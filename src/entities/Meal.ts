@@ -3,9 +3,11 @@ import {
   Column,
   PrimaryGeneratedColumn,
 } from 'typeorm/browser';
+import { Product } from './Product';
+import { productsRepository } from '../repositories';
 
-@Entity('Product')
-export class Product {
+@Entity('Meal')
+export class Meal {
 
   @PrimaryGeneratedColumn()
   id!: number;
