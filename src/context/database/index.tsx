@@ -1,14 +1,23 @@
-import React from 'react';
-import { createConnection, getRepository } from 'typeorm/browser';
+import React, { ReactNode } from 'react';
+import { createConnection, getRepository, Connection, Repository } from 'typeorm/browser';
 import * as entities from '../../entities';
 import { Text } from 'react-native';
 
-export const DatabaseContext = React.createContext({});
+export const DatabaseContext = React.createContext<DatabaseContext>({} as any);
 
-export class DatabaseProvider extends React.Component {
+interface DatabaseProviderProps {
+  children: ReactNode 
+}
+interface DatabaseProviderState {
+  isLoading: boolean
+  connection: null | Connection
+  repositories: null | Repositories 
+}
+export class DatabaseProvider extends React.Component<DatabaseProviderProps, DatabaseProviderState> {
 
   state = {
-    repositories: {},
+    connection: null,
+    repositories: null,
     isLoading: true
   }
 
@@ -17,7 +26,7 @@ export class DatabaseProvider extends React.Component {
   }
 
   async setupDatabase() {
-    await createConnection({
+    const connection = await createConnection({
       type: 'react-native',
       database: 'test',
       location: 'default',
@@ -26,7 +35,7 @@ export class DatabaseProvider extends React.Component {
       entities: Object.values(entities)
     });
 
-    const repositories = Object.entries(entities)
+    const repositories: any = Object.entries(entities)
       .reduce((acc, [name, entity]) => ({
         ...acc,
         [name]: getRepository(entity)
@@ -34,6 +43,7 @@ export class DatabaseProvider extends React.Component {
 
     this.setState({
       repositories,
+      connection,
       isLoading: false
     });
   }
@@ -45,9 +55,18 @@ export class DatabaseProvider extends React.Component {
     }
 
     return (
-      <DatabaseContext.Provider value={this.state}>
+      <DatabaseContext.Provider value={this.state as any}>
         {this.props.children}
       </DatabaseContext.Provider>
     );
   }
+}
+
+type Repositories = {
+  [key in keyof typeof entities]: Repository<typeof entities>
+}
+
+interface DatabaseContext extends DatabaseProviderState {
+  connection: Connection
+  repositories: Repositories
 }
