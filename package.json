@@ -8,9 +8,11 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@eva-design/eva": "^1.0.1",
     "react": "16.8.6",
     "react-native": "0.60.4",
     "react-native-sqlite-storage": "^3.3.11",
+    "react-native-ui-kitten": "^4.1.0",
     "typeorm": "^0.2.18"
   },
   "devDependencies": {
