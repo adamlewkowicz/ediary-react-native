@@ -2,7 +2,12 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  OneToMany,
+  Unique,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm/browser';
+import { MealProduct } from './MealProduct';
 
 @Entity('Product')
 export class Product {
@@ -12,6 +17,9 @@ export class Product {
 
   @Column()
   name!: string;
+
+  @Column('string', { unique: true, nullable: true })
+  barcode!: string | null
 
   @Column('decimal', { precision: 5, scale: 2 })
   carbs!: number
@@ -24,5 +32,14 @@ export class Product {
 
   @Column('decimal', { precision: 5, scale: 2 })
   kcal!: number
+
+  @CreateDateColumn('timestamp')
+  createdAt!: Date;
+
+  @UpdateDateColumn('timestamp')
+  updatedAt!: Date;
+
+  @OneToMany(type => MealProduct, mealProduct => mealProduct.meal)
+  mealProducts!: MealProduct[]
 
 }

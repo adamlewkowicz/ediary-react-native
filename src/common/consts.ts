@@ -1,0 +1,1 @@
+export const PRODUCT_UNITS = ['g', 'mg', 'kg', 'ml', 'l'] as const;

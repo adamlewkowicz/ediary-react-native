@@ -1,3 +1,4 @@
+import { PRODUCT_UNITS } from './common/consts';
 
 export interface Meal {
   id: number
@@ -14,10 +15,14 @@ export interface Product {
   id: number
   name: string
   barcode: string | null
+  quantity: number
+  unit: ProductUnit
   carbs: number
   prots: number
   fats: number
   kcal: number
-  updatedAt: number
-  createdAt: number
+  updatedAt: Date
+  createdAt: Date
 }
+
+export type ProductUnit = typeof PRODUCT_UNITS[number];
