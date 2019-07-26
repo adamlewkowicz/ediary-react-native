@@ -21,6 +21,7 @@ export interface Product {
   prots: number
   fats: number
   kcal: number
+  mealId: Meal['id']
   updatedAt: Date
   createdAt: Date
 }

@@ -3,7 +3,9 @@ import { Meal, Product } from '../../entities';
 import {
   MEAL_CREATED,
   MEAL_UPDATED,
-  MEAL_DELETED
+  MEAL_DELETED,
+  MEAL_PRODUCT_CREATED,
+  MEAL_PRODUCT_DELETED
 } from '../consts';
 
 export const mealCreated = (meal: Meal): MealCreated => ({
@@ -41,6 +43,14 @@ export const mealProductCreate = (product: Product) => async (dispatch: any) => 
   dispatch()
 }
 
+export const mealProductCreated = (
+  mealId: Meal['id'],
+  product: Product
+): MealProductCreated => ({
+  type: MEAL_PRODUCT_CREATED,
+  payload: product,
+  meta: { mealId }
+});
 
 type MealCreated = {
   type: typeof MEAL_CREATED
@@ -58,4 +68,23 @@ type MealDeleted = {
   meta: { mealId: Meal['id'] }
 }
 
-export type DiaryActions = MealCreated | MealUpdated | MealDeleted
+type MealProductCreated = {
+  type: typeof MEAL_PRODUCT_CREATED
+  payload: Product
+  meta: { mealId: Meal['id'] }
+}
+
+type MealProductDeleted = {
+  type: typeof MEAL_PRODUCT_DELETED
+  meta: {
+    mealId: Meal['id']
+    productId: Product['id']
+  }
+}
+
+export type DiaryActions =
+  | MealCreated 
+  | MealUpdated 
+  | MealDeleted 
+  | MealProductCreated
+  | MealProductDeleted

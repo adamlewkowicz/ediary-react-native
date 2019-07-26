@@ -8,7 +8,10 @@ import {
   CLEAR_DIARY,
   MEAL_CREATED,
   MEAL_UPDATED,
-  MEAL_DELETED
+  MEAL_DELETED,
+  MEAL_PRODUCT_CREATED,
+  MEAL_PRODUCT_DELETED,
+  PRODUCT_UPDATED
 } from '../consts';
 import { Product, Meal } from '../../entities';
 import { DiaryActions } from '../actions/diary';
@@ -56,6 +59,35 @@ export function diaryReducer(
     case MEAL_DELETED: return {
       ...state,
       meals: state.meals.filter(meal => meal.id !== action.meta.mealId)
+    }
+    case MEAL_PRODUCT_CREATED: return {
+      ...state,
+      meals: state.meals.map(meal => meal.id === action.meta.mealId 
+        ? { ...meal, products: [...(meal as any).products, action.payload.id] }
+        : meal
+      ),
+      products: [...state.products, action.payload]
+    }
+    case MEAL_PRODUCT_DELETED: return {
+      ...state,
+      meals: state.meals.map(meal => meal.id === action.meta.mealId
+        ? {
+            ...meal,
+            products: meal.products.filter(productId =>
+              productId !== action.meta.productId
+            )
+          }
+        : meal
+      ),
+      products: state.products.filter(product => product.id !== action.meta.productId)
+    }
+    case PRODUCT_UPDATED:
+    case MEAL_PRODUCT_UPDATED: return {
+      ...state,
+      products: state.products.map(product => product.id === action.meta.productId
+        ? { ...product, ...action.payload }
+        : product
+      )
     }
     case ADD_MEAL_PRODUCT: {
       const { mealId, payload } = action;
