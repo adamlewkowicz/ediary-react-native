@@ -31,7 +31,7 @@ export class DatabaseProvider extends React.Component<DatabaseProviderProps, Dat
       database: 'test',
       location: 'default',
       logging: ['error', 'query', 'schema'],
-      synchronize: true,
+      synchronize: false,
       entities: Object.values(entities)
     });
 

@@ -5,6 +5,6 @@ import {
 } from '../entities';
 import { MealRepository } from './MealRepository';
 
-export const productRepository = getRepository(Product);
-export const mealRepository = getCustomRepository(MealRepository);
-export const mealProductRepository = getRepository(MealProduct);
+// export const productRepository = getRepository(Product);
+// export const mealRepository = getCustomRepository(MealRepository);
+// export const mealProductRepository = getRepository(MealProduct);

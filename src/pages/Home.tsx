@@ -8,11 +8,14 @@ export const Home = () => {
   const [name, setName] = useState('Zupa');
   const repositories = useRepositories();
 
-  function handleProductCreate() {
+  async function handleProductCreate() {
     const productRepo = getRepository(Product)
-    productRepo.save({
+    await productRepo.save({
       name
     });
+
+    const products = await productRepo.find();
+    console.log({ products })
   }
 
   return (

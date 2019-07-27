@@ -4,11 +4,14 @@ import {
   ManyToOne,
   Unique,
   PrimaryColumn,
+  Check,
 } from 'typeorm/browser';
 import { Product } from './Product';
 import { Meal } from './Meal';
 import { ProductUnit } from '../types';
 import { PRODUCT_UNITS } from '../common/consts';
+
+const productUnitsEnum = PRODUCT_UNITS.map(unit => `'${unit}'`).join(',');
 
 @Entity('MealProduct', {
   name: 'meal_products'
@@ -25,7 +28,8 @@ export class MealProduct {
   @Column('decimal', { precision: 4, scale: 1 })
   quantity!: number
 
-  @Column('enum', { enum: PRODUCT_UNITS })
+  @Column('text')
+  @Check(`unit IN (${productUnitsEnum}) `)
   unit!: ProductUnit
 
   @ManyToOne(type => Meal, meal => meal.mealProducts)

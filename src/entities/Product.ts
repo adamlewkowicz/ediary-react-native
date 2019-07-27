@@ -3,9 +3,6 @@ import {
   Column,
   PrimaryGeneratedColumn,
   OneToMany,
-  Unique,
-  CreateDateColumn,
-  UpdateDateColumn,
 } from 'typeorm/browser';
 import { MealProduct } from './MealProduct';
 
@@ -18,25 +15,25 @@ export class Product {
   @Column()
   name!: string;
 
-  @Column('string', { unique: true, nullable: true })
+  @Column('text', { unique: true, nullable: true })
   barcode!: string | null
 
-  @Column('decimal', { precision: 5, scale: 2 })
+  @Column('decimal', { precision: 5, scale: 2, default: 0 })
   carbs!: number
 
-  @Column('decimal', { precision: 5, scale: 2 })
+  @Column('decimal', { precision: 5, scale: 2, default: 0 })
   prots!: number
   
-  @Column('decimal', { precision: 5, scale: 2 })
+  @Column('decimal', { precision: 5, scale: 2, default: 0 })
   fats!: number
 
-  @Column('decimal', { precision: 5, scale: 2 })
+  @Column('decimal', { precision: 5, scale: 2, default: 0 })
   kcal!: number
 
-  @CreateDateColumn('timestamp')
+  @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;
 
-  @UpdateDateColumn('timestamp')
+  @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   updatedAt!: Date;
 
   @OneToMany(type => MealProduct, mealProduct => mealProduct.meal)
