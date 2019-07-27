@@ -14,6 +14,8 @@ export interface Meal {
 export interface Product {
   id: number
   name: string
+  producer?: string | null
+  img?: string
   barcode: string | null
   quantity: number
   unit: ProductUnit
@@ -22,6 +24,7 @@ export interface Product {
   fats: number
   kcal: number
   mealId: Meal['id']
+  userId?: number
   updatedAt: Date
   createdAt: Date
 }

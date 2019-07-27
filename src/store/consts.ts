@@ -34,8 +34,6 @@ export const DELETE_TRAINING_ASYNC = 'DELETE_TRAINING_ASYNC';
 
 /*** DIARY ***/
 
-export const CLEAR_DIARY = 'CLEAR_DIARY';
-
 /* Meals */
 
 export const MEAL_CREATED = 'MEAL_CREATED';
@@ -46,18 +44,6 @@ export const MEAL_PRODUCT_CREATED = 'MEAL_PRODUCT_CREATED';
 export const MEAL_PRODUCT_UPDATED = 'MEAL_PRODUCT_UPDATED'; // just use getState in dispatch to update meal's kcals ()
 export const MEAL_PRODUCT_DELETED = 'MEAL_PRODUCT_DELETED';
 export const PRODUCT_UPDATED = 'PRODUCT_UPDATED';
-
-export const ADD_MEALS = 'ADD_MEALS';
-export const UPDATE_MEAL = 'UPDATE_MEAL';
-export const DELETE_MEAL = 'DELETE_MEAL';
-
-/* Meal Products */
-
-export const ADD_MEAL_PRODUCT = 'ADD_MEAL_PRODUCT';
-export const UPDATE_MEAL_PRODUCT = 'UPDATE_MEAL_PRODUCT';
-export const DELETE_MEAL_PRODUCT = 'DELETE_MEAL_PRODUCT';
-
-
 
 /*** MEASUREMENTS ***/
 

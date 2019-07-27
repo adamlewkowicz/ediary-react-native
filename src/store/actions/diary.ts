@@ -1,11 +1,12 @@
-import { mealsRepository } from '../../repositories';
+import { mealsRepository, productsRepository, mealProductRepository } from '../../repositories';
 import { Meal, Product } from '../../entities';
 import {
   MEAL_CREATED,
   MEAL_UPDATED,
   MEAL_DELETED,
   MEAL_PRODUCT_CREATED,
-  MEAL_PRODUCT_DELETED
+  MEAL_PRODUCT_DELETED,
+  PRODUCT_UPDATED
 } from '../consts';
 
 export const mealCreated = (meal: Meal): MealCreated => ({
@@ -39,10 +40,6 @@ export const mealUpdate = (mealId: Meal['id'], meal: Meal) => async (dispatch: a
   await mealsRepository.update(mealId, meal);
 }
 
-export const mealProductCreate = (product: Product) => async (dispatch: any) => {
-  dispatch()
-}
-
 export const mealProductCreated = (
   mealId: Meal['id'],
   product: Product
@@ -51,6 +48,47 @@ export const mealProductCreated = (
   payload: product,
   meta: { mealId }
 });
+
+export const mealProductDeleted = (
+  mealId: Meal['id'],
+  productId: Product['id']
+): MealProductDeleted => ({
+  type: MEAL_PRODUCT_DELETED,
+  meta: { mealId, productId }
+});
+
+export const productUpdated = (
+  productId: Product['id'],
+  product: Product
+): ProductUpdated => ({
+  type: PRODUCT_UPDATED,
+  payload: product,
+  meta: { productId }
+});
+
+export const mealProductCreate = (
+  mealId: Meal['id'],
+  payload: Product
+) => async (dispatch: any) => {
+  const newProduct = await Meal.createProduct(mealId, payload);
+  dispatch(mealProductCreated(mealId, newProduct as any));
+}
+
+export const mealProductDelete = (
+  mealId: Meal['id'],
+  productId: Product['id']
+) => async (dispatch: any) => {
+  dispatch(mealProductDeleted(mealId, productId));
+  await mealProductRepository.delete({ mealId, productId });
+}
+
+export const productUpdate = (
+  productId: Product['id'],
+  product: Product
+) => async (dispatch: any) => {
+  dispatch(productUpdated(productId, product));
+  await productsRepository.update(productId, product);
+}
 
 type MealCreated = {
   type: typeof MEAL_CREATED
@@ -82,9 +120,18 @@ type MealProductDeleted = {
   }
 }
 
+type ProductUpdated = {
+  type: typeof PRODUCT_UPDATED
+  payload: Product
+  meta: {
+    productId: Product['id']
+  }
+}
+
 export type DiaryActions =
   | MealCreated 
   | MealUpdated 
   | MealDeleted 
   | MealProductCreated
   | MealProductDeleted
+  | ProductUpdated
