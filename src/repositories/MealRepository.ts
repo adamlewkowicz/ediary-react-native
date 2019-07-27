@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm/browser';
-import { Meal, Product } from '../entities';
-import { productRepository, mealProductRepository } from './index';
+import { Meal, Product, MealProduct } from '../entities';
+import { productRepository, mealProductRepository } from '.';
 
 @EntityRepository(Meal)
 export class MealRepository extends Repository<Meal> {
@@ -10,8 +10,8 @@ export class MealRepository extends Repository<Meal> {
     productOrProductId: Product | Product['id']
   ) {
     const productAction = typeof productOrProductId === 'number'
-      ? productRepository.findOne(productOrProductId)
-      : productRepository.save(productOrProductId);
+      ? productRepository().findOne(productOrProductId)
+      : productRepository().save(productOrProductId);
 
     const product = await productAction;
 
@@ -21,7 +21,7 @@ export class MealRepository extends Repository<Meal> {
       );
     }
 
-    const mealProduct = await mealProductRepository.save({
+    const mealProduct = await mealProductRepository().save({
       productId: product.id,
       mealId
     });

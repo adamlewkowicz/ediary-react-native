@@ -1,5 +1,5 @@
 import { mealRepository, productRepository, mealProductRepository } from '../../repositories';
-import { Meal, Product } from '../../entities';
+import { Meal, Product, MealProduct } from '../../entities';
 import {
   MEAL_CREATED,
   MEAL_UPDATED,
@@ -26,18 +26,18 @@ export const mealDeleted = (mealId: Meal['id']): MealDeleted => ({
 });
 
 export const mealCreate = (name: Meal['name']) => async (dispatch: any) => {
-  const meal = await mealRepository.save({ name });
+  const meal = await mealRepository().save({ name });
   dispatch(mealCreated(meal));
 }
 
 export const mealDelete = (mealId: Meal['id']) => async (dispatch: any) => {
   dispatch(mealDeleted(mealId));
-  await mealRepository.delete(mealId);
+  await mealRepository().delete(mealId);
 }
 
 export const mealUpdate = (mealId: Meal['id'], meal: Meal) => async (dispatch: any) => {
   dispatch(mealUpdated(mealId, meal));
-  await mealRepository.update(mealId, meal);
+  await mealRepository().update(mealId, meal);
 }
 
 export const mealProductCreated = (
@@ -70,7 +70,7 @@ export const mealProductCreate = (
   mealId: Meal['id'],
   payload: Product
 ) => async (dispatch: any) => {
-  const newProduct = await mealRepository.addProduct(mealId, payload);
+  const newProduct = await mealRepository().addProduct(mealId, payload);
   dispatch(mealProductCreated(mealId, newProduct as any));
 }
 
@@ -79,7 +79,7 @@ export const mealProductDelete = (
   productId: Product['id']
 ) => async (dispatch: any) => {
   dispatch(mealProductDeleted(mealId, productId));
-  await mealProductRepository.delete({ mealId, productId });
+  await mealProductRepository().delete({ mealId, productId });
 }
 
 export const productUpdate = (
@@ -87,7 +87,7 @@ export const productUpdate = (
   product: Product
 ) => async (dispatch: any) => {
   dispatch(productUpdated(productId, product));
-  await productRepository.update(productId, product);
+  await productRepository().update(productId, product);
 }
 
 type MealCreated = {
