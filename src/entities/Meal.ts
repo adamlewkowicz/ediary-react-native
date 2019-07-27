@@ -5,7 +5,7 @@ import {
   OneToMany,
 } from 'typeorm/browser';
 import { Product } from './Product';
-import { productsRepository, mealProductRepository } from '../repositories';
+import { productRepository, mealProductRepository } from '../repositories';
 import { MealProduct } from './MealProduct';
 import * as types from '../types';
 
@@ -35,12 +35,37 @@ export class Meal {
   @OneToMany(type => MealProduct, mealProduct => mealProduct.product)
   mealProducts!: MealProduct[]
 
-  static async createProduct(mealId: Meal['id'], payload: Product): Promise<types.Product> {
-    const product = await productsRepository.save(payload);
+  async addProduct(
+    productId: Product['id']
+  ) {
+    const mealId = this.id;
+    const product = await productRepository.findOne(productId);
+
+    if (!product) {
+      throw new Error(
+        `Product with id ${productId} doesn't exist`
+      );
+    }
+
     const mealProduct = await mealProductRepository.save({
       productId: product.id,
       mealId
     });
+
+    return { ...product, ...mealProduct };
+  }
+
+  async addAndCreateProduct(
+    payload: Product
+  ) {
+    const mealId = this.id;
+    const product = await productRepository.save(payload);
+
+    const mealProduct = await mealProductRepository.save({
+      productId: product.id,
+      mealId
+    });
+
     return { ...product, ...mealProduct };
   }
 }
