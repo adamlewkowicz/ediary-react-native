@@ -3,6 +3,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   OneToMany,
+  BaseEntity,
 } from 'typeorm/browser';
 import { Product } from './Product';
 import { productRepository, mealProductRepository } from '../repositories';
@@ -12,7 +13,7 @@ import * as types from '../types';
 @Entity('Meal', {
   name: 'meals'
 })
-export class Meal {
+export class Meal extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id!: number;

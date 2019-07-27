@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { createConnection, getRepository, Connection, Repository } from 'typeorm/browser';
+import { createConnection, getRepository, Connection, Repository, ConnectionManager, getConnection } from 'typeorm/browser';
 import * as entities from '../../entities';
 import { Text } from 'react-native';
 
