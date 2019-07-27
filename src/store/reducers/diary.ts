@@ -22,7 +22,10 @@ export function diaryReducer(
   switch(action.type) {
     case MEAL_CREATED: return {
       ...state,
-      meals: [...state.meals, action.payload]
+      meals: [
+        ...state.meals,
+        { ...action.payload, products: [] }
+      ]
     }
     case MEAL_UPDATED: return {
       ...state,
@@ -45,15 +48,18 @@ export function diaryReducer(
     }
     case MEAL_PRODUCT_DELETED: return {
       ...state,
-      meals: state.meals.map(meal => meal.id === action.meta.mealId
-        ? {
+      meals: state.meals.map(meal => {
+        if (meal.id === action.meta.mealId) {
+          const productIds = meal.products.filter(productId =>
+            productId !== action.meta.productId
+          );
+          return {
             ...meal,
-            products: meal.products.filter(productId =>
-              productId !== action.meta.productId
-            )
+            products: productIds
           }
-        : meal
-      ),
+        }
+        return meal;
+      }),
       products: state.products.filter(product => product.id !== action.meta.productId)
     }
     case PRODUCT_UPDATED: return {
@@ -67,12 +73,19 @@ export function diaryReducer(
   }
 }
 
-interface MealState extends Meal {
-  products: number[]
-}
-
 interface DiaryReducerState {
-  meals: MealState[]
+  meals: {
+    id: number
+    name: string
+    carbs: number
+    prots: number
+    fats: number
+    kcal: number
+    updatedAt?: number
+    createdAt?: number
+    /** List of meal's product ids */
+    products: number[]
+  }[]
   products: Product[]
   isLoading: boolean
 }

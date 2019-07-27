@@ -29,4 +29,6 @@ export interface Product {
   createdAt: Date
 }
 
+export interface ProductMerged extends Product {};
+
 export type ProductUnit = typeof PRODUCT_UNITS[number];
