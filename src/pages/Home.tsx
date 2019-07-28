@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Layout, Text, Input, Button } from 'react-native-ui-kitten';
-import { useRepositories } from '../common/hooks';
 import { getRepository } from 'typeorm/browser';
 import { Product, Meal } from '../entities';
 import { useDispatch, useSelector } from 'react-redux';
-import * as Actions from '../store/actions';
+import * as Actions from '../store/actions-root';
 import { AppState } from '../store';
 import { TouchableHighlight } from 'react-native';
 import { mergedMealSelector } from '../store/selectors';

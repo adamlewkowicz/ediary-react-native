@@ -6,9 +6,9 @@ import {
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED,
 } from '../consts';
-import { Product, Meal } from '../../entities';
-import { DiaryActions } from '../actions/diary';
+import { Meal } from '../../entities';
 import { ProductUnit } from '../../types';
+import { DiaryActions } from '../action-types';
 
 const initialState: DiaryReducerState = {
   meals: [],
