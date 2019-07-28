@@ -47,6 +47,12 @@ export const Home = () => {
       <Button onPress={() => dispatch(Actions.mealCreate(name))}>
         Dodaj posiłek (dispatch)
       </Button>
+      <Button onPress={() => dispatch(Actions.mealProductCreate(
+        mealsMerged[0].id,
+        { name } as any
+      ))}>
+        Dodaj produkt (Pierwszy posiłek)
+      </Button>
       {mealsMerged.map(meal => (
         <TouchableHighlight
           key={meal.id}

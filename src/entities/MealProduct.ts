@@ -28,7 +28,7 @@ export class MealProduct {
   @Column('decimal', { precision: 4, scale: 1 })
   quantity!: number
 
-  @Column('text')
+  @Column('text', { default: 'g' })
   @Check(`unit IN (${productUnitsEnum}) `)
   unit!: ProductUnit
 

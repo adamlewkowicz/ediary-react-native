@@ -61,10 +61,14 @@ export class Meal extends BaseEntity {
   ) {
     const mealId = this.id;
     const product = await productRepository().save(payload);
+    const quantity = 100;
+    const unit = 'g';
 
     const mealProduct = await mealProductRepository().save({
       productId: product.id,
-      mealId
+      mealId,
+      quantity,
+      unit
     });
 
     return { ...product, ...mealProduct };

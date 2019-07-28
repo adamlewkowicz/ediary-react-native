@@ -70,7 +70,8 @@ export const mealProductCreate = (
   mealId: Meal['id'],
   payload: Product
 ) => async (dispatch: any) => {
-  const newProduct = await mealRepository().addProduct(mealId, payload);
+  const meal = await mealRepository().findOne(mealId) as Meal;
+  const newProduct = await meal.addAndCreateProduct(payload);
   dispatch(mealProductCreated(mealId, newProduct as any));
 }
 
