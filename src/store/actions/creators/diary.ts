@@ -1,5 +1,5 @@
-import { Meal, Product } from '../../entities';
-import { ProductState } from '../reducers/diary';
+import { Meal, Product } from '../../../entities';
+import { ProductState } from '../../reducers/diary';
 import {
   MEAL_CREATED,
   MEAL_UPDATED,
@@ -7,7 +7,7 @@ import {
   MEAL_PRODUCT_CREATED,
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED
-} from '../consts';
+} from '../../consts';
 import {
   MealDeleted,
   MealUpdated,
@@ -15,7 +15,7 @@ import {
   MealProductCreated,
   MealProductDeleted,
   ProductUpdated
-} from '../action-types/diary';
+} from '../types';
 
 export const mealCreated = (meal: Meal): MealCreated => ({
   type: MEAL_CREATED,

@@ -8,7 +8,7 @@ import {
 } from '../consts';
 import { Meal } from '../../entities';
 import { ProductUnit } from '../../types';
-import { DiaryActions } from '../action-types';
+import { DiaryActions } from '../actions';
 
 const initialState: DiaryReducerState = {
   meals: [],

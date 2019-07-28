@@ -1,4 +1,4 @@
-import { Meal, Product } from '../../entities';
+import { Meal, Product } from '../../../entities';
 import {
   mealCreated,
   mealDeleted,
@@ -6,14 +6,14 @@ import {
   mealProductCreated,
   mealProductDeleted,
   productUpdated
-} from '../actions/index';
+} from '../index';
 import {
   mealRepository,
   mealProductRepository, 
   productRepository
-} from '../../repositories';
-import { AppState } from '..';
-import { ProductState } from '../reducers/diary';
+} from '../../../repositories';
+import { AppState } from '../..';
+import { ProductState } from '../../reducers/diary';
 
 
 export const mealCreate = (name: Meal['name']) => async (dispatch: any) => {

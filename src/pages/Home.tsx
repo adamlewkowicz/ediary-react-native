@@ -3,7 +3,7 @@ import { Layout, Text, Input, Button } from 'react-native-ui-kitten';
 import { getRepository } from 'typeorm/browser';
 import { Product, Meal } from '../entities';
 import { useDispatch, useSelector } from 'react-redux';
-import * as Actions from '../store/actions-root';
+import * as Actions from '../store/actions';
 import { AppState } from '../store';
 import { TouchableHighlight, View, TouchableOpacity } from 'react-native';
 import { mergedMealSelector } from '../store/selectors';

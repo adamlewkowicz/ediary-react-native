@@ -5,9 +5,9 @@ import {
   MEAL_PRODUCT_CREATED,
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED,
-} from '../consts';
-import { Meal, Product } from '../../entities';
-import { ProductState } from '../reducers/diary';
+} from '../../consts';
+import { Meal, Product } from '../../../entities';
+import { ProductState } from '../../reducers/diary';
 
 export type MealCreated = {
   type: typeof MEAL_CREATED
