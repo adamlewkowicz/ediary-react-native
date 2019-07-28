@@ -32,3 +32,5 @@ export interface Product {
 export interface ProductMerged extends Product {};
 
 export type ProductUnit = typeof PRODUCT_UNITS[number];
+
+export type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType[number];

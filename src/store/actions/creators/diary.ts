@@ -1,12 +1,13 @@
 import { Meal, Product } from '../../../entities';
-import { ProductState } from '../../reducers/diary';
+import { ProductState, MealState } from '../../reducers/diary';
 import {
   MEAL_CREATED,
   MEAL_UPDATED,
   MEAL_DELETED,
   MEAL_PRODUCT_CREATED,
   MEAL_PRODUCT_DELETED,
-  PRODUCT_UPDATED
+  PRODUCT_UPDATED,
+  MEAL_TOGGLED
 } from '../../consts';
 import {
   MealDeleted,
@@ -14,7 +15,8 @@ import {
   MealCreated,
   MealProductCreated,
   MealProductDeleted,
-  ProductUpdated
+  ProductUpdated,
+  MealToggled
 } from '../types';
 
 export const mealCreated = (meal: Meal): MealCreated => ({
@@ -22,7 +24,10 @@ export const mealCreated = (meal: Meal): MealCreated => ({
   payload: meal
 });
 
-export const mealUpdated = (mealId: Meal['id'], meal: Meal): MealUpdated => ({
+export const mealUpdated = (
+  mealId: Meal['id'],
+  meal: Partial<MealState>
+): MealUpdated => ({
   type: MEAL_UPDATED,
   payload: meal,
   meta: { mealId }
@@ -57,4 +62,11 @@ export const productUpdated = (
   type: PRODUCT_UPDATED,
   payload: product,
   meta: { productId }
+});
+
+export const mealToggled = (
+  mealId: MealState['id']
+): MealToggled => ({
+  type: MEAL_TOGGLED,
+  meta: { mealId }
 });

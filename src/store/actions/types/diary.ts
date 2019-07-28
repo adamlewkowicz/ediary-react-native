@@ -5,9 +5,10 @@ import {
   MEAL_PRODUCT_CREATED,
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED,
+  MEAL_TOGGLED,
 } from '../../consts';
 import { Meal, Product } from '../../../entities';
-import { ProductState } from '../../reducers/diary';
+import { ProductState, MealState } from '../../reducers/diary';
 
 export type MealCreated = {
   type: typeof MEAL_CREATED
@@ -47,10 +48,18 @@ export type ProductUpdated = {
   }
 }
 
+export type MealToggled = {
+  type: typeof MEAL_TOGGLED
+  meta: {
+    mealId: MealState['id']
+  }
+}
+
 export type DiaryActions =
   | MealCreated 
   | MealUpdated 
   | MealDeleted 
   | MealProductCreated
   | MealProductDeleted
-  | ProductUpdated;
+  | ProductUpdated
+  | MealToggled

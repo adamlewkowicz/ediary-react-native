@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Layout, Text, Input, Button } from 'react-native-ui-kitten';
-import { getRepository } from 'typeorm/browser';
-import { Product, Meal } from '../entities';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
 import { AppState } from '../store';
 import { TouchableHighlight, View, TouchableOpacity } from 'react-native';
 import { mergedMealSelector } from '../store/selectors';
+import { MealList } from '../components/MealList';
 
 export const Home = () => {
   const [name, setName] = useState('Zupa');
@@ -45,6 +44,9 @@ export const Home = () => {
       ))}>
         Aktualizuj nazwę (Pierwszy produkt)
       </Button>
+      <MealList
+        meals={mealsMerged}
+      />
       {mealsMerged.map(meal => (
         <TouchableHighlight
           key={meal.id}

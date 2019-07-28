@@ -40,3 +40,5 @@ export const calcedMealSelector = (
     products: calcedProducts
   }
 });
+
+export type CalcedMealSelectorResult = ReturnType<typeof calcedMealSelector>;

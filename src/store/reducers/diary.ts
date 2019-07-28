@@ -5,6 +5,7 @@ import {
   MEAL_PRODUCT_CREATED,
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED,
+  MEAL_TOGGLED,
 } from '../consts';
 import { Meal } from '../../entities';
 import { ProductUnit } from '../../types';
@@ -25,8 +26,21 @@ export function diaryReducer(
       ...state,
       meals: [
         ...state.meals,
-        { ...action.payload, products: [] }
+        {
+          ...action.payload,
+          isToggled: false,
+          products: []
+        }
       ]
+    }
+    case MEAL_TOGGLED: return {
+      ...state,
+      meals: state.meals.map(meal => ({
+        ...meal,
+        isToggled: action.meta.mealId === meal.id
+          ? !meal.isToggled
+          : false
+      }))
     }
     case MEAL_UPDATED: return {
       ...state,
@@ -82,6 +96,7 @@ export type MealState = {
   prots: number
   fats: number
   kcal: number
+  isToggled: boolean
   updatedAt?: number
   createdAt?: number
   /** List of meal's product ids */
