@@ -37,12 +37,13 @@ export function diaryReducer(
     }
     case MEAL_DELETED: return {
       ...state,
-      meals: state.meals.filter(meal => meal.id !== action.meta.mealId)
+      meals: state.meals.filter(meal => meal.id !== action.meta.mealId),
+      products: state.products.filter(product => product.mealId !== action.meta.mealId)
     }
     case MEAL_PRODUCT_CREATED: return {
       ...state,
       meals: state.meals.map(meal => meal.id === action.meta.mealId 
-        ? { ...meal, products: [...(meal as any).products, action.payload.id] }
+        ? { ...meal, products: [...meal.products, action.payload.id] }
         : meal
       ),
       products: [...state.products, action.payload]
@@ -101,8 +102,8 @@ export interface ProductState {
   prots: number
   fats: number
   kcal: number
-  mealId: Meal['id']
-  userId?: number
+  mealId: Meal['id'] | null
+  userId?: number | null
   updatedAt: Date
   createdAt: Date
 }

@@ -5,7 +5,7 @@ import { Product, Meal } from '../entities';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions-root';
 import { AppState } from '../store';
-import { TouchableHighlight } from 'react-native';
+import { TouchableHighlight, View, TouchableOpacity } from 'react-native';
 import { mergedMealSelector } from '../store/selectors';
 
 export const Home = () => {
@@ -22,16 +22,6 @@ export const Home = () => {
     [meals, products]
   );
 
-  async function handleProductCreate() {
-    const productRepo = getRepository(Product)
-    await productRepo.save({
-      name
-    });
-
-    const products = await productRepo.find();
-    console.log({ products })
-  }
-
   return (
     <Layout style={{ flex: 1 }}>
       <Text category="h3">Home</Text>
@@ -40,11 +30,8 @@ export const Home = () => {
         value={name}
         onChangeText={name => setName(name)}
       />
-      <Button onPress={handleProductCreate}>
-        Dodaj posiłek
-      </Button>
       <Button onPress={() => dispatch(Actions.mealCreate(name))}>
-        Dodaj posiłek (dispatch)
+        Dodaj posiłek
       </Button>
       <Button onPress={() => dispatch(Actions.mealProductCreate(
         mealsMerged[0].id,
@@ -52,14 +39,37 @@ export const Home = () => {
       ))}>
         Dodaj produkt (Pierwszy posiłek)
       </Button>
+      <Button onPress={() => dispatch(Actions.productUpdate(
+        mealsMerged[0].products[0].id,
+        { name }
+      ))}>
+        Aktualizuj nazwę (Pierwszy produkt)
+      </Button>
       {mealsMerged.map(meal => (
         <TouchableHighlight
           key={meal.id}
           onPress={() => dispatch(Actions.mealDelete(meal.id))}
         >
-          <Text category="h4">
-            {meal.name}
-          </Text>
+          <View>
+            <Text category="h4">
+              {meal.name}
+            </Text>
+            <Text category="h6">
+              Produkty: ({meal.products.length as any})
+            </Text>
+            {meal.products.map(product => (
+              <TouchableOpacity
+                key={product.id}
+                onPress={() => dispatch(
+                  Actions.mealProductDelete(meal.id, product.id)
+                )}
+              >
+                <Text category="h6">
+                  {product.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </TouchableHighlight>
       ))}
     </Layout>

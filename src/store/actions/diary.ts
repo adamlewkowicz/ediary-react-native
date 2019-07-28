@@ -52,7 +52,7 @@ export const mealProductDeleted = (
 
 export const productUpdated = (
   productId: Product['id'],
-  product: Product
+  product: Partial<ProductState>
 ): ProductUpdated => ({
   type: PRODUCT_UPDATED,
   payload: product,

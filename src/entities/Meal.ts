@@ -6,7 +6,7 @@ import {
   BaseEntity,
 } from 'typeorm/browser';
 import { Product } from './Product';
-import { productRepository, mealProductRepository } from '../repositories';
+import { productRepository, mealProductRepository, mealRepository } from '../repositories';
 import { MealProduct } from './MealProduct';
 import * as types from '../types';
 
@@ -33,7 +33,9 @@ export class Meal extends BaseEntity {
   @Column('decimal', { precision: 5, scale: 2, default: 0 })
   kcal!: number
 
-  @OneToMany(type => MealProduct, mealProduct => mealProduct.product)
+  @OneToMany(type => MealProduct, mealProduct => mealProduct.product, {
+    onDelete: 'CASCADE'
+  })
   mealProducts!: MealProduct[]
 
   async addProduct(
@@ -72,5 +74,12 @@ export class Meal extends BaseEntity {
     });
 
     return { ...product, ...mealProduct };
+  }
+  
+  async deleteInCascade() {
+    const mealId = this.id;
+    const mealProducts = await mealProductRepository().find({ mealId });
+    await mealProductRepository().remove(mealProducts);
+    await this.remove();
   }
 }

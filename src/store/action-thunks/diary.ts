@@ -12,6 +12,8 @@ import {
   mealProductRepository, 
   productRepository
 } from '../../repositories';
+import { AppState } from '..';
+import { ProductState } from '../reducers/diary';
 
 
 export const mealCreate = (name: Meal['name']) => async (dispatch: any) => {
@@ -21,7 +23,8 @@ export const mealCreate = (name: Meal['name']) => async (dispatch: any) => {
 
 export const mealDelete = (mealId: Meal['id']) => async (dispatch: any) => {
   dispatch(mealDeleted(mealId));
-  await mealRepository().delete(mealId);
+  const meal = await mealRepository().findOne(mealId) as Meal;
+  await meal.deleteInCascade();
 }
 
 export const mealUpdate = (mealId: Meal['id'], meal: Meal) => async (dispatch: any) => {
@@ -48,7 +51,7 @@ export const mealProductDelete = (
 
 export const productUpdate = (
   productId: Product['id'],
-  product: Product
+  product: Partial<ProductState>
 ) => async (dispatch: any) => {
   dispatch(productUpdated(productId, product));
   await productRepository().update(productId, product);

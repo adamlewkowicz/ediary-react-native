@@ -41,7 +41,7 @@ export type MealProductDeleted = {
 
 export type ProductUpdated = {
   type: typeof PRODUCT_UPDATED
-  payload: Partial<Product>
+  payload: Partial<ProductState>
   meta: {
     productId: Product['id']
   }
