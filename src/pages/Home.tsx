@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
 import { AppState } from '../store';
 import { TouchableHighlight } from 'react-native';
-import { mealsMergedSelector } from '../store/selectors';
+import { mergedMealSelector } from '../store/selectors';
 
 export const Home = () => {
   const [name, setName] = useState('Zupa');
@@ -19,7 +19,7 @@ export const Home = () => {
     state => state.diary.products
   );
   const mealsMerged = useMemo(() =>
-    mealsMergedSelector(meals, products),
+    mergedMealSelector(meals, products as any),
     [meals, products]
   );
 

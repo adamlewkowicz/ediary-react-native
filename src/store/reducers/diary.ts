@@ -8,6 +8,7 @@ import {
 } from '../consts';
 import { Product, Meal } from '../../entities';
 import { DiaryActions } from '../actions/diary';
+import { ProductUnit } from '../../types';
 
 const initialState: DiaryReducerState = {
   meals: [],
@@ -73,19 +74,43 @@ export function diaryReducer(
   }
 }
 
+export type MealState = {
+  id: number
+  name: string
+  carbs: number
+  prots: number
+  fats: number
+  kcal: number
+  updatedAt?: number
+  createdAt?: number
+  /** List of meal's product ids */
+  products: number[]
+}
+
+export type MealStateArray = MealState[];
+
+export interface ProductState {
+  id: number
+  name: string
+  producer?: string | null
+  img?: string
+  barcode: string | null
+  quantity: number
+  unit: ProductUnit
+  carbs: number
+  prots: number
+  fats: number
+  kcal: number
+  mealId: Meal['id']
+  userId?: number
+  updatedAt: Date
+  createdAt: Date
+}
+
+export type ProductStateArray = ProductState[]
+
 interface DiaryReducerState {
-  meals: {
-    id: number
-    name: string
-    carbs: number
-    prots: number
-    fats: number
-    kcal: number
-    updatedAt?: number
-    createdAt?: number
-    /** List of meal's product ids */
-    products: number[]
-  }[]
-  products: Product[]
+  meals: MealStateArray
+  products: ProductState[]
   isLoading: boolean
 }

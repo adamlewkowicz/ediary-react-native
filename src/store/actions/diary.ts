@@ -8,6 +8,7 @@ import {
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED
 } from '../consts';
+import { ProductState } from '../reducers/diary';
 
 export const mealCreated = (meal: Meal): MealCreated => ({
   type: MEAL_CREATED,
@@ -42,7 +43,7 @@ export const mealUpdate = (mealId: Meal['id'], meal: Meal) => async (dispatch: a
 
 export const mealProductCreated = (
   mealId: Meal['id'],
-  product: Product
+  product: ProductState
 ): MealProductCreated => ({
   type: MEAL_PRODUCT_CREATED,
   payload: product,
@@ -72,7 +73,7 @@ export const mealProductCreate = (
 ) => async (dispatch: any) => {
   const meal = await mealRepository().findOne(mealId) as Meal;
   const newProduct = await meal.addAndCreateProduct(payload);
-  dispatch(mealProductCreated(mealId, newProduct as any));
+  dispatch(mealProductCreated(mealId, newProduct));
 }
 
 export const mealProductDelete = (
@@ -98,7 +99,7 @@ type MealCreated = {
 
 type MealUpdated = {
   type: typeof MEAL_UPDATED
-  payload: Meal
+  payload: Partial<Meal>
   meta: { mealId: Meal['id'] }
 }
 
@@ -109,7 +110,7 @@ type MealDeleted = {
 
 type MealProductCreated = {
   type: typeof MEAL_PRODUCT_CREATED
-  payload: Product
+  payload: ProductState
   meta: { mealId: Meal['id'] }
 }
 
@@ -123,7 +124,7 @@ type MealProductDeleted = {
 
 type ProductUpdated = {
   type: typeof PRODUCT_UPDATED
-  payload: Product
+  payload: Partial<Product>
   meta: {
     productId: Product['id']
   }
