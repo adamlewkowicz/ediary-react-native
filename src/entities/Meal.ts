@@ -21,16 +21,16 @@ export class Meal extends BaseEntity {
   @Column()
   name!: string;
 
-  @Column('decimal', { precision: 5, scale: 2 })
+  @Column('decimal', { precision: 5, scale: 2, default: 0 })
   carbs!: number
 
-  @Column('decimal', { precision: 5, scale: 2 })
+  @Column('decimal', { precision: 5, scale: 2, default: 0 })
   prots!: number
   
-  @Column('decimal', { precision: 5, scale: 2 })
+  @Column('decimal', { precision: 5, scale: 2, default: 0 })
   fats!: number
 
-  @Column('decimal', { precision: 5, scale: 2 })
+  @Column('decimal', { precision: 5, scale: 2, default: 0 })
   kcal!: number
 
   @OneToMany(type => MealProduct, mealProduct => mealProduct.product)
@@ -40,7 +40,7 @@ export class Meal extends BaseEntity {
     productId: Product['id']
   ) {
     const mealId = this.id;
-    const product = await productRepository.findOne(productId);
+    const product = await productRepository().findOne(productId);
 
     if (!product) {
       throw new Error(
@@ -48,7 +48,7 @@ export class Meal extends BaseEntity {
       );
     }
 
-    const mealProduct = await mealProductRepository.save({
+    const mealProduct = await mealProductRepository().save({
       productId: product.id,
       mealId
     });
@@ -60,9 +60,9 @@ export class Meal extends BaseEntity {
     payload: Product
   ) {
     const mealId = this.id;
-    const product = await productRepository.save(payload);
+    const product = await productRepository().save(payload);
 
-    const mealProduct = await mealProductRepository.save({
+    const mealProduct = await mealProductRepository().save({
       productId: product.id,
       mealId
     });

@@ -35,14 +35,7 @@ export class DatabaseProvider extends React.Component<DatabaseProviderProps, Dat
       entities: Object.values(entities)
     });
 
-    const repositories: any = Object.entries(entities)
-      .reduce((acc, [name, entity]) => ({
-        ...acc,
-        [name]: getRepository(entity)
-      }), {});
-
     this.setState({
-      repositories,
       connection,
       isLoading: false
     });

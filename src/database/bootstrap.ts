@@ -1,8 +1,8 @@
-import { connectionManager } from './manager';
 import * as entities from '../entities';
+import { createConnection } from 'typeorm/browser';
 
 export async function bootstrapDatabase() {
-  const connection = await connectionManager.create({
+  const connection = await createConnection({
     type: 'react-native',
     database: 'test',
     location: 'default',
@@ -10,7 +10,5 @@ export async function bootstrapDatabase() {
     synchronize: true,
     entities: Object.values(entities)
   });
-  await connection.connect();
-
   return connection;
 }
