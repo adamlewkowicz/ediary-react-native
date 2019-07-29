@@ -7,6 +7,7 @@ import { TouchableHighlight, View, TouchableOpacity } from 'react-native';
 import { mergedMealSelector } from '../store/selectors';
 import { MealList } from '../components/MealList';
 import { DateChanger } from '../components/DateChanger';
+import { ProgressBar } from '../components/ProgressBar';
 
 export const Home = () => {
   const [name, setName] = useState('Zupa');
@@ -25,6 +26,10 @@ export const Home = () => {
   return (
     <Layout style={{ flex: 1 }}>
       <DateChanger date={new Date} />
+      <ProgressBar
+        percentages={45}
+        colors={['#5DB4CF', '#C5FBFF']}
+      />
       <Text category="h3">Home</Text>
       <Input
         placeholder="Nazwa nowego posiłku"
