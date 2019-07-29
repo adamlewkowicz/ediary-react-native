@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@eva-design/eva": "^1.0.1",
+    "dayjs": "^1.8.15",
     "react": "16.8.6",
     "react-native": "0.60.4",
     "react-native-sqlite-storage": "^3.3.11",
