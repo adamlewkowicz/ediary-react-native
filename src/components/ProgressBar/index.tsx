@@ -1,8 +1,6 @@
 import React, { ReactNode } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
-import { MacroElement } from '../../types';
 
 interface ProgressBarProps {
   percentages: number

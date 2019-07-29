@@ -21,6 +21,7 @@ export const DateChanger = ({
 const Container = styled.View`
   display: flex;
   align-items: center;
+  margin: 25px 0;
 `
 
 const Title = styled.Text`

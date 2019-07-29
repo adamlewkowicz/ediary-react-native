@@ -8,6 +8,15 @@ import { mergedMealSelector } from '../store/selectors';
 import { MealList } from '../components/MealList';
 import { DateChanger } from '../components/DateChanger';
 import { ProgressBar } from '../components/ProgressBar';
+import { MacroCard } from '../components/MacroCard';
+import { nutritionColors } from '../common/theme';
+import styled from 'styled-components/native';
+
+const elements = [
+  { name: 'carbs', title: 'Węgle', value: 19, percentages: 25 },
+  { name: 'prots', title: 'Białka', value: 73, percentages: 63 },
+  { name: 'fats', title: 'Tłuszcze', value: 281, percentages: 89 },
+]
 
 export const Home = () => {
   const [name, setName] = useState('Zupa');
@@ -26,11 +35,17 @@ export const Home = () => {
   return (
     <Layout style={{ flex: 1 }}>
       <DateChanger date={new Date} />
-      <ProgressBar
-        percentages={45}
-        colors={['#5DB4CF', '#C5FBFF']}
-      />
-      <Text category="h3">Home</Text>
+      <MacroCards>
+        {elements.map(element => (
+          <MacroCard
+            key={element.name}
+            colors={(nutritionColors as any)[element.name]}
+            percentages={element.percentages}
+            title={element.title}
+            value={element.value}
+          />
+        ))}
+      </MacroCards>
       <Input
         placeholder="Nazwa nowego posiłku"
         value={name}
@@ -84,3 +99,9 @@ export const Home = () => {
     </Layout>
   );
 }
+
+const MacroCards = styled.View`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+`
