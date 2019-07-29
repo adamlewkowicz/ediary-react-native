@@ -21,11 +21,10 @@ export const DateChanger = ({
 const Container = styled.View`
   display: flex;
   align-items: center;
-
 `
 
 const Title = styled.Text`
-  font-size: 20px;
+  font-size: 25px;
   font-weight: bold;
 `
 
