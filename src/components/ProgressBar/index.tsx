@@ -14,15 +14,12 @@ interface ProgressBarProps {
   rounded?: boolean
 }
 export const ProgressBar = ({
-  showPercentages,
   percentages,
   vertical = false,
   length = '50px',
   width = '20px',
   colors,
   rounded = true,
-  children,
-  renderContent
 }: ProgressBarProps) => {
   return (
     <Container
@@ -64,16 +61,6 @@ const BackgroundStripe = styled.View<{
   border-radius: ${props => props.rounded ? '50px' : '0px'};
   height: ${props => props.vertical ? '100%' : props.width};
   width: ${props => props.vertical ? props.width : '100%'};
-`
-
-const TextWrapper = styled.View`
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  align-items: center;
-  justify-content: center;
 `
 
 const GradientLine = styled(LinearGradient)<{

@@ -11,6 +11,7 @@ import { MacroCard } from '../components/MacroCard';
 import { nutritionColors } from '../common/theme';
 import styled from 'styled-components/native';
 import { MealListItem } from '../components/MealListItem';
+import { ProductItem } from '../components/ProductItem';
 
 const elements = [
   { name: 'carbs', title: 'Węgle', value: 19, percentages: 25 },

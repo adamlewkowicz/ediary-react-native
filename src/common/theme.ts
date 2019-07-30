@@ -1,8 +1,8 @@
 
 export const nutritionColors = {
-  carbs: ['#C5FFC7', '#5DCF8B'],
-  prots: ['#C5FBFF', '#5DB4CF'],
-  fats: ['#FFEFC5', '#CFAF5D']
+  carbs: ['#5DCF8B', '#C5FFC7'],
+  prots: ['#5DB4CF', '#C5FBFF'],
+  fats: ['#CFAF5D', '#FFEFC5']
 }
 
 export const themeProps = {
