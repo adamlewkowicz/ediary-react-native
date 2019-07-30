@@ -11,6 +11,7 @@ import { Meal } from '../../entities';
 import { ProductUnit, MacroElement } from '../../types';
 import { DiaryActions } from '../actions';
 import { calcMacroByQuantity } from '../helpers/diary';
+import dayjs from 'dayjs';
 
 const initialState: DiaryReducerState = {
   meals: [],
@@ -29,6 +30,7 @@ export function diaryReducer(
         ...state.meals,
         {
           ...action.payload,
+          day: dayjs(action.payload.date).format('YYYY-MM-DD'),
           isToggled: true,
           products: []
         }
@@ -116,7 +118,8 @@ export type MealState = {
   fats: number
   kcal: number
   isToggled: boolean
-  date?: string
+  day: string
+  date: string
   updatedAt?: number
   createdAt?: number
   /** List of meal's product ids */

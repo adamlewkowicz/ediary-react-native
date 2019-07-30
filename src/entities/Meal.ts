@@ -33,6 +33,9 @@ export class Meal extends BaseEntity {
   @Column('decimal', { precision: 5, scale: 2, default: 0 })
   kcal!: number
 
+  @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
+  date!: string;
+
   @OneToMany(type => MealProduct, mealProduct => mealProduct.product, {
     onDelete: 'CASCADE'
   })
