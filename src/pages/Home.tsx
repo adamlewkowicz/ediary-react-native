@@ -10,6 +10,7 @@ import { MacroCard } from '../components/MacroCard';
 import { nutritionColors } from '../common/theme';
 import styled from 'styled-components/native';
 import { MealListItem } from '../components/MealListItem';
+import { FloatingButton } from '../components/FloatingButton';
 
 const elements = [
   { name: 'carbs', title: 'Węgle', value: 19, percentages: 25 },
@@ -20,6 +21,7 @@ const elements = [
 export const Home = () => {
   const [name, setName] = useState('Zupa');
   const dispatch = useDispatch();
+  const [menuOpened, setMenuOpened] = useState(false);
   const meals = useSelector<AppState, AppState['diary']['meals']>(
     state => state.diary.meals
   );
@@ -75,6 +77,10 @@ export const Home = () => {
       ))}>
         Aktualizuj nazwę (Pierwszy produkt)
       </Button>
+      <FloatingButton
+        children="+"
+        onPress={() => setMenuOpened(status => !status)}
+      />
     </ScrollView>
   );
 }
