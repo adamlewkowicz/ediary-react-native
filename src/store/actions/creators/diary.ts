@@ -65,7 +65,7 @@ export const productUpdated = (
 });
 
 export const mealToggled = (
-  mealId: MealState['id']
+  mealId: MealState['id'] | null
 ): MealToggled => ({
   type: MEAL_TOGGLED,
   meta: { mealId }

@@ -8,8 +8,9 @@ import {
   MEAL_TOGGLED,
 } from '../consts';
 import { Meal } from '../../entities';
-import { ProductUnit } from '../../types';
+import { ProductUnit, MacroElement } from '../../types';
 import { DiaryActions } from '../actions';
+import { calcMacroByQuantity } from '../helpers/diary';
 
 const initialState: DiaryReducerState = {
   meals: [],
@@ -28,7 +29,7 @@ export function diaryReducer(
         ...state.meals,
         {
           ...action.payload,
-          isToggled: false,
+          isToggled: true,
           products: []
         }
       ]
@@ -60,7 +61,13 @@ export function diaryReducer(
         ? { ...meal, products: [...meal.products, action.payload.id] }
         : meal
       ),
-      products: [...state.products, action.payload]
+      products: [
+        ...state.products,
+        {
+          ...action.payload,
+          macro: calcMacroByQuantity(action.payload)
+        }
+      ]
     }
     case MEAL_PRODUCT_DELETED: return {
       ...state,
@@ -80,10 +87,22 @@ export function diaryReducer(
     }
     case PRODUCT_UPDATED: return {
       ...state,
-      products: state.products.map(product => product.id === action.meta.productId
-        ? { ...product, ...action.payload }
-        : product
-      )
+      products: state.products.map(product => {
+        if (product.id === action.meta.productId) {
+          const merged = { ...product, ...action.payload };
+          if (
+            'quantity' in action.payload &&
+            action.payload.quantity !== product.quantity
+          ) {
+            return {
+              ...merged,
+              macro: calcMacroByQuantity(merged)
+            }
+          }
+          return merged;
+        }
+        return product;
+      })
     }
     default: return state;
   }
@@ -118,6 +137,10 @@ export interface ProductState {
   prots: number
   fats: number
   kcal: number
+  macro: {
+    element: MacroElement
+    value: number
+  }[]
   mealId: Meal['id'] | null
   userId?: number | null
   updatedAt: Date

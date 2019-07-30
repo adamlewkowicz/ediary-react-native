@@ -51,7 +51,7 @@ export type ProductUpdated = {
 export type MealToggled = {
   type: typeof MEAL_TOGGLED
   meta: {
-    mealId: MealState['id']
+    mealId: MealState['id'] | null
   }
 }
 

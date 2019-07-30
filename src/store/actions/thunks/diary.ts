@@ -12,12 +12,14 @@ import {
   mealProductRepository, 
   productRepository
 } from '../../../repositories';
-import { AppState } from '../..';
 import { ProductState } from '../../reducers/diary';
+import { getProductMock } from '../../helpers/diary';
+import { mealToggled } from '../creators';
 
 
 export const mealCreate = (name: Meal['name']) => async (dispatch: any) => {
   const meal = await mealRepository().save({ name });
+  dispatch(mealToggled(null));
   dispatch(mealCreated(meal));
 }
 
@@ -38,7 +40,7 @@ export const mealProductCreate = (
 ) => async (dispatch: any) => {
   const meal = await mealRepository().findOne(mealId) as Meal;
   const newProduct = await meal.addAndCreateProduct(payload);
-  dispatch(mealProductCreated(mealId, newProduct));
+  dispatch(mealProductCreated(mealId, { ...newProduct, ...getProductMock() }));
 }
 
 export const mealProductDelete = (

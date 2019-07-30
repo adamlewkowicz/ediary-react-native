@@ -1,10 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { Input, Button } from 'react-native-ui-kitten';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, connect } from 'react-redux';
 import * as Actions from '../store/actions';
 import { AppState } from '../store';
 import { FlatList, ScrollView } from 'react-native';
-import { mergedMealSelector } from '../store/selectors';
+import { mergedMealSelector, mealsWithRatio, MealsWithRatio } from '../store/selectors';
 import { DateChanger } from '../components/DateChanger';
 import { MacroCard } from '../components/MacroCard';
 import { nutritionColors } from '../common/theme';
@@ -18,7 +18,10 @@ const elements = [
   { name: 'fats', title: 'Tłuszcze', value: 281, percentages: 89 },
 ]
 
-export const Home = () => {
+interface HomeProps {
+  mealsWithRatio: MealsWithRatio
+}
+const Home = (props: HomeProps) => {
   const [name, setName] = useState('Zupa');
   const dispatch = useDispatch();
   const [menuOpened, setMenuOpened] = useState(false);
@@ -48,12 +51,12 @@ export const Home = () => {
         ))}
       </MacroCards>
       <FlatList
-        data={mealsMerged}
+        data={props.mealsWithRatio}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <MealListItem
             meal={item}
-            onMealToggle={mealId => dispatch(Actions.mealToggled(mealId))}
+            onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
           />
         )}
       />
@@ -84,6 +87,15 @@ export const Home = () => {
     </ScrollView>
   );
 }
+
+const HomeConnected = connect(
+  (state: AppState) => ({
+    mealsWithRatio: mealsWithRatio(state)
+  }),
+  (dispatch) => ({ dispatch })
+)(Home);
+
+export { HomeConnected as Home };
 
 const MacroCards = styled.View`
   display: flex;

@@ -3,33 +3,31 @@ import styled from 'styled-components/native';
 import { Theme, nutritionColors } from '../../common/theme';
 import { MacroElements } from '../../types';
 import { ProgressBar } from '../ProgressBar';
-import { MACRO_ELEMENTS } from '../../common/consts';
 import { ProductPartial, ProductItem } from '../ProductItem';
 import { FlatList, TouchableOpacity } from 'react-native';
+import { MealsWithRatio } from '../../store/selectors';
 
 interface MealListItemProps {
-  meal: MealPartial
-  onMealToggle: (mealId: MealPartial['id']) => void
+  meal: MealsWithRatio[number]
+  onToggle: (mealId: MealsWithRatio[number]['id']) => void
 }
 export const MealListItem = (props: MealListItemProps) => (
   <Container>
-    <TouchableOpacity onPress={() => props.onMealToggle(props.meal.id)}>
+    <TouchableOpacity onPress={() => props.onToggle(props.meal.id)}>
       <InfoContainer>
         <Title>{props.meal.name}</Title>
         <Calories>{props.meal.kcal} kcal</Calories>
       </InfoContainer>
       <NutritionBar>
-        {MACRO_ELEMENTS.map(element => (
-          element !== 'kcal' && (
-            <NutritionStripe key={element}>
-              <ProgressBar
-                percentages={(props.meal as any)[`${element}Ratio`] || 0}
-                colors={(nutritionColors as any)[element]}
-                rounded={false}
-                width="8px"
-              />
-            </NutritionStripe>
-          )
+        {props.meal.macroRatio.map(ratio => (
+          <NutritionStripe key={ratio.element}>
+            <ProgressBar
+              percentages={ratio.value * 100}
+              colors={nutritionColors[ratio.element]}
+              rounded={false}
+              width="8px"
+            />
+          </NutritionStripe>
         ))}
       </NutritionBar>
     </TouchableOpacity>
@@ -51,6 +49,7 @@ export const MealListItem = (props: MealListItemProps) => (
         </NutritionDetails>
         <FlatList
           data={props.meal.products}
+          keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
             <ProductItem
               key={item.id}
@@ -64,6 +63,7 @@ export const MealListItem = (props: MealListItemProps) => (
 );
 
 const Container = styled.View`
+  margin-bottom: 30px;
 `
 
 const InfoContainer = styled.View`

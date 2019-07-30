@@ -1,7 +1,8 @@
 import { MealState, ProductState } from '../reducers/diary';
-import { MACRO_ELEMENTS, BASE_MACRO_ELEMENTS } from '../../common/consts';
-import { MacroElements, BaseMacroElement, BaseMacroElements } from '../../types';
+import { BASE_MACRO_ELEMENTS } from '../../common/consts';
+import { MacroElements } from '../../types';
 import { AppState } from '..';
+import { createSelector } from 'reselect';
 
 const baseMacro: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 
@@ -18,65 +19,58 @@ export const mergedMealSelector = (
   }))
 );
 
-export const calcedMealSelector = (
-  meals: ReturnType<typeof mergedMealSelector>
-) => meals.map(meal => {
+const meals = (state: AppState) => state.diary.meals;
+const products = (state: AppState) => state.diary.products;
 
-  const calcedProducts = meal.products.map(product => ({
+const calcedProducts = createSelector(
+  products,
+  products => products.map(product => ({
     ...product,
-    ...MACRO_ELEMENTS.reduce((macro, element) => ({
-      ...macro,
-      [element]: product[element] * product.quantity
-    }), { ...baseMacro })
-  }));
+    carbs: Math.round(product.carbs * product.quantity / 100),
+    prots: Math.round(product.prots * product.quantity / 100),
+    fats: Math.round(product.fats * product.quantity / 100),
+    kcal: Math.round(product.kcal * product.quantity / 100)
+  })
+));
 
-  const mealMacro = calcedProducts.reduce((macro, product) => {
-    for (const element of MACRO_ELEMENTS) {
-      macro[element] += product[element];
-    }
-    return macro;
-  }, { ...baseMacro });
-
-  return {
+const mealsWithProducts = createSelector(
+  meals,
+  calcedProducts,
+  (meals, products) => meals.map(meal => ({
     ...meal,
-    ...mealMacro,
-    products: calcedProducts
-  }
-});
+    products: meal.products.flatMap(productId => {
+      const foundProduct = products.find(product => product.id === productId);
+      return foundProduct ? [foundProduct] : []
+    })
+  }))
+);
 
-export const dailyEatenMacro = (
-  day: string,
-  meals: CalcedMealSelectorResult
-): MacroElements => meals
-  // .filter(meal => meal.day === day)
-  .reduce((macro, meal) => {
-    for (const element of MACRO_ELEMENTS) {
-      macro[element] += meal[element];
-    }
-    return macro;
-  }, { ...baseMacro });
+const calcedMeals = createSelector(
+  mealsWithProducts,
+  meals => meals.map(meal => {
+    const summedMacro = meal.products.reduce((macro, product) => ({
+      ...macro,
+      carbs: macro.carbs += product.carbs,
+      prots: macro.prots += product.prots,
+      fats: macro.fats += product.fats,
+      kcal: macro.kcal += product.kcal,
+    }), { ...baseMacro });
 
-export const calcedProducts = (products: AppState['diary']['products']) => products.map(calcMacroOnQuantity);
+    return { ...meal, ...summedMacro }
+  })
+);
 
-export const getMacroRatio = <T extends BaseMacroElements>(
-  macroData: T
-) => {
-  const macroWeightSum = macroData.carbs + macroData.prots + macroData.fats;
+export const mealsWithRatio = createSelector(
+  calcedMeals,
+  meals => meals.map(meal => {
+    const macroSum = meal.carbs + meal.prots + meal.fats;
+    const macroRatio = BASE_MACRO_ELEMENTS.map(element => ({
+      value: meal[element] / macroSum,
+      element
+    }));
 
-  return BASE_MACRO_ELEMENTS.map(element => ({
-    value: Math.round(macroData[element] / macroWeightSum * 100),
-    element
-  }));
-}
+    return { ...meal, macroRatio };
+  })
+);
 
-interface CalcMacroOnQuantityData extends MacroElements {
-  quantity: number
-}
-export const calcMacroOnQuantity = <T extends CalcMacroOnQuantityData>(
-  macroData: T
-) => MACRO_ELEMENTS.map(element => ({
-  value: Math.round(macroData[element] * macroData.quantity / 100),
-  element
-}));
-
-export type CalcedMealSelectorResult = ReturnType<typeof calcedMealSelector>;
+export type MealsWithRatio = ReturnType<typeof mealsWithRatio>;
