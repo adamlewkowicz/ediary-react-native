@@ -44,6 +44,7 @@ const Value = styled.Text<{
   fontSize?: number
   fontWeight?: FontWeightProperty
 }>`
+  font-family: 'DMSans-Regular';
   font-size: ${({ fontSize = 14 }) => fontSize + 'px'};
   font-weight: ${({ fontWeight = 'normal' }) => fontWeight};
 `
@@ -51,6 +52,7 @@ const Value = styled.Text<{
 const Meta = styled.Text<{
   fontSize?: number
 }>`
+  font-family: 'DMSans-Regular';
   font-size: ${({ fontSize = 10 }) => fontSize + 'px'};
   margin-left: 2px;
 `

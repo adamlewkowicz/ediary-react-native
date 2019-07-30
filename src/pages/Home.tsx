@@ -7,7 +7,6 @@ import { TouchableHighlight, View, TouchableOpacity } from 'react-native';
 import { mergedMealSelector } from '../store/selectors';
 import { MealList } from '../components/MealList';
 import { DateChanger } from '../components/DateChanger';
-import { ProgressBar } from '../components/ProgressBar';
 import { MacroCard } from '../components/MacroCard';
 import { nutritionColors } from '../common/theme';
 import styled from 'styled-components/native';
