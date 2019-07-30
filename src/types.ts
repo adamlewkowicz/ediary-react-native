@@ -36,3 +36,7 @@ export type ProductUnit = typeof PRODUCT_UNITS[number];
 export type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType[number];
 
 export type MacroElement = typeof MACRO_ELEMENTS[number];
+
+export type MacroElements = {
+  [key in MacroElement]: number
+}
