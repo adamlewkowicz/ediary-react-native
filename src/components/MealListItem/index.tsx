@@ -63,7 +63,6 @@ export const MealListItem = (props: MealListItemProps) => (
 );
 
 const Container = styled.View`
-  margin-bottom: 30px;
 `
 
 const InfoContainer = styled.View`
