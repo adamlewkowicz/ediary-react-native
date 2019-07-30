@@ -1,17 +1,15 @@
 import React, { useState, useMemo } from 'react';
-import { Layout, Text, Input, Button } from 'react-native-ui-kitten';
+import { Input, Button } from 'react-native-ui-kitten';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
 import { AppState } from '../store';
-import { TouchableHighlight, View, TouchableOpacity } from 'react-native';
+import { FlatList, ScrollView } from 'react-native';
 import { mergedMealSelector } from '../store/selectors';
-import { MealList } from '../components/MealList';
 import { DateChanger } from '../components/DateChanger';
 import { MacroCard } from '../components/MacroCard';
 import { nutritionColors } from '../common/theme';
 import styled from 'styled-components/native';
 import { MealListItem } from '../components/MealListItem';
-import { ProductItem } from '../components/ProductItem';
 
 const elements = [
   { name: 'carbs', title: 'Węgle', value: 19, percentages: 25 },
@@ -34,7 +32,7 @@ export const Home = () => {
   );
 
   return (
-    <Layout style={{ flex: 1 }}>
+    <ScrollView>
       <DateChanger date={new Date} />
       <MacroCards>
         {elements.map(element => (
@@ -47,6 +45,16 @@ export const Home = () => {
           />
         ))}
       </MacroCards>
+      <FlatList
+        data={mealsMerged}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <MealListItem
+            meal={item}
+            onMealToggle={mealId => dispatch(Actions.mealToggled(mealId))}
+          />
+        )}
+      />
       <Input
         placeholder="Nazwa nowego posiłku"
         value={name}
@@ -67,37 +75,7 @@ export const Home = () => {
       ))}>
         Aktualizuj nazwę (Pierwszy produkt)
       </Button>
-      <MealList
-        meals={mealsMerged}
-      />
-      {mealsMerged.map(meal => (
-        <TouchableHighlight
-          key={meal.id}
-          onPress={() => dispatch(Actions.mealDelete(meal.id))}
-        >
-          <View>
-            <Text category="h4">
-              {meal.name}
-            </Text>
-            <Text category="h6">
-              Produkty: ({meal.products.length as any})
-            </Text>
-            {meal.products.map(product => (
-              <TouchableOpacity
-                key={product.id}
-                onPress={() => dispatch(
-                  Actions.mealProductDelete(meal.id, product.id)
-                )}
-              >
-                <Text category="h6">
-                  {product.name}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </TouchableHighlight>
-      ))}
-    </Layout>
+    </ScrollView>
   );
 }
 
@@ -105,4 +83,5 @@ const MacroCards = styled.View`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  margin-bottom: 50px;
 `

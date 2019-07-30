@@ -9,7 +9,7 @@ export const ProductItem = (props: ProductItemProps) => {
     <Container>
       <Name>{props.product.name}</Name>
       <Quantity>{props.product.quantity}g</Quantity>
-      <Calories>{props.product.kcal}kcal</Calories>
+      <Calories>{props.product.kcal} kcal</Calories>
     </Container>
   );
 }
@@ -46,6 +46,7 @@ const Calories = styled.Text`
 `
 
 export interface ProductPartial {
+  id: number
   name: string
   quantity: number
   kcal: number
