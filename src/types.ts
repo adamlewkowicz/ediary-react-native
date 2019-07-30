@@ -1,4 +1,4 @@
-import { PRODUCT_UNITS, MACRO_ELEMENTS } from './common/consts';
+import { PRODUCT_UNITS, MACRO_ELEMENTS, BASE_MACRO_ELEMENTS } from './common/consts';
 
 export interface Meal {
   id: number
@@ -35,8 +35,13 @@ export type ProductUnit = typeof PRODUCT_UNITS[number];
 
 export type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType[number];
 
+export type BaseMacroElement = typeof BASE_MACRO_ELEMENTS[number];
 export type MacroElement = typeof MACRO_ELEMENTS[number];
 
 export type MacroElements = {
   [key in MacroElement]: number
+}
+
+export type BaseMacroElements = {
+  [key in BaseMacroElement]: number
 }

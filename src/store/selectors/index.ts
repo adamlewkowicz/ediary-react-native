@@ -1,5 +1,9 @@
 import { MealState, ProductState } from '../reducers/diary';
-import { MACRO_ELEMENTS } from '../../common/consts';
+import { MACRO_ELEMENTS, BASE_MACRO_ELEMENTS } from '../../common/consts';
+import { MacroElements, BaseMacroElement, BaseMacroElements } from '../../types';
+import { AppState } from '..';
+
+const baseMacro: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 
 export const mergedMealSelector = (
   meals: MealState[],
@@ -17,7 +21,6 @@ export const mergedMealSelector = (
 export const calcedMealSelector = (
   meals: ReturnType<typeof mergedMealSelector>
 ) => meals.map(meal => {
-  const baseMacro = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 
   const calcedProducts = meal.products.map(product => ({
     ...product,
@@ -32,7 +35,7 @@ export const calcedMealSelector = (
       macro[element] += product[element];
     }
     return macro;
-  }, baseMacro);
+  }, { ...baseMacro });
 
   return {
     ...meal,
@@ -40,5 +43,40 @@ export const calcedMealSelector = (
     products: calcedProducts
   }
 });
+
+export const dailyEatenMacro = (
+  day: string,
+  meals: CalcedMealSelectorResult
+): MacroElements => meals
+  // .filter(meal => meal.day === day)
+  .reduce((macro, meal) => {
+    for (const element of MACRO_ELEMENTS) {
+      macro[element] += meal[element];
+    }
+    return macro;
+  }, { ...baseMacro });
+
+export const calcedProducts = (products: AppState['diary']['products']) => products.map(calcMacroOnQuantity);
+
+export const getMacroRatio = <T extends BaseMacroElements>(
+  macroData: T
+) => {
+  const macroWeightSum = macroData.carbs + macroData.prots + macroData.fats;
+
+  return BASE_MACRO_ELEMENTS.map(element => ({
+    value: Math.round(macroData[element] / macroWeightSum * 100),
+    element
+  }));
+}
+
+interface CalcMacroOnQuantityData extends MacroElements {
+  quantity: number
+}
+export const calcMacroOnQuantity = <T extends CalcMacroOnQuantityData>(
+  macroData: T
+) => MACRO_ELEMENTS.map(element => ({
+  value: Math.round(macroData[element] * macroData.quantity / 100),
+  element
+}));
 
 export type CalcedMealSelectorResult = ReturnType<typeof calcedMealSelector>;

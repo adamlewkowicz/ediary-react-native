@@ -97,6 +97,7 @@ export type MealState = {
   fats: number
   kcal: number
   isToggled: boolean
+  date?: string
   updatedAt?: number
   createdAt?: number
   /** List of meal's product ids */
