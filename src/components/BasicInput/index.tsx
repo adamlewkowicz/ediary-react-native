@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { TextInputProps, TextInput } from 'react-native';
 import { Theme } from '../../common/theme';
-import { TextAlignProperty, MinWidthProperty } from 'csstype';
+import { TextAlignProperty } from 'csstype';
 
-interface BasicInputProps extends TextInputProps {
+export interface BasicInputProps extends TextInputProps {
   label?: string
   minWidth?: number
   textAlign?: TextAlignProperty
-  customRef?: React.Ref<TextInput>
+  forwardedRef?: React.Ref<TextInput>
 }
 export const BasicInput = ({
   label,
   onBlur,
   onFocus,
-  customRef,
+  forwardedRef,
   textAlign,
   minWidth,
   ...props
@@ -24,6 +24,8 @@ export const BasicInput = ({
     <Container isFocused={isFocused} minWidth={minWidth}>
       {label && <Label>{label}:</Label>}
       <Input
+        textAlign={textAlign}
+        ref={forwardedRef}
         onFocus={(event) => {
           setFocused(true);
           onFocus && onFocus(event);
@@ -32,8 +34,6 @@ export const BasicInput = ({
           setFocused(false);
           onBlur && onBlur(event);
         }}
-        textAlign={textAlign}
-        ref={customRef}
         {...props}
       />
     </Container>
@@ -43,7 +43,6 @@ export const BasicInput = ({
 const Container = styled.View<{
   isFocused: boolean
   minWidth?: number
-  textAlign?: TextAlignProperty
   theme: Theme
 }>`
   font-family: ${props => props.theme.fontFamily};
@@ -53,7 +52,6 @@ const Container = styled.View<{
   font-weight: 900;
   margin-bottom: 20px;
   min-width: ${props => props.minWidth || '100%'};
-  text-align: ${props => props.textAlign || 'left'};
 `
 
 const Label = styled.Text<{
@@ -65,13 +63,19 @@ const Label = styled.Text<{
   color: #BCBCBC;
 `
 
-const Input = styled.TextInput`
+const Input = styled.TextInput<{
+  textAlign?: TextAlignProperty
+}>`
   font-family: DMSans-Regular;
   font-weight: 600;
   font-size: 15px;
   padding: 8px 0;
+  text-align: ${props => props.textAlign || 'left'};
 `
 
-export const BasicInputRef = React.forwardRef<TextInput, BasicInputProps>((props, ref) => (
-  <BasicInput {...props} customRef={ref} />
+export const BasicInputRef = React.forwardRef<
+  TextInput,
+  BasicInputProps
+>((props, ref) => (
+  <BasicInput {...props} forwardedRef={ref} />
 ));

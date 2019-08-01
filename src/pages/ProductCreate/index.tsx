@@ -2,42 +2,42 @@ import React, { useReducer, useRef, createRef } from 'react';
 import styled from 'styled-components/native';
 import { BasicInput, BasicInputRef } from '../../components/BasicInput';
 import { formReducer, initialState, FormReducerState } from './reducer';
-import { Text, TextInput } from 'react-native';
+import { Text, TextInput, ScrollView } from 'react-native';
 import { Theme } from '../../common/theme';
 import { BasicOption } from '../../components/BasicOption';
 import { MacroElement } from '../../types';
+import { InputRow } from '../../components/InputRow';
+
+const quantityTitle = {
+  '100g': 'Opakowanie zawiera',
+  'portion': 'Porcja zawiera',
+  'package': 'Opakowanie zawiera'
+}
 
 const nutritionInputs: {
   title: string
-  titleOptions?: {
-    [key in FormReducerState['nutritionFor']]: string
-  }
   property: MacroElement | 'quantity'
+  nextRef: MacroElement | 'barcode'
 }[] = [
-  {
-    title: 'Opakowanie zawiera',
-    property: 'quantity',
-    titleOptions: {
-      '100g': 'Opakowanie zawiera',
-      'portion': 'Porcja zawiera',
-      'package': 'Opakowanie zawiera'
-    }
-  },
   {
     title: 'Węglowodany',
     property: 'carbs',
+    nextRef: 'prots'
   },
   {
     title: 'Białka',
-    property: 'prots'
+    property: 'prots',
+    nextRef: 'fats'
   },
   {
     title: 'Tłuszcze',
-    property: 'fats'
+    property: 'fats',
+    nextRef: 'kcal'
   },
   {
     title: 'Kalorie',
-    property: 'kcal'
+    property: 'kcal',
+    nextRef: 'barcode'
   }
 ]
 
@@ -60,56 +60,69 @@ export const ProductCreate = () => {
     });
   }
 
+  function handleProductCreate() {}
+
   return (
-    <Container>
-      <BasicInput
-        label="Nazwa"
-        value={state.name}
-        onChangeText={name => handleUpdate({ name })}
-        onSubmitEditing={() => refsList.producer.current!.focus()}
-      />
-      <BasicInputRef
-        label="Producent"
-        value={state.producer}
-        onChangeText={producer => handleUpdate({ producer })}
-        onSubmitEditing={() => refsList.quantity.current!.focus()}
-        ref={refsList.producer}
-      />
-      <InfoTitle>Wartości odżywcze na:</InfoTitle>
-      <OptionsContainer>
-        <BasicOption
-          title="100g"
-          value={state.nutritionFor === '100g'}
-          onChange={() => handleUpdate({ nutritionFor: '100g' })}
+    <ScrollView>
+      <Container>
+        <BasicInput
+          label="Nazwa"
+          value={state.name}
+          onChangeText={name => handleUpdate({ name })}
+          onSubmitEditing={() => refsList.producer.current!.focus()}
         />
-        <BasicOption
-          title="porcję"
-          value={state.nutritionFor === 'portion'}
-          onChange={() => handleUpdate({ nutritionFor: 'portion' })}
+        <BasicInputRef
+          label="Producent"
+          value={state.producer}
+          onChangeText={producer => handleUpdate({ producer })}
+          onSubmitEditing={() => refsList.quantity.current!.focus()}
+          ref={refsList.producer}
         />
-        <BasicOption
-          title="opakowanie"
-          value={state.nutritionFor === 'package'}
-          onChange={() => handleUpdate({ nutritionFor: 'package' })}
+        <InfoTitle>Wartości odżywcze na:</InfoTitle>
+        <OptionsContainer>
+          <BasicOption
+            title="100g"
+            value={state.nutritionFor === '100g'}
+            onChange={() => handleUpdate({ nutritionFor: '100g' })}
+          />
+          <BasicOption
+            title="porcję"
+            value={state.nutritionFor === 'portion'}
+            onChange={() => handleUpdate({ nutritionFor: 'portion' })}
+          />
+          <BasicOption
+            title="opakowanie"
+            value={state.nutritionFor === 'package'}
+            onChange={() => handleUpdate({ nutritionFor: 'package' })}
+          />
+        </OptionsContainer>
+        <InputRow
+          title={quantityTitle[state.nutritionFor]}
+          value={state.quantity.toString()}
+          onChangeText={quantity => handleUpdate({ quantity: Number(quantity) })}
+          onSubmitEditing={() => refsList.carbs.current!.focus()}
+          ref={refsList.quantity}
         />
-      </OptionsContainer>
-      {nutritionInputs.map((data, index) => (
-        <NutriRow key={data.title}>
-          <NutriInfo>
-            {data.titleOptions ? data.titleOptions[state.nutritionFor] : data.title}
-          </NutriInfo>
-          <BasicInputRef
-            minWidth={100}
-            textAlign="center"
-            keyboardType="numeric"
+        {nutritionInputs.map(data => (
+          <InputRow
+            key={data.title}
+            title={data.title}
             value={state[data.property].toString()}
             onChangeText={value => handleUpdate({ [data.property]: Number(value) })}
-            onSubmitEditing={() => refsList[nutritionInputs[index + 1].property].current!.focus()}
+            onSubmitEditing={() => refsList[data.nextRef].current!.focus()}
             ref={refsList[data.property]}
           />
-        </NutriRow>
-      ))}
-    </Container>
+        ))}
+        <InputRow
+          title="Kod kreskowy"
+          keyboardType="default"
+          ref={refsList.barcode}
+          value={state.barcode as string}
+          onChangeText={barcode => handleUpdate({ barcode })}
+          onSubmitEditing={handleProductCreate}
+        />
+      </Container>
+    </ScrollView>
   );
 }
 
@@ -129,19 +142,6 @@ const InfoTitle = styled.Text<{
   theme: Theme
 }>`
   text-align: center;
-  font-size: ${props => props.theme.fontSize};
-  font-family: ${props => props.theme.fontFamily};
-`
-
-const NutriRow = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`
-
-const NutriInfo = styled.Text<{
-  theme: Theme
-}>`
   font-size: ${props => props.theme.fontSize};
   font-family: ${props => props.theme.fontFamily};
 `
