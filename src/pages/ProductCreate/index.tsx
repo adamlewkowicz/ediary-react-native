@@ -1,14 +1,14 @@
 import React, { useReducer, useRef, createRef } from 'react';
 import styled from 'styled-components/native';
 import { BasicInput, BasicInputRef } from '../../components/BasicInput';
-import { formReducer, initialState, FormReducerState } from './reducer';
+import { formReducer, initialState, FormReducerState, PortionOption } from './reducer';
 import { TextInput, ScrollView } from 'react-native';
 import { Theme } from '../../common/theme';
-import { BasicOption } from '../../components/BasicOption';
 import { MacroElement } from '../../types';
 import { InputRow } from '../../components/InputRow';
 import { useDispatch } from 'react-redux';
 import * as Actions from '../../store/actions';
+import { Options } from '../../components/Options';
 
 export const ProductCreate = () => {
   const [state, dispatch] = useReducer(formReducer, initialState);
@@ -31,7 +31,7 @@ export const ProductCreate = () => {
   }
 
   function handleProductCreate() {
-    const { nutri, nutritionFor, ...data } = state;
+    const { portionOption, portionOptions, ...data } = state;
 
     storeDispatch(
       Actions.productCreate({
@@ -39,6 +39,13 @@ export const ProductCreate = () => {
         quantity: data.portion
       })
     );
+  }
+
+  function handlePortionOptionChange(option: PortionOption) {
+    dispatch({
+      type: 'SELECT_PORTION_OPTION',
+      payload: option
+    });
   }
 
   return (
@@ -58,25 +65,13 @@ export const ProductCreate = () => {
           ref={refsList.producer}
         />
         <InfoTitle>Wartości odżywcze na:</InfoTitle>
-        <OptionsContainer>
-          <BasicOption
-            title="100g"
-            value={state.nutritionFor === '100g'}
-            onChange={() => handleUpdate({ nutritionFor: '100g' })}
-          />
-          <BasicOption
-            title="porcję"
-            value={state.nutritionFor === 'portion'}
-            onChange={() => handleUpdate({ nutritionFor: 'portion' })}
-          />
-          <BasicOption
-            title="opakowanie"
-            value={state.nutritionFor === 'package'}
-            onChange={() => handleUpdate({ nutritionFor: 'package' })}
-          />
-        </OptionsContainer>
+        <Options
+          value={state.portionOptions}
+          /** Temporary */
+          onChange={(option: any) => handlePortionOptionChange(option)}
+        />
         <InputRow
-          title={portionTitle[state.nutritionFor]}
+          title={portionTitle[state.portionOption]}
           value={state.portion.toString()}
           onChangeText={portion => handleUpdate({ portion: Number(portion) })}
           onSubmitEditing={() => refsList.carbs.current!.focus()}
@@ -109,12 +104,6 @@ const Container = styled.View<{
   theme: Theme
 }>`
   padding: 20px;
-`
-
-const OptionsContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-around;
-  margin: 15px 0;
 `
 
 const InfoTitle = styled.Text<{
