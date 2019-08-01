@@ -58,7 +58,7 @@ export type MealToggled = {
 
 export type ProductCreated = {
   type: typeof PRODUCT_CREATED
-  payload: ProductState
+  payload: Omit<ProductState, 'macro'>
 }
 
 export type DiaryActions =

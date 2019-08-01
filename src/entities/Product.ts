@@ -5,6 +5,7 @@ import {
   OneToMany,
 } from 'typeorm/browser';
 import { MealProduct } from './MealProduct';
+import { BarcodeId } from '../types';
 
 @Entity('Product')
 export class Product {
@@ -16,7 +17,7 @@ export class Product {
   name!: string;
 
   @Column('text', { unique: true, nullable: true })
-  barcode!: string | null
+  barcode!: BarcodeId | null
 
   @Column('decimal', { precision: 5, scale: 2, default: 0 })
   carbs!: number

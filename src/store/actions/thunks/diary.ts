@@ -5,8 +5,10 @@ import {
   mealUpdated,
   mealProductCreated,
   mealProductDeleted,
-  productUpdated
-} from '../index';
+  productUpdated,
+  mealToggled,
+  productCreated,
+} from '../creators';
 import {
   mealRepository,
   mealProductRepository, 
@@ -14,7 +16,6 @@ import {
 } from '../../../repositories';
 import { ProductState } from '../../reducers/diary';
 import { getProductMock } from '../../helpers/diary';
-import { mealToggled, productCreated } from '../creators';
 
 
 export const mealCreate = (name: Meal['name']) => async (dispatch: any) => {
@@ -60,7 +61,8 @@ export const productUpdate = (
 }
 
 export const productCreate = (
-  product: ProductState
+  product: Omit<ProductState, 'id' | 'updatedAt' | 'createdAt' | 'macro'>
 ) => async (dispatch: any) => {
   const newProduct = await productRepository().create(product);
+  dispatch(productCreated({ ...product, ...newProduct }));
 }

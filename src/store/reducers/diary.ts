@@ -6,9 +6,10 @@ import {
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED,
   MEAL_TOGGLED,
+  PRODUCT_CREATED,
 } from '../consts';
 import { Meal } from '../../entities';
-import { ProductUnit, MacroElement } from '../../types';
+import { ProductUnit, MacroElement, BarcodeId } from '../../types';
 import { DiaryActions } from '../actions';
 import { calcMacroByQuantity } from '../helpers/diary';
 import dayjs from 'dayjs';
@@ -106,6 +107,16 @@ export function diaryReducer(
         return product;
       })
     }
+    case PRODUCT_CREATED: return {
+      ...state,
+      products: [
+        ...state.products,
+        {
+          ...action.payload,
+          macro: calcMacroByQuantity(action.payload)
+        }
+      ]
+    }
     default: return state;
   }
 }
@@ -133,7 +144,7 @@ export interface ProductState {
   name: string
   producer?: string | null
   img?: string
-  barcode: string | null
+  barcode: BarcodeId | null
   quantity: number
   unit: ProductUnit
   carbs: number

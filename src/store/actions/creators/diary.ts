@@ -74,7 +74,7 @@ export const mealToggled = (
 });
 
 export const productCreated = (
-  product: ProductState
+  product: Omit<ProductState, 'macro'>
 ): ProductCreated => ({
   type: PRODUCT_CREATED,
   payload: product

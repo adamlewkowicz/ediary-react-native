@@ -30,7 +30,16 @@ export const ProductCreate = () => {
     });
   }
 
-  function handleProductCreate() {}
+  function handleProductCreate() {
+    const { nutri, nutritionFor, ...data } = state;
+
+    storeDispatch(
+      Actions.productCreate({
+        ...data,
+        quantity: data.portion
+      })
+    );
+  }
 
   return (
     <ScrollView>

@@ -6,13 +6,14 @@ export interface FormReducerState {
   producer: string
   portion: number
   nutritionFor: '100g' | 'portion' | 'package'
-  // unit: ProductUnit
+  unit: ProductUnit
   nutri: any
   carbs: number
   prots: number
   fats: number
   kcal: number
   barcode: BarcodeId
+  mealId: null
 }
 
 export const initialState: FormReducerState = {
@@ -25,12 +26,14 @@ export const initialState: FormReducerState = {
       value: false
     }
   ],
+  unit: 'g',
   portion: 0,
   carbs: 0,
   prots: 0,
   fats: 0,
   kcal: 0,
-  barcode: ''
+  barcode: '',
+  mealId: null
 }
 
 export function formReducer(
