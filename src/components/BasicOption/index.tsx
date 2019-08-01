@@ -6,11 +6,15 @@ import { TouchableOpacity } from 'react-native';
 interface BasicOptionProps {
   title: string
   value: boolean
+  maxWidth?: number
   onChange: (status: boolean) => void
 }
 export const BasicOption = (props: BasicOptionProps) => {
   return (
-    <Wrapper onPress={() => props.onChange(!props.value)}>
+    <Wrapper
+      maxWidth={props.maxWidth}
+      onPress={() => props.onChange(!props.value)}
+    >
       <Container isActive={props.value}>
         <Text isActive={props.value}>
           {props.title}
@@ -20,8 +24,11 @@ export const BasicOption = (props: BasicOptionProps) => {
   );
 }
 
-const Wrapper = styled(TouchableOpacity)`
-  max-width: 85px;
+const Wrapper = styled(TouchableOpacity)<{
+  maxWidth?: number
+}>`
+  flex: 1;
+  max-width: ${props => props.maxWidth || 100};
 `
 
 const Container = styled.View<{
@@ -31,7 +38,7 @@ const Container = styled.View<{
   border-radius: 50;
   border: 1px solid #BCBCBC; 
   border-color: ${props => props.isActive ? props.theme.focusColor : '#BCBCBC'};
-  padding: 11px 17px;
+  padding: 11px 8px;
 `
 
 const Text = styled.Text<{

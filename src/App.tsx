@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import { ThemeProvider } from 'styled-components/native';
 import { themeProps } from './common/theme';
+import { ProductCreate } from './pages/ProductCreate';
 
 export const App = () => {
   return (
@@ -17,7 +18,7 @@ export const App = () => {
             mapping={mapping}
             theme={lightTheme}
           >
-            <Home />
+            <ProductCreate />
           </ApplicationProvider>
         </ThemeProvider>
       </DatabaseProvider>
