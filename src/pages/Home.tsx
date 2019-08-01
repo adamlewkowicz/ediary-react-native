@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Button } from 'react-native-ui-kitten';
+import { Button } from 'react-native-ui-kitten';
 import { useDispatch, connect, DispatchProp } from 'react-redux';
 import * as Actions from '../store/actions';
 import { AppState } from '../store';
@@ -11,6 +11,7 @@ import { nutritionColors } from '../common/theme';
 import styled from 'styled-components/native';
 import { MealListItem } from '../components/MealListItem';
 import { FloatingButton } from '../components/FloatingButton';
+import { BasicInput } from '../components/BasicInput';
 
 const elements = [
   { name: 'carbs', title: 'Węgle', value: 19, percentages: 25 },
@@ -55,8 +56,8 @@ const Home = (props: HomeProps) => {
             />
           )}
         />
-        <Input
-          placeholder="Nazwa nowego posiłku"
+        <BasicInput
+          label="Nazwa posiłku"
           value={name}
           onChangeText={name => setName(name)}
         />

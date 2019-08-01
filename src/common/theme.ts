@@ -7,6 +7,7 @@ export const nutritionColors = {
 
 export const themeProps = {
   fontFamily: 'DMSans-Regular',
+  focusColor: '#5361E0'
 }
 
 export type Theme = typeof themeProps;
