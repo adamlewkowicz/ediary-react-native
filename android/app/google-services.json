@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "155555359114",
+    "firebase_url": "https://ediary-b95f6.firebaseio.com",
+    "project_id": "ediary-b95f6",
+    "storage_bucket": "ediary-b95f6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:155555359114:android:b24c2b415d65c426",
+        "android_client_info": {
+          "package_name": "com.ediarymobileapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "155555359114-huf8ehdbuc26vneef8scgpjrqstmbaeq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrJTaC6e0sIn074iIWbw2F0OEK2drIwc8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "155555359114-huf8ehdbuc26vneef8scgpjrqstmbaeq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
