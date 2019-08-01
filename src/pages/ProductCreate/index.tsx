@@ -1,7 +1,7 @@
 import React, { useReducer, useRef, createRef } from 'react';
 import styled from 'styled-components/native';
 import { BasicInput, BasicInputRef } from '../../components/BasicInput';
-import { formReducer, initialState, FormReducerState, PortionOption } from './reducer';
+import { productCreateReducer, initialState, ProductCreateState, PortionOption } from './reducer';
 import { TextInput, ScrollView } from 'react-native';
 import { Theme } from '../../common/theme';
 import { MacroElement } from '../../types';
@@ -11,7 +11,7 @@ import * as Actions from '../../store/actions';
 import { Options } from '../../components/Options';
 
 export const ProductCreate = () => {
-  const [state, dispatch] = useReducer(formReducer, initialState);
+  const [state, dispatch] = useReducer(productCreateReducer, initialState);
   const storeDispatch = useDispatch();
   const { current: refsList } = useRef({
     producer: createRef<TextInput>(),
@@ -23,7 +23,7 @@ export const ProductCreate = () => {
     barcode: createRef<TextInput>(),
   });
 
-  function handleUpdate(payload: Partial<FormReducerState>) {
+  function handleUpdate(payload: Partial<ProductCreateState>) {
     dispatch({
       type: 'UPDATE',
       payload

@@ -1,6 +1,6 @@
 import { ProductUnit, BarcodeId } from '../../types';
 
-export interface FormReducerState {
+export interface ProductCreateState {
   name: string
   producer: string
   portion: number
@@ -19,7 +19,7 @@ export interface FormReducerState {
   mealId: null
 }
 
-export const initialState: FormReducerState = {
+export const initialState: ProductCreateState = {
   name: '',
   producer: '',
   portionOptions: [
@@ -50,10 +50,10 @@ export const initialState: FormReducerState = {
   mealId: null
 }
 
-export function formReducer(
-  state: FormReducerState,
-  action: FormAction,
-): FormReducerState {
+export function productCreateReducer(
+  state: ProductCreateState,
+  action: ProductCreateAction,
+): ProductCreateState {
   switch(action.type) {
     case 'UPDATE': return {
       ...state,
@@ -75,7 +75,7 @@ export type PortionOption = '100g' | 'portion' | 'package';
 
 type Update = {
   type: 'UPDATE'
-  payload: Partial<FormReducerState>
+  payload: Partial<ProductCreateState>
 }
 
 type SelectPortionOption = {
@@ -83,6 +83,6 @@ type SelectPortionOption = {
   payload: PortionOption
 }
 
-type FormAction =
+type ProductCreateAction =
   | Update
   | SelectPortionOption
