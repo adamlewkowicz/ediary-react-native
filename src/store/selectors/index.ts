@@ -1,4 +1,4 @@
-import { MealState, ProductState } from '../reducers/diary';
+import { DiaryMeal, DiaryProduct } from '../reducers/diary';
 import { BASE_MACRO_ELEMENTS } from '../../common/consts';
 import { MacroElements } from '../../types';
 import { AppState } from '..';
@@ -7,8 +7,8 @@ import { createSelector } from 'reselect';
 const baseMacro: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 
 export const mergedMealSelector = (
-  meals: MealState[],
-  products: ProductState[]
+  meals: DiaryMeal[],
+  products: DiaryProduct[]
 ) => (
   meals.map(meal => ({
     ...meal,

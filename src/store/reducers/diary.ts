@@ -9,12 +9,12 @@ import {
   PRODUCT_CREATED,
 } from '../consts';
 import { Meal } from '../../entities';
-import { ProductUnit, MacroElement, BarcodeId } from '../../types';
+import { ProductUnit, MacroElement, BarcodeId, ProductId, MealId } from '../../types';
 import { DiaryActions } from '../actions';
 import { calcMacroByQuantity } from '../helpers/diary';
 import dayjs from 'dayjs';
 
-const initialState: DiaryReducerState = {
+const initialState: DiaryState = {
   meals: [],
   products: [],
   isLoading: false
@@ -23,7 +23,7 @@ const initialState: DiaryReducerState = {
 export function diaryReducer(
   state = initialState,
   action: DiaryActions
-): DiaryReducerState {
+): DiaryState {
   switch(action.type) {
     case MEAL_CREATED: return {
       ...state,
@@ -121,58 +121,8 @@ export function diaryReducer(
   }
 }
 
-export type MealState = {
-  id: number
-  name: string
-  carbs: number
-  prots: number
-  fats: number
-  kcal: number
-  isToggled: boolean
-  day: string
-  date: string
-  updatedAt?: number
-  createdAt?: number
-  /** List of meal's product ids */
-  products: number[]
-}
-
-export type MealStateArray = MealState[];
-
-export interface ProductState {
-  id: number
-  name: string
-  producer?: string | null
-  img?: string
-  barcode: BarcodeId | null
-  quantity: number
-  unit: ProductUnit
-  carbs: number
-  prots: number
-  fats: number
-  kcal: number
-  macro: {
-    element: MacroElement
-    value: number
-  }[]
-  mealId: Meal['id'] | null
-  userId?: number | null
-  updatedAt: Date
-  createdAt: Date
-}
-
-export type ProductStateArray = ProductState[]
-
-interface DiaryReducerState {
-  meals: MealStateArray
-  products: ProductState[]
-  isLoading: boolean
-}
-
-export type ProductStatePayload = Omit<ProductState, 'macro'>;
-
 export interface DiaryMealPayload {
-  id: number
+  id: MealId
   name: string
   carbs: number
   prots: number
@@ -190,5 +140,33 @@ export interface DiaryMeal extends DiaryMealPayload {
   products: number[]
 }
 
-export type DiaryProduct = ProductState;
-export type DiaryProductPayload = ProductStatePayload;
+export interface DiaryProductPayload {
+  id: ProductId
+  name: string
+  producer?: string | null
+  img?: string
+  barcode: BarcodeId | null
+  quantity: number
+  unit: ProductUnit
+  carbs: number
+  prots: number
+  fats: number
+  kcal: number
+  mealId: Meal['id'] | null
+  userId?: number | null
+  updatedAt: Date
+  createdAt: Date
+}
+
+export interface DiaryProduct extends DiaryProductPayload {
+  macro: {
+    element: MacroElement
+    value: number
+  }[]
+}
+
+interface DiaryState {
+  meals: DiaryMeal[]
+  products: DiaryProduct[]
+  isLoading: boolean
+}

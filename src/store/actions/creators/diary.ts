@@ -1,5 +1,4 @@
-import { Meal, Product } from '../../../entities';
-import { ProductState, MealState, ProductStatePayload, DiaryMealPayload } from '../../reducers/diary';
+import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
 import {
   MEAL_CREATED,
   MEAL_UPDATED,
@@ -20,6 +19,7 @@ import {
   MealToggled,
   ProductCreated
 } from '../types';
+import { MealId, ProductId } from '../../../types';
 
 export const mealCreated = (
   meal: DiaryMealPayload
@@ -29,22 +29,22 @@ export const mealCreated = (
 });
 
 export const mealUpdated = (
-  mealId: Meal['id'],
-  meal: Partial<MealState>
+  mealId: MealId,
+  meal: Partial<DiaryMealPayload>
 ): MealUpdated => ({
   type: MEAL_UPDATED,
   payload: meal,
   meta: { mealId }
 });
 
-export const mealDeleted = (mealId: Meal['id']): MealDeleted => ({
+export const mealDeleted = (mealId: MealId): MealDeleted => ({
   type: MEAL_DELETED,
   meta: { mealId }
 });
 
 export const mealProductCreated = (
-  mealId: Meal['id'],
-  product: ProductStatePayload
+  mealId: MealId,
+  product: DiaryProductPayload
 ): MealProductCreated => ({
   type: MEAL_PRODUCT_CREATED,
   payload: product,
@@ -52,16 +52,16 @@ export const mealProductCreated = (
 });
 
 export const mealProductDeleted = (
-  mealId: Meal['id'],
-  productId: Product['id']
+  mealId: MealId,
+  productId: ProductId
 ): MealProductDeleted => ({
   type: MEAL_PRODUCT_DELETED,
   meta: { mealId, productId }
 });
 
 export const productUpdated = (
-  productId: Product['id'],
-  product: Partial<ProductState>
+  productId: ProductId,
+  product: Partial<DiaryProductPayload>
 ): ProductUpdated => ({
   type: PRODUCT_UPDATED,
   payload: product,
@@ -69,14 +69,14 @@ export const productUpdated = (
 });
 
 export const mealToggled = (
-  mealId: MealState['id'] | null
+  mealId: MealId | null
 ): MealToggled => ({
   type: MEAL_TOGGLED,
   meta: { mealId }
 });
 
 export const productCreated = (
-  product: Omit<ProductState, 'macro'>
+  product: DiaryProductPayload
 ): ProductCreated => ({
   type: PRODUCT_CREATED,
   payload: product

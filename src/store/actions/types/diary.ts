@@ -10,9 +10,6 @@ import {
 } from '../../consts';
 import { Meal, Product } from '../../../entities';
 import {
-  ProductState,
-  MealState,
-  ProductStatePayload,
   DiaryMealPayload,
   DiaryProductPayload,
 } from '../../reducers/diary';

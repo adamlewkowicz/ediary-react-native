@@ -15,7 +15,7 @@ export interface FormReducerState {
   prots: number
   fats: number
   kcal: number
-  barcode: BarcodeId
+  barcode: BarcodeId | string
   mealId: null
 }
 

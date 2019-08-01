@@ -6,9 +6,9 @@ import {
   BaseEntity,
 } from 'typeorm/browser';
 import { Product } from './Product';
-import { productRepository, mealProductRepository, mealRepository } from '../repositories';
+import { productRepository, mealProductRepository } from '../repositories';
 import { MealProduct } from './MealProduct';
-import * as types from '../types';
+import { MealId } from '../types';
 
 @Entity('Meal', {
   name: 'meals'
@@ -16,7 +16,7 @@ import * as types from '../types';
 export class Meal extends BaseEntity {
 
   @PrimaryGeneratedColumn()
-  id!: number;
+  id!: MealId;
 
   @Column()
   name!: string;

@@ -46,4 +46,10 @@ export type BaseMacroElements = {
   [key in BaseMacroElement]: number
 }
 
-export interface BarcodeId extends String {}
+export interface BarcodeId extends String {};
+
+enum ProductIdBrand {};
+export type ProductId = ProductIdBrand & number;
+
+enum MealIdBrand {};
+export type MealId = MealIdBrand & number;

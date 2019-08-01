@@ -5,13 +5,13 @@ import {
   OneToMany,
 } from 'typeorm/browser';
 import { MealProduct } from './MealProduct';
-import { BarcodeId } from '../types';
+import { BarcodeId, ProductId } from '../types';
 
 @Entity('Product')
 export class Product {
 
   @PrimaryGeneratedColumn()
-  id!: number;
+  id!: ProductId;
 
   @Column()
   name!: string;
