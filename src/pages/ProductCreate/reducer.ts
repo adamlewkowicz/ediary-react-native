@@ -1,4 +1,4 @@
-import { ProductUnit } from '../../types';
+import { ProductUnit, BarcodeId } from '../../types';
 
 
 export interface FormReducerState {
@@ -12,6 +12,7 @@ export interface FormReducerState {
   prots: number
   fats: number
   kcal: number
+  barcode: BarcodeId
 }
 
 export const initialState: FormReducerState = {
@@ -29,6 +30,7 @@ export const initialState: FormReducerState = {
   prots: 0,
   fats: 0,
   kcal: 0,
+  barcode: ''
 }
 
 export function formReducer(
@@ -36,23 +38,11 @@ export function formReducer(
   action: FormAction,
 ) {
   switch(action.type) {
-    case 'UPDATE_PROPERTY': return {
-      ...state,
-      [action.meta.key]: action.payload
-    }
     case 'UPDATE': return {
       ...state,
       ...action.payload
     }
     default: return state;
-  }
-}
-
-type UpdateProperty = {
-  type: 'UPDATE_PROPERTY'
-  payload: string | number
-  meta: {
-    key: keyof FormReducerState
   }
 }
 
@@ -62,5 +52,4 @@ type Update = {
 }
 
 type FormAction =
-  | UpdateProperty
   | Update

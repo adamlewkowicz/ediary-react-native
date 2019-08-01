@@ -45,3 +45,5 @@ export type MacroElements = {
 export type BaseMacroElements = {
   [key in BaseMacroElement]: number
 }
+
+export interface BarcodeId extends String {}

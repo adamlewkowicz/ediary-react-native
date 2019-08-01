@@ -1,28 +1,57 @@
-import React, { useReducer, useRef } from 'react';
+import React, { useReducer, useRef, createRef } from 'react';
 import styled from 'styled-components/native';
 import { BasicInput, BasicInputRef } from '../../components/BasicInput';
 import { formReducer, initialState, FormReducerState } from './reducer';
 import { Text, TextInput } from 'react-native';
 import { Theme } from '../../common/theme';
 import { BasicOption } from '../../components/BasicOption';
+import { MacroElement } from '../../types';
 
-const quantityTitle = {
-
-}
+const nutritionInputs: {
+  title: string
+  titleOptions?: {
+    [key in FormReducerState['nutritionFor']]: string
+  }
+  property: MacroElement | 'quantity'
+}[] = [
+  {
+    title: 'Opakowanie zawiera',
+    property: 'quantity',
+    titleOptions: {
+      '100g': 'Opakowanie zawiera',
+      'portion': 'Porcja zawiera',
+      'package': 'Opakowanie zawiera'
+    }
+  },
+  {
+    title: 'Węglowodany',
+    property: 'carbs',
+  },
+  {
+    title: 'Białka',
+    property: 'prots'
+  },
+  {
+    title: 'Tłuszcze',
+    property: 'fats'
+  },
+  {
+    title: 'Kalorie',
+    property: 'kcal'
+  }
+]
 
 export const ProductCreate = () => {
   const [state, dispatch] = useReducer(formReducer, initialState);
-  const producerInputRef = useRef<TextInput>(null);
-  const quantityInputRef = useRef<TextInput>(null);
-  const carbsInputRef = useRef<TextInput>(null);
-
-  function handlePropertyUpdate(value: any, property: any) {
-    dispatch({
-      type: 'UPDATE_PROPERTY',
-      payload: value,
-      meta: { key: property }
-    });
-  }
+  const { current: refsList } = useRef({
+    producer: createRef<TextInput>(),
+    quantity: createRef<TextInput>(),
+    carbs: createRef<TextInput>(),
+    prots: createRef<TextInput>(),
+    fats: createRef<TextInput>(),
+    kcal: createRef<TextInput>(),
+    barcode: createRef<TextInput>(),
+  });
 
   function handleUpdate(payload: Partial<FormReducerState>) {
     dispatch({
@@ -37,14 +66,14 @@ export const ProductCreate = () => {
         label="Nazwa"
         value={state.name}
         onChangeText={name => handleUpdate({ name })}
-        onSubmitEditing={() => producerInputRef.current!.focus()}
+        onSubmitEditing={() => refsList.producer.current!.focus()}
       />
       <BasicInputRef
         label="Producent"
         value={state.producer}
         onChangeText={producer => handleUpdate({ producer })}
-        onSubmitEditing={() => quantityInputRef.current!.focus()}
-        ref={producerInputRef}
+        onSubmitEditing={() => refsList.quantity.current!.focus()}
+        ref={refsList.producer}
       />
       <InfoTitle>Wartości odżywcze na:</InfoTitle>
       <OptionsContainer>
@@ -64,29 +93,22 @@ export const ProductCreate = () => {
           onChange={() => handleUpdate({ nutritionFor: 'package' })}
         />
       </OptionsContainer>
-      <NutriRow>
-        <NutriInfo>Opakowanie zawiera</NutriInfo>
-        <BasicInputRef
-          minWidth={100}
-          textAlign="center"
-          keyboardType="numeric"
-          value={state.quantity.toString()}
-          onChangeText={quantity => handleUpdate({ quantity: Number(quantity) })}
-          onSubmitEditing={() => carbsInputRef.current!.focus()}
-          ref={quantityInputRef}
-        />
-      </NutriRow>
-      <NutriRow>
-        <NutriInfo>Węglowodany</NutriInfo>
-        <BasicInputRef
-          minWidth={100}
-          textAlign="center"
-          keyboardType="numeric"
-          value={state.carbs.toString()}
-          onChangeText={carbs => handleUpdate({ carbs: Number(carbs) })}
-          ref={carbsInputRef}
-        />
-      </NutriRow>
+      {nutritionInputs.map((data, index) => (
+        <NutriRow key={data.title}>
+          <NutriInfo>
+            {data.titleOptions ? data.titleOptions[state.nutritionFor] : data.title}
+          </NutriInfo>
+          <BasicInputRef
+            minWidth={100}
+            textAlign="center"
+            keyboardType="numeric"
+            value={state[data.property].toString()}
+            onChangeText={value => handleUpdate({ [data.property]: Number(value) })}
+            onSubmitEditing={() => refsList[nutritionInputs[index + 1].property].current!.focus()}
+            ref={refsList[data.property]}
+          />
+        </NutriRow>
+      ))}
     </Container>
   );
 }
