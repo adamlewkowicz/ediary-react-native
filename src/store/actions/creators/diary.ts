@@ -7,7 +7,8 @@ import {
   MEAL_PRODUCT_CREATED,
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED,
-  MEAL_TOGGLED
+  MEAL_TOGGLED,
+  PRODUCT_CREATED
 } from '../../consts';
 import {
   MealDeleted,
@@ -16,7 +17,8 @@ import {
   MealProductCreated,
   MealProductDeleted,
   ProductUpdated,
-  MealToggled
+  MealToggled,
+  ProductCreated
 } from '../types';
 
 export const mealCreated = (meal: Meal): MealCreated => ({
@@ -69,4 +71,11 @@ export const mealToggled = (
 ): MealToggled => ({
   type: MEAL_TOGGLED,
   meta: { mealId }
+});
+
+export const productCreated = (
+  product: ProductState
+): ProductCreated => ({
+  type: PRODUCT_CREATED,
+  payload: product
 });

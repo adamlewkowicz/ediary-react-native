@@ -4,7 +4,7 @@ import { ProductUnit, BarcodeId } from '../../types';
 export interface FormReducerState {
   name: string
   producer: string
-  quantity: number
+  portion: number
   nutritionFor: '100g' | 'portion' | 'package'
   // unit: ProductUnit
   nutri: any
@@ -25,7 +25,7 @@ export const initialState: FormReducerState = {
       value: false
     }
   ],
-  quantity: 0,
+  portion: 0,
   carbs: 0,
   prots: 0,
   fats: 0,

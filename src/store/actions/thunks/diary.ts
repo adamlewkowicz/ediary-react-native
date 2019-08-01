@@ -14,7 +14,7 @@ import {
 } from '../../../repositories';
 import { ProductState } from '../../reducers/diary';
 import { getProductMock } from '../../helpers/diary';
-import { mealToggled } from '../creators';
+import { mealToggled, productCreated } from '../creators';
 
 
 export const mealCreate = (name: Meal['name']) => async (dispatch: any) => {
@@ -57,4 +57,10 @@ export const productUpdate = (
 ) => async (dispatch: any) => {
   dispatch(productUpdated(productId, product));
   await productRepository().update(productId, product);
+}
+
+export const productCreate = (
+  product: ProductState
+) => async (dispatch: any) => {
+  const newProduct = await productRepository().create(product);
 }

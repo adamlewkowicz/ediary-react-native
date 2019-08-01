@@ -2,50 +2,20 @@ import React, { useReducer, useRef, createRef } from 'react';
 import styled from 'styled-components/native';
 import { BasicInput, BasicInputRef } from '../../components/BasicInput';
 import { formReducer, initialState, FormReducerState } from './reducer';
-import { Text, TextInput, ScrollView } from 'react-native';
+import { TextInput, ScrollView } from 'react-native';
 import { Theme } from '../../common/theme';
 import { BasicOption } from '../../components/BasicOption';
 import { MacroElement } from '../../types';
 import { InputRow } from '../../components/InputRow';
-
-const quantityTitle = {
-  '100g': 'Opakowanie zawiera',
-  'portion': 'Porcja zawiera',
-  'package': 'Opakowanie zawiera'
-}
-
-const nutritionInputs: {
-  title: string
-  property: MacroElement | 'quantity'
-  nextRef: MacroElement | 'barcode'
-}[] = [
-  {
-    title: 'Węglowodany',
-    property: 'carbs',
-    nextRef: 'prots'
-  },
-  {
-    title: 'Białka',
-    property: 'prots',
-    nextRef: 'fats'
-  },
-  {
-    title: 'Tłuszcze',
-    property: 'fats',
-    nextRef: 'kcal'
-  },
-  {
-    title: 'Kalorie',
-    property: 'kcal',
-    nextRef: 'barcode'
-  }
-]
+import { useDispatch } from 'react-redux';
+import * as Actions from '../../store/actions';
 
 export const ProductCreate = () => {
   const [state, dispatch] = useReducer(formReducer, initialState);
+  const storeDispatch = useDispatch();
   const { current: refsList } = useRef({
     producer: createRef<TextInput>(),
-    quantity: createRef<TextInput>(),
+    portion: createRef<TextInput>(),
     carbs: createRef<TextInput>(),
     prots: createRef<TextInput>(),
     fats: createRef<TextInput>(),
@@ -75,7 +45,7 @@ export const ProductCreate = () => {
           label="Producent"
           value={state.producer}
           onChangeText={producer => handleUpdate({ producer })}
-          onSubmitEditing={() => refsList.quantity.current!.focus()}
+          onSubmitEditing={() => refsList.portion.current!.focus()}
           ref={refsList.producer}
         />
         <InfoTitle>Wartości odżywcze na:</InfoTitle>
@@ -97,11 +67,11 @@ export const ProductCreate = () => {
           />
         </OptionsContainer>
         <InputRow
-          title={quantityTitle[state.nutritionFor]}
-          value={state.quantity.toString()}
-          onChangeText={quantity => handleUpdate({ quantity: Number(quantity) })}
+          title={portionTitle[state.nutritionFor]}
+          value={state.portion.toString()}
+          onChangeText={portion => handleUpdate({ portion: Number(portion) })}
           onSubmitEditing={() => refsList.carbs.current!.focus()}
-          ref={refsList.quantity}
+          ref={refsList.portion}
         />
         {nutritionInputs.map(data => (
           <InputRow
@@ -145,3 +115,36 @@ const InfoTitle = styled.Text<{
   font-size: ${props => props.theme.fontSize};
   font-family: ${props => props.theme.fontFamily};
 `
+
+const portionTitle = {
+  '100g': 'Opakowanie zawiera',
+  'portion': 'Porcja zawiera',
+  'package': 'Opakowanie zawiera'
+}
+
+const nutritionInputs: {
+  title: string
+  property: MacroElement
+  nextRef: MacroElement | 'barcode'
+}[] = [
+  {
+    title: 'Węglowodany',
+    property: 'carbs',
+    nextRef: 'prots'
+  },
+  {
+    title: 'Białka',
+    property: 'prots',
+    nextRef: 'fats'
+  },
+  {
+    title: 'Tłuszcze',
+    property: 'fats',
+    nextRef: 'kcal'
+  },
+  {
+    title: 'Kalorie',
+    property: 'kcal',
+    nextRef: 'barcode'
+  }
+]

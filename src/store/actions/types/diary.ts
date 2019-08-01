@@ -6,6 +6,7 @@ import {
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED,
   MEAL_TOGGLED,
+  PRODUCT_CREATED,
 } from '../../consts';
 import { Meal, Product } from '../../../entities';
 import { ProductState, MealState } from '../../reducers/diary';
@@ -55,6 +56,11 @@ export type MealToggled = {
   }
 }
 
+export type ProductCreated = {
+  type: typeof PRODUCT_CREATED
+  payload: ProductState
+}
+
 export type DiaryActions =
   | MealCreated 
   | MealUpdated 
@@ -63,3 +69,4 @@ export type DiaryActions =
   | MealProductDeleted
   | ProductUpdated
   | MealToggled
+  | ProductCreated
