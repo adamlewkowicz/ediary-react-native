@@ -9,16 +9,22 @@ import {
   PRODUCT_CREATED,
 } from '../../consts';
 import { Meal, Product } from '../../../entities';
-import { ProductState, MealState } from '../../reducers/diary';
+import {
+  ProductState,
+  MealState,
+  ProductStatePayload,
+  DiaryMealPayload,
+  DiaryProductPayload,
+} from '../../reducers/diary';
 
 export type MealCreated = {
   type: typeof MEAL_CREATED
-  payload: Meal
+  payload: DiaryMealPayload
 }
 
 export type MealUpdated = {
   type: typeof MEAL_UPDATED
-  payload: Partial<Meal>
+  payload: Partial<DiaryMealPayload>
   meta: { mealId: Meal['id'] }
 }
 
@@ -29,7 +35,7 @@ export type MealDeleted = {
 
 export type MealProductCreated = {
   type: typeof MEAL_PRODUCT_CREATED
-  payload: ProductState
+  payload: DiaryProductPayload
   meta: { mealId: Meal['id'] }
 }
 
@@ -43,7 +49,7 @@ export type MealProductDeleted = {
 
 export type ProductUpdated = {
   type: typeof PRODUCT_UPDATED
-  payload: Partial<ProductState>
+  payload: Partial<DiaryProductPayload>
   meta: {
     productId: Product['id']
   }
@@ -52,13 +58,13 @@ export type ProductUpdated = {
 export type MealToggled = {
   type: typeof MEAL_TOGGLED
   meta: {
-    mealId: MealState['id'] | null
+    mealId: Meal['id'] | null
   }
 }
 
 export type ProductCreated = {
   type: typeof PRODUCT_CREATED
-  payload: Omit<ProductState, 'macro'>
+  payload: DiaryProductPayload
 }
 
 export type DiaryActions =

@@ -168,3 +168,27 @@ interface DiaryReducerState {
   products: ProductState[]
   isLoading: boolean
 }
+
+export type ProductStatePayload = Omit<ProductState, 'macro'>;
+
+export interface DiaryMealPayload {
+  id: number
+  name: string
+  carbs: number
+  prots: number
+  fats: number
+  kcal: number
+  date: string
+  updatedAt?: number
+  createdAt?: number
+}
+
+export interface DiaryMeal extends DiaryMealPayload {
+  isToggled: boolean
+  day: string
+  /** List of meal's product ids */
+  products: number[]
+}
+
+export type DiaryProduct = ProductState;
+export type DiaryProductPayload = ProductStatePayload;

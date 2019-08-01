@@ -14,7 +14,7 @@ import {
   mealProductRepository, 
   productRepository
 } from '../../../repositories';
-import { ProductState } from '../../reducers/diary';
+import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
 import { getProductMock } from '../../helpers/diary';
 
 
@@ -30,7 +30,10 @@ export const mealDelete = (mealId: Meal['id']) => async (dispatch: any) => {
   await meal.deleteInCascade();
 }
 
-export const mealUpdate = (mealId: Meal['id'], meal: Meal) => async (dispatch: any) => {
+export const mealUpdate = (
+  mealId: Meal['id'],
+  meal: Partial<DiaryMealPayload>
+) => async (dispatch: any) => {
   dispatch(mealUpdated(mealId, meal));
   await mealRepository().update(mealId, meal);
 }
@@ -54,14 +57,14 @@ export const mealProductDelete = (
 
 export const productUpdate = (
   productId: Product['id'],
-  product: Partial<ProductState>
+  product: Partial<DiaryProductPayload>
 ) => async (dispatch: any) => {
   dispatch(productUpdated(productId, product));
   await productRepository().update(productId, product);
 }
 
 export const productCreate = (
-  product: Omit<ProductState, 'id' | 'updatedAt' | 'createdAt' | 'macro'>
+  product: Omit<DiaryProductPayload, 'id' | 'createdAt' | 'updatedAt'>
 ) => async (dispatch: any) => {
   const newProduct = await productRepository().create(product);
   dispatch(productCreated({ ...product, ...newProduct }));

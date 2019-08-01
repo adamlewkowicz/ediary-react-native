@@ -1,5 +1,5 @@
 import { Meal, Product } from '../../../entities';
-import { ProductState, MealState } from '../../reducers/diary';
+import { ProductState, MealState, ProductStatePayload, DiaryMealPayload } from '../../reducers/diary';
 import {
   MEAL_CREATED,
   MEAL_UPDATED,
@@ -21,7 +21,9 @@ import {
   ProductCreated
 } from '../types';
 
-export const mealCreated = (meal: Meal): MealCreated => ({
+export const mealCreated = (
+  meal: DiaryMealPayload
+): MealCreated => ({
   type: MEAL_CREATED,
   payload: meal
 });
@@ -42,7 +44,7 @@ export const mealDeleted = (mealId: Meal['id']): MealDeleted => ({
 
 export const mealProductCreated = (
   mealId: Meal['id'],
-  product: ProductState
+  product: ProductStatePayload
 ): MealProductCreated => ({
   type: MEAL_PRODUCT_CREATED,
   payload: product,
