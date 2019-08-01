@@ -66,6 +66,6 @@ export const productUpdate = (
 export const productCreate = (
   product: Omit<DiaryProductPayload, 'id' | 'createdAt' | 'updatedAt'>
 ) => async (dispatch: any) => {
-  const newProduct = await productRepository().create(product);
+  const newProduct = await productRepository().save(product);
   dispatch(productCreated({ ...product, ...newProduct }));
 }
