@@ -8,6 +8,7 @@ import { store } from './store';
 import { ThemeProvider } from 'styled-components/native';
 import { themeProps } from './common/theme';
 import { ProductCreate } from './pages/ProductCreate';
+import { ProductFinder } from './pages/ProductFinder';
 
 export const App = () => {
   return (
@@ -18,7 +19,7 @@ export const App = () => {
             mapping={mapping}
             theme={lightTheme}
           >
-            <ProductCreate />
+            <Home />
           </ApplicationProvider>
         </ThemeProvider>
       </DatabaseProvider>

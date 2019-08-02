@@ -36,9 +36,9 @@ const Container = styled.View<{
   theme: Theme
 }>`
   border-radius: 50;
-  border: 1px solid #BCBCBC; 
-  border-color: ${props => props.isActive ? props.theme.focusColor : '#BCBCBC'};
-  padding: 11px 8px;
+  border-width: 2px; 
+  border-color: ${props => props.isActive ? props.theme.focusColor : '#d6d6d6'};
+  padding: 8px;
 `
 
 const Text = styled.Text<{
