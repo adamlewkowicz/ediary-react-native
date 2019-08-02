@@ -1,7 +1,9 @@
 import React, { ReactNode } from 'react';
-import { createConnection, getRepository, Connection, Repository, ConnectionManager, getConnection } from 'typeorm/browser';
+import { createConnection, Connection, Repository } from 'typeorm/browser';
 import * as entities from '../../entities';
 import { Text } from 'react-native';
+import { userRepository } from '../../repositories';
+import { USER_ID_UNSYNCED } from '../../common/consts';
 
 export const DatabaseContext = React.createContext<DatabaseContext>({} as any);
 
@@ -35,6 +37,17 @@ export class DatabaseProvider extends React.Component<DatabaseProviderProps, Dat
       synchronize: false,
       entities: Object.values(entities)
     });
+
+    const existingUser = await userRepository().findOne(USER_ID_UNSYNCED);
+
+    if (!existingUser) {
+      await userRepository().save({
+        id: USER_ID_UNSYNCED,
+        email: null,
+        login: 'login',
+        password: 'password',
+      });
+    }
 
     this.setState({
       connection,

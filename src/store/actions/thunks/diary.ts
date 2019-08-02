@@ -29,8 +29,8 @@ export const mealCreate = (name: Meal['name']) => async (dispatch: any) => {
 
 export const mealDelete = (mealId: Meal['id']) => async (dispatch: any) => {
   dispatch(mealDeleted(mealId));
-  const meal = await mealRepository().findOne(mealId) as Meal;
-  await meal.deleteInCascade();
+  const meal = await mealRepository().findOneOrFail(mealId);
+  await meal.remove();
 }
 
 export const mealUpdate = (
@@ -45,9 +45,10 @@ export const mealProductCreate = (
   mealId: Meal['id'],
   payload: Product
 ) => async (dispatch: any) => {
-  const meal = await mealRepository().findOne(mealId) as Meal;
-  const newProduct = await meal.addAndCreateProduct(payload);
-  dispatch(mealProductCreated(mealId, { ...newProduct, ...getProductMock() }));
+  const meal = await mealRepository().findOneOrFail(mealId);
+  const mockedProduct = { ...payload, ...getProductMock() };
+  const newProduct = await meal.addAndCreateProduct(mockedProduct);
+  dispatch(mealProductCreated(mealId, { ...mockedProduct, ...newProduct }));
 }
 
 export const mealProductDelete = (
@@ -75,9 +76,8 @@ export const productCreate = (
 
 export const mealsFindByDay = (
   day?: string
-) => async (dispatch: any, getState: any) => {
-  const appState: AppState = getState();
-  const mealDay = day || appState.application.day;
+) => async (dispatch: any, getState: () => AppState): Promise<boolean> => {
+  const mealDay = day || getState().application.day;
 
   const foundMeals = await mealRepository().find({
     where: { date: Between(`${mealDay} 00:00:00`, `${mealDay} 23:59:59`) },
@@ -86,5 +86,7 @@ export const mealsFindByDay = (
 
   if (foundMeals.length) {
     dispatch(mealsAdded(foundMeals));
+    return true;
   }
+  return false;
 }

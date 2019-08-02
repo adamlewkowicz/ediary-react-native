@@ -40,7 +40,7 @@ export class Meal extends BaseEntity {
   @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   date!: string;
 
-  @OneToMany(type => MealProduct, mealProduct => mealProduct.product, {
+  @OneToMany(type => MealProduct, mealProduct => mealProduct.meal, {
     onDelete: 'CASCADE'
   })
   mealProducts!: MealProduct[]

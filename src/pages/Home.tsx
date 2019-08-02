@@ -58,6 +58,7 @@ const Home = (props: HomeProps) => {
             <MealListItem
               meal={item}
               onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
+              onLongPress={() => dispatch(Actions.mealDelete(item.id))}
             />
           )}
         />

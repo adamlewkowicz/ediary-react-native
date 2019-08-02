@@ -4,16 +4,20 @@ import { Theme, nutritionColors } from '../../common/theme';
 import { MacroElements } from '../../types';
 import { ProgressBar } from '../ProgressBar';
 import { ProductPartial, ProductItem } from '../ProductItem';
-import { FlatList, TouchableOpacity } from 'react-native';
+import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { MealsWithRatio } from '../../store/selectors';
 
 interface MealListItemProps {
   meal: MealsWithRatio[number]
   onToggle: (mealId: MealsWithRatio[number]['id']) => void
+  onLongPress?: TouchableOpacityProps['onLongPress']
 }
 export const MealListItem = (props: MealListItemProps) => (
   <Container>
-    <TouchableOpacity onPress={() => props.onToggle(props.meal.id)}>
+    <TouchableOpacity
+      onPress={() => props.onToggle(props.meal.id)}
+      onLongPress={props.onLongPress}
+    >
       <InfoContainer>
         <Title>{props.meal.name}</Title>
         <Calories>{props.meal.kcal} kcal</Calories>

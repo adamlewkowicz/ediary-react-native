@@ -41,7 +41,7 @@ export class Product {
   @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   updatedAt!: Date;
 
-  @OneToMany(type => MealProduct, mealProduct => mealProduct.meal)
+  @OneToMany(type => MealProduct, mealProduct => mealProduct.product)
   mealProducts!: MealProduct[]
 
   @Column('number', { default: USER_ID_UNSYNCED })

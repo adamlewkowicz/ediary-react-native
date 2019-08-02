@@ -33,7 +33,11 @@ export class MealProduct {
   @Check(`unit IN (${productUnitsEnum}) `)
   unit!: ProductUnit
 
-  @ManyToOne(type => Meal, meal => meal.mealProducts)
+  // cascade must be set on inverse side too
+  // https://github.com/typeorm/typeorm/issues/70#issuecomment-263054083
+  @ManyToOne(type => Meal, meal => meal.mealProducts, {
+    onDelete: 'CASCADE'
+  })
   @JoinColumn({ name: 'mealId' })
   meal!: Meal
 
