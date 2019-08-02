@@ -5,6 +5,7 @@ import {
   Unique,
   PrimaryColumn,
   Check,
+  JoinColumn,
 } from 'typeorm/browser';
 import { Product } from './Product';
 import { Meal } from './Meal';
@@ -33,9 +34,11 @@ export class MealProduct {
   unit!: ProductUnit
 
   @ManyToOne(type => Meal, meal => meal.mealProducts)
+  @JoinColumn({ name: 'mealId' })
   meal!: Meal
 
   @ManyToOne(type => Product, product => product.mealProducts)
+  @JoinColumn({ name: 'productId' })
   product!: Product
 
 }

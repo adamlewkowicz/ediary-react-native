@@ -3,9 +3,13 @@ import {
   Column,
   PrimaryGeneratedColumn,
   OneToMany,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm/browser';
 import { MealProduct } from './MealProduct';
-import { BarcodeId, ProductId } from '../types';
+import { BarcodeId, ProductId, UserId } from '../types';
+import { User } from './User';
+import { USER_ID_UNSYNCED } from '../common/consts';
 
 @Entity('Product')
 export class Product {
@@ -40,4 +44,11 @@ export class Product {
   @OneToMany(type => MealProduct, mealProduct => mealProduct.meal)
   mealProducts!: MealProduct[]
 
+  @Column('number', { default: USER_ID_UNSYNCED })
+  userId!: UserId | null;
+
+  @ManyToOne(type => User)
+  @JoinColumn({ name: 'userId' })
+  user!: User;
+  
 }

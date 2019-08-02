@@ -1,35 +1,9 @@
-import { PRODUCT_UNITS, MACRO_ELEMENTS, BASE_MACRO_ELEMENTS } from './common/consts';
-
-export interface Meal {
-  id: number
-  name: string
-  carbs: number
-  prots: number
-  fats: number
-  kcal: number
-  updatedAt: number
-  createdAt: number
-}
-
-export interface Product {
-  id: number
-  name: string
-  producer?: string | null
-  img?: string
-  barcode: string | null
-  quantity: number
-  unit: ProductUnit
-  carbs: number
-  prots: number
-  fats: number
-  kcal: number
-  mealId: Meal['id']
-  userId?: number
-  updatedAt: Date
-  createdAt: Date
-}
-
-export interface ProductMerged extends Product {};
+import {
+  PRODUCT_UNITS,
+  MACRO_ELEMENTS,
+  BASE_MACRO_ELEMENTS,
+  USER_ID_UNSYNCED
+} from './common/consts';
 
 export type ProductUnit = typeof PRODUCT_UNITS[number];
 
@@ -55,4 +29,9 @@ enum MealIdBrand {};
 export type MealId = MealIdBrand & number;
 
 enum UserIdBrand {};
-export type UserId = UserIdBrand & number; 
+export type UserId = UserIdBrand & number;
+
+// proposal type for userId of user
+// that has not been synced/registerd in online mode
+type UserIdUnsynced = typeof USER_ID_UNSYNCED
+type _UserId = UserId | UserIdUnsynced;

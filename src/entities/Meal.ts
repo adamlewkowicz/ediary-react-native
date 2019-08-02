@@ -4,11 +4,15 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   BaseEntity,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm/browser';
 import { Product } from './Product';
 import { productRepository, mealProductRepository } from '../repositories';
 import { MealProduct } from './MealProduct';
-import { MealId } from '../types';
+import { MealId, UserId } from '../types';
+import { User } from './User';
+import { USER_ID_UNSYNCED } from '../common/consts';
 
 @Entity('Meal', {
   name: 'meals'
@@ -40,6 +44,13 @@ export class Meal extends BaseEntity {
     onDelete: 'CASCADE'
   })
   mealProducts!: MealProduct[]
+
+  @Column('number', { default: USER_ID_UNSYNCED })
+  userId!: UserId | null;
+
+  @ManyToOne(type => User)
+  @JoinColumn({ name: 'userId' })
+  user!: User;
 
   async addProduct(
     productId: Product['id']
