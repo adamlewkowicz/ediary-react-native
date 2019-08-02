@@ -7,6 +7,7 @@ import {
   PRODUCT_UPDATED,
   MEAL_TOGGLED,
   PRODUCT_CREATED,
+  MEALS_ADDED,
 } from '../consts';
 import { Meal } from '../../entities';
 import { ProductUnit, MacroElement, BarcodeId, ProductId, MealId } from '../../types';
@@ -25,6 +26,37 @@ export function diaryReducer(
   action: DiaryActions
 ): DiaryState {
   switch(action.type) {
+    case MEALS_ADDED: return {
+      ...state,
+      meals: [
+        ...state.meals,
+        ...action.payload.map(meal => {
+          const { mealProducts, ...data } = meal;
+          return {
+            ...data,
+            isToggled: false,
+            day: dayjs(meal.date).format('YYYY-MM-DD'),
+            products: mealProducts.map(mealProduct => mealProduct.productId)
+          }
+        })
+      ],
+      products: [
+        ...state.products,
+        ...action.payload.flatMap(meal => {
+          return meal.mealProducts.map(mealProduct => {
+            const { meal, product, ...data } = mealProduct;
+            const normalizedProduct = {
+              ...data,
+              ...product,
+            }
+            return {
+              ...normalizedProduct,
+              macro: calcMacroByQuantity(normalizedProduct)
+            }
+          })
+        })
+      ]
+    }
     case MEAL_CREATED: return {
       ...state,
       meals: [
@@ -137,7 +169,7 @@ export interface DiaryMeal extends DiaryMealPayload {
   isToggled: boolean
   day: string
   /** List of meal's product ids */
-  products: number[]
+  products: ProductId[]
 }
 
 export interface DiaryProductPayload {

@@ -1,10 +1,10 @@
+import dayjs from 'dayjs';
 
-interface ApplicationReducerState {
-  date: Date
-}
+const date = new Date;
 
-const initialState: ApplicationReducerState = {
-  date: new Date
+const initialState: AppReducerState = {
+  date,
+  day: dayjs(date).format('YYYY-MM-DD')
 }
 
 export function applicationReducer(
@@ -14,4 +14,9 @@ export function applicationReducer(
   switch(action.type) {
     default: return state;
   }
+}
+
+interface AppReducerState {
+  date: Date
+  day: string
 }

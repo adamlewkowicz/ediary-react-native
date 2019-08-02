@@ -8,6 +8,7 @@ import {
   productUpdated,
   mealToggled,
   productCreated,
+  mealsAdded,
 } from '../creators';
 import {
   mealRepository,
@@ -16,6 +17,8 @@ import {
 } from '../../../repositories';
 import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
 import { getProductMock } from '../../helpers/diary';
+import { Between } from 'typeorm/browser';
+import { AppState } from '../..';
 
 
 export const mealCreate = (name: Meal['name']) => async (dispatch: any) => {
@@ -68,4 +71,20 @@ export const productCreate = (
 ) => async (dispatch: any) => {
   const newProduct = await productRepository().save(product);
   dispatch(productCreated({ ...product, ...newProduct }));
+}
+
+export const mealsFindByDay = (
+  day?: string
+) => async (dispatch: any, getState: any) => {
+  const appState: AppState = getState();
+  const mealDay = day || appState.application.day;
+
+  const foundMeals = await mealRepository().find({
+    where: { date: Between(`${mealDay} 00:00:00`, `${mealDay} 23:59:59`) },
+    relations: ['mealProducts', 'mealProducts.product']
+  });
+
+  if (foundMeals.length) {
+    dispatch(mealsAdded(foundMeals));
+  }
 }

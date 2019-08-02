@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from 'react-native-ui-kitten';
-import { useDispatch, connect, DispatchProp } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 import * as Actions from '../store/actions';
 import { AppState } from '../store';
 import { FlatList, ScrollView } from 'react-native';
@@ -21,12 +21,17 @@ const elements = [
 
 interface HomeProps {
   mealsWithRatio: MealsWithRatio
+  appDate: AppState['application']['date']
 }
 const Home = (props: HomeProps) => {
   const [name, setName] = useState('Zupa');
   const [menuOpened, setMenuOpened] = useState(false);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(Actions.mealsFindByDay())
+  }, []);
+  
   return (
     <Container>
       <FloatingButton
@@ -34,7 +39,7 @@ const Home = (props: HomeProps) => {
         onPress={() => setMenuOpened(status => !status)}
       />
       <ScrollView>
-        <DateChanger date={new Date} />
+        <DateChanger date={props.appDate} />
         <MacroCards>
           {elements.map(element => (
             <MacroCard
@@ -83,7 +88,8 @@ const Home = (props: HomeProps) => {
 
 const HomeConnected = connect(
   (state: AppState) => ({
-    mealsWithRatio: mealsWithRatio(state)
+    mealsWithRatio: mealsWithRatio(state),
+    appDate: state.application.date
   }),
   (dispatch) => ({ dispatch })
 )(Home);

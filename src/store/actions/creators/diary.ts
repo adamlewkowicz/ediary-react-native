@@ -7,7 +7,8 @@ import {
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED,
   MEAL_TOGGLED,
-  PRODUCT_CREATED
+  PRODUCT_CREATED,
+  MEALS_ADDED
 } from '../../consts';
 import {
   MealDeleted,
@@ -17,9 +18,11 @@ import {
   MealProductDeleted,
   ProductUpdated,
   MealToggled,
-  ProductCreated
+  ProductCreated,
+  MealsAdded
 } from '../types';
 import { MealId, ProductId } from '../../../types';
+import { Meal } from '../../../entities';
 
 export const mealCreated = (
   meal: DiaryMealPayload
@@ -80,4 +83,11 @@ export const productCreated = (
 ): ProductCreated => ({
   type: PRODUCT_CREATED,
   payload: product
+});
+
+export const mealsAdded = (
+  meals: Meal[]
+): MealsAdded => ({
+  type: MEALS_ADDED,
+  payload: meals
 });

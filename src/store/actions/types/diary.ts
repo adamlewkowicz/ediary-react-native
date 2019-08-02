@@ -7,6 +7,7 @@ import {
   PRODUCT_UPDATED,
   MEAL_TOGGLED,
   PRODUCT_CREATED,
+  MEALS_ADDED,
 } from '../../consts';
 import { Meal, Product } from '../../../entities';
 import {
@@ -64,6 +65,11 @@ export type ProductCreated = {
   payload: DiaryProductPayload
 }
 
+export type MealsAdded = {
+  type: typeof MEALS_ADDED
+  payload: Meal[]
+}
+
 export type DiaryActions =
   | MealCreated 
   | MealUpdated 
@@ -73,3 +79,4 @@ export type DiaryActions =
   | ProductUpdated
   | MealToggled
   | ProductCreated
+  | MealsAdded
