@@ -89,11 +89,5 @@ export class Meal extends BaseEntity {
 
     return { ...product, ...mealProduct };
   }
-  
-  async deleteInCascade() {
-    const mealId = this.id;
-    const mealProducts = await mealProductRepository().find({ mealId });
-    await mealProductRepository().remove(mealProducts);
-    await this.remove();
-  }
+
 }
