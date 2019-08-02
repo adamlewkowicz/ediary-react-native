@@ -53,3 +53,6 @@ export type ProductId = ProductIdBrand & number;
 
 enum MealIdBrand {};
 export type MealId = MealIdBrand & number;
+
+enum UserIdBrand {};
+export type UserId = UserIdBrand & number; 
