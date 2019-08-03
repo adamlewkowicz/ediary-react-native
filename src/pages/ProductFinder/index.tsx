@@ -21,10 +21,11 @@ export const ProductFinder = (props: ProductFinderProps) => {
   function handleProductSearch(name: string) {
     if (!isLoading) setLoading(true);
     setName(name);
+    const trimmedName = name.trim();
     
     debounce(async () => {
       const foundProducts = await productRepository().find({
-        where: { name: Like(`%${name.trim()}%`) },
+        where: { name: Like(`%${trimmedName}%`) },
         take: 10 
       });
 
