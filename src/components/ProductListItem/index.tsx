@@ -6,9 +6,10 @@ import { TextMeta } from '../Elements';
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
 interface ProductListItemProps extends TouchableOpacityProps {
+  hideBottomLine?: boolean
   product: {
-    title: string
-    quantity: number
+    name: string
+    portion?: number
     carbs: number
     prots: number
     fats: number
@@ -17,15 +18,16 @@ interface ProductListItemProps extends TouchableOpacityProps {
 }
 export const ProductListItem = ({
   product,
+  hideBottomLine = false,
   ...props
 }: ProductListItemProps) => {
   return (
     <TouchableOpacity {...props}>
-      <Container>
+      <Container hideBottomLine={hideBottomLine}>
         <InfoContainer>
-          <Title>{product.title}</Title>
+          <Title>{product.name}</Title>
           <Info>
-            <Quantity>{product.quantity}g</Quantity>
+            <Quantity>{product.portion || 100}g</Quantity>
             <Kcal>{product.kcal} kcal</Kcal>
           </Info>
         </InfoContainer>
@@ -80,12 +82,12 @@ export const ProductListItem = ({
 
 const Container = styled.View<{
   theme: Theme
+  hideBottomLine?: boolean
 }>`
   flex-direction: row;
   justify-content: space-between;
-  /* margin-bottom:  */
   border-bottom-width: 1px;
-  border-bottom-color: #E1E1E1;
+  border-bottom-color: ${props => props.hideBottomLine ? 'transparent' : '#E1E1E1'};
   padding: 25px 0;
 `
 

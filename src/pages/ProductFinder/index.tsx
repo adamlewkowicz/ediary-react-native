@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { Theme } from '../../common/theme';
 import { debounce } from '../../common/utils';
 import { ActivityIndicator, FlatList } from 'react-native';
 import { productRepository } from '../../repositories';
 import { Like } from 'typeorm/browser';
 import { Product } from '../../entities';
 import { ProductListItem } from '../../components/ProductListItem';
+import { InputSearcher } from '../../components/InputSearcher';
 
 export const ProductFinder = () => {
   const [name, setName] = useState('');
@@ -30,17 +30,20 @@ export const ProductFinder = () => {
 
   return (
     <Container>
-      <FinderInput
+      <InputSearcher
         value={name}
+        placeholder="Nazwa produktu"
         onChangeText={handleProductSearch}
+        showLabel={!name.length}
       />
       <FlatList
         data={products}
         keyExtractor={product => product.id.toString()}
-        renderItem={({ item }) => (
-          <ProductName>
-            {item.name}
-          </ProductName>
+        renderItem={({ item, index }) => (
+          <ProductListItem
+            product={item}
+            hideBottomLine={index === products.length - 1}
+          />
         )}
       />
       {isLoading && <ActivityIndicator size="large" />}
@@ -51,14 +54,3 @@ export const ProductFinder = () => {
 const Container = styled.View`
   padding: 20px;
 `
-
-const FinderInput = styled.TextInput<{
-  theme: Theme
-}>`
-  font-size: 25px;
-  color: #626262;
-  font-family: ${props => props.theme.fontFamily};
-  font-weight: 600;
-`
-
-const ProductName = styled.Text``
