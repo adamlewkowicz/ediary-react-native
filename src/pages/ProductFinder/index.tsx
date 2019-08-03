@@ -6,6 +6,7 @@ import { ActivityIndicator, FlatList } from 'react-native';
 import { productRepository } from '../../repositories';
 import { Like } from 'typeorm/browser';
 import { Product } from '../../entities';
+import { ProductListItem } from '../../components/ProductListItem';
 
 export const ProductFinder = () => {
   const [name, setName] = useState('');
@@ -48,7 +49,7 @@ export const ProductFinder = () => {
 }
 
 const Container = styled.View`
-
+  padding: 20px;
 `
 
 const FinderInput = styled.TextInput<{

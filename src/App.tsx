@@ -19,7 +19,7 @@ export const App = () => {
             mapping={mapping}
             theme={lightTheme}
           >
-            <Home />
+            <ProductFinder />
           </ApplicationProvider>
         </ThemeProvider>
       </DatabaseProvider>
