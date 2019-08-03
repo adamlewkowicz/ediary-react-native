@@ -12,6 +12,9 @@ import styled from 'styled-components/native';
 import { MealListItem } from '../components/MealListItem';
 import { FloatingButton } from '../components/FloatingButton';
 import { BasicInput } from '../components/BasicInput';
+import { NavigationScreenProps } from 'react-navigation';
+import { DiaryProductPayload } from '../store/reducers/diary';
+import { HandleItemPressHandler } from './ProductFinder';
 
 const elements = [
   { name: 'carbs', title: 'Węgle', value: 19, percentages: 25 },
@@ -19,7 +22,7 @@ const elements = [
   { name: 'fats', title: 'Tłuszcze', value: 281, percentages: 89 },
 ]
 
-interface HomeProps {
+interface HomeProps extends NavigationScreenProps {
   mealsWithRatio: MealsWithRatio
   appDate: AppState['application']['date']
 }
@@ -31,6 +34,20 @@ const Home = (props: HomeProps) => {
   useEffect(() => {
     dispatch(Actions.mealsFindByDay())
   }, []);
+
+  const handleProductAdd: HandleItemPressHandler = (product) => {
+    const mealId = props.mealsWithRatio[0].id;
+    props.navigation.navigate('Home');
+
+    const parsedProduct: DiaryProductPayload = {
+      ...product,
+      quantity: 100,
+      mealId,
+      unit: 'g'
+    }
+
+    dispatch(Actions.mealProductCreated(mealId, parsedProduct));
+  }
   
   return (
     <Container>
@@ -82,6 +99,11 @@ const Home = (props: HomeProps) => {
         ))}>
           Aktualizuj nazwę (Pierwszy produkt)
         </Button>
+        <Button onPress={() => props.navigation.navigate('ProductFinder', {
+          onItemPress: handleProductAdd
+        })}>
+          Dodaj produkt
+        </Button>
       </ScrollView>
     </Container>
   );
@@ -94,6 +116,10 @@ const HomeConnected = connect(
   }),
   (dispatch) => ({ dispatch })
 )(Home);
+
+(HomeConnected as any).navigationOptions = {
+  header: null
+}
 
 const Container = styled.View`
   display: flex;

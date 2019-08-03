@@ -9,6 +9,7 @@ import { ThemeProvider } from 'styled-components/native';
 import { themeProps } from './common/theme';
 import { ProductCreate } from './pages/ProductCreate';
 import { ProductFinder } from './pages/ProductFinder';
+import { AppContainer } from './navigation';
 
 export const App = () => {
   return (
@@ -19,7 +20,7 @@ export const App = () => {
             mapping={mapping}
             theme={lightTheme}
           >
-            <ProductFinder />
+            <AppContainer />
           </ApplicationProvider>
         </ThemeProvider>
       </DatabaseProvider>

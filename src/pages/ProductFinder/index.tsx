@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components/native';
 import { debounce } from '../../common/utils';
 import { ActivityIndicator, FlatList } from 'react-native';
@@ -7,11 +7,16 @@ import { Like } from 'typeorm/browser';
 import { Product } from '../../entities';
 import { ProductListItem } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
+import { NavigationScreenProps } from 'react-navigation';
 
-export const ProductFinder = () => {
+interface ProductFinderProps extends NavigationScreenProps {}
+export const ProductFinder = (props: ProductFinderProps) => {
   const [name, setName] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setLoading] = useState(false);
+  const { current: handleItemPress } = useRef<HandleItemPressHandler>(
+    props.navigation.getParam('onItemPress')
+  );
 
   function handleProductSearch(name: string) {
     if (!isLoading) setLoading(true);
@@ -25,7 +30,7 @@ export const ProductFinder = () => {
 
       setProducts(foundProducts);
       setLoading(false);
-    });
+    }, 100);
   }
 
   return (
@@ -43,6 +48,7 @@ export const ProductFinder = () => {
           <ProductListItem
             product={item}
             hideBottomLine={index === products.length - 1}
+            onPress={() => handleItemPress && handleItemPress(item)}
           />
         )}
       />
@@ -54,3 +60,9 @@ export const ProductFinder = () => {
 const Container = styled.View`
   padding: 20px;
 `
+
+ProductFinder.navigationOptions = {
+  headerTitle: 'Znajdź produkt'
+}
+
+export type HandleItemPressHandler = ((product: Product) => void) | undefined;

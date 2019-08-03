@@ -45,6 +45,7 @@ export const mealDeleted = (mealId: MealId): MealDeleted => ({
   meta: { mealId }
 });
 
+// Rename to mealProductAdded
 export const mealProductCreated = (
   mealId: MealId,
   product: DiaryProductPayload

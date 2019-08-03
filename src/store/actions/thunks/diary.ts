@@ -19,6 +19,7 @@ import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
 import { getProductMock } from '../../helpers/diary';
 import { Between } from 'typeorm/browser';
 import { AppState } from '../..';
+import { MealId } from '../../../types';
 
 
 export const mealCreate = (name: Meal['name']) => async (dispatch: any) => {
