@@ -1,4 +1,4 @@
-import { Meal, Product } from '../../../entities';
+import { Meal, Product, MealProduct } from '../../../entities';
 import {
   mealCreated,
   mealDeleted,
@@ -17,9 +17,11 @@ import {
 } from '../../../repositories';
 import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
 import { getProductMock } from '../../helpers/diary';
-import { Between } from 'typeorm/browser';
+import { Between, getCustomRepository, getRepository } from 'typeorm/browser';
 import { AppState } from '../..';
-import { MealId } from '../../../types';
+import { MealId, ProductUnit } from '../../../types';
+import { MealRepository } from '../../../repositories/MealRepository';
+import { MealsWithRatio } from '../../selectors';
 
 
 export const mealCreate = (name: Meal['name']) => async (dispatch: any) => {
@@ -90,4 +92,48 @@ export const mealsFindByDay = (
     return true;
   }
   return false;
+}
+
+export const mealProductAdd = (
+  meal: MealsWithRatio[number],
+  product: Product,
+  quantity: number = 100,
+  unit: ProductUnit = 'g'
+) => async (dispatch: any, getState: () => AppState) => {
+  const mealId = meal.id;
+  const productId = product.id;
+
+  if (meal.productIds.includes(product.id)) {
+    const existingProduct = getState().diary.products.find(anyProduct =>
+      anyProduct.id === productId
+    );
+
+    if (!existingProduct) return;
+
+    const updatedQuantity = existingProduct.quantity += quantity;
+
+    dispatch(
+      productUpdated(productId, {
+        quantity: updatedQuantity
+      })
+    );
+    await getRepository(MealProduct).update(
+      { mealId, productId },
+      { quantity: updatedQuantity }
+    );
+
+  } else {
+    dispatch(
+      mealProductCreated(mealId, {
+        ...product,
+        mealId,
+        quantity,
+        unit
+      })
+    );
+
+    await getRepository(MealProduct).save({
+      mealId, productId, quantity, unit
+    });
+  }
 }

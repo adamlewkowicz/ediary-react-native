@@ -38,6 +38,7 @@ const mealsWithProducts = createSelector(
   calcedProducts,
   (meals, products) => meals.map(meal => ({
     ...meal,
+    productIds: meal.products,
     products: meal.products.flatMap(productId => {
       const foundProduct = products.find(product => product.id === productId);
       return foundProduct ? [foundProduct] : []

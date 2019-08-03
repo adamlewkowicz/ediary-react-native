@@ -24,7 +24,7 @@ export const ProductFinder = (props: ProductFinderProps) => {
     
     debounce(async () => {
       const foundProducts = await productRepository().find({
-        where: { name: Like(`%${name}%`) },
+        where: { name: Like(`%${name.trim()}%`) },
         take: 10 
       });
 

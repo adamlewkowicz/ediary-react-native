@@ -1,31 +1,39 @@
 import { EntityRepository, Repository } from 'typeorm/browser';
-import { Meal, Product, MealProduct } from '../entities';
-import { productRepository, mealProductRepository } from '.';
+import { Meal, Product } from '../entities';
+import { mealProductRepository } from '.';
 
 @EntityRepository(Meal)
 export class MealRepository extends Repository<Meal> {
 
+  /** Adds provided product to meal.
+   *  If product with given id is alread assigned to meal with provided id,
+   *  then it increases it's quantity.
+   */
   async addProduct(
     mealId: Meal['id'],
-    productOrProductId: Product | Product['id']
+    product: Product,
+    quantity: number
   ) {
-    const productAction = typeof productOrProductId === 'number'
-      ? productRepository().findOne(productOrProductId)
-      : productRepository().save(productOrProductId);
+    const productId = product.id;
 
-    const product = await productAction;
-
-    if (!product) {
-      throw new Error(
-        'Product couldnt be found or created'
-      );
-    }
-
-    const mealProduct = await mealProductRepository().save({
-      productId: product.id,
-      mealId
+    const existingMealProduct = await mealProductRepository().findOne({
+      mealId,
+      productId
     });
 
-    return { ...product, ...mealProduct };
+    if (existingMealProduct) {
+      existingMealProduct.quantity += quantity;
+      await mealProductRepository().save(existingMealProduct);
+      
+      return { ...product, ...existingMealProduct };
+    }
+    
+    const createdMealProduct = await mealProductRepository().save({
+      productId: product.id,
+      mealId,
+      quantity
+    });
+
+    return { ...product, ...createdMealProduct }; 
   }
 }

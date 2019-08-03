@@ -13,8 +13,8 @@ import { MealListItem } from '../components/MealListItem';
 import { FloatingButton } from '../components/FloatingButton';
 import { BasicInput } from '../components/BasicInput';
 import { NavigationScreenProps } from 'react-navigation';
-import { DiaryProductPayload } from '../store/reducers/diary';
 import { HandleItemPressHandler } from './ProductFinder';
+import { mealProductAdd } from '../store/actions';
 
 const elements = [
   { name: 'carbs', title: 'Węgle', value: 19, percentages: 25 },
@@ -35,18 +35,11 @@ const Home = (props: HomeProps) => {
     dispatch(Actions.mealsFindByDay())
   }, []);
 
-  const handleProductAdd: HandleItemPressHandler = (product) => {
-    const mealId = props.mealsWithRatio[0].id;
+  const handleProductAdd: HandleItemPressHandler = (foundProduct) => {
+    const [meal] = props.mealsWithRatio;
     props.navigation.navigate('Home');
 
-    const parsedProduct: DiaryProductPayload = {
-      ...product,
-      quantity: 100,
-      mealId,
-      unit: 'g'
-    }
-
-    dispatch(Actions.mealProductCreated(mealId, parsedProduct));
+    dispatch(mealProductAdd(meal, foundProduct));
   }
   
   return (
