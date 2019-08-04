@@ -6,3 +6,5 @@ export const debounce = (fn: () => void, delay = 150) => {
 }
 
 export const round = (value: number, scale = 10) => Math.round(value / scale) * scale;
+
+export const toLocaleString = (value: number) => new Intl.NumberFormat('pl-PL').format(value);

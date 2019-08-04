@@ -20,7 +20,7 @@ export class ProductFinder {
       'szklanka': 'glass',
       'sztuka': 'piece'
     }
-    const portionMapKeys = Object.keys(portionMap);
+    const knownPortionTypes = Object.keys(portionMap);
 
     const normalizedResults = data.map(record => {
       const _id = record.id;
@@ -47,7 +47,7 @@ export class ProductFinder {
 
       const portions = Object
         .entries(record.unitdata)
-        .filter(([key]) => portionMapKeys.includes(key))
+        .filter(([key]) => knownPortionTypes.includes(key))
         .map(([key, data]) => ({
           type: portionMap[key as IleWazyPortionType],
           value: Number(data!.unit_weight)

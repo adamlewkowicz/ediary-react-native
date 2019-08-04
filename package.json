@@ -12,6 +12,7 @@
     "@eva-design/eva": "^1.0.1",
     "class-validator": "^0.9.1",
     "dayjs": "^1.8.15",
+    "intl": "^1.2.5",
     "react": "16.8.6",
     "react-native": "0.60.4",
     "react-native-camera": "^3.0.0",

@@ -1,9 +1,8 @@
 import React from 'react';
-import { SteakIcon, WheatIcon, DropIcon } from '../Icons';
 import styled from 'styled-components/native';
 import { Theme } from '../../common/theme';
-import { TextMeta } from '../Elements';
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
+import { NutritionBox } from '../NutritionBox';
 
 interface ProductListItemProps extends TouchableOpacityProps {
   hideBottomLine?: boolean
@@ -23,59 +22,29 @@ export const ProductListItem = ({
 }: ProductListItemProps) => {
   return (
     <TouchableOpacity {...props}>
-      <Container hideBottomLine={hideBottomLine}>
-        <InfoContainer>
-          <Title>{product.name}</Title>
-          <Info>
-            <Quantity>{product.portion || 100}g</Quantity>
-            <Kcal>{product.kcal} kcal</Kcal>
-          </Info>
-        </InfoContainer>
-        <NutriContainer>
-          <NutriInfo>
-            <WheatIcon
-              width={22}
-              height={22}
-              fill="#8AE4A5"
-            />
-            <TextMeta
-              value={product.carbs}
-              meta="g"
-              valueFontSize={16}
-              metaFontSize={13}
-              marginTop="9px"
-            />
-          </NutriInfo>
-          <NutriInfo>
-            <SteakIcon
-              width={22}
-              height={22}
-              fill="#7BD4E5"
-            />
-            <TextMeta
-              value={product.prots}
-              meta="g"
-              valueFontSize={16}
-              metaFontSize={13}
-              marginTop="9px"
-            />
-          </NutriInfo>
-          <NutriInfo>
-            <DropIcon
-              width={22}
-              height={22}
-              fill="#E8CF92"
-            />
-            <TextMeta
-              value={product.fats}
-              meta="g"
-              valueFontSize={16}
-              metaFontSize={13}
-              marginTop="9px"
-            />
-          </NutriInfo>
-        </NutriContainer>
-      </Container>
+      <Container>
+        <Name>{product.name}</Name>
+          <Content>
+            <Info>
+              <Quantity>{product.portion || 100}g</Quantity>
+              <Kcal>{product.kcal} kcal</Kcal>
+            </Info>
+            <NutritionContainer>
+              <NutritionBox
+                value={product.carbs}
+                element="carbs"
+              />
+              <NutritionBox
+                value={product.prots}
+                element="prots"
+              />
+              <NutritionBox
+                value={product.fats}
+                element="fats"
+              />
+            </NutritionContainer>
+          </Content>
+        </Container>
     </TouchableOpacity>
   );
 }
@@ -84,53 +53,47 @@ const Container = styled.View<{
   theme: Theme
   hideBottomLine?: boolean
 }>`
-  flex-direction: row;
-  justify-content: space-between;
   border-bottom-width: 1px;
   border-bottom-color: ${props => props.hideBottomLine ? 'transparent' : '#E1E1E1'};
-  padding: 25px 0;
+  padding: 18px 0;
 `
 
-const InfoContainer = styled.View`
-
+const Content = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
 `
 
-const Title = styled.Text<{
-  theme: Theme
-}>`
+const Name = styled.Text`
   font-family: DMSans-Medium;
   font-size: 16px;
-  margin-bottom: 9px;
+  margin-bottom: 5px;
 `
 
 const Info = styled.View`
   flex-direction: row;
+  align-items: center;
 `
 
 const Quantity = styled.Text<{
   theme: Theme
 }>`
-  min-width: 45px;
   border-right-width: 1px;
+  width: 60px;
   font-size: ${props => props.theme.fontSize};
   color: ${props => props.theme.secondaryColor};
   border-right-color: ${props => props.theme.secondaryColor};
+  margin-right: 16px;
 `
 
 const Kcal = styled.Text<{
   theme: Theme
 }>`
-  padding-left: 20px;
+  width: 60px;
   font-size: ${props => props.theme.fontSize};
   color: ${props => props.theme.secondaryColor};
 `
 
-const NutriContainer = styled.View`
+const NutritionContainer = styled.View`
   flex-direction: row;
   justify-content: space-around;
-`
-
-const NutriInfo = styled.View`
-  align-items: center;
-  width: 65px;
 `

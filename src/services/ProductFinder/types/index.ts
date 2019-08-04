@@ -39,7 +39,7 @@ export interface IleWazyPayload {
     product_slug: null | string
     salt: null | string
     unitdata: {
-      [key in IleWazyPortionType]?: IleWazyUnitData
+      [key in IleWazyPortionType | string]?: IleWazyUnitData
     }
   }[]
 }

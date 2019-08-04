@@ -3,6 +3,8 @@ import { App } from './src/App';
 import { name as appName } from './app.json';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pl';
+import 'intl';
+import 'intl/locale-data/jsonp/pl-PL';
 
 dayjs.locale('pl');
 
