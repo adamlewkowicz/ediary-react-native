@@ -2,32 +2,30 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components/native';
 import { debounce } from '../../common/utils';
 import { ActivityIndicator, FlatList } from 'react-native';
-import { productRepository } from '../../repositories';
-import { Like } from 'typeorm/browser';
+import { getCustomRepository } from 'typeorm/browser';
 import { Product } from '../../entities';
 import { ProductListItem } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
 import { NavigationScreenProps } from 'react-navigation';
+import { ProductRepository } from '../../repositories/ProductRepository';
 
 interface ProductFinderProps extends NavigationScreenProps {}
 export const ProductFinder = (props: ProductFinderProps) => {
   const [name, setName] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setLoading] = useState(false);
-  const { current: handleItemPress } = useRef<HandleItemPressHandler>(
-    props.navigation.getParam('onItemPress')
-  );
+  const { current: params } = useRef<ProductFinderParams>({
+    onItemPress: props.navigation.getParam('onItemPress')
+  });
 
   function handleProductSearch(name: string) {
-    if (!isLoading) setLoading(true);
     setName(name);
+    if (!isLoading) setLoading(true);
     const trimmedName = name.trim();
     
     debounce(async () => {
-      const foundProducts = await productRepository().find({
-        where: { name: Like(`%${trimmedName}%`) },
-        take: 10 
-      });
+      const foundProducts = await getCustomRepository(ProductRepository)
+        .findAndFetchByNameLike(trimmedName);
 
       setProducts(foundProducts);
       setLoading(false);
@@ -49,7 +47,7 @@ export const ProductFinder = (props: ProductFinderProps) => {
           <ProductListItem
             product={item}
             hideBottomLine={index === products.length - 1}
-            onPress={() => handleItemPress && handleItemPress(item)}
+            onPress={() => params.onItemPress && params.onItemPress(item)}
           />
         )}
       />
@@ -67,3 +65,6 @@ ProductFinder.navigationOptions = {
 }
 
 export type HandleItemPressHandler = ((product: Product) => void) | undefined;
+export type ProductFinderParams = {
+  onItemPress?: HandleItemPressHandler
+}

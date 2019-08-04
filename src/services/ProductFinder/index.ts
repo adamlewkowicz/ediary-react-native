@@ -13,7 +13,7 @@ export class ProductFinder {
     const result: IleWazyPayload = await response.json();
 
     const normalizedResults = result.data.map(record => {
-      const id = record.id + 'ilw';
+      const _id = record.id;
       const name = record.ingredient_name;
       const prots = Number(record.bialko);
       const kcal = Number(record.energia);
@@ -35,7 +35,7 @@ export class ProductFinder {
       }
 
       const normalizedProduct = {
-        id,
+        _id,
         name,
         portion,
         prots,

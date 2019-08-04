@@ -13,7 +13,7 @@ import { MealListItem } from '../components/MealListItem';
 import { FloatingButton } from '../components/FloatingButton';
 import { BasicInput } from '../components/BasicInput';
 import { NavigationScreenProps } from 'react-navigation';
-import { HandleItemPressHandler } from './ProductFinder';
+import { HandleItemPressHandler, ProductFinderParams } from './ProductFinder';
 import { mealProductAdd } from '../store/actions';
 
 const elements = [
@@ -94,7 +94,7 @@ const Home = (props: HomeProps) => {
         </Button>
         <Button onPress={() => props.navigation.navigate('ProductFinder', {
           onItemPress: handleProductAdd
-        })}>
+        } as ProductFinderParams)}>
           Dodaj produkt
         </Button>
       </ScrollView>
