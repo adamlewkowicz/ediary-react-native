@@ -1,0 +1,429 @@
+{
+  "page": null,
+  "records": "14",
+  "total": 7,
+  "data": [
+    {
+      "id": "16390",
+      "weight": null,
+      "bialko": "7",
+      "weglowodany": "71",
+      "tluszcz": "5.4",
+      "blonnik": null,
+      "energia": "365",
+      "salt": "0.52",
+      "simple_sugars": "33",
+      "fatty_acid": "2.4",
+      "id_iu": null,
+      "ingredient_name": "Bagatelka owocowa, kruche ciasteczka z nadzieniem jabłkowym z cynamonem",
+      "category_name": null,
+      "category_slug": null,
+      "category_extended_content": null,
+      "post_name": null,
+      "unitdata": {
+        "sztuka": {
+          "unit_name": "Sztuka",
+          "unit_weight": "16",
+          "id": "2",
+          "post_name": "kruche-ciasteczko-z-nadzieniem-jablkowym-z-cynamonem-1",
+          "id_iu": "19562",
+          "filename": "bagatelka-ciastka-jablko-z-cynamonem-1.jpg"
+        },
+        "porcja": {
+          "unit_name": "Porcja",
+          "unit_weight": "48",
+          "id": "1",
+          "post_name": "3-kruche-ciasteczka-z-nadzieniem-jablkowym-z-cynamonem",
+          "id_iu": "19563",
+          "filename": "bagatelka-ciastka-jablko-z-cynamonem-2.jpg"
+        }
+      },
+      "product_slug": null
+    },
+    {
+      "id": "17551",
+      "weight": null,
+      "bialko": "1.4",
+      "weglowodany": "72",
+      "tluszcz": "3.3",
+      "blonnik": "5.5",
+      "energia": "333",
+      "salt": "0.07",
+      "simple_sugars": "63",
+      "fatty_acid": "0.3",
+      "id_iu": null,
+      "ingredient_name": "Baton jabłkowo-pomarańczowy z marchwią",
+      "category_name": null,
+      "category_slug": null,
+      "category_extended_content": null,
+      "post_name": null,
+      "unitdata": {
+        "sztuka": {
+          "unit_name": "Sztuka",
+          "unit_weight": "40",
+          "filename": "baton-marchew-jablko-pomarancza-freeyu-1.jpg",
+          "id": "2",
+          "post_name": "baton-jablkowopomaranczowy-z-marchwia",
+          "id_iu": "21106"
+        }
+      },
+      "product_slug": null
+    },
+    {
+      "id": "17550",
+      "weight": null,
+      "bialko": "1.8",
+      "weglowodany": "70",
+      "tluszcz": "3.6",
+      "blonnik": "7",
+      "energia": "332",
+      "salt": "0.07",
+      "simple_sugars": "64",
+      "fatty_acid": "0.3",
+      "id_iu": null,
+      "ingredient_name": "Baton jabłkowo-truskawkowo-malinowy z czerwonym burakiem",
+      "category_name": null,
+      "category_slug": null,
+      "category_extended_content": null,
+      "post_name": null,
+      "unitdata": {
+        "sztuka": {
+          "unit_name": "Sztuka",
+          "unit_weight": "40",
+          "filename": "baton-jablko-burak-freeyu-1.jpg",
+          "id": "2",
+          "post_name": "baton-jablkowotruskawkowomalinowy-z-czerwonym-burakiem",
+          "id_iu": "21105"
+        }
+      },
+      "product_slug": null
+    },
+    {
+      "id": "17553",
+      "weight": null,
+      "bialko": "3.1",
+      "weglowodany": "69",
+      "tluszcz": "3.7",
+      "blonnik": "7",
+      "energia": "334",
+      "salt": "0.04",
+      "simple_sugars": "58",
+      "fatty_acid": "0.4",
+      "id_iu": null,
+      "ingredient_name": "Baton jabłkowo-truskawkowy z płatkami owsianymi",
+      "category_name": null,
+      "category_slug": null,
+      "category_extended_content": null,
+      "post_name": null,
+      "unitdata": {
+        "sztuka": {
+          "unit_name": "Sztuka",
+          "unit_weight": "40",
+          "filename": "baton-jablko-truskawka-platki owsiane-freeyu-1.jpg",
+          "id": "2",
+          "post_name": "baton-jablkowotruskawkowy-z-platkami-owsianymi",
+          "id_iu": "21107"
+        }
+      },
+      "product_slug": null
+    },
+    {
+      "id": "16195",
+      "weight": null,
+      "bialko": "3.7",
+      "weglowodany": "39.1",
+      "tluszcz": "22.4",
+      "blonnik": "14.4",
+      "energia": "402",
+      "salt": "0.01",
+      "simple_sugars": "38.7",
+      "fatty_acid": "3.6",
+      "id_iu": null,
+      "ingredient_name": "Baton owocowy z orzechami jabłko i baobab",
+      "category_name": null,
+      "category_slug": null,
+      "category_extended_content": null,
+      "post_name": null,
+      "unitdata": {
+        "sztuka": {
+          "unit_name": "Sztuka",
+          "unit_weight": "35",
+          "filename": "baton-jablko-baobab-foodsbyann-1.jpg",
+          "id": "2",
+          "post_name": "baton-owocowy-z-orzechami-jablko-i-baobab",
+          "id_iu": "19476"
+        }
+      },
+      "product_slug": null
+    },
+    {
+      "id": "12205",
+      "weight": null,
+      "bialko": "2",
+      "weglowodany": "76",
+      "tluszcz": "0.4",
+      "blonnik": "7.7",
+      "energia": "302",
+      "salt": null,
+      "simple_sugars": null,
+      "fatty_acid": null,
+      "id_iu": null,
+      "ingredient_name": "Baton Raw Energy Jabłko-Cynamon",
+      "category_name": null,
+      "category_slug": null,
+      "category_extended_content": null,
+      "post_name": null,
+      "unitdata": {
+        "sztuka": {
+          "unit_name": "Sztuka",
+          "unit_weight": "50",
+          "filename": "baton-jablko-cynamon-sztuka-5.jpg",
+          "id": "2",
+          "post_name": "baton-raw-energy-jablkocynamon",
+          "id_iu": "14147"
+        }
+      },
+      "product_slug": null
+    },
+    {
+      "id": "18136",
+      "weight": null,
+      "bialko": "6.5",
+      "weglowodany": "31.7",
+      "tluszcz": "1.1",
+      "blonnik": null,
+      "energia": "162",
+      "salt": "0",
+      "simple_sugars": "10.5",
+      "fatty_acid": "0.3",
+      "id_iu": null,
+      "ingredient_name": "Baton szarlotkowy",
+      "category_name": null,
+      "category_slug": null,
+      "category_extended_content": null,
+      "post_name": null,
+      "unitdata": {
+        "sztuka": {
+          "unit_name": "Sztuka",
+          "unit_weight": "130",
+          "filename": "baton-szarlotkowy-legal-cakes-1.jpg",
+          "id": "2",
+          "post_name": "baton-szarlotkowy",
+          "id_iu": "21597"
+        }
+      },
+      "product_slug": null
+    },
+    {
+      "id": "14604",
+      "weight": null,
+      "bialko": "6.8",
+      "weglowodany": "59.5",
+      "tluszcz": "13.4",
+      "blonnik": null,
+      "energia": "354",
+      "salt": "0.1",
+      "simple_sugars": "42.5",
+      "fatty_acid": "2.4",
+      "id_iu": null,
+      "ingredient_name": "Baton Urwis jabłkowy",
+      "category_name": null,
+      "category_slug": null,
+      "category_extended_content": null,
+      "post_name": null,
+      "unitdata": {
+        "sztuka": {
+          "unit_name": "Sztuka",
+          "unit_weight": "40",
+          "filename": "baton-urwis-jabklo-2.jpg",
+          "id": "2",
+          "post_name": "baton-urwis-jablkowy",
+          "id_iu": "17185"
+        }
+      },
+      "product_slug": null
+    },
+    {
+      "id": "2989",
+      "weight": null,
+      "bialko": "5.1",
+      "weglowodany": "68.2",
+      "tluszcz": "15.5",
+      "blonnik": "3.3",
+      "energia": "439",
+      "salt": null,
+      "simple_sugars": null,
+      "fatty_acid": null,
+      "id_iu": null,
+      "ingredient_name": "Baton zbożowy z suszonym jabłkiem, rodzynkami i polewą kakaową",
+      "category_name": null,
+      "category_slug": null,
+      "category_extended_content": null,
+      "post_name": null,
+      "unitdata": {
+        "sztuka": {
+          "unit_name": "Sztuka",
+          "unit_weight": "40",
+          "filename": "baton-zbozowy-ba-2.jpg",
+          "id": "2",
+          "post_name": "baton-zbozowy-z-suszonym-jablkiem-rodzynkami-i-polewa-kakaowa",
+          "id_iu": "2965"
+        }
+      },
+      "product_slug": null
+    },
+    {
+      "id": "11010",
+      "weight": null,
+      "bialko": "4.9",
+      "weglowodany": "66.8",
+      "tluszcz": "9.6",
+      "blonnik": null,
+      "energia": "381",
+      "salt": null,
+      "simple_sugars": null,
+      "fatty_acid": null,
+      "id_iu": null,
+      "ingredient_name": "Batonik Musli owocowo zbożowy HiPP ",
+      "category_name": null,
+      "category_slug": null,
+      "category_extended_content": null,
+      "post_name": null,
+      "unitdata": {
+        "sztuka": {
+          "unit_name": "Sztuka",
+          "unit_weight": "20",
+          "filename": "muesli-freund-hipp-sztuka-1.jpg",
+          "id": "2",
+          "post_name": "batonik-musli-owocowo-zbozowy-hipp",
+          "id_iu": "12619"
+        }
+      },
+      "product_slug": null
+    },
+    {
+      "id": "16973",
+      "weight": null,
+      "bialko": "0",
+      "weglowodany": "9.1",
+      "tluszcz": "0",
+      "blonnik": null,
+      "energia": "36",
+      "salt": "0.01",
+      "simple_sugars": "7.6",
+      "fatty_acid": "0",
+      "id_iu": null,
+      "ingredient_name": "Bezalkoholowy napój piwny Radler o smaku jabłka z miętą",
+      "category_name": null,
+      "category_slug": null,
+      "category_extended_content": null,
+      "post_name": null,
+      "unitdata": {
+        "porcja": {
+          "unit_name": "Porcja",
+          "unit_weight": "500",
+          "id": "1",
+          "post_name": "porcja-bezalkoholowego-napoju-piwnego-radler-o-smaku-jablka-z-mieta-1",
+          "id_iu": "20373",
+          "filename": "warka-radler-jablko-mieta-1.jpg"
+        },
+        "szklanka": {
+          "unit_name": "Szklanka",
+          "unit_weight": "215",
+          "id": "6",
+          "post_name": "szklanka-bezalkoholowego-napoju-piwnego-radler-o-smaku-jablka-z-mieta",
+          "id_iu": "20374",
+          "filename": "warka-radler-jablko-mieta-2.jpg"
+        }
+      },
+      "product_slug": null
+    },
+    {
+      "id": "537",
+      "weight": "8",
+      "bialko": "1.1",
+      "weglowodany": "93.4",
+      "tluszcz": "0.5",
+      "blonnik": "0",
+      "energia": "382",
+      "salt": null,
+      "simple_sugars": null,
+      "fatty_acid": null,
+      "id_iu": null,
+      "ingredient_name": "Chipsy jabłkowe",
+      "category_name": null,
+      "category_slug": null,
+      "category_extended_content": null,
+      "post_name": null,
+      "unitdata": {
+        "garsc": {
+          "unit_name": "Garść",
+          "unit_weight": "8",
+          "filename": "chipsy-jablkowe-garsc.jpg",
+          "id": "3",
+          "post_name": "garsc-chipsow-jablkowych",
+          "id_iu": "668"
+        }
+      },
+      "product_slug": "chipsy-jablkowe"
+    },
+    {
+      "id": "16266",
+      "weight": null,
+      "bialko": "1.8",
+      "weglowodany": "81.9",
+      "tluszcz": "0.2",
+      "blonnik": "10.3",
+      "energia": "355",
+      "salt": "0.01",
+      "simple_sugars": "66.7",
+      "fatty_acid": "0.1",
+      "id_iu": null,
+      "ingredient_name": "Chipsy z jabłka z sokiem z ananasa",
+      "category_name": null,
+      "category_slug": null,
+      "category_extended_content": null,
+      "post_name": null,
+      "unitdata": {
+        "garsc": {
+          "unit_name": "Garść",
+          "unit_weight": "16",
+          "filename": "suszone-jablko-z-sokiem-z-ananasa-1.jpg",
+          "id": "3",
+          "post_name": "garsc-chipsow-z-jablka-z-sokiem-z-ananasa",
+          "id_iu": "19513"
+        }
+      },
+      "product_slug": null
+    },
+    {
+      "id": "16265",
+      "weight": null,
+      "bialko": "1.9",
+      "weglowodany": "85.7",
+      "tluszcz": "0.1",
+      "blonnik": "9.1",
+      "energia": "370",
+      "salt": "0.01",
+      "simple_sugars": "70.3",
+      "fatty_acid": "0.1",
+      "id_iu": null,
+      "ingredient_name": "Chipsy z jabłka z sokiem z mango",
+      "category_name": null,
+      "category_slug": null,
+      "category_extended_content": null,
+      "post_name": null,
+      "unitdata": {
+        "garsc": {
+          "unit_name": "Garść",
+          "unit_weight": "20",
+          "filename": "suszone-jablko-z-sokie-z-mango-1.jpg",
+          "id": "3",
+          "post_name": "garsc-chipsow-z-jablka-z-sokiem-z-mango",
+          "id_iu": "19512"
+        }
+      },
+      "product_slug": null
+    }
+  ]
+}

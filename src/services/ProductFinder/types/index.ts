@@ -11,7 +11,7 @@ type IleWazyUnitData = {
   unit_weight: string
 }
 
-type IleWazyPortionType = 'szklanka' | 'porcja' | 'sztuka' | 'kromka' | 'lyzka';
+type IleWazyPortionType = 'szklanka' | 'porcja' | 'sztuka' | 'kromka' | 'lyzka' | 'garsc';
 
 export interface IleWazyPayload {
   page: null
