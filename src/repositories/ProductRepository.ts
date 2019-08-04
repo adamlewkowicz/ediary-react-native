@@ -1,9 +1,10 @@
-import { EntityRepository, Repository, Like } from 'typeorm/browser';
+import { EntityRepository, Like } from 'typeorm/browser';
 import { Product, ProductPortion } from '../entities';
 import { ProductFinder, productFinder } from '../services/ProductFinder';
+import { GenericRepository } from './Generic';
 
 @EntityRepository(Product)
-export class ProductRepository extends Repository<Product> {
+export class ProductRepository extends GenericRepository<Product> {
 
   productFinder: ProductFinder;
 
@@ -39,9 +40,18 @@ export class ProductRepository extends Repository<Product> {
           }),
         }));
 
-        const createdProducts = await this.save(verifiedProducts);
+        const foundOrCreatedProducts = await Promise.all(
+          verifiedProducts.map(product =>
+            this.findOneOrSave({
+              where: {
+                name: product.name,
+                verified: true
+              }
+            }, product)
+          )
+        );
         
-        return [...savedProducts, ...createdProducts];
+        return [...savedProducts, ...foundOrCreatedProducts];
       }
     }
 
