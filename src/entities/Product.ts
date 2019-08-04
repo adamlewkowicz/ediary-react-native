@@ -10,6 +10,7 @@ import {
 import { MealProduct } from './MealProduct';
 import { BarcodeId, ProductId, UserId } from '../types';
 import { User } from './User';
+import { ProductPortion } from './ProductPortion';
 
 @Entity('Product')
 @Unique(['name', 'userId'])
@@ -55,5 +56,12 @@ export class Product {
   @ManyToOne(type => User)
   @JoinColumn({ name: 'userId' })
   user!: User;
-  
+
+  @OneToMany(
+    type => ProductPortion,
+    productPortion => productPortion.product,
+    { onDelete: 'CASCADE' }
+  )
+  portions!: ProductPortion[];
+
 }

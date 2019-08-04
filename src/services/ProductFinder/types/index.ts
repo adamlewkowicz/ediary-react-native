@@ -1,3 +1,4 @@
+import { PortionType } from '../../../types';
 
 type IleWazyUnitData = {
   filename: "koncentrat-grzybowy-krakus-1.jpg"
@@ -11,7 +12,7 @@ type IleWazyUnitData = {
   unit_weight: string
 }
 
-type IleWazyPortionType = 'szklanka' | 'porcja' | 'sztuka' | 'kromka' | 'lyzka' | 'garsc';
+export type IleWazyPortionType = 'szklanka' | 'porcja' | 'sztuka' | 'kromka' | 'lyzka' | 'garsc';
 
 export interface IleWazyPayload {
   page: null
@@ -41,4 +42,8 @@ export interface IleWazyPayload {
       [key in IleWazyPortionType]?: IleWazyUnitData
     }
   }[]
+}
+
+export type PortionMap = {
+  [key in IleWazyPortionType]: PortionType
 }

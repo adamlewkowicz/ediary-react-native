@@ -1,4 +1,4 @@
-import { IleWazyPayload } from './types';
+import { IleWazyPayload, PortionMap, IleWazyPortionType } from './types';
 import { round } from '../../common/utils';
 
 export class ProductFinder {
@@ -12,12 +12,23 @@ export class ProductFinder {
 
     const { data = [] }: IleWazyPayload = await response.json();
 
+    const portionMap: PortionMap = {
+      'garsc': 'handful',
+      'kromka': 'slice',
+      'lyzka': 'spoon',
+      'porcja': 'portion',
+      'szklanka': 'glass',
+      'sztuka': 'piece'
+    }
+    const portionMapKeys = Object.keys(portionMap);
+
     const normalizedResults = data.map(record => {
       const _id = record.id;
       const name = record.ingredient_name;
       const prots = Number(record.bialko);
       const kcal = Number(record.energia);
       const portion = Number(record.weight);
+      const isVerified = true as const;
       let carbs = Number(record.weglowodany);
       let fats = Number(record.tluszcz);
 
@@ -34,6 +45,18 @@ export class ProductFinder {
         }
       }
 
+      const portions = Object
+        .entries(record.unitdata)
+        .filter(([key]) => portionMapKeys.includes(key))
+        .map(([key, data]) => ({
+          type: portionMap[key as IleWazyPortionType],
+          value: Number(data!.unit_weight)
+        }));
+
+      const images = Object
+        .values(record.unitdata)
+        .map(unitdata => `http://static.ilewazy.pl/dziennik/470/${unitdata!.filename}`);
+
       const normalizedProduct = {
         _id,
         name,
@@ -42,6 +65,9 @@ export class ProductFinder {
         carbs,
         fats,
         kcal,
+        portions,
+        images,
+        isVerified,
       }
       
       return normalizedProduct;

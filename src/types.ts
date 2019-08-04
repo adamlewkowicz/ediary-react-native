@@ -2,7 +2,8 @@ import {
   PRODUCT_UNITS,
   MACRO_ELEMENTS,
   BASE_MACRO_ELEMENTS,
-  USER_ID_UNSYNCED
+  USER_ID_UNSYNCED,
+  PORTION_TYPES
 } from './common/consts';
 
 export type ProductUnit = typeof PRODUCT_UNITS[number];
@@ -35,3 +36,5 @@ export type UserId = UserIdBrand & number;
 // that has not been synced/registerd in online mode
 type UserIdUnsynced = typeof USER_ID_UNSYNCED
 type _UserId = UserId | UserIdUnsynced;
+
+export type PortionType = typeof PORTION_TYPES[number];

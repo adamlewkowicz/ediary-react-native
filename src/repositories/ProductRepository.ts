@@ -1,5 +1,5 @@
 import { EntityRepository, Repository, Like } from 'typeorm/browser';
-import { Product } from '../entities';
+import { Product, ProductPortion } from '../entities';
 import { ProductFinder, productFinder } from '../services/ProductFinder';
 
 @EntityRepository(Product)
@@ -28,8 +28,19 @@ export class ProductRepository extends Repository<Product> {
       const foundProducts = await this.productFinder.findByName(name);
 
       if (foundProducts.length) {
-        const verifiedProducts = foundProducts.map(p => ({ ...p, verified: true }));
+        const verifiedProducts = foundProducts.map(product => ({
+          ...product,
+          verified: true,
+          portions: product.portions.map(portion => {
+            const productPortion = new ProductPortion;
+            productPortion.type = portion.type;
+            productPortion.value = portion.value;
+            return productPortion;
+          }),
+        }));
+
         const createdProducts = await this.save(verifiedProducts);
+        
         return [...savedProducts, ...createdProducts];
       }
     }
