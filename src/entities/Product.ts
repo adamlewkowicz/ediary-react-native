@@ -5,13 +5,15 @@ import {
   OneToMany,
   ManyToOne,
   JoinColumn,
+  Unique,
 } from 'typeorm/browser';
 import { MealProduct } from './MealProduct';
 import { BarcodeId, ProductId, UserId } from '../types';
 import { User } from './User';
-import { USER_ID_UNSYNCED } from '../common/consts';
 
 @Entity('Product')
+@Unique(['name', 'userId'])
+@Unique(['name', 'verified'])
 export class Product {
 
   @PrimaryGeneratedColumn()
@@ -44,7 +46,10 @@ export class Product {
   @OneToMany(type => MealProduct, mealProduct => mealProduct.product)
   mealProducts!: MealProduct[]
 
-  @Column('number', { default: USER_ID_UNSYNCED })
+  @Column('boolean', { default: false })
+  verified!: boolean;
+
+  @Column('int', { nullable: true })
   userId!: UserId | null;
 
   @ManyToOne(type => User)

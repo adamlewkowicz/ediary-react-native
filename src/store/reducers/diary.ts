@@ -186,6 +186,7 @@ export interface DiaryProductPayload {
   kcal: number
   mealId: Meal['id'] | null
   userId?: number | null
+  verified: boolean
   updatedAt: Date
   createdAt: Date
 }

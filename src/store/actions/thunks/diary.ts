@@ -22,6 +22,7 @@ import { AppState } from '../..';
 import { MealId, ProductUnit } from '../../../types';
 import { MealRepository } from '../../../repositories/MealRepository';
 import { MealsWithRatio } from '../../selectors';
+import { USER_ID_UNSYNCED } from '../../../common/consts';
 
 
 export const mealCreate = (name: Meal['name']) => async (dispatch: any) => {
@@ -49,7 +50,7 @@ export const mealProductCreate = (
   payload: Product
 ) => async (dispatch: any) => {
   const meal = await mealRepository().findOneOrFail(mealId);
-  const mockedProduct = { ...payload, ...getProductMock() };
+  const mockedProduct = { ...payload, ...getProductMock(), userId: USER_ID_UNSYNCED };
   const newProduct = await meal.addAndCreateProduct(mockedProduct);
   dispatch(mealProductCreated(mealId, { ...mockedProduct, ...newProduct }));
 }
@@ -71,7 +72,7 @@ export const productUpdate = (
 }
 
 export const productCreate = (
-  product: Omit<DiaryProductPayload, 'id' | 'createdAt' | 'updatedAt'>
+  product: Omit<DiaryProductPayload, 'id' | 'createdAt' | 'updatedAt' | 'verified'>
 ) => async (dispatch: any) => {
   const newProduct = await productRepository().save(product);
   dispatch(productCreated({ ...product, ...newProduct }));

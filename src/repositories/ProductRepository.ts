@@ -28,7 +28,8 @@ export class ProductRepository extends Repository<Product> {
       const foundProducts = await this.productFinder.findByName(name);
 
       if (foundProducts.length) {
-        const createdProducts = await this.save(foundProducts);
+        const verifiedProducts = foundProducts.map(p => ({ ...p, verified: true }));
+        const createdProducts = await this.save(verifiedProducts);
         return [...savedProducts, ...createdProducts];
       }
     }
