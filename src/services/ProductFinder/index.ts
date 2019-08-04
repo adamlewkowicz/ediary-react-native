@@ -10,9 +10,9 @@ export class ProductFinder {
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }
     });
 
-    const result: IleWazyPayload = await response.json();
+    const { data = [] }: IleWazyPayload = await response.json();
 
-    const normalizedResults = result.data.map(record => {
+    const normalizedResults = data.map(record => {
       const _id = record.id;
       const name = record.ingredient_name;
       const prots = Number(record.bialko);

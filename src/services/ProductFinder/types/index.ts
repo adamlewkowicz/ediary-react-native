@@ -17,7 +17,7 @@ export interface IleWazyPayload {
   page: null
   records: string
   total: number
-  data: {
+  data?: {
     /** Product name */
     ingredient_name: string
     weglowodany: string

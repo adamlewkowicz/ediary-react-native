@@ -27,7 +27,20 @@ export const ProductFinder = (props: ProductFinderProps) => {
       const foundProducts = await getCustomRepository(ProductRepository)
         .findAndFetchByNameLike(trimmedName);
 
-      setProducts(foundProducts);
+      const nameLowered = trimmedName.toLowerCase();
+
+      const sortedProducts = foundProducts
+        .sort((a, b) => {
+          const aName = a.name.toLowerCase();
+          const bName = b.name.toLowerCase();
+
+          const aIndex = aName.indexOf(nameLowered);
+          const bIndex = bName.indexOf(nameLowered);
+          
+          return aIndex - bIndex;
+        });
+
+      setProducts(sortedProducts);
       setLoading(false);
     }, 100);
   }
