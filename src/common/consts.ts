@@ -6,3 +6,5 @@ export const USER_ID_UNSYNCED = 0 as const;
 export const PORTION_TYPES = [
   'portion', 'package',  'piece', 'slice', 'spoon', 'handful', 'glass'
 ] as const;
+
+export const IS_DEV = __DEV__;

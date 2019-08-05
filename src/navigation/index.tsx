@@ -3,6 +3,8 @@ import { Home } from '../pages/Home';
 import { ProductCreate } from '../pages/ProductCreate';
 import { ProductFinder } from '../pages/ProductFinder';
 import { themeProps } from '../common/theme';
+import { IS_DEV } from '../common/consts';
+import { StorybookUIRoot } from '../../storybook/index';
 
 const HomeStack = createStackNavigator({
   Home,
@@ -18,9 +20,10 @@ const HomeStack = createStackNavigator({
 });
 
 export const AppNavigator = createBottomTabNavigator({
+  ...IS_DEV && { StoryBook: StorybookUIRoot },
   Home: HomeStack,
 }, {
-  initialRouteName: 'Home',
+  initialRouteName: IS_DEV ? 'StoryBook' : 'Home',
 });
 
 export const AppContainer = createAppContainer(AppNavigator);
