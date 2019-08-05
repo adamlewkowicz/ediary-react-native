@@ -13,7 +13,7 @@ import { MealListItem } from '../components/MealListItem';
 import { FloatingButton } from '../components/FloatingButton';
 import { BasicInput } from '../components/BasicInput';
 import { NavigationScreenProps } from 'react-navigation';
-import { HandleItemPressHandler, ProductFinderParams } from './ProductFinder';
+import { ProductFinderParams } from './ProductFinder';
 import { mealProductAdd } from '../store/actions';
 
 const elements = [
@@ -32,14 +32,17 @@ const Home = (props: HomeProps) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(Actions.mealsFindByDay())
+    dispatch(Actions.mealsFindByDay());
   }, []);
 
-  const handleProductAdd: HandleItemPressHandler = (foundProduct) => {
-    const [meal] = props.mealsWithRatio;
-    props.navigation.navigate('Home');
-
-    dispatch(mealProductAdd(meal, foundProduct));
+  const handleProductFinderNavigation = (meal: MealsWithRatio[number]) => {
+    const screenParams: ProductFinderParams = {
+      onItemPress(foundProduct) {
+        props.navigation.navigate('Home');
+        dispatch(mealProductAdd(meal, foundProduct));
+      }
+    }
+    props.navigation.navigate('ProductFinder', screenParams);
   }
   
   return (
@@ -69,9 +72,7 @@ const Home = (props: HomeProps) => {
               meal={item}
               onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
               onLongPress={() => dispatch(Actions.mealDelete(item.id))}
-              onProductAdd={() => props.navigation.navigate('ProductFinder', {
-                onItemPress: handleProductAdd
-              })}
+              onProductAdd={() => handleProductFinderNavigation(item)}
             />
           )}
         />
@@ -95,10 +96,8 @@ const Home = (props: HomeProps) => {
         ))}>
           Aktualizuj nazwę (Pierwszy produkt)
         </Button>
-        <Button onPress={() => props.navigation.navigate('ProductFinder', {
-          onItemPress: handleProductAdd
-        } as ProductFinderParams)}>
-          Dodaj produkt
+        <Button onPress={() => props.navigation.navigate('ProductFinder')}>
+          Wyszukiwarka produktów
         </Button>
       </ScrollView>
     </Container>
