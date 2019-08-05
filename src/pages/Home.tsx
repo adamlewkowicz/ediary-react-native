@@ -69,6 +69,9 @@ const Home = (props: HomeProps) => {
               meal={item}
               onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
               onLongPress={() => dispatch(Actions.mealDelete(item.id))}
+              onProductAdd={() => props.navigation.navigate('ProductFinder', {
+                onItemPress: handleProductAdd
+              })}
             />
           )}
         />

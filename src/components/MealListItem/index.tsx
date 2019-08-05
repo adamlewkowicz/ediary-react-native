@@ -6,11 +6,13 @@ import { ProgressBar } from '../ProgressBar';
 import { ProductPartial, ProductItem } from '../ProductItem';
 import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { MealsWithRatio } from '../../store/selectors';
+import { Button } from 'react-native-ui-kitten';
 
 interface MealListItemProps {
   meal: MealsWithRatio[number]
   onToggle: (mealId: MealsWithRatio[number]['id']) => void
   onLongPress?: TouchableOpacityProps['onLongPress']
+  onProductAdd: () => void
 }
 export const MealListItem = (props: MealListItemProps) => (
   <Container>
@@ -61,6 +63,9 @@ export const MealListItem = (props: MealListItemProps) => (
             />
           )}
         />
+        <Button onPress={props.onProductAdd}>
+          Dodaj produkt
+        </Button>
       </>
     )}
   </Container>

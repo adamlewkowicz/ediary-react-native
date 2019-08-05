@@ -76,7 +76,7 @@ const Input = styled.TextInput<{
   border-radius: 30;
   font-family: ${props => props.theme.fontFamily};
   font-size: ${props => props.theme.fontSize};
-  padding-left: 45px;
+  padding: 10px 45px;
 `
 
 const Label = styled.Text<{

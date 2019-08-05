@@ -8,6 +8,7 @@ import {
 
 export class GenericRepository<T> extends Repository<T> {
 
+  // does not allow to execute another query in the same time
   findOneOrSave<P extends DeepPartial<T>>(
     options: FindOneOptions,
     payload: P

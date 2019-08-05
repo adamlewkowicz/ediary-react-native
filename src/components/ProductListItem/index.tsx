@@ -69,7 +69,7 @@ const Content = styled.View`
 const Name = styled.Text`
   font-family: DMSans-Medium;
   font-size: 16px;
-  margin-bottom: 7px;
+  margin-bottom: 9px;
 `
 
 const Info = styled.View`
