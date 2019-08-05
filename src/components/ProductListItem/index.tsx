@@ -66,7 +66,7 @@ const Content = styled.View`
 const Name = styled.Text`
   font-family: DMSans-Medium;
   font-size: 16px;
-  margin-bottom: 5px;
+  margin-bottom: 7px;
 `
 
 const Info = styled.View`
@@ -78,7 +78,7 @@ const Quantity = styled.Text<{
   theme: Theme
 }>`
   border-right-width: 1px;
-  width: 60px;
+  width: 55px;
   font-size: ${props => props.theme.fontSize};
   color: ${props => props.theme.secondaryColor};
   border-right-color: ${props => props.theme.secondaryColor};
@@ -88,7 +88,7 @@ const Quantity = styled.Text<{
 const Kcal = styled.Text<{
   theme: Theme
 }>`
-  width: 60px;
+  width: 65px;
   font-size: ${props => props.theme.fontSize};
   color: ${props => props.theme.secondaryColor};
 `

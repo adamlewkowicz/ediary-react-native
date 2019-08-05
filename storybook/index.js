@@ -6,6 +6,7 @@ function loadStories() {
   // const req = require.context('./src/components', true, /\.story\.tsx$/);
   
   if (IS_DEV) {
+    require('../src/components/InputSearcher/story');
     require('../src/components/ProductListItem/story');
   }
 }

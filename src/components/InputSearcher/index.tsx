@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { TextInputProps } from 'react-native';
+import { TextInputProps, ActivityIndicator } from 'react-native';
 import { Theme } from '../../common/theme';
 import { LoupeIcon } from '../Icons';
 import { _InputSearcherLoupe } from '../../common/zIndex';
@@ -9,12 +9,14 @@ const LOUPE_SIZE = 18;
 
 interface InputSearcherProps extends TextInputProps {
   showLabel?: boolean
+  isLoading?: boolean
 }
 export const InputSearcher = ({
   placeholder,
   onBlur,
   onFocus,
-  showLabel = true,
+  showLabel = false,
+  isLoading = false,
   ...props
 }: InputSearcherProps) => {
   const [isFocused, setFocused] = useState(false);
@@ -22,7 +24,6 @@ export const InputSearcher = ({
   return (
     <Container>
       <Input
-        placeholderTextColor="transparent"
         placeholder={placeholder}
         onFocus={(event) => {
           if (onFocus) onFocus(event);
@@ -35,13 +36,11 @@ export const InputSearcher = ({
         {...props}
       />
       {placeholder && showLabel && (
-        <Label
-          isFocused={isFocused}
-          style={{ transform: [{ translateY: isFocused ? -50 : -10 }] }}
-        >
+        <Label isFocused={isFocused}>
           {placeholder}
         </Label>
       )}
+      {isLoading && <Spinner />}
       <StyledLoupeIcon
         fill="#272733"
         width={LOUPE_SIZE}
@@ -55,6 +54,13 @@ export const InputSearcher = ({
 
 const Container = styled.View`
   position: relative;
+`
+
+const Spinner = styled(ActivityIndicator)`
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-10px);
 `
 
 const StyledLoupeIcon = styled(LoupeIcon)`
@@ -81,7 +87,9 @@ const Label = styled.Text<{
   left: ${45};
   font-family: ${props => props.theme.fontFamily};
   font-size: ${props => props.theme.fontSize};
-  color: ${props => props.isFocused ? props.theme.focusColor : '#8F8F8F'};
   top: 50%;
   height: 20px;
+  color: #8F8F8F;
+  color: ${props => props.isFocused ? props.theme.focusColor : '#8F8F8F'};
+  transform: ${props => `translateY(${props.isFocused ? -50 : -10}px)`};
 `
