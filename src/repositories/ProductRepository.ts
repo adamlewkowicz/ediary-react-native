@@ -2,6 +2,7 @@ import { EntityRepository, Like } from 'typeorm/browser';
 import { Product, ProductPortion } from '../entities';
 import { ProductFinder, productFinder } from '../services/ProductFinder';
 import { GenericRepository } from './Generic';
+import { mapAsyncSequence } from '../common/utils';
 
 @EntityRepository(Product)
 export class ProductRepository extends GenericRepository<Product> {
@@ -40,18 +41,23 @@ export class ProductRepository extends GenericRepository<Product> {
           }),
         }));
 
-        const foundOrCreatedProducts = await Promise.all(
-          verifiedProducts.map(product =>
-            this.findOneOrSave({
-              where: {
-                name: product.name,
-                verified: true
-              }
-            }, product)
-          )
+        const foundOrCreatedProducts = await mapAsyncSequence(
+          verifiedProducts,
+          product => this.findOneOrSave({
+            where: {
+              name: product.name,
+              verified: true
+            }
+          }, product)
         );
+
+        const mergedProducts = [...savedProducts, ...foundOrCreatedProducts]
+          .filter((product, index, self) => {
+            const foundIndex = self.findIndex(anyProduct => anyProduct.id === product.id);
+            return foundIndex === index;
+          });
         
-        return [...savedProducts, ...foundOrCreatedProducts];
+        return mergedProducts
       }
     }
 

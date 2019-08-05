@@ -2,20 +2,24 @@ import {
   Repository,
   FindOneOptions,
   DeepPartial,
+  ObjectType,
 } from 'typeorm/browser';
 
 export class GenericRepository<T> extends Repository<T> {
 
-  async findOneOrSave<P extends DeepPartial<T>>(
+  findOneOrSave<P extends DeepPartial<T>>(
     options: FindOneOptions,
     payload: P
   ): Promise<T> {
-    const existingItem = await this.findOne(options);
-    if (existingItem) {
-      return existingItem;
-    }
-    const createdItem = await this.save(payload);
-    return createdItem;
+    return this.manager.transaction(async manager => {
+      const entity: ObjectType<T> = this.target as any;
+      const existingItem = await manager.findOne(entity, options);
+      if (existingItem) {
+        return existingItem;
+      }
+      const createdItem = await manager.save(entity, payload);
+      return createdItem;
+    });
   }
 
 }

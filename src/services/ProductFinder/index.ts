@@ -24,7 +24,7 @@ export class ProductFinder {
 
     const normalizedResults = data.map(record => {
       const _id = record.id;
-      const name = record.ingredient_name;
+      const name = record.ingredient_name.trim();
       const prots = Number(record.bialko);
       const kcal = Number(record.energia);
       const portion = Number(record.weight);
