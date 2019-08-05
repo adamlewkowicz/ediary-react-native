@@ -15,6 +15,7 @@ import { BasicInput } from '../components/BasicInput';
 import { NavigationScreenProps } from 'react-navigation';
 import { ProductFinderParams } from './ProductFinder';
 import { mealProductAdd } from '../store/actions';
+import { ProductCreateParams } from './ProductCreate';
 
 const elements = [
   { name: 'carbs', title: 'Węgle', value: 19, percentages: 25 },
@@ -43,6 +44,15 @@ const Home = (props: HomeProps) => {
       }
     }
     props.navigation.navigate('ProductFinder', screenParams);
+  }
+  
+  const handleProductCreatorNavigation = () => {
+    const screenParams: ProductCreateParams = {
+      onProductCreated() {
+        props.navigation.navigate('Home');
+      }
+    }
+    props.navigation.navigate('ProductCreate', screenParams);
   }
   
   return (
@@ -98,6 +108,9 @@ const Home = (props: HomeProps) => {
         </Button>
         <Button onPress={() => props.navigation.navigate('ProductFinder')}>
           Wyszukiwarka produktów
+        </Button>
+        <Button onPress={handleProductCreatorNavigation}>
+          Kreator produktów
         </Button>
       </ScrollView>
     </Container>

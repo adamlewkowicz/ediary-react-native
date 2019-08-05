@@ -9,10 +9,15 @@ import { InputRow } from '../../components/InputRow';
 import { useDispatch } from 'react-redux';
 import * as Actions from '../../store/actions';
 import { Options } from '../../components/Options';
+import { NavigationScreenProps } from 'react-navigation';
 
-export const ProductCreate = () => {
+interface ProductCreateProps extends NavigationScreenProps {}
+export const ProductCreate = (props: ProductCreateProps) => {
   const [state, dispatch] = useReducer(productCreateReducer, initialState);
   const storeDispatch = useDispatch();
+  const { current: params } = useRef<ProductCreateParams>({
+    onProductCreated: props.navigation.getParam('onProductCreated')
+  });
   const { current: refsList } = useRef({
     producer: createRef<TextInput>(),
     portion: createRef<TextInput>(),
@@ -30,15 +35,19 @@ export const ProductCreate = () => {
     });
   }
 
-  function handleProductCreate() {
+  async function handleProductCreate() {
     const { portionOption, portionOptions, ...data } = state;
 
-    storeDispatch(
+    await storeDispatch(
       Actions.productCreate({
         ...data,
         quantity: data.portion
       })
     );
+
+    if (params.onProductCreated) {
+      params.onProductCreated();
+    }
   }
 
   function handlePortionOptionChange(option: PortionOption) {
@@ -146,3 +155,11 @@ const nutritionInputs: {
     nextRef: 'barcode'
   }
 ]
+
+ProductCreate.navigationOptions = {
+  headerTitle: 'Stwórz produkt'
+}
+
+export interface ProductCreateParams {
+  onProductCreated?: () => void
+}

@@ -73,9 +73,10 @@ export const productUpdate = (
 
 export const productCreate = (
   product: Omit<DiaryProductPayload, 'id' | 'createdAt' | 'updatedAt' | 'verified'>
-) => async (dispatch: any) => {
+) => async (dispatch: any): Promise<Product> => {
   const newProduct = await productRepository().save(product);
   dispatch(productCreated({ ...product, ...newProduct }));
+  return newProduct;
 }
 
 export const mealsFindByDay = (
