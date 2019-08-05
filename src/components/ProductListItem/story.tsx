@@ -5,6 +5,7 @@ import { ProductListItem } from '.';
 storiesOf('ProductListItem', module)
   .add('default', () => (
     <ProductListItem
+      phrase="pad"
       product={{
         name: 'Pad Thai',
         carbs: 51,

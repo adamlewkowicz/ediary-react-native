@@ -68,6 +68,7 @@ export const ProductFinder = (props: ProductFinderProps) => {
             product={item}
             hideBottomLine={index === products.length - 1}
             onPress={() => params.onItemPress && params.onItemPress(item)}
+            phrase={name}
           />
         )}
       />

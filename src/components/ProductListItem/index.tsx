@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import { Theme } from '../../common/theme';
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { NutritionBox } from '../NutritionBox';
+import { PhraseSelector } from '../PhraseSelector';
 
 interface ProductListItemProps extends TouchableOpacityProps {
   hideBottomLine?: boolean
@@ -14,36 +15,38 @@ interface ProductListItemProps extends TouchableOpacityProps {
     fats: number
     kcal: number
   }
+  phrase?: string
 }
 export const ProductListItem = ({
   product,
   hideBottomLine = false,
+  phrase,
   ...props
 }: ProductListItemProps) => {
   return (
     <TouchableOpacity {...props}>
       <Container>
         <Name>{product.name}</Name>
-          <Content>
-            <Info>
-              <Quantity>{product.portion || 100}g</Quantity>
-              <Kcal>{product.kcal} kcal</Kcal>
-            </Info>
-            <NutritionContainer>
-              <NutritionBox
-                value={product.carbs}
-                element="carbs"
-              />
-              <NutritionBox
-                value={product.prots}
-                element="prots"
-              />
-              <NutritionBox
-                value={product.fats}
-                element="fats"
-              />
-            </NutritionContainer>
-          </Content>
+        <Content>
+          <Info>
+            <Quantity>{product.portion || 100}g</Quantity>
+            <Kcal>{product.kcal} kcal</Kcal>
+          </Info>
+          <NutritionContainer>
+            <NutritionBox
+              value={product.carbs}
+              element="carbs"
+            />
+            <NutritionBox
+              value={product.prots}
+              element="prots"
+            />
+            <NutritionBox
+              value={product.fats}
+              element="fats"
+            />
+          </NutritionContainer>
+        </Content>
         </Container>
     </TouchableOpacity>
   );
