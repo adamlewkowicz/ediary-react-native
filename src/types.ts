@@ -38,3 +38,5 @@ type UserIdUnsynced = typeof USER_ID_UNSYNCED
 type _UserId = UserId | UserIdUnsynced;
 
 export type PortionType = typeof PORTION_TYPES[number];
+
+export type WeightGoal = 'decrease' | 'maintain' | 'increase';
