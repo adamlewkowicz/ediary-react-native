@@ -2,8 +2,11 @@ import React, { ReactNode } from 'react';
 import { createConnection, Connection, Repository } from 'typeorm/browser';
 import * as entities from '../../entities';
 import { Text } from 'react-native';
-import { userRepository } from '../../repositories';
 import { USER_ID_UNSYNCED } from '../../common/consts';
+import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
+import { store } from '../../store';
+import { appConnectionStatusUpdated } from '../../store/actions';
+import { UserRepository } from '../../repositories/UserRepository';
 
 export const DatabaseContext = React.createContext<DatabaseContext>({} as any);
 
@@ -17,42 +20,60 @@ interface DatabaseProviderState {
 }
 export class DatabaseProvider extends React.Component<DatabaseProviderProps, DatabaseProviderState> {
 
+  unsubscribe: NetInfoSubscription
+
   state = {
     connection: null,
     repositories: null,
     isLoading: true
   }
 
-  componentDidMount() {
-    this.setupDatabase();
+  constructor(props: DatabaseProviderProps) {
+    super(props);
+
+    this.unsubscribe = NetInfo.addEventListener(state => {
+      this.handleConnectionStatusUpdate(state.isConnected);
+    });
   }
 
-  async setupDatabase() {
+  componentDidMount() {
+    this.setup();
+  }
+
+  async setup() {
     const connection = await createConnection({
       type: 'react-native',
       database: 'test',
       location: 'default',
       logging: ['error', 'query', 'schema'],
-      dropSchema: false,
-      synchronize: false,
+      dropSchema: true,
+      synchronize: true,
       entities: Object.values(entities)
     });
 
-    const existingUser = await userRepository().findOne(USER_ID_UNSYNCED);
-
-    if (!existingUser) {
-      await userRepository().save({
+    await connection
+      .getCustomRepository(UserRepository)
+      .findOneOrSave({ where: { id: USER_ID_UNSYNCED }}, {
         id: USER_ID_UNSYNCED,
         email: null,
         login: 'login',
         password: 'password',
       });
-    }
 
     this.setState({
       connection,
       isLoading: false
     });
+  }
+
+  handleConnectionStatusUpdate(status: boolean) {
+    store.dispatch(
+      appConnectionStatusUpdated(status)
+    );
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   render() {

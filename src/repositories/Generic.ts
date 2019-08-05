@@ -3,6 +3,7 @@ import {
   FindOneOptions,
   DeepPartial,
   ObjectType,
+  ObjectID,
 } from 'typeorm/browser';
 
 export class GenericRepository<T> extends Repository<T> {
@@ -23,3 +24,5 @@ export class GenericRepository<T> extends Repository<T> {
   }
 
 }
+
+type TypeOrmFindId = string | number | Date | ObjectID;
