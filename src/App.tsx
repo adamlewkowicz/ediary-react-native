@@ -10,6 +10,7 @@ import { themeProps } from './common/theme';
 import { ProductCreate } from './pages/ProductCreate';
 import { ProductFinder } from './pages/ProductFinder';
 import { AppContainer } from './navigation';
+import { ProfileCreator } from './pages/ProfileCreator';
 
 export const App = () => {
   return (
@@ -20,7 +21,7 @@ export const App = () => {
             mapping={mapping}
             theme={lightTheme}
           >
-            <AppContainer />
+            <ProfileCreator />
           </ApplicationProvider>
         </ThemeProvider>
       </DatabaseProvider>

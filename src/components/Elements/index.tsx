@@ -56,3 +56,5 @@ const Meta = styled.Text<{
   font-size: ${({ fontSize = 10 }) => fontSize + 'px'};
   margin-left: 2px;
 `
+
+export * from './Block';
