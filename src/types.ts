@@ -5,6 +5,7 @@ import {
   USER_ID_UNSYNCED,
   PORTION_TYPES
 } from './common/consts';
+import * as Screens from './pages';
 
 export type ProductUnit = typeof PRODUCT_UNITS[number];
 
@@ -44,3 +45,5 @@ export type WeightGoal = 'decrease' | 'maintain' | 'increase';
 export interface ProfileId extends Number {
   _profileIdBrand: number;
 }
+
+export type Screen = keyof typeof Screens;

@@ -1,5 +1,4 @@
 import React from 'react';
-import { DatabaseProvider } from './context/Database';
 import { Home } from './pages/Home';
 import { mapping, light as lightTheme } from '@eva-design/eva';
 import { ApplicationProvider } from 'react-native-ui-kitten';
@@ -15,16 +14,14 @@ import { ProfileCreator } from './pages/ProfileCreator';
 export const App = () => {
   return (
     <Provider store={store}>
-      <DatabaseProvider>
-        <ThemeProvider theme={themeProps}>
-          <ApplicationProvider
-            mapping={mapping}
-            theme={lightTheme}
-          >
-            <AppContainer />
-          </ApplicationProvider>
-        </ThemeProvider>
-      </DatabaseProvider>
+      <ThemeProvider theme={themeProps}>
+        <ApplicationProvider
+          mapping={mapping}
+          theme={lightTheme}
+        >
+          <AppContainer />
+        </ApplicationProvider>
+      </ThemeProvider>
     </Provider>
   );
 };
