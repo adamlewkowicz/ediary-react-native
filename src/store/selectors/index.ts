@@ -84,7 +84,7 @@ const mealsMacroSum = createSelector(
     fats: Math.round(sum.fats + meal.fats),
     kcal: Math.round(sum.kcal + meal.kcal)
   }), { ...baseMacro })
-)
+);
 
 export const macroNeedsLeft = createSelector(
   mealsMacroSum,
@@ -93,11 +93,11 @@ export const macroNeedsLeft = createSelector(
     .reduce((result, element) => {
       const diff = Math.round(macroNeeds[element] - macroSum[element]);
       const ratio = Math.floor(
-        macroNeeds[element] / macroSum[element] * 100
+        macroSum[element] / macroNeeds[element] * 100
       );
       return {
         ...result,
-        [element]: { diff, ratio }
+        [element]: { diff, ratio, eaten: macroSum[element], needed: macroNeeds[element] }
       }
     }, {
       carbs: { diff: 0, ratio: 0 },

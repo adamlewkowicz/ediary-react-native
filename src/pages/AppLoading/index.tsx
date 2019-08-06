@@ -1,5 +1,5 @@
 import React from 'react';
-import { createConnection, Connection } from 'typeorm/browser';
+import { Connection, ConnectionOptions, createConnections } from 'typeorm/browser';
 import * as entities from '../../entities';
 import { ActivityIndicator } from 'react-native';
 import { USER_ID_UNSYNCED } from '../../common/consts';
@@ -30,7 +30,7 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
   }
 
   async setup() {
-    const connection = await createConnection({
+    const config: ConnectionOptions = {
       type: 'react-native',
       database: 'test',
       location: 'default',
@@ -38,9 +38,14 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
       dropSchema: false,
       synchronize: false,
       entities: Object.values(entities)
-    });
+    }
 
-    const user = await this.getUser(connection);
+    const [defaultConnection] = await createConnections([
+      { name: 'default', ...config },
+      { name: 'transactional', ...config }
+    ]);
+
+    const user = await this.getUser(defaultConnection);
 
     store.dispatch(
       Actions.appInitialized(user)

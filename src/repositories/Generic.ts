@@ -4,6 +4,7 @@ import {
   DeepPartial,
   ObjectType,
   ObjectID,
+  getConnection,
 } from 'typeorm/browser';
 
 export class GenericRepository<T> extends Repository<T> {
@@ -14,7 +15,7 @@ export class GenericRepository<T> extends Repository<T> {
     options: FindOneOptions,
     payload: P
   ): Promise<T> {
-    return this.manager.transaction(async manager => {
+    return getConnection('transactional').transaction(async manager => {
       const entity: ObjectType<T> = this.target as any;
       const existingItem = await manager.findOne(entity, options);
       if (existingItem) {
