@@ -35,8 +35,8 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
       database: 'test',
       location: 'default',
       logging: ['error', 'query', 'schema'],
-      dropSchema: true,
-      synchronize: true,
+      dropSchema: false,
+      synchronize: false,
       entities: Object.values(entities)
     });
 

@@ -7,18 +7,31 @@ import { themeProps } from '../../common/theme';
 import { Button } from '../../components/Button';
 import { Heading } from '../../components/Elements/Heading';
 import Slider from '@react-native-community/slider';
-import { WeightGoal } from '../../types';
+import { WeightGoal, Screen } from '../../types';
+import { useDispatch } from 'react-redux';
+import * as Actions from '../../store/actions';
+import { NavigationScreenProps } from 'react-navigation';
 
-
-export const ProfileCreator = () => {
+interface ProfileCreatorProps extends NavigationScreenProps{}
+export const ProfileCreator = (props: ProfileCreatorProps) => {
   const [step, setStep] = useState(0);
   const [male, setMale] = useState(true);
   const [height, setHeight] = useState(170);
   const [weight, setWeight] = useState(60);
   const [age, setAge] = useState(55);
   const [weightGoal, setWeightGoal] = useState<WeightGoal>('maintain');
+  const dispatch = useDispatch();
 
-  function handleProfileCreate() {}
+  async function handleProfileCreate() {
+    const payload = { male, height, weightGoal, weight, age };
+
+    await dispatch(
+      Actions.userProfileCreate(payload)
+    );
+
+    const screen: Screen = 'Main';
+    props.navigation.navigate(screen);
+  }
 
   const steps = [
     (

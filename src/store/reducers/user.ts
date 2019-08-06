@@ -1,8 +1,8 @@
 import { WeightGoal, UserId, ProfileId } from '../../types';
 import { UserActions } from '../actions';
 import {
-  USER_PROFILE_ADDED,
-  APP_INITIALIZED
+  APP_INITIALIZED,
+  USER_PROFILE_CREATED
 } from '../consts';
 
 const initialState: UserState = {
@@ -22,7 +22,6 @@ export function userReducer(
 ): UserState {
   switch(action.type) {
     case APP_INITIALIZED:
-    case USER_PROFILE_ADDED:
       const { profile, ...data } = action.payload.user;
       return {
         ...state,
@@ -35,6 +34,17 @@ export function userReducer(
         },
         data
       }
+    case USER_PROFILE_CREATED: {
+      const { macroNeeds, ...profile } = action.payload;
+      return {
+        ...state,
+        profile: {
+          ...profile,
+          gender: profile.male ? 'male' : 'female'
+        },
+        macroNeeds
+      }
+    }
     default: return state;
   }
 }

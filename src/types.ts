@@ -46,4 +46,4 @@ export interface ProfileId extends Number {
   _profileIdBrand: number;
 }
 
-export type Screen = keyof typeof Screens;
+export type Screen = keyof typeof Screens | 'Main' | 'AppLoading';

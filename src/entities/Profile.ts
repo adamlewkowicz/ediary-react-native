@@ -1,10 +1,18 @@
-import { Entity, Column, OneToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm/browser';
+import { 
+  Entity,
+  Column,
+  OneToOne,
+  JoinColumn,
+  PrimaryGeneratedColumn,
+  BeforeInsert,
+} from 'typeorm/browser';
 import { Min, Max } from 'class-validator';
-import { WeightGoal, ProfileId } from '../types';
+import { WeightGoal, ProfileId, UserId } from '../types';
 import { SqliteENUM } from '../database/decorators';
 import { WEIGHT_GOAL } from '../common/consts';
 import { Macro } from '../database/shared';
 import { User } from './User';
+import { measureMacroNeeds } from '../common/helpers';
 
 @Entity()
 export class Profile {
@@ -16,6 +24,11 @@ export class Profile {
   @Min(30)
   @Max(255)
   weight!: number;
+
+  @Column('tinyint')
+  @Min(100)
+  @Max(230)
+  height!: number;
 
   @Column('tinyint')
   @Min(10)
@@ -32,8 +45,17 @@ export class Profile {
   @Column(type => Macro)
   macroNeeds!: Macro;
 
+  @Column()
+  userId!: UserId;
+
   @OneToOne(type => User, user => user.profile)
-  @JoinColumn()
+  @JoinColumn({ name: 'userId' })
   user!: User;
 
+  @BeforeInsert()
+  measureMacroNeeds() {
+    const { weight, weightGoal } = this;
+    const macroNeeds = measureMacroNeeds({ weight, weightGoal });
+    this.macroNeeds = macroNeeds;
+  }
 }

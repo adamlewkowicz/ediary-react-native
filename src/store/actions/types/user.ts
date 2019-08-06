@@ -1,14 +1,12 @@
-import { USER_PROFILE_ADDED } from '../../consts';
-import { User } from '../../../entities';
+import { USER_PROFILE_CREATED } from '../../consts';
+import { Profile } from '../../../entities';
 import { AppInitialized } from './application';
 
-export type UserProfileAdded = {
-  type: typeof USER_PROFILE_ADDED
-  payload: {
-    user: User
-  }
+export type UserProfileCreated = {
+  type: typeof USER_PROFILE_CREATED
+  payload: Profile
 }
 
 export type UserActions = 
-  | UserProfileAdded
   | AppInitialized
+  | UserProfileCreated
