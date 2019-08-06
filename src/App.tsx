@@ -21,7 +21,7 @@ export const App = () => {
             mapping={mapping}
             theme={lightTheme}
           >
-            <ProfileCreator />
+            <AppContainer />
           </ApplicationProvider>
         </ThemeProvider>
       </DatabaseProvider>

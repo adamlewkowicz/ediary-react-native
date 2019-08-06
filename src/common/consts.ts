@@ -7,4 +7,6 @@ export const PORTION_TYPES = [
   'portion', 'package',  'piece', 'slice', 'spoon', 'handful', 'glass'
 ] as const;
 
+export const WEIGHT_GOAL = ['decrease', 'maintain', 'increase'] as const;
+
 export const IS_DEV = __DEV__;

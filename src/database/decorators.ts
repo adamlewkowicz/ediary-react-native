@@ -1,6 +1,6 @@
 import { getMetadataArgsStorage } from 'typeorm/browser';
 
-export function SqliteENUM(...types: string[]) {
+export function SqliteENUM(types: string[] | readonly string[]) {
   return (object: any, propertyName: string) => {
 
     if (!propertyName) {
@@ -9,8 +9,8 @@ export function SqliteENUM(...types: string[]) {
       );
     }
 
-    const parsedEnum = types.map(type => `'${type}'`).join(',');
-    const expression = `${propertyName} IN (${parsedEnum})`;
+    const parsedEnum = [...types].map(type => `'${type}'`).join(',');
+    const expression = `"${propertyName}" IN (${parsedEnum})`;
     
     getMetadataArgsStorage().checks.push({
       // propertyName,

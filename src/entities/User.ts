@@ -3,11 +3,14 @@ import {
   Column,
   PrimaryGeneratedColumn,
   OneToMany,
+  OneToOne,
+  getRepository,
 } from 'typeorm/browser';
 import { UserId } from '../types';
 import { IsEmail, IsOptional, MinLength, MaxLength } from 'class-validator';
 import { Product } from './Product';
 import { Meal } from './Meal';
+import { Profile } from './Profile';
 
 @Entity('User')
 export class User {
@@ -40,4 +43,12 @@ export class User {
   @OneToMany(type => Meal, meal => meal.userId)
   meals!: Meal[];
 
+  @OneToOne(type => Profile, profile => profile.user)
+  profile!: Profile; 
+  
+  async getProfile(): Promise<Profile> {
+    const profile = await getRepository(Profile).findOneOrFail(this.id);
+    this.profile = profile;
+    return profile;
+  }
 }
