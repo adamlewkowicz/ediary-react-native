@@ -1,6 +1,7 @@
 import { Dayjs } from 'dayjs';
-import { APP_DATE_UPDATED, APP_CONNECTION_STATUS_UPDATED } from '../../consts';
-import { AppDateUpdated, AppConnectionStatusUpdated } from '../types';
+import { APP_DATE_UPDATED, APP_CONNECTION_STATUS_UPDATED, APP_INITIALIZED } from '../../consts';
+import { AppDateUpdated, AppConnectionStatusUpdated, AppInitialized } from '../types';
+import { User } from '../../../entities';
 
 export const appDateUpdated = (
   date: Dayjs
@@ -14,4 +15,13 @@ export const appConnectionStatusUpdated = (
 ): AppConnectionStatusUpdated => ({
   type: APP_CONNECTION_STATUS_UPDATED,
   payload: status
+});
+
+export const appInitialized = (
+  user: User
+): AppInitialized => ({
+  type: APP_INITIALIZED,
+  payload: {
+    user
+  }
 });

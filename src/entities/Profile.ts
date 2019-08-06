@@ -1,6 +1,6 @@
 import { Entity, Column, OneToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm/browser';
 import { Min, Max } from 'class-validator';
-import { WeightGoal } from '../types';
+import { WeightGoal, ProfileId } from '../types';
 import { SqliteENUM } from '../database/decorators';
 import { WEIGHT_GOAL } from '../common/consts';
 import { Macro } from '../database/shared';
@@ -10,7 +10,7 @@ import { User } from './User';
 export class Profile {
 
   @PrimaryGeneratedColumn()
-  id!: number;
+  id!: ProfileId;
 
   @Column('tinyint')
   @Min(30)

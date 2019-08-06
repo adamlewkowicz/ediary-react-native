@@ -1,5 +1,6 @@
-import { APP_DATE_UPDATED, APP_CONNECTION_STATUS_UPDATED } from '../../consts';
+import { APP_DATE_UPDATED, APP_CONNECTION_STATUS_UPDATED, APP_INITIALIZED } from '../../consts';
 import { Dayjs } from 'dayjs';
+import { User } from '../../../entities';
 
 export type AppDateUpdated = {
   type: typeof APP_DATE_UPDATED
@@ -11,6 +12,14 @@ export type AppConnectionStatusUpdated = {
   payload: boolean
 }
 
+export type AppInitialized = {
+  type: typeof APP_INITIALIZED
+  payload: {
+    user: User
+  }
+}
+
 export type AppActions =
   | AppDateUpdated
   | AppConnectionStatusUpdated
+  | AppInitialized

@@ -5,7 +5,7 @@ import { Text } from 'react-native';
 import { USER_ID_UNSYNCED } from '../../common/consts';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
 import { store } from '../../store';
-import { appConnectionStatusUpdated } from '../../store/actions';
+import * as Actions from '../../store/actions';
 import { UserRepository } from '../../repositories/UserRepository';
 
 export const DatabaseContext = React.createContext<DatabaseContext>({} as any);
@@ -60,6 +60,17 @@ export class DatabaseProvider extends React.Component<DatabaseProviderProps, Dat
         password: 'password',
       });
 
+    const user = await connection
+      .getCustomRepository(UserRepository)
+      .findOneOrFail({
+        where: { id: USER_ID_UNSYNCED },
+        relations: ['profile']
+      });
+
+    store.dispatch(
+      Actions.appInitialized(user)
+    );
+
     this.setState({
       connection,
       isLoading: false
@@ -68,7 +79,7 @@ export class DatabaseProvider extends React.Component<DatabaseProviderProps, Dat
 
   handleConnectionStatusUpdate(status: boolean) {
     store.dispatch(
-      appConnectionStatusUpdated(status)
+      Actions.appConnectionStatusUpdated(status)
     );
   }
 

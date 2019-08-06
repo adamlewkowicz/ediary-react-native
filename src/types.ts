@@ -40,3 +40,7 @@ type _UserId = UserId | UserIdUnsynced;
 export type PortionType = typeof PORTION_TYPES[number];
 
 export type WeightGoal = 'decrease' | 'maintain' | 'increase';
+
+export interface ProfileId extends Number {
+  _profileIdBrand: number;
+}
