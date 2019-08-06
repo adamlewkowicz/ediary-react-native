@@ -58,3 +58,4 @@ const Meta = styled.Text<{
 `
 
 export * from './Block';
+export * from './Heading';

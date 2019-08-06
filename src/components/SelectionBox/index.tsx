@@ -2,7 +2,6 @@ import React, { ReactNode } from 'react';
 import styled from 'styled-components/native';
 import { Theme, themeProps } from '../../common/theme';
 import { CheckedIcon } from '../Icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { TouchableOpacityProps } from 'react-native';
 
 interface SelectionBoxProps {
@@ -13,12 +12,14 @@ interface SelectionBoxProps {
   description?: string
   icon?: JSX.Element
   onPress?: TouchableOpacityProps['onPress']
+  noFlex?: boolean
 }
 export const SelectionBox = (props: SelectionBoxProps) => {
   return (
     <TouchableWrapper
       isActive={props.value}
       onPress={() => props.onChange && props.onChange(!props.value)}
+      noFlex={props.noFlex}
     >
       <IconContainer>
         {props.icon}
@@ -44,6 +45,7 @@ const CHECKED_ICON_SIZE = 16;
 const TouchableWrapper = styled.TouchableOpacity<{
   theme: Theme
   isActive: boolean
+  noFlex?: boolean
 }>`
   border-radius: 5px;
   padding: 10px;
@@ -52,7 +54,7 @@ const TouchableWrapper = styled.TouchableOpacity<{
   border-width: 1px;
   align-items: center;
   margin: 20px;
-  flex: 1 1 0;
+  flex: ${props => props.noFlex ? 'none' : 1};
 `
 
 const Title = styled.Text<{
@@ -79,4 +81,6 @@ const Description = styled.Text<{
   theme: Theme
 }>`
   font-family: ${props => props.theme.fontFamily};
+  text-align: center;
+  margin: 5px 0;
 `
