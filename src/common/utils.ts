@@ -1,3 +1,6 @@
+import dayjs from 'dayjs';
+import { DateDay } from '../types';
+
 let timeout: NodeJS.Timeout;
 
 export const debounce = (fn: () => void, delay = 150) => {
@@ -21,4 +24,11 @@ export const mapAsyncSequence = async <T, R>(
   }
 
   return result;
+}
+
+export function getDayFromDate(
+  date: dayjs.ConfigType
+): DateDay {
+  const dateDay: DateDay = dayjs(date).format('YYYY-MM-DD') as any;
+  return dateDay;
 }

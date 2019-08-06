@@ -4,7 +4,7 @@ import { useDispatch, connect } from 'react-redux';
 import * as Actions from '../store/actions';
 import { AppState } from '../store';
 import { FlatList, ScrollView } from 'react-native';
-import { mealsWithRatio, MealsWithRatio } from '../store/selectors';
+import * as selectors from '../store/selectors';
 import { DateChanger } from '../components/DateChanger';
 import { MacroCard } from '../components/MacroCard';
 import { nutritionColors } from '../common/theme';
@@ -16,16 +16,13 @@ import { NavigationScreenProps } from 'react-navigation';
 import { ProductFinderParams } from './ProductFinder';
 import { mealProductAdd } from '../store/actions';
 import { ProductCreateParams } from './ProductCreate';
-
-const elements = [
-  { name: 'carbs', title: 'Węgle', value: 19, percentages: 25 },
-  { name: 'prots', title: 'Białka', value: 73, percentages: 63 },
-  { name: 'fats', title: 'Tłuszcze', value: 281, percentages: 89 },
-]
+import { BASE_MACRO_ELEMENTS } from '../common/consts';
+import { elementTitles } from '../common/helpers';
 
 interface HomeProps extends NavigationScreenProps {
-  mealsWithRatio: MealsWithRatio
+  mealsWithRatio: selectors.MealsWithRatio
   appDate: AppState['application']['date']
+  macroNeedsLeft: selectors.MacroNeedsLeft
 }
 const Home = (props: HomeProps) => {
   const [name, setName] = useState('Zupa');
@@ -36,7 +33,7 @@ const Home = (props: HomeProps) => {
     dispatch(Actions.mealsFindByDay());
   }, []);
 
-  const handleProductFinderNavigation = (meal: MealsWithRatio[number]) => {
+  const handleProductFinderNavigation = (meal: selectors.MealsWithRatio[number]) => {
     const screenParams: ProductFinderParams = {
       onItemPress(foundProduct) {
         props.navigation.navigate('Home');
@@ -64,13 +61,13 @@ const Home = (props: HomeProps) => {
       <ScrollView>
         <DateChanger date={props.appDate} />
         <MacroCards>
-          {elements.map(element => (
+          {BASE_MACRO_ELEMENTS.map(element => (
             <MacroCard
-              key={element.name}
-              colors={(nutritionColors as any)[element.name]}
-              percentages={element.percentages}
-              title={element.title}
-              value={element.value}
+              key={element}
+              colors={nutritionColors[element]}
+              percentages={props.macroNeedsLeft[element].ratio}
+              title={elementTitles[element]}
+              value={props.macroNeedsLeft[element].diff}
             />
           ))}
         </MacroCards>
@@ -119,7 +116,8 @@ const Home = (props: HomeProps) => {
 
 const HomeConnected = connect(
   (state: AppState) => ({
-    mealsWithRatio: mealsWithRatio(state),
+    mealsWithRatio: selectors.mealsWithRatio(state),
+    macroNeedsLeft: selectors.macroNeedsLeft(state),
     appDate: state.application.date
   }),
   (dispatch) => ({ dispatch })

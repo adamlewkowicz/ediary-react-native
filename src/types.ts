@@ -47,3 +47,7 @@ export interface ProfileId extends Number {
 }
 
 export type Screen = keyof typeof Screens | 'Main' | 'AppLoading';
+
+export interface DateDay extends String {
+  _dateDayBrand: 'YYYY-MM-DD';
+}

@@ -1,8 +1,9 @@
 import { DiaryMeal, DiaryProduct } from '../reducers/diary';
-import { BASE_MACRO_ELEMENTS } from '../../common/consts';
+import { BASE_MACRO_ELEMENTS, MACRO_ELEMENTS } from '../../common/consts';
 import { MacroElements } from '../../types';
 import { AppState } from '..';
 import { createSelector } from 'reselect';
+import { macroNeeds } from './user';
 
 const baseMacro: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 
@@ -74,4 +75,37 @@ export const mealsWithRatio = createSelector(
   })
 );
 
+const mealsMacroSum = createSelector(
+  calcedMeals,
+  meals => meals.reduce((sum, meal) => ({
+    ...sum,
+    carbs: Math.round(sum.carbs + meal.carbs),
+    prots: Math.round(sum.prots + meal.prots),
+    fats: Math.round(sum.fats + meal.fats),
+    kcal: Math.round(sum.kcal + meal.kcal)
+  }), { ...baseMacro })
+)
+
+export const macroNeedsLeft = createSelector(
+  mealsMacroSum,
+  macroNeeds,
+  (macroSum, macroNeeds) => MACRO_ELEMENTS
+    .reduce((result, element) => {
+      const diff = Math.round(macroNeeds[element] - macroSum[element]);
+      const ratio = Math.floor(
+        macroNeeds[element] / macroSum[element] * 100
+      );
+      return {
+        ...result,
+        [element]: { diff, ratio }
+      }
+    }, {
+      carbs: { diff: 0, ratio: 0 },
+      prots: { diff: 0, ratio: 0 },
+      fats: { diff: 0, ratio: 0 },
+      kcal: { diff: 0, ratio: 0 },
+    })
+);
+
+export type MacroNeedsLeft = ReturnType<typeof macroNeedsLeft>;
 export type MealsWithRatio = ReturnType<typeof mealsWithRatio>;

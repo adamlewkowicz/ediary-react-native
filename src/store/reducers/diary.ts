@@ -9,11 +9,18 @@ import {
   PRODUCT_CREATED,
   MEALS_ADDED,
 } from '../consts';
+import {
+  ProductUnit,
+  MacroElement,
+  BarcodeId,
+  ProductId,
+  MealId,
+  DateDay,
+} from '../../types';
 import { Meal } from '../../entities';
-import { ProductUnit, MacroElement, BarcodeId, ProductId, MealId } from '../../types';
 import { DiaryActions } from '../actions';
 import { calcMacroByQuantity } from '../helpers/diary';
-import dayjs from 'dayjs';
+import { getDayFromDate } from '../../common/utils';
 
 const initialState: DiaryState = {
   meals: [],
@@ -35,7 +42,7 @@ export function diaryReducer(
           return {
             ...data,
             isToggled: false,
-            day: dayjs(meal.date).format('YYYY-MM-DD'),
+            day: getDayFromDate(meal.date),
             products: mealProducts.map(mealProduct => mealProduct.productId)
           }
         })
@@ -63,7 +70,7 @@ export function diaryReducer(
         ...state.meals,
         {
           ...action.payload,
-          day: dayjs(action.payload.date).format('YYYY-MM-DD'),
+          day: getDayFromDate(action.payload.date),
           isToggled: true,
           products: []
         }
@@ -167,7 +174,7 @@ export interface DiaryMealPayload {
 
 export interface DiaryMeal extends DiaryMealPayload {
   isToggled: boolean
-  day: string
+  day: DateDay
   /** List of meal's product ids */
   products: ProductId[]
 }
