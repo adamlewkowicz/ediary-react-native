@@ -80,6 +80,7 @@ const Home = (props: HomeProps) => {
               onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
               onLongPress={() => dispatch(Actions.mealDelete(item.id))}
               onProductAdd={() => handleProductFinderNavigation(item)}
+              onProductDelete={product => dispatch(Actions.mealProductDelete(item.id, product.id))}
             />
           )}
         />

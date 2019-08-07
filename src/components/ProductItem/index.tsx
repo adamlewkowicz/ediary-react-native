@@ -1,16 +1,35 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import { TrashIcon } from '../Icons';
+// @ts-ignore
+import Swipeable from 'react-native-swipeable';
 
 interface ProductItemProps {
   product: ProductPartial
+  onProductDelete: () => void
 }
 export const ProductItem = (props: ProductItemProps) => {
   return (
-    <Container>
-      <Name>{props.product.name}</Name>
-      <Quantity>{props.product.quantity}g</Quantity>
-      <Calories>{props.product.kcal} kcal</Calories>
-    </Container>
+    <Swipeable
+      onRightActionRelease={props.onProductDelete}
+      rightActionActivationDistance={200}
+      rightButtonWidth={200}
+      rightContent={(
+        <DeleteContainer>
+          <TrashIcon
+            width={20}
+            height={20}
+            fill="#fff"
+          />
+        </DeleteContainer>
+      )}
+    >
+      <Container>
+        <Name>{props.product.name}</Name>
+        <Quantity>{props.product.quantity}g</Quantity>
+        <Calories>{props.product.kcal} kcal</Calories>
+      </Container>
+    </Swipeable>
   );
 }
 
@@ -40,9 +59,16 @@ const Calories = styled.Text`
   font-size: 15px;
   color: #848484;
   margin-left: 15px;
-  /* background: red; */
   min-width: 70px;
   text-align: right;
+`
+
+const DeleteContainer = styled.View`
+  background-color: #e74c3c;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  padding-left: 10px;
 `
 
 export interface ProductPartial {

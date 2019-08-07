@@ -5,4 +5,8 @@ declare global {
     const content: React.ComponentClass<SvgProps, any>
     export default content
   }
+  declare module "react-native-swipeable" {
+    const content: React.ComponentClass<any, any>
+    export default content;
+  }
 }

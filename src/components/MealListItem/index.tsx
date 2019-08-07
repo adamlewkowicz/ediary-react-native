@@ -13,6 +13,7 @@ interface MealListItemProps {
   onToggle: (mealId: MealsWithRatio[number]['id']) => void
   onLongPress?: TouchableOpacityProps['onLongPress']
   onProductAdd: () => void
+  onProductDelete: (product: MealsWithRatio[number]['products'][number]) => void
 }
 export const MealListItem = (props: MealListItemProps) => (
   <Container>
@@ -60,6 +61,7 @@ export const MealListItem = (props: MealListItemProps) => (
             <ProductItem
               key={item.id}
               product={item}
+              onProductDelete={() => props.onProductDelete(item)}
             />
           )}
         />

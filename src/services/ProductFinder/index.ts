@@ -24,13 +24,17 @@ export class ProductFinder {
 
     const normalizedResults = data.map(record => {
       const _id = record.id;
-      const name = record.ingredient_name.replace('WA:ŻYWO', '').trim();
+      let name = record.ingredient_name.replace('WA:ŻYWO', '').trim();
       const prots = Number(record.bialko);
       const kcal = Number(record.energia);
       const portion = Number(record.weight);
       const isVerified = true as const;
       let carbs = Number(record.weglowodany);
       let fats = Number(record.tluszcz);
+
+      if (name.charAt(name.length - 1) === '.') {
+        name = name.slice(0, -1);
+      }
 
       if (record.simple_sugars) {
         const simpleSugars = Number(record.simple_sugars);
