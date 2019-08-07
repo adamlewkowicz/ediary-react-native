@@ -28,7 +28,7 @@ export const ProductFinder = (props: ProductFinderProps) => {
     if (!isLoading) setLoading(true);
     const trimmedName = name.trim();
     const findMethod = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
-    
+
     debounce(async () => {
       const foundProducts = await getCustomRepository(ProductRepository)[findMethod](
         trimmedName
@@ -38,13 +38,30 @@ export const ProductFinder = (props: ProductFinderProps) => {
 
       const sortedProducts = foundProducts
         .sort((a, b) => {
-          const aName = a.name.toLowerCase();
-          const bName = b.name.toLowerCase();
+          const aLowered = a.name.toLowerCase();
+          const bLowered = b.name.toLowerCase();
+        
+          const aIndex = aLowered.indexOf(nameLowered);
+          const bIndex = bLowered.indexOf(nameLowered);
 
-          const aIndex = aName.indexOf(nameLowered);
-          const bIndex = bName.indexOf(nameLowered);
-          
-          return aIndex - bIndex;
+          const notFoundIndex = -1;
+          const orderByShorter = aLowered.length > bLowered.length ? 1 : -1;
+        
+          if (aIndex === notFoundIndex && bIndex === notFoundIndex) {
+            return -1;
+          }
+          if (aIndex === notFoundIndex) {
+            return 1;
+          }
+          if (bIndex === notFoundIndex) {
+            return -1;
+          }
+
+          if (aLowered.length === bLowered.length) {
+            return 0;
+          }
+
+          return orderByShorter;
         });
 
       setProducts(sortedProducts);

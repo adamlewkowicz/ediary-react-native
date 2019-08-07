@@ -10,18 +10,18 @@ import {
 export class GenericRepository<T> extends Repository<T> {
 
   // does not allow to execute another query in the same time
-  // does not return entity instance - debug
+  // does not return (sometimes, or not anymore?) entity instance (raw data)
   findOneOrSave<P extends DeepPartial<T>>(
     options: FindOneOptions,
     payload: P
   ): Promise<T> {
     return getConnection('transactional').transaction(async manager => {
-      const entity: ObjectType<T> = this.target as any;
-      const existingItem = await manager.findOne(entity, options);
+      const Entity: ObjectType<T> = this.target as any;
+      const existingItem = await manager.findOne(Entity, options);
       if (existingItem) {
         return existingItem;
       }
-      const createdItem = await manager.save(entity, payload);
+      const createdItem = await manager.save(Entity, payload);
       return createdItem;
     });
   }
