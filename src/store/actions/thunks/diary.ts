@@ -19,7 +19,7 @@ import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
 import { getProductMock } from '../../helpers/diary';
 import { Between, getCustomRepository, getRepository } from 'typeorm/browser';
 import { AppState } from '../..';
-import { MealId, ProductUnit } from '../../../types';
+import { MealId, ProductUnit, DateDay } from '../../../types';
 import { MealRepository } from '../../../repositories/MealRepository';
 import { MealsWithRatio } from '../../selectors';
 import { USER_ID_UNSYNCED } from '../../../common/consts';
@@ -80,12 +80,10 @@ export const productCreate = (
 }
 
 export const mealsFindByDay = (
-  day?: string
+  dateDay: DateDay
 ) => async (dispatch: any, getState: () => AppState): Promise<boolean> => {
-  const mealDay = day || getState().application.day;
-
   const foundMeals = await mealRepository().find({
-    where: { date: Between(`${mealDay} 00:00:00`, `${mealDay} 23:59:59`) },
+    where: { date: Between(`${dateDay} 00:00:00`, `${dateDay} 23:59:59`) },
     relations: ['mealProducts', 'mealProducts.product']
   });
 

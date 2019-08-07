@@ -22,6 +22,7 @@ import { elementTitles } from '../common/helpers';
 interface HomeProps extends NavigationScreenProps {
   mealsWithRatio: selectors.MealsWithRatio
   appDate: AppState['application']['date']
+  appDateDay: AppState['application']['day']
   macroNeedsLeft: selectors.MacroNeedsLeft
   toggledProductId: AppState['diary']['toggledProductId']
 }
@@ -31,8 +32,8 @@ const Home = (props: HomeProps) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(Actions.mealsFindByDay());
-  }, []);
+    dispatch(Actions.mealsFindByDay(props.appDateDay));
+  }, [props.appDateDay]);
 
   const handleProductFinderNavigation = (meal: selectors.MealsWithRatio[number]) => {
     const screenParams: ProductFinderParams = {
@@ -60,7 +61,10 @@ const Home = (props: HomeProps) => {
         onPress={() => setMenuOpened(status => !status)}
       />
       <ScrollView>
-        <DateChanger date={props.appDate} />
+        <DateChanger
+          value={props.appDate}
+          onChange={date => dispatch(Actions.appDateUpdated(date))}
+        />
         <MacroCards>
           {BASE_MACRO_ELEMENTS.map(element => (
             <MacroCard
@@ -111,7 +115,8 @@ const HomeConnected = connect(
     mealsWithRatio: selectors.mealsWithRatio(state),
     macroNeedsLeft: selectors.macroNeedsLeft(state),
     toggledProductId: state.diary.toggledProductId,
-    appDate: state.application.date
+    appDate: state.application.date,
+    appDateDay: state.application.day,
   }),
   (dispatch) => ({ dispatch })
 )(Home);

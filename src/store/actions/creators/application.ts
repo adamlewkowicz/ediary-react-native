@@ -1,10 +1,9 @@
-import { Dayjs } from 'dayjs';
 import { APP_DATE_UPDATED, APP_CONNECTION_STATUS_UPDATED, APP_INITIALIZED } from '../../consts';
 import { AppDateUpdated, AppConnectionStatusUpdated, AppInitialized } from '../types';
 import { User } from '../../../entities';
 
 export const appDateUpdated = (
-  date: Dayjs
+  date: Date
 ): AppDateUpdated => ({
   type: APP_DATE_UPDATED,
   payload: date

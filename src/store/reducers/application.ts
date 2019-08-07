@@ -6,6 +6,7 @@ import {
 } from '../consts';
 import { DateDay } from '../../types';
 import { getDayFromDate } from '../../common/utils';
+import dayjs from 'dayjs';
 
 const date = new Date;
 
@@ -28,8 +29,8 @@ export function applicationReducer(
     }
     case APP_DATE_UPDATED: return {
       ...state,
-      date: new Date(action.payload.toISOString()),
-      day: action.payload.format('YYYY-MM-DD') as any as DateDay
+      date: action.payload,
+      day: dayjs(action.payload).format('YYYY-MM-DD') as any as DateDay
     }
     case APP_CONNECTION_STATUS_UPDATED: return {
       ...state,
