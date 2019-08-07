@@ -9,8 +9,8 @@ export function useUserId(): UserId {
   );
   if (userId === null) {
     throw new UserIdCannotBeNullError(
-      'User id cannot be null. You must have made something wrong, ' +
-      'or userId hook has been called before app initialization.'
+      'User id cannot be null. This hook has been called in wrong place, ' +
+      'or it has been called before app initialization.'
     );
   }
   return userId;

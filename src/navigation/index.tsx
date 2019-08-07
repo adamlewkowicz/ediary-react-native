@@ -7,11 +7,13 @@ import { ProfileCreator } from '../pages/ProfileCreator';
 import { themeProps } from '../common/theme';
 import { IS_DEV } from '../common/consts';
 import { StorybookUIRoot } from '../../storybook/index';
+import { BarcodeScan } from '../pages/BarcodeScan';
 
 const HomeStack = createStackNavigator({
   Home,
   ProductCreate,
   ProductFinder,
+  BarcodeScan,
 }, {
   headerMode: 'screen',
   defaultNavigationOptions: {

@@ -105,6 +105,9 @@ const Home = (props: HomeProps) => {
         <Button onPress={handleProductCreatorNavigation}>
           Dodaj własny produkt
         </Button>
+        <Button onPress={() => props.navigation.navigate('BarcodeScan')}>
+          Zeskanuj kod kreskowy
+        </Button>
       </ScrollView>
     </Container>
   );
