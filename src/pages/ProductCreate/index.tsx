@@ -1,8 +1,8 @@
-import React, { useReducer, useRef, createRef } from 'react';
+import React, { useReducer, useRef, createRef, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { BasicInput, BasicInputRef } from '../../components/BasicInput';
 import { productCreateReducer, initialState, ProductCreateState, PortionOption } from './reducer';
-import { TextInput, ScrollView } from 'react-native';
+import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { Theme } from '../../common/theme';
 import { MacroElement } from '../../types';
 import { InputRow } from '../../components/InputRow';
@@ -10,11 +10,13 @@ import { useDispatch } from 'react-redux';
 import * as Actions from '../../store/actions';
 import { Options } from '../../components/Options';
 import { NavigationScreenProps } from 'react-navigation';
+import { useUserId } from '../../common/hooks';
 
-interface ProductCreateProps extends NavigationScreenProps {}
+interface ProductCreateProps extends NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
 export const ProductCreate = (props: ProductCreateProps) => {
   const [state, dispatch] = useReducer(productCreateReducer, initialState);
   const storeDispatch = useDispatch();
+  const userId = useUserId();
   const { current: params } = useRef<ProductCreateParams>({
     onProductCreated: props.navigation.getParam('onProductCreated')
   });
@@ -36,12 +38,14 @@ export const ProductCreate = (props: ProductCreateProps) => {
   }
 
   async function handleProductCreate() {
-    const { portionOption, portionOptions, ...data } = state;
+    const { portionOption, portionOptions, barcode, ...data } = state;
 
     await storeDispatch(
       Actions.productCreate({
         ...data,
-        quantity: data.portion
+        barcode: barcode.length ? barcode : null,
+        quantity: data.portion,
+        userId
       })
     );
 
@@ -49,6 +53,10 @@ export const ProductCreate = (props: ProductCreateProps) => {
       params.onProductCreated();
     }
   }
+  
+  useEffect(() => {
+    props.navigation.setParams({ handleProductCreate });
+  }, []);
 
   function handlePortionOptionChange(option: PortionOption) {
     dispatch({
@@ -123,6 +131,17 @@ const InfoTitle = styled.Text<{
   font-family: ${props => props.theme.fontFamily};
 `
 
+const SaveButton = styled(TouchableOpacity)`
+  margin-right: 10px;
+`
+
+const SaveText = styled.Text<{
+  theme: Theme
+}>`
+  font-family: ${props => props.theme.fontFamily};
+  color: ${props => props.theme.focusColor};
+`
+
 const portionTitle = {
   '100g': 'Opakowanie zawiera',
   'portion': 'Porcja zawiera',
@@ -156,10 +175,23 @@ const nutritionInputs: {
   }
 ]
 
-ProductCreate.navigationOptions = {
-  headerTitle: 'Stwórz produkt'
-}
+const navigationOptions: ProductCreateProps['navigationOptions'] = ({ navigation }) => ({
+  headerTitle: 'Stwórz produkt',
+  headerRight: (
+    <SaveButton onPress={navigation.getParam('handleProductCreate')}>
+      <SaveText>Zapisz</SaveText>
+    </SaveButton>
+  )
+});
+
+ProductCreate.navigationOptions = navigationOptions;
 
 export interface ProductCreateParams {
   onProductCreated?: () => void
+  handleProductCreate?: () => void
+}
+
+interface ProductCreateOptions {
+  headerTitle: string
+  headerRight: JSX.Element
 }
