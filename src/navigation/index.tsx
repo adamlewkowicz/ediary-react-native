@@ -25,7 +25,8 @@ const MainStack = createBottomTabNavigator({
   ...IS_DEV && { StoryBook: StorybookUIRoot },
   Home: HomeStack,
 }, {
-  initialRouteName: IS_DEV ? 'StoryBook' : 'Home',
+  initialRouteName: 'Home',
+  // initialRouteName: IS_DEV ? 'StoryBook' : 'Home',
 });
 
 const RootNavigator = createSwitchNavigator({

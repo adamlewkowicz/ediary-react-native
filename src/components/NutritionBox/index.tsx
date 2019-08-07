@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { WheatIcon, SteakIcon, DropIcon } from '../Icons';
+import { WheatIcon, SteakIcon, DropIcon, FireIcon } from '../Icons';
 import { TextMeta } from '../Elements';
 import { nutritionColorSolid } from '../../common/theme';
 import { toLocaleString } from '../../common/utils';
@@ -9,11 +9,12 @@ const nutritionIcon = {
   carbs: WheatIcon,
   prots: SteakIcon,
   fats: DropIcon,
+  kcal: FireIcon
 }
 
 interface NutritionBoxProps {
   value: number
-  element: 'carbs' | 'prots' | 'fats'
+  element: 'carbs' | 'prots' | 'fats' | 'kcal'
 }
 export const NutritionBox = (props: NutritionBoxProps) => {
   const GenericIcon = nutritionIcon[props.element];
@@ -26,7 +27,7 @@ export const NutritionBox = (props: NutritionBoxProps) => {
       />
       <TextMeta
         value={toLocaleString(props.value)}
-        meta="g"
+        meta={props.element === 'kcal' ? 'kcal' : 'g'}
         valueFontSize={16}
         metaFontSize={13}
         marginTop="9px"

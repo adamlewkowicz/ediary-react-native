@@ -10,6 +10,7 @@ export const MEAL_TOGGLED = 'MEAL_TOGGLED';
 
 export const PRODUCT_UPDATED = 'PRODUCT_UPDATED';
 export const PRODUCT_CREATED = 'PRODUCT_CREATED';
+export const PRODUCT_TOGGLED = 'PRODUCT_TOGGLED';
 
 // Application
 export const APP_DATE_UPDATED = 'APP_DATE_UPDATED';

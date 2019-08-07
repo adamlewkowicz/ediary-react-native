@@ -321,7 +321,7 @@ export const FireIcon = (props: any) => (
         style={{
           stroke: 'none',
           fillRule: 'nonzero',
-          fill: 'rgb(0%,0%,0%)',
+          fill: props.fill || 'rgb(0%,0%,0%)',
           fillOpacity: 1,
         }}
       />

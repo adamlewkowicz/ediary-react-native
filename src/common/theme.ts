@@ -9,7 +9,7 @@ export const nutritionColorSolid = {
   carbs: '#8AE4A5',
   prots: '#7BD4E5',
   fats: '#E8CF92',
-  kcal: '#E8CF92',
+  kcal: '#E89292',
 }
 
 export const themeProps = {

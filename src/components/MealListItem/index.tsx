@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { Theme, nutritionColors } from '../../common/theme';
-import { MacroElements } from '../../types';
+import { MacroElements, ProductId } from '../../types';
 import { ProgressBar } from '../ProgressBar';
 import { ProductPartial, ProductItem } from '../ProductItem';
 import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native';
@@ -13,7 +13,9 @@ interface MealListItemProps {
   onToggle: (mealId: MealsWithRatio[number]['id']) => void
   onLongPress?: TouchableOpacityProps['onLongPress']
   onProductAdd: () => void
-  onProductDelete: (product: MealsWithRatio[number]['products'][number]) => void
+  onProductDelete: (productId: ProductId) => void
+  onProductToggle: (productId: ProductId) => void
+  toggledProductId: ProductId | null
 }
 export const MealListItem = (props: MealListItemProps) => (
   <Container>
@@ -61,7 +63,9 @@ export const MealListItem = (props: MealListItemProps) => (
             <ProductItem
               key={item.id}
               product={item}
-              onProductDelete={() => props.onProductDelete(item)}
+              onDelete={props.onProductDelete}
+              onToggle={props.onProductToggle}
+              isToggled={props.toggledProductId === item.id}
             />
           )}
         />

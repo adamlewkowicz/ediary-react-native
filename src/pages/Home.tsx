@@ -23,6 +23,7 @@ interface HomeProps extends NavigationScreenProps {
   mealsWithRatio: selectors.MealsWithRatio
   appDate: AppState['application']['date']
   macroNeedsLeft: selectors.MacroNeedsLeft
+  toggledProductId: AppState['diary']['toggledProductId']
 }
 const Home = (props: HomeProps) => {
   const [name, setName] = useState('Zupa');
@@ -80,7 +81,9 @@ const Home = (props: HomeProps) => {
               onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
               onLongPress={() => dispatch(Actions.mealDelete(item.id))}
               onProductAdd={() => handleProductFinderNavigation(item)}
-              onProductDelete={product => dispatch(Actions.mealProductDelete(item.id, product.id))}
+              onProductDelete={productId => dispatch(Actions.mealProductDelete(item.id, productId))}
+              onProductToggle={productId => dispatch(Actions.productToggled(productId))}
+              toggledProductId={props.toggledProductId}
             />
           )}
         />
@@ -92,23 +95,11 @@ const Home = (props: HomeProps) => {
         <Button onPress={() => dispatch(Actions.mealCreate(name))}>
           Dodaj posiłek
         </Button>
-        <Button onPress={() => dispatch(Actions.mealProductCreate(
-          props.mealsWithRatio[0].id,
-          { name } as any
-        ))}>
-          Dodaj produkt (Pierwszy posiłek)
-        </Button>
-        <Button onPress={() => dispatch(Actions.productUpdate(
-          props.mealsWithRatio[0].products[0].id,
-          { name }
-        ))}>
-          Aktualizuj nazwę (Pierwszy produkt)
-        </Button>
         <Button onPress={() => props.navigation.navigate('ProductFinder')}>
           Wyszukiwarka produktów
         </Button>
         <Button onPress={handleProductCreatorNavigation}>
-          Kreator produktów
+          Dodaj własny produkt
         </Button>
       </ScrollView>
     </Container>
@@ -119,6 +110,7 @@ const HomeConnected = connect(
   (state: AppState) => ({
     mealsWithRatio: selectors.mealsWithRatio(state),
     macroNeedsLeft: selectors.macroNeedsLeft(state),
+    toggledProductId: state.diary.toggledProductId,
     appDate: state.application.date
   }),
   (dispatch) => ({ dispatch })

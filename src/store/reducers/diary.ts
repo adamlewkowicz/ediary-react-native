@@ -8,6 +8,7 @@ import {
   MEAL_TOGGLED,
   PRODUCT_CREATED,
   MEALS_ADDED,
+  PRODUCT_TOGGLED,
 } from '../consts';
 import {
   ProductUnit,
@@ -17,7 +18,7 @@ import {
   MealId,
   DateDay,
 } from '../../types';
-import { Meal } from '../../entities';
+import { Meal, Product } from '../../entities';
 import { DiaryActions } from '../actions';
 import { calcMacroByQuantity } from '../helpers/diary';
 import { getDayFromDate } from '../../common/utils';
@@ -25,6 +26,7 @@ import { getDayFromDate } from '../../common/utils';
 const initialState: DiaryState = {
   meals: [],
   products: [],
+  toggledProductId: null,
   isLoading: false
 }
 
@@ -58,6 +60,7 @@ export function diaryReducer(
             }
             return {
               ...normalizedProduct,
+              isToggled: false,
               macro: calcMacroByQuantity(normalizedProduct)
             }
           })
@@ -78,6 +81,7 @@ export function diaryReducer(
     }
     case MEAL_TOGGLED: return {
       ...state,
+      toggledProductId: null,
       meals: state.meals.map(meal => ({
         ...meal,
         isToggled: action.meta.mealId === meal.id
@@ -107,6 +111,7 @@ export function diaryReducer(
         ...state.products,
         {
           ...action.payload,
+          isToggled: false,
           macro: calcMacroByQuantity(action.payload)
         }
       ]
@@ -152,9 +157,22 @@ export function diaryReducer(
         ...state.products,
         {
           ...action.payload,
+          isToggled: false,
           macro: calcMacroByQuantity(action.payload)
         }
       ]
+    }
+    case PRODUCT_TOGGLED: return {
+      ...state,
+      toggledProductId: state.toggledProductId === action.payload
+        ? null
+        : action.payload,
+      products: state.products.map(product => ({
+        ...product,
+        isToggled: action.payload === product.id
+          ? !product.isToggled
+          : false
+      }))
     }
     default: return state;
   }
@@ -203,10 +221,12 @@ export interface DiaryProduct extends DiaryProductPayload {
     element: MacroElement
     value: number
   }[]
+  isToggled: boolean
 }
 
 interface DiaryState {
   meals: DiaryMeal[]
   products: DiaryProduct[]
+  toggledProductId: ProductId | null
   isLoading: boolean
 }
