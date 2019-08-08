@@ -92,7 +92,7 @@ export const ProductFinder = (props: ProductFinderProps) => {
       {!isLoading && productsAreEmpty && !!name.length && (
         <NotFoundInfo>
           Nie znaleziono żadnych produktów.
-          {!isConnected && 'Przejdź do trybu online aby wyszukiwać produkty, lub utwórz własny.'}
+          {!isConnected && ' Przejdź do trybu online aby wyszukiwać produkty, lub utwórz własny.'}
         </NotFoundInfo>
       )}
     </Container>

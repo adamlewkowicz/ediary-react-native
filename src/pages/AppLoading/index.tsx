@@ -1,6 +1,5 @@
 import React from 'react';
-import { Connection, ConnectionOptions, createConnections } from 'typeorm/browser';
-import * as entities from '../../entities';
+import { Connection, createConnections } from 'typeorm/browser';
 import { ActivityIndicator } from 'react-native';
 import { USER_ID_UNSYNCED } from '../../common/consts';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
@@ -9,6 +8,7 @@ import * as Actions from '../../store/actions';
 import { UserRepository } from '../../repositories/UserRepository';
 import { User } from '../../entities';
 import { NavigationScreenProps } from 'react-navigation';
+import { databaseConfig } from '../../database/config';
 
 interface AppLoadingProps extends NavigationScreenProps {}
 interface AppLoadingState {}
@@ -19,7 +19,6 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
 
   constructor(props: AppLoadingProps) {
     super(props);
-
     this.unsubscribe = NetInfo.addEventListener(state => {
       this.handleConnectionStatusUpdate(state.isConnected);
     });
@@ -30,20 +29,16 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
   }
 
   async setup() {
-    const config: ConnectionOptions = {
-      type: 'react-native',
-      database: 'test',
-      location: 'default',
-      logging: ['error', 'query', 'schema'],
-      dropSchema: false,
-      synchronize: false,
-      entities: Object.values(entities)
-    }
-
     const [defaultConnection] = await createConnections([
-      { name: 'default', ...config },
-      { name: 'transactional', ...config }
+      { name: 'default', ...databaseConfig },
+      { name: 'transactional', ...databaseConfig }
     ]);
+
+    const hasMigrationsToRun = await defaultConnection.showMigrations();
+
+    if (hasMigrationsToRun) {
+      await defaultConnection.runMigrations();
+    }
 
     const user = await this.getUser(defaultConnection);
 
