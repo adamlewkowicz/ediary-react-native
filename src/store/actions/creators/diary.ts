@@ -3,25 +3,25 @@ import {
   MEAL_CREATED,
   MEAL_UPDATED,
   MEAL_DELETED,
-  MEAL_PRODUCT_CREATED,
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED,
   MEAL_TOGGLED,
   PRODUCT_CREATED,
   MEALS_ADDED,
-  PRODUCT_TOGGLED
+  PRODUCT_TOGGLED,
+  MEAL_PRODUCT_ADDED
 } from '../../consts';
 import {
   MealDeleted,
   MealUpdated,
   MealCreated,
-  MealProductCreated,
   MealProductDeleted,
   ProductUpdated,
   MealToggled,
   ProductCreated,
   MealsAdded,
-  ProductToggled
+  ProductToggled,
+  MealProductAdded
 } from '../types';
 import { MealId, ProductId } from '../../../types';
 import { Meal } from '../../../entities';
@@ -47,12 +47,11 @@ export const mealDeleted = (mealId: MealId): MealDeleted => ({
   meta: { mealId }
 });
 
-// Rename to mealProductAdded
-export const mealProductCreated = (
+export const mealProductAdded = (
   mealId: MealId,
   product: DiaryProductPayload
-): MealProductCreated => ({
-  type: MEAL_PRODUCT_CREATED,
+): MealProductAdded => ({
+  type: MEAL_PRODUCT_ADDED,
   payload: product,
   meta: { mealId }
 });

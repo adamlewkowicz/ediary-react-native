@@ -2,13 +2,13 @@ import {
   MEAL_CREATED,
   MEAL_UPDATED,
   MEAL_DELETED,
-  MEAL_PRODUCT_CREATED,
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED,
   MEAL_TOGGLED,
   PRODUCT_CREATED,
   MEALS_ADDED,
   PRODUCT_TOGGLED,
+  MEAL_PRODUCT_ADDED,
 } from '../../consts';
 import { Meal, Product } from '../../../entities';
 import {
@@ -33,8 +33,8 @@ export type MealDeleted = {
   meta: { mealId: Meal['id'] }
 }
 
-export type MealProductCreated = {
-  type: typeof MEAL_PRODUCT_CREATED
+export type MealProductAdded = {
+  type: typeof MEAL_PRODUCT_ADDED
   payload: DiaryProductPayload
   meta: { mealId: Meal['id'] }
 }
@@ -81,7 +81,7 @@ export type DiaryActions =
   | MealCreated 
   | MealUpdated 
   | MealDeleted 
-  | MealProductCreated
+  | MealProductAdded
   | MealProductDeleted
   | ProductUpdated
   | MealToggled

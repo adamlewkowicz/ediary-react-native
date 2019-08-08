@@ -2,13 +2,13 @@ import {
   MEAL_CREATED,
   MEAL_UPDATED,
   MEAL_DELETED,
-  MEAL_PRODUCT_CREATED,
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED,
   MEAL_TOGGLED,
   PRODUCT_CREATED,
   MEALS_ADDED,
   PRODUCT_TOGGLED,
+  MEAL_PRODUCT_ADDED,
 } from '../consts';
 import {
   ProductUnit,
@@ -18,7 +18,7 @@ import {
   MealId,
   DateDay,
 } from '../../types';
-import { Meal, Product } from '../../entities';
+import { Meal } from '../../entities';
 import { DiaryActions } from '../actions';
 import { calcMacroByQuantity } from '../helpers/diary';
 import { getDayFromDate } from '../../common/utils';
@@ -37,35 +37,29 @@ export function diaryReducer(
   switch(action.type) {
     case MEALS_ADDED: return {
       ...state,
-      meals: [
-        ...state.meals,
-        ...action.payload.map(meal => {
-          const { mealProducts, ...data } = meal;
-          return {
+      meals: action.payload.map(meal => {
+        const { mealProducts, ...data } = meal;
+        return {
+          ...data,
+          isToggled: false,
+          day: getDayFromDate(meal.date),
+          products: mealProducts.map(mealProduct => mealProduct.productId)
+        }
+      }),
+      products: action.payload.flatMap(meal => {
+        return meal.mealProducts.map(mealProduct => {
+          const { meal, product, ...data } = mealProduct;
+          const normalizedProduct = {
             ...data,
+            ...product,
+          }
+          return {
+            ...normalizedProduct,
             isToggled: false,
-            day: getDayFromDate(meal.date),
-            products: mealProducts.map(mealProduct => mealProduct.productId)
+            macro: calcMacroByQuantity(normalizedProduct)
           }
         })
-      ],
-      products: [
-        ...state.products,
-        ...action.payload.flatMap(meal => {
-          return meal.mealProducts.map(mealProduct => {
-            const { meal, product, ...data } = mealProduct;
-            const normalizedProduct = {
-              ...data,
-              ...product,
-            }
-            return {
-              ...normalizedProduct,
-              isToggled: false,
-              macro: calcMacroByQuantity(normalizedProduct)
-            }
-          })
-        })
-      ]
+      })
     }
     case MEAL_CREATED: return {
       ...state,
@@ -101,7 +95,7 @@ export function diaryReducer(
       meals: state.meals.filter(meal => meal.id !== action.meta.mealId),
       products: state.products.filter(product => product.mealId !== action.meta.mealId)
     }
-    case MEAL_PRODUCT_CREATED: return {
+    case MEAL_PRODUCT_ADDED: return {
       ...state,
       meals: state.meals.map(meal => meal.id === action.meta.mealId 
         ? { ...meal, products: [...meal.products, action.payload.id] }

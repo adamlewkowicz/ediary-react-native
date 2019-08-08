@@ -3,12 +3,12 @@ import {
   mealCreated,
   mealDeleted,
   mealUpdated,
-  mealProductCreated,
   mealProductDeleted,
   productUpdated,
   mealToggled,
   productCreated,
   mealsAdded,
+  mealProductAdded,
 } from '../creators';
 import {
   mealRepository,
@@ -17,9 +17,9 @@ import {
 } from '../../../repositories';
 import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
 import { getProductMock } from '../../helpers/diary';
-import { Between, getCustomRepository, getRepository } from 'typeorm/browser';
+import { getCustomRepository, getRepository } from 'typeorm/browser';
 import { AppState } from '../..';
-import { MealId, ProductUnit, DateDay } from '../../../types';
+import { ProductUnit, DateDay } from '../../../types';
 import { MealRepository } from '../../../repositories/MealRepository';
 import { MealsWithRatio } from '../../selectors';
 import { USER_ID_UNSYNCED } from '../../../common/consts';
@@ -52,7 +52,7 @@ export const mealProductCreate = (
   const meal = await mealRepository().findOneOrFail(mealId);
   const mockedProduct = { ...payload, ...getProductMock(), userId: USER_ID_UNSYNCED };
   const newProduct = await meal.addAndCreateProduct(mockedProduct);
-  dispatch(mealProductCreated(mealId, { ...mockedProduct, ...newProduct }));
+  dispatch(mealProductAdded(mealId, { ...mockedProduct, ...newProduct }));
 }
 
 export const mealProductDelete = (
@@ -81,17 +81,10 @@ export const productCreate = (
 
 export const mealsFindByDay = (
   dateDay: DateDay
-) => async (dispatch: any, getState: () => AppState): Promise<boolean> => {
-  const foundMeals = await mealRepository().find({
-    where: { date: Between(`${dateDay} 00:00:00`, `${dateDay} 23:59:59`) },
-    relations: ['mealProducts', 'mealProducts.product']
-  });
+) => async (dispatch: any) => {
+  const foundMeals = await getCustomRepository(MealRepository).findByDay(dateDay);
 
-  if (foundMeals.length) {
-    dispatch(mealsAdded(foundMeals));
-    return true;
-  }
-  return false;
+  dispatch(mealsAdded(foundMeals));
 }
 
 export const mealProductAdd = (
@@ -124,7 +117,7 @@ export const mealProductAdd = (
 
   } else {
     dispatch(
-      mealProductCreated(mealId, {
+      mealProductAdded(mealId, {
         ...product,
         mealId,
         quantity,

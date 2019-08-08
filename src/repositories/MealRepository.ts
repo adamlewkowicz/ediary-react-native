@@ -1,6 +1,7 @@
-import { EntityRepository, Repository } from 'typeorm/browser';
+import { EntityRepository, Repository, Between } from 'typeorm/browser';
 import { Meal, Product } from '../entities';
 import { mealProductRepository } from '.';
+import { DateDay } from '../types';
 
 @EntityRepository(Meal)
 export class MealRepository extends Repository<Meal> {
@@ -35,5 +36,12 @@ export class MealRepository extends Repository<Meal> {
     });
 
     return { ...product, ...createdMealProduct }; 
+  }
+
+  findByDay(dateDay: DateDay) {
+    return this.find({
+      where: { date: Between(`${dateDay} 00:00:00`, `${dateDay} 23:59:59`) },
+      relations: ['mealProducts', 'mealProducts.product']
+    });
   }
 }
