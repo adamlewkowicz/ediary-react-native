@@ -129,8 +129,8 @@ export interface NormalizedProduct {
   carbs: number
   fats: number
   kcal: number
-  portions: []
   images: string[]
   producer?: string
   description?: string
+  ingredients?: string[]
 }

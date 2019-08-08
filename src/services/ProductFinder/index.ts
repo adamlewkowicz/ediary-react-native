@@ -1,7 +1,7 @@
 import { IleWazyPayload, PortionMap, IleWazyPortionType, NormalizedProduct } from './types';
-import { round, getValAndUnitFromString } from '../../common/utils';
+import { round } from '../../common/utils';
 import { BarcodeId, MacroElement } from '../../types';
-import { FriscoResponse, FriscoNutritionBrand, FriscoNutritionName, FriscoMacroMap } from './types/frisco';
+import { FriscoQueryResponse } from './types/frisco';
 import { baseMacro } from '../../common/helpers';
 
 export class ProductFinder {
@@ -83,56 +83,69 @@ export class ProductFinder {
     return normalizedResults;
   }
 
-  async findByBarcode(
-    barcode: BarcodeId, productId: number
-  ): Promise<NormalizedProduct | null> {
+  async findByBarcode(barcodeId: BarcodeId): Promise<NormalizedProduct | null> {
 
     const response = await fetch(
-      `https://products.frisco.pl/api/products/get/${productId}`,
-      { headers: { 'X-Requested-With': 'XMLHttpRequest' }
-    });
+      `https://commerce.frisco.pl/api/offer/products/query?search=${barcodeId}` +
+      '&includeCategories=true&pageIndex=1&deliveryMethod=Van&pageSize=60' +
+      '&language=pl&facetCount=100&includeWineFacets=false',
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }}
+    );
 
-    const data: FriscoResponse = await response.json();
+    const data: FriscoQueryResponse = await response.json();
 
-    const _id = data.productId;
-    const name = data.seoData.title;
-    const description = data.seoData.description;
-
-    const macroData = data.brandbank.find(brand =>
-      brand.sectionName === 'Wartości odżywcze'
-    ) as FriscoNutritionBrand;
-
-    if (!macroData) {
+    if (!data.products.length) {
       return null;
     }
 
-    const macroMap: FriscoMacroMap = {
-      'Energia': 'kcal',
-      'Tłuszcz ': 'fats',
-      ' w tym kwasy nasycone ': 'fats',
-      'Węglowodany ': 'carbs',
-      ' w tym cukry ': 'carbs',
-      'Białko ': 'prots',
+    const [{ product, productId: _productId }] = data.products;
+    const { components = [], substances } = product.contentData;
+
+    if (!substances || !substances.length) {
+      return null;
     }
 
-    const macro = macroData.content.Nutrients.reduce((macro, data) => {
-      const [firstValue] = data.Values;
-      const { value } = getValAndUnitFromString(firstValue);
-      const element = macroMap[data.Name];
+    const _id = _productId;
+    const name = product.name.pl;
+    const description = product.description;
+    const barcode = product.ean;
+    const images = product.imageUrl ? [product.imageUrl] : [];
+    const ingredients = components.flatMap(ingredient =>
+      ingredient.split(', ').map(ingrd =>
+        ingrd.replace(/,/, '')
+      )
+    );
+    const portion = Math.round(product.grammage * 1000);
+    const brand = product.brand;
+    const producer = product.producer;
 
-      if (element && value !== null) {
-        macro[element] = round(macro[element] + value);
+    const macroMap: { [key: string]: MacroElement } = {
+      'węglowodany': 'carbs',
+      'w tym cukry': 'carbs',
+      'białko': 'prots',
+      'tłuszcz': 'fats',
+      'w tym kwasy tłuszczowe nasycone': 'fats',
+    }
+
+    const macro = substances.reduce((macro, substance) => {
+      const element = macroMap[substance.name];
+      if (element) {
+        macro[element] = round(macro[element] + substance.quantity);
       }
-
       return macro;
     }, { ...baseMacro });
 
     const normalizedProduct = {
-      _id,
-      name,
+      _id, 
+      name, 
       description,
-      
-      ...macro,
+      barcode,
+      images,
+      ingredients,
+      portion,
+      brand,
+      producer,
+      ...macro
     }
 
     return normalizedProduct;
