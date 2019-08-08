@@ -11,7 +11,7 @@ export class GenericRepository<T> extends Repository<T> {
 
   // does not allow to execute another query in the same time
   // does not return (sometimes, or not anymore?) entity instance (raw data)
-  findOneOrSave<P extends DeepPartial<T>>(
+  findOneOrSaveTrx<P extends DeepPartial<T>>(
     options: FindOneOptions,
     payload: P
   ): Promise<T> {
@@ -24,6 +24,18 @@ export class GenericRepository<T> extends Repository<T> {
       const createdItem = await manager.save(Entity, payload);
       return createdItem;
     });
+  }
+
+  async findOneOrSave<P extends DeepPartial<T>>(
+    options: FindOneOptions,
+    payload: P
+  ): Promise<T> {
+    const existingItem = await this.findOne(options);
+    if (existingItem) {
+      return existingItem;
+    }
+    const createdItem = await this.save(payload);
+    return createdItem;
   }
 
 }

@@ -13,8 +13,8 @@ import { User } from './User';
 import { ProductPortion } from './ProductPortion';
 
 @Entity('Product')
-@Unique(['name', 'userId'])
-@Unique(['name', 'verified'])
+// @Unique(['name', 'userId'])
+// @Unique(['name', 'verified'])
 export class Product {
 
   @PrimaryGeneratedColumn()

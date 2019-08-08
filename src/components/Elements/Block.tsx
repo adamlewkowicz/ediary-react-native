@@ -24,6 +24,6 @@ interface BlockParams {
 const Container = styled.View<BlockParams>`
   flex-direction: ${props => props.row ? 'row' : 'column'};
   justify-content: ${props => props.space ? props.space : 'flex-start'};
-  margin: ${props => props.marginVertical && props.marginVertical}px 0;
+  ${props => props.marginVertical && `${props.marginVertical}px 0`};
   ${props => props.css};
 `
