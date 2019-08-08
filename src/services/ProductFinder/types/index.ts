@@ -120,3 +120,17 @@ export interface FriscoResponse {
     | FriscoNutritionBrandbank
   )[]
 }
+
+export interface NormalizedProduct {
+  _id: string | number
+  name: string
+  portion: number
+  prots: number
+  carbs: number
+  fats: number
+  kcal: number
+  portions: []
+  images: string[]
+  producer?: string
+  description?: string
+}

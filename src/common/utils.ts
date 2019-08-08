@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
-import { DateDay } from '../types';
+import { DateDay, ProductUnit } from '../types';
+import { PRODUCT_UNITS } from './consts';
 
 let timeout: NodeJS.Timeout;
 
@@ -31,4 +32,21 @@ export function getDayFromDate(
 ): DateDay {
   const dateDay: DateDay = dayjs(date).format('YYYY-MM-DD') as any;
   return dateDay;
+}
+
+
+export function getValAndUnitFromString(value: string): {
+  value: number | null
+  unit: ProductUnit | null
+} {
+  const unit = PRODUCT_UNITS.find(unit => value.includes(unit));
+  const parsedValue = parseFloat(
+    value.replace(/,/, '.')
+  );
+  const result = Number.isNaN(parsedValue) ? null : parsedValue; 
+
+  return {
+    unit: unit || null,
+    value: result || null
+  }
 }

@@ -1,6 +1,8 @@
-import { IleWazyPayload, PortionMap, IleWazyPortionType, FriscoResponse } from './types';
-import { round } from '../../common/utils';
-import { BarcodeId } from '../../types';
+import { IleWazyPayload, PortionMap, IleWazyPortionType, NormalizedProduct } from './types';
+import { round, getValAndUnitFromString } from '../../common/utils';
+import { BarcodeId, MacroElement } from '../../types';
+import { FriscoResponse, FriscoNutritionBrand, FriscoNutritionName, FriscoMacroMap } from './types/frisco';
+import { baseMacro } from '../../common/helpers';
 
 export class ProductFinder {
   async findByName(name: string) {
@@ -81,7 +83,9 @@ export class ProductFinder {
     return normalizedResults;
   }
 
-  async findByBarcode(barcode: BarcodeId, productId: number) {
+  async findByBarcode(
+    barcode: BarcodeId, productId: number
+  ): Promise<NormalizedProduct | null> {
 
     const response = await fetch(
       `https://products.frisco.pl/api/products/get/${productId}`,
@@ -94,36 +98,44 @@ export class ProductFinder {
     const name = data.seoData.title;
     const description = data.seoData.description;
 
-    const macro = data.brandbank.flatMap(brandbank => 
-      brandbank.fields
-        .filter(field => field.contentType === 'TextualNutrition')
-        .flatMap(field => {
-          if (field.contentType === 'TextualNutrition') {
-            field.content.Nutrients.reduce((parsed, nutrition) => {
+    const macroData = data.brandbank.find(brand =>
+      brand.sectionName === 'Wartości odżywcze'
+    ) as FriscoNutritionBrand;
 
-              if (nutrition.Name === 'Energia') {
-                return {
-                  ...parsed,
+    if (!macroData) {
+      return null;
+    }
 
-                }
-              }
+    const macroMap: FriscoMacroMap = {
+      'Energia': 'kcal',
+      'Tłuszcz ': 'fats',
+      ' w tym kwasy nasycone ': 'fats',
+      'Węglowodany ': 'carbs',
+      ' w tym cukry ': 'carbs',
+      'Białko ': 'prots',
+    }
 
-              const value = nutrition.Values.find(val => val.includes('g')) || nutrition.Values[0];
+    const macro = macroData.content.Nutrients.reduce((macro, data) => {
+      const [firstValue] = data.Values;
+      const { value } = getValAndUnitFromString(firstValue);
+      const element = macroMap[data.Name];
 
-              value.replace(/,/, '.');
+      if (element && value !== null) {
+        macro[element] = round(macro[element] + value);
+      }
 
-              const NUMERIC_REGEXP = /[-]{0,1}[\d]*[\.]{0,1}[\d]+/g;
+      return macro;
+    }, { ...baseMacro });
 
+    const normalizedProduct = {
+      _id,
+      name,
+      description,
+      
+      ...macro,
+    }
 
-              return {
-                ...parsed,
-                // [nutrition.Name]: null
-              }
-            }, {});
-          }
-        })
-    );
-
+    return normalizedProduct;
   }
 }
 

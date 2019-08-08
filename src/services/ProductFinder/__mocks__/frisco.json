@@ -1,12 +1,12 @@
 {
-  "productId": 9295,
+  "productId": 15740,
   "seoData": {
-    "title": "Coca-Cola - Napój gazowany w szklanej butelce 200 ml",
-    "description": "Napój gazowany Coca-Cola, bez dodatku jakichkolwiek substancji konserwujących. Orzeźwienie i ugaszenie pragnienia gwarantowane. Kup już teraz i sprawdź!",
-    "imgAlt": "Coca-Colaw szklanej butelce"
+    "title": "Coca-Cola Zero - Napój gazowany bez cukru 1,5 l",
+    "description": "COCA-COLA ZERO - Napój gazowany bez cukru to smaczny, orzeźwiający smak, uwielbiany przez miliony ludzi na całym świecie. Kup teraz!",
+    "imgAlt": "Coca Cola Zero - napój gazowany"
   },
-  "description": "<p>Już od 1886 roku <strong>Coca-Cola</strong> każdego dnia dostarcza radość i orzeźwienie ludziom na całym świecie. To najchętniej kupowany napój gazowany w historii, jak również jeden z najbardziej rozpoznawalnych produktów na świecie.</p><p>Tajemnica <strong>Coca-Coli</strong> tkwi w unikalnej recepturze, opierającej się na składnikach pochodzenia naturalnego, która nie zmieniła się od przeszło 125 lat.</p><p>Ciekawostki o Coca-Coli:</p><ul><li>tylko raz, w 1985 roku, próbowano zmienić recepturę napoju, ale działanie to spotkało się z licznymi protestami,</li><li>w 2009 roku w Stanach Zjednoczonych wprowadzono <strong>Coca-Cola Freestyle</strong> - automatyczny dystrybutor napojów,</li><li>od 2007 roku w sprzedaży jest dostępna Coca-Cola Orange.</li></ul>",
-  "officialProductName": "Napój gazowany o smaku cola. ",
+  "description": "<p><strong>Napój gazowany Coca Cola Zero</strong> to niezwykle innowacyjny produkt. Producent stworzył go z myślą o osobach, które uwielbiają słodki smak napojów gazowanych, lecz skrupulatnie liczą kalorie. <strong>Coca Cola zero</strong> w swoim składzie nie zawiera cukru. Będzie więc idealnym rozwiązaniem dla wszystkich dbających o linię.</p><p><strong>Napój gazowany Coca Cola Zero</strong> zamknięty jest w ergonomicznej butelce, wygodnej do przenoszenia. Z tego względu wszędzie cieszyć się można pysznym smakiem bezkalorycznego napoju. Mimo, iż produkt nie zawiera cukru – nadal świetnie smakuje.</p><p><strong>Jakie zalety ma napój gazowany Coca Cola Zero:</strong></p><ul><li>Doskonale orzeźwia</li><li>Nie zawiera cukru</li><li>Fantastycznie smakuje</li><li>Posiada wygodną butelkę</li></ul>",
+  "officialProductName": "Napój gazowany o smaku cola nie posiadający wartości energetycznej. Zawiera substancje słodzące.",
   "brandbank": [
     {
       "sectionId": 1,
@@ -18,11 +18,12 @@
           "contentType": "LongTextItems",
           "content": [
             "woda",
-            "cukier",
             "dwutlenek węgla",
             "barwnik E 150d",
             "kwas: kwas fosforowy",
-            "naturalne aromaty w tym kofeina"
+            "substancje słodzące: cyklaminiany, acesulfam K, aspartam",
+            "naturalne aromaty w tym kofeina",
+            "regulator kwasowości: cytryniany sodu"
           ]
         },
         {
@@ -33,16 +34,16 @@
             {
               "Reference": "Na porcję",
               "Headers": [
-                "200 ml"
+                "250 ml"
               ],
               "Wartość energetyczna": {
-                "Quantity": "360 kJ",
-                "Percentage": "4.00",
+                "Quantity": "2,3 kJ",
+                "Percentage": "0.00",
                 "Rating": null
               },
               "Footers": [
-                "100 ml: 180 kJ / 42 kcal",
-                "Referencyjna wartość spożycia dla przeciętnej osoby dorosłej (8400 kJ / 2000 kcal)"
+                "100 ml: 0,9 kJ / 0,2 kcal",
+                "Referencyjna wartość spożycia dla przeciętnej osoby dorosłej (8400 kJ / 2000 kcal)."
               ]
             }
           ]
@@ -59,49 +60,71 @@
           "contentType": "TextualNutrition",
           "content": {
             "Headings": [
-              "W 100 ml"
+              "100 ml",
+              "250 ml (%*)"
             ],
             "Nutrients": [
               {
                 "Name": "Energia",
                 "Values": [
-                  "180 kJ / 42 kcal"
+                  "0,9 kJ / 0,2 kcal",
+                  "2,3 kJ / 1 kcal (0%)"
                 ]
               },
               {
                 "Name": "Tłuszcz ",
                 "Values": [
-                  "0 g"
+                  "0 g",
+                  "0 g (0%)"
                 ]
               },
               {
                 "Name": " w tym kwasy nasycone ",
                 "Values": [
-                  "0 g"
+                  "0 g",
+                  "0 g (0%)"
                 ]
               },
               {
                 "Name": "Węglowodany ",
                 "Values": [
-                  "10,6 g"
+                  "0 g",
+                  "0 g (0%)"
                 ]
               },
               {
                 "Name": " w tym cukry ",
                 "Values": [
-                  "10,6 g"
+                  "0 g",
+                  "0 g (0%)"
                 ]
               },
               {
                 "Name": "Białko ",
                 "Values": [
-                  "0 g"
+                  "0 g",
+                  "0 g (0%)"
                 ]
               },
               {
                 "Name": "Sól ",
                 "Values": [
-                  "0 g"
+                  "0,02 g",
+                  "0,05 g (1%)"
+                ]
+              },
+              {
+                "Name": "*Referencyjna wartość spożycia dla przeciętnej osoby dorosłej (8400 kJ / 2000 kcal).",
+                "Values": [
+                  "",
+                  ""
+                ]
+              },
+              {
+                "Name": "1,5 l = 6 x 250 ml",
+                "Values": [
+                  "",
+                  ""
                 ]
               }
             ]
@@ -125,7 +148,7 @@
           "fieldId": 20,
           "fieldName": "Przechowywanie",
           "contentType": "Memo",
-          "content": "Przechowywać w chłodnym i suchym miejscu. Chronić przed działaniem promieni słonecznych."
+          "content": "Przechowywać w chłodnym i suchym miejscu. Chronić przed działaniem promieni słonecznych. Po otwarciu przechowywać w lodówce i spożyć w ciągu 3 dni."
         }
       ]
     },
@@ -138,7 +161,7 @@
           "fieldName": "Rozmiar opakowania",
           "contentType": "LongTextItems",
           "content": [
-            "250"
+            "1,5"
           ]
         },
         {
@@ -146,15 +169,23 @@
           "fieldName": "Jednostka",
           "contentType": "LongTextItems",
           "content": [
-            "ml"
+            "l"
           ]
+        },
+        {
+          "fieldId": 34,
+          "fieldName": null,
+          "contentType": "NameTextItems",
+          "content": {
+            "Waga brutto": "1537"
+          }
         },
         {
           "fieldId": 68,
           "fieldName": null,
           "contentType": "NameTextItems",
           "content": {
-            "Wymiar liczbowy": "250"
+            "Wymiar liczbowy": "1.5"
           }
         },
         {
@@ -162,15 +193,35 @@
           "fieldName": null,
           "contentType": "NameLookups",
           "content": {
-            "Jednostka (specyficzna)": "Mililitrów"
+            "Jednostka (specyficzna)": "Litrów"
           }
+        },
+        {
+          "fieldId": 191,
+          "fieldName": "Liczba użyć",
+          "contentType": "NameTextLookups",
+          "content": [
+            {
+              "Name": "Liczba czynności użycia",
+              "Value": "Porcje",
+              "Text": "6"
+            }
+          ]
+        },
+        {
+          "fieldId": 194,
+          "fieldName": "Użycie",
+          "contentType": "LongTextItems",
+          "content": [
+            "1,5 l = 6 x 250 ml"
+          ]
         },
         {
           "fieldId": 29,
           "fieldName": "Rodzaj opakowania",
           "contentType": "NameLookups",
           "content": {
-            "Typ": "Butelka"
+            "Typ": "Butelka plastikowa"
           }
         },
         {
@@ -178,7 +229,7 @@
           "fieldName": "Informacje o recyklingu",
           "contentType": "NameLookups",
           "content": {
-            "Opakowanie": "Szkło - powszechnie recyklingowane"
+            "Opakowanie": "Nadające się do recyklingu"
           }
         },
         {
@@ -208,7 +259,7 @@
           "fieldId": 3,
           "fieldName": "Pozostałe informacje",
           "contentType": "Memo",
-          "content": "200 ml 360 kJ 84 kcal 4%*\r\n100 ml: 180 kJ / 42 kcal\r\n\r\nButelka z kaucją 30 gr. Butelka tylko na napoje.\r\n\r\n*Referencyjna wartość spożycia dla przeciętnej osoby dorosłej (8400 kJ / 2000 kcal)"
+          "content": "250 ml 2,3 kJ 1 kcal 0%*\r\n100 ml: 0,9 kJ / 0,2 kcal\r\n\r\nZawiera źródło fenyloalaniny.\r\n\r\n*Referencyjna wartość spożycia dla przeciętnej osoby dorosłej (8400 kJ / 2000 kcal)."
         },
         {
           "fieldId": 196,
@@ -222,6 +273,16 @@
       "sectionId": 3,
       "sectionName": "Informacje producenta",
       "fields": [
+        {
+          "fieldId": 32,
+          "fieldName": "Cechy",
+          "contentType": "LongTextItems",
+          "content": [
+            "prawdziwy smak, zero kalorii",
+            "tylko naturalne aromaty",
+            "bez dodatku substancji konserwujących"
+          ]
+        },
         {
           "fieldId": 25,
           "fieldName": "Marka",
@@ -251,14 +312,39 @@
           "fieldName": "Produkt",
           "contentType": "NameTextItems",
           "content": {
-            "Nazwa funkcjonalna": "Napój gazowany"
+            "Nazwa funkcjonalna": "Napój gazowany",
+            "Wariant": "zero"
           }
         },
         {
           "fieldId": 36,
           "fieldName": "O marce",
           "contentType": "Memo",
-          "content": "Coca-Cola każdego dnia dostarcza radość i orzeźwienie ludziom na całym świecie. To najpopularniejszy i najchętniej kupowany napój gazowany w historii, jak również najlepiej znany produkt na świecie. Tajemnica Coca-Coli tkwi w unikalnej recepturze, opierającej się na składnikach pochodzenia naturalnego, która nie zmieniła się od przeszło 125 lat.\r\n\r\nDodatkowe informacje dostępne są na stronie www.coca-cola.pl oraz www.coca-cola.com.pl"
+          "content": "Coca-Cola Zero jest uosobieniem hasła „niemożliwe staje się możliwe”. Kto by pomyślał, że można uzyskać oryginalny smak Coca-Cola bez cukru? Coca-Cola Zero udowadnia, że to możliwe!"
+        },
+        {
+          "fieldId": 13,
+          "fieldName": "Informacje o dodatkach: pozostały tekst",
+          "contentType": "LongTextItems",
+          "content": [
+            "Zawiera substancje słodzące.",
+            "Zawiera źródło fenyloalaniny.",
+            "Bez dodatku substancji konserwujących."
+          ]
+        },
+        {
+          "fieldId": 156,
+          "fieldName": "Oświadczenia żywieniowe",
+          "contentType": "LongTextItems",
+          "content": [
+            "Napój gazowany o smaku cola nie posiadający wartości energetycznej."
+          ]
+        },
+        {
+          "fieldId": 21,
+          "fieldName": "Dodatkowe informacje",
+          "contentType": "Memo",
+          "content": "Podaruj radość, a radość wróci do Ciebie!"
         }
       ]
     },
@@ -270,7 +356,7 @@
           "fieldId": 26,
           "fieldName": "Adres zwrotny",
           "contentType": "Memo",
-          "content": "Coca-Cola HBC Polska Sp. z o.o.\r\nul. Annopol 20\r\n03-236 Warszawa\r\nInfolinia: 801 110 110\r\ncoca-cola.pl"
+          "content": "Coca-Cola HBC Polska Sp. z o.o.\r\nul. Annopol 20\r\n03-236 Warszawa\r\n801 110 110\r\ncokezero.pl\r\ncoca-cola.pl"
         },
         {
           "fieldId": 153,
@@ -285,6 +371,7 @@
           "fieldName": "Adres internetowy",
           "contentType": "LongTextItems",
           "content": [
+            "cokezero.pl",
             "coca-cola.pl"
           ]
         },
