@@ -1,5 +1,6 @@
-import { IleWazyPayload, PortionMap, IleWazyPortionType } from './types';
+import { IleWazyPayload, PortionMap, IleWazyPortionType, FriscoResponse } from './types';
 import { round } from '../../common/utils';
+import { BarcodeId } from '../../types';
 
 export class ProductFinder {
   async findByName(name: string) {
@@ -78,6 +79,51 @@ export class ProductFinder {
     });
 
     return normalizedResults;
+  }
+
+  async findByBarcode(barcode: BarcodeId, productId: number) {
+
+    const response = await fetch(
+      `https://products.frisco.pl/api/products/get/${productId}`,
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    });
+
+    const data: FriscoResponse = await response.json();
+
+    const _id = data.productId;
+    const name = data.seoData.title;
+    const description = data.seoData.description;
+
+    const macro = data.brandbank.flatMap(brandbank => 
+      brandbank.fields
+        .filter(field => field.contentType === 'TextualNutrition')
+        .flatMap(field => {
+          if (field.contentType === 'TextualNutrition') {
+            field.content.Nutrients.reduce((parsed, nutrition) => {
+
+              if (nutrition.Name === 'Energia') {
+                return {
+                  ...parsed,
+
+                }
+              }
+
+              const value = nutrition.Values.find(val => val.includes('g')) || nutrition.Values[0];
+
+              value.replace(/,/, '.');
+
+              const NUMERIC_REGEXP = /[-]{0,1}[\d]*[\.]{0,1}[\d]+/g;
+
+
+              return {
+                ...parsed,
+                // [nutrition.Name]: null
+              }
+            }, {});
+          }
+        })
+    );
+
   }
 }
 
