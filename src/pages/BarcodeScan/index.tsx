@@ -1,4 +1,4 @@
-import React, { PureComponent, createRef } from 'react';
+import React, { createRef } from 'react';
 import { RNCamera, RNCameraProps, TakePictureResponse } from 'react-native-camera';
 import styled from 'styled-components/native';
 import { NavigationScreenProps } from 'react-navigation';
@@ -6,7 +6,7 @@ import { BarcodeId } from '../../types';
 import { Theme } from '../../common/theme';
 
 interface BarcodeScanProps extends NavigationScreenProps<BarcodeScanParams, BarcodeScanNavigationOptions> {}
-export class BarcodeScan extends PureComponent {
+export class BarcodeScan extends React.Component {
 
   static navigationOptions: BarcodeScanProps['navigationOptions'] = {
     title: 'Zeskanuj kod kreskowy'
@@ -15,6 +15,7 @@ export class BarcodeScan extends PureComponent {
   camera = createRef<RNCamera>();
   onBarcodeDetected: BarcodeScanParams['onBarcodeDetected'];
   onPhotoTaken: BarcodeScanParams['onPhotoTaken'];
+  prevBarcodeId?: BarcodeId
 
   constructor(props: BarcodeScanProps) {
     super(props);
@@ -33,14 +34,29 @@ export class BarcodeScan extends PureComponent {
 
   handleGoogleBarcodeDetection: RNCameraProps['onGoogleVisionBarcodesDetected'] = ({ barcodes }) => {
     const [barcode] = barcodes.filter(barcode => barcode.type === 'ISBN');
-    if (barcode && this.onBarcodeDetected) {
-      this.onBarcodeDetected(barcode.data);
+
+    if (!barcode || !this.onBarcodeDetected) {
+      return;
+    }
+
+    const barcodeId = barcode.data;
+
+    if (barcodeId !== this.prevBarcodeId) {
+      this.onBarcodeDetected(barcodeId);
+      this.prevBarcodeId = barcodeId;
     }
   }
 
   handleBarcodeDetection: RNCameraProps['onBarCodeRead'] = (barcode) => {
-    if (this.onBarcodeDetected) {
+    if (!barcode || !this.onBarcodeDetected) {
+      return;
+    }
+
+    const barcodeId = barcode.data;
+
+    if (barcodeId !== this.prevBarcodeId) {
       this.onBarcodeDetected(barcode.data);
+      this.prevBarcodeId = barcodeId;
     }
   }
 
@@ -71,8 +87,6 @@ export class BarcodeScan extends PureComponent {
       </Container>
     );
   }
-
-
 }
 
 const Container = styled.View`
