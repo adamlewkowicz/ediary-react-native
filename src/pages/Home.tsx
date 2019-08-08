@@ -18,6 +18,10 @@ import { mealProductAdd } from '../store/actions';
 import { ProductCreateParams } from './ProductCreate';
 import { BASE_MACRO_ELEMENTS } from '../common/consts';
 import { elementTitles } from '../common/helpers';
+import { BarcodeScanParams } from './BarcodeScan';
+import { productFinder } from '../services/ProductFinder';
+import { ProductRepository } from '../repositories/ProductRepository';
+import { getCustomRepository } from 'typeorm/browser';
 
 interface HomeProps extends NavigationScreenProps {
   mealsWithRatio: selectors.MealsWithRatio
@@ -52,6 +56,27 @@ const Home = (props: HomeProps) => {
       }
     }
     props.navigation.navigate('ProductCreate', screenParams);
+  }
+
+  const handleBarcodeScan = () => {
+    const screenParams: BarcodeScanParams = {
+      async onBarcodeDetected(barcode) {
+        props.navigation.navigate('Home');
+        const product = await productFinder.findByBarcode(barcode);
+
+        if (product) {
+          const savedProduct = await getCustomRepository(ProductRepository)
+            .findOneOrSave({
+              where: { barcode: product.barcode }
+            }, product);
+
+          const [firsMeal] = props.mealsWithRatio;
+          dispatch(mealProductAdd(firsMeal, savedProduct));
+        }
+      }
+    }
+    
+    props.navigation.navigate('BarcodeScan', screenParams);
   }
   
   return (
@@ -105,7 +130,7 @@ const Home = (props: HomeProps) => {
         <Button onPress={handleProductCreatorNavigation}>
           Dodaj własny produkt
         </Button>
-        <Button onPress={() => props.navigation.navigate('BarcodeScan')}>
+        <Button onPress={handleBarcodeScan}>
           Zeskanuj kod kreskowy
         </Button>
       </ScrollView>

@@ -1,4 +1,4 @@
-import { PortionType } from '../../../types';
+import { PortionType, BarcodeId } from '../../../types';
 
 type IleWazyUnitData = {
   filename: "koncentrat-grzybowy-krakus-1.jpg"
@@ -130,6 +130,7 @@ export interface NormalizedProduct {
   fats: number
   kcal: number
   images: string[]
+  barcode?: BarcodeId
   producer?: string
   description?: string
   ingredients?: string[]
