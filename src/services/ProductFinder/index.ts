@@ -117,7 +117,7 @@ export class ProductFinder {
     return normalizedResults;
   }
 
-  private async findOneByProductIdFrisco(
+  async findOneByProductIdFrisco(
     productId: FriscoProductId
   ): Promise<NormalizedProduct | null> {
 
@@ -134,7 +134,7 @@ export class ProductFinder {
     const macroData = data.brandbank.find(brand => brand.sectionId === macroSectionId);
     const images: [] = [];
 
-    console.log(data)
+    // console.log(data)
 
     if (!macroData) {
       return null;
@@ -191,7 +191,7 @@ export class ProductFinder {
     }
   }
 
-  private async findByPhraseFrisco(
+  async findByPhraseFrisco(
     phrase: string | BarcodeId
   ) {
     const parsedPhrase = encodeURIComponent(phrase as string);

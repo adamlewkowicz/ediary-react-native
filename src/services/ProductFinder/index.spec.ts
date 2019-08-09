@@ -1,7 +1,10 @@
 import { productFinder } from '.';
 import ilewazyResponseMock from './__mocks__/ilewazy.json';
+import { FriscoProductId } from './types/frisco';
+import friscoResponseMock from './__mocks__/frisco.json';
+(global as any).fetch = require('node-fetch');
 
-jest.mock('fetch');
+jest.mock('node-fetch');
 
 test('Ilewazy - products are parsed correctly', async () => {
   const name = 'jabl';
@@ -19,7 +22,21 @@ test('Ilewazy - products are parsed correctly', async () => {
   const [firstProduct] = await productFinder.findByName(name);
 
   expect(fetch).toHaveBeenCalledTimes(1);
-  expect(firstProduct).toEqual({
-    name: firstMockedProduct.ingredient_name,
-  });
+});
+
+test('frisco - ', async () => {
+  const productId = 15740 as unknown as FriscoProductId;
+  const mockedProduct = friscoResponseMock;
+
+  (fetch as jest.Mock).mockImplementationOnce(() => ({
+    async json() {
+      return friscoResponseMock;
+    }
+  }))
+
+  const foundProduct = await productFinder.findOneByProductIdFrisco(productId);
+
+  expect(foundProduct).toHaveProperty(
+    '_id',
+  );
 });
