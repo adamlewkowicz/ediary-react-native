@@ -54,6 +54,7 @@ export const InputSearcher = ({
 
 const Container = styled.View`
   position: relative;
+  flex: 1;
 `
 
 const Spinner = styled(ActivityIndicator)`

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components/native';
-import { debounce } from '../../common/utils';
+import { sortByMostAccurateName, debounce_ } from '../../common/utils';
 import { FlatList } from 'react-native';
 import { getCustomRepository } from 'typeorm/browser';
 import { Product } from '../../entities';
@@ -11,6 +11,13 @@ import { ProductRepository } from '../../repositories/ProductRepository';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../store';
 import { Theme } from '../../common/theme';
+import { Block } from '../../components/Elements';
+import { BarcodeButton } from '../../components/BarcodeButton';
+import { BarcodeScanParams } from '../BarcodeScan';
+import { productFinder } from '../../services/ProductFinder';
+import { Screen } from '../../types';
+
+const debounceA = debounce_();
 
 interface ProductFinderProps extends NavigationScreenProps {}
 export const ProductFinder = (props: ProductFinderProps) => {
@@ -29,54 +36,66 @@ export const ProductFinder = (props: ProductFinderProps) => {
     const trimmedName = name.trim();
     const findMethod = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
 
-    debounce(async () => {
+    debounceA(async () => {
       const foundProducts = await getCustomRepository(ProductRepository)[findMethod](
         trimmedName
       );
 
-      const nameLowered = trimmedName.toLowerCase();
-
       const sortedProducts = foundProducts
-        .sort((a, b) => {
-          const aLowered = a.name.toLowerCase();
-          const bLowered = b.name.toLowerCase();
-        
-          const aIndex = aLowered.indexOf(nameLowered);
-          const bIndex = bLowered.indexOf(nameLowered);
-
-          const notFoundIndex = -1;
-          const orderByShorter = aLowered.length > bLowered.length ? 1 : -1;
-        
-          if (aIndex === notFoundIndex && bIndex === notFoundIndex) {
-            return -1;
-          }
-          if (aIndex === notFoundIndex) {
-            return 1;
-          }
-          if (bIndex === notFoundIndex) {
-            return -1;
-          }
-
-          if (aLowered.length === bLowered.length) {
-            return 0;
-          }
-
-          return orderByShorter;
-        });
+        .sort(sortByMostAccurateName(name));
 
       setProducts(sortedProducts);
       setLoading(false);
-    }, 100);
+    }, 1000);
+  }
+
+  function handleBarcodeScanNavigation() {
+    const screenParams: BarcodeScanParams = {
+      async onBarcodeDetected(barcode) {
+        const finderScreen: Screen = 'ProductFinder';
+        props.navigation.navigate(finderScreen);
+        setName('');
+        setProducts([]);
+        setLoading(true);
+
+        const existingProducts = await getCustomRepository(ProductRepository).find({
+          where: { barcode }
+        });
+
+        if (existingProducts.length) {
+          setProducts(existingProducts);
+        } else {
+          const foundProduct = await productFinder.findByBarcode(barcode);
+
+          if (foundProduct) {
+            const savedProduct = await getCustomRepository(ProductRepository)
+              .findOneOrSave({ where: { barcode: foundProduct.barcode }}, foundProduct);
+  
+            setProducts([savedProduct]);
+          }
+        }
+      
+        setLoading(false);
+      }
+    }
+    
+    const barcodeScreen: Screen = 'BarcodeScan';
+    props.navigation.navigate(barcodeScreen, screenParams);
   }
 
   return (
     <Container>
-      <InputSearcher
-        value={name}
-        placeholder="Nazwa produktu"
-        onChangeText={handleProductSearch}
-        isLoading={isLoading}
-      />
+      <Block space="space-between" align="center">
+        <InputSearcher
+          value={name}
+          placeholder="Nazwa produktu"
+          onChangeText={handleProductSearch}
+          isLoading={isLoading}
+        />
+        <BarcodeButton
+          onPress={handleBarcodeScanNavigation}
+        />
+      </Block>
       <FlatList
         data={products}
         keyExtractor={product => product.id.toString()}
