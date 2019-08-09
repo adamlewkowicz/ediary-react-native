@@ -14,6 +14,7 @@ interface ProductListItemProps extends TouchableOpacityProps {
     prots: number
     fats: number
     kcal: number
+    brand?: string
   }
   phrase?: string
 }
@@ -26,7 +27,10 @@ export const ProductListItem = ({
   return (
     <TouchableOpacity {...props}>
       <Container>
-        <Name>{product.name}</Name>
+        <Name>
+          {product.name}
+          {product.brand && ` (${product.brand})`}
+        </Name>
         <Content>
           <Info>
             <Quantity>{product.portion || 100}g</Quantity>

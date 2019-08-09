@@ -128,7 +128,7 @@ export class ProductFinder {
 
     const data: FriscoResponse = await response.json();
     const _id = data.productId;
-    const name = data.officialProductName;
+    const name = data.officialProductName.replace(/\./, '');
     const description = data.description;
     const macroSectionId = 2;
     const macroData = data.brandbank.find(brand => brand.sectionId === macroSectionId);
@@ -167,6 +167,7 @@ export class ProductFinder {
         const { value, unit } = this.getNumAndUnitFromString(bank.Values[0]);
 
         if (unit !== 'g') {
+          return macro;
           throw new UnsupportedUnitTypeError;
         }
         if (value !== null) {
