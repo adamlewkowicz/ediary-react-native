@@ -2,7 +2,7 @@ import { MacroElement, BarcodeId } from '../../../types';
 
 export interface FriscoQueryResponse {
   products: {
-    productId: string
+    productId: FriscoProductId
     product: {
       ean: BarcodeId
       producer: string
@@ -55,7 +55,7 @@ export interface FriscoNutritionBrand {
 }
 
 export interface FriscoResponse {
-  productId: number
+  productId: FriscoProductId
   seoData: {
     title: string
     description: string
@@ -89,3 +89,5 @@ export interface FriscoResponse {
 export type FriscoMacroMap = {
   [key in FriscoNutritionName]: MacroElement
 }
+
+export interface FriscoProductId extends String {}

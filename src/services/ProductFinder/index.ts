@@ -1,10 +1,44 @@
-import { IleWazyPayload, PortionMap, IleWazyPortionType, NormalizedProduct } from './types';
+import { IleWazyPayload, PortionMap, IleWazyPortionType, NormalizedProduct, FriscoResponse, FriscoNutritionBrandbank } from './types';
 import { round } from '../../common/utils';
-import { BarcodeId, MacroElement } from '../../types';
-import { FriscoQueryResponse } from './types/frisco';
+import { BarcodeId, MacroElement, MacroElements, ProductUnit } from '../../types';
+import { FriscoQueryResponse, FriscoProductId } from './types/frisco';
 import { baseMacro } from '../../common/helpers';
+import { PRODUCT_UNITS } from '../../common/consts';
+import { UnsupportedUnitTypeError } from '../../common/error';
 
 export class ProductFinder {
+
+  private getNumAndUnitFromString(value: string): {
+    value: number | null
+    unit: ProductUnit | null
+  } {
+    const parseToNumber = (val: string): number | null => {
+      const result = parseFloat(
+        val.trim().replace(/,/, '.')
+      );
+      if (Number.isNaN(result)) {
+        return null;
+      }
+      return result;
+    }
+    const unit = PRODUCT_UNITS.find(unit => value.includes(unit)) || null;
+    const manyValues = value.split('/');
+
+    if (manyValues.length > 1) {
+      const result = parseToNumber(manyValues[manyValues.length - 1]);
+      return {
+        value: result,
+        unit
+      }
+    }
+    const result = parseToNumber(manyValues[0]);
+  
+    return {
+      value: result,
+      unit
+    }
+  }
+
   async findByName(name: string) {
     const parsedName = encodeURIComponent(name);
 
@@ -83,7 +117,108 @@ export class ProductFinder {
     return normalizedResults;
   }
 
+  private async findOneByProductIdFrisco(
+    productId: FriscoProductId
+  ): Promise<NormalizedProduct | null> {
+
+    const response = await fetch(
+      `https://products.frisco.pl/api/products/get/${productId}`,
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    });
+
+    const data: FriscoResponse = await response.json();
+    const _id = data.productId;
+    const name = data.officialProductName;
+    const description = data.description;
+    const macroSectionId = 2;
+    const macroData = data.brandbank.find(brand => brand.sectionId === macroSectionId);
+    const images: [] = [];
+
+    console.log(data)
+
+    if (!macroData) {
+      return null;
+    }
+
+    const macroMap: { [key: string]: MacroElement } = {
+      'energia': 'kcal',
+      'tłuszcz': 'fats',
+      'w tym kwasy nasycone': 'fats',
+      'węglowodany': 'carbs',
+      'w tym cukry': 'carbs',
+      'białko': 'prots',
+    }
+
+    const [firstField] = (macroData as FriscoNutritionBrandbank).fields;
+
+    if (!firstField) {
+      return null;
+    }
+
+    const { value } = this.getNumAndUnitFromString(firstField.content.Headings[0]);
+    const portion = value || 100;
+
+    const macro: MacroElements = firstField.content.Nutrients.reduce((macro, bank) => {
+      const parsedName = bank.Name.toLowerCase().trim();
+      const foundMacroElement = Object.entries(macroMap).find(([macroName]) => parsedName.includes(macroName));
+
+      if (foundMacroElement) {
+        const [, element] = foundMacroElement;
+        const { value, unit } = this.getNumAndUnitFromString(bank.Values[0]);
+
+        if (unit !== 'g') {
+          throw new UnsupportedUnitTypeError;
+        }
+        if (value !== null) {
+          macro[element] = round(macro[element] + value);
+        }
+      }
+      return macro;
+    }, { ...baseMacro });
+
+    if (Object.values(macro).every(value => value === 0)) {
+      return null;
+    }
+
+    return {
+      _id,
+      name,
+      description,
+      images,
+      portion,
+      ...macro
+    }
+  }
+
+  private async findByPhraseFrisco(
+    phrase: string | BarcodeId
+  ) {
+    const parsedPhrase = encodeURIComponent(phrase as string);
+
+    const response = await fetch(
+      `https://commerce.frisco.pl/api/offer/products/query?search=${parsedPhrase}` +
+      '&includeCategories=true&pageIndex=1&deliveryMethod=Van&pageSize=60' +
+      '&language=pl&facetCount=100&includeWineFacets=false',
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }}
+    );
+
+    const { products }: FriscoQueryResponse = await response.json();
+    return products;
+  }
+
   async findByBarcode(barcodeId: BarcodeId): Promise<NormalizedProduct | null> {
+    const [firstProduct] = await this.findByPhraseFrisco(barcodeId);
+
+    if (firstProduct) {
+      const fetchedProduct = await this.findOneByProductIdFrisco(
+        firstProduct.productId
+      );
+      return fetchedProduct;
+    }
+    return null;
+  }
+
+  private async findByBarcodeFrisco(barcodeId: BarcodeId): Promise<NormalizedProduct | null> {
 
     const response = await fetch(
       `https://commerce.frisco.pl/api/offer/products/query?search=${barcodeId}` +
@@ -101,7 +236,7 @@ export class ProductFinder {
     const [{ product, productId: _productId }] = data.products;
     const { components = [], substances } = product.contentData;
 
-    if (!substances || !substances.length) {
+    if (!substances || !substances.length || !product.contentData.sustenanceCalories) {
       return null;
     }
 
@@ -127,13 +262,16 @@ export class ProductFinder {
       'w tym kwasy tłuszczowe nasycone': 'fats',
     }
 
-    const macro = substances.reduce((macro, substance) => {
+    const macro: MacroElements = substances.reduce((macro, substance) => {
       const element = macroMap[substance.name];
       if (element) {
         macro[element] = round(macro[element] + substance.quantity);
       }
       return macro;
-    }, { ...baseMacro });
+    }, {
+      ...baseMacro,
+      kcal: product.contentData.sustenanceCalories
+    });
 
     const normalizedProduct = {
       _id, 

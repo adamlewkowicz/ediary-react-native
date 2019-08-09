@@ -1,4 +1,5 @@
 import { PortionType, BarcodeId } from '../../../types';
+import { FriscoProductId } from './frisco';
 
 type IleWazyUnitData = {
   filename: "koncentrat-grzybowy-krakus-1.jpg"
@@ -100,7 +101,7 @@ interface FriscoIngredientsBrandbank extends FirscoBrandbank {
   // fields: (FriscoFrontOfPackGDAField | FriscoLongTextItemField)[]
 }
 
-interface FriscoNutritionBrandbank extends FirscoBrandbank {
+export interface FriscoNutritionBrandbank extends FirscoBrandbank {
   sectionId: 2
   sectionName: 'Wartości odżywcze',
   fields: FriscoTextualNutritionField[]
@@ -122,7 +123,7 @@ export interface FriscoResponse {
 }
 
 export interface NormalizedProduct {
-  _id: string | number
+  _id: string | number | FriscoProductId
   name: string
   portion: number
   prots: number

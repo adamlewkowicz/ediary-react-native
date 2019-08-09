@@ -15,14 +15,14 @@ export class BarcodeScan extends React.Component {
   camera = createRef<RNCamera>();
   onBarcodeDetected: BarcodeScanParams['onBarcodeDetected'];
   onPhotoTaken: BarcodeScanParams['onPhotoTaken'];
-  prevBarcodeId?: BarcodeId
+  prevBarcodeId: BarcodeId | null
 
   constructor(props: BarcodeScanProps) {
     super(props);
     this.onBarcodeDetected = props.navigation.getParam('onBarcodeDetected');
     this.onPhotoTaken = props.navigation.getParam('onPhotoTaken');
+    this.prevBarcodeId = null;
   }
-
 
   takePicture = async () => {
     if (this.camera.current && this.onPhotoTaken) {
