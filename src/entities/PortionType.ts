@@ -1,13 +1,12 @@
-import { Entity, OneToMany, PrimaryColumn } from 'typeorm/browser';
-import { ProductPortion } from './ProductPortion';
+import {
+  Entity,
+  PrimaryColumn,
+} from 'typeorm/browser';
 
 @Entity()
 export class PortionType {
 
   @PrimaryColumn()
   value!: string;
-
-  @OneToMany(type => ProductPortion, productPortion => productPortion.portionType)
-  productPortion!: ProductPortion[];
 
 }

@@ -1,7 +1,14 @@
-import { Entity, ManyToOne, Column, PrimaryColumn, OneToMany, JoinColumn } from 'typeorm/browser';
+import {
+  Entity,
+  ManyToOne,
+  Column,
+  PrimaryColumn,
+  JoinColumn,
+} from 'typeorm/browser';
 import { Product } from './Product';
 import { PortionType } from './PortionType';
 import { ProductId } from '../types';
+import { ManyToMany } from 'typeorm';
 
 @Entity()
 export class ProductPortion {
@@ -20,10 +27,11 @@ export class ProductPortion {
     product => product.portions,
     { onDelete: 'CASCADE' }
   )
-  readonly product!: Product;
+  @JoinColumn({ name: 'productId' })
+  product!: Product;
 
-  @OneToMany(type => PortionType, portionType => portionType.productPortion)
+  @ManyToMany(type => PortionType)
   @JoinColumn({ name: 'type' })
-  readonly portionType!: PortionType;
+  portionType!: PortionType;
 
 }
