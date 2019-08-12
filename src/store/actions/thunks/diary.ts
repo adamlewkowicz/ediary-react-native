@@ -25,7 +25,7 @@ import { USER_ID_UNSYNCED } from '../../../common/consts';
 
 
 export const mealCreate = (name: Meal['name']) => async (dispatch: any) => {
-  const meal = Meal.create({ name });
+  const meal = await Meal.save({ name });
   dispatch(mealToggled(null));
   dispatch(mealCreated(meal));
 }

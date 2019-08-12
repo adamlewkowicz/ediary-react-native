@@ -4,6 +4,7 @@ import {
   DeepPartial,
   getConnection,
   ObjectType,
+  SaveOptions,
 } from 'typeorm/browser';
 
 export class GenericEntity extends BaseEntity {
@@ -22,6 +23,14 @@ export class GenericEntity extends BaseEntity {
       const createdItem = await manager.save(Entity, payload);
       return createdItem;
     });
+  }
+
+  static save<T extends BaseEntity>(
+    this: ObjectType<T>,
+    entityOrEntities: DeepPartial<T> | DeepPartial<T>[],
+    saveOptions?: SaveOptions
+  ): Promise<T> {
+    return super.save(entityOrEntities as any, saveOptions);
   }
 
 }

@@ -58,23 +58,11 @@ export const ProductFinder = (props: ProductFinderProps) => {
         setProducts([]);
         setLoading(true);
 
-        const existingProducts = await getCustomRepository(ProductRepository).find({
-          where: { barcode }
-        });
+        const foundProducts = await Product.findByBarcode(barcode);
 
-        if (existingProducts.length) {
-          setProducts(existingProducts);
-        } else {
-          const foundProduct = await productFinder.findByBarcode(barcode);
-
-          if (foundProduct) {
-            const savedProduct = await getCustomRepository(ProductRepository)
-              .findOneOrSave({ where: { barcode: foundProduct.barcode }}, foundProduct);
-  
-            setProducts([savedProduct]);
-          }
+        if (foundProducts.length) {
+          setProducts(foundProducts);
         }
-      
         setLoading(false);
       }
     }

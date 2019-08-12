@@ -3,7 +3,6 @@ import {
   Column,
   PrimaryGeneratedColumn,
   OneToMany,
-  BaseEntity,
   ManyToOne,
   JoinColumn,
   Between,
@@ -14,11 +13,12 @@ import { MealProduct } from './MealProduct';
 import { MealId, UserId, DateDay } from '../types';
 import { User } from './User';
 import { USER_ID_UNSYNCED } from '../common/consts';
+import { GenericEntity } from './Generic';
 
 @Entity('Meal', {
   name: 'meals'
 })
-export class Meal extends BaseEntity {
+export class Meal extends GenericEntity {
 
   @PrimaryGeneratedColumn()
   id!: MealId;

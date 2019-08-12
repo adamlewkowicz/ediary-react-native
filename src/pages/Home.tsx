@@ -58,27 +58,6 @@ const Home = (props: HomeProps) => {
     props.navigation.navigate('ProductCreate', screenParams);
   }
 
-  const handleBarcodeScan = () => {
-    const screenParams: BarcodeScanParams = {
-      async onBarcodeDetected(barcode) {
-        props.navigation.navigate('Home');
-        const product = await productFinder.findByBarcode(barcode);
-
-        if (product) {
-          const savedProduct = await getCustomRepository(ProductRepository)
-            .findOneOrSave({
-              where: { barcode: product.barcode }
-            }, product);
-
-          const [firsMeal] = props.mealsWithRatio;
-          dispatch(mealProductAdd(firsMeal, savedProduct));
-        }
-      }
-    }
-    
-    props.navigation.navigate('BarcodeScan', screenParams);
-  }
-
   const handleMealDelete = (meal: HomeProps['mealsWithRatio'][number]) => {
     Alert.alert(
       'Usuń posiłek',
@@ -120,7 +99,7 @@ const Home = (props: HomeProps) => {
         </MacroCards>
         <FlatList
           data={props.mealsWithRatio}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
             <MealListItem
               meal={item}
@@ -146,9 +125,6 @@ const Home = (props: HomeProps) => {
         </Button>
         <Button onPress={handleProductCreatorNavigation}>
           Dodaj własny produkt
-        </Button>
-        <Button onPress={handleBarcodeScan}>
-          Zeskanuj kod kreskowy
         </Button>
       </ScrollView>
     </Container>

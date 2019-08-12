@@ -11,11 +11,13 @@ import { MealProduct } from './MealProduct';
 import { BarcodeId, ProductId, UserId } from '../types';
 import { User } from './User';
 import { ProductPortion } from './ProductPortion';
+import { friscoApi } from '../services/FriscoApi';
+import { GenericEntity } from './Generic';
 
 @Entity('Product')
 // @Unique(['name', 'userId'])
 // @Unique(['name', 'verified'])
-export class Product {
+export class Product extends GenericEntity {
 
   @PrimaryGeneratedColumn()
   id!: ProductId;
@@ -63,5 +65,23 @@ export class Product {
     { onDelete: 'CASCADE' }
   )
   portions!: ProductPortion[];
+
+  static async findByBarcode(barcode: BarcodeId): Promise<Product[]> {
+    const savedProducts = await this.find({ barcode });
+    const hasVerifiedProduct = savedProducts.some(product => product.verified);
+    
+    if (!savedProducts.length || !hasVerifiedProduct) {
+      const fetchedProducts = await friscoApi.findByQuery(barcode);
+      const createdProducts = await Promise.all(
+        fetchedProducts.map(product => this.save({
+          ...product,
+          verified: true
+        }))
+      );
+      return createdProducts;
+    }
+
+    return savedProducts;
+  }
 
 }
