@@ -1,14 +1,14 @@
 import { BarcodeId, MacroElement, MacroElements } from '../../types';
 import { round, getNumAndUnitFromString } from '../../common/utils';
 import { baseMacro } from '../../common/helpers';
-import { FriscoNutritionBrandbank, NormalizedProduct } from '../ProductFinder/types';
-import { FriscoResponse } from './types/response';
+import { NormalizedProduct } from '../ProductFinder/types';
+import { FriscoResponse, FriscoNutritionBrandbank } from './types/response';
 import { FriscoProductId } from './types/common';
 import { FriscoQueryResponse } from './types';
 
 export class FriscoApi {
 
-  async findByQuery(
+  private async findAndParseByQuery(
     query: string | BarcodeId
   ): Promise<{
     raw: FriscoQueryResponse['products']
@@ -33,8 +33,10 @@ export class FriscoApi {
     }
   }
 
-  async findByBarcode(barcodeId: BarcodeId): Promise<NormalizedProduct[]> {
-    const { normalized, raw } = await this.findByQuery(barcodeId);
+  async findByQuery(
+    query: BarcodeId | string
+  ): Promise<NormalizedProduct[]> {
+    const { normalized, raw } = await this.findAndParseByQuery(query);
 
     if (!normalized.length && raw.length) {
       const [firstRawProduct] = raw;
@@ -42,7 +44,7 @@ export class FriscoApi {
       return foundProduct ? [foundProduct] : [];
     }
 
-    return normalized;
+    return normalized; 
   }
 
   async findOneByProductId(
@@ -56,7 +58,7 @@ export class FriscoApi {
     const data: FriscoResponse = await response.json();
 
     const macroSectionId = 2;
-    const macroFieldId = 25;
+    const macroFieldId = 85;
     const macroSection = data.brandbank.find(brand =>
       brand.sectionId === macroSectionId
     );
@@ -126,7 +128,7 @@ export class FriscoApi {
     }
   }
 
-  normalizeQueryProducts(
+  private normalizeQueryProducts(
     products: FriscoQueryResponse['products']
   ): NormalizedProduct[] {
     return products.flatMap(data => {
