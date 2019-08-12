@@ -24,6 +24,31 @@ export interface FriscoResponse {
   )[]
 }
 
+export interface FriscoIngredientsBrandbank extends FriscoBrandbank {
+  sectionId: 1
+  sectionName: 'Składniki'
+  fields: ({
+    fieldId: 178
+    fieldName: 'Spis składników odżywczych na przodzie opakowania'
+    contentType: 'FrontOfPackGDA'
+    content: {
+      Reference: 'Na porcję'
+      Headers: string[]
+      'Wartość energetyczna': {
+        Quantity: '2,3 kJ'
+        Percentage: '0.00'
+        Rating: null | string
+      }
+      Footers: string[]
+    }[]
+  } | {
+    fieldId: 84
+    fieldName: 'Składniki'
+    contentType: 'LongTextItems'
+    content: string[]
+  })[]
+}
+
 export interface FriscoNutritionBrandbank extends FriscoBrandbank {
   sectionId: 2
   sectionName: 'Wartości odżywcze'

@@ -57,6 +57,11 @@ export interface NormalizedProduct {
   carbs: number
   fats: number
   kcal: number
+  portions?: {
+    type: PortionType | null
+    unit: ProductUnit
+    value: number
+  }[]
   unit?: ProductUnit | null
   images?: string[]
   barcode?: BarcodeId

@@ -84,6 +84,7 @@ export class FriscoApi {
     const { value: portion, unit } = getNumAndUnitFromString(portionHeading);
 
     const macroMap: { [key: string]: MacroElement } = {
+      'wartość energetyczna': 'kcal',
       'energia': 'kcal',
       'tłuszcz': 'fats',
       'w tym kwasy nasycone': 'fats',
@@ -100,7 +101,7 @@ export class FriscoApi {
         const [, element] = foundMacroElement;
         const { value, unit: elementUnit } = getNumAndUnitFromString(bank.Values[0]);
 
-        if (elementUnit !== unit) {
+        if (elementUnit !== 'g' && element !== 'kcal') {
           return macro;
         }
         if (value !== null) {
@@ -117,12 +118,25 @@ export class FriscoApi {
     const _id = data.productId;
     const name = data.officialProductName.replace(/\./, '');
     const description = data.description;
+    const portions = macroField.content.Headings.flatMap(heading => {
+      const { value, unit } = getNumAndUnitFromString(heading);
+
+      if (value !== null && unit !== null) {
+        return [{
+          type: null,
+          value,
+          unit
+        }];
+      }
+      return [];
+    });
 
     return {
       _id,
       name,
       description,
       portion,
+      portions,
       unit,
       ...macro
     }

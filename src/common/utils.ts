@@ -104,25 +104,22 @@ export function getNumAndUnitFromString(value: string): {
   unit: ProductUnit | null
 } {
   const parseToNumber = (val: string): number | null => {
-    const result = parseFloat(
-      val.trim().replace(/,/, '.')
-    );
+    const parsed = val.trim().replace(/,/, '.')
+    const numbers = parsed.match(/[+-]?\d+(\.\d+)?/g);
+
+    if (!numbers) {
+      return null;
+    }
+    const result = parseFloat(numbers[numbers.length - 1]);
+
     if (Number.isNaN(result)) {
       return null;
     }
     return result;
   }
-  const unit = PRODUCT_UNITS.find(unit => value.includes(unit)) || null;
-  const manyValues = value.split('/');
 
-  if (manyValues.length > 1) {
-    const result = parseToNumber(manyValues[manyValues.length - 1]);
-    return {
-      value: result,
-      unit
-    }
-  }
-  const result = parseToNumber(manyValues[0]);
+  const unit = PRODUCT_UNITS.find(unit => value.includes(` ${unit}`)) || null;
+  const result = parseToNumber(value);
 
   return {
     value: result,
