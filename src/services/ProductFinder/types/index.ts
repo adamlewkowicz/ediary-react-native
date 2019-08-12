@@ -1,4 +1,4 @@
-import { PortionType, BarcodeId } from '../../../types';
+import { PortionType, BarcodeId, ProductUnit } from '../../../types';
 import { FriscoProductId } from './frisco';
 
 type IleWazyUnitData = {
@@ -125,12 +125,13 @@ export interface FriscoResponse {
 export interface NormalizedProduct {
   _id: string | number | FriscoProductId
   name: string
-  portion: number
+  portion: number | null
   prots: number
   carbs: number
   fats: number
   kcal: number
-  images: string[]
+  unit?: ProductUnit | null
+  images?: string[]
   barcode?: BarcodeId
   producer?: string
   description?: string

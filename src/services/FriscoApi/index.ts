@@ -1,10 +1,10 @@
 import { BarcodeId, MacroElement, MacroElements } from '../../types';
-import { FriscoQueryResponse } from './types/frisco';
-import { NormalizedProduct } from './types';
-import { FriscoProductId, FriscoResponse } from '../ProductFinder/types/frisco';
 import { round, getNumAndUnitFromString } from '../../common/utils';
 import { baseMacro } from '../../common/helpers';
-import { FriscoNutritionBrandbank } from '../ProductFinder/types';
+import { FriscoNutritionBrandbank, NormalizedProduct } from '../ProductFinder/types';
+import { FriscoResponse } from './types/response';
+import { FriscoProductId } from './types/common';
+import { FriscoQueryResponse } from './types';
 
 export class FriscoApi {
 
@@ -53,18 +53,33 @@ export class FriscoApi {
       `https://products.frisco.pl/api/products/get/${productId}`,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }
     });
-
     const data: FriscoResponse = await response.json();
-    const _id = data.productId;
-    const name = data.officialProductName.replace(/\./, '');
-    const description = data.description;
-    const macroSectionId = 2;
-    const macroData = data.brandbank.find(brand => brand.sectionId === macroSectionId);
-    const images: [] = [];
 
-    if (!macroData) {
+    const macroSectionId = 2;
+    const macroFieldId = 25;
+    const macroSection = data.brandbank.find(brand =>
+      brand.sectionId === macroSectionId
+    );
+    
+    if (!macroSection) {
       return null;
     }
+
+    const macroField = (macroSection as any as FriscoNutritionBrandbank).fields.find(field => 
+      field.fieldId === macroFieldId
+    );
+
+    if (!macroField) {
+      return null;
+    }
+
+    const [portionHeading] = macroField.content.Headings;
+
+    if (!portionHeading) {
+      return null;
+    }
+
+    const { value: portion, unit } = getNumAndUnitFromString(portionHeading);
 
     const macroMap: { [key: string]: MacroElement } = {
       'energia': 'kcal',
@@ -75,26 +90,17 @@ export class FriscoApi {
       'białko': 'prots',
     }
 
-    const [firstField] = (macroData as FriscoNutritionBrandbank).fields;
-
-    if (!firstField) {
-      return null;
-    }
-
-    const { value } = getNumAndUnitFromString(firstField.content.Headings[0]);
-    const portion = value || 100;
-
-    const macro: MacroElements = firstField.content.Nutrients.reduce((macro, bank) => {
+    const macro: MacroElements = macroField.content.Nutrients.reduce((macro, bank) => {
       const parsedName = bank.Name.toLowerCase().trim();
       const foundMacroElement = Object.entries(macroMap).find(([macroName]) => parsedName.includes(macroName));
 
       if (foundMacroElement) {
         const [, element] = foundMacroElement;
-        const { value, unit } = getNumAndUnitFromString(bank.Values[0]);
+        const { value, unit: elementUnit } = getNumAndUnitFromString(bank.Values[0]);
 
-        // if (unit !== 'g') {
-        //   return macro;
-        // }
+        if (elementUnit !== unit) {
+          return macro;
+        }
         if (value !== null) {
           macro[element] = round(macro[element] + value);
         }
@@ -106,12 +112,16 @@ export class FriscoApi {
       return null;
     }
 
+    const _id = data.productId;
+    const name = data.officialProductName.replace(/\./, '');
+    const description = data.description;
+
     return {
       _id,
       name,
       description,
-      images,
       portion,
+      unit,
       ...macro
     }
   }
@@ -176,7 +186,7 @@ export class FriscoApi {
       return [normalizedProduct];
     });
   }
-  
+
 }
 
 export const friscoApi = new FriscoApi;
