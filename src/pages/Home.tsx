@@ -3,7 +3,7 @@ import { Button } from 'react-native-ui-kitten';
 import { useDispatch, connect } from 'react-redux';
 import * as Actions from '../store/actions';
 import { AppState } from '../store';
-import { FlatList, ScrollView } from 'react-native';
+import { FlatList, ScrollView, Alert } from 'react-native';
 import * as selectors from '../store/selectors';
 import { DateChanger } from '../components/DateChanger';
 import { MacroCard } from '../components/MacroCard';
@@ -16,7 +16,7 @@ import { NavigationScreenProps } from 'react-navigation';
 import { ProductFinderParams } from './ProductFinder';
 import { mealProductAdd } from '../store/actions';
 import { ProductCreateParams } from './ProductCreate';
-import { BASE_MACRO_ELEMENTS } from '../common/consts';
+import { BASE_MACRO_ELEMENTS, IS_DEV } from '../common/consts';
 import { elementTitles } from '../common/helpers';
 import { BarcodeScanParams } from './BarcodeScan';
 import { productFinder } from '../services/ProductFinder';
@@ -39,7 +39,7 @@ const Home = (props: HomeProps) => {
     dispatch(Actions.mealsFindByDay(props.appDateDay));
   }, [props.appDateDay]);
 
-  const handleProductFinderNavigation = (meal: selectors.MealsWithRatio[number]) => {
+  const handleProductFinderNavigation = (meal: HomeProps['mealsWithRatio'][number]) => {
     const screenParams: ProductFinderParams = {
       onItemPress(foundProduct) {
         props.navigation.navigate('Home');
@@ -78,6 +78,23 @@ const Home = (props: HomeProps) => {
     
     props.navigation.navigate('BarcodeScan', screenParams);
   }
+
+  const handleMealDelete = (meal: HomeProps['mealsWithRatio'][number]) => {
+    Alert.alert(
+      'Usuń posiłek',
+      `Czy jesteś pewnien że chcesz usunąć: ${meal.name}?`,
+      [
+        {
+          text: 'Anuluj',
+          style: 'cancel'
+        },
+        {
+          text: 'OK',
+          onPress: () => dispatch(Actions.mealDelete(meal.id))
+        }
+      ]
+    );
+  }
   
   return (
     <Container>
@@ -108,7 +125,7 @@ const Home = (props: HomeProps) => {
             <MealListItem
               meal={item}
               onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
-              // onLongPress={() => dispatch(Actions.mealDelete(item.id))}
+              onLongPress={IS_DEV ? undefined : () => handleMealDelete(item)}
               onProductAdd={() => handleProductFinderNavigation(item)}
               onProductDelete={productId => dispatch(Actions.mealProductDelete(item.id, productId))}
               onProductToggle={productId => dispatch(Actions.productToggled(productId))}

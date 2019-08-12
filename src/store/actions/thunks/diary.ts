@@ -17,24 +17,22 @@ import {
 } from '../../../repositories';
 import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
 import { getProductMock } from '../../helpers/diary';
-import { getCustomRepository, getRepository } from 'typeorm/browser';
+import { getRepository } from 'typeorm/browser';
 import { AppState } from '../..';
 import { ProductUnit, DateDay } from '../../../types';
-import { MealRepository } from '../../../repositories/MealRepository';
 import { MealsWithRatio } from '../../selectors';
 import { USER_ID_UNSYNCED } from '../../../common/consts';
 
 
 export const mealCreate = (name: Meal['name']) => async (dispatch: any) => {
-  const meal = await mealRepository().save({ name });
+  const meal = Meal.create({ name });
   dispatch(mealToggled(null));
   dispatch(mealCreated(meal));
 }
 
 export const mealDelete = (mealId: Meal['id']) => async (dispatch: any) => {
   dispatch(mealDeleted(mealId));
-  const meal = await mealRepository().findOneOrFail(mealId);
-  await meal.remove();
+  await Meal.delete(mealId);
 }
 
 export const mealUpdate = (
@@ -42,7 +40,7 @@ export const mealUpdate = (
   meal: Partial<DiaryMealPayload>
 ) => async (dispatch: any) => {
   dispatch(mealUpdated(mealId, meal));
-  await mealRepository().update(mealId, meal);
+  await Meal.update(mealId, meal);
 }
 
 export const mealProductCreate = (
@@ -82,7 +80,7 @@ export const productCreate = (
 export const mealsFindByDay = (
   dateDay: DateDay
 ) => async (dispatch: any) => {
-  const foundMeals = await getCustomRepository(MealRepository).findByDay(dateDay);
+  const foundMeals = await Meal.findByDay(dateDay);
 
   dispatch(mealsAdded(foundMeals));
 }

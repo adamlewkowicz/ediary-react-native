@@ -6,11 +6,12 @@ import {
   BaseEntity,
   ManyToOne,
   JoinColumn,
+  Between,
 } from 'typeorm/browser';
 import { Product } from './Product';
 import { productRepository, mealProductRepository } from '../repositories';
 import { MealProduct } from './MealProduct';
-import { MealId, UserId } from '../types';
+import { MealId, UserId, DateDay } from '../types';
 import { User } from './User';
 import { USER_ID_UNSYNCED } from '../common/consts';
 
@@ -88,6 +89,13 @@ export class Meal extends BaseEntity {
     });
 
     return { ...product, ...mealProduct };
+  }
+
+  static findByDay(dateDay: DateDay) {
+    return this.find({
+      where: { date: Between(`${dateDay} 00:00:00`, `${dateDay} 23:59:59`) },
+      relations: ['mealProducts', 'mealProducts.product']
+    });
   }
 
 }
