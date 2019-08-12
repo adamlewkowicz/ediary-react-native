@@ -1,0 +1,387 @@
+{
+  "productId": 15740,
+  "seoData": {
+    "title": "Coca-Cola Zero - Napój gazowany bez cukru 1,5 l",
+    "description": "COCA-COLA ZERO - Napój gazowany bez cukru to smaczny, orzeźwiający smak, uwielbiany przez miliony ludzi na całym świecie. Kup teraz!",
+    "imgAlt": "Coca Cola Zero - napój gazowany"
+  },
+  "description": "<p><strong>Napój gazowany Coca Cola Zero</strong> to niezwykle innowacyjny produkt. Producent stworzył go z myślą o osobach, które uwielbiają słodki smak napojów gazowanych, lecz skrupulatnie liczą kalorie. <strong>Coca Cola zero</strong> w swoim składzie nie zawiera cukru. Będzie więc idealnym rozwiązaniem dla wszystkich dbających o linię.</p><p><strong>Napój gazowany Coca Cola Zero</strong> zamknięty jest w ergonomicznej butelce, wygodnej do przenoszenia. Z tego względu wszędzie cieszyć się można pysznym smakiem bezkalorycznego napoju. Mimo, iż produkt nie zawiera cukru – nadal świetnie smakuje.</p><p><strong>Jakie zalety ma napój gazowany Coca Cola Zero:</strong></p><ul><li>Doskonale orzeźwia</li><li>Nie zawiera cukru</li><li>Fantastycznie smakuje</li><li>Posiada wygodną butelkę</li></ul>",
+  "officialProductName": "Napój gazowany o smaku cola nie posiadający wartości energetycznej. Zawiera substancje słodzące.",
+  "brandbank": [
+    {
+      "sectionId": 1,
+      "sectionName": "Składniki",
+      "fields": [
+        {
+          "fieldId": 84,
+          "fieldName": "Składniki",
+          "contentType": "LongTextItems",
+          "content": [
+            "woda",
+            "dwutlenek węgla",
+            "barwnik E 150d",
+            "kwas: kwas fosforowy",
+            "substancje słodzące: cyklaminiany, acesulfam K, aspartam",
+            "naturalne aromaty w tym kofeina",
+            "regulator kwasowości: cytryniany sodu"
+          ]
+        },
+        {
+          "fieldId": 178,
+          "fieldName": "Spis składników odżywczych na przodzie opakowania",
+          "contentType": "FrontOfPackGDA",
+          "content": [
+            {
+              "Reference": "Na porcję",
+              "Headers": [
+                "250 ml"
+              ],
+              "Wartość energetyczna": {
+                "Quantity": "2,3 kJ",
+                "Percentage": "0.00",
+                "Rating": null
+              },
+              "Footers": [
+                "100 ml: 0,9 kJ / 0,2 kcal",
+                "Referencyjna wartość spożycia dla przeciętnej osoby dorosłej (8400 kJ / 2000 kcal)."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": 2,
+      "sectionName": "Wartości odżywcze",
+      "fields": [
+        {
+          "fieldId": 85,
+          "fieldName": "Wartości odżywcze",
+          "contentType": "TextualNutrition",
+          "content": {
+            "Headings": [
+              "100 ml",
+              "250 ml (%*)"
+            ],
+            "Nutrients": [
+              {
+                "Name": "Energia",
+                "Values": [
+                  "0,9 kJ / 0,2 kcal",
+                  "2,3 kJ / 1 kcal (0%)"
+                ]
+              },
+              {
+                "Name": "Tłuszcz ",
+                "Values": [
+                  "0 g",
+                  "0 g (0%)"
+                ]
+              },
+              {
+                "Name": " w tym kwasy nasycone ",
+                "Values": [
+                  "0 g",
+                  "0 g (0%)"
+                ]
+              },
+              {
+                "Name": "Węglowodany ",
+                "Values": [
+                  "0 g",
+                  "0 g (0%)"
+                ]
+              },
+              {
+                "Name": " w tym cukry ",
+                "Values": [
+                  "0 g",
+                  "0 g (0%)"
+                ]
+              },
+              {
+                "Name": "Białko ",
+                "Values": [
+                  "0 g",
+                  "0 g (0%)"
+                ]
+              },
+              {
+                "Name": "Sól ",
+                "Values": [
+                  "0,02 g",
+                  "0,05 g (1%)"
+                ]
+              },
+              {
+                "Name": "*Referencyjna wartość spożycia dla przeciętnej osoby dorosłej (8400 kJ / 2000 kcal).",
+                "Values": [
+                  "",
+                  ""
+                ]
+              },
+              {
+                "Name": "1,5 l = 6 x 250 ml",
+                "Values": [
+                  "",
+                  ""
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": 4,
+      "sectionName": "Przygotowywanie i przechowywanie",
+      "fields": [
+        {
+          "fieldId": 27,
+          "fieldName": "Rodzaj przechowywania",
+          "contentType": "NameLookups",
+          "content": {
+            "Typ": "Przechowywać w temperaturze otoczenia"
+          }
+        },
+        {
+          "fieldId": 20,
+          "fieldName": "Przechowywanie",
+          "contentType": "Memo",
+          "content": "Przechowywać w chłodnym i suchym miejscu. Chronić przed działaniem promieni słonecznych. Po otwarciu przechowywać w lodówce i spożyć w ciągu 3 dni."
+        }
+      ]
+    },
+    {
+      "sectionId": 5,
+      "sectionName": "Opakowanie",
+      "fields": [
+        {
+          "fieldId": 70,
+          "fieldName": "Rozmiar opakowania",
+          "contentType": "LongTextItems",
+          "content": [
+            "1,5"
+          ]
+        },
+        {
+          "fieldId": 71,
+          "fieldName": "Jednostka",
+          "contentType": "LongTextItems",
+          "content": [
+            "l"
+          ]
+        },
+        {
+          "fieldId": 34,
+          "fieldName": null,
+          "contentType": "NameTextItems",
+          "content": {
+            "Waga brutto": "1537"
+          }
+        },
+        {
+          "fieldId": 68,
+          "fieldName": null,
+          "contentType": "NameTextItems",
+          "content": {
+            "Wymiar liczbowy": "1.5"
+          }
+        },
+        {
+          "fieldId": 69,
+          "fieldName": null,
+          "contentType": "NameLookups",
+          "content": {
+            "Jednostka (specyficzna)": "Litrów"
+          }
+        },
+        {
+          "fieldId": 191,
+          "fieldName": "Liczba użyć",
+          "contentType": "NameTextLookups",
+          "content": [
+            {
+              "Name": "Liczba czynności użycia",
+              "Value": "Porcje",
+              "Text": "6"
+            }
+          ]
+        },
+        {
+          "fieldId": 194,
+          "fieldName": "Użycie",
+          "contentType": "LongTextItems",
+          "content": [
+            "1,5 l = 6 x 250 ml"
+          ]
+        },
+        {
+          "fieldId": 29,
+          "fieldName": "Rodzaj opakowania",
+          "contentType": "NameLookups",
+          "content": {
+            "Typ": "Butelka plastikowa"
+          }
+        },
+        {
+          "fieldId": 11,
+          "fieldName": "Informacje o recyklingu",
+          "contentType": "NameLookups",
+          "content": {
+            "Opakowanie": "Nadające się do recyklingu"
+          }
+        },
+        {
+          "fieldId": 65,
+          "fieldName": "Język produktu",
+          "contentType": "NameLookups",
+          "content": {
+            "Główny język opisu": "polski",
+            "Język danych": "polski"
+          }
+        },
+        {
+          "fieldId": 83,
+          "fieldName": "Języki na opakowaniu",
+          "contentType": "Statements",
+          "content": [
+            "polski"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": 6,
+      "sectionName": "Ostrzeżenia i pozostałe informacje",
+      "fields": [
+        {
+          "fieldId": 3,
+          "fieldName": "Pozostałe informacje",
+          "contentType": "Memo",
+          "content": "250 ml 2,3 kJ 1 kcal 0%*\r\n100 ml: 0,9 kJ / 0,2 kcal\r\n\r\nZawiera źródło fenyloalaniny.\r\n\r\n*Referencyjna wartość spożycia dla przeciętnej osoby dorosłej (8400 kJ / 2000 kcal)."
+        },
+        {
+          "fieldId": 196,
+          "fieldName": "Trademark Information",
+          "contentType": "Memo",
+          "content": "Wyprodukowano za zgodą The Coca-Cola Company."
+        }
+      ]
+    },
+    {
+      "sectionId": 3,
+      "sectionName": "Informacje producenta",
+      "fields": [
+        {
+          "fieldId": 32,
+          "fieldName": "Cechy",
+          "contentType": "LongTextItems",
+          "content": [
+            "prawdziwy smak, zero kalorii",
+            "tylko naturalne aromaty",
+            "bez dodatku substancji konserwujących"
+          ]
+        },
+        {
+          "fieldId": 25,
+          "fieldName": "Marka",
+          "contentType": "LongTextItems",
+          "content": [
+            "Coca-Cola"
+          ]
+        },
+        {
+          "fieldId": 33,
+          "fieldName": null,
+          "contentType": "NameLookups",
+          "content": {
+            "Marka": "Coca-Cola"
+          }
+        },
+        {
+          "fieldId": 97,
+          "fieldName": "Marka producenta",
+          "contentType": "NameLookups",
+          "content": {
+            "Marka": "Coca-Cola"
+          }
+        },
+        {
+          "fieldId": 184,
+          "fieldName": "Produkt",
+          "contentType": "NameTextItems",
+          "content": {
+            "Nazwa funkcjonalna": "Napój gazowany",
+            "Wariant": "zero"
+          }
+        },
+        {
+          "fieldId": 36,
+          "fieldName": "O marce",
+          "contentType": "Memo",
+          "content": "Coca-Cola Zero jest uosobieniem hasła „niemożliwe staje się możliwe”. Kto by pomyślał, że można uzyskać oryginalny smak Coca-Cola bez cukru? Coca-Cola Zero udowadnia, że to możliwe!"
+        },
+        {
+          "fieldId": 13,
+          "fieldName": "Informacje o dodatkach: pozostały tekst",
+          "contentType": "LongTextItems",
+          "content": [
+            "Zawiera substancje słodzące.",
+            "Zawiera źródło fenyloalaniny.",
+            "Bez dodatku substancji konserwujących."
+          ]
+        },
+        {
+          "fieldId": 156,
+          "fieldName": "Oświadczenia żywieniowe",
+          "contentType": "LongTextItems",
+          "content": [
+            "Napój gazowany o smaku cola nie posiadający wartości energetycznej."
+          ]
+        },
+        {
+          "fieldId": 21,
+          "fieldName": "Dodatkowe informacje",
+          "contentType": "Memo",
+          "content": "Podaruj radość, a radość wróci do Ciebie!"
+        }
+      ]
+    },
+    {
+      "sectionId": 7,
+      "sectionName": "Dane teleadresowe",
+      "fields": [
+        {
+          "fieldId": 26,
+          "fieldName": "Adres zwrotny",
+          "contentType": "Memo",
+          "content": "Coca-Cola HBC Polska Sp. z o.o.\r\nul. Annopol 20\r\n03-236 Warszawa\r\n801 110 110\r\ncokezero.pl\r\ncoca-cola.pl"
+        },
+        {
+          "fieldId": 153,
+          "fieldName": "Telefon/Fax kontaktowy",
+          "contentType": "LongTextItems",
+          "content": [
+            "801110110"
+          ]
+        },
+        {
+          "fieldId": 155,
+          "fieldName": "Adres internetowy",
+          "contentType": "LongTextItems",
+          "content": [
+            "cokezero.pl",
+            "coca-cola.pl"
+          ]
+        },
+        {
+          "fieldId": 152,
+          "fieldName": "Adres dystrybutora",
+          "contentType": "Memo",
+          "content": "Coca-Cola HBC Polska Sp. z o.o.\r\nul. Annopol 20\r\n03-236 Warszawa"
+        }
+      ]
+    }
+  ]
+}

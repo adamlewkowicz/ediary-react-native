@@ -98,3 +98,34 @@ export function sortByMostAccurateName(
 interface SortByName {
   name: string
 }
+
+export function getNumAndUnitFromString(value: string): {
+  value: number | null
+  unit: ProductUnit | null
+} {
+  const parseToNumber = (val: string): number | null => {
+    const result = parseFloat(
+      val.trim().replace(/,/, '.')
+    );
+    if (Number.isNaN(result)) {
+      return null;
+    }
+    return result;
+  }
+  const unit = PRODUCT_UNITS.find(unit => value.includes(unit)) || null;
+  const manyValues = value.split('/');
+
+  if (manyValues.length > 1) {
+    const result = parseToNumber(manyValues[manyValues.length - 1]);
+    return {
+      value: result,
+      unit
+    }
+  }
+  const result = parseToNumber(manyValues[0]);
+
+  return {
+    value: result,
+    unit
+  }
+}

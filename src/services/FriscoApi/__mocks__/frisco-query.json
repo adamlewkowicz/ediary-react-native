@@ -1,0 +1,334 @@
+{
+  "originalSearch": "54490086",
+  "pageIndex": 1,
+  "pageSize": 60,
+  "pageCount": 1,
+  "totalCount": 1,
+  "continuationToken": "7a3ed38d",
+  "products": [
+    {
+      "productId": "9295",
+      "primaryVariantId": "9295",
+      "score": 1200496,
+      "product": {
+        "ean": "54490086",
+        "packSize": 1,
+        "unitOfMeasure": "Litre",
+        "grammage": 0.25,
+        "producer": "COCA-COLA",
+        "brand": "COCA-COLA",
+        "supplier": "COCA-COLA",
+        "name": {
+          "pl": "Napój gazowany (szkło) (cena zawiera 0,40 zł kaucji za butelkę)",
+          "en": "Fizzy Drink"
+        },
+        "description": "Napój gazowany o smaku cola.<br/>Naturalne aromaty. Bez dodatku substancji konserwujących.<br/>Od 1886 Coca-Cola każdego dnia dostarcza radość i orzeźwienie ludziom na całym świecie.<br/>To najpopularniejszy i najchętniej kupowany napój gazowany w historii, jak również najlepiej znany produkt na świecie.<br/>Tajemnica Coca-Coli tkwi w unikalnej recepturze, opierającej się na składnikach pochodzenia naturalnego, która nie zmieniła się od przeszło 125 lat.",
+        "contentData": {
+          "isVegetarian": true,
+          "sustenanceCalories": 42,
+          "sustenanceCaloriesInUnit": 84,
+          "sustenanceJoule": 176,
+          "sustenanceJouleInUnit": 351,
+          "components": [
+            "woda, cukier, dwutlenek węgla, barwnik E 150d",
+            "kwas: kwas fosforowy, naturalne aromaty w tym kofeina"
+          ],
+          "substances": [
+            {
+              "name": "tłuszcz",
+              "quantity": 0,
+              "quantityInUnit": 0
+            },
+            {
+              "name": "w tym kwasy nasycone",
+              "quantity": 0,
+              "quantityInUnit": 0
+            },
+            {
+              "name": "węglowodany",
+              "quantity": 10.6,
+              "quantityInUnit": 26.5
+            },
+            {
+              "name": "w tym cukry",
+              "quantity": 10.6,
+              "quantityInUnit": 26.5
+            },
+            {
+              "name": "białko",
+              "quantity": 0,
+              "quantityInUnit": 0
+            },
+            {
+              "name": "sól",
+              "quantity": 0,
+              "quantityInUnit": 0
+            }
+          ]
+        },
+        "primaryCategory": {
+          "categoryId": "2603",
+          "parentId": "1",
+          "parentPath": "2603,1",
+          "depth": 1,
+          "name": {
+            "pl": "Napoje gazowane",
+            "en": "Sparkling Drinks"
+          }
+        },
+        "categories": [
+          {
+            "categoryId": "1",
+            "parentPath": "1",
+            "depth": 0,
+            "name": {
+              "pl": "Napoje",
+              "en": "Drinks"
+            }
+          },
+          {
+            "categoryId": "2603",
+            "parentId": "1",
+            "parentPath": "2603,1",
+            "depth": 1,
+            "name": {
+              "pl": "Napoje gazowane",
+              "en": "Sparkling Drinks"
+            }
+          }
+        ],
+        "analyticGroup": "410020102",
+        "primaryVariantId": "9295",
+        "variants": [
+          {
+            "productId": "54936",
+            "ean": "5449000058195",
+            "packSize": 24
+          }
+        ],
+        "isAvailable": true,
+        "isStocked": true,
+        "stock": 492,
+        "vat": 23,
+        "price": {
+          "price": 2.49
+        },
+        "storageType": "Normal",
+        "measurements": {
+          "width": 5.7,
+          "height": 19.8,
+          "depth": 5.7,
+          "weight": 596
+        },
+        "deliveryMethods": [
+          "Van",
+          "Coolomat"
+        ],
+        "validityPeriod": "2020-07-23T00:00:00+02:00",
+        "fullValidityTerm": 365,
+        "minimumValidityTerm": 10,
+        "promotions": [],
+        "restrictions": [],
+        "containers": [
+          "lp-B2B-napoje:lp_B2B_NAPOJE",
+          "lp-office:lp_office_2018"
+        ],
+        "boostedPhrases": [
+          "cola"
+        ],
+        "favoriteCount": 7,
+        "productUrl": "https://www.frisco.pl/pid,9295/n,coca-cola-napoj-gazowany-(szklo)-(cena-zawiera-040-zl-kaucji-za-butelke)/stn,product",
+        "imageUrl": "https://res.cloudinary.com/dj484tw6k/image/upload/v1500521101/bb/9295.png",
+        "id": "9295",
+        "updatedAt": "2019-08-08T02:23:24+02:00",
+        "createdAt": "2017-07-15T17:04:16+02:00",
+        "version": 2983
+      }
+    }
+  ],
+  "categories": [
+    {
+      "categoryId": "1",
+      "count": 1,
+      "category": {
+        "parentPath": "1",
+        "depth": 0,
+        "name": {
+          "pl": "Napoje",
+          "en": "Drinks"
+        },
+        "priority": 5,
+        "ancestors": [],
+        "children": [
+          {
+            "childId": "147",
+            "parentPath": "147,1",
+            "depth": 1,
+            "name": {
+              "pl": "Kawa, herbata, kakao",
+              "en": "Coffee, Tea & Cacao"
+            },
+            "priority": 1,
+            "productCount": 555
+          },
+          {
+            "childId": "2596",
+            "parentPath": "2596,1",
+            "depth": 1,
+            "name": {
+              "pl": "Woda",
+              "en": "Water"
+            },
+            "priority": 2,
+            "productCount": 156
+          },
+          {
+            "childId": "25",
+            "parentPath": "25,1",
+            "depth": 1,
+            "name": {
+              "pl": "Soki",
+              "en": "Juice"
+            },
+            "priority": 3,
+            "productCount": 247
+          },
+          {
+            "childId": "4418",
+            "parentPath": "4418,1",
+            "depth": 1,
+            "name": {
+              "pl": "Nektary",
+              "en": "Nectar"
+            },
+            "priority": 4,
+            "productCount": 21
+          },
+          {
+            "childId": "2608",
+            "parentPath": "2608,1",
+            "depth": 1,
+            "name": {
+              "pl": "Soki i nektary dla dzieci",
+              "en": "Kids"
+            },
+            "priority": 5,
+            "productCount": 69
+          },
+          {
+            "childId": "3997",
+            "parentPath": "3997,1",
+            "depth": 1,
+            "name": {
+              "pl": "Napoje niegazowane",
+              "en": "Still Drinks"
+            },
+            "priority": 6,
+            "productCount": 160
+          },
+          {
+            "childId": "2603",
+            "parentPath": "2603,1",
+            "depth": 1,
+            "name": {
+              "pl": "Napoje gazowane",
+              "en": "Sparkling Drinks"
+            },
+            "priority": 7,
+            "productCount": 111
+          },
+          {
+            "childId": "2614",
+            "parentPath": "2614,1",
+            "depth": 1,
+            "name": {
+              "pl": "Napoje energetyczne&izotoniczne",
+              "en": "Energy&Isotonic Drinks"
+            },
+            "priority": 8,
+            "productCount": 55
+          },
+          {
+            "childId": "3996",
+            "parentPath": "3996,1",
+            "depth": 1,
+            "name": {
+              "pl": "Syropy",
+              "en": "Syrups"
+            },
+            "priority": 9,
+            "productCount": 46
+          },
+          {
+            "childId": "2616",
+            "parentPath": "2616,1",
+            "depth": 1,
+            "name": {
+              "pl": "Mleko",
+              "en": "Milk"
+            },
+            "priority": 10,
+            "productCount": 153
+          }
+        ],
+        "productCount": 1507,
+        "deliveryMethods": [
+          "Van",
+          "DPD",
+          "Coolomat"
+        ],
+        "id": "1",
+        "updatedAt": "2018-03-21T13:15:11+01:00",
+        "createdAt": "2017-07-01T03:47:03+02:00",
+        "version": 5
+      }
+    }
+  ],
+  "facets": [
+    {
+      "facet": "brand",
+      "values": [
+        {
+          "value": "COCA-COLA",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "facet": "price",
+      "values": [
+        {
+          "value": "2.49",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "facet": "producer",
+      "values": [
+        {
+          "value": "COCA-COLA",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "facet": "supplier",
+      "values": [
+        {
+          "value": "COCA-COLA",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "facet": "tags",
+      "values": [
+        {
+          "value": "isVegetarian",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}
