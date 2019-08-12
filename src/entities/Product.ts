@@ -8,11 +8,13 @@ import {
   Unique,
 } from 'typeorm/browser';
 import { MealProduct } from './MealProduct';
-import { BarcodeId, ProductId, UserId } from '../types';
+import { BarcodeId, ProductId, UserId, ProductUnit } from '../types';
 import { User } from './User';
 import { ProductPortion } from './ProductPortion';
 import { friscoApi } from '../services/FriscoApi';
 import { GenericEntity } from './Generic';
+import { SqliteENUM } from '../database/decorators';
+import { PRODUCT_UNITS } from '../common/consts';
 
 @Entity('Product')
 // @Unique(['name', 'userId'])
@@ -40,6 +42,14 @@ export class Product extends GenericEntity {
   @Column('decimal', { precision: 5, scale: 2, default: 0 })
   kcal!: number
 
+  /**
+   * Type of unit that describes macro values.
+   * Each macro value describes it's value in 100 units of this type.  
+  */
+  @Column('text', { default: 'g' })
+  @SqliteENUM(PRODUCT_UNITS)
+  unit!: ProductUnit;
+
   @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;
 
@@ -66,6 +76,18 @@ export class Product extends GenericEntity {
   )
   portions!: ProductPortion[];
 
+  /*
+  get portion(): number | any {
+    const [firstPortion] = this.portions;
+    const defaultPortion = 100;
+
+    if (firstPortion) {
+      return firstPortion.value;
+    }
+    return defaultPortion;
+  }
+  */
+
   static async findByBarcode(barcode: BarcodeId): Promise<Product[]> {
     const savedProducts = await this.find({ barcode });
     const hasVerifiedProduct = savedProducts.some(product => product.verified);
@@ -75,6 +97,7 @@ export class Product extends GenericEntity {
       const createdProducts = await Promise.all(
         fetchedProducts.map(product => this.save({
           ...product,
+          unit: product.unit || undefined,
           verified: true
         }))
       );
