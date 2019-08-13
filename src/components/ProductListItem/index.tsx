@@ -3,7 +3,6 @@ import styled from 'styled-components/native';
 import { Theme } from '../../common/theme';
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { NutritionBox } from '../NutritionBox';
-import { PhraseSelector } from '../PhraseSelector';
 
 interface ProductListItemProps extends TouchableOpacityProps {
   hideBottomLine?: boolean
@@ -25,7 +24,11 @@ export const ProductListItem = ({
   ...props
 }: ProductListItemProps) => {
   return (
-    <TouchableOpacity {...props}>
+    <TouchableOpacity
+      {...props}
+      accessibilityLabel="Dodaj produkt do posiłku"
+      accessibilityHint="Wraca na główną stronę i dodaje produkt do posiłku"
+    >
       <Container>
         <Name>
           {product.name}

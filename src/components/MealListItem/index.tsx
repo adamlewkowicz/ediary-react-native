@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { Theme, nutritionColors } from '../../common/theme';
-import { MacroElements, ProductId } from '../../types';
+import { MacroElements, ProductId, MealId } from '../../types';
 import { ProgressBar } from '../ProgressBar';
 import { ProductPartial, ProductItem } from '../ProductItem';
 import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native';
@@ -10,7 +10,7 @@ import { Button } from 'react-native-ui-kitten';
 
 interface MealListItemProps {
   meal: MealsWithRatio[number]
-  onToggle: (mealId: MealsWithRatio[number]['id']) => void
+  onToggle: (mealId: MealId) => void
   onLongPress?: TouchableOpacityProps['onLongPress']
   onProductAdd: () => void
   onProductDelete: (productId: ProductId) => void
@@ -23,6 +23,9 @@ export const MealListItem = (props: MealListItemProps) => (
     <TouchableOpacity
       onPress={() => props.onToggle(props.meal.id)}
       onLongPress={props.onLongPress}
+      accessibilityLabel="Pokaż szczegóły posiłku"
+      accessibilityHint={`Wyświetla makroskładniki or produkty posiłku - ${props.meal.name}`}
+      accessibilityRole="radio"
     >
       <InfoContainer>
         <Title>{props.meal.name}</Title>
@@ -71,7 +74,11 @@ export const MealListItem = (props: MealListItemProps) => (
             />
           )}
         />
-        <Button onPress={props.onProductAdd}>
+        <Button
+          onPress={props.onProductAdd}
+          accessibilityLabel="Wyszukaj produkt do posiłku"
+          accessibilityRole="link"
+        >
           Dodaj produkt
         </Button>
       </>

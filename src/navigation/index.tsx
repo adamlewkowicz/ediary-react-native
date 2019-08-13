@@ -9,7 +9,7 @@ import { IS_DEV } from '../common/consts';
 import { StorybookUIRoot } from '../../storybook/index';
 import { BarcodeScan } from '../pages/BarcodeScan';
 
-const HomeStack = createStackNavigator({
+export const HomeStack = createStackNavigator({
   Home,
   ProductCreate,
   ProductFinder,
