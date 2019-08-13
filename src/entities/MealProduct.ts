@@ -11,6 +11,7 @@ import { Product } from './Product';
 import { Meal } from './Meal';
 import { ProductUnit } from '../types';
 import { PRODUCT_UNITS } from '../common/consts';
+import { GenericEntity } from './Generic';
 
 const productUnitsEnum = PRODUCT_UNITS.map(unit => `'${unit}'`).join(',');
 
@@ -18,7 +19,7 @@ const productUnitsEnum = PRODUCT_UNITS.map(unit => `'${unit}'`).join(',');
   name: 'meal_products'
 })
 @Unique('meal_product', ['mealId', 'productId'])
-export class MealProduct {
+export class MealProduct extends GenericEntity {
 
   @PrimaryColumn()
   mealId!: Meal['id']

@@ -15,6 +15,7 @@ interface MealListItemProps {
   onProductAdd: () => void
   onProductDelete: (productId: ProductId) => void
   onProductToggle: (productId: ProductId) => void
+  onProductQuantityUpdate: (productId: ProductId, quantity: number) => void
   toggledProductId: ProductId | null
 }
 export const MealListItem = (props: MealListItemProps) => (
@@ -65,6 +66,7 @@ export const MealListItem = (props: MealListItemProps) => (
               product={item}
               onDelete={props.onProductDelete}
               onToggle={props.onProductToggle}
+              onQuantityUpdate={props.onProductQuantityUpdate}
               isToggled={props.toggledProductId === item.id}
             />
           )}

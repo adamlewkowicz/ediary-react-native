@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
 import { TrashIcon } from '../Icons';
 // @ts-ignore
 import Swipeable from 'react-native-swipeable';
@@ -8,9 +8,11 @@ import { TouchableOpacity } from 'react-native';
 import { Block } from '../Elements';
 import { NutritionBox } from '../NutritionBox';
 import { MACRO_ELEMENTS } from '../../common/consts';
+import { InputRow } from '../InputRow';
 
 interface ProductItemProps<P extends ProductPartial> {
   product: P
+  onQuantityUpdate: (productId: ProductId, quantity: number) => void
   onDelete: (productId: ProductId) => void
   onToggle: (productId: ProductId) => void
   isToggled: boolean
@@ -40,15 +42,23 @@ export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>
             <Calories>{props.product.kcal} kcal</Calories>
           </Content>
           {props.isToggled && (
-            <Block space="space-evenly" marginVertical={8}>
-              {MACRO_ELEMENTS.map(element => (
-                <NutritionBox
-                  key={element}
-                  element={element}
-                  value={props.product[element]}
-                />
-              ))}
-            </Block>
+            <>
+              <InputRow
+                title="Ilość"
+                value={props.product.quantity.toString()}
+                onChangeText={quantity => props.onQuantityUpdate(productId, Number(quantity))}
+                css={InputRowStyle}
+              />
+              <Block space="space-evenly">
+                {MACRO_ELEMENTS.map(element => (
+                  <NutritionBox
+                    key={element}
+                    element={element}
+                    value={props.product[element]}
+                  />
+                ))}
+              </Block>
+            </>
           )}
         </TouchableContent>
       </Swipeable>
@@ -59,10 +69,14 @@ const TouchableContent = styled(TouchableOpacity)`
   background: #F5F7F9;
   border-bottom-width: 1px;
   border-bottom-color: #E3E7EC;
+  padding: 16px 25px;
+`
+
+const InputRowStyle = css`
+  margin: 20px 0 15px 0;
 `
 
 const Content = styled.View`
-  padding: 16px 25px;
   display: flex;
   flex-direction: row;
 `

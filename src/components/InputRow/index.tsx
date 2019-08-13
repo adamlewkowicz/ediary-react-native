@@ -3,9 +3,11 @@ import { BasicInput, BasicInputProps } from '../BasicInput';
 import { TextInput } from 'react-native';
 import styled from 'styled-components/native';
 import { Theme } from '../../common/theme';
+import { FlattenSimpleInterpolation } from 'styled-components';
 
 interface NutritionRowProps extends BasicInputProps {
   title: string
+  css?: FlattenSimpleInterpolation
 }
 export const InputRow = React.forwardRef<TextInput, NutritionRowProps>((
   {
@@ -13,11 +15,12 @@ export const InputRow = React.forwardRef<TextInput, NutritionRowProps>((
     minWidth = 100,
     textAlign = 'center',
     keyboardType = 'numeric',
+    css,
     ...inputProps
   },
   ref
 ) => (
-  <Container>
+  <Container css={css}>
     <Title>
       {title}
     </Title>
@@ -31,10 +34,13 @@ export const InputRow = React.forwardRef<TextInput, NutritionRowProps>((
   </Container>
 ));
 
-const Container = styled.View`
+const Container = styled.View<{
+  css?: FlattenSimpleInterpolation
+}>`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  ${props => props.css};
 `
 
 const Title = styled.Text<{

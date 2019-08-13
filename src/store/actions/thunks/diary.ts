@@ -61,6 +61,15 @@ export const mealProductDelete = (
   await mealProductRepository().delete({ mealId, productId });
 }
 
+export const mealProductUpdateQuantity = (
+  mealId: Meal['id'],
+  productId: Product['id'],
+  quantity: number
+) => async (dispatch: any) => {
+  dispatch(productUpdated(productId, { quantity }));
+  await MealProduct.update({ mealId, productId }, { quantity });
+}
+
 export const productUpdate = (
   productId: Product['id'],
   product: Partial<DiaryProductPayload>

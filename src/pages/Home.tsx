@@ -108,6 +108,9 @@ const Home = (props: HomeProps) => {
               onProductAdd={() => handleProductFinderNavigation(item)}
               onProductDelete={productId => dispatch(Actions.mealProductDelete(item.id, productId))}
               onProductToggle={productId => dispatch(Actions.productToggled(productId))}
+              onProductQuantityUpdate={(productId, quantity) => dispatch(Actions.mealProductUpdateQuantity(
+                item.id, productId, quantity
+              ))}
               toggledProductId={props.toggledProductId}
             />
           )}
@@ -146,7 +149,7 @@ const HomeConnected = connect(
   header: null
 }
 
-const Container = styled.View`
+const Container = styled.KeyboardAvoidingView`
   display: flex;
   min-height: 100%;
 `
