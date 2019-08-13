@@ -4,7 +4,7 @@ import {
   Column,
   PrimaryColumn,
   JoinColumn,
-} from 'typeorm/browser';
+} from 'typeorm';
 import { Product } from './Product';
 import { ProductId } from '../../types';
 import { ManyToMany } from 'typeorm';

@@ -1,7 +1,7 @@
 import {
   Entity,
   PrimaryColumn,
-} from 'typeorm/browser';
+} from 'typeorm';
 
 @Entity()
 export class PortionType {

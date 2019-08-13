@@ -1,5 +1,5 @@
 import { GenericRepository } from './Generic';
-import { EntityRepository, DeepPartial } from 'typeorm/browser';
+import { EntityRepository, DeepPartial } from 'typeorm';
 import { User, Profile } from '../entities';
 import { UserId } from '../../types';
 

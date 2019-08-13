@@ -5,7 +5,7 @@ import {
   JoinColumn,
   PrimaryGeneratedColumn,
   BeforeInsert,
-} from 'typeorm/browser';
+} from 'typeorm';
 import { Min, Max } from 'class-validator';
 import { WeightGoal, ProfileId, UserId } from '../../types';
 import { SqliteENUM } from '../decorators';

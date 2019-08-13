@@ -1,4 +1,4 @@
-import { getConnection, Connection } from 'typeorm/browser';
+import { getConnection, Connection } from 'typeorm';
 
 export async function getDatabaseSchema(
   connection: Connection = getConnection()

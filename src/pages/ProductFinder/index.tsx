@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components/native';
 import { sortByMostAccurateName, debounce_ } from '../../common/utils';
 import { FlatList } from 'react-native';
-import { getCustomRepository } from 'typeorm/browser';
+import { getCustomRepository } from 'typeorm';
 import { Product } from '../../database/entities';
 import { ProductListItem } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';

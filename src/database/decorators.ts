@@ -1,4 +1,4 @@
-import { getMetadataArgsStorage } from 'typeorm/browser';
+import { getMetadataArgsStorage } from 'typeorm';
 
 export function SqliteENUM(types: string[] | readonly string[]) {
   return (object: any, propertyName: string) => {

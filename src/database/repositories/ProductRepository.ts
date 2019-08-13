@@ -1,4 +1,4 @@
-import { EntityRepository, Like } from 'typeorm/browser';
+import { EntityRepository, Like } from 'typeorm';
 import { Product, ProductPortion } from '../entities';
 import { ProductFinder, productFinder } from '../../services/ProductFinder';
 import { GenericRepository } from './Generic';

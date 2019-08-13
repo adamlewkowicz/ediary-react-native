@@ -6,7 +6,7 @@ import {
   PrimaryColumn,
   Check,
   JoinColumn,
-} from 'typeorm/browser';
+} from 'typeorm';
 import { Product } from './Product';
 import { Meal } from './Meal';
 import { ProductUnit } from '../../types';

@@ -5,7 +5,7 @@ import {
   ObjectType,
   ObjectID,
   getConnection,
-} from 'typeorm/browser';
+} from 'typeorm';
 
 export class GenericRepository<T> extends Repository<T> {
 

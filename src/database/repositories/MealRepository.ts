@@ -1,4 +1,4 @@
-import { EntityRepository, Repository, Between } from 'typeorm/browser';
+import { EntityRepository, Repository, Between } from 'typeorm';
 import { Meal, Product } from '../entities';
 import { mealProductRepository } from '.';
 import { DateDay } from '../../types';

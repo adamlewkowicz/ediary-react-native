@@ -6,7 +6,7 @@ import {
   ManyToOne,
   JoinColumn,
   Between,
-} from 'typeorm/browser';
+} from 'typeorm';
 import { Product, IProduct, IProductMerged } from './Product';
 import { MealProduct } from './MealProduct';
 import { MealId, UserId, DateDay, ProductUnit, ProductId } from '../../types';

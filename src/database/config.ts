@@ -1,4 +1,4 @@
-import { ConnectionOptions } from 'typeorm/browser';
+import { ConnectionOptions } from 'typeorm';
 import * as entities from './entities';
 import * as migrations from './migrations';
 

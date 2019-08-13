@@ -13,7 +13,7 @@ test('toggling meal shows meal details', async () => {
 
 });
 
-test('searching and adding product to meal by name', async () => {
+test('searching by name and adding product to meal', async () => {
   const productName = productMock.name;
 
   const { findByLabelText, findByPlaceholderText, queryByText } = render(

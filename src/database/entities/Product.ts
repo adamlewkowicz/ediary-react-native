@@ -7,7 +7,7 @@ import {
   JoinColumn,
   Unique,
   Like,
-} from 'typeorm/browser';
+} from 'typeorm';
 import { MealProduct, IMealProduct } from './MealProduct';
 import { BarcodeId, ProductId, UserId, ProductUnit } from '../../types';
 import { User } from './User';

@@ -5,7 +5,7 @@ import {
   getConnection,
   ObjectType,
   SaveOptions,
-} from 'typeorm/browser';
+} from 'typeorm';
 
 export class GenericEntity extends BaseEntity {
 

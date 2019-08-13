@@ -1,5 +1,5 @@
 import React from 'react';
-import { Connection, createConnections } from 'typeorm/browser';
+import { Connection, createConnections } from 'typeorm';
 import { ActivityIndicator } from 'react-native';
 import { USER_ID_UNSYNCED } from '../../common/consts';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';

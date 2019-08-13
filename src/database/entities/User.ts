@@ -5,7 +5,7 @@ import {
   OneToMany,
   OneToOne,
   getRepository,
-} from 'typeorm/browser';
+} from 'typeorm';
 import { UserId } from '../../types';
 import { IsEmail, IsOptional, MinLength, MaxLength } from 'class-validator';
 import { Product } from './Product';

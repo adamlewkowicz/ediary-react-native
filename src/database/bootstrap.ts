@@ -1,5 +1,5 @@
 import * as entities from './entities';
-import { createConnection } from 'typeorm/browser';
+import { createConnection } from 'typeorm';
 
 export async function bootstrapDatabase() {
   const connection = await createConnection({
