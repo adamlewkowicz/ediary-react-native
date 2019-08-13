@@ -18,10 +18,6 @@ import { mealProductAdd } from '../store/actions';
 import { ProductCreateParams } from './ProductCreate';
 import { BASE_MACRO_ELEMENTS, IS_DEV } from '../common/consts';
 import { elementTitles } from '../common/helpers';
-import { BarcodeScanParams } from './BarcodeScan';
-import { productFinder } from '../services/ProductFinder';
-import { ProductRepository } from '../repositories/ProductRepository';
-import { getCustomRepository } from 'typeorm/browser';
 
 interface HomeProps extends NavigationScreenProps {
   mealsWithRatio: selectors.MealsWithRatio
@@ -122,9 +118,6 @@ const Home = (props: HomeProps) => {
         />
         <Button onPress={() => dispatch(Actions.mealCreate(name))}>
           Dodaj posiłek
-        </Button>
-        <Button onPress={() => props.navigation.navigate('ProductFinder')}>
-          Wyszukiwarka produktów
         </Button>
         <Button onPress={handleProductCreatorNavigation}>
           Dodaj własny produkt

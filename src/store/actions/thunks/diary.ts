@@ -22,7 +22,9 @@ import { AppState } from '../..';
 import { ProductUnit, DateDay } from '../../../types';
 import { MealsWithRatio } from '../../selectors';
 import { USER_ID_UNSYNCED } from '../../../common/consts';
+import { debounce_ } from '../../../common/utils';
 
+const debounceA = debounce_();
 
 export const mealCreate = (name: Meal['name']) => async (dispatch: any) => {
   const meal = await Meal.save({ name });
@@ -67,7 +69,9 @@ export const mealProductUpdateQuantity = (
   quantity: number
 ) => async (dispatch: any) => {
   dispatch(productUpdated(productId, { quantity }));
-  await MealProduct.update({ mealId, productId }, { quantity });
+  debounceA(async () => {
+    await MealProduct.update({ mealId, productId }, { quantity });
+  }, 300);
 }
 
 export const productUpdate = (

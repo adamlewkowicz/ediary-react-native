@@ -14,7 +14,6 @@ import { Theme } from '../../common/theme';
 import { Block } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { BarcodeScanParams } from '../BarcodeScan';
-import { productFinder } from '../../services/ProductFinder';
 import { Screen } from '../../types';
 
 const debounceA = debounce_();
@@ -46,7 +45,7 @@ export const ProductFinder = (props: ProductFinderProps) => {
 
       setProducts(sortedProducts);
       setLoading(false);
-    }, 1000);
+    }, 600);
   }
 
   function handleBarcodeScanNavigation() {

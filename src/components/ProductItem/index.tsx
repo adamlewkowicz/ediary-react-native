@@ -25,7 +25,7 @@ export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>
         onRightActionRelease={() => props.onDelete(productId)}
         rightActionActivationDistance={200}
         rightButtonWidth={200}
-        rightContent={(
+        rightContent={props.isToggled ? null : (
           <DeleteContainer>
             <TrashIcon
               width={20}

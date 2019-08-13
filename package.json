@@ -33,6 +33,7 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "styled-components": "^4.3.2",
+    "throttle-debounce": "^2.1.0",
     "typeorm": "^0.2.18"
   },
   "devDependencies": {
