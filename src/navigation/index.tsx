@@ -6,7 +6,6 @@ import { AppLoading } from '../pages/AppLoading';
 import { ProfileCreator } from '../pages/ProfileCreator';
 import { themeProps } from '../common/theme';
 import { IS_DEV } from '../common/consts';
-import { StorybookUIRoot } from '../../storybook/index';
 import { BarcodeScan } from '../pages/BarcodeScan';
 
 export const HomeStack = createStackNavigator({
@@ -24,7 +23,7 @@ export const HomeStack = createStackNavigator({
 });
 
 const MainStack = createBottomTabNavigator({
-  ...IS_DEV && { StoryBook: StorybookUIRoot },
+  // ...IS_DEV && { StoryBook: require('../../storybook').StorybookUIRoot },
   Home: HomeStack,
 }, {
   initialRouteName: 'Home',
