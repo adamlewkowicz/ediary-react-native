@@ -12,10 +12,7 @@ import {
 } from '../creators';
 import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
 import { getProductMock } from '../../helpers/diary';
-import { getRepository } from 'typeorm/browser';
-import { AppState } from '../..';
-import { ProductUnit, DateDay } from '../../../types';
-import { MealsWithRatio } from '../../selectors';
+import { ProductUnit, DateDay, ProductId, MealId } from '../../../types';
 import { USER_ID_UNSYNCED } from '../../../common/consts';
 import { debounce_ } from '../../../common/utils';
 import { Omit } from 'yargs';
@@ -58,7 +55,7 @@ export const mealProductDelete = (
   await MealProduct.delete({ mealId, productId });
 }
 
-export const mealProductUpdateQuantity = (
+export const mealProductQuantityUpdate = (
   mealId: Meal['id'],
   productId: Product['id'],
   quantity: number
@@ -93,45 +90,24 @@ export const mealsFindByDay = (
 }
 
 export const mealProductAdd = (
-  meal: MealsWithRatio[number],
-  product: Product,
+  mealId: MealId,
+  productId: ProductId,
   quantity: number = 100,
   unit: ProductUnit = 'g'
-) => async (dispatch: any, getState: () => AppState) => {
-  const mealId = meal.id;
-  const productId = product.id;
-
-  if (meal.productIds.includes(product.id)) {
-    const existingProduct = getState().diary.products.find(anyProduct =>
-      anyProduct.id === productId
-    );
-
-    if (!existingProduct) return;
-
-    const updatedQuantity = existingProduct.quantity += quantity;
-
+) => async (dispatch: any) => {
+  const { product, created } = await Meal.addProduct(
+    mealId,
+    productId,
+    quantity,
+    unit
+  );
+  if (created) {
     dispatch(
-      productUpdated(productId, {
-        quantity: updatedQuantity
-      })
+      productUpdated(productId, { quantity: product.quantity })
     );
-    await getRepository(MealProduct).update(
-      { mealId, productId },
-      { quantity: updatedQuantity }
-    );
-
   } else {
     dispatch(
-      mealProductAdded(mealId, {
-        ...product,
-        mealId,
-        quantity,
-        unit
-      })
+      mealProductAdded(mealId, product)
     );
-
-    await getRepository(MealProduct).save({
-      mealId, productId, quantity, unit
-    });
   }
 }

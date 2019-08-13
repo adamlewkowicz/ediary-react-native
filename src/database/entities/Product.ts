@@ -8,7 +8,7 @@ import {
   Unique,
   Like,
 } from 'typeorm/browser';
-import { MealProduct } from './MealProduct';
+import { MealProduct, IMealProduct } from './MealProduct';
 import { BarcodeId, ProductId, UserId, ProductUnit } from '../../types';
 import { User } from './User';
 import { ProductPortion } from './ProductPortion';
@@ -16,7 +16,7 @@ import { friscoApi } from '../../services/FriscoApi';
 import { GenericEntity } from './Generic';
 import { SqliteENUM } from '../decorators';
 import { PRODUCT_UNITS } from '../../common/consts';
-import { Omit } from 'yargs';
+import { EntityType } from '../types';
 
 @Entity('Product')
 // @Unique(['name', 'userId'])
@@ -117,4 +117,5 @@ export class Product extends GenericEntity {
 
 }
 
-export type IProduct = Omit<Product, 'hasId' | 'save' | 'remove' | 'reload'>;
+export type IProduct = EntityType<Product>;
+export type IProductMerged = IProduct & IMealProduct;

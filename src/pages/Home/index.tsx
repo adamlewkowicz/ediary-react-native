@@ -18,6 +18,7 @@ import { mealProductAdd } from '../../store/actions';
 import { ProductCreateParams } from '../ProductCreate';
 import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
 import { elementTitles } from '../../common/helpers';
+import { MealId } from '../../types';
 
 interface HomeProps extends NavigationScreenProps {
   mealsWithRatio: selectors.MealsWithRatio
@@ -35,11 +36,11 @@ const Home = (props: HomeProps) => {
     dispatch(Actions.mealsFindByDay(props.appDateDay));
   }, [props.appDateDay]);
 
-  const handleProductFinderNavigation = (meal: HomeProps['mealsWithRatio'][number]) => {
+  const handleProductFinderNavigation = (mealId: MealId) => {
     const screenParams: ProductFinderParams = {
       onItemPress(foundProduct) {
         props.navigation.navigate('Home');
-        dispatch(mealProductAdd(meal, foundProduct));
+        dispatch(mealProductAdd(mealId, foundProduct.id));
       }
     }
     props.navigation.navigate('ProductFinder', screenParams);
@@ -101,10 +102,10 @@ const Home = (props: HomeProps) => {
               meal={item}
               onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
               onLongPress={IS_DEV ? undefined : () => handleMealDelete(item)}
-              onProductAdd={() => handleProductFinderNavigation(item)}
+              onProductAdd={() => handleProductFinderNavigation(item.id)}
               onProductDelete={productId => dispatch(Actions.mealProductDelete(item.id, productId))}
               onProductToggle={productId => dispatch(Actions.productToggled(productId))}
-              onProductQuantityUpdate={(productId, quantity) => dispatch(Actions.mealProductUpdateQuantity(
+              onProductQuantityUpdate={(productId, quantity) => dispatch(Actions.mealProductQuantityUpdate(
                 item.id, productId, quantity
               ))}
               toggledProductId={props.toggledProductId}

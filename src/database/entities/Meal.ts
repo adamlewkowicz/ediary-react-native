@@ -7,13 +7,14 @@ import {
   JoinColumn,
   Between,
 } from 'typeorm/browser';
-import { Product, IProduct } from './Product';
+import { Product, IProduct, IProductMerged } from './Product';
 import { MealProduct } from './MealProduct';
 import { MealId, UserId, DateDay, ProductUnit, ProductId } from '../../types';
 import { User } from './User';
 import { USER_ID_UNSYNCED } from '../../common/consts';
 import { GenericEntity } from './Generic';
 import { DeepPartial } from 'typeorm';
+import { EntityType } from '../types';
 
 @Entity('Meal', {
   name: 'meals'
@@ -81,7 +82,7 @@ export class Meal extends GenericEntity {
     productId: ProductId,
     quantity: number = 100,
     unit: ProductUnit = 'g'
-  ): Promise<IProduct> {
+  ): Promise<{ product: IProductMerged, created: boolean }> {
     const [product, mealProduct] = await Promise.all([
       Product.findOneOrFail(productId),
       MealProduct.findOne({ mealId, productId })
@@ -92,7 +93,8 @@ export class Meal extends GenericEntity {
     if (mealProduct) {
       mealProduct.quantity += portionValue;
       await mealProduct.save();
-      return { ...mealProduct, ...product };
+      const mergedProduct = { ...mealProduct, ...product };
+      return { product: mergedProduct, created: false  };
     } else {
       const createdMealProduct = await MealProduct.save({
         quantity: portionValue,
@@ -100,8 +102,11 @@ export class Meal extends GenericEntity {
         productId,
         unit
       });
-      return { ...createdMealProduct, ...product };
+      const mergedProduct = { ...createdMealProduct, ...product };
+      return { product: mergedProduct, created: true };
     }
   }
 
 }
+
+export type IMeal = EntityType<Meal>;
