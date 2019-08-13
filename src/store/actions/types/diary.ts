@@ -10,7 +10,7 @@ import {
   PRODUCT_TOGGLED,
   MEAL_PRODUCT_ADDED,
 } from '../../consts';
-import { Meal, Product } from '../../../entities';
+import { Meal, Product } from '../../../database/entities';
 import {
   DiaryMealPayload,
   DiaryProductPayload,

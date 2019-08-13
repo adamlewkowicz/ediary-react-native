@@ -1,8 +1,8 @@
 import { EntityRepository, Like } from 'typeorm/browser';
 import { Product, ProductPortion } from '../entities';
-import { ProductFinder, productFinder } from '../services/ProductFinder';
+import { ProductFinder, productFinder } from '../../services/ProductFinder';
 import { GenericRepository } from './Generic';
-import { mapAsyncSequence } from '../common/utils';
+import { mapAsyncSequence } from '../../common/utils';
 
 @EntityRepository(Product)
 export class ProductRepository extends GenericRepository<Product> {

@@ -1,7 +1,7 @@
 import { EntityRepository, Repository, Between } from 'typeorm/browser';
 import { Meal, Product } from '../entities';
 import { mealProductRepository } from '.';
-import { DateDay } from '../types';
+import { DateDay } from '../../types';
 
 @EntityRepository(Meal)
 export class MealRepository extends Repository<Meal> {

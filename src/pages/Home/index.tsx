@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-native-ui-kitten';
 import { useDispatch, connect } from 'react-redux';
-import * as Actions from '../store/actions';
-import { AppState } from '../store';
+import * as Actions from '../../store/actions';
+import { AppState } from '../../store';
 import { FlatList, ScrollView, Alert } from 'react-native';
-import * as selectors from '../store/selectors';
-import { DateChanger } from '../components/DateChanger';
-import { MacroCard } from '../components/MacroCard';
-import { nutritionColors } from '../common/theme';
+import * as selectors from '../../store/selectors';
+import { DateChanger } from '../../components/DateChanger';
+import { MacroCard } from '../../components/MacroCard';
+import { nutritionColors } from '../../common/theme';
 import styled from 'styled-components/native';
-import { MealListItem } from '../components/MealListItem';
-import { FloatingButton } from '../components/FloatingButton';
-import { BasicInput } from '../components/BasicInput';
+import { MealListItem } from '../../components/MealListItem';
+import { FloatingButton } from '../../components/FloatingButton';
+import { BasicInput } from '../../components/BasicInput';
 import { NavigationScreenProps } from 'react-navigation';
-import { ProductFinderParams } from './ProductFinder';
-import { mealProductAdd } from '../store/actions';
-import { ProductCreateParams } from './ProductCreate';
-import { BASE_MACRO_ELEMENTS, IS_DEV } from '../common/consts';
-import { elementTitles } from '../common/helpers';
+import { ProductFinderParams } from '../ProductFinder';
+import { mealProductAdd } from '../../store/actions';
+import { ProductCreateParams } from '../ProductCreate';
+import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
+import { elementTitles } from '../../common/helpers';
 
 interface HomeProps extends NavigationScreenProps {
   mealsWithRatio: selectors.MealsWithRatio

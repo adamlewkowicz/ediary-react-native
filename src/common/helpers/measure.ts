@@ -1,4 +1,4 @@
-import { Profile } from '../../entities';
+import { Profile } from '../../database/entities';
 import { MacroElements, WeightGoal } from '../../types';
 
 export const formulaRatio: FormulaRatio = {

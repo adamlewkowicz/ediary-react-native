@@ -18,7 +18,7 @@ import {
   MealId,
   DateDay,
 } from '../../types';
-import { Meal } from '../../entities';
+import { Meal } from '../../database/entities';
 import { DiaryActions } from '../actions';
 import { calcMacroByQuantity } from '../helpers/diary';
 import { getDayFromDate } from '../../common/utils';

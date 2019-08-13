@@ -1,5 +1,5 @@
 import { APP_DATE_UPDATED, APP_CONNECTION_STATUS_UPDATED, APP_INITIALIZED } from '../../consts';
-import { User } from '../../../entities';
+import { User } from '../../../database/entities';
 
 export type AppDateUpdated = {
   type: typeof APP_DATE_UPDATED

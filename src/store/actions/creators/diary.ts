@@ -24,7 +24,7 @@ import {
   MealProductAdded
 } from '../types';
 import { MealId, ProductId } from '../../../types';
-import { Meal } from '../../../entities';
+import { Meal } from '../../../database/entities';
 
 export const mealCreated = (
   meal: DiaryMealPayload

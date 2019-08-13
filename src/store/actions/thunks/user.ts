@@ -1,6 +1,6 @@
-import { Profile } from '../../../entities';
+import { Profile } from '../../../database/entities';
 import { getCustomRepository } from 'typeorm/browser';
-import { UserRepository } from '../../../repositories/UserRepository';
+import { UserRepository } from '../../../database/repositories/UserRepository';
 import { AppState } from '../..';
 import { userProfileCreated } from '../creators/user';
 

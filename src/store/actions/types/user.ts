@@ -1,5 +1,5 @@
 import { USER_PROFILE_CREATED } from '../../consts';
-import { Profile } from '../../../entities';
+import { Profile } from '../../../database/entities';
 import { AppInitialized } from './application';
 
 export type UserProfileCreated = {

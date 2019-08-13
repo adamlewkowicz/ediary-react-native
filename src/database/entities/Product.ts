@@ -8,13 +8,13 @@ import {
   Unique,
 } from 'typeorm/browser';
 import { MealProduct } from './MealProduct';
-import { BarcodeId, ProductId, UserId, ProductUnit } from '../types';
+import { BarcodeId, ProductId, UserId, ProductUnit } from '../../types';
 import { User } from './User';
 import { ProductPortion } from './ProductPortion';
-import { friscoApi } from '../services/FriscoApi';
+import { friscoApi } from '../../services/FriscoApi';
 import { GenericEntity } from './Generic';
-import { SqliteENUM } from '../database/decorators';
-import { PRODUCT_UNITS } from '../common/consts';
+import { SqliteENUM } from '../decorators';
+import { PRODUCT_UNITS } from '../../common/consts';
 
 @Entity('Product')
 // @Unique(['name', 'userId'])
@@ -95,9 +95,8 @@ export class Product extends GenericEntity {
     if (!savedProducts.length || !hasVerifiedProduct) {
       const fetchedProducts = await friscoApi.findByQuery(barcode);
       const createdProducts = await Promise.all(
-        fetchedProducts.map(product => this.save({
+        fetchedProducts.map(({ unit, portions, ...product }) => this.save({
           ...product,
-          unit: product.unit || undefined,
           verified: true
         }))
       );

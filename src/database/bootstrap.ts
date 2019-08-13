@@ -1,4 +1,4 @@
-import * as entities from '../entities';
+import * as entities from './entities';
 import { createConnection } from 'typeorm/browser';
 
 export async function bootstrapDatabase() {

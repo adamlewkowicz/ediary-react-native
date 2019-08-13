@@ -6,7 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm/browser';
 import { Product } from './Product';
-import { ProductId } from '../types';
+import { ProductId } from '../../types';
 import { ManyToMany } from 'typeorm';
 import { PortionType } from './Lexical';
 

@@ -1,4 +1,4 @@
-import { Meal, Product, MealProduct } from '../../../entities';
+import { Meal, Product, MealProduct } from '../../../database/entities';
 import {
   mealCreated,
   mealDeleted,
@@ -14,7 +14,7 @@ import {
   mealRepository,
   mealProductRepository, 
   productRepository
-} from '../../../repositories';
+} from '../../../database/repositories';
 import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
 import { getProductMock } from '../../helpers/diary';
 import { getRepository } from 'typeorm/browser';

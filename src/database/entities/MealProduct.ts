@@ -9,8 +9,8 @@ import {
 } from 'typeorm/browser';
 import { Product } from './Product';
 import { Meal } from './Meal';
-import { ProductUnit } from '../types';
-import { PRODUCT_UNITS } from '../common/consts';
+import { ProductUnit } from '../../types';
+import { PRODUCT_UNITS } from '../../common/consts';
 import { GenericEntity } from './Generic';
 
 const productUnitsEnum = PRODUCT_UNITS.map(unit => `'${unit}'`).join(',');

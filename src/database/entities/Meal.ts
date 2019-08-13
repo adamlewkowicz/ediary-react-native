@@ -10,9 +10,9 @@ import {
 import { Product } from './Product';
 import { productRepository, mealProductRepository } from '../repositories';
 import { MealProduct } from './MealProduct';
-import { MealId, UserId, DateDay } from '../types';
+import { MealId, UserId, DateDay } from '../../types';
 import { User } from './User';
-import { USER_ID_UNSYNCED } from '../common/consts';
+import { USER_ID_UNSYNCED } from '../../common/consts';
 import { GenericEntity } from './Generic';
 
 @Entity('Meal', {

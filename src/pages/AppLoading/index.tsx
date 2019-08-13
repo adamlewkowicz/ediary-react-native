@@ -5,8 +5,8 @@ import { USER_ID_UNSYNCED } from '../../common/consts';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
 import { store } from '../../store';
 import * as Actions from '../../store/actions';
-import { UserRepository } from '../../repositories/UserRepository';
-import { User } from '../../entities';
+import { UserRepository } from '../../database/repositories/UserRepository';
+import { User } from '../../database/entities';
 import { NavigationScreenProps } from 'react-navigation';
 import { databaseConfig } from '../../database/config';
 

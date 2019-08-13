@@ -6,7 +6,7 @@ import {
   OneToOne,
   getRepository,
 } from 'typeorm/browser';
-import { UserId } from '../types';
+import { UserId } from '../../types';
 import { IsEmail, IsOptional, MinLength, MaxLength } from 'class-validator';
 import { Product } from './Product';
 import { Meal } from './Meal';

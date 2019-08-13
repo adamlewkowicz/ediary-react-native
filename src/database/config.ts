@@ -1,5 +1,5 @@
 import { ConnectionOptions } from 'typeorm/browser';
-import * as entities from '../entities';
+import * as entities from './entities';
 import * as migrations from './migrations';
 
 export const databaseConfig: ConnectionOptions = {

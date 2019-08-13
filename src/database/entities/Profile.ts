@@ -7,12 +7,12 @@ import {
   BeforeInsert,
 } from 'typeorm/browser';
 import { Min, Max } from 'class-validator';
-import { WeightGoal, ProfileId, UserId } from '../types';
-import { SqliteENUM } from '../database/decorators';
-import { WEIGHT_GOAL } from '../common/consts';
-import { Macro } from '../database/shared';
+import { WeightGoal, ProfileId, UserId } from '../../types';
+import { SqliteENUM } from '../decorators';
+import { WEIGHT_GOAL } from '../../common/consts';
+import { Macro } from '../shared';
 import { User } from './User';
-import { measureMacroNeeds } from '../common/helpers';
+import { measureMacroNeeds } from '../../common/helpers';
 
 @Entity()
 export class Profile {

@@ -1,6 +1,6 @@
 import { APP_DATE_UPDATED, APP_CONNECTION_STATUS_UPDATED, APP_INITIALIZED } from '../../consts';
 import { AppDateUpdated, AppConnectionStatusUpdated, AppInitialized } from '../types';
-import { User } from '../../../entities';
+import { User } from '../../../database/entities';
 
 export const appDateUpdated = (
   date: Date
