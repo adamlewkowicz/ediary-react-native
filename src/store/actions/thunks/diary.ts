@@ -10,11 +10,6 @@ import {
   mealsAdded,
   mealProductAdded,
 } from '../creators';
-import {
-  mealRepository,
-  mealProductRepository, 
-  productRepository
-} from '../../../database/repositories';
 import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
 import { getProductMock } from '../../helpers/diary';
 import { getRepository } from 'typeorm/browser';
@@ -23,6 +18,7 @@ import { ProductUnit, DateDay } from '../../../types';
 import { MealsWithRatio } from '../../selectors';
 import { USER_ID_UNSYNCED } from '../../../common/consts';
 import { debounce_ } from '../../../common/utils';
+import { Omit } from 'yargs';
 
 const debounceA = debounce_();
 
@@ -49,10 +45,9 @@ export const mealProductCreate = (
   mealId: Meal['id'],
   payload: Product
 ) => async (dispatch: any) => {
-  const meal = await mealRepository().findOneOrFail(mealId);
   const mockedProduct = { ...payload, ...getProductMock(), userId: USER_ID_UNSYNCED };
-  const newProduct = await meal.addAndCreateProduct(mockedProduct);
-  dispatch(mealProductAdded(mealId, { ...mockedProduct, ...newProduct }));
+  const newProduct = await Meal.addAndCreateProduct(mealId, mockedProduct);
+  dispatch(mealProductAdded(mealId, { mealId, ...mockedProduct, ...newProduct }));
 }
 
 export const mealProductDelete = (
@@ -60,7 +55,7 @@ export const mealProductDelete = (
   productId: Product['id']
 ) => async (dispatch: any) => {
   dispatch(mealProductDeleted(mealId, productId));
-  await mealProductRepository().delete({ mealId, productId });
+  await MealProduct.delete({ mealId, productId });
 }
 
 export const mealProductUpdateQuantity = (
@@ -79,13 +74,13 @@ export const productUpdate = (
   product: Partial<DiaryProductPayload>
 ) => async (dispatch: any) => {
   dispatch(productUpdated(productId, product));
-  await productRepository().update(productId, product);
+  await Product.update(productId, product);
 }
 
 export const productCreate = (
   product: Omit<DiaryProductPayload, 'id' | 'createdAt' | 'updatedAt' | 'verified'>
 ) => async (dispatch: any): Promise<Product> => {
-  const newProduct = await productRepository().save(product);
+  const newProduct = await Product.save(product);
   dispatch(productCreated({ ...product, ...newProduct }));
   return newProduct;
 }
@@ -94,7 +89,6 @@ export const mealsFindByDay = (
   dateDay: DateDay
 ) => async (dispatch: any) => {
   const foundMeals = await Meal.findByDay(dateDay);
-
   dispatch(mealsAdded(foundMeals));
 }
 

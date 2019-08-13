@@ -3,6 +3,7 @@ import { getCustomRepository } from 'typeorm/browser';
 import { UserRepository } from '../../../database/repositories/UserRepository';
 import { AppState } from '../..';
 import { userProfileCreated } from '../creators/user';
+import { Omit } from 'yargs';
 
 export const userProfileCreate = (
   profile: Omit<Profile, 'id' | 'macroNeeds' | 'user' | 'measureMacroNeeds' | 'userId'>

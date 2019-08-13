@@ -7,13 +7,13 @@ import {
   JoinColumn,
   Between,
 } from 'typeorm/browser';
-import { Product } from './Product';
-import { productRepository, mealProductRepository } from '../repositories';
+import { Product, IProduct } from './Product';
 import { MealProduct } from './MealProduct';
-import { MealId, UserId, DateDay } from '../../types';
+import { MealId, UserId, DateDay, ProductUnit, ProductId } from '../../types';
 import { User } from './User';
 import { USER_ID_UNSYNCED } from '../../common/consts';
 import { GenericEntity } from './Generic';
+import { DeepPartial } from 'typeorm';
 
 @Entity('Meal', {
   name: 'meals'
@@ -53,49 +53,55 @@ export class Meal extends GenericEntity {
   @JoinColumn({ name: 'userId' })
   user!: User;
 
-  async addProduct(
-    productId: Product['id']
-  ) {
-    const mealId = this.id;
-    const product = await productRepository().findOne(productId);
+  static findByDay(dateDay: DateDay) {
+    return this.find({
+      where: { date: Between(`${dateDay} 00:00:00`, `${dateDay} 23:59:59`) },
+      relations: ['mealProducts', 'mealProducts.product']
+    });
+  }
 
-    if (!product) {
-      throw new Error(
-        `Product with id ${productId} doesn't exist`
-      );
-    }
-
-    const mealProduct = await mealProductRepository().save({
+  static async addAndCreateProduct(
+    mealId: MealId,
+    payload: DeepPartial<Product>,
+    quantity: number = 100
+  ): Promise<IProduct> {
+    const product = await Product.save(payload);
+    const mealProduct = await MealProduct.save({
       productId: product.id,
+      unit: product.unit,
+      quantity,
       mealId
     });
 
     return { ...product, ...mealProduct };
   }
 
-  async addAndCreateProduct(
-    payload: Product
-  ) {
-    const mealId = this.id;
-    const product = await productRepository().save(payload);
-    const quantity = 100;
-    const unit = 'g';
+  static async addProduct(
+    mealId: MealId,
+    productId: ProductId,
+    quantity: number = 100,
+    unit: ProductUnit = 'g'
+  ): Promise<IProduct> {
+    const [product, mealProduct] = await Promise.all([
+      Product.findOneOrFail(productId),
+      MealProduct.findOne({ mealId, productId })
+    ]);
+    const [portion] = product.portions;
+    const portionValue = portion ? portion.value : quantity;
 
-    const mealProduct = await mealProductRepository().save({
-      productId: product.id,
-      mealId,
-      quantity,
-      unit
-    });
-
-    return { ...product, ...mealProduct };
-  }
-
-  static findByDay(dateDay: DateDay) {
-    return this.find({
-      where: { date: Between(`${dateDay} 00:00:00`, `${dateDay} 23:59:59`) },
-      relations: ['mealProducts', 'mealProducts.product']
-    });
+    if (mealProduct) {
+      mealProduct.quantity += portionValue;
+      await mealProduct.save();
+      return { ...mealProduct, ...product };
+    } else {
+      const createdMealProduct = await MealProduct.save({
+        quantity: portionValue,
+        mealId,
+        productId,
+        unit
+      });
+      return { ...createdMealProduct, ...product };
+    }
   }
 
 }

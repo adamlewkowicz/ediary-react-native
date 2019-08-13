@@ -6,6 +6,7 @@ import {
   ManyToOne,
   JoinColumn,
   Unique,
+  Like,
 } from 'typeorm/browser';
 import { MealProduct } from './MealProduct';
 import { BarcodeId, ProductId, UserId, ProductUnit } from '../../types';
@@ -15,6 +16,7 @@ import { friscoApi } from '../../services/FriscoApi';
 import { GenericEntity } from './Generic';
 import { SqliteENUM } from '../decorators';
 import { PRODUCT_UNITS } from '../../common/consts';
+import { Omit } from 'yargs';
 
 @Entity('Product')
 // @Unique(['name', 'userId'])
@@ -88,6 +90,13 @@ export class Product extends GenericEntity {
   }
   */
 
+  static async findByNameLike(name: string, limit: number = 10): Promise<Product[]> {
+    return this.find({
+      where: { name: Like(`%${name}%`) },
+      take: limit
+    });
+  }
+
   static async findByBarcode(barcode: BarcodeId): Promise<Product[]> {
     const savedProducts = await this.find({ barcode });
     const hasVerifiedProduct = savedProducts.some(product => product.verified);
@@ -107,3 +116,5 @@ export class Product extends GenericEntity {
   }
 
 }
+
+export type IProduct = Omit<Product, 'hasId' | 'save' | 'remove' | 'reload'>;
