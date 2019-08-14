@@ -14,14 +14,19 @@ test('toggling meal shows meal details', async () => {
 });
 
 test('searching by name and adding product to meal', async () => {
+  const mealName = 'Cucumber soup'
   const productName = productMock.name;
 
-  const { findByLabelText, findByPlaceholderText, queryByText } = render(
+  const {
+    findByLabelText,
+    findByPlaceholderText,
+    queryByText,
+    getByPlaceholderText,
+    getByLabelText,
+    asJSON
+  } = render(
     <App />
   );
-
-  const mealButton = await findByLabelText('Pokaż szczegóły posiłku');
-  fireEvent.press(mealButton);
 
   const addProductNavButton = await findByLabelText('Wyszukaj produkt do posiłku');
   fireEvent.press(addProductNavButton);

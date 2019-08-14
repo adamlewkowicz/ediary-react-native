@@ -1,4 +1,16 @@
-require('reflect-metadata');
+import 'reflect-metadata';
+import { createConnection, getConnection } from 'typeorm';
+import { databaseConfig } from './src/database/config';
+
+console.disableYellowBox = true;
+
+beforeEach(async () => {
+  await createConnection(databaseConfig);
+});
+
+afterEach(async () => {
+  await getConnection().close();
+});
 
 jest.mock('NativeAnimatedHelper');
 

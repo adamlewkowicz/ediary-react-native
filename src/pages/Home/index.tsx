@@ -113,11 +113,15 @@ const Home = (props: HomeProps) => {
           )}
         />
         <BasicInput
+          placeholder="Nazwa posiłku"
           label="Nazwa posiłku"
           value={name}
           onChangeText={name => setName(name)}
         />
-        <Button onPress={() => dispatch(Actions.mealCreate(name))}>
+        <Button
+          accessibilityLabel="Utwórz nowy posiłek"
+          onPress={() => dispatch(Actions.mealCreate(name))}
+        >
           Dodaj posiłek
         </Button>
         <Button onPress={handleProductCreatorNavigation}>

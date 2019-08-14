@@ -51,3 +51,5 @@ export type Screen = keyof typeof Screens | 'Main' | 'AppLoading';
 export interface DateDay extends String {
   _dateDayBrand: 'YYYY-MM-DD';
 }
+
+export type Environment = 'development' | 'test' | 'production';
