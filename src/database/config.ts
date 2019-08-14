@@ -4,8 +4,8 @@ import * as migrations from './migrations';
 import { Environment } from '../types';
 import { APP_ENV } from '../common/consts';
 
-const migrationsArray = Object.values(migrations);
-const entitiesArray = Object.values(entities);
+export const migrationsArray = Object.values(migrations);
+export const entitiesArray = Object.values(entities);
 
 export const config: DatabaseConfig = {
   development: {

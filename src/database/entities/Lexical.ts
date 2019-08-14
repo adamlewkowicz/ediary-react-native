@@ -4,9 +4,15 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class PortionType {
+export class UnitType {
+  /** g, mg, kg, ml... */
   @PrimaryColumn()
   value!: string;
 }
 
-export { PortionType as UnitType };
+@Entity()
+export class PortionType {
+  /** spoon, glass, handful... */
+  @PrimaryColumn()
+  value!: string;
+}

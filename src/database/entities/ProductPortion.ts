@@ -4,11 +4,11 @@ import {
   Column,
   PrimaryColumn,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { Product } from './Product';
 import { ProductId } from '../../types';
-import { ManyToMany } from 'typeorm';
-import { PortionType } from './Lexical';
+import { UnitType } from './Lexical';
 
 @Entity()
 export class ProductPortion {
@@ -30,8 +30,8 @@ export class ProductPortion {
   @JoinColumn({ name: 'productId' })
   product!: Product;
 
-  @ManyToMany(type => PortionType)
+  @OneToOne(type => UnitType)
   @JoinColumn({ name: 'type' })
-  portionType!: PortionType;
+  unitType!: UnitType;
 
 }

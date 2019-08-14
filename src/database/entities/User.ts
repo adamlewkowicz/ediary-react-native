@@ -12,13 +12,13 @@ import { Product } from './Product';
 import { Meal } from './Meal';
 import { Profile } from './Profile';
 
-@Entity('User')
+@Entity()
 export class User {
 
   @PrimaryGeneratedColumn()
   id!: UserId;
 
-  @Column({ nullable: true })
+  @Column('text', { nullable: true })
   @IsOptional()
   @IsEmail()
   email!: string | null;

@@ -19,7 +19,7 @@ import { PRODUCT_UNITS } from '../../common/consts';
 import { EntityType } from '../types';
 import { Optional } from 'utility-types';
 
-@Entity('Product')
+@Entity()
 // @Unique(['name', 'userId'])
 // @Unique(['name', 'verified'])
 export class Product extends GenericEntity {

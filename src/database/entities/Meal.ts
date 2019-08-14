@@ -15,9 +15,7 @@ import { GenericEntity } from './Generic';
 import { DeepPartial } from 'typeorm';
 import { EntityType } from '../types';
 
-@Entity('Meal', {
-  name: 'meals'
-})
+@Entity()
 export class Meal extends GenericEntity {
 
   @PrimaryGeneratedColumn()
@@ -41,9 +39,10 @@ export class Meal extends GenericEntity {
   @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   date!: string;
 
-  @OneToMany(type => MealProduct, mealProduct => mealProduct.meal, {
-    onDelete: 'CASCADE'
-  })
+  @OneToMany(
+    type => MealProduct,
+    mealProduct => mealProduct.meal
+  )
   mealProducts!: MealProduct[]
 
   @Column('number', { default: null, nullable: true })
