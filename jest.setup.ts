@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import '@testing-library/jest-native/extend-expect';
 import { createConnection, getConnection } from 'typeorm';
 import { databaseConfig } from './src/database/config';
 

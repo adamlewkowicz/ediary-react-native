@@ -22,7 +22,7 @@ const config: DatabaseConfig = {
     type: 'sqlite',
     database: ':memory:',
     synchronize: true,
-    logging: false,
+    logging: ['error'],
     migrations: migrationsArray,
     entities: entitiesArray
   },

@@ -47,10 +47,10 @@ export class Meal extends GenericEntity {
   })
   mealProducts!: MealProduct[]
 
-  @Column('number', { default: USER_ID_UNSYNCED })
+  @Column('number', { default: null, nullable: true })
   userId!: UserId | null;
 
-  @ManyToOne(type => User)
+  @ManyToOne(type => User, { nullable: true })
   @JoinColumn({ name: 'userId' })
   user!: User;
 
