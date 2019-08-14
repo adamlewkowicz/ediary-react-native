@@ -18,7 +18,7 @@ import {
   MealId,
   DateDay,
 } from '../../types';
-import { Meal } from '../../database/entities';
+import { Meal, IProduct } from '../../database/entities';
 import { DiaryActions } from '../actions';
 import { calcMacroByQuantity } from '../helpers/diary';
 import { getDayFromDate } from '../../common/utils';
@@ -26,6 +26,7 @@ import { getDayFromDate } from '../../common/utils';
 const initialState: DiaryState = {
   meals: [],
   products: [],
+  recentProducts: [],
   toggledProductId: null,
   isLoading: false
 }
@@ -147,14 +148,7 @@ export function diaryReducer(
     }
     case PRODUCT_CREATED: return {
       ...state,
-      products: [
-        ...state.products,
-        {
-          ...action.payload,
-          isToggled: false,
-          macro: calcMacroByQuantity(action.payload)
-        }
-      ]
+      recentProducts: [action.payload, ...state.recentProducts].splice(0, 4)
     }
     case PRODUCT_TOGGLED: return {
       ...state,
@@ -221,6 +215,7 @@ export interface DiaryProduct extends DiaryProductPayload {
 interface DiaryState {
   meals: DiaryMeal[]
   products: DiaryProduct[]
+  recentProducts: IProduct[]
   toggledProductId: ProductId | null
   isLoading: boolean
 }

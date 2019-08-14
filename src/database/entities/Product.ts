@@ -17,6 +17,7 @@ import { GenericEntity } from './Generic';
 import { SqliteENUM } from '../decorators';
 import { PRODUCT_UNITS } from '../../common/consts';
 import { EntityType } from '../types';
+import { Optional } from 'utility-types';
 
 @Entity('Product')
 // @Unique(['name', 'userId'])
@@ -118,4 +119,5 @@ export class Product extends GenericEntity {
 }
 
 export type IProduct = EntityType<Product>;
+export type IProductOptional = Optional<IProduct, 'id' | 'updatedAt' | 'createdAt' | 'mealProducts' | 'portions' | 'user' | 'verified'>;
 export type IProductMerged = IProduct & IMealProduct;

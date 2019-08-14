@@ -4,7 +4,6 @@ import {
   ManyToOne,
   Unique,
   PrimaryColumn,
-  Check,
   JoinColumn,
 } from 'typeorm';
 import { Product } from './Product';
@@ -13,8 +12,7 @@ import { ProductUnit } from '../../types';
 import { PRODUCT_UNITS } from '../../common/consts';
 import { GenericEntity } from './Generic';
 import { EntityType } from '../types';
-
-const productUnitsEnum = PRODUCT_UNITS.map(unit => `'${unit}'`).join(',');
+import { SqliteENUM } from '../decorators';
 
 @Entity('MealProduct', {
   name: 'meal_products'
@@ -32,7 +30,7 @@ export class MealProduct extends GenericEntity {
   quantity!: number
 
   @Column('text', { default: 'g' })
-  @Check(`unit IN (${productUnitsEnum}) `)
+  @SqliteENUM(PRODUCT_UNITS)
   unit!: ProductUnit
 
   // cascade must be set on inverse side too

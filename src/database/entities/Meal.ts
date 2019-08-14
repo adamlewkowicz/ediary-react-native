@@ -7,11 +7,10 @@ import {
   JoinColumn,
   Between,
 } from 'typeorm';
-import { Product, IProduct, IProductMerged } from './Product';
+import { Product, IProductMerged } from './Product';
 import { MealProduct } from './MealProduct';
 import { MealId, UserId, DateDay, ProductUnit, ProductId } from '../../types';
 import { User } from './User';
-import { USER_ID_UNSYNCED } from '../../common/consts';
 import { GenericEntity } from './Generic';
 import { DeepPartial } from 'typeorm';
 import { EntityType } from '../types';
@@ -65,7 +64,7 @@ export class Meal extends GenericEntity {
     mealId: MealId,
     payload: DeepPartial<Product>,
     quantity: number = 100
-  ): Promise<IProduct> {
+  ): Promise<IProductMerged> {
     const product = await Product.save(payload);
     const mealProduct = await MealProduct.save({
       productId: product.id,

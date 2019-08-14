@@ -10,11 +10,3 @@ export const calcMacroByQuantity = <T extends CalcMacroByQuantityData>(
   value: Math.round(macroData[element] * macroData.quantity / 100),
   element
 }));
-
-export const getProductMock = () => ({
-  carbs: Math.round(Math.random() * 400),
-  prots: Math.round(Math.random() * 400),
-  fats: Math.round(Math.random() * 400),
-  kcal: Math.round(Math.random() * 400),
-  quantity: Math.round(Math.random() * 150)
-});

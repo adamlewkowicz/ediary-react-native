@@ -10,7 +10,7 @@ import {
   PRODUCT_TOGGLED,
   MEAL_PRODUCT_ADDED,
 } from '../../consts';
-import { Meal, Product } from '../../../database/entities';
+import { Meal, Product, IProduct } from '../../../database/entities';
 import {
   DiaryMealPayload,
   DiaryProductPayload,
@@ -64,7 +64,7 @@ export type MealToggled = {
 
 export type ProductCreated = {
   type: typeof PRODUCT_CREATED
-  payload: DiaryProductPayload
+  payload: IProduct
 }
 
 export type MealsAdded = {

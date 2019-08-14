@@ -24,7 +24,7 @@ import {
   MealProductAdded
 } from '../types';
 import { MealId, ProductId } from '../../../types';
-import { Meal } from '../../../database/entities';
+import { Meal, IProduct } from '../../../database/entities';
 
 export const mealCreated = (
   meal: DiaryMealPayload
@@ -81,7 +81,7 @@ export const mealToggled = (
 });
 
 export const productCreated = (
-  product: DiaryProductPayload
+  product: IProduct
 ): ProductCreated => ({
   type: PRODUCT_CREATED,
   payload: product

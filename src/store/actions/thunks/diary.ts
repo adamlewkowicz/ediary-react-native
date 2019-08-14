@@ -1,4 +1,4 @@
-import { Meal, Product, MealProduct } from '../../../database/entities';
+import { Meal, Product, MealProduct, IProduct, IProductOptional } from '../../../database/entities';
 import {
   mealCreated,
   mealDeleted,
@@ -11,11 +11,8 @@ import {
   mealProductAdded,
 } from '../creators';
 import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
-import { getProductMock } from '../../helpers/diary';
 import { ProductUnit, DateDay, ProductId, MealId } from '../../../types';
-import { USER_ID_UNSYNCED } from '../../../common/consts';
 import { debounce_ } from '../../../common/utils';
-import { Omit } from 'yargs';
 
 const debounceA = debounce_();
 
@@ -40,11 +37,10 @@ export const mealUpdate = (
 
 export const mealProductCreate = (
   mealId: Meal['id'],
-  payload: Product
+  payload: IProduct
 ) => async (dispatch: any) => {
-  const mockedProduct = { ...payload, ...getProductMock(), userId: USER_ID_UNSYNCED };
-  const newProduct = await Meal.addAndCreateProduct(mealId, mockedProduct);
-  dispatch(mealProductAdded(mealId, { mealId, ...mockedProduct, ...newProduct }));
+  const newProduct = await Meal.addAndCreateProduct(mealId, payload);
+  dispatch(mealProductAdded(mealId, { mealId, ...newProduct }));
 }
 
 export const mealProductDelete = (
@@ -75,7 +71,7 @@ export const productUpdate = (
 }
 
 export const productCreate = (
-  product: Omit<DiaryProductPayload, 'id' | 'createdAt' | 'updatedAt' | 'verified'>
+  product: IProductOptional
 ) => async (dispatch: any): Promise<Product> => {
   const newProduct = await Product.save(product);
   dispatch(productCreated({ ...product, ...newProduct }));

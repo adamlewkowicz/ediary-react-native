@@ -44,7 +44,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
       Actions.productCreate({
         ...data,
         barcode: barcode.length ? barcode : null,
-        quantity: data.portion,
+        // quantity: data.portion,
         userId
       })
     );
