@@ -1,0 +1,27 @@
+stages:
+  - test
+  - build
+  - deploy
+
+services:
+  - docker:dind
+
+cache:
+  paths:
+  - node_modules/
+
+test:
+  stage: test
+  image: node:10.15.3
+  script:
+    - npm i --silent
+    - npm run test
+  variables:
+    APP_ENV: "test"
+
+type-check:
+  stage: test
+  image: node:10.15.3
+  script:
+    - npm i --silent
+    - npm run type-check

@@ -1,12 +1,12 @@
 import 'reflect-metadata';
 import '@testing-library/jest-native/extend-expect';
 import { createConnection, getConnection } from 'typeorm';
-import { databaseConfig } from './src/database/config';
+import { config } from './src/database/config';
 
 console.disableYellowBox = true;
 
 beforeEach(async () => {
-  await createConnection(databaseConfig);
+  await createConnection(config.test);
 });
 
 afterEach(async () => {

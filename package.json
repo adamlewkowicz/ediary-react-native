@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "react-native start",
-    "test": "APP_ENV=test jest",
+    "test": "jest",
     "test:win": "set APP_ENV=test&& jest",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",

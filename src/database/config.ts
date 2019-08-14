@@ -7,7 +7,7 @@ import { APP_ENV } from '../common/consts';
 const migrationsArray = Object.values(migrations);
 const entitiesArray = Object.values(entities);
 
-const config: DatabaseConfig = {
+export const config: DatabaseConfig = {
   development: {
     type: 'react-native',
     database: 'test',
