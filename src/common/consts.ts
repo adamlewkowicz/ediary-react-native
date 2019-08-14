@@ -11,6 +11,6 @@ export const PORTION_TYPES = [
 
 export const WEIGHT_GOAL = ['decrease', 'maintain', 'increase'] as const;
 
-export const IS_DEV = (global as any).__DEV__;
+export const IS_DEV: boolean = (global as any).__DEV__ || true;
 
 export const APP_ENV = (process.env.APP_ENV || 'development') as Environment;
