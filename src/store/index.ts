@@ -24,4 +24,6 @@ export function configureStore(initialState?: Partial<AppState>): Store<AppState
   return store;
 }
 
+export const store = configureStore();
+
 export type AppState = ReturnType<typeof rootReducer>;

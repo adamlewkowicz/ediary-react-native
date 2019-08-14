@@ -2,7 +2,6 @@ import React from 'react';
 import { Connection, createConnections } from 'typeorm';
 import { ActivityIndicator } from 'react-native';
 import { USER_ID_UNSYNCED } from '../../common/consts';
-import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
 import { store } from '../../store';
 import * as Actions from '../../store/actions';
 import { UserRepository } from '../../database/repositories/UserRepository';
@@ -14,14 +13,10 @@ interface AppLoadingProps extends NavigationScreenProps {}
 interface AppLoadingState {}
 export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState> {
 
-  unsubscribe: NetInfoSubscription
   state = {}
 
   constructor(props: AppLoadingProps) {
     super(props);
-    this.unsubscribe = NetInfo.addEventListener(state => {
-      this.handleConnectionStatusUpdate(state.isConnected);
-    });
   }
 
   componentDidMount() {
@@ -77,10 +72,6 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
     store.dispatch(
       Actions.appConnectionStatusUpdated(status)
     );
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
   }
 
   render() {
