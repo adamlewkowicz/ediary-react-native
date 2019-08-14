@@ -1,4 +1,4 @@
-import { IProduct } from '../src/database/entities';
+import { IProduct } from '../../src/database/entities';
 
 const productMock: IProduct = {
   id: 1,

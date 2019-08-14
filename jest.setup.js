@@ -1,5 +1,7 @@
 require('reflect-metadata');
 
+jest.mock('NativeAnimatedHelper');
+
 jest.mock('NativeModules', () => ({
   UIManager: {
     RCTView: () => ({

@@ -143,7 +143,7 @@ const HomeConnected = connect(
   header: null
 }
 
-const Container = styled.KeyboardAvoidingView`
+const Container = styled.View`
   display: flex;
   min-height: 100%;
 `

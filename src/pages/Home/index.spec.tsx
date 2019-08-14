@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import productMock from '../../../__mocks__/product';
+import productMock from '../../../__tests__/data/product';
 import { App } from '../../../__tests__/utils';
 
 test('toggling meal shows meal details', async () => {
