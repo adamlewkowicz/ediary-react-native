@@ -9,15 +9,14 @@ import {
   Like,
 } from 'typeorm';
 import { MealProduct, IMealProduct } from './MealProduct';
-import { BarcodeId, ProductId, UserId, ProductUnit } from '../../types';
+import { BarcodeId, ProductId, UserId } from '../../types';
 import { User } from './User';
 import { ProductPortion } from './ProductPortion';
 import { friscoApi } from '../../services/FriscoApi';
 import { GenericEntity } from './Generic';
-import { SqliteENUM } from '../decorators';
-import { PRODUCT_UNITS } from '../../common/consts';
 import { EntityType } from '../types';
-import { Optional } from 'utility-types';
+import { Optional, DeepPartial } from 'utility-types';
+import { ProductMacro, IProductMacroOptional } from './ProductMacro';
 
 @Entity('product')
 // @Unique(['name', 'userId'])
@@ -32,26 +31,6 @@ export class Product extends GenericEntity {
 
   @Column('text', { unique: true, nullable: true })
   barcode!: BarcodeId | null
-
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  carbs!: number
-
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  prots!: number
-  
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  fats!: number
-
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  kcal!: number
-
-  /**
-   * Type of unit that describes macro values.
-   * Each macro value describes it's value in 100 units of this type.  
-  */
-  @Column('text', { default: 'g' })
-  @SqliteENUM(PRODUCT_UNITS)
-  unit!: ProductUnit;
 
   @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;
@@ -73,9 +52,16 @@ export class Product extends GenericEntity {
   user!: User;
 
   @OneToMany(
+    type => ProductMacro,
+    productMacro => productMacro.product,
+    { cascade: true, eager: true }
+  )
+  macro!: ProductMacro[];
+
+  @OneToMany(
     type => ProductPortion,
     productPortion => productPortion.product,
-    { onDelete: 'CASCADE' }
+    { cascade: true }
   )
   portions?: ProductPortion[];
 
@@ -114,6 +100,18 @@ export class Product extends GenericEntity {
     }
 
     return savedProducts;
+  }
+
+  // rename to save
+  static async createWithMacro(
+    payload: DeepPartial<IProduct>,
+    macro: IProductMacroOptional[]
+  ): Promise<Product> {
+    const product = await Product.save({
+      ...payload,
+      macro
+    });
+    return product;
   }
 
 }
