@@ -15,7 +15,7 @@ import { GenericEntity } from './Generic';
 import { DeepPartial } from 'typeorm';
 import { EntityType } from '../types';
 
-@Entity()
+@Entity('meal')
 export class Meal extends GenericEntity {
 
   @PrimaryGeneratedColumn()

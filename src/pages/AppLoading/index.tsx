@@ -1,39 +1,53 @@
 import React from 'react';
 import { Connection, createConnections } from 'typeorm';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Alert } from 'react-native';
 import { USER_ID_UNSYNCED } from '../../common/consts';
 import { store } from '../../store';
 import * as Actions from '../../store/actions';
 import { UserRepository } from '../../database/repositories/UserRepository';
 import { User } from '../../database/entities';
 import { NavigationScreenProps } from 'react-navigation';
-import { databaseConfig } from '../../database/config';
+import { entitiesArray, migrationsArray } from '../../database/config';
 
 interface AppLoadingProps extends NavigationScreenProps {}
 interface AppLoadingState {}
 export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState> {
 
-  state = {}
-
   constructor(props: AppLoadingProps) {
     super(props);
   }
 
-  componentDidMount() {
-    this.setup();
+  async componentDidMount() {
+    try {
+      await this.setup();
+    } catch(error) {
+      Alert.alert(
+        error.name,
+        error.message
+      );
+    }
   }
 
   async setup() {
     const [defaultConnection] = await createConnections([
-      { name: 'default', ...databaseConfig },
-      { name: 'transactional', ...databaseConfig }
+      {
+        type: 'react-native',
+        database: 'mocker.sqlite',
+        location: 'default',
+        logging: ['error', 'query', 'schema'],
+        dropSchema: false,
+        synchronize: true,
+        migrations: migrationsArray,
+        entities: entitiesArray
+      },
+      // { name: 'transactional', ...databaseConfig }
     ]);
 
-    const hasMigrationsToRun = await defaultConnection.showMigrations();
+    // const hasMigrationsToRun = await defaultConnection.showMigrations();
 
-    if (hasMigrationsToRun) {
-      await defaultConnection.runMigrations();
-    }
+    // if (hasMigrationsToRun) {
+      // await defaultConnection.runMigrations();
+    // }
 
     const user = await this.getUser(defaultConnection);
 

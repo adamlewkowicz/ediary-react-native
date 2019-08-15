@@ -12,7 +12,7 @@ import { Product } from './Product';
 import { Meal } from './Meal';
 import { Profile } from './Profile';
 
-@Entity()
+@Entity('user')
 export class User {
 
   @PrimaryGeneratedColumn()

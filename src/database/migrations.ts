@@ -1,0 +1,1 @@
+export * from './migrations/1565856561248-Initial';

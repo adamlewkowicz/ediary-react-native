@@ -10,9 +10,11 @@ import * as Actions from './store/actions';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
 
 interface AppProps {}
-export class App extends React.Component<AppProps> {
+interface AppState {}
+export class App extends React.Component<AppProps, AppState> {
 
   unsubscribe: NetInfoSubscription
+  state = {}
 
   constructor(props: AppProps) {
     super(props);

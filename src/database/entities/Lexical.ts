@@ -3,14 +3,14 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('unit_type')
 export class UnitType {
   /** g, mg, kg, ml... */
   @PrimaryColumn()
   value!: string;
 }
 
-@Entity()
+@Entity('portion_type')
 export class PortionType {
   /** spoon, glass, handful... */
   @PrimaryColumn()

@@ -13,7 +13,7 @@ import { GenericEntity } from './Generic';
 import { EntityType } from '../types';
 import { SqliteENUM } from '../decorators';
 
-@Entity()
+@Entity('meal_product')
 export class MealProduct extends GenericEntity {
 
   @PrimaryColumn()

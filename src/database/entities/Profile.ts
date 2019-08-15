@@ -14,7 +14,7 @@ import { Macro } from '../shared';
 import { User } from './User';
 import { measureMacroNeeds } from '../../common/helpers';
 
-@Entity()
+@Entity('profile')
 export class Profile {
 
   @PrimaryGeneratedColumn()

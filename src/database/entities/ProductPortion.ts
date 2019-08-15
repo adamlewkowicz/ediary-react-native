@@ -10,7 +10,7 @@ import { Product } from './Product';
 import { ProductId } from '../../types';
 import { UnitType } from './Lexical';
 
-@Entity()
+@Entity('product_portion')
 export class ProductPortion {
 
   @PrimaryColumn()
