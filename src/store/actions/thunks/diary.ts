@@ -91,13 +91,13 @@ export const mealProductAdd = (
   quantity: number = 100,
   unit: ProductUnit = 'g'
 ) => async (dispatch: any) => {
-  const { product, created } = await Meal.addProduct(
+  const { product, action } = await Meal.addProduct(
     mealId,
     productId,
     quantity,
     unit
   );
-  if (created) {
+  if (action === 'update') {
     dispatch(
       productUpdated(productId, { quantity: product.quantity })
     );

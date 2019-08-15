@@ -77,7 +77,7 @@ export class Product extends GenericEntity {
     productPortion => productPortion.product,
     { onDelete: 'CASCADE' }
   )
-  portions!: ProductPortion[];
+  portions?: ProductPortion[];
 
   /*
   get portion(): number | any {

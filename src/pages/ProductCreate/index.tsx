@@ -67,7 +67,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
 
   return (
     <ScrollView>
-      <Container>
+      <Container behavior="padding">
         <BasicInput
           label="Nazwa"
           value={state.name}
@@ -117,7 +117,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
   );
 }
 
-const Container = styled.View<{
+const Container = styled.KeyboardAvoidingView<{
   theme: Theme
 }>`
   padding: 20px;
