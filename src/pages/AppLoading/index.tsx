@@ -32,7 +32,7 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
     const hasMigrationsToRun = await defaultConnection.showMigrations();
 
     if (hasMigrationsToRun) {
-      // await defaultConnection.runMigrations();
+      await defaultConnection.runMigrations();
     }
 
     const user = await this.getUser(defaultConnection);
@@ -78,7 +78,7 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
     return (
       <ActivityIndicator
         size="large"
-        style={{ alignSelf: 'center' }}
+        style={{ flex: 1 }}
       />
     );
   }

@@ -40,18 +40,4 @@ export const config: DatabaseConfig = {
 
 export const databaseConfig = config[APP_ENV];
 
-const migrationGeneration: ConnectionOptions = {
-  type: 'sqlite',
-  database: './test.sqlite',
-  logging: ['error'],
-  migrations: migrationsArray,
-  entities: entitiesArray,
-  cli: {
-    migrationsDir: './src/database/migrations',
-    entitiesDir: './src/database/entities',
-  }
-}
-
-module.exports = migrationGeneration;
-
 type DatabaseConfig = { [key in Environment]: ConnectionOptions }

@@ -135,7 +135,7 @@ export const ProfileCreator = (props: ProfileCreatorProps) => {
     ),
     (
       <>
-        <Block space="space-around">
+        <Block space="space-around" row={false}>
           <SelectionBox 
             value={weightGoal === 'decrease'}
             onChange={() => setWeightGoal('decrease')}
