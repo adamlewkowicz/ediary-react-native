@@ -60,6 +60,7 @@
     "babel-plugin-transform-typescript-metadata": "^0.2.2",
     "eslint": "6.1.0",
     "jest": "24.8.0",
+    "metro-minify-terser": "^0.56.0",
     "metro-react-native-babel-preset": "0.54.1",
     "node-fetch": "^2.6.0",
     "react-native-svg-transformer": "^0.13.0",
