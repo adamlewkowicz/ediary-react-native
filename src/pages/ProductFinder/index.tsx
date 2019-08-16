@@ -2,12 +2,10 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components/native';
 import { sortByMostAccurateName, debounce_ } from '../../common/utils';
 import { FlatList } from 'react-native';
-import { getCustomRepository } from 'typeorm';
 import { Product } from '../../database/entities';
 import { ProductListItem } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
 import { NavigationScreenProps } from 'react-navigation';
-import { ProductRepository } from '../../database/repositories/ProductRepository';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../store';
 import { Theme } from '../../common/theme';
@@ -36,9 +34,7 @@ export const ProductFinder = (props: ProductFinderProps) => {
     const findMethod = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
 
     debounceA(async () => {
-      const foundProducts = await getCustomRepository(ProductRepository)[findMethod](
-        trimmedName
-      );
+      const foundProducts = await Product[findMethod](trimmedName);
 
       const sortedProducts = foundProducts
         .sort(sortByMostAccurateName(name));

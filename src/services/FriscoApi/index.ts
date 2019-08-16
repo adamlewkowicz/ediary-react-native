@@ -171,6 +171,7 @@ export class FriscoApi {
       const portion = Math.round(product.grammage * 1000);
       const brand = product.brand;
       const producer = product.producer;
+      const portions: [] = [];
   
       const macroMap: { [key: string]: MacroElement } = {
         'węglowodany': 'carbs',
@@ -201,6 +202,7 @@ export class FriscoApi {
         portion,
         brand,
         producer,
+        portions,
         ...macro
       }
   

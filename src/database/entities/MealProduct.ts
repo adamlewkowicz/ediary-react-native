@@ -7,11 +7,8 @@ import {
 } from 'typeorm';
 import { Product } from './Product';
 import { Meal } from './Meal';
-import { ProductUnit } from '../../types';
-import { PRODUCT_UNITS } from '../../common/consts';
 import { GenericEntity } from './Generic';
 import { EntityType } from '../types';
-import { SqliteENUM } from '../decorators';
 
 @Entity('meal_product')
 export class MealProduct extends GenericEntity {
@@ -25,11 +22,6 @@ export class MealProduct extends GenericEntity {
   @Column('decimal', { precision: 4, scale: 1 })
   quantity!: number
 
-  @Column('text', { default: 'g' })
-  @SqliteENUM(PRODUCT_UNITS)
-  unit!: ProductUnit;
-
-  // Cascade must be set where join column is set
   @ManyToOne(
     type => Meal,
     meal => meal.mealProducts,

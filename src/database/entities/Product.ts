@@ -18,6 +18,8 @@ import { SqliteENUM } from '../decorators';
 import { EntityType } from '../types';
 import { Optional } from 'utility-types';
 import { PRODUCT_UNITS } from '../../common/consts';
+import { productFinder } from '../../services/ProductFinder';
+import { mapAsyncSequence, filterByUniqueId } from '../../common/utils';
 
 @Entity('product')
 // @Unique(['name', 'userId'])
@@ -99,6 +101,33 @@ export class Product extends GenericEntity {
       where: { name: Like(`%${name}%`) },
       take: limit
     });
+  }
+
+  static async findAndFetchByNameLike(name: string): Promise<Product[]> {
+    const savedProducts = await Product.findByNameLike(name);
+
+    if (savedProducts.length <= 3) {
+      const fetchedProducts = await productFinder.findByName(name);
+
+      if (fetchedProducts.length) {
+        const foundOrCreatedProducts = await mapAsyncSequence(
+          fetchedProducts,
+          product => this.findOneOrSave({
+            where: {
+              name: product.name,
+              verified: true
+            }
+          }, { ...product, verified: true })
+        );
+
+        const mergedProducts = [...savedProducts, ...foundOrCreatedProducts]
+          .filter(filterByUniqueId);
+        
+        return mergedProducts;
+      }
+    }
+
+    return savedProducts;
   }
 
   static async findByBarcode(barcode: BarcodeId): Promise<Product[]> {

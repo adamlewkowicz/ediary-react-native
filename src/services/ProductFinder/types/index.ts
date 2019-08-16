@@ -57,7 +57,7 @@ export interface NormalizedProduct {
   carbs: number
   fats: number
   kcal: number
-  portions?: {
+  portions: {
     type: PortionType | null
     unit: ProductUnit
     value: number

@@ -4,20 +4,20 @@ import {
   Column,
   PrimaryColumn,
   JoinColumn,
-  OneToOne,
 } from 'typeorm';
 import { Product } from './Product';
 import { ProductId } from '../../types';
-import { PortionType } from './Lexical';
+import { GenericEntity } from './Generic';
+import { EntityType } from '../types';
 
-@Entity('product_portion')
-export class ProductPortion {
+@Entity('product_portions')
+export class ProductPortion extends GenericEntity {
 
   @PrimaryColumn()
   productId!: ProductId;
 
   @PrimaryColumn()
-  type!: PortionType['value'];
+  type!: string;
 
   @Column()
   value!: number;
@@ -30,11 +30,6 @@ export class ProductPortion {
   @JoinColumn({ name: 'productId' })
   product!: Product;
 
-  @OneToOne(
-    type => PortionType,
-    { cascade: true }
-  )
-  @JoinColumn({ name: 'type' })
-  portionType?: PortionType;
-
 }
+
+export type IProductPortion = EntityType<ProductPortion>;

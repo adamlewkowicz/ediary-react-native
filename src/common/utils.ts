@@ -126,3 +126,12 @@ export function getNumAndUnitFromString(value: string): {
     unit
   }
 }
+
+export function filterByUniqueId<T extends { id: number | string }>(
+  item: T,
+  index: number,
+  self: T[]
+): boolean {
+  const foundIndex = self.findIndex(anyItem => anyItem.id === item.id);
+  return foundIndex === index;
+}
