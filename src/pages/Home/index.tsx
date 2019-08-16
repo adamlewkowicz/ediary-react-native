@@ -28,7 +28,7 @@ interface HomeProps extends NavigationScreenProps {
   toggledProductId: AppState['diary']['toggledProductId']
 }
 const Home = (props: HomeProps) => {
-  const [name, setName] = useState('Zupa');
+  const [name, setName] = useState('Śniadanie');
   const [menuOpened, setMenuOpened] = useState(false);
   const dispatch = useDispatch();
 
@@ -90,7 +90,8 @@ const Home = (props: HomeProps) => {
               colors={nutritionColors[element]}
               percentages={props.macroNeedsLeft[element].ratio}
               title={elementTitles[element]}
-              value={props.macroNeedsLeft[element].diff}
+              reached={props.macroNeedsLeft[element].eaten}
+              goal={props.macroNeedsLeft[element].needed}
             />
           ))}
         </MacroCards>
@@ -113,7 +114,7 @@ const Home = (props: HomeProps) => {
           )}
         />
         <BasicInput
-          placeholder="Nazwa posiłku"
+          placeholder="Nazwa nowego posiłku"
           label="Nazwa posiłku"
           value={name}
           onChangeText={name => setName(name)}

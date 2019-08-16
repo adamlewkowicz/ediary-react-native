@@ -17,6 +17,9 @@ export const themeProps = {
   focusColor: '#5361E0',
   secondaryColor: '#C7C6CB',
   fontSize: 15,
+  colors: {
+    lightBlue: '#6BB4DD'
+  }
 }
 
 export type Theme = typeof themeProps;

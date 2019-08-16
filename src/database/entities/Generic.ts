@@ -9,7 +9,7 @@ import {
 
 export class GenericEntity extends BaseEntity {
 
-  static async findOneOrSave<T extends BaseEntity>(
+  static async findOneOrSaveTrx<T extends BaseEntity>(
     this: ObjectType<T>,
     options: FindOneOptions,
     payload: DeepPartial<T>
@@ -23,6 +23,19 @@ export class GenericEntity extends BaseEntity {
       const createdItem = await manager.save(Entity, payload);
       return createdItem;
     });
+  }
+
+  static async findOneOrSave<T extends BaseEntity>(
+    this: ObjectType<T>,
+    options: FindOneOptions,
+    payload: DeepPartial<T>
+  ): Promise<T> {
+    const existingItem = await super.findOne(options);
+    if (existingItem) {
+      return existingItem;
+    }
+    const createdItem: T = await super.save(payload as any);
+    return createdItem;
   }
 
   static save<T extends BaseEntity>(

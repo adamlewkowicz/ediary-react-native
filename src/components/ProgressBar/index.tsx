@@ -12,6 +12,7 @@ interface ProgressBarProps {
   renderContent?: any
   colors: string[]
   rounded?: boolean
+  marginVertical?: number
 }
 export const ProgressBar = ({
   percentages,
@@ -20,11 +21,13 @@ export const ProgressBar = ({
   width = '20px',
   colors,
   rounded = true,
+  marginVertical = 0
 }: ProgressBarProps) => {
   return (
     <Container
       vertical={vertical}
       length={length}
+      marginVertical={marginVertical}
     >
       <BackgroundStripe
         vertical={vertical}
@@ -47,9 +50,11 @@ export const ProgressBar = ({
 const Container = styled.View<{
   vertical: boolean
   length: string
+  marginVertical: number
 }>`
   position: relative;
   height: ${props => props.vertical ? props.length : 'auto'};
+  margin: ${props => `${props.marginVertical}px 0`};
 `
 
 const BackgroundStripe = styled.View<{

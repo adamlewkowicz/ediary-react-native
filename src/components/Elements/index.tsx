@@ -10,8 +10,12 @@ interface TextMetaProps {
   metaFontSize?: number
   marginTop?: string
   marginBottom?: string
+  color?: string
 }
-export const TextMeta = (props: TextMetaProps) => (
+export const TextMeta = ({
+  color = '#000',
+  ...props
+}: TextMetaProps) => (
   <Container
     marginTop={props.marginTop}
     marginBottom={props.marginBottom}
@@ -19,10 +23,14 @@ export const TextMeta = (props: TextMetaProps) => (
     <Value
       fontSize={props.valueFontSize}
       fontWeight={props.valueFontWeight}
+      color={color}
     >
       {props.value}
     </Value>
-    <Meta fontSize={props.metaFontSize}>
+    <Meta
+      fontSize={props.metaFontSize}
+      color={color}
+    >
       {props.meta}
     </Meta>
   </Container>
@@ -43,18 +51,22 @@ const Container = styled.View<{
 const Value = styled.Text<{
   fontSize?: number
   fontWeight?: FontWeightProperty
+  color: string
 }>`
   font-family: 'DMSans-Regular';
   font-size: ${({ fontSize = 14 }) => fontSize + 'px'};
   font-weight: ${({ fontWeight = 'normal' }) => fontWeight};
+  color: ${props => props.color};
 `
 
 const Meta = styled.Text<{
   fontSize?: number
+  color: string
 }>`
   font-family: 'DMSans-Regular';
   font-size: ${({ fontSize = 10 }) => fontSize + 'px'};
-  margin-left: 2px;
+  margin-left: 1px;
+  color: ${props => props.color};
 `
 
 export * from './Block';

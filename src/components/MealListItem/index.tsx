@@ -28,7 +28,7 @@ export const MealListItem = (props: MealListItemProps) => (
       accessibilityRole="radio"
     >
       <InfoContainer>
-        <Title>{props.meal.name}</Title>
+        <Title numberOfLines={1}>{props.meal.name}</Title>
         <Calories>{props.meal.kcal} kcal</Calories>
       </InfoContainer>
       <NutritionBar>
@@ -104,8 +104,11 @@ const Title = styled.Text<{
   font-size: 15px;
 `
 
-const Calories = styled.Text`
-  color: #6BB4DD;
+const Calories = styled.Text<{
+  theme: Theme
+}>`
+  font-family: ${props => props.theme.fontFamily};
+  color: ${props => props.theme.colors.lightBlue};
   font-size: 15px;
 `
 

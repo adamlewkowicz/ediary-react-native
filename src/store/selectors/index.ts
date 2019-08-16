@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import { macroNeeds } from './user';
 
 const baseMacro: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
+const macroNeedsElement = { diff: 0, ratio: 0, eaten: 0, needed: 0 };
 
 export const mergedMealSelector = (
   meals: DiaryMeal[],
@@ -86,6 +87,7 @@ const mealsMacroSum = createSelector(
   }), { ...baseMacro })
 );
 
+
 export const macroNeedsLeft = createSelector(
   mealsMacroSum,
   macroNeeds,
@@ -97,13 +99,18 @@ export const macroNeedsLeft = createSelector(
       );
       return {
         ...result,
-        [element]: { diff, ratio, eaten: macroSum[element], needed: macroNeeds[element] }
+        [element]: {
+          diff,
+          ratio,
+          eaten: macroSum[element],
+          needed: macroNeeds[element]
+        }
       }
     }, {
-      carbs: { diff: 0, ratio: 0 },
-      prots: { diff: 0, ratio: 0 },
-      fats: { diff: 0, ratio: 0 },
-      kcal: { diff: 0, ratio: 0 },
+      carbs: { ...macroNeedsElement },
+      prots: { ...macroNeedsElement },
+      fats: { ...macroNeedsElement },
+      kcal: { ...macroNeedsElement }
     })
 );
 

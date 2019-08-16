@@ -9,6 +9,7 @@ import { Block } from '../Elements';
 import { NutritionBox } from '../NutritionBox';
 import { MACRO_ELEMENTS } from '../../common/consts';
 import { InputRow } from '../InputRow';
+import { Theme } from '../../common/theme';
 
 interface ProductItemProps<P extends ProductPartial> {
   product: P
@@ -36,11 +37,13 @@ export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>
         )}
       >
         <TouchableContent onPress={() => props.onToggle(productId)}>
-          <Content>
-            <Name>{props.product.name}</Name>
+          <Block align="stretch" space="space-between">
+            <Name numberOfLines={props.isToggled ? undefined : 1}>
+              {props.product.name}
+            </Name>
             <Quantity>{props.product.quantity}g</Quantity>
             <Calories>{props.product.kcal} kcal</Calories>
-          </Content>
+          </Block>
           {props.isToggled && (
             <>
               <InputRow
@@ -76,14 +79,11 @@ const InputRowStyle = css`
   margin: 20px 0 15px 0;
 `
 
-const Content = styled.View`
-  display: flex;
-  flex-direction: row;
-`
-
 const Name = styled.Text`
   font-family: 'DMSans-Regular';
   font-size: 15px;
+  flex: 1;
+  margin-right: 14px;
 `
 
 const Quantity = styled.Text`
@@ -91,15 +91,17 @@ const Quantity = styled.Text`
   font-size: 15px;
   color: #848484;
   margin-left: auto;
+  margin-right: 14px;
 `
 
-const Calories = styled.Text`
+const Calories = styled.Text<{
+  theme: Theme
+}>`
   font-family: 'DMSans-Regular';
   font-size: 15px;
   color: #848484;
-  margin-left: 15px;
-  min-width: 70px;
   text-align: right;
+  color: ${props => props.theme.colors.lightBlue};
 `
 
 const DeleteContainer = styled.View`

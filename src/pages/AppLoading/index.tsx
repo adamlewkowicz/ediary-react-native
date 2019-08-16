@@ -7,7 +7,7 @@ import * as Actions from '../../store/actions';
 import { UserRepository } from '../../database/repositories/UserRepository';
 import { User } from '../../database/entities';
 import { NavigationScreenProps } from 'react-navigation';
-import { entitiesArray, migrationsArray } from '../../database/config';
+import { entitiesArray, migrationsArray, databaseConfig } from '../../database/config';
 
 interface AppLoadingProps extends NavigationScreenProps {}
 interface AppLoadingState {}
@@ -30,17 +30,8 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
 
   async setup() {
     const [defaultConnection] = await createConnections([
-      {
-        type: 'react-native',
-        database: 'mocker.sqlite',
-        location: 'default',
-        logging: ['error', 'query', 'schema'],
-        dropSchema: false,
-        synchronize: true,
-        migrations: migrationsArray,
-        entities: entitiesArray
-      },
-      // { name: 'transactional', ...databaseConfig }
+      { name: 'default', ...databaseConfig },
+      { name: 'transactional', ...databaseConfig }
     ]);
 
     // const hasMigrationsToRun = await defaultConnection.showMigrations();
