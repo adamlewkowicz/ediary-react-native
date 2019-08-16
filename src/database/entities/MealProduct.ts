@@ -27,7 +27,7 @@ export class MealProduct extends GenericEntity {
 
   @Column('text', { default: 'g' })
   @SqliteENUM(PRODUCT_UNITS)
-  unit!: ProductUnit
+  unit!: ProductUnit;
 
   // Cascade must be set where join column is set
   @ManyToOne(

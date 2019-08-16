@@ -83,6 +83,10 @@ export class FriscoApi {
 
     const { value: portion, unit } = getNumAndUnitFromString(portionHeading);
 
+    if (unit !== 'g' && unit !== 'ml') {
+      return null;
+    }
+
     const macroMap: { [key: string]: MacroElement } = {
       'wartość energetyczna': 'kcal',
       'energia': 'kcal',
@@ -121,13 +125,14 @@ export class FriscoApi {
     const portions = macroField.content.Headings.flatMap(heading => {
       const { value, unit } = getNumAndUnitFromString(heading);
 
-      if (value !== null && unit !== null) {
+      if ((unit === 'g' || unit === 'ml') && value !== null) {
         return [{
           type: null,
           value,
           unit
         }];
       }
+
       return [];
     });
 

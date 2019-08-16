@@ -1,13 +1,14 @@
 import {
-  PRODUCT_UNITS,
   MACRO_ELEMENTS,
   BASE_MACRO_ELEMENTS,
   USER_ID_UNSYNCED,
-  PORTION_TYPES
+  PORTION_TYPES,
+  UNIT_TYPES,
 } from './common/consts';
 import * as Screens from './pages';
 
-export type ProductUnit = typeof PRODUCT_UNITS[number];
+export type UnitType = typeof UNIT_TYPES[number];
+export type ProductUnit = 'g' | 'ml';
 
 export type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType[number];
 

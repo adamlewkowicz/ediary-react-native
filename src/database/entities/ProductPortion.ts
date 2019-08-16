@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Product } from './Product';
 import { ProductId } from '../../types';
-import { UnitType } from './Lexical';
+import { PortionType } from './Lexical';
 
 @Entity('product_portion')
 export class ProductPortion {
@@ -17,7 +17,7 @@ export class ProductPortion {
   productId!: ProductId;
 
   @PrimaryColumn()
-  type!: string;
+  type!: PortionType['value'];
 
   @Column()
   value!: number;
@@ -30,8 +30,11 @@ export class ProductPortion {
   @JoinColumn({ name: 'productId' })
   product!: Product;
 
-  @OneToOne(type => UnitType)
+  @OneToOne(
+    type => PortionType,
+    { cascade: true }
+  )
   @JoinColumn({ name: 'type' })
-  unitType!: UnitType;
+  portionType?: PortionType;
 
 }

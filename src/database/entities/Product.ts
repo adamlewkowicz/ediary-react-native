@@ -15,9 +15,9 @@ import { ProductPortion } from './ProductPortion';
 import { friscoApi } from '../../services/FriscoApi';
 import { GenericEntity } from './Generic';
 import { SqliteENUM } from '../decorators';
-import { PRODUCT_UNITS } from '../../common/consts';
 import { EntityType } from '../types';
 import { Optional } from 'utility-types';
+import { PRODUCT_UNITS } from '../../common/consts';
 
 @Entity('product')
 // @Unique(['name', 'userId'])
@@ -59,8 +59,11 @@ export class Product extends GenericEntity {
   @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   updatedAt!: Date;
 
-  @OneToMany(type => MealProduct, mealProduct => mealProduct.product)
-  mealProducts!: MealProduct[]
+  @OneToMany(
+    type => MealProduct,
+    mealProduct => mealProduct.product
+  )
+  mealProducts?: MealProduct[]
 
   @Column('boolean', { default: false })
   verified!: boolean;
@@ -75,7 +78,7 @@ export class Product extends GenericEntity {
   @OneToMany(
     type => ProductPortion,
     productPortion => productPortion.product,
-    { onDelete: 'CASCADE' }
+    { cascade: true }
   )
   portions?: ProductPortion[];
 

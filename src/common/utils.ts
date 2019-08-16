@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import { DateDay, ProductUnit } from '../types';
-import { PRODUCT_UNITS } from './consts';
+import { DateDay, UnitType } from '../types';
+import { UNIT_TYPES } from './consts';
 
 let timeout: NodeJS.Timeout;
 
@@ -45,9 +45,9 @@ export function getDayFromDate(
 
 export function getValAndUnitFromString(value: string): {
   value: number | null
-  unit: ProductUnit | null
+  unit: UnitType | null
 } {
-  const unit = PRODUCT_UNITS.find(unit => value.includes(unit));
+  const unit = UNIT_TYPES.find(unit => value.includes(unit));
   const parsedValue = parseFloat(
     value.replace(/,/, '.')
   );
@@ -101,7 +101,7 @@ interface SortByName {
 
 export function getNumAndUnitFromString(value: string): {
   value: number | null
-  unit: ProductUnit | null
+  unit: UnitType | null
 } {
   const parseToNumber = (val: string): number | null => {
     const parsed = val.trim().replace(/,/, '.')
@@ -118,7 +118,7 @@ export function getNumAndUnitFromString(value: string): {
     return result;
   }
 
-  const unit = PRODUCT_UNITS.find(unit => value.includes(` ${unit}`)) || null;
+  const unit = UNIT_TYPES.find(unit => value.includes(` ${unit}`)) || null;
   const result = parseToNumber(value);
 
   return {
