@@ -11,7 +11,7 @@ import {
   mealProductAdded,
 } from '../creators';
 import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
-import { ProductUnit, DateDay, ProductId, MealId } from '../../../types';
+import { DateDay, ProductId, MealId } from '../../../types';
 import { debounce_ } from '../../../common/utils';
 
 const debounceA = debounce_();
@@ -88,14 +88,12 @@ export const mealsFindByDay = (
 export const mealProductAdd = (
   mealId: MealId,
   productId: ProductId,
-  quantity: number = 100,
-  unit: ProductUnit = 'g'
+  quantity: number = 100
 ) => async (dispatch: any) => {
   const { product, action } = await Meal.addProduct(
     mealId,
     productId,
-    quantity,
-    unit
+    quantity
   );
   if (action === 'update') {
     dispatch(

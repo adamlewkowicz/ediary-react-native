@@ -67,7 +67,6 @@ export class Meal extends GenericEntity {
     const product = await Product.save(payload);
     const mealProduct = await MealProduct.save({
       productId: product.id,
-      unit: product.unit,
       quantity,
       mealId
     });
@@ -78,8 +77,7 @@ export class Meal extends GenericEntity {
   static async addProduct(
     mealId: MealId,
     productId: ProductId,
-    quantity: number = 100,
-    unit: ProductUnit = 'g'
+    quantity: number = 100
   ): Promise<{ product: IProductMerged, action: 'create' | 'update' }> {
     const product = await Product.findOneOrFail(productId);
     const mealProduct = await MealProduct.findOne({ mealId, productId });
@@ -95,8 +93,7 @@ export class Meal extends GenericEntity {
       const createdMealProduct = await MealProduct.save({
         quantity: portionValue,
         mealId,
-        productId,
-        unit
+        productId
       });
       const mergedProduct = { ...createdMealProduct, ...product };
       return { product: mergedProduct, action: 'create' };
