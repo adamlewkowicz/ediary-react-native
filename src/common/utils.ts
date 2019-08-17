@@ -135,3 +135,14 @@ export function filterByUniqueId<T extends { id: number | string }>(
   const foundIndex = self.findIndex(anyItem => anyItem.id === item.id);
   return foundIndex === index;
 }
+
+export function parseNumber(
+  value: string,
+  maxLength?: number
+): number {
+  const trimmed = maxLength ? value.substring(0, maxLength) : value;
+  const cleaned = trimmed.replace(/[^\d.-]/g, '');
+  const parsed = Number(cleaned);
+
+  return parsed;
+}
