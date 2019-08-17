@@ -1,5 +1,5 @@
 import React from 'react';
-import { Connection, getConnectionManager } from 'typeorm';
+import { Connection } from 'typeorm';
 import { ActivityIndicator, Alert } from 'react-native';
 import { USER_ID_UNSYNCED } from '../../common/consts';
 import { store } from '../../store';
@@ -8,6 +8,7 @@ import { UserRepository } from '../../database/repositories/UserRepository';
 import { User } from '../../database/entities';
 import { NavigationScreenProps } from 'react-navigation';
 import { databaseConfig } from '../../database/config';
+import { getOrCreateConnection } from '../../database/getOrCreateConnection';
 
 interface AppLoadingProps extends NavigationScreenProps {}
 interface AppLoadingState {}
@@ -29,18 +30,15 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
   }
 
   async setup() {
-    const connectionManager = getConnectionManager();
-
     const DEFAULT = 'default';
     const TRANSACTIONAL = 'transactional';
 
-    const defaultConnection = connectionManager.has(DEFAULT)
-      ? connectionManager.get(DEFAULT)
-      : connectionManager.create({ name: DEFAULT, ...databaseConfig });
-
-    const transactionalConnection = connectionManager.has(TRANSACTIONAL)
-      ? connectionManager.get(TRANSACTIONAL)
-      : connectionManager.create({ name: TRANSACTIONAL, ...databaseConfig });
+    const defaultConnection = await getOrCreateConnection(
+      DEFAULT, { name: DEFAULT, ...databaseConfig }
+    );
+    await getOrCreateConnection(
+      TRANSACTIONAL, { name: TRANSACTIONAL, ...databaseConfig }
+    );
 
     // const hasMigrationsToRun = await defaultConnection.showMigrations();
 
