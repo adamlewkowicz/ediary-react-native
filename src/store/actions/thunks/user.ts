@@ -1,13 +1,13 @@
 import { Profile } from '../../../database/entities';
 import { getCustomRepository } from 'typeorm';
 import { UserRepository } from '../../../database/repositories/UserRepository';
-import { AppState } from '../..';
+import { Thunk } from '../..';
 import { userProfileCreated } from '../creators/user';
 import { Omit } from 'yargs';
 
 export const userProfileCreate = (
   profile: Omit<Profile, 'id' | 'macroNeeds' | 'user' | 'measureMacroNeeds' | 'userId'>
-) => async (dispatch: any, getState: () => AppState) => {
+): Thunk => async (dispatch, getState) => {
   const userData = getState().user.data;
   if (!userData) return;
 
