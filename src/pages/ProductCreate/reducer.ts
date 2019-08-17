@@ -71,6 +71,15 @@ export function productCreateReducer(
   }
 }
 
+export function initProductCreateReducer(
+  barcode: BarcodeId = ''
+): ProductCreateState {
+  return {
+    ...initialState,
+    barcode: barcode
+  }
+}
+
 export type PortionOption = '100g' | 'portion' | 'package';
 
 type Update = {

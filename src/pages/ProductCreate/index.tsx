@@ -1,10 +1,15 @@
 import React, { useReducer, useRef, createRef, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { BasicInput, BasicInputRef } from '../../components/BasicInput';
-import { productCreateReducer, initialState, ProductCreateState, PortionOption } from './reducer';
+import {
+  productCreateReducer,
+  ProductCreateState,
+  PortionOption,
+  initProductCreateReducer
+} from './reducer';
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { Theme } from '../../common/theme';
-import { MacroElement } from '../../types';
+import { MacroElement, BarcodeId } from '../../types';
 import { InputRow } from '../../components/InputRow';
 import { useDispatch } from 'react-redux';
 import * as Actions from '../../store/actions';
@@ -14,12 +19,17 @@ import { useUserId } from '../../common/hooks';
 
 interface ProductCreateProps extends NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
 export const ProductCreate = (props: ProductCreateProps) => {
-  const [state, dispatch] = useReducer(productCreateReducer, initialState);
+  const { current: params } = useRef<ProductCreateParams>({
+    onProductCreated: props.navigation.getParam('onProductCreated'),
+    barcode: props.navigation.getParam('barcode')
+  });
+  const [state, dispatch] = useReducer(
+    productCreateReducer,
+    params.barcode,
+    initProductCreateReducer
+  );
   const storeDispatch = useDispatch();
   const userId = useUserId();
-  const { current: params } = useRef<ProductCreateParams>({
-    onProductCreated: props.navigation.getParam('onProductCreated')
-  });
   const { current: refsList } = useRef({
     producer: createRef<TextInput>(),
     portion: createRef<TextInput>(),
@@ -189,6 +199,7 @@ ProductCreate.navigationOptions = navigationOptions;
 export interface ProductCreateParams {
   onProductCreated?: () => void
   handleProductCreate?: () => void
+  barcode?: BarcodeId
 }
 
 interface ProductCreateOptions {
