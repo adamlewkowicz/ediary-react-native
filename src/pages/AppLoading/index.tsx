@@ -7,8 +7,8 @@ import * as Actions from '../../store/actions';
 import { UserRepository } from '../../database/repositories/UserRepository';
 import { User } from '../../database/entities';
 import { NavigationScreenProps } from 'react-navigation';
-import { databaseConfig } from '../../database/config';
-import { getOrCreateConnection } from '../../database/getOrCreateConnection';
+import { databaseConfig } from '../../database/config/config';
+import { getOrCreateConnection } from '../../database/utils/getOrCreateConnection';
 
 interface AppLoadingProps extends NavigationScreenProps {}
 interface AppLoadingState {}

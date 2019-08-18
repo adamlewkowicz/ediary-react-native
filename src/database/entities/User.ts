@@ -6,8 +6,13 @@ import {
   OneToOne,
   getRepository,
 } from 'typeorm';
+import {
+  IsEmail,
+  IsOptional,
+  MinLength,
+  MaxLength,
+} from 'class-validator';
 import { UserId } from '../../types';
-import { IsEmail, IsOptional, MinLength, MaxLength } from 'class-validator';
 import { Product } from './Product';
 import { Meal } from './Meal';
 import { Profile } from './Profile';

@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import '@testing-library/jest-native/extend-expect';
 import { createConnection, getConnection } from 'typeorm';
-import { config } from './src/database/config';
+import { config } from './src/database/config/config';
 
 console.disableYellowBox = true;
 
