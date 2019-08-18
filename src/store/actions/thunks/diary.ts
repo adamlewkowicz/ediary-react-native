@@ -75,6 +75,9 @@ export const productUpdate = (
   await Product.update(productId, product);
 }
 
+/**
+ * @deprecated - is this action needed, when it doesn't add product to meal?
+ */
 export const productCreate = (
   product: IProductOptional
 ): Thunk<Promise<Product>> => async (dispatch): Promise<Product> => {

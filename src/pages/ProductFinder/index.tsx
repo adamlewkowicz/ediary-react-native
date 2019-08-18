@@ -14,6 +14,7 @@ import { BarcodeButton } from '../../components/BarcodeButton';
 import { BarcodeScanParams } from '../BarcodeScan';
 import { Screen, BarcodeId } from '../../types';
 import { Button } from 'react-native-ui-kitten';
+import { ProductCreateParams } from '../ProductCreate';
 
 const debounceA = debounce_();
 
@@ -70,20 +71,42 @@ export const ProductFinder = (props: ProductFinderProps) => {
     props.navigation.navigate(barcodeScreen, screenParams);
   }
 
+  function handleProductCreateNavigation() {
+    const screen: Screen = 'ProductCreate';
+    const screenParams: ProductCreateParams = {
+      barcode: barcode ? barcode : undefined,
+      onProductCreated(createdProduct) {
+        setBarcode(null);
+        setProducts([createdProduct]);
+        setLoading(false);
+        props.navigation.navigate('ProductFinder');
+      }
+    }
+    props.navigation.navigate(screen, screenParams);
+  }
+
   function renderInfo() {
-    if (isLoading || !productsAreEmpty) return null;
+    if (
+      isLoading ||
+      !productsAreEmpty ||
+      (!name.length && barcode === null)
+    ) return null;
 
-    if (barcode) {
-
-    }
-
-    if (!name.length) {
-      <NotFoundInfo>
-        <Button>
-
+    return (
+      <>
+        <NotFoundInfo>
+          Nie znaleziono produktów.
+        </NotFoundInfo>
+        {!isConnected && (
+          <NotFoundInfo>
+            Aby wyszukiwać więcej produktów, przejdź do trybu online.
+          </NotFoundInfo>
+        )}
+        <Button onPress={handleProductCreateNavigation}>
+          Dodaj własny
         </Button>
-      </NotFoundInfo>
-    }
+      </>
+    );
   }
 
   return (
@@ -111,12 +134,7 @@ export const ProductFinder = (props: ProductFinderProps) => {
           />
         )}
       />
-      {!isLoading && productsAreEmpty && !!name.length && (
-        <NotFoundInfo>
-          Nie znaleziono żadnych produktów.
-          {!isConnected && ' Przejdź do trybu online aby wyszukiwać produkty, lub dodaj własny.'}
-        </NotFoundInfo>
-      )}
+      {renderInfo()}
     </Container>
   );
 }

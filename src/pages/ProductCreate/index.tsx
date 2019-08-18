@@ -12,10 +12,10 @@ import { Theme } from '../../common/theme';
 import { MacroElement, BarcodeId } from '../../types';
 import { InputRow } from '../../components/InputRow';
 import { useDispatch } from 'react-redux';
-import * as Actions from '../../store/actions';
 import { Options } from '../../components/Options';
 import { NavigationScreenProps } from 'react-navigation';
 import { useUserId } from '../../common/hooks';
+import { Product } from '../../database/entities';
 
 interface ProductCreateProps extends NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
 export const ProductCreate = (props: ProductCreateProps) => {
@@ -28,7 +28,6 @@ export const ProductCreate = (props: ProductCreateProps) => {
     params.barcode,
     initProductCreateReducer
   );
-  const storeDispatch = useDispatch();
   const userId = useUserId();
   const { current: refsList } = useRef({
     producer: createRef<TextInput>(),
@@ -50,17 +49,14 @@ export const ProductCreate = (props: ProductCreateProps) => {
   async function handleProductCreate() {
     const { portionOption, portionOptions, barcode, ...data } = state;
 
-    await storeDispatch(
-      Actions.productCreate({
-        ...data,
-        barcode: barcode.length ? barcode : null,
-        // quantity: data.portion,
-        userId
-      })
-    );
+    const newProduct = await Product.save({
+      ...data,
+      barcode: barcode.length ? barcode : null,
+      userId
+    });
 
     if (params.onProductCreated) {
-      params.onProductCreated();
+      params.onProductCreated(newProduct);
     }
   }
   
@@ -197,7 +193,7 @@ const navigationOptions: ProductCreateProps['navigationOptions'] = ({ navigation
 ProductCreate.navigationOptions = navigationOptions;
 
 export interface ProductCreateParams {
-  onProductCreated?: () => void
+  onProductCreated?: (product: Product) => void
   handleProductCreate?: () => void
   barcode?: BarcodeId
 }
