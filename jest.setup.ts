@@ -1,3 +1,4 @@
+import 'core-js/features/array/flat-map';
 import 'reflect-metadata';
 import '@testing-library/jest-native/extend-expect';
 import { createConnection, getConnection } from 'typeorm';
