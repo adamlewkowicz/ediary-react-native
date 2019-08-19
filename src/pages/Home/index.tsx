@@ -140,8 +140,7 @@ const HomeConnected = connect(
     toggledProductId: state.diary.toggledProductId,
     appDate: state.application.date,
     appDateDay: state.application.day,
-  }),
-  (dispatch) => ({ dispatch })
+  })
 )(Home);
 
 (HomeConnected as any).navigationOptions = {
