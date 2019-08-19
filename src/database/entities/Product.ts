@@ -7,6 +7,7 @@ import {
   JoinColumn,
   Unique,
   Like,
+  SaveOptions,
 } from 'typeorm';
 import { MealProduct, IMealProduct } from './MealProduct';
 import { BarcodeId, ProductId, UserId, ProductUnit } from '../../types';
@@ -89,13 +90,14 @@ export class Product extends GenericEntity {
   portions?: ProductPortion[];
 
   /*
-  get portion(): number | any {
-    const [firstPortion] = this.portions;
+  get portion(): number {
     const defaultPortion = 100;
 
-    if (firstPortion) {
+    if (this.portions && this.portions.length) {
+      const [firstPortion] = this.portions;
       return firstPortion.value;
     }
+
     return defaultPortion;
   }
   */
