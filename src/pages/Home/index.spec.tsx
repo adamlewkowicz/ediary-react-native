@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, findByText } from '@testing-library/react-native';
 import { App } from '../../../__tests__/utils';
-import { Meal, Product } from '../../database/entities';
+import { Meal, Product, MealProduct } from '../../database/entities';
 
 test('creates new meal and displays it', async () => {
   const mealName = 'Cucumber soup';
@@ -27,11 +27,11 @@ test('creates new meal and displays it', async () => {
   await expect(findByText(mealName)).toBeTruthy();
 });
 
-test('navigates to product search page and adds product to meal', async () => {
+test('navigates to product search screen and adds product to meal', async () => {
   const mealMock = await Meal.save({ name: 'Tomato soup' });
   const productMock = await Product.save({ name: 'Tomatoes' });
-  const mealAddProductSpy = jest.spyOn(Meal, 'addProduct');
-  const defaultQuantity = 100;
+  const mealId = mealMock.id;
+  const productId = productMock.id;
 
   const {
     findByLabelText,
@@ -58,10 +58,5 @@ test('navigates to product search page and adds product to meal', async () => {
   // check if page changed to Home
 
   await expect(findByText(toggleMealButton, productMock.name)).toBeTruthy();
-  // expect(mealAddProductSpy).toHaveBeenCalledWith(
-  //   mealMock.id,
-  //   productMock.id,
-  //   defaultQuantity,
-  //   productMock.unit
-  // );
+  await expect(MealProduct.findOne({ productId, mealId })).toBeTruthy();
 });
