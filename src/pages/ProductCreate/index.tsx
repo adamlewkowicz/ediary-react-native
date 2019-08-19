@@ -11,7 +11,6 @@ import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { Theme } from '../../common/theme';
 import { MacroElement, BarcodeId } from '../../types';
 import { InputRow } from '../../components/InputRow';
-import { useDispatch } from 'react-redux';
 import { Options } from '../../components/Options';
 import { NavigationScreenProps } from 'react-navigation';
 import { useUserId } from '../../common/hooks';
@@ -49,8 +48,13 @@ export const ProductCreate = (props: ProductCreateProps) => {
   async function handleProductCreate() {
     const { portionOption, portionOptions, barcode, ...data } = state;
 
+    if (!data.name.length) {
+      return;
+    }
+
     const newProduct = await Product.save({
       ...data,
+      name: data.name.trim(),
       barcode: barcode.length ? barcode : null,
       userId
     });
@@ -62,7 +66,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
   
   useEffect(() => {
     props.navigation.setParams({ handleProductCreate });
-  }, []);
+  }, [state]);
 
   function handlePortionOptionChange(option: PortionOption) {
     dispatch({

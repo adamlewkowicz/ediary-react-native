@@ -20,19 +20,23 @@ import { Optional } from 'utility-types';
 import { PRODUCT_UNITS } from '../../common/consts';
 import { productFinder } from '../../services/ProductFinder';
 import { mapAsyncSequence, filterByUniqueId } from '../../common/utils';
+import { MinLength } from 'class-validator';
 
 @Entity('product')
 // @Unique(['name', 'userId'])
 // @Unique(['name', 'verified'])
+@Unique(['barcode', 'userId'])
+@Unique(['barcode', 'verified'])
 export class Product extends GenericEntity {
 
   @PrimaryGeneratedColumn()
   id!: ProductId;
 
   @Column()
+  @MinLength(2)
   name!: string;
 
-  @Column('text', { unique: true, nullable: true })
+  @Column('text', { nullable: true })
   barcode!: BarcodeId | null
 
   @Column('decimal', { precision: 5, scale: 2, default: 0 })
@@ -130,19 +134,22 @@ export class Product extends GenericEntity {
     return savedProducts;
   }
 
-  static async findByBarcode(barcode: BarcodeId): Promise<Product[]> {
-    const savedProducts = await this.find({ barcode });
+  static findByBarcode(barcode: BarcodeId): Promise<Product[]> {
+    return this.find({ barcode });
+  }
+
+  static async findAndFetchByBarcode(barcode: BarcodeId): Promise<Product[]> {
+    const savedProducts = await this.findByBarcode(barcode);
     const hasVerifiedProduct = savedProducts.some(product => product.verified);
     
     if (!savedProducts.length || !hasVerifiedProduct) {
       const fetchedProducts = await friscoApi.findByQuery(barcode);
-      const createdProducts = await Promise.all(
-        fetchedProducts.map(({ unit, portions, ...product }) => this.save({
-          ...product,
-          verified: true
-        }))
+      const createdProducts = await mapAsyncSequence(
+        fetchedProducts,
+        ({ unit, portions, ...product }) => this.save({ ...product, verified: true })
       );
-      return createdProducts;
+
+      return [...savedProducts, ...createdProducts];
     }
 
     return savedProducts;

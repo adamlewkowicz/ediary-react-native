@@ -34,10 +34,10 @@ export const ProductFinder = (props: ProductFinderProps) => {
     setName(name);
     if (!isLoading) setLoading(true);
     const trimmedName = name.trim();
-    const findMethod = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
+    const methodName = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
 
     debounceA(async () => {
-      const foundProducts = await Product[findMethod](trimmedName);
+      const foundProducts = await Product[methodName](trimmedName);
 
       const sortedProducts = foundProducts
         .sort(sortByMostAccurateName(name));
@@ -56,7 +56,8 @@ export const ProductFinder = (props: ProductFinderProps) => {
         setProducts([]);
         setLoading(true);
 
-        const foundProducts = await Product.findByBarcode(barcode);
+        const methodName = isConnected ? 'findAndFetchByBarcode' : 'findByBarcode';
+        const foundProducts = await Product[methodName](barcode);
 
         if (foundProducts.length) {
           setProducts(foundProducts);
