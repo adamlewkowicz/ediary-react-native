@@ -3,7 +3,7 @@ import { ProductUnit, BarcodeId } from '../../types';
 export interface ProductCreateState {
   name: string
   producer: string
-  portion: number
+  portion: string
   unit: ProductUnit
   portionOptions: {
     title: string
@@ -11,10 +11,10 @@ export interface ProductCreateState {
     selected: boolean
   }[]
   portionOption: PortionOption
-  carbs: number
-  prots: number
-  fats: number
-  kcal: number
+  carbs: string
+  prots: string
+  fats: string
+  kcal: string
   barcode: BarcodeId | string
   mealId: null
 }
@@ -41,11 +41,11 @@ export const initialState: ProductCreateState = {
   ],
   portionOption: '100g',
   unit: 'g',
-  portion: 0,
-  carbs: 0,
-  prots: 0,
-  fats: 0,
-  kcal: 0,
+  portion: '100',
+  carbs: '',
+  prots: '',
+  fats: '',
+  kcal: '',
   barcode: '',
   mealId: null
 }

@@ -15,6 +15,7 @@ import { Options } from '../../components/Options';
 import { NavigationScreenProps } from 'react-navigation';
 import { useUserId } from '../../common/hooks';
 import { Product } from '../../database/entities';
+import { parseNumber } from '../../common/utils';
 
 interface ProductCreateProps extends NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
 export const ProductCreate = (props: ProductCreateProps) => {
@@ -56,7 +57,11 @@ export const ProductCreate = (props: ProductCreateProps) => {
       ...data,
       name: data.name.trim(),
       barcode: barcode.length ? barcode : null,
-      userId
+      userId,
+      carbs: Number(data.carbs),
+      prots: Number(data.prots),
+      fats: Number(data.fats),
+      kcal: Number(data.kcal),
     });
 
     if (params.onProductCreated) {
@@ -99,8 +104,8 @@ export const ProductCreate = (props: ProductCreateProps) => {
         />
         <InputRow
           title={portionTitle[state.portionOption]}
-          value={state.portion.toString()}
-          onChangeText={portion => handleUpdate({ portion: Number(portion) })}
+          value={state.portion}
+          onChangeText={portion => handleUpdate({ portion: parseNumber(portion, 10000, 6) })}
           onSubmitEditing={() => refsList.carbs.current!.focus()}
           ref={refsList.portion}
         />
@@ -108,8 +113,8 @@ export const ProductCreate = (props: ProductCreateProps) => {
           <InputRow
             key={data.title}
             title={data.title}
-            value={state[data.property].toString()}
-            onChangeText={value => handleUpdate({ [data.property]: Number(value) })}
+            value={state[data.property]}
+            onChangeText={value => handleUpdate({ [data.property]: parseNumber(value, 10000, 6) })}
             onSubmitEditing={() => refsList[data.nextRef].current!.focus()}
             ref={refsList[data.property]}
           />

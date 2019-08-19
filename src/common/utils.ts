@@ -138,11 +138,16 @@ export function filterByUniqueId<T extends { id: number | string }>(
 
 export function parseNumber(
   value: string,
-  maxLength?: number
-): number {
+  maxNumber?: number,
+  maxLength?: number,
+): string {
   const trimmed = maxLength ? value.substring(0, maxLength) : value;
   const cleaned = trimmed.replace(/[^\d.-]/g, '');
   const parsed = Number(cleaned);
 
-  return parsed;
+  if (maxNumber && parsed >= maxNumber) {
+    return cleaned.slice(0, -1);
+  }
+
+  return cleaned;
 }
