@@ -2,11 +2,11 @@ import { getConnection, Connection } from 'typeorm';
 
 export async function getDatabaseSchema(
   connection: Connection = getConnection()
-): Promise<string[]> {
+): Promise<TableSchema[]> {
   const tableSchema: TableSchema[] = await connection.query(
     `SELECT * FROM sqlite_master WHERE type = "table";`
   );
-  return tableSchema.map(schema => schema.sql);
+  return tableSchema;
 }
 
 interface TableSchema {

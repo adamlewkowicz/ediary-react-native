@@ -1,0 +1,94 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`entity sql matches snapshot: meal 1`] = `
+"CREATE TABLE \\"meal\\" (
+  \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+  \\"name\\" varchar NOT NULL,
+  \\"carbs\\" decimal(5, 2) NOT NULL DEFAULT (0),
+  \\"prots\\" decimal(5, 2) NOT NULL DEFAULT (0),
+  \\"fats\\" decimal(5, 2) NOT NULL DEFAULT (0),
+  \\"kcal\\" decimal(5, 2) NOT NULL DEFAULT (0),
+  \\"date\\" text NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+  \\"userId\\" integer,
+  CONSTRAINT \\"FK_419ad998c5e3b37a7cce0f872f5\\" FOREIGN KEY (\\"userId\\") REFERENCES \\"user\\" (\\"id\\") ON DELETE NO ACTION ON UPDATE NO ACTION
+)"
+`;
+
+exports[`entity sql matches snapshot: meal_product 1`] = `
+"CREATE TABLE \\"meal_product\\" (
+  \\"mealId\\" integer NOT NULL,
+  \\"productId\\" integer NOT NULL,
+  \\"quantity\\" decimal(4, 1) NOT NULL,
+  CONSTRAINT \\"FK_ad97c8c16a4ff39daaf8f464279\\" FOREIGN KEY (\\"mealId\\") REFERENCES \\"meal\\" (\\"id\\") ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT \\"FK_769d3e5caceede515715277c784\\" FOREIGN KEY (\\"productId\\") REFERENCES \\"product\\" (\\"id\\") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  PRIMARY KEY (\\"mealId\\", \\"productId\\")
+)"
+`;
+
+exports[`entity sql matches snapshot: portion_type 1`] = `"CREATE TABLE \\"portion_type\\" (\\"value\\" varchar PRIMARY KEY NOT NULL)"`;
+
+exports[`entity sql matches snapshot: product 1`] = `
+"CREATE TABLE \\"product\\" (
+  \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+  \\"name\\" varchar NOT NULL,
+  \\"barcode\\" text,
+  \\"carbs\\" decimal(5, 2) NOT NULL DEFAULT (0),
+  \\"prots\\" decimal(5, 2) NOT NULL DEFAULT (0),
+  \\"fats\\" decimal(5, 2) NOT NULL DEFAULT (0),
+  \\"kcal\\" decimal(5, 2) NOT NULL DEFAULT (0),
+  \\"unit\\" text NOT NULL DEFAULT ('g'),
+  \\"createdAt\\" text NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+  \\"updatedAt\\" text NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+  \\"verified\\" boolean NOT NULL DEFAULT (0),
+  \\"userId\\" integer,
+  CONSTRAINT \\"UQ_ecea47f30dc9f7ad7eb8ddc5989\\" UNIQUE (\\"barcode\\", \\"verified\\"),
+  CONSTRAINT \\"UQ_c1dd1975fe160d2190161668c52\\" UNIQUE (\\"barcode\\", \\"userId\\"),
+  CONSTRAINT \\"CHK_fc8bb6dce3ee11546ec5f9d2bb\\" CHECK (\\"unit\\" IN ('g', 'ml')),
+  CONSTRAINT \\"FK_329b8ae12068b23da547d3b4798\\" FOREIGN KEY (\\"userId\\") REFERENCES \\"user\\" (\\"id\\") ON DELETE NO ACTION ON UPDATE NO ACTION
+)"
+`;
+
+exports[`entity sql matches snapshot: product_portions 1`] = `
+"CREATE TABLE \\"product_portions\\" (
+  \\"productId\\" integer NOT NULL,
+  \\"type\\" varchar NOT NULL,
+  \\"value\\" integer NOT NULL,
+  CONSTRAINT \\"UQ_422bab5f9d32229ab5eec6f1631\\" UNIQUE (\\"productId\\", \\"type\\"),
+  CONSTRAINT \\"FK_03c8a652a50d45ef2abcda1db18\\" FOREIGN KEY (\\"productId\\") REFERENCES \\"product\\" (\\"id\\") ON DELETE CASCADE ON UPDATE NO ACTION,
+  PRIMARY KEY (\\"productId\\", \\"type\\")
+)"
+`;
+
+exports[`entity sql matches snapshot: profile 1`] = `
+"CREATE TABLE \\"profile\\" (
+  \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+  \\"weight\\" tinyint NOT NULL,
+  \\"height\\" tinyint NOT NULL,
+  \\"age\\" tinyint NOT NULL,
+  \\"male\\" boolean NOT NULL,
+  \\"weightGoal\\" text NOT NULL,
+  \\"userId\\" integer NOT NULL,
+  \\"macroNeedsCarbs\\" decimal(6, 2) NOT NULL DEFAULT (0),
+  \\"macroNeedsProts\\" decimal(6, 2) NOT NULL DEFAULT (0),
+  \\"macroNeedsFats\\" decimal(6, 2) NOT NULL DEFAULT (0),
+  \\"macroNeedsKcal\\" decimal(6, 2) NOT NULL DEFAULT (0),
+  CONSTRAINT \\"REL_a24972ebd73b106250713dcddd\\" UNIQUE (\\"userId\\"),
+  CONSTRAINT \\"CHK_e13c7952dc8655e48c8f83608a\\" CHECK (
+    \\"weightGoal\\" IN ('decrease', 'maintain', 'increase')
+  ),
+  CONSTRAINT \\"FK_a24972ebd73b106250713dcddd9\\" FOREIGN KEY (\\"userId\\") REFERENCES \\"user\\" (\\"id\\") ON DELETE NO ACTION ON UPDATE NO ACTION
+)"
+`;
+
+exports[`entity sql matches snapshot: unit_type 1`] = `"CREATE TABLE \\"unit_type\\" (\\"value\\" varchar PRIMARY KEY NOT NULL)"`;
+
+exports[`entity sql matches snapshot: user 1`] = `
+"CREATE TABLE \\"user\\" (
+  \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+  \\"email\\" text,
+  \\"login\\" varchar NOT NULL,
+  \\"password\\" varchar NOT NULL,
+  \\"createdAt\\" text NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+  \\"updatedAt\\" text NOT NULL DEFAULT (CURRENT_TIMESTAMP)
+)"
+`;
