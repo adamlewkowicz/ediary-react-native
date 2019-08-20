@@ -34,7 +34,7 @@ export class GenericEntity extends BaseEntity {
     if (existingItem) {
       return existingItem;
     }
-    const createdItem: T = await super.save(payload as any);
+    const createdItem: T = await (this as typeof GenericEntity).save<T>(payload);
     return createdItem;
   }
 
@@ -43,7 +43,8 @@ export class GenericEntity extends BaseEntity {
     entityOrEntities: DeepPartial<T> | DeepPartial<T>[],
     saveOptions?: SaveOptions
   ): Promise<T> {
-    return super.save(entityOrEntities as any, saveOptions);
+    const entityInstances = super.create(entityOrEntities as any);
+    return super.save(entityInstances as any, saveOptions);
   }
 
 }
