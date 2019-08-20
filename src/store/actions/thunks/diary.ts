@@ -96,7 +96,7 @@ export const mealsFindByDay = (
 export const mealProductAdd = (
   mealId: MealId,
   productId: ProductId,
-  quantity: number = 100
+  quantity?: number
 ): Thunk => async (dispatch) => {
   const { product, action } = await Meal.addProduct(
     mealId,

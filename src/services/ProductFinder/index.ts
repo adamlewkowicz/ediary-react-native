@@ -32,8 +32,6 @@ export class ProductFinder {
       let name = record.ingredient_name.replace('WA:ŻYWO', '').trim();
       const prots = Number(record.bialko);
       const kcal = Number(record.energia);
-      const portion = Number(record.weight);
-      const isVerified = true as const;
       let carbs = Number(record.weglowodany);
       let fats = Number(record.tluszcz);
 
@@ -69,14 +67,12 @@ export class ProductFinder {
       const normalizedProduct = {
         _id,
         name,
-        portion,
         prots,
         carbs,
         fats,
         kcal,
         portions,
         images,
-        isVerified,
       }
       
       return normalizedProduct;

@@ -6,8 +6,6 @@ import { Product } from '../../database/entities';
 import { ProductListItem } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
 import { NavigationScreenProps } from 'react-navigation';
-import { useSelector } from 'react-redux';
-import { AppState } from '../../store';
 import { Theme } from '../../common/theme';
 import { Block } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
@@ -15,6 +13,7 @@ import { BarcodeScanParams } from '../BarcodeScan';
 import { Screen, BarcodeId } from '../../types';
 import { Button } from 'react-native-ui-kitten';
 import { ProductCreateParams } from '../ProductCreate';
+import { useConnected } from '../../common/hooks';
 
 const debounceA = debounce_();
 
@@ -24,7 +23,7 @@ export const ProductFinder = (props: ProductFinderProps) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setLoading] = useState(false);
   const [barcode, setBarcode] = useState<BarcodeId | null>(null);
-  const isConnected = useSelector<AppState, boolean>(state => state.application.isConnected);
+  const isConnected = useConnected();
   const productsAreEmpty = !products.length;
   const { current: params } = useRef<ProductFinderParams>({
     onItemPress: props.navigation.getParam('onItemPress')
@@ -38,7 +37,7 @@ export const ProductFinder = (props: ProductFinderProps) => {
 
     debounceA(async () => {
       const foundProducts = await Product[methodName](trimmedName);
-
+      console.log(foundProducts)
       const sortedProducts = foundProducts
         .sort(sortByMostAccurateName(name));
 

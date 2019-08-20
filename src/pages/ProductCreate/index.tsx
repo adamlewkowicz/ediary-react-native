@@ -47,7 +47,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
   }
 
   async function handleProductCreate() {
-    const { portionOption, portionOptions, barcode, ...data } = state;
+    const { portionOption, portionOptions, portion, barcode, ...data } = state;
 
     if (!data.name.length) {
       return;

@@ -77,12 +77,11 @@ export class Meal extends GenericEntity {
   static async addProduct(
     mealId: MealId,
     productId: ProductId,
-    quantity: number = 100
+    quantity?: number
   ): Promise<{ product: IProductMerged, action: 'create' | 'update' }> {
     const product = await Product.findOneOrFail(productId);
     const mealProduct = await MealProduct.findOne({ mealId, productId });
-    const { portions } = product;
-    const portionValue = portions && portions.length ? portions[0].value : quantity;
+    const portionValue = quantity ? quantity : product.portion;
 
     if (mealProduct) {
       mealProduct.quantity += portionValue;

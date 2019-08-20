@@ -17,7 +17,7 @@ import { friscoApi } from '../../services/FriscoApi';
 import { GenericEntity } from './Generic';
 import { SqliteENUM } from '../decorators';
 import { EntityType } from '../types';
-import { Optional } from 'utility-types';
+import { Optional, Omit } from 'utility-types';
 import { PRODUCT_UNITS } from '../../common/consts';
 import { productFinder } from '../../services/ProductFinder';
 import { mapAsyncSequence, filterByUniqueId } from '../../common/utils';
@@ -85,11 +85,10 @@ export class Product extends GenericEntity {
   @OneToMany(
     type => ProductPortion,
     productPortion => productPortion.product,
-    { cascade: true }
+    { cascade: true, eager: true }
   )
   portions?: ProductPortion[];
 
-  /*
   get portion(): number {
     const defaultPortion = 100;
 
@@ -100,9 +99,8 @@ export class Product extends GenericEntity {
 
     return defaultPortion;
   }
-  */
 
-  static async findByNameLike(name: string, limit: number = 10): Promise<Product[]> {
+  static findByNameLike(name: string, limit: number = 10): Promise<Product[]> {
     return this.find({
       where: { name: Like(`%${name}%`) },
       take: limit
@@ -123,7 +121,10 @@ export class Product extends GenericEntity {
               name: product.name,
               verified: true
             }
-          }, { ...product, verified: true })
+          }, Object.assign(new Product,
+              { ...product, verified: true }
+            )
+          )
         );
 
         const mergedProducts = [...savedProducts, ...foundOrCreatedProducts]
@@ -148,7 +149,7 @@ export class Product extends GenericEntity {
       const fetchedProducts = await friscoApi.findByQuery(barcode);
       const createdProducts = await mapAsyncSequence(
         fetchedProducts,
-        ({ unit, portions, ...product }) => this.save({ ...product, verified: true })
+        ({ unit, portion, portions, ...product }) => this.save({ ...product, verified: true })
       );
 
       return [...savedProducts, ...createdProducts];
@@ -159,6 +160,6 @@ export class Product extends GenericEntity {
 
 }
 
-export type IProduct = EntityType<Product>;
+export type IProduct = Omit<EntityType<Product>, 'portion'>;
 export type IProductOptional = Optional<IProduct, 'id' | 'updatedAt' | 'createdAt' | 'mealProducts' | 'portions' | 'user' | 'verified'>;
 export type IProductMerged = IProduct & IMealProduct;

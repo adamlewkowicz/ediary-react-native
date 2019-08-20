@@ -8,7 +8,7 @@ interface ProductListItemProps extends TouchableOpacityProps {
   hideBottomLine?: boolean
   product: {
     name: string
-    portion?: number
+    portion: number
     carbs: number
     prots: number
     fats: number
@@ -36,7 +36,7 @@ export const ProductListItem = ({
         </Name>
         <Content>
           <Info>
-            <Quantity>{product.portion || 100}g</Quantity>
+            <Quantity>{product.portion}g</Quantity>
             <Kcal>{product.kcal} kcal</Kcal>
           </Info>
           <NutritionContainer>
