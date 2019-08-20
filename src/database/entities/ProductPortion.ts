@@ -8,8 +8,8 @@ import {
 } from 'typeorm';
 import { Product } from './Product';
 import { ProductId } from '../../types';
-import { GenericEntity } from './Generic';
 import { EntityType } from '../types';
+import { GenericEntity } from '../generics/GenericEntity';
 
 @Entity('product_portions')
 @Unique(['productId', 'type'])

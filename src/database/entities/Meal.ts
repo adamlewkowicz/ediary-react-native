@@ -9,11 +9,11 @@ import {
 } from 'typeorm';
 import { Product, IProductMerged } from './Product';
 import { MealProduct } from './MealProduct';
-import { MealId, UserId, DateDay, ProductUnit, ProductId } from '../../types';
+import { MealId, UserId, DateDay, ProductId } from '../../types';
 import { User } from './User';
-import { GenericEntity } from './Generic';
 import { DeepPartial } from 'typeorm';
 import { EntityType } from '../types';
+import { GenericEntity } from '../generics/GenericEntity';
 
 @Entity('meal')
 export class Meal extends GenericEntity {

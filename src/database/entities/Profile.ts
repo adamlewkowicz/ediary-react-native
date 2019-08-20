@@ -10,7 +10,7 @@ import { Min, Max } from 'class-validator';
 import { WeightGoal, ProfileId, UserId } from '../../types';
 import { SqliteENUM } from '../decorators';
 import { WEIGHT_GOAL } from '../../common/consts';
-import { Macro } from '../shared';
+import { Macro } from '../embeds/Macro';
 import { User } from './User';
 import { measureMacroNeeds } from '../../common/helpers';
 

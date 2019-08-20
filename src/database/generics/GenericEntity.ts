@@ -11,7 +11,7 @@ import {
 import { validate } from 'class-validator';
 import { EntityValidationError } from '../../common/error';
 
-export class GenericEntity extends BaseEntity {
+export abstract class GenericEntity extends BaseEntity {
 
   static async findOneOrSaveTrx<T extends BaseEntity>(
     this: ObjectType<T>,

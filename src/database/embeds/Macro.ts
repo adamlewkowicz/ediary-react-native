@@ -1,6 +1,6 @@
 import { Column } from 'typeorm';
 
-export class Macro {
+export abstract class Macro {
   
   @Column('decimal', {
     precision: 6,

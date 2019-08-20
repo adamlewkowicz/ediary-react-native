@@ -13,7 +13,6 @@ import { BarcodeId, ProductId, UserId, ProductUnit } from '../../types';
 import { User } from './User';
 import { ProductPortion } from './ProductPortion';
 import { friscoApi } from '../../services/FriscoApi';
-import { GenericEntity } from './Generic';
 import { SqliteENUM } from '../decorators';
 import { EntityType } from '../types';
 import { Optional, Omit } from 'utility-types';
@@ -21,6 +20,7 @@ import { PRODUCT_UNITS } from '../../common/consts';
 import { productFinder } from '../../services/ProductFinder';
 import { mapAsyncSequence, filterByUniqueId } from '../../common/utils';
 import { MinLength } from 'class-validator';
+import { GenericEntity } from '../generics/GenericEntity';
 
 @Entity('product')
 // @Unique(['name', 'userId'])

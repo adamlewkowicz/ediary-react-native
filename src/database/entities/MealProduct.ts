@@ -7,8 +7,8 @@ import {
 } from 'typeorm';
 import { Product } from './Product';
 import { Meal } from './Meal';
-import { GenericEntity } from './Generic';
 import { EntityType } from '../types';
+import { GenericEntity } from '../generics/GenericEntity';
 
 @Entity('meal_product')
 export class MealProduct extends GenericEntity {
