@@ -14,13 +14,16 @@ import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
 import { DateDay, ProductId, MealId } from '../../../types';
 import { debounce_ } from '../../../common/utils';
 import { Thunk } from '../..';
+import dayjs from 'dayjs';
 
 const debounceA = debounce_();
 
 export const mealCreate = (
-  name: Meal['name']
+  name: Meal['name'],
+  date: Date
 ): Thunk => async (dispatch) => {
-  const meal = await Meal.save({ name });
+  const parsedDate = dayjs(date).format('YYYY-MM-DD HH:mm:ss');
+  const meal = await Meal.save({ name, date: parsedDate });
   dispatch(mealToggled(null));
   dispatch(mealCreated(meal));
 }
