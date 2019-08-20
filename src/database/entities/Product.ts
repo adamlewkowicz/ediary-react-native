@@ -7,6 +7,7 @@ import {
   JoinColumn,
   Unique,
   Like,
+  BeforeInsert,
 } from 'typeorm';
 import { MealProduct, IMealProduct } from './MealProduct';
 import { BarcodeId, ProductId, UserId, ProductUnit } from '../../types';
@@ -21,7 +22,6 @@ import { PRODUCT_UNITS } from '../../common/consts';
 import { productFinder } from '../../services/ProductFinder';
 import { mapAsyncSequence, filterByUniqueId } from '../../common/utils';
 import { MinLength, validate } from 'class-validator';
-import { BeforeInsert } from 'typeorm/browser';
 import { EntityValidationError } from '../../common/error';
 
 @Entity('product')
