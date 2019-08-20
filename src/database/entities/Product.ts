@@ -7,7 +7,6 @@ import {
   JoinColumn,
   Unique,
   Like,
-  BeforeInsert,
 } from 'typeorm';
 import { MealProduct, IMealProduct } from './MealProduct';
 import { BarcodeId, ProductId, UserId, ProductUnit } from '../../types';
@@ -21,8 +20,7 @@ import { Optional, Omit } from 'utility-types';
 import { PRODUCT_UNITS } from '../../common/consts';
 import { productFinder } from '../../services/ProductFinder';
 import { mapAsyncSequence, filterByUniqueId } from '../../common/utils';
-import { MinLength, validate } from 'class-validator';
-import { EntityValidationError } from '../../common/error';
+import { MinLength } from 'class-validator';
 
 @Entity('product')
 // @Unique(['name', 'userId'])
@@ -91,15 +89,6 @@ export class Product extends GenericEntity {
     { cascade: true, eager: true }
   )
   portions?: ProductPortion[];
-
-  @BeforeInsert()
-  async validate() {
-    const [error] = await validate(this);
-    if (error) {
-      const [firstErrorMessage] = Object.values(error.constraints)
-      throw new EntityValidationError(firstErrorMessage);
-    }
-  }
 
   get portion(): number {
     const defaultPortion = 100;

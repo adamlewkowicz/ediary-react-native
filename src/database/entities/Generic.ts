@@ -5,7 +5,11 @@ import {
   getConnection,
   ObjectType,
   SaveOptions,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
+import { validate } from 'class-validator';
+import { EntityValidationError } from '../../common/error';
 
 export class GenericEntity extends BaseEntity {
 
@@ -45,6 +49,16 @@ export class GenericEntity extends BaseEntity {
   ): Promise<T> {
     const entityInstances = super.create(entityOrEntities as any);
     return super.save(entityInstances as any, saveOptions);
+  }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async validate() {
+    const [error] = await validate(this);
+    if (error) {
+      const [firstErrorMessage] = Object.values(error.constraints)
+      throw new EntityValidationError(firstErrorMessage);
+    }
   }
 
 }
