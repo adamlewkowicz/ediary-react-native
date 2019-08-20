@@ -37,7 +37,6 @@ export const ProductFinder = (props: ProductFinderProps) => {
 
     debounceA(async () => {
       const foundProducts = await Product[methodName](trimmedName);
-      console.log(foundProducts)
       const sortedProducts = foundProducts
         .sort(sortByMostAccurateName(name));
 
