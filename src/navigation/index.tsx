@@ -4,14 +4,16 @@ import {
   createBottomTabNavigator,
   createSwitchNavigator,
 } from 'react-navigation';
-import { Home } from '../pages/Home';
-import { ProductCreate } from '../pages/ProductCreate';
-import { ProductFind } from '../pages/ProductFind';
-import { AppLoading } from '../pages/AppLoading';
-import { ProfileCreate } from '../pages/ProfileCreate';
+import {
+  Home,
+  ProductCreate,
+  ProductFind,
+  AppLoading,
+  ProfileCreate,
+  BarcodeScan,
+} from '../screens';
 import { themeProps } from '../common/theme';
 import { IS_DEV } from '../common/consts';
-import { BarcodeScan } from '../pages/BarcodeScan';
 
 export const HomeStack = createStackNavigator({
   Home,

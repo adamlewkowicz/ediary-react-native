@@ -5,7 +5,7 @@ import {
   PORTION_TYPES,
   UNIT_TYPES,
 } from './common/consts';
-import * as Screens from './pages';
+import * as Screens from './screens';
 
 export type UnitType = typeof UNIT_TYPES[number];
 export type ProductUnit = 'g' | 'ml';
