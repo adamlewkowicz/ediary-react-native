@@ -9,6 +9,7 @@ export interface BasicInputProps extends TextInputProps {
   minWidth?: number
   textAlign?: TextAlignProperty
   forwardedRef?: React.Ref<TextInput>
+  marginVertical?: number
 }
 export const BasicInput = ({
   label,
@@ -17,11 +18,16 @@ export const BasicInput = ({
   forwardedRef,
   textAlign,
   minWidth,
+  marginVertical = 0,
   ...props
 }: BasicInputProps) => {
   const [isFocused, setFocused] = useState(false);
   return (
-    <Container isFocused={isFocused} minWidth={minWidth}>
+    <Container
+      marginVertical={marginVertical}
+      isFocused={isFocused}
+      minWidth={minWidth}
+    >
       {label && <Label>{label}:</Label>}
       <Input
         textAlign={textAlign}
@@ -43,6 +49,7 @@ export const BasicInput = ({
 const Container = styled.View<{
   isFocused: boolean
   minWidth?: number
+  marginVertical: number
   theme: Theme
 }>`
   font-family: ${props => props.theme.fontFamily};
@@ -52,6 +59,7 @@ const Container = styled.View<{
   font-weight: 900;
   margin-bottom: 20px;
   min-width: ${props => props.minWidth || '100%'};
+  margin: ${props => `${props.marginVertical}px 0px`};
 `
 
 const Label = styled.Text<{

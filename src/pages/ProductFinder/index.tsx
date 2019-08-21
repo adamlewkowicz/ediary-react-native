@@ -101,7 +101,10 @@ export const ProductFinder = (props: ProductFinderProps) => {
             Aby wyszukiwać więcej produktów, przejdź do trybu online.
           </NotFoundInfo>
         )}
-        <Button onPress={handleProductCreateNavigation}>
+        <Button
+          style={{ marginTop: 15 }}
+          onPress={handleProductCreateNavigation}
+        >
           Dodaj własny
         </Button>
       </>

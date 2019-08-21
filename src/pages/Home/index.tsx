@@ -114,6 +114,7 @@ const Home = (props: HomeProps) => {
           )}
         />
         <BasicInput
+          marginVertical={15}
           placeholder="Nazwa nowego posiłku"
           label="Nazwa posiłku"
           value={name}
@@ -125,7 +126,10 @@ const Home = (props: HomeProps) => {
         >
           Dodaj posiłek
         </Button>
-        <Button onPress={handleProductCreatorNavigation}>
+        <Button
+          style={{ marginTop: 30 }}
+          onPress={handleProductCreatorNavigation}
+        >
           Dodaj własny produkt
         </Button>
       </ScrollView>
