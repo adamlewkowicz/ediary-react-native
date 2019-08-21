@@ -41,7 +41,8 @@ export class Meal extends GenericEntity {
 
   @OneToMany(
     type => MealProduct,
-    mealProduct => mealProduct.meal
+    mealProduct => mealProduct.meal,
+    { cascade: true }
   )
   mealProducts!: MealProduct[]
 
@@ -99,6 +100,28 @@ export class Meal extends GenericEntity {
     }
   }
 
+  static async createWithProduct(
+    payload: DeepPartial<IMeal>,
+    productId: ProductId,
+    quantity?: number
+  ): Promise<Meal> {
+    const product = await Product.findOneOrFail(productId);
+
+    const newMeal = {
+      ...payload,
+      mealProducts: [
+        {
+          productId: product.id,
+          quantity: quantity ? quantity : product.portion
+        }
+      ]
+    }
+
+    const createdMeal = await Meal.save(newMeal);
+    return createdMeal; 
+  }
+
 }
 
 export type IMeal = EntityType<Meal>;
+export type IMealRequired = IMeal

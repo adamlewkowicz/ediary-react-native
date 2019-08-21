@@ -4,7 +4,7 @@ import '@testing-library/jest-native/extend-expect';
 import { createConnection, getConnection } from 'typeorm';
 import { config } from './src/database/config/config';
 
-console.disableYellowBox = true;
+// console.disableYellowBox = true;
 
 beforeEach(async () => {
   await createConnection(config.test);

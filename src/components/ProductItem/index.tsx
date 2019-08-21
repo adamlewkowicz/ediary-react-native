@@ -36,7 +36,10 @@ export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>
           </DeleteContainer>
         )}
       >
-        <TouchableContent onPress={() => props.onToggle(productId)}>
+        <TouchableContent
+          onPress={() => props.onToggle(productId)}
+          accessibilityLabel="Pokaż szczegóły produktu"
+        >
           <Block align="stretch" space="space-between">
             <Name numberOfLines={props.isToggled ? undefined : 1}>
               {props.product.name}
@@ -48,6 +51,7 @@ export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>
             <>
               <InputRow
                 title="Ilość"
+                accessibilityLabel="Zmień ilość produktu"
                 value={props.product.quantity.toString()}
                 onChangeText={quantity => props.onQuantityUpdate(productId, Number(quantity))}
                 css={InputRowStyle}
