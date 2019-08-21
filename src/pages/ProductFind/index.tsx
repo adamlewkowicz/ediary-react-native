@@ -17,15 +17,15 @@ import { useConnected } from '../../common/hooks';
 
 const debounceA = debounce_();
 
-interface ProductFinderProps extends NavigationScreenProps {}
-export const ProductFinder = (props: ProductFinderProps) => {
+interface ProductFindProps extends NavigationScreenProps {}
+export const ProductFind = (props: ProductFindProps) => {
   const [name, setName] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setLoading] = useState(false);
   const [barcode, setBarcode] = useState<BarcodeId | null>(null);
   const isConnected = useConnected();
   const productsAreEmpty = !products.length;
-  const { current: params } = useRef<ProductFinderParams>({
+  const { current: params } = useRef<ProductFindParams>({
     onItemPress: props.navigation.getParam('onItemPress')
   });
 
@@ -48,7 +48,7 @@ export const ProductFinder = (props: ProductFinderProps) => {
   function handleBarcodeScanNavigation() {
     const screenParams: BarcodeScanParams = {
       async onBarcodeDetected(barcode) {
-        const finderScreen: Screen = 'ProductFinder';
+        const finderScreen: Screen = 'ProductFind';
         props.navigation.navigate(finderScreen);
         setName('');
         setProducts([]);
@@ -78,7 +78,7 @@ export const ProductFinder = (props: ProductFinderProps) => {
         setBarcode(null);
         setProducts([createdProduct]);
         setLoading(false);
-        props.navigation.navigate('ProductFinder');
+        props.navigation.navigate('ProductFind');
       }
     }
     props.navigation.navigate(screen, screenParams);
@@ -154,11 +154,11 @@ const NotFoundInfo = styled.Text<{
   padding: 0 50px;
 `
 
-ProductFinder.navigationOptions = {
+ProductFind.navigationOptions = {
   headerTitle: 'Znajdź produkt'
 }
 
 export type HandleItemPressHandler = ((product: Product) => void) | undefined;
-export type ProductFinderParams = {
+export type ProductFindParams = {
   onItemPress?: HandleItemPressHandler
 }

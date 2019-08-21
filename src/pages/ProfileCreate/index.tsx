@@ -12,8 +12,8 @@ import { useDispatch } from 'react-redux';
 import * as Actions from '../../store/actions';
 import { NavigationScreenProps } from 'react-navigation';
 
-interface ProfileCreatorProps extends NavigationScreenProps{}
-export const ProfileCreator = (props: ProfileCreatorProps) => {
+interface ProfileCreateProps extends NavigationScreenProps{}
+export const ProfileCreate = (props: ProfileCreateProps) => {
   const [step, setStep] = useState(0);
   const [male, setMale] = useState(true);
   const [height, setHeight] = useState(170);

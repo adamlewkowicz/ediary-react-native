@@ -1,9 +1,14 @@
-import { createStackNavigator, createAppContainer, createBottomTabNavigator, createSwitchNavigator } from 'react-navigation';
+import {
+  createStackNavigator,
+  createAppContainer,
+  createBottomTabNavigator,
+  createSwitchNavigator,
+} from 'react-navigation';
 import { Home } from '../pages/Home';
 import { ProductCreate } from '../pages/ProductCreate';
-import { ProductFinder } from '../pages/ProductFinder';
+import { ProductFind } from '../pages/ProductFind';
 import { AppLoading } from '../pages/AppLoading';
-import { ProfileCreator } from '../pages/ProfileCreator';
+import { ProfileCreate } from '../pages/ProfileCreate';
 import { themeProps } from '../common/theme';
 import { IS_DEV } from '../common/consts';
 import { BarcodeScan } from '../pages/BarcodeScan';
@@ -11,7 +16,7 @@ import { BarcodeScan } from '../pages/BarcodeScan';
 export const HomeStack = createStackNavigator({
   Home,
   ProductCreate,
-  ProductFinder,
+  ProductFind,
   BarcodeScan,
 }, {
   headerMode: 'screen',
@@ -32,7 +37,7 @@ const MainStack = createBottomTabNavigator({
 
 const RootNavigator = createSwitchNavigator({
   Main: MainStack,
-  ProfileCreator,
+  ProfileCreate,
   AppLoading
 }, { initialRouteName: 'AppLoading' });
 

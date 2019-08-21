@@ -53,7 +53,7 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
     );
 
     if (user.profile == null) {
-      this.props.navigation.navigate('ProfileCreator');
+      this.props.navigation.navigate('ProfileCreate');
     } else {
       this.props.navigation.navigate('Main');
     }

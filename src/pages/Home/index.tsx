@@ -13,7 +13,7 @@ import { MealListItem } from '../../components/MealListItem';
 import { FloatingButton } from '../../components/FloatingButton';
 import { BasicInput } from '../../components/BasicInput';
 import { NavigationScreenProps } from 'react-navigation';
-import { ProductFinderParams } from '../ProductFinder';
+import { ProductFindParams } from '../ProductFind';
 import { mealProductAdd } from '../../store/actions';
 import { ProductCreateParams } from '../ProductCreate';
 import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
@@ -37,13 +37,13 @@ const Home = (props: HomeProps) => {
   }, [props.appDateDay]);
 
   const handleProductFinderNavigation = (mealId: MealId) => {
-    const screenParams: ProductFinderParams = {
+    const screenParams: ProductFindParams = {
       onItemPress(foundProduct) {
         props.navigation.navigate('Home');
         dispatch(mealProductAdd(mealId, foundProduct.id));
       }
     }
-    props.navigation.navigate('ProductFinder', screenParams);
+    props.navigation.navigate('ProductFind', screenParams);
   }
   
   const handleProductCreatorNavigation = () => {
