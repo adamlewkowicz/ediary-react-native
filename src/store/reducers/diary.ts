@@ -44,7 +44,7 @@ export function diaryReducer(
           ...data,
           isToggled: false,
           day: getDayFromDate(meal.date),
-          products: mealProducts.map(mealProduct => mealProduct.productId)
+          productIds: mealProducts.map(mealProduct => mealProduct.productId),
         }
       }),
       products: action.payload.flatMap(meal => {
@@ -70,7 +70,7 @@ export function diaryReducer(
           ...action.payload,
           day: getDayFromDate(action.payload.date),
           isToggled: true,
-          products: []
+          productIds: [],
         }
       ]
     }
@@ -99,7 +99,7 @@ export function diaryReducer(
     case MEAL_PRODUCT_ADDED: return {
       ...state,
       meals: state.meals.map(meal => meal.id === action.meta.mealId 
-        ? { ...meal, products: [...meal.products, action.payload.id] }
+        ? { ...meal, productIds: [...meal.productIds, action.payload.id] }
         : meal
       ),
       products: [
@@ -115,12 +115,12 @@ export function diaryReducer(
       ...state,
       meals: state.meals.map(meal => {
         if (meal.id === action.meta.mealId) {
-          const productIds = meal.products.filter(productId =>
+          const productIds = meal.productIds.filter(productId =>
             productId !== action.meta.productId
           );
           return {
             ...meal,
-            products: productIds
+            productIds
           }
         }
         return meal;
@@ -181,8 +181,7 @@ export interface DiaryMealPayload {
 export interface DiaryMeal extends DiaryMealPayload {
   isToggled: boolean
   day: DateDay
-  /** List of meal's product ids */
-  products: ProductId[]
+  productIds: ProductId[]
 }
 
 export interface DiaryProductPayload {
