@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-native-ui-kitten';
-import { useDispatch, connect } from 'react-redux';
+import { connect } from 'react-redux';
 import * as Actions from '../../store/actions';
-import { AppState } from '../../store';
+import { AppState, Dispatch } from '../../store';
 import { FlatList, ScrollView, Alert } from 'react-native';
 import * as selectors from '../../store/selectors';
 import { DateChanger } from '../../components/DateChanger';
@@ -26,11 +26,12 @@ interface HomeProps extends NavigationScreenProps {
   appDateDay: AppState['application']['day']
   macroNeedsLeft: selectors.MacroNeedsLeft
   toggledProductId: AppState['diary']['toggledProductId']
+  dispatch: Dispatch
 }
 const Home = (props: HomeProps) => {
   const [name, setName] = useState('Śniadanie');
   const [menuOpened, setMenuOpened] = useState(false);
-  const dispatch = useDispatch();
+  const { dispatch } = props;
 
   useEffect(() => {
     dispatch(Actions.mealsFindByDay(props.appDateDay));
