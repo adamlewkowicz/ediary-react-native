@@ -16,9 +16,12 @@ import { UserId } from '../../types';
 import { Product } from './Product';
 import { Meal } from './Meal';
 import { Profile } from './Profile';
+import { GenericEntity } from '../generics/GenericEntity';
+import { DeepPartial } from 'redux';
+import { EntityType } from '../types';
 
 @Entity('user')
-export class User {
+export class User extends GenericEntity {
 
   @PrimaryGeneratedColumn()
   id!: UserId;
@@ -42,18 +45,46 @@ export class User {
   @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   updatedAt!: string;
 
-  @OneToMany(type => Product, product => product.userId)
-  products!: Product[];
+  @OneToMany(
+    type => Product,
+    product => product.userId
+  )
+  products?: Product[];
   
-  @OneToMany(type => Meal, meal => meal.userId)
-  meals!: Meal[];
+  @OneToMany(
+    type => Meal,
+    meal => meal.userId
+  )
+  meals?: Meal[];
 
-  @OneToOne(type => Profile, profile => profile.user)
-  profile!: Profile; 
+  @OneToOne(
+    type => Profile,
+    profile => profile.user
+  )
+  profile?: Profile; 
   
   async getProfile(): Promise<Profile> {
     const profile = await getRepository(Profile).findOneOrFail(this.id);
     this.profile = profile;
     return profile;
   }
+
+  static async getOrCreate(
+    payload: DeepPartial<IUser> & { id: UserId }
+  ): Promise<User> {
+    const { id } = await this.findOneOrSave({
+      where: { id: payload.id }},
+      payload
+    );
+
+    const user = await this
+      .findOneOrFail({
+        where: { id },
+        relations: ['profile']
+      });
+
+    return user;
+  }
 }
+
+export type IUser = EntityType<User>;

@@ -1,10 +1,8 @@
 import React from 'react';
-import { Connection } from 'typeorm';
 import { ActivityIndicator, Alert } from 'react-native';
 import { USER_ID_UNSYNCED } from '../../common/consts';
 import { store } from '../../store';
 import * as Actions from '../../store/actions';
-import { UserRepository } from '../../database/repositories/UserRepository';
 import { User } from '../../database/entities';
 import { NavigationScreenProps } from 'react-navigation';
 import { databaseConfig } from '../../database/config/config';
@@ -46,7 +44,12 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
       // await defaultConnection.runMigrations();
     // }
 
-    const user = await this.getUser(defaultConnection);
+    const user = await User.getOrCreate({
+      id: USER_ID_UNSYNCED,
+      email: null,
+      login: 'login',
+      password: 'password',
+    });
 
     store.dispatch(
       Actions.appInitialized(user)
@@ -57,26 +60,6 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
     } else {
       this.props.navigation.navigate('Main');
     }
-  }
-
-  async getUser(connection: Connection): Promise<User> {
-    const userRepository = connection.getCustomRepository(UserRepository)
-
-    await userRepository
-      .findOneOrSave({ where: { id: USER_ID_UNSYNCED }}, {
-        id: USER_ID_UNSYNCED,
-        email: null,
-        login: 'login',
-        password: 'password',
-      });
-
-    const user = await userRepository
-      .findOneOrFail({
-        where: { id: USER_ID_UNSYNCED },
-        relations: ['profile']
-      });
-
-    return user;
   }
 
   handleConnectionStatusUpdate(status: boolean) {
