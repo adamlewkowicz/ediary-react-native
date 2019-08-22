@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import '@testing-library/jest-native/extend-expect';
 import { createConnection, getConnection } from 'typeorm';
 import { config } from './src/database/config/config';
+import { NativeModules } from 'react-native';
 
 // console.disableYellowBox = true;
 
@@ -16,13 +17,7 @@ afterEach(async () => {
 
 jest.mock('NativeAnimatedHelper');
 
-jest.mock('NativeModules', () => ({
-  UIManager: {
-    RCTView: () => ({
-      directEventTypes: {}
-    })
-  },
-  KeyboardObserver: {},
+Object.assign(NativeModules, {
   RNGestureHandlerModule: {
     attachGestureHandler: jest.fn(),
     createGestureHandler: jest.fn(),
@@ -30,5 +25,8 @@ jest.mock('NativeModules', () => ({
     updateGestureHandler: jest.fn(),
     State: {},
     Directions: {}
-  }
-}));
+  },
+  PlatformConstants: {
+    forceTouchAvailable: false,
+  }}
+);

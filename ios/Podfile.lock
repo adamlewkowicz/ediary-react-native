@@ -217,10 +217,10 @@ SPEC CHECKSUMS:
   React-jsi: 21d3153b1153fbf6510a92b6b11e33e725cb7432
   React-jsiexecutor: 7549641e48bafae7bfee3f3ea19bf4901639c5de
   React-jsinspector: 73f24a02fa684ed6a2b828ba116874a2191ded88
-  react-native-camera: fa20f6aa54ce4a84c47e38a2d63dc0f3c18dccf9
-  react-native-netinfo: c8798d4becf1df39247d1625abc623ee65832c75
-  react-native-slider: 27bcb456301032f9c7ea077a12d781765b5d6c3a
-  react-native-sqlite-storage: 3cfa904d9750f7e846c9a14c47951583ee99dbf4
+  react-native-camera: 53e453fd5e6501afbac79d6b21a5fbfd84950eda
+  react-native-netinfo: e2c8a843bb18ab6c3f1e6cbead694491b36e3ffd
+  react-native-slider: 40bdbfc1af0393922ac331bc1d95a6c5d5174fb6
+  react-native-sqlite-storage: c7d77c26a0b82a304d7158d3515f188665e3ef72
   React-RCTActionSheet: 9f71d7ae3e8fb10e08d162cbf14c621349dbfab3
   React-RCTAnimation: 981d8c95b0e30918a9832ccac32af83562a27fae
   React-RCTBlob: 21e73d1020a302a75fed30dbaee9f15287b80baa

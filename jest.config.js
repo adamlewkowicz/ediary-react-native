@@ -1,9 +1,12 @@
+const jestPreset = require('@testing-library/react-native/jest-preset');
+
 module.exports = {
-  preset: 'react-native',
+  preset: '@testing-library/react-native',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   setupFilesAfterEnv: [
-    "./jest.setup.ts",
+    ...jestPreset.setupFiles,
     "@testing-library/react-native/cleanup-after-each",
+    "./jest.setup.ts",
   ],
   modulePathIgnorePatterns: [
     "<rootDir>/__tests__/utils",

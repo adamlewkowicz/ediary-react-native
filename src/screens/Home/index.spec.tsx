@@ -3,6 +3,7 @@ import {
   render,
   fireEvent,
   findByText,
+  wait,
 } from '@testing-library/react-native';
 import { App } from '../../../__tests__/utils';
 import { Meal, Product, MealProduct } from '../../database/entities';
@@ -71,17 +72,12 @@ test('updates product\'s quantity', async () => {
   const carbsMock = 10;
   const quantityMock = 180;
   const carbsAfterQuantityUpdate = 18;
-  const productMock = await Product.save({
-    name: 'Milk',
-    carbs: carbsMock
-  });
+  const productMock = await Product.save({ name: 'Milk', carbs: carbsMock });
   const productId = productMock.id;
   const mealMock = await Meal.createWithProduct({ name: 'Milk soup' }, productId);
   const mealId = mealMock.id;
 
-  const {
-    findByLabelText,
-  } = render(<App />);
+  const { findByLabelText } = render(<App />);
 
   const toggleMealButton = await findByLabelText('Pokaż szczegóły posiłku');
   fireEvent.press(toggleMealButton);
@@ -91,15 +87,17 @@ test('updates product\'s quantity', async () => {
   
   const productQuantityInput = await findByLabelText('Zmień ilość produktu');
   fireEvent.changeText(productQuantityInput, quantityMock);
-
-  // fix this by:
-  // https://github.com/testing-library/native-testing-library/issues/24
-  // https://www.native-testing-library.com/docs/install
-  // await findByText(toggleProductButton, carbsAfterQuantityUpdate.toString());
-
-  // temp workaround until findByText fix
-  await new Promise(r => setTimeout(r, 500))
-
-  const mealProduct = await MealProduct.findOneOrFail({ mealId });
-  expect(mealProduct.quantity).toEqual(quantityMock);
+  
+  await findByText(
+    toggleProductButton,
+    /180/
+  );
+  await findByText(
+    toggleProductButton,
+    carbsAfterQuantityUpdate.toString()
+  );
+  await wait(async () => {
+    const mealProduct = await MealProduct.findOneOrFail({ mealId });
+    expect(mealProduct.quantity).toEqual(quantityMock);
+  });
 });
