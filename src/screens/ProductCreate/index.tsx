@@ -85,12 +85,14 @@ export const ProductCreate = (props: ProductCreateProps) => {
       <Container behavior="padding">
         <BasicInput
           label="Nazwa"
+          accessibilityLabel="Nazwa produktu"
           value={state.name}
           onChangeText={name => handleUpdate({ name })}
           onSubmitEditing={() => refsList.producer.current!.focus()}
         />
         <BasicInputRef
           label="Producent"
+          accessibilityLabel="Producent"
           value={state.producer}
           onChangeText={producer => handleUpdate({ producer })}
           onSubmitEditing={() => refsList.portion.current!.focus()}
@@ -108,6 +110,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
           onChangeText={portion => handleUpdate({ portion: parseNumber(portion, 10000, 6) })}
           onSubmitEditing={() => refsList.carbs.current!.focus()}
           ref={refsList.portion}
+          accessibilityLabel="Ilość produktu"
         />
         {nutritionInputs.map(data => (
           <InputRow
@@ -117,6 +120,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
             onChangeText={value => handleUpdate({ [data.property]: parseNumber(value, 10000, 6) })}
             onSubmitEditing={() => refsList[data.nextRef].current!.focus()}
             ref={refsList[data.property]}
+            accessibilityLabel={data.title}
           />
         ))}
         <InputRow
@@ -126,6 +130,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
           value={state.barcode as string}
           onChangeText={barcode => handleUpdate({ barcode })}
           onSubmitEditing={handleProductCreate}
+          accessibilityLabel="Kod kreskowy"
         />
       </Container>
     </ScrollView>
@@ -193,7 +198,10 @@ const nutritionInputs: {
 const navigationOptions: ProductCreateProps['navigationOptions'] = ({ navigation }) => ({
   headerTitle: 'Stwórz produkt',
   headerRight: (
-    <SaveButton onPress={navigation.getParam('handleProductCreate')}>
+    <SaveButton
+      onPress={navigation.getParam('handleProductCreate')}
+      accessibilityLabel="Zapisz produkt"  
+    >
       <SaveText>Zapisz</SaveText>
     </SaveButton>
   )

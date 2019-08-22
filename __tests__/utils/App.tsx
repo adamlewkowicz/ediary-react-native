@@ -1,6 +1,6 @@
 import React from 'react';
-import { createAppContainer, createStackNavigator } from 'react-navigation';
-import { HomeStack } from '../../src/navigation';
+import { createAppContainer } from 'react-navigation';
+import { createHomeStack } from '../../src/navigation';
 import { Provider } from 'react-redux';
 import { AppState, configureStore } from '../../src/store';
 import { Screen } from '../../src/types';
@@ -14,17 +14,15 @@ interface AppProps {
   initialState?: Partial<AppState>
   initialRouteName?: Screen
   store?: Store<AppState>
+  screen?: Screen
 }
 export function App({
-  initialRouteName = 'Home',
   initialState,
-  store = configureStore(initialState)
+  store = configureStore(initialState),
+  screen = 'Home'
 }: AppProps) {
-  const MainStack = createStackNavigator({
-    Home: HomeStack
-  }, { initialRouteName });
-
-  const AppContainer = createAppContainer(MainStack);
+  const HomeStack = createHomeStack(screen);
+  const AppContainer = createAppContainer(HomeStack);
 
   return (
     <Provider store={store}>

@@ -14,20 +14,28 @@ import {
 } from '../screens';
 import { themeProps } from '../common/theme';
 import { IS_DEV } from '../common/consts';
+import { Screen } from '../types';
 
-export const HomeStack = createStackNavigator({
-  Home,
-  ProductCreate,
-  ProductFind,
-  BarcodeScan,
-}, {
-  headerMode: 'screen',
-  defaultNavigationOptions: {
-    headerTitleStyle: {
-      fontFamily: themeProps.fontFamily
+export function createHomeStack(
+  initialRouteName: Screen = 'Home'
+) {
+  return createStackNavigator({
+    Home,
+    ProductCreate,
+    ProductFind,
+    BarcodeScan,
+  }, {
+    initialRouteName,
+    headerMode: 'screen',
+    defaultNavigationOptions: {
+      headerTitleStyle: {
+        fontFamily: themeProps.fontFamily
+      }
     }
-  }
-});
+  });
+}
+
+const HomeStack = createHomeStack();
 
 const MainStack = createBottomTabNavigator({
   // ...IS_DEV && { StoryBook: require('../../storybook').StorybookUIRoot },
