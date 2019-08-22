@@ -8,6 +8,27 @@ import {
 import { App } from '../../../__tests__/utils';
 import { Meal, Product, MealProduct } from '../../database/entities';
 
+test('changing date display accurate meals', async () => {
+  const mealMock = await Meal.save({ name: 'Salad' });
+  const {
+    findByLabelText,
+    queryByText,
+    findByText,
+  } = render(<App />);
+
+  await findByText(mealMock.name);
+  
+  const nextDayButton = await findByLabelText('Następny dzień');
+  fireEvent.press(nextDayButton);
+
+  await wait(() => expect(queryByText(mealMock.name)).toBeFalsy());
+
+  const prevDayButton = await findByLabelText('Poprzedni dzień');
+  fireEvent.press(prevDayButton);
+
+  await findByText(mealMock.name)
+});
+
 test('creates new meal and displays it', async () => {
   const mealName = 'Cucumber soup';
 
@@ -30,6 +51,33 @@ test('creates new meal and displays it', async () => {
 
   expect(toggleMealButton).toBeTruthy();
   await expect(findByText(mealName)).toBeTruthy();
+});
+
+test('creates meal using correct date', async () => {
+  const mealName = 'Fruit salad';
+  const {
+    findByLabelText,
+    queryByText,
+    findByText,
+    getByPlaceholderText,
+    getByLabelText,
+  } = render(<App />);
+
+  const nextDayButton = await findByLabelText('Następny dzień');
+  fireEvent.press(nextDayButton);
+
+  const createMealNameInput = getByPlaceholderText('Nazwa nowego posiłku');
+  fireEvent.changeText(createMealNameInput, mealName);
+
+  const createMealConfirmButton = getByLabelText('Utwórz nowy posiłek');
+  fireEvent.press(createMealConfirmButton);
+
+  await findByText(mealName);
+
+  const prevDayButton = await findByLabelText('Poprzedni dzień');
+  fireEvent.press(prevDayButton);
+
+  await wait(() => expect(queryByText(mealName)).toBeFalsy());
 });
 
 test('navigates to product search screen and adds product to meal', async () => {
@@ -90,7 +138,8 @@ test('updates product\'s quantity', async () => {
   
   await findByText(
     toggleProductButton,
-    /180/
+    quantityMock.toString(),
+    { exact: false }
   );
   await findByText(
     toggleProductButton,

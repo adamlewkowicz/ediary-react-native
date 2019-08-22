@@ -30,6 +30,7 @@ export const DateChanger = (props: DateChangerProps) => {
     <Block marginVertical={8} align="center" space="space-between">
       <DayChangeButton
         title="Poprzedni"
+        accessibilityLabel="Poprzedni dzień"
         onPress={() => props.onChange(
           dayjsDate.add(-1, 'day').toDate()
         )}
@@ -40,6 +41,7 @@ export const DateChanger = (props: DateChangerProps) => {
       </CalendarButton>
       <DayChangeButton
         title="Następny"
+        accessibilityLabel="Następny dzień"
         onPress={() => props.onChange(
           dayjsDate.add(1, 'day').toDate()
         )}

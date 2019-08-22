@@ -17,7 +17,8 @@ interface AppProps {
 }
 export function App({
   initialRouteName = 'Home',
-  store = configureStore()
+  initialState,
+  store = configureStore(initialState)
 }: AppProps) {
   const MainStack = createStackNavigator({
     Home: HomeStack
