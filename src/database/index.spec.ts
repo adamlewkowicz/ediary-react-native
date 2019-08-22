@@ -1,5 +1,6 @@
 import { getDatabaseSchema } from './utils/getSchema';
 import sqlFormatter from 'sql-formatter';
+import { getConnection } from 'typeorm';
 
 test('entity sql matches snapshot', async () => {
   const schema = await getDatabaseSchema();
@@ -10,4 +11,10 @@ test('entity sql matches snapshot', async () => {
       expect(prettySql).toMatchSnapshot(tbl_name);
     }
   }
+});
+
+test('migrations run without issues', async () => {
+  const connection = getConnection();
+  await connection.dropDatabase();
+  await connection.runMigrations();
 });
