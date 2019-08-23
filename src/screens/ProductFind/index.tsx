@@ -74,6 +74,7 @@ export const ProductFind = (props: ProductFindProps) => {
     const screen: Screen = 'ProductCreate';
     const screenParams: ProductCreateParams = {
       barcode: barcode ? barcode : undefined,
+      name: name.length ? name.trim() : undefined,
       onProductCreated(createdProduct) {
         setBarcode(null);
         setProducts([createdProduct]);

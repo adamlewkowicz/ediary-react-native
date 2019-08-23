@@ -25,7 +25,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
   });
   const [state, dispatch] = useReducer(
     productCreateReducer,
-    params.barcode,
+    params,
     initProductCreateReducer
   );
   const userId = useUserId();
@@ -209,10 +209,13 @@ const navigationOptions: ProductCreateProps['navigationOptions'] = ({ navigation
 
 ProductCreate.navigationOptions = navigationOptions;
 
-export interface ProductCreateParams {
+export interface ProductDataParams {
+  barcode?: BarcodeId
+  name?: string
+}
+export interface ProductCreateParams extends ProductDataParams {
   onProductCreated?: (product: Product) => void
   handleProductCreate?: () => void
-  barcode?: BarcodeId
 }
 
 interface ProductCreateOptions {
