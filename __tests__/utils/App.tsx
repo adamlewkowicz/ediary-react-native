@@ -9,6 +9,22 @@ import { mapping, light as lightTheme } from '@eva-design/eva';
 import { themeProps } from '../../src/common/theme';
 import { ThemeProvider } from 'styled-components/native';
 import { Store } from 'redux';
+import { User } from '../../src/database/entities';
+import { USER_ID_UNSYNCED } from '../../src/common/consts';
+import * as Actions from '../../src/store/actions';
+
+let user: User;
+let initialized = false;
+
+beforeEach(async () => {
+  initialized = false;
+  user = await User.getOrCreate({
+    id: USER_ID_UNSYNCED,
+    email: null,
+    login: 'login',
+    password: 'password',
+  });
+});
 
 interface AppProps {
   initialState?: Partial<AppState>
@@ -23,6 +39,13 @@ export function App({
 }: AppProps) {
   const HomeStack = createHomeStack(screen);
   const AppContainer = createAppContainer(HomeStack);
+
+  if (!initialized) {
+    store.dispatch(
+      Actions.appInitialized(user)
+    );
+    initialized = true;
+  }
 
   return (
     <Provider store={store}>

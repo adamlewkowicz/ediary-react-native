@@ -16,7 +16,6 @@ export interface ProductCreateState {
   fats: string
   kcal: string
   barcode: BarcodeId | string
-  mealId: null
 }
 
 export const initialState: ProductCreateState = {
@@ -47,7 +46,6 @@ export const initialState: ProductCreateState = {
   fats: '',
   kcal: '',
   barcode: '',
-  mealId: null
 }
 
 export function productCreateReducer(
