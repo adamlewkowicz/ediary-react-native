@@ -14,7 +14,6 @@ import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
 import { DateDay, ProductId, MealId } from '../../../types';
 import { debounce_, findOrFail } from '../../../common/utils';
 import { Thunk } from '../..';
-import dayjs from 'dayjs';
 
 const debounceA = debounce_();
 
@@ -22,16 +21,20 @@ export const mealCreate = (
   name: Meal['name'],
   date: Date
 ): Thunk => async (dispatch) => {
-  const parsedDate = dayjs(date).format('YYYY-MM-DD HH:mm:ss');
-  const meal = await Meal.save({ name, date: parsedDate });
+  const meal = await Meal.saveWithDate({ name }, date);
   dispatch(mealToggled(null));
   dispatch(mealCreated(meal));
 }
 
 export const mealDelete = (
   mealId: MealId
-): Thunk => async (dispatch) => {
+): Thunk => async (dispatch, getState) => {
+  const { templates } = getState().diary;
+  // const meal = findOn
   dispatch(mealDeleted(mealId));
+  if (templates.find()) {
+
+  }
   await Meal.delete(mealId);
 }
 
@@ -54,7 +57,14 @@ export const mealProductCreate = (
 export const mealProductDelete = (
   mealId: Meal['id'],
   productId: Product['id']
-): Thunk => async (dispatch) => {
+): Thunk => async (dispatch, getState) => {
+  const { meals } = getState().diary;
+  const meal = findOrFail(meals, meal => meal.id === mealId);
+
+  if (meal.isTemplate) {
+
+  }
+
   dispatch(mealProductDeleted(mealId, productId));
   await MealProduct.delete({ mealId, productId });
 }

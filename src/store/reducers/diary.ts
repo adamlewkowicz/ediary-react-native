@@ -17,6 +17,7 @@ import {
   ProductId,
   MealId,
   DateDay,
+  DateTime,
 } from '../../types';
 import { Meal, IProduct } from '../../database/entities';
 import { DiaryActions } from '../actions';
@@ -26,13 +27,13 @@ import { getDayFromDate } from '../../common/utils';
 const initialState: DiaryState = {
   meals: [
     {
-      id: 'Śniadanie',
+      id: -1,
       name: 'Śniadanie',
       carbs: 0,
       prots: 0,
       fats: 0,
       kcal: 0,
-      date: null,
+      date: null as any,
       day: '' as any,
       isTemplate: true,
       isToggled: false,
@@ -43,7 +44,12 @@ const initialState: DiaryState = {
   ],
   templates: [
     {
-      name: 'Śniadanie'
+      name: 'Śniadanie',
+      time: '08:30:00' as any as DateTime,
+    },
+    {
+      name: 'Obiad',
+      time: '12:00:00' as any as DateTime,
     }
   ],
   products: [],
@@ -244,5 +250,9 @@ interface DiaryState {
   products: DiaryProduct[]
   recentProducts: IProduct[]
   toggledProductId: ProductId | null
+  templates: {
+    name: string
+    time: DateTime
+  }[]
   isLoading: boolean
 }

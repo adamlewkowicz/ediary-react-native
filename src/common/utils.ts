@@ -159,7 +159,7 @@ export function findOrFail<T>(
   const foundItem = array.find(matcher);
   if (!foundItem) {
     throw new Error(
-      '[findOrFail] - Item could not be found for specified criteria'
+      '[findOrFail] - No item could be found for specified criteria'
     );
   }
   return foundItem;

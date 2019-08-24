@@ -53,4 +53,8 @@ export interface DateDay extends String {
   _dateDayBrand: 'YYYY-MM-DD';
 }
 
+export interface DateTime extends String {
+  _dateTimeBrand: 'HH:mm:ss'
+}
+
 export type Environment = 'development' | 'test' | 'production';

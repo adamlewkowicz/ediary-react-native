@@ -9,6 +9,7 @@ const macroNeedsElement = { diff: 0, ratio: 0, eaten: 0, needed: 0 };
 
 const meals = (state: StoreState) => state.diary.meals;
 const products = (state: StoreState) => state.diary.products;
+const templates = (state: StoreState) => state.diary.templates;
 
 const calcedProducts = createSelector(
   products,
@@ -98,6 +99,43 @@ export const macroNeedsLeft = createSelector(
       kcal: { ...macroNeedsElement }
     })
 );
+
+const mealsWithTemplates = createSelector(
+  mealsWithRatio,
+  templates,
+  (meals, templates): MealsWithRatio => {
+    const filteredTemplates = templates.filter((template, index) => {
+      const foundIndex = meals.findIndex(meal => meal.name === template.name);
+      return foundIndex >= index;
+    });
+
+    // return [
+    //   ...templates.map((template, index) => ({
+    //     id: index * -1,
+    //     name: template.name,
+    //     carbs: 0,
+    //     prots: 0,
+    //     fats: 0,
+    //     kcal: 0,
+
+    //     isTemplate: true,
+    //   }))
+    // ]
+    
+    return [
+      ...meals.map(meal => ({
+        ...meal,
+        isTemplate: false
+      })),
+      ...templates.map(template => ({
+        isTemplate: true
+      }))
+    ]
+    // const mockedTemplates = templates
+
+    return [...meals, ...templates]
+  }
+)
 
 export type MacroNeedsLeft = ReturnType<typeof macroNeedsLeft>;
 export type MealsWithRatio = ReturnType<typeof mealsWithRatio>;

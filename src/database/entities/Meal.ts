@@ -6,6 +6,7 @@ import {
   ManyToOne,
   JoinColumn,
   Between,
+  BeforeInsert,
 } from 'typeorm';
 import { Product, IProductMerged } from './Product';
 import { MealProduct } from './MealProduct';
@@ -14,6 +15,8 @@ import { User } from './User';
 import { DeepPartial } from 'typeorm';
 import { EntityType } from '../types';
 import { GenericEntity } from '../generics/GenericEntity';
+import dayjs from 'dayjs';
+import { DATE_FORMAT } from '../../common/consts';
 
 @Entity('meal')
 export class Meal extends GenericEntity {
@@ -52,6 +55,17 @@ export class Meal extends GenericEntity {
   @ManyToOne(type => User, { nullable: true })
   @JoinColumn({ name: 'userId' })
   user!: User;
+
+  static saveWithDate(
+    payload: DeepPartial<IMeal>,
+    date: Date
+  ): Promise<Meal> {
+    const formattedDate = dayjs(date).format(DATE_FORMAT);
+    return this.save({
+      ...payload,
+      date: formattedDate
+    });
+  }
 
   static findByDay(dateDay: DateDay) {
     return this.find({
@@ -118,7 +132,10 @@ export class Meal extends GenericEntity {
     }
 
     const createdMeal = await Meal.save(newMeal);
-    return createdMeal; 
+    const mealWithRelations = Meal.findOneOrFail(createdMeal.id, {
+      relations: ['mealProducts', 'mealProducts.product']
+    });
+    return mealWithRelations; 
   }
 
 }
