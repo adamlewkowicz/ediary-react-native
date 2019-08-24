@@ -24,7 +24,28 @@ import { calcMacroByQuantity } from '../helpers/diary';
 import { getDayFromDate } from '../../common/utils';
 
 const initialState: DiaryState = {
-  meals: [],
+  meals: [
+    {
+      id: 'Śniadanie',
+      name: 'Śniadanie',
+      carbs: 0,
+      prots: 0,
+      fats: 0,
+      kcal: 0,
+      date: null,
+      day: '' as any,
+      isTemplate: true,
+      isToggled: false,
+      productIds: [],
+      createdAt: 1,
+      updatedAt: 1,
+    }
+  ],
+  templates: [
+    {
+      name: 'Śniadanie'
+    }
+  ],
   products: [],
   recentProducts: [],
   toggledProductId: null,
@@ -43,6 +64,7 @@ export function diaryReducer(
         return {
           ...data,
           isToggled: false,
+          isTemplate: false,
           day: getDayFromDate(meal.date),
           productIds: mealProducts.map(mealProduct => mealProduct.productId),
         }
@@ -70,6 +92,7 @@ export function diaryReducer(
           ...action.payload,
           day: getDayFromDate(action.payload.date),
           isToggled: true,
+          isTemplate: false,
           productIds: [],
         }
       ]
@@ -180,8 +203,13 @@ export interface DiaryMealPayload {
 
 export interface DiaryMeal extends DiaryMealPayload {
   isToggled: boolean
+  isTemplate: boolean
   day: DateDay
   productIds: ProductId[]
+}
+
+interface DiaryMealLayout {
+
 }
 
 export interface DiaryProductPayload {

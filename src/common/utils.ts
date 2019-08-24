@@ -151,3 +151,16 @@ export function parseNumber(
 
   return cleaned;
 }
+
+export function findOrFail<T>(
+  array: T[],
+  matcher: (item: T, index: number, self: T[]) => boolean
+) {
+  const foundItem = array.find(matcher);
+  if (!foundItem) {
+    throw new Error(
+      '[findOrFail] - Item could not be found for specified criteria'
+    );
+  }
+  return foundItem;
+}

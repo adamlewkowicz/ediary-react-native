@@ -12,7 +12,7 @@ import {
 } from '../creators';
 import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
 import { DateDay, ProductId, MealId } from '../../../types';
-import { debounce_ } from '../../../common/utils';
+import { debounce_, findOrFail } from '../../../common/utils';
 import { Thunk } from '../..';
 import dayjs from 'dayjs';
 
@@ -100,7 +100,24 @@ export const mealProductAdd = (
   mealId: MealId,
   productId: ProductId,
   quantity?: number
-): Thunk => async (dispatch) => {
+): Thunk => async (dispatch, getState) => {
+  const { meals } = getState().diary;
+  const meal = findOrFail(meals, meal => meal.id === mealId);
+
+  if (meal.isTemplate) {
+    const newMeal = {
+      name: meal.name,
+    }
+    const createdMeal = await Meal.createWithProduct(
+      newMeal,
+      productId,
+      quantity
+    );
+    dispatch(mealDeleted(meal.id));
+    dispatch(mealsAdded([createdMeal]));
+    return;
+  }
+
   const { product, action } = await Meal.addProduct(
     mealId,
     productId,
