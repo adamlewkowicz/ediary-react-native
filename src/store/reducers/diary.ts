@@ -21,8 +21,8 @@ import {
 } from '../../types';
 import { Meal, IProduct } from '../../database/entities';
 import { DiaryActions } from '../actions';
-import { calcMacroByQuantity } from '../helpers/diary';
-import { getDayFromDate } from '../../common/utils';
+import { calcMacroByQuantity, getDataFromTemplate } from '../helpers/diary';
+import { getDayFromDate, getTimeFromDate } from '../../common/utils';
 
 const initialState: DiaryState = {
   meals: [
@@ -35,6 +35,7 @@ const initialState: DiaryState = {
       kcal: 0,
       date: null as any,
       day: '' as any,
+      time: '' as any,
       isTemplate: true,
       isToggled: false,
       productIds: [],
@@ -72,6 +73,7 @@ export function diaryReducer(
           isToggled: false,
           isTemplate: false,
           day: getDayFromDate(meal.date),
+          time: getTimeFromDate(meal.date),
           productIds: mealProducts.map(mealProduct => mealProduct.productId),
         }
       }),
@@ -120,11 +122,38 @@ export function diaryReducer(
         : meal
       )
     }
-    case MEAL_DELETED: return {
-      ...state,
-      meals: state.meals.filter(meal => meal.id !== action.meta.mealId),
-      products: state.products.filter(product => product.mealId !== action.meta.mealId)
-    }
+    case MEAL_DELETED: 
+      const mealToDelete = state.meals.find(meal => meal.id === action.meta.mealId);
+      const filteredMeals = state.meals.filter(meal => meal.id !== action.meta.mealId);
+
+      if (mealToDelete && mealToDelete.template) {
+        return {
+          ...state,
+          meals: [
+            ...filteredMeals,
+            {
+              id: -1,
+              name: mealToDelete.template.name,
+              carbs: 0,
+              prots: 0,
+              fats: 0,
+              kcal: 0,
+              date: null as any,
+              day: '' as any,
+              isTemplate: true,
+              isToggled: false,
+              productIds: [],
+              createdAt: 1,
+              updatedAt: 1,
+            }
+          ]
+        }
+      }
+      return {
+        ...state,
+        meals: state.meals.filter(meal => meal.id !== action.meta.mealId),
+        products: state.products.filter(product => product.mealId !== action.meta.mealId)
+      }
     case MEAL_PRODUCT_ADDED: return {
       ...state,
       meals: state.meals.map(meal => meal.id === action.meta.mealId 
@@ -211,7 +240,9 @@ export interface DiaryMeal extends DiaryMealPayload {
   isToggled: boolean
   isTemplate: boolean
   day: DateDay
+  time: DateTime
   productIds: ProductId[]
+  template?: MealTemplate
 }
 
 interface DiaryMealLayout {
@@ -250,9 +281,11 @@ interface DiaryState {
   products: DiaryProduct[]
   recentProducts: IProduct[]
   toggledProductId: ProductId | null
-  templates: {
-    name: string
-    time: DateTime
-  }[]
+  templates: MealTemplate[]
   isLoading: boolean
+}
+
+interface MealTemplate {
+  name: string
+  time: DateTime
 }

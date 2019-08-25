@@ -131,8 +131,8 @@ export class Meal extends GenericEntity {
       ]
     }
 
-    const createdMeal = await Meal.save(newMeal);
-    const mealWithRelations = Meal.findOneOrFail(createdMeal.id, {
+    const createdMeal = await Meal.save(newMeal, { reload: false });
+    const mealWithRelations = await Meal.findOneOrFail(createdMeal.id, {
       relations: ['mealProducts', 'mealProducts.product']
     });
     return mealWithRelations; 
