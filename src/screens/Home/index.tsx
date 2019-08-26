@@ -19,6 +19,7 @@ import { ProductCreateParams } from '../ProductCreate';
 import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
 import { elementTitles } from '../../common/helpers';
 import { MealId } from '../../types';
+import { DiaryMealId } from '../../store/reducers/diary';
 
 interface HomeProps extends NavigationScreenProps {
   mealsWithRatio: selectors.MealsWithRatio
@@ -26,6 +27,7 @@ interface HomeProps extends NavigationScreenProps {
   appDateDay: AppState['application']['day']
   macroNeedsLeft: selectors.MacroNeedsLeft
   toggledProductId: AppState['diary']['toggledProductId']
+  mealsWithTemplates: selectors.MealsWithTemplates
   dispatch: Dispatch
 }
 const Home = (props: HomeProps) => {
@@ -37,7 +39,7 @@ const Home = (props: HomeProps) => {
     dispatch(Actions.mealsFindByDay(props.appDateDay));
   }, [props.appDateDay]);
 
-  const handleProductFinderNavigation = (mealId: MealId) => {
+  const handleProductFinderNavigation = (mealId: DiaryMealId) => {
     const screenParams: ProductFindParams = {
       onItemPress(foundProduct) {
         props.navigation.navigate('Home');
@@ -56,7 +58,7 @@ const Home = (props: HomeProps) => {
     props.navigation.navigate('ProductCreate', screenParams);
   }
 
-  const handleMealDelete = (meal: HomeProps['mealsWithRatio'][number]) => {
+  const handleMealDelete = <T extends { name: string, id: MealId }>(meal: T) => {
     Alert.alert(
       'Usuń posiłek',
       `Czy jesteś pewnien że chcesz usunąć: ${meal.name}?`,
@@ -97,7 +99,7 @@ const Home = (props: HomeProps) => {
           ))}
         </MacroCards>
         <FlatList
-          data={props.mealsWithRatio}
+          data={props.mealsWithTemplates}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
             <MealListItem
@@ -145,6 +147,7 @@ const HomeConnected = connect(
     toggledProductId: state.diary.toggledProductId,
     appDate: state.application.date,
     appDateDay: state.application.day,
+    mealsWithTemplates: selectors.mealsWithTemplates(state),
   })
 )(Home);
 

@@ -19,7 +19,7 @@ import { ProductId } from '../../../types';
 
 export type MealCreated = {
   type: typeof MEAL_CREATED
-  payload: DiaryMealPayload
+  payload: Meal
 }
 
 export type MealUpdated = {

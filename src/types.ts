@@ -57,4 +57,8 @@ export interface DateTime extends String {
   _dateTimeBrand: 'HH:mm:ss'
 }
 
+export interface TemplateId extends Number {
+  _templateIdBrand: number;
+}
+
 export type Environment = 'development' | 'test' | 'production';

@@ -3,6 +3,7 @@ import { MacroElements } from '../../types';
 import { StoreState } from '..';
 import { createSelector } from 'reselect';
 import { macroNeeds } from './user';
+import { Template } from '../reducers/diary';
 
 const baseMacro: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 const macroNeedsElement = { diff: 0, ratio: 0, eaten: 0, needed: 0 };
@@ -100,42 +101,26 @@ export const macroNeedsLeft = createSelector(
     })
 );
 
-const mealsWithTemplates = createSelector(
+export const mealsWithTemplates = createSelector(
   mealsWithRatio,
   templates,
-  (meals, templates): MealsWithRatio => {
-    const filteredTemplates = templates.filter((template, index) => {
-      const foundIndex = meals.findIndex(meal => meal.name === template.name);
-      return foundIndex >= index;
-    });
+  (meals, templates): MealsWithTemplates => [
+    ...meals.map(meal => ({
+      ...meal,
+      type: 'meal' as 'meal'
+    })),
+    ...templates.map(template => ({
+      ...template, 
+      type: 'template' as 'template'
+    }))
+  ]
+);
 
-    // return [
-    //   ...templates.map((template, index) => ({
-    //     id: index * -1,
-    //     name: template.name,
-    //     carbs: 0,
-    //     prots: 0,
-    //     fats: 0,
-    //     kcal: 0,
-
-    //     isTemplate: true,
-    //   }))
-    // ]
-    
-    return [
-      ...meals.map(meal => ({
-        ...meal,
-        isTemplate: false
-      })),
-      ...templates.map(template => ({
-        isTemplate: true
-      }))
-    ]
-    // const mockedTemplates = templates
-
-    return [...meals, ...templates]
-  }
-)
+export type MealsWithTemplates = (
+  (MealsWithRatio[number] & { type: 'meal' }) |
+  (Template & { type: 'template' })
+)[];
 
 export type MacroNeedsLeft = ReturnType<typeof macroNeedsLeft>;
 export type MealsWithRatio = ReturnType<typeof mealsWithRatio>;
+// export type MealsWithTemplates = ReturnType<typeof mealsWithTemplates>;

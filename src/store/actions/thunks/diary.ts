@@ -10,7 +10,7 @@ import {
   mealsAdded,
   mealProductAdded,
 } from '../creators';
-import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
+import { DiaryMealPayload, DiaryProductPayload, DiaryMealId } from '../../reducers/diary';
 import { DateDay, ProductId, MealId } from '../../../types';
 import { debounce_, findOrFail } from '../../../common/utils';
 import { Thunk } from '../..';
@@ -107,7 +107,7 @@ export const mealsFindByDay = (
 }
 
 export const mealProductAdd = (
-  mealId: MealId,
+  mealId: DiaryMealId,
   productId: ProductId,
   quantity?: number
 ): Thunk => async (dispatch, getState) => {
