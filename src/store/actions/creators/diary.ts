@@ -9,7 +9,8 @@ import {
   PRODUCT_CREATED,
   MEALS_ADDED,
   PRODUCT_TOGGLED,
-  MEAL_PRODUCT_ADDED
+  MEAL_PRODUCT_ADDED,
+  MEAL_TEMPLATE_TOGGLED
 } from '../../consts';
 import {
   MealDeleted,
@@ -22,7 +23,8 @@ import {
   MealsAdded,
   ProductToggled,
   MealProductAdded,
-  MealTemplateToggled
+  MealTemplateToggled,
+  DiaryActions
 } from '../types';
 import { MealId, ProductId, TemplateId } from '../../../types';
 import { Meal, IProduct } from '../../../database/entities';
@@ -75,14 +77,10 @@ export const productUpdated = (
 });
 
 export const mealToggled = (
-  targetId: MealId,
-  type: MealType
-): MealToggled | MealTemplateToggled => ({
+  mealId: MealId | null
+): DiaryActions => ({
   type: MEAL_TOGGLED,
-  meta: {
-    targetId,
-    type
-  }
+  meta: { targetId: mealId }
 });
 
 export const productCreated = (
@@ -104,4 +102,11 @@ export const productToggled = (
 ): ProductToggled => ({
   type: PRODUCT_TOGGLED,
   payload: productId
+});
+
+export const mealTemplateToggled = (
+  templateId: TemplateId | null
+): DiaryActions => ({
+  type: MEAL_TEMPLATE_TOGGLED,
+  meta: { targetId: templateId }
 });

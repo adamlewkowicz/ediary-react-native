@@ -101,10 +101,10 @@ export const macroNeedsLeft = createSelector(
     })
 );
 
-export const mealsWithTemplates = createSelector(
+export const mealsAndTemplates = createSelector(
   mealsWithRatio,
   templates,
-  (meals, templates): MealsWithTemplates => [
+  (meals, templates): MealsAndTemplates => [
     ...meals.map(meal => ({
       ...meal,
       type: 'meal' as 'meal'
@@ -116,7 +116,7 @@ export const mealsWithTemplates = createSelector(
   ]
 );
 
-export type MealsWithTemplates = (
+export type MealsAndTemplates = (
   (MealsWithRatio[number] & { type: 'meal' }) |
   (Template & { type: 'template' })
 )[];

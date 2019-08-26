@@ -9,6 +9,7 @@ import {
   MEALS_ADDED,
   PRODUCT_TOGGLED,
   MEAL_PRODUCT_ADDED,
+  MEAL_TEMPLATE_TOGGLED,
 } from '../../consts';
 import { Meal, Product, IProduct } from '../../../database/entities';
 import {
@@ -56,27 +57,10 @@ export type ProductUpdated = {
   }
 }
 
-// export type MealToggled = {
-//   type: typeof MEAL_TOGGLED
-//   meta: {
-//     mealId: Meal['id'] | null
-//     type: 'meal' | 'template'
-//   }
-// }
-
 export type MealToggled = {
   type: typeof MEAL_TOGGLED
   meta: {
     targetId: MealId | null
-    type: MealType
-  }
-}
-
-export type MealTemplateToggled = {
-  type: typeof MEAL_TOGGLED
-  meta: {
-    targetId: TemplateId | null
-    type: MealType
   }
 }
 
@@ -95,6 +79,13 @@ export type ProductToggled = {
   payload: ProductId | null
 }
 
+export type MealTemplateToggled = {
+  type: typeof MEAL_TEMPLATE_TOGGLED
+  meta: {
+    targetId: TemplateId | null
+  }
+} 
+
 export type DiaryActions =
   | MealCreated 
   | MealUpdated 
@@ -106,3 +97,4 @@ export type DiaryActions =
   | ProductCreated
   | MealsAdded
   | ProductToggled
+  | MealTemplateToggled

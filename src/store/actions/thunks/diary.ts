@@ -58,7 +58,7 @@ export const mealProductCreate = (
 export const mealProductDelete = (
   mealId: Meal['id'],
   productId: Product['id']
-): Thunk => async (dispatch, getState) => {
+): Thunk => async (dispatch) => {
   dispatch(mealProductDeleted(mealId, productId));
   await MealProduct.delete({ mealId, productId });
 }

@@ -9,6 +9,7 @@ import {
   MEALS_ADDED,
   PRODUCT_TOGGLED,
   MEAL_PRODUCT_ADDED,
+  MEAL_TEMPLATE_TOGGLED,
 } from '../consts';
 import {
   ProductUnit,
@@ -26,24 +27,8 @@ import { calcMacroByQuantity, normalizeMeals } from '../helpers/diary';
 import { getDayFromDate, getTimeFromDate } from '../../common/utils';
 
 const initialState: DiaryState = {
-  meals: [
-    {
-      id: -1,
-      name: 'Śniadanie',
-      carbs: 0,
-      prots: 0,
-      fats: 0,
-      kcal: 0,
-      date: null as any,
-      day: '' as any,
-      time: '' as any,
-      isToggled: false,
-      productIds: [],
-      createdAt: 1,
-      updatedAt: 1,
-      templateId: null,
-    }
-  ],
+  meals: [],
+  products: [],
   templates: [
     {
       id: 1 as any as TemplateId,
@@ -57,8 +42,7 @@ const initialState: DiaryState = {
       time: '12:00:00' as any as DateTime,
       isToggled: false
     }
-  ] as any,
-  products: [],
+  ],
   recentProducts: [],
   toggledProductId: null,
   isLoading: false
@@ -92,8 +76,17 @@ export function diaryReducer(
       toggledProductId: null,
       meals: state.meals.map(meal => ({
         ...meal,
-        isToggled: action.meta.mealId === meal.id
+        isToggled: action.meta.targetId === meal.id
           ? !meal.isToggled
+          : false
+      }))
+    }
+    case MEAL_TEMPLATE_TOGGLED: return {
+      ...state,
+      templates: state.templates.map(template => ({
+        ...template,
+        isToggled: action.meta.targetId === template.id
+          ? !template.isToggled
           : false
       }))
     }
@@ -105,37 +98,8 @@ export function diaryReducer(
       )
     }
     case MEAL_DELETED: 
-      const mealToDelete = state.meals.find(meal => meal.id === action.meta.mealId);
       const meals = state.meals.filter(meal => meal.id !== action.meta.mealId);
       const products = state.products.filter(product => product.mealId !== action.meta.mealId);
-
-      if (mealToDelete && mealToDelete.templateId) {
-        const template = state.templates.find(template => 
-          template.name === mealToDelete.templateId
-        );
-        if (template) {
-          return {
-            ...state,
-            products,
-            meals: [
-              ...meals,
-              {
-                ...template,
-                id: template.name,
-                carbs: 0,
-                prots: 0,
-                fats: 0,
-                kcal: 0,
-                date: null,
-                day: null,
-                productIds: [],
-                isToggled: false,
-                templateId: template.name,
-              }
-            ]
-          }
-        }
-      }
       return { ...state, meals, products };
     case MEAL_PRODUCT_ADDED: return {
       ...state,
@@ -207,8 +171,6 @@ export function diaryReducer(
   }
 }
 
-export type DiaryMealId = MealId | TemplId;
-
 export interface DiaryMealPayload {
   id: MealId
   name: string
@@ -226,11 +188,7 @@ export interface DiaryMeal extends DiaryMealPayload {
   day: DateDay | null
   time: DateTime
   productIds: ProductId[]
-  templateId: TemplId | null
-}
-
-interface TemplId extends String {
-  _templateIdBrand: string
+  templateId?: null
 }
 
 export interface Template {
@@ -240,11 +198,6 @@ export interface Template {
   isToggled: boolean
 }
 export { Template as DiaryTemplate }
-
-// interface DiaryMealTemplate extends Template {
-//   isTemplate: boolean
-//   isToggled: boolean
-// }
 
 export interface DiaryProductPayload {
   id: ProductId

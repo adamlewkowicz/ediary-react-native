@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
 import * as Actions from '../../store/actions';
-import { AppState, Dispatch } from '../../store';
+import { StoreState, Dispatch } from '../../store';
 import { FlatList, ScrollView, Alert } from 'react-native';
 import * as selectors from '../../store/selectors';
 import { DateChanger } from '../../components/DateChanger';
@@ -23,11 +23,11 @@ import { DiaryTemplate } from '../../store/reducers/diary';
 
 interface HomeProps extends NavigationScreenProps {
   mealsWithRatio: selectors.MealsWithRatio
-  appDate: AppState['application']['date']
-  appDateDay: AppState['application']['day']
+  appDate: StoreState['application']['date']
+  appDateDay: StoreState['application']['day']
   macroNeedsLeft: selectors.MacroNeedsLeft
-  toggledProductId: AppState['diary']['toggledProductId']
-  mealsWithTemplates: selectors.MealsWithTemplates
+  toggledProductId: StoreState['diary']['toggledProductId']
+  mealsAndTemplates: selectors.MealsAndTemplates
   dispatch: Dispatch
 }
 const Home = (props: HomeProps) => {
@@ -110,20 +110,20 @@ const Home = (props: HomeProps) => {
           ))}
         </MacroCards>
         <FlatList
-          data={props.mealsWithTemplates}
+          data={props.mealsAndTemplates}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
             item.type === 'template' ? (
               <MealListItemTemplate
                 meal={item}
                 onProductAdd={() => {}}
-                onToggle={(templateId) => dispatch(Actions.mealToggled(templateId, 'template'))}
+                onToggle={(templateId) => dispatch(Actions.mealTemplateToggled(templateId))}
               />
             ) : (
               <MealListItem
                 meal={item}
                 toggledProductId={props.toggledProductId}
-                onToggle={mealId => dispatch(Actions.mealToggled(mealId, 'meal'))}
+                onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
                 onLongPress={IS_DEV ? undefined : () => handleMealDelete(item)}
                 onProductAdd={() => handleProductFinderNavigation(item.id)}
                 onProductDelete={productId => dispatch(Actions.mealProductDelete(item.id, productId))}
@@ -160,13 +160,13 @@ const Home = (props: HomeProps) => {
 }
 
 const HomeConnected = connect(
-  (state: AppState) => ({
+  (state: StoreState) => ({
     mealsWithRatio: selectors.mealsWithRatio(state),
     macroNeedsLeft: selectors.macroNeedsLeft(state),
     toggledProductId: state.diary.toggledProductId,
     appDate: state.application.date,
     appDateDay: state.application.day,
-    mealsWithTemplates: selectors.mealsWithTemplates(state),
+    mealsWithTemplates: selectors.mealsAndTemplates(state),
   })
 )(Home);
 
