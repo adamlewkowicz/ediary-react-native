@@ -14,8 +14,9 @@ import { Meal, Product, IProduct } from '../../../database/entities';
 import {
   DiaryMealPayload,
   DiaryProductPayload,
+  MealType,
 } from '../../reducers/diary';
-import { ProductId } from '../../../types';
+import { ProductId, TemplateId, MealId } from '../../../types';
 
 export type MealCreated = {
   type: typeof MEAL_CREATED
@@ -55,10 +56,27 @@ export type ProductUpdated = {
   }
 }
 
+// export type MealToggled = {
+//   type: typeof MEAL_TOGGLED
+//   meta: {
+//     mealId: Meal['id'] | null
+//     type: 'meal' | 'template'
+//   }
+// }
+
 export type MealToggled = {
   type: typeof MEAL_TOGGLED
   meta: {
-    mealId: Meal['id'] | null
+    targetId: MealId | null
+    type: MealType
+  }
+}
+
+export type MealTemplateToggled = {
+  type: typeof MEAL_TOGGLED
+  meta: {
+    targetId: TemplateId | null
+    type: MealType
   }
 }
 

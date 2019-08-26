@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { Theme, nutritionColors } from '../../common/theme';
-import { MacroElements, ProductId, MealId } from '../../types';
+import { ProductId, MealId, TemplateId } from '../../types';
 import { ProgressBar } from '../ProgressBar';
-import { ProductPartial, ProductItem } from '../ProductItem';
+import { ProductItem } from '../ProductItem';
 import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { MealsWithRatio } from '../../store/selectors';
 import { Button } from 'react-native-ui-kitten';
@@ -26,7 +26,7 @@ export const MealListItem = (props: MealListItemProps) => (
       onPress={() => props.onToggle(props.meal.id)}
       onLongPress={props.onLongPress}
       accessibilityLabel="Pokaż szczegóły posiłku"
-      accessibilityHint={`Wyświetla makroskładniki or produkty posiłku - ${props.meal.name}`}
+      accessibilityHint={`Wyświetla makroskładniki i produkty posiłku - ${props.meal.name}`}
       accessibilityRole="radio"
     >
       <InfoContainer>
@@ -84,16 +84,15 @@ export const MealListItem = (props: MealListItemProps) => (
 
 interface MealListItemTemplateProps {
   meal: Template
-  onToggle: (mealId: MealId) => void
+  onToggle: (templateId: TemplateId) => void
   onProductAdd: () => void
 }
 export const MealListItemTemplate = (props: MealListItemTemplateProps) => (
   <Container>
     <TouchableOpacity
       onPress={() => props.onToggle(props.meal.id)}
-      onLongPress={props.onLongPress}
       accessibilityLabel="Pokaż szczegóły posiłku"
-      accessibilityHint={`Wyświetla makroskładniki or produkty posiłku - ${props.meal.name}`}
+      accessibilityHint={`Wyświetla makroskładniki i produkty posiłku - ${props.meal.name}`}
       accessibilityRole="radio"
     >
       <InfoContainer>
@@ -101,11 +100,11 @@ export const MealListItemTemplate = (props: MealListItemTemplateProps) => (
         <Calories>{0} kcal</Calories>
       </InfoContainer>
       <NutritionBar>
-        {props.meal.macroRatio.map(ratio => (
-          <NutritionStripe key={ratio.element}>
+        {BASE_MACRO_ELEMENTS.map(element => (
+          <NutritionStripe key={element}>
             <ProgressBar
               percentages={0}
-              colors={nutritionColors[ratio.element]}
+              colors={nutritionColors[element]}
               rounded={false}
               width="8px"
             />
@@ -200,13 +199,3 @@ const NutritionTitle = styled.Text<{
   color: #646464;
   text-align: center;
 `
-
-interface MealPartial extends MacroElements {
-  id: number
-  name: string
-  carbsRatio?: number
-  protsRatio?: number
-  fatsRatio?: number
-  isToggled: boolean
-  products: ProductPartial[]
-}

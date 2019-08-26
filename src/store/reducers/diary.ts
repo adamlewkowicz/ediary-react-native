@@ -210,7 +210,7 @@ export function diaryReducer(
 export type DiaryMealId = MealId | TemplId;
 
 export interface DiaryMealPayload {
-  id: DiaryMealId
+  id: MealId
   name: string
   carbs: number
   prots: number
@@ -235,10 +235,11 @@ interface TemplId extends String {
 
 export interface Template {
   id: TemplateId
-  name: TemplId
+  name: string
   time: DateTime
   isToggled: boolean
 }
+export { Template as DiaryTemplate }
 
 // interface DiaryMealTemplate extends Template {
 //   isTemplate: boolean
@@ -280,3 +281,5 @@ interface DiaryState {
   templates: Template[]
   isLoading: boolean
 }
+
+export type MealType = 'meal' | 'template';

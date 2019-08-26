@@ -9,7 +9,7 @@ import { DateChanger } from '../../components/DateChanger';
 import { MacroCard } from '../../components/MacroCard';
 import { nutritionColors } from '../../common/theme';
 import styled from 'styled-components/native';
-import { MealListItem } from '../../components/MealListItem';
+import { MealListItem, MealListItemTemplate } from '../../components/MealListItem';
 import { FloatingButton } from '../../components/FloatingButton';
 import { BasicInput } from '../../components/BasicInput';
 import { NavigationScreenProps } from 'react-navigation';
@@ -19,7 +19,7 @@ import { ProductCreateParams } from '../ProductCreate';
 import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
 import { elementTitles } from '../../common/helpers';
 import { MealId } from '../../types';
-import { DiaryMealId } from '../../store/reducers/diary';
+import { DiaryTemplate } from '../../store/reducers/diary';
 
 interface HomeProps extends NavigationScreenProps {
   mealsWithRatio: selectors.MealsWithRatio
@@ -39,11 +39,22 @@ const Home = (props: HomeProps) => {
     dispatch(Actions.mealsFindByDay(props.appDateDay));
   }, [props.appDateDay]);
 
-  const handleProductFinderNavigation = (mealId: DiaryMealId) => {
+  const handleProductFinderNavigation = (
+    mealId: MealId,
+    template?: DiaryTemplate,
+  ) => {
     const screenParams: ProductFindParams = {
       onItemPress(foundProduct) {
         props.navigation.navigate('Home');
-        dispatch(mealProductAdd(mealId, foundProduct.id));
+        if (template) {
+          dispatch(
+            Actions.mealCreateFromTemplate(
+              template, props.appDate, foundProduct.id
+            )
+          );
+        } else {
+          dispatch(mealProductAdd(mealId, foundProduct.id));
+        }
       }
     }
     props.navigation.navigate('ProductFind', screenParams);
@@ -102,18 +113,26 @@ const Home = (props: HomeProps) => {
           data={props.mealsWithTemplates}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
-            <MealListItem
-              meal={item}
-              onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
-              onLongPress={IS_DEV ? undefined : () => handleMealDelete(item)}
-              onProductAdd={() => handleProductFinderNavigation(item.id)}
-              onProductDelete={productId => dispatch(Actions.mealProductDelete(item.id, productId))}
-              onProductToggle={productId => dispatch(Actions.productToggled(productId))}
-              onProductQuantityUpdate={(productId, quantity) => dispatch(Actions.mealProductQuantityUpdate(
-                item.id, productId, quantity
-              ))}
-              toggledProductId={props.toggledProductId}
-            />
+            item.type === 'template' ? (
+              <MealListItemTemplate
+                meal={item}
+                onProductAdd={() => {}}
+                onToggle={(templateId) => dispatch(Actions.mealToggled(templateId, 'template'))}
+              />
+            ) : (
+              <MealListItem
+                meal={item}
+                toggledProductId={props.toggledProductId}
+                onToggle={mealId => dispatch(Actions.mealToggled(mealId, 'meal'))}
+                onLongPress={IS_DEV ? undefined : () => handleMealDelete(item)}
+                onProductAdd={() => handleProductFinderNavigation(item.id)}
+                onProductDelete={productId => dispatch(Actions.mealProductDelete(item.id, productId))}
+                onProductToggle={productId => dispatch(Actions.productToggled(productId))}
+                onProductQuantityUpdate={(productId, quantity) => dispatch(
+                  Actions.mealProductQuantityUpdate(item.id, productId, quantity)
+                )}
+              />
+            )
           )}
         />
         <BasicInput

@@ -16,7 +16,8 @@ import { DeepPartial } from 'typeorm';
 import { EntityType } from '../types';
 import { GenericEntity } from '../generics/GenericEntity';
 import dayjs from 'dayjs';
-import { DATE_FORMAT } from '../../common/consts';
+import { DATE_FORMAT, DATE_DAY } from '../../common/consts';
+import { DiaryTemplate } from '../../store/reducers/diary';
 
 @Entity('meal')
 export class Meal extends GenericEntity {
@@ -136,6 +137,23 @@ export class Meal extends GenericEntity {
       relations: ['mealProducts', 'mealProducts.product']
     });
     return mealWithRelations; 
+  }
+
+  static createFromTemplate(
+    template: DiaryTemplate,
+    date: Date,
+    productId: ProductId,
+    quantity?: number,
+  ): Promise<Meal> {
+    const newMeal = {
+      name: template.name,
+      date: dayjs(date).format(`${DATE_DAY} ${template.time}`)
+    }
+    return Meal.createWithProduct(
+      newMeal,
+      productId,
+      quantity
+    );
   }
 
 }

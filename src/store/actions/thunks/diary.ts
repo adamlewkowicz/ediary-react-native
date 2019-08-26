@@ -1,4 +1,10 @@
-import { Meal, Product, MealProduct, IProduct, IProductOptional } from '../../../database/entities';
+import { 
+  Meal,
+  Product,
+  MealProduct,
+  IProduct,
+  IProductOptional,
+} from '../../../database/entities';
 import {
   mealCreated,
   mealDeleted,
@@ -10,9 +16,9 @@ import {
   mealsAdded,
   mealProductAdded,
 } from '../creators';
-import { DiaryMealPayload, DiaryProductPayload, DiaryMealId } from '../../reducers/diary';
+import { DiaryMealPayload, DiaryProductPayload, DiaryTemplate } from '../../reducers/diary';
 import { DateDay, ProductId, MealId } from '../../../types';
-import { debounce_, findOrFail } from '../../../common/utils';
+import { debounce_ } from '../../../common/utils';
 import { Thunk } from '../..';
 
 const debounceA = debounce_();
@@ -28,13 +34,8 @@ export const mealCreate = (
 
 export const mealDelete = (
   mealId: MealId
-): Thunk => async (dispatch, getState) => {
-  const { templates } = getState().diary;
-  // const meal = findOn
+): Thunk => async (dispatch) => {
   dispatch(mealDeleted(mealId));
-  if (templates.find()) {
-
-  }
   await Meal.delete(mealId);
 }
 
@@ -58,13 +59,6 @@ export const mealProductDelete = (
   mealId: Meal['id'],
   productId: Product['id']
 ): Thunk => async (dispatch, getState) => {
-  const { meals } = getState().diary;
-  const meal = findOrFail(meals, meal => meal.id === mealId);
-
-  if (meal.isTemplate) {
-
-  }
-
   dispatch(mealProductDeleted(mealId, productId));
   await MealProduct.delete({ mealId, productId });
 }
@@ -106,28 +100,23 @@ export const mealsFindByDay = (
   dispatch(mealsAdded(foundMeals));
 }
 
+export const mealCreateFromTemplate = (
+  template: DiaryTemplate,
+  date: Date,
+  productId: ProductId,
+  quantity?: number,
+): Thunk => async (dispatch) => {
+  const createdMeal = await Meal.createFromTemplate(
+    template, date, productId, quantity
+  );
+  dispatch(mealsAdded([createdMeal]));
+}
+
 export const mealProductAdd = (
-  mealId: DiaryMealId,
+  mealId: MealId,
   productId: ProductId,
   quantity?: number
-): Thunk => async (dispatch, getState) => {
-  const { meals } = getState().diary;
-  const meal = findOrFail(meals, meal => meal.id === mealId);
-
-  if (meal.isTemplate) {
-    const newMeal = {
-      name: meal.name,
-    }
-    const createdMeal = await Meal.createWithProduct(
-      newMeal,
-      productId,
-      quantity
-    );
-    dispatch(mealDeleted(meal.id));
-    dispatch(mealsAdded([createdMeal]));
-    return;
-  }
-
+): Thunk => async (dispatch) => {
   const { product, action } = await Meal.addProduct(
     mealId,
     productId,
