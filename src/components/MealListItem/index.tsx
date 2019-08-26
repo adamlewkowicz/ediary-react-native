@@ -7,6 +7,8 @@ import { ProductPartial, ProductItem } from '../ProductItem';
 import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { MealsWithRatio } from '../../store/selectors';
 import { Button } from 'react-native-ui-kitten';
+import { BASE_MACRO_ELEMENTS } from '../../common/consts';
+import { Template } from '../../store/reducers/diary';
 
 interface MealListItemProps {
   meal: MealsWithRatio[number]
@@ -47,18 +49,12 @@ export const MealListItem = (props: MealListItemProps) => (
     {props.meal.isToggled && (
       <>
         <NutritionDetails>
-          <NutritionElement>
-            <NutritionValue>{props.meal.carbs}g</NutritionValue>
-            <NutritionTitle>Węgle</NutritionTitle>
-          </NutritionElement>
-          <NutritionElement>
-            <NutritionValue>{props.meal.prots}g</NutritionValue>
-            <NutritionTitle>Białka</NutritionTitle>
-          </NutritionElement>
-          <NutritionElement>
-            <NutritionValue>{props.meal.fats}g</NutritionValue>
-            <NutritionTitle>Tłuszcze</NutritionTitle>
-          </NutritionElement>
+          {BASE_MACRO_ELEMENTS.map(element => (
+            <NutritionElement>
+              <NutritionValue>{props.meal[element]}g</NutritionValue>
+              <NutritionTitle>Węgle</NutritionTitle>
+            </NutritionElement>
+          ))}
         </NutritionDetails>
         <FlatList
           data={props.meal.products}
@@ -85,6 +81,60 @@ export const MealListItem = (props: MealListItemProps) => (
     )}
   </Container>
 );
+
+interface MealListItemTemplateProps {
+  meal: Template
+  onToggle: (mealId: MealId) => void
+  onProductAdd: () => void
+}
+export const MealListItemTemplate = (props: MealListItemTemplateProps) => (
+  <Container>
+    <TouchableOpacity
+      onPress={() => props.onToggle(props.meal.id)}
+      onLongPress={props.onLongPress}
+      accessibilityLabel="Pokaż szczegóły posiłku"
+      accessibilityHint={`Wyświetla makroskładniki or produkty posiłku - ${props.meal.name}`}
+      accessibilityRole="radio"
+    >
+      <InfoContainer>
+        <Title numberOfLines={1}>{props.meal.name}</Title>
+        <Calories>{0} kcal</Calories>
+      </InfoContainer>
+      <NutritionBar>
+        {props.meal.macroRatio.map(ratio => (
+          <NutritionStripe key={ratio.element}>
+            <ProgressBar
+              percentages={0}
+              colors={nutritionColors[ratio.element]}
+              rounded={false}
+              width="8px"
+            />
+          </NutritionStripe>
+        ))}
+      </NutritionBar>
+    </TouchableOpacity>
+    {props.meal.isToggled && (
+      <>
+        <NutritionDetails>
+          {BASE_MACRO_ELEMENTS.map(element => (
+            <NutritionElement>
+              <NutritionValue>{0}g</NutritionValue>
+              <NutritionTitle>Węgle</NutritionTitle>
+            </NutritionElement>
+          ))}
+        </NutritionDetails>
+        <Button
+          onPress={props.onProductAdd}
+          accessibilityLabel="Wyszukaj produkt do posiłku"
+          accessibilityRole="link"
+        >
+          Dodaj produkt
+        </Button>
+      </>
+    )}
+  </Container>
+);
+
 
 const Container = styled.View`
 `

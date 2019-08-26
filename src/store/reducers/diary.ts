@@ -57,7 +57,7 @@ const initialState: DiaryState = {
       time: '12:00:00' as any as DateTime,
       isToggled: false
     }
-  ],
+  ] as any,
   products: [],
   recentProducts: [],
   toggledProductId: null,
@@ -121,7 +121,7 @@ export function diaryReducer(
               ...meals,
               {
                 ...template,
-                id: null,
+                id: template.name,
                 carbs: 0,
                 prots: 0,
                 fats: 0,
@@ -207,10 +207,10 @@ export function diaryReducer(
   }
 }
 
-export type DiaryMealId = MealId | TemplateId;
+export type DiaryMealId = MealId | TemplId;
 
 export interface DiaryMealPayload {
-  id: MealId
+  id: DiaryMealId
   name: string
   carbs: number
   prots: number
@@ -235,7 +235,7 @@ interface TemplId extends String {
 
 export interface Template {
   id: TemplateId
-  name: string
+  name: TemplId
   time: DateTime
   isToggled: boolean
 }
