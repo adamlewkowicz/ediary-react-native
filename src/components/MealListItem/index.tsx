@@ -50,7 +50,7 @@ export const MealListItem = (props: MealListItemProps) => (
       <>
         <NutritionDetails>
           {BASE_MACRO_ELEMENTS.map(element => (
-            <NutritionElement>
+            <NutritionElement key={element}>
               <NutritionValue>{props.meal[element]}g</NutritionValue>
               <NutritionTitle>Węgle</NutritionTitle>
             </NutritionElement>
@@ -116,7 +116,7 @@ export const MealListItemTemplate = (props: MealListItemTemplateProps) => (
       <>
         <NutritionDetails>
           {BASE_MACRO_ELEMENTS.map(element => (
-            <NutritionElement>
+            <NutritionElement key={element}>
               <NutritionValue>{0}g</NutritionValue>
               <NutritionTitle>Węgle</NutritionTitle>
             </NutritionElement>

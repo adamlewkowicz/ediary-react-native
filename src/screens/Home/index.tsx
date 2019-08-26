@@ -22,7 +22,6 @@ import { MealId } from '../../types';
 import { DiaryTemplate } from '../../store/reducers/diary';
 
 interface HomeProps extends NavigationScreenProps {
-  mealsWithRatio: selectors.MealsWithRatio
   appDate: StoreState['application']['date']
   appDateDay: StoreState['application']['day']
   macroNeedsLeft: selectors.MacroNeedsLeft
@@ -40,7 +39,7 @@ const Home = (props: HomeProps) => {
   }, [props.appDateDay]);
 
   const handleProductFinderNavigation = (
-    mealId: MealId,
+    mealId: MealId | null,
     template?: DiaryTemplate,
   ) => {
     const screenParams: ProductFindParams = {
@@ -52,7 +51,7 @@ const Home = (props: HomeProps) => {
               template, props.appDate, foundProduct.id
             )
           );
-        } else {
+        } else if (mealId) {
           dispatch(mealProductAdd(mealId, foundProduct.id));
         }
       }
@@ -116,7 +115,7 @@ const Home = (props: HomeProps) => {
             item.type === 'template' ? (
               <MealListItemTemplate
                 meal={item}
-                onProductAdd={() => {}}
+                onProductAdd={() => handleProductFinderNavigation(null, item)}
                 onToggle={(templateId) => dispatch(Actions.mealTemplateToggled(templateId))}
               />
             ) : (
@@ -161,12 +160,11 @@ const Home = (props: HomeProps) => {
 
 const HomeConnected = connect(
   (state: StoreState) => ({
-    mealsWithRatio: selectors.mealsWithRatio(state),
     macroNeedsLeft: selectors.macroNeedsLeft(state),
     toggledProductId: state.diary.toggledProductId,
     appDate: state.application.date,
     appDateDay: state.application.day,
-    mealsWithTemplates: selectors.mealsAndTemplates(state),
+    mealsAndTemplates: selectors.mealsAndTemplates(state),
   })
 )(Home);
 

@@ -116,23 +116,19 @@ export class Meal extends GenericEntity {
   }
 
   static async createWithProduct(
-    payload: DeepPartial<IMeal>,
+    payload: DeepPartial<Meal>,
     productId: ProductId,
     quantity?: number
   ): Promise<Meal> {
     const product = await Product.findOneOrFail(productId);
 
-    const newMeal = {
-      ...payload,
-      mealProducts: [
-        {
-          productId: product.id,
-          quantity: quantity ? quantity : product.portion
-        }
-      ]
-    }
-
-    const createdMeal = await Meal.save(newMeal, { reload: false });
+    const createdMeal = await Meal.save(payload);
+    await MealProduct.save({
+      mealId: createdMeal.id,
+      productId: product.id,
+      quantity: quantity || product.portion
+    });
+    
     const mealWithRelations = await Meal.findOneOrFail(createdMeal.id, {
       relations: ['mealProducts', 'mealProducts.product']
     });

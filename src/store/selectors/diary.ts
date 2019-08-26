@@ -50,7 +50,7 @@ const calcedMeals = createSelector(
   })
 );
 
-export const mealsWithRatio = createSelector(
+const mealsWithRatio = createSelector(
   calcedMeals,
   meals => meals.map(meal => {
     const macroSum = meal.carbs + meal.prots + meal.fats;
@@ -73,7 +73,6 @@ const mealsMacroSum = createSelector(
     kcal: Math.round(sum.kcal + meal.kcal)
   }), { ...baseMacro })
 );
-
 
 export const macroNeedsLeft = createSelector(
   mealsMacroSum,
@@ -104,16 +103,28 @@ export const macroNeedsLeft = createSelector(
 export const mealsAndTemplates = createSelector(
   mealsWithRatio,
   templates,
-  (meals, templates): MealsAndTemplates => [
-    ...meals.map(meal => ({
+  (meals, templates): MealsAndTemplates => {
+    const mealNames = meals.map(meal => meal.name);
+    const parsedMeals = meals.map(meal => ({
       ...meal,
       type: 'meal' as 'meal'
-    })),
-    ...templates.map(template => ({
-      ...template, 
-      type: 'template' as 'template'
-    }))
-  ]
+    }));
+    const parsedTemplates = templates
+      .map(template => ({
+        ...template,
+        type: 'template' as 'template'
+      }))
+      .filter(template => !mealNames.includes(template.name));
+
+    const sorted = [...parsedMeals, ...parsedTemplates]
+      .sort((a, b) => {
+        const timeA = Number(a.time.replace(/:/g, ''));
+        const timeB = Number(b.time.replace(/:/g, ''));
+        return timeA > timeB ? 1 : -1;
+      });
+
+    return sorted;
+  }
 );
 
 export type MealsAndTemplates = (
@@ -123,4 +134,3 @@ export type MealsAndTemplates = (
 
 export type MacroNeedsLeft = ReturnType<typeof macroNeedsLeft>;
 export type MealsWithRatio = ReturnType<typeof mealsWithRatio>;
-// export type MealsWithTemplates = ReturnType<typeof mealsWithTemplates>;
