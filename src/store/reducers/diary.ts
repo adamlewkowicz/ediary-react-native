@@ -1,5 +1,4 @@
 import {
-  MEAL_CREATED,
   MEAL_UPDATED,
   MEAL_DELETED,
   MEAL_PRODUCT_DELETED,
@@ -9,26 +8,16 @@ import {
   MEALS_ADDED,
   PRODUCT_TOGGLED,
   MEAL_PRODUCT_ADDED,
-  MEAL_TEMPLATE_TOGGLED,
-  MEAL_ADDED_FROM_TEMPLATE,
   MEAL_ADDED,
 } from '../consts';
 import {
-  ProductUnit,
-  MacroElement,
-  BarcodeId,
-  ProductId,
-  MealId,
-  DateDay,
   DateTime,
   TemplateId,
-  TemplateIdReverted,
 } from '../../types';
-import { Meal, IProduct } from '../../database/entities';
 import { DiaryActions } from '../actions';
-import { calcMacroByQuantity, normalizeMeals, getRevertedTemplateId, normalizeMeal } from '../helpers/diary';
+import { calcMacroByQuantity, getRevertedTemplateId, normalizeMeal } from '../helpers/diary';
 import { getDayFromDate, getTimeFromDate } from '../../common/utils';
-import { DiaryMeal_, DiaryMealTemplate } from './types/diary';
+import { DiaryState } from './types/diary';
 
 const initialState: DiaryState = {
   meals: [],
@@ -38,13 +27,11 @@ const initialState: DiaryState = {
       id: 1 as any as TemplateId,
       name: 'Śniadanie',
       time: '08:30:00' as any as DateTime,
-      isToggled: true,
     },
     {
       id: 2 as any as TemplateId,
       name: 'Obiad',
       time: '12:00:00' as any as DateTime,
-      isToggled: false
     }
   ],
   recentProducts: [],
@@ -59,38 +46,10 @@ export function diaryReducer(
   switch(action.type) {
     case MEALS_ADDED: return {
       ...state,
-      ...normalizeMeals(
-        action.payload,
-        action.meta.templateId
-      )
-    }
-    case MEAL_CREATED: return {
-      ...state,
-      // meals: [
-      //   ...state.meals,
-      //   {
-      //     ...action.payload,
-      //     day: getDayFromDate(action.payload.date),
-      //     time: getTimeFromDate(action.payload.date),
-      //     isToggled: true,
-      //     templateId: null,
-      //     productIds: [],
-      //   }
-      // ],
-      meals: state.templates.map(template => ({
-        ...template,
-        id: template.id as any,
-        carbs: 0,
-        prots: 0,
-        fats: 0,
-        kcal: 0,
-        day: null,
-        date: null,
-        templateId: template.id,
-        type: 'template',
-        isToggled: false,
-        productIds: [],
-      }))
+      // ...normalizeMeals(
+      //   action.payload,
+      //   action.meta.templateId
+      // )
     }
     case MEAL_ADDED: {
       const { templateId } = action.meta;
@@ -159,15 +118,6 @@ export function diaryReducer(
         ...meal,
         isToggled: action.meta.targetId === meal.id
           ? !meal.isToggled
-          : false
-      }))
-    }
-    case MEAL_TEMPLATE_TOGGLED: return {
-      ...state,
-      templates: state.templates.map(template => ({
-        ...template,
-        isToggled: action.meta.targetId === template.id
-          ? !template.isToggled
           : false
       }))
     }
@@ -246,70 +196,3 @@ export function diaryReducer(
     default: return state;
   }
 }
-
-export interface DiaryMealPayload {
-  id: MealId | TemplateIdReverted
-  name: string
-  carbs: number
-  prots: number
-  fats: number
-  kcal: number
-  date: string | null
-  updatedAt?: number
-  createdAt?: number
-}
-
-export interface DiaryMeal extends DiaryMealPayload {
-  isToggled: boolean
-  day: DateDay | null
-  time: DateTime
-  productIds: ProductId[]
-  templateId: TemplateId | null
-  isTemplate: boolean
-}
-
-export interface Template {
-  id: TemplateId
-  name: string
-  time: DateTime
-  isToggled: boolean
-}
-export { Template as DiaryTemplate }
-
-export interface DiaryProductPayload {
-  id: ProductId
-  name: string
-  producer?: string | null
-  img?: string
-  barcode: BarcodeId | null
-  quantity: number
-  unit: ProductUnit
-  carbs: number
-  prots: number
-  fats: number
-  kcal: number
-  mealId: Meal['id'] | null
-  userId?: number | null
-  verified: boolean
-  updatedAt: Date
-  createdAt: Date
-}
-
-export interface DiaryProduct extends DiaryProductPayload {
-  macro: {
-    element: MacroElement
-    value: number
-  }[]
-  isToggled: boolean
-}
-
-interface DiaryState {
-  meals: (DiaryMeal_ | DiaryMealTemplate)[]
-  products: DiaryProduct[]
-  recentProducts: IProduct[]
-  toggledProductId: ProductId | null
-  templates: Template[]
-  isLoading: boolean
-}
-
-export type MealType = 'meal' | 'template';

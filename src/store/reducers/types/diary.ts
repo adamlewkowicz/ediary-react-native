@@ -5,7 +5,11 @@ import {
   ProductId,
   TemplateId,
   DateDay,
+  BarcodeId,
+  ProductUnit,
+  MacroElement,
 } from '../../../types';
+import { IProduct } from '../../../database/entities';
 
 interface DiaryMealBase {
   id: MealId | TemplateIdReverted
@@ -35,9 +39,49 @@ export interface DiaryMealTemplate extends DiaryMealBase {
   type: 'template'
 }
 
-export interface DiaryMeal_ extends DiaryMealBase {
+export interface DiaryMeal extends DiaryMealBase {
   id: MealId
   date: string
   day: DateDay
   type: 'meal'
+}
+
+export interface DiaryProduct {
+  id: ProductId
+  name: string
+  producer?: string | null
+  img?: string
+  barcode: BarcodeId | null
+  quantity: number
+  unit: ProductUnit
+  carbs: number
+  prots: number
+  fats: number
+  kcal: number
+  mealId: MealId | null
+  userId?: number | null
+  verified: boolean
+  updatedAt: Date
+  createdAt: Date
+  //
+  macro: {
+    element: MacroElement
+    value: number
+  }[]
+  isToggled: boolean
+}
+
+export interface DiaryTemplate {
+  id: TemplateId
+  name: string
+  time: DateTime
+}
+
+export interface DiaryState {
+  meals: (DiaryMeal | DiaryMealTemplate)[]
+  products: DiaryProduct[]
+  recentProducts: IProduct[]
+  toggledProductId: ProductId | null
+  templates: DiaryTemplate[]
+  isLoading: boolean
 }

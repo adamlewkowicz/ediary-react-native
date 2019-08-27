@@ -1,5 +1,4 @@
 import {
-  MEAL_CREATED,
   MEAL_UPDATED,
   MEAL_DELETED,
   MEAL_PRODUCT_DELETED,
@@ -9,53 +8,42 @@ import {
   MEALS_ADDED,
   PRODUCT_TOGGLED,
   MEAL_PRODUCT_ADDED,
-  MEAL_TEMPLATE_TOGGLED,
-  MEAL_ADDED_FROM_TEMPLATE,
   MEAL_ADDED,
 } from '../../consts';
-import { Meal, Product, IProduct } from '../../../database/entities';
-import {
-  DiaryMealPayload,
-  DiaryProductPayload,
-} from '../../reducers/diary';
+import { Meal, Product, IProductMerged } from '../../../database/entities';
 import { ProductId, TemplateId, MealId } from '../../../types';
-import { DiaryMeal_ } from '../../reducers/types/diary';
-
-export type MealCreated = {
-  type: typeof MEAL_CREATED
-  payload: Meal
-}
+import { DiaryMeal, DiaryProduct } from '../../reducers/types/diary';
 
 export type MealUpdated = {
   type: typeof MEAL_UPDATED
-  payload: Partial<DiaryMeal_>
-  meta: { mealId: Meal['id'] }
+  payload: Partial<DiaryMeal>
+  meta: { mealId: MealId }
 }
 
 export type MealDeleted = {
   type: typeof MEAL_DELETED
-  meta: { mealId: Meal['id'] }
+  meta: { mealId: MealId }
 }
 
 export type MealProductAdded = {
   type: typeof MEAL_PRODUCT_ADDED
-  payload: DiaryProductPayload
-  meta: { mealId: Meal['id'] }
+  payload: IProductMerged
+  meta: { mealId: MealId }
 }
 
 export type MealProductDeleted = {
   type: typeof MEAL_PRODUCT_DELETED
   meta: {
-    mealId: Meal['id']
-    productId: Product['id']
+    mealId: MealId
+    productId: ProductId
   }
 }
 
 export type ProductUpdated = {
   type: typeof PRODUCT_UPDATED
-  payload: Partial<DiaryProductPayload>
+  payload: Partial<DiaryProduct>
   meta: {
-    productId: Product['id']
+    productId: ProductId
   }
 }
 
@@ -68,7 +56,7 @@ export type MealToggled = {
 
 export type ProductCreated = {
   type: typeof PRODUCT_CREATED
-  payload: IProduct
+  payload: Product
 }
 
 export type MealsAdded = {
@@ -84,21 +72,6 @@ export type ProductToggled = {
   payload: ProductId | null
 }
 
-export type MealTemplateToggled = {
-  type: typeof MEAL_TEMPLATE_TOGGLED
-  meta: {
-    targetId: TemplateId | null
-  }
-}
-
-export type MealAddedFromTemplate = {
-  type: typeof MEAL_ADDED_FROM_TEMPLATE
-  payload: Meal
-  meta: {
-    templateId?: TemplateId
-  }
-}
-
 export type MealAdded = {
   type: typeof MEAL_ADDED
   payload: Meal
@@ -108,7 +81,6 @@ export type MealAdded = {
 }
 
 export type DiaryActions =
-  | MealCreated 
   | MealUpdated 
   | MealDeleted 
   | MealProductAdded
@@ -118,6 +90,4 @@ export type DiaryActions =
   | ProductCreated
   | MealsAdded
   | ProductToggled
-  | MealTemplateToggled
-  | MealAddedFromTemplate
   | MealAdded
