@@ -39,6 +39,6 @@ jobs:
     - name: build apk
       run: |
         npm install
-        cd android && ./gradlew assembleRelease
+        cd android && chmod +x ./gradlew assembleRelease
       env:
         CI: true
