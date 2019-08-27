@@ -1,4 +1,4 @@
-import { MacroElements, DateTime } from '../../types';
+import { MacroElements, DateTime, TemplateId } from '../../types';
 import { MACRO_ELEMENTS } from '../../common/consts';
 import { Meal } from '../../database/entities';
 import { getDayFromDate, getTimeFromDate } from '../../common/utils';
@@ -26,18 +26,19 @@ interface Template {
 }
 
 export const normalizeMeals = <T extends Meal[]>(
-  payload: T
+  payload: T,
+  templateId: TemplateId | null = null,
 ) => {
   const meals = payload.map(meal => {
     const { mealProducts, ...data } = meal;
     return {
       ...data,
-      isToggled: false,
+      isToggled: templateId != null,
       isTemplate: false,
       day: getDayFromDate(meal.date),
       time: getTimeFromDate(meal.date),
       productIds: mealProducts.map(mealProduct => mealProduct.productId),
-      templateId: null,
+      templateId,
     }
   });
   const products = payload.flatMap(meal => {

@@ -1,4 +1,7 @@
-import { DiaryMealPayload, DiaryProductPayload, MealType } from '../../reducers/diary';
+import {
+  DiaryMealPayload,
+  DiaryProductPayload,
+} from '../../reducers/diary';
 import {
   MEAL_CREATED,
   MEAL_UPDATED,
@@ -18,19 +21,17 @@ import {
   MealCreated,
   MealProductDeleted,
   ProductUpdated,
-  MealToggled,
   ProductCreated,
   MealsAdded,
   ProductToggled,
   MealProductAdded,
-  MealTemplateToggled,
   DiaryActions
 } from '../types';
 import { MealId, ProductId, TemplateId } from '../../../types';
 import { Meal, IProduct } from '../../../database/entities';
 
 export const mealCreated = (
-  meal: DiaryMealPayload
+  meal: Meal
 ): MealCreated => ({
   type: MEAL_CREATED,
   payload: meal
@@ -91,10 +92,12 @@ export const productCreated = (
 });
 
 export const mealsAdded = (
-  meals: Meal[]
+  meals: Meal[],
+  templateId?: TemplateId
 ): MealsAdded => ({
   type: MEALS_ADDED,
-  payload: meals
+  payload: meals,
+  meta: { templateId }
 });
 
 export const productToggled = (

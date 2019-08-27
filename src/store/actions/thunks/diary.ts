@@ -4,6 +4,7 @@ import {
   MealProduct,
   IProduct,
   IProductOptional,
+  IMeal,
 } from '../../../database/entities';
 import {
   mealCreated,
@@ -41,7 +42,7 @@ export const mealDelete = (
 
 export const mealUpdate = (
   mealId: Meal['id'],
-  meal: Partial<DiaryMealPayload>
+  meal: Partial<DiaryMealPayload & IMeal>
 ): Thunk => async (dispatch) => {
   dispatch(mealUpdated(mealId, meal));
   await Meal.update(mealId, meal);
@@ -109,7 +110,9 @@ export const mealCreateFromTemplate = (
   const createdMeal = await Meal.createFromTemplate(
     template, date, productId, quantity
   );
-  dispatch(mealsAdded([createdMeal]));
+  dispatch(
+    mealsAdded([createdMeal], template.id)
+  );
 }
 
 export const mealProductAdd = (

@@ -104,7 +104,7 @@ export const mealsAndTemplates = createSelector(
   mealsWithRatio,
   templates,
   (meals, templates): MealsAndTemplates => {
-    const mealNames = meals.map(meal => meal.name);
+    const usedTemplateIds = meals.flatMap(meal => meal.templateId ? [meal.templateId] : []);
     const parsedMeals = meals.map(meal => ({
       ...meal,
       type: 'meal' as 'meal'
@@ -114,7 +114,7 @@ export const mealsAndTemplates = createSelector(
         ...template,
         type: 'template' as 'template'
       }))
-      .filter(template => !mealNames.includes(template.name));
+      .filter(template => !usedTemplateIds.includes(template.id));
 
     const sorted = [...parsedMeals, ...parsedTemplates]
       .sort((a, b) => {

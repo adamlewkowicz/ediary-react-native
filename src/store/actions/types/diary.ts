@@ -15,7 +15,6 @@ import { Meal, Product, IProduct } from '../../../database/entities';
 import {
   DiaryMealPayload,
   DiaryProductPayload,
-  MealType,
 } from '../../reducers/diary';
 import { ProductId, TemplateId, MealId } from '../../../types';
 
@@ -72,6 +71,9 @@ export type ProductCreated = {
 export type MealsAdded = {
   type: typeof MEALS_ADDED
   payload: Meal[]
+  meta: {
+    templateId?: TemplateId
+  }
 }
 
 export type ProductToggled = {

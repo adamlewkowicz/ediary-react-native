@@ -55,7 +55,10 @@ export function diaryReducer(
   switch(action.type) {
     case MEALS_ADDED: return {
       ...state,
-      ...normalizeMeals(action.payload),
+      ...normalizeMeals(
+        action.payload,
+        action.meta.templateId
+      )
     }
     case MEAL_CREATED: return {
       ...state,
@@ -188,7 +191,7 @@ export interface DiaryMeal extends DiaryMealPayload {
   day: DateDay | null
   time: DateTime
   productIds: ProductId[]
-  templateId?: null
+  templateId: TemplateId | null
 }
 
 export interface Template {
