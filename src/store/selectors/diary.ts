@@ -3,7 +3,6 @@ import { MacroElements } from '../../types';
 import { StoreState } from '..';
 import { createSelector } from 'reselect';
 import { macroNeeds } from './user';
-import { Template } from '../reducers/diary';
 
 const baseMacro: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 const macroNeedsElement = { diff: 0, ratio: 0, eaten: 0, needed: 0 };

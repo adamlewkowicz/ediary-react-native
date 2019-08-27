@@ -9,9 +9,9 @@ import {
   ProductUnit,
   MacroElement,
 } from '../../../types';
-import { IProduct } from '../../../database/entities';
+import { Product } from '../../../database/entities';
 
-interface DiaryMealBase {
+export interface DiaryMealBase {
   id: MealId | TemplateIdReverted
   name: string
   carbs: number
@@ -34,7 +34,7 @@ export interface DiaryMealTemplate extends DiaryMealBase {
   id: TemplateIdReverted
   date: null
   day: null
-  productIds: []
+  // productIds: []
   templateId: TemplateId
   type: 'template'
 }
@@ -80,8 +80,7 @@ export interface DiaryTemplate {
 export interface DiaryState {
   meals: (DiaryMeal | DiaryMealTemplate)[]
   products: DiaryProduct[]
-  recentProducts: IProduct[]
+  recentProducts: Product[]
   toggledProductId: ProductId | null
   templates: DiaryTemplate[]
-  isLoading: boolean
 }

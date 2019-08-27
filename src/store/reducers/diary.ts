@@ -5,10 +5,10 @@ import {
   PRODUCT_UPDATED,
   MEAL_TOGGLED,
   PRODUCT_CREATED,
-  MEALS_ADDED,
   PRODUCT_TOGGLED,
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
+  MEALS_LOADED,
 } from '../consts';
 import {
   DateTime,
@@ -17,7 +17,7 @@ import {
 import { DiaryActions } from '../actions';
 import { calcMacroByQuantity, getRevertedTemplateId, normalizeMeal } from '../helpers/diary';
 import { getDayFromDate, getTimeFromDate } from '../../common/utils';
-import { DiaryState } from './types/diary';
+import { DiaryState, DiaryMeal, DiaryMealTemplate } from './types/diary';
 
 const initialState: DiaryState = {
   meals: [],
@@ -35,8 +35,7 @@ const initialState: DiaryState = {
     }
   ],
   recentProducts: [],
-  toggledProductId: null,
-  isLoading: false
+  toggledProductId: null
 }
 
 export function diaryReducer(
@@ -44,12 +43,58 @@ export function diaryReducer(
   action: DiaryActions
 ): DiaryState {
   switch(action.type) {
-    case MEALS_ADDED: return {
+    case MEALS_LOADED: return {
       ...state,
-      // ...normalizeMeals(
-      //   action.payload,
-      //   action.meta.templateId
-      // )
+      meals: [
+        ...state.templates.flatMap(template => {
+          if (action.payload.some(meal => meal.name === template.name)) {
+            return [];
+          }
+          const type: DiaryMealTemplate['type'] = 'template';
+          return [{
+            id: getRevertedTemplateId(template.id),
+            name: template.name,
+            carbs: 0,
+            prots: 0,
+            fats: 0,
+            kcal: 0,
+            day: null,
+            date: null,
+            time: template.time,
+            isToggled: false,
+            templateId: template.id,
+            productIds: [],
+            type,
+          }];
+        }),
+        ...action.payload.map(meal => {
+          const { mealProducts, ...data } = meal;
+          const type: DiaryMeal['type'] = 'meal';
+          return {
+            ...data,
+            isToggled: false,
+            day: getDayFromDate(meal.date),
+            time: getTimeFromDate(meal.date),
+            templateId: null,
+            productIds: mealProducts.map(mealProduct => mealProduct.productId),
+            type,
+          }
+        })
+      ],
+      products: action.payload.flatMap(meal => {
+        return meal.mealProducts.map(mealProduct => {
+          const { meal, product, ...data } = mealProduct;
+          const normalizedProduct = {
+            ...data,
+            ...product,
+          }
+          return {
+            ...normalizedProduct,
+            isToggled: false,
+            macro: calcMacroByQuantity(normalizedProduct)
+          }
+        })
+      })
     }
     case MEAL_ADDED: {
       const { templateId } = action.meta;
