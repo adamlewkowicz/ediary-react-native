@@ -87,7 +87,7 @@ export function diaryReducer(
         day: null,
         date: null,
         templateId: template.id,
-        isTemplate: true,
+        type: 'template',
         isToggled: false,
         productIds: [],
       }))
@@ -101,15 +101,15 @@ export function diaryReducer(
           ...state,
           products: [...state.products, ...products],
           meals: state.meals.map(meal => {
-            if (meal.isTemplate && meal.templateId === templateId) {
+            if (meal.type === 'meal' && meal.templateId === templateId) {
               return {
                 ...action.payload,
                 day: getDayFromDate(action.payload.date),
                 time: getTimeFromDate(action.payload.date),
                 productIds: products.map(product => product.id),
                 isToggled: true,
-                isTemplate: false,
                 templateId: templateId || null,
+                type: 'meal'
               }
             }
             return meal;
@@ -119,7 +119,7 @@ export function diaryReducer(
       return {
         ...state,
         products: [...state.products, ...products],
-        meals: [...state.meals, { ...meal, isTemplate: false }]
+        meals: [...state.meals, { ...meal, type: 'meal' }]
       }
     }
     case MEAL_DELETED: return {
@@ -131,23 +131,21 @@ export function diaryReducer(
         if (meal.id === action.meta.mealId) {
           if (meal.templateId) {
             const { templateId, name, time } = meal;
-            return [
-              {
-                id: getRevertedTemplateId(meal.templateId),
-                carbs: 0,
-                prots: 0,
-                fats: 0,
-                kcal: 0,
-                day: null,
-                date: null,
-                isTemplate: true,
-                isToggled: false,
-                productIds: [],
-                templateId,
-                name,
-                time,
-              }
-            ]
+            return [{
+              id: getRevertedTemplateId(meal.templateId),
+              carbs: 0,
+              prots: 0,
+              fats: 0,
+              kcal: 0,
+              day: null,
+              date: null,
+              type: 'template',
+              isToggled: false,
+              productIds: [],
+              templateId,
+              name,
+              time,
+            }]
           }
           return [];
         }
@@ -176,7 +174,7 @@ export function diaryReducer(
     case MEAL_UPDATED: return {
       ...state,
       meals: state.meals.map(meal =>
-        !meal.isTemplate && meal.id === action.meta.mealId
+        meal.type === 'meal' && meal.id === action.meta.mealId
           ? { ...meal, ...action.payload }
           : meal
       )
@@ -184,7 +182,7 @@ export function diaryReducer(
     case MEAL_PRODUCT_ADDED: return {
       ...state,
       meals: state.meals.map(meal => 
-        !meal.isTemplate && meal.id === action.meta.mealId 
+        meal.type === 'meal' && meal.id === action.meta.mealId 
           ? { ...meal, productIds: [...meal.productIds, action.payload.id] }
           : meal
       ),
@@ -200,7 +198,7 @@ export function diaryReducer(
     case MEAL_PRODUCT_DELETED: return {
       ...state,
       meals: state.meals.map(meal => {
-        if (!meal.isTemplate && meal.id === action.meta.mealId) {
+        if (meal.type === 'meal' && meal.id === action.meta.mealId) {
           const productIds = meal.productIds.filter(productId =>
             productId !== action.meta.productId
           );

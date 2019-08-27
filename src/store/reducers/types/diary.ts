@@ -19,8 +19,8 @@ interface DiaryMealBase {
   updatedAt?: number
   createdAt?: number
   //
+  type: 'meal' | 'template'
   isToggled: boolean
-  isTemplate: boolean
   productIds: ProductId[]
   templateId: TemplateId | null
   day: DateDay | null
@@ -31,13 +31,13 @@ export interface DiaryMealTemplate extends DiaryMealBase {
   date: null
   day: null
   productIds: []
-  isTemplate: true
   templateId: TemplateId
+  type: 'template'
 }
 
 export interface DiaryMeal_ extends DiaryMealBase {
   id: MealId
   date: string
   day: DateDay
-  isTemplate: false
+  type: 'meal'
 }
