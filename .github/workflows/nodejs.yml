@@ -25,7 +25,6 @@ jobs:
       env:
         CI: true
 
-jobs:
   build-apk:
     runs-on: ubuntu-latest
     strategy:
