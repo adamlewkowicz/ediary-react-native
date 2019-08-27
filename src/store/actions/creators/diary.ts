@@ -29,6 +29,7 @@ import {
 } from '../types';
 import { MealId, ProductId, TemplateId } from '../../../types';
 import { Meal, IProduct } from '../../../database/entities';
+import { DiaryMeal_ } from '../../reducers/types/diary';
 
 export const mealCreated = (
   meal: Meal
@@ -39,7 +40,7 @@ export const mealCreated = (
 
 export const mealUpdated = (
   mealId: MealId,
-  meal: Partial<DiaryMealPayload>
+  meal: Partial<DiaryMeal_>
 ): MealUpdated => ({
   type: MEAL_UPDATED,
   payload: meal,

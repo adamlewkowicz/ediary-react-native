@@ -27,6 +27,7 @@ import { Meal, IProduct } from '../../database/entities';
 import { DiaryActions } from '../actions';
 import { calcMacroByQuantity, normalizeMeals, getRevertedTemplateId, normalizeMeal } from '../helpers/diary';
 import { getDayFromDate, getTimeFromDate } from '../../common/utils';
+import { DiaryMeal_, DiaryMealTemplate } from './types/diary';
 
 const initialState: DiaryState = {
   meals: [],
@@ -94,6 +95,8 @@ export function diaryReducer(
       const { templateId } = action.meta;
       const { meal, products } = normalizeMeal(action.payload, templateId);
 
+      // if ()
+        
       return {
         ...state,
         products: [...state.products, ...products],
@@ -114,9 +117,9 @@ export function diaryReducer(
       meals: state.meals.flatMap(meal => {
         if (meal.id === action.meta.mealId) {
           if (meal.templateId) {
+            const { templateId, name, time } = meal;
             return [
               {
-                ...meal,
                 id: getRevertedTemplateId(meal.templateId),
                 carbs: 0,
                 prots: 0,
@@ -127,6 +130,9 @@ export function diaryReducer(
                 isTemplate: true,
                 isToggled: false,
                 productIds: [],
+                templateId,
+                name,
+                time,
               }
             ]
           }
@@ -156,20 +162,18 @@ export function diaryReducer(
     }
     case MEAL_UPDATED: return {
       ...state,
-      meals: state.meals.map(meal => meal.id === action.meta.mealId
-        ? { ...meal, ...action.payload }
-        : meal
+      meals: state.meals.map(meal =>
+        !meal.isTemplate && meal.id === action.meta.mealId
+          ? { ...meal, ...action.payload }
+          : meal
       )
     }
-    case MEAL_DELETED: 
-      const meals = state.meals.filter(meal => meal.id !== action.meta.mealId);
-      const products = state.products.filter(product => product.mealId !== action.meta.mealId);
-      return { ...state, meals, products };
     case MEAL_PRODUCT_ADDED: return {
       ...state,
-      meals: state.meals.map(meal => meal.id === action.meta.mealId 
-        ? { ...meal, productIds: [...meal.productIds, action.payload.id] }
-        : meal
+      meals: state.meals.map(meal => 
+        !meal.isTemplate && meal.id === action.meta.mealId 
+          ? { ...meal, productIds: [...meal.productIds, action.payload.id] }
+          : meal
       ),
       products: [
         ...state.products,
@@ -183,14 +187,11 @@ export function diaryReducer(
     case MEAL_PRODUCT_DELETED: return {
       ...state,
       meals: state.meals.map(meal => {
-        if (meal.id === action.meta.mealId) {
+        if (!meal.isTemplate && meal.id === action.meta.mealId) {
           const productIds = meal.productIds.filter(productId =>
             productId !== action.meta.productId
           );
-          return {
-            ...meal,
-            productIds
-          }
+          return { ...meal, productIds };
         }
         return meal;
       }),
@@ -292,7 +293,7 @@ export interface DiaryProduct extends DiaryProductPayload {
 }
 
 interface DiaryState {
-  meals: DiaryMeal[]
+  meals: (DiaryMeal_ | DiaryMealTemplate)[]
   products: DiaryProduct[]
   recentProducts: IProduct[]
   toggledProductId: ProductId | null

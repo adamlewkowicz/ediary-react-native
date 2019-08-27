@@ -18,6 +18,7 @@ import {
   DiaryProductPayload,
 } from '../../reducers/diary';
 import { ProductId, TemplateId, MealId } from '../../../types';
+import { DiaryMeal_ } from '../../reducers/types/diary';
 
 export type MealCreated = {
   type: typeof MEAL_CREATED
@@ -26,7 +27,7 @@ export type MealCreated = {
 
 export type MealUpdated = {
   type: typeof MEAL_UPDATED
-  payload: Partial<DiaryMealPayload>
+  payload: Partial<DiaryMeal_>
   meta: { mealId: Meal['id'] }
 }
 
