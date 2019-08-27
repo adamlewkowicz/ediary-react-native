@@ -3,6 +3,7 @@ export const MEAL_UPDATED = 'MEAL_UPDATED';
 export const MEAL_DELETED = 'MEAL_DELETED';
 export const MEAL_PRODUCT_ADDED = 'MEAL_PRODUCT_ADDED';
 export const MEALS_ADDED = 'MEALS_ADDED';
+export const MEAL_ADDED_FROM_TEMPLATE = 'MEAL_ADDED_FROM_TEMPLATE';
 // use getState in dispatch to update meal's kcals ?
 export const MEAL_PRODUCT_UPDATED = 'MEAL_PRODUCT_UPDATED';
 export const MEAL_PRODUCT_DELETED = 'MEAL_PRODUCT_DELETED';

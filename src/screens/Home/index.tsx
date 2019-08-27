@@ -125,11 +125,13 @@ const Home = (props: HomeProps) => {
                 onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
                 onLongPress={IS_DEV ? undefined : () => handleMealDelete(item)}
                 onProductAdd={() => handleProductFinderNavigation(item.id)}
-                onProductDelete={productId => dispatch(Actions.mealProductDelete(item.id, productId))}
-                onProductToggle={productId => dispatch(Actions.productToggled(productId))}
-                onProductQuantityUpdate={(productId, quantity) => dispatch(
-                  Actions.mealProductQuantityUpdate(item.id, productId, quantity)
-                )}
+                {...!item.isTemplate && {
+                  onProductDelete: (productId) => dispatch(Actions.mealProductDelete(item.id, productId)),
+                  onProductToggle: (productId) => dispatch(Actions.productToggled(productId)),
+                  onProductQuantityUpdate: (productId, quantity) => dispatch(
+                    Actions.mealProductQuantityUpdate(item.id, productId, quantity)
+                  )
+                }}
               />
             )
           )}

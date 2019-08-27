@@ -61,4 +61,8 @@ export interface TemplateId extends Number {
   _templateIdBrand: number;
 }
 
+export interface TemplateIdReverted extends Number {
+  _TemplateIdRevertedBrand: number;
+}
+
 export type Environment = 'development' | 'test' | 'production';
