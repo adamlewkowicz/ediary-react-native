@@ -100,7 +100,7 @@ export function diaryReducer(
       const { templateId } = action.meta;
       const { meal, products } = normalizeMeal(action.payload, templateId);
 
-      if (templateId) {
+      if (templateId !== null) {
         return {
           ...state,
           products: [...state.products, ...products],

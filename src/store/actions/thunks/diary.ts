@@ -7,30 +7,31 @@ import {
   IMeal,
 } from '../../../database/entities';
 import {
-  mealCreated,
   mealDeleted,
   mealUpdated,
   mealProductDeleted,
   productUpdated,
   mealToggled,
   productCreated,
-  mealsAdded,
   mealProductAdded,
+  mealAdded,
+  mealsLoaded,
 } from '../creators';
-import { DiaryMealPayload, DiaryProductPayload, DiaryTemplate } from '../../reducers/diary';
-import { DateDay, ProductId, MealId } from '../../../types';
+import { DateDay, ProductId, MealId, TemplateId } from '../../../types';
 import { debounce_ } from '../../../common/utils';
 import { Thunk } from '../..';
+import { DiaryMeal, DiaryProduct, DiaryTemplate } from '../../reducers/types/diary';
 
 const debounceA = debounce_();
 
 export const mealCreate = (
   name: Meal['name'],
-  date: Date
+  date: Date,
+  templateId: TemplateId,
 ): Thunk => async (dispatch) => {
   const meal = await Meal.saveWithDate({ name }, date);
   dispatch(mealToggled(null));
-  dispatch(mealCreated(meal));
+  dispatch(mealAdded(meal, templateId));
 }
 
 export const mealDelete = (
@@ -42,7 +43,7 @@ export const mealDelete = (
 
 export const mealUpdate = (
   mealId: Meal['id'],
-  meal: Partial<DiaryMealPayload & IMeal>
+  meal: Partial<DiaryMeal & IMeal>
 ): Thunk => async (dispatch) => {
   dispatch(mealUpdated(mealId, meal));
   await Meal.update(mealId, meal);
@@ -77,7 +78,7 @@ export const mealProductQuantityUpdate = (
 
 export const productUpdate = (
   productId: Product['id'],
-  product: Partial<DiaryProductPayload>
+  product: Partial<DiaryProduct>
 ): Thunk => async (dispatch) => {
   dispatch(productUpdated(productId, product));
   await Product.update(productId, product);
@@ -98,7 +99,7 @@ export const mealsFindByDay = (
   dateDay: DateDay
 ): Thunk => async (dispatch) => {
   const foundMeals = await Meal.findByDay(dateDay);
-  dispatch(mealsAdded(foundMeals));
+  dispatch(mealsLoaded(foundMeals));
 }
 
 export const mealCreateFromTemplate = (
@@ -111,7 +112,7 @@ export const mealCreateFromTemplate = (
     template, date, productId, quantity
   );
   dispatch(
-    mealsAdded([createdMeal], template.id)
+    mealAdded(createdMeal, template.id)
   );
 }
 

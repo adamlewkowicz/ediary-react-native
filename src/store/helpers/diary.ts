@@ -2,7 +2,6 @@ import { MacroElements, DateTime, TemplateId, TemplateIdReverted } from '../../t
 import { MACRO_ELEMENTS } from '../../common/consts';
 import { Meal } from '../../database/entities';
 import { getDayFromDate, getTimeFromDate } from '../../common/utils';
-import { DiaryTemplate } from '../reducers/diary';
 
 interface CalcMacroByQuantityData extends MacroElements {
   quantity: number

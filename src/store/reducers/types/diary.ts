@@ -9,7 +9,7 @@ import {
   ProductUnit,
   MacroElement,
 } from '../../../types';
-import { Product } from '../../../database/entities';
+import { IProduct } from '../../../database/entities';
 
 export interface DiaryMealBase {
   id: MealId | TemplateIdReverted
@@ -80,7 +80,7 @@ export interface DiaryTemplate {
 export interface DiaryState {
   meals: (DiaryMeal | DiaryMealTemplate)[]
   products: DiaryProduct[]
-  recentProducts: Product[]
+  recentProducts: IProduct[]
   toggledProductId: ProductId | null
   templates: DiaryTemplate[]
 }
