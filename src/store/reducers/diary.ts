@@ -11,6 +11,7 @@ import {
   MEAL_PRODUCT_ADDED,
   MEAL_TEMPLATE_TOGGLED,
   MEAL_ADDED_FROM_TEMPLATE,
+  MEAL_ADDED,
 } from '../consts';
 import {
   ProductUnit,
@@ -91,22 +92,34 @@ export function diaryReducer(
         productIds: [],
       }))
     }
-    case MEAL_ADDED_FROM_TEMPLATE: {
+    case MEAL_ADDED: {
       const { templateId } = action.meta;
       const { meal, products } = normalizeMeal(action.payload, templateId);
 
-      // if ()
-        
+      if (templateId) {
+        return {
+          ...state,
+          products: [...state.products, ...products],
+          meals: state.meals.map(meal => {
+            if (meal.isTemplate && meal.templateId === templateId) {
+              return {
+                ...action.payload,
+                day: getDayFromDate(action.payload.date),
+                time: getTimeFromDate(action.payload.date),
+                productIds: products.map(product => product.id),
+                isToggled: true,
+                isTemplate: false,
+                templateId: templateId || null,
+              }
+            }
+            return meal;
+          })
+        }
+      }
       return {
         ...state,
         products: [...state.products, ...products],
-        meals: !templateId
-          ? [...state.meals, meal]
-          : state.meals.map(meal => 
-              meal.templateId === templateId 
-                ? { ...meal, ...action.payload }
-                : meal 
-            )
+        meals: [...state.meals, { ...meal, isTemplate: false }]
       }
     }
     case MEAL_DELETED: return {

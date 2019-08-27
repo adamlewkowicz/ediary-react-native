@@ -11,6 +11,7 @@ import {
   MEAL_PRODUCT_ADDED,
   MEAL_TEMPLATE_TOGGLED,
   MEAL_ADDED_FROM_TEMPLATE,
+  MEAL_ADDED,
 } from '../../consts';
 import { Meal, Product, IProduct } from '../../../database/entities';
 import {
@@ -98,6 +99,14 @@ export type MealAddedFromTemplate = {
   }
 }
 
+export type MealAdded = {
+  type: typeof MEAL_ADDED
+  payload: Meal
+  meta: {
+    templateId?: TemplateId
+  }
+}
+
 export type DiaryActions =
   | MealCreated 
   | MealUpdated 
@@ -111,3 +120,4 @@ export type DiaryActions =
   | ProductToggled
   | MealTemplateToggled
   | MealAddedFromTemplate
+  | MealAdded
