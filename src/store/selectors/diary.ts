@@ -51,15 +51,20 @@ const calcedMeals = createSelector(
 
 export const mealsWithRatio = createSelector(
   calcedMeals,
-  meals => meals.map(meal => {
-    const macroSum = meal.carbs + meal.prots + meal.fats;
-    const macroRatio = BASE_MACRO_ELEMENTS.map(element => ({
-      value: meal[element] / macroSum,
-      element
-    }));
-
-    return { ...meal, macroRatio };
-  })
+  meals => meals
+    .map(meal => {
+      const macroSum = meal.carbs + meal.prots + meal.fats;
+      const macroRatio = BASE_MACRO_ELEMENTS.map(element => ({
+        value: meal[element] / macroSum,
+        element
+      }));
+      return { ...meal, macroRatio };
+    })
+    .sort((a, b) => {
+      const timeA = Number(a.time.replace(/:/g, ''));
+      const timeB = Number(b.time.replace(/:/g, ''));
+      return timeA > timeB ? 1 : -1;
+    })
 );
 
 const mealsMacroSum = createSelector(
@@ -98,38 +103,6 @@ export const macroNeedsLeft = createSelector(
       kcal: { ...macroNeedsElement }
     })
 );
-
-export const mealsAndTemplates = createSelector(
-  mealsWithRatio,
-  templates,
-  (meals, templates): MealsAndTemplates => {
-    const usedTemplateIds = meals.flatMap(meal => meal.templateId ? [meal.templateId] : []);
-    const parsedMeals = meals.map(meal => ({
-      ...meal,
-      type: 'meal' as 'meal'
-    }));
-    const parsedTemplates = templates
-      .map(template => ({
-        ...template,
-        type: 'template' as 'template'
-      }))
-      .filter(template => !usedTemplateIds.includes(template.id));
-
-    const sorted = [...parsedMeals, ...parsedTemplates]
-      .sort((a, b) => {
-        const timeA = Number(a.time.replace(/:/g, ''));
-        const timeB = Number(b.time.replace(/:/g, ''));
-        return timeA > timeB ? 1 : -1;
-      });
-
-    return sorted;
-  }
-);
-
-export type MealsAndTemplates = (
-  (MealsWithRatio[number] & { type: 'meal' }) |
-  (Template & { type: 'template' })
-)[];
 
 export type MacroNeedsLeft = ReturnType<typeof macroNeedsLeft>;
 export type MealsWithRatio = ReturnType<typeof mealsWithRatio>;

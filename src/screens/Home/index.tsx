@@ -26,7 +26,6 @@ interface HomeProps extends NavigationScreenProps {
   appDateDay: StoreState['application']['day']
   macroNeedsLeft: selectors.MacroNeedsLeft
   toggledProductId: StoreState['diary']['toggledProductId']
-  mealsAndTemplates: selectors.MealsAndTemplates
   mealsWithRatio: selectors.MealsWithRatio
   dispatch: Dispatch
 }
@@ -41,8 +40,6 @@ const Home = (props: HomeProps) => {
 
   const handleProductFinderNavigation = (
     meal: DiaryMeal | DiaryMealTemplate
-    // mealId: MealId | null,
-    // template?: DiaryTemplate,
   ) => {
     const screenParams: ProductFindParams = {
       onItemPress(foundProduct) {
@@ -121,7 +118,7 @@ const Home = (props: HomeProps) => {
               toggledProductId={props.toggledProductId}
               onProductAdd={() => handleProductFinderNavigation(item)}
               onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
-              onLongPress={item.type === 'template' ? undefined : () => handleMealDelete(item)}
+              onLongPress={IS_DEV || item.type === 'template' ? undefined : () => handleMealDelete(item)}
               {...item.type === 'meal' && {
                 onProductDelete: (productId) => dispatch(Actions.mealProductDelete(item.id, productId)),
                 onProductToggle: (productId) => dispatch(Actions.productToggled(productId)),
@@ -162,7 +159,6 @@ const HomeConnected = connect(
     toggledProductId: state.diary.toggledProductId,
     appDate: state.application.date,
     appDateDay: state.application.day,
-    mealsAndTemplates: selectors.mealsAndTemplates(state),
     mealsWithRatio: selectors.mealsWithRatio(state),
   })
 )(Home);

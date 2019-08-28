@@ -10,9 +10,9 @@ import {
   MEAL_ADDED,
   MEALS_LOADED,
 } from '../../consts';
-import { Meal, Product, IProductMerged, IProduct } from '../../../database/entities';
+import { Meal, IProductMerged, IProduct } from '../../../database/entities';
 import { ProductId, TemplateId, MealId } from '../../../types';
-import { DiaryMeal, DiaryProduct, DiaryMealId } from '../../reducers/types/diary';
+import { DiaryProduct, DiaryMealId, DiaryMeal } from '../../reducers/types/diary';
 
 export type MealUpdated = {
   type: typeof MEAL_UPDATED

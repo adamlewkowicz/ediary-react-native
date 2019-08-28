@@ -105,7 +105,7 @@ export function diaryReducer(
           ...state,
           products: [...state.products, ...products],
           meals: state.meals.map(meal => {
-            if (meal.type === 'meal' && meal.templateId === templateId) {
+            if (meal.type === 'template' && meal.templateId === templateId) {
               return {
                 ...action.payload,
                 day: getDayFromDate(action.payload.date),
@@ -169,7 +169,7 @@ export function diaryReducer(
     case MEAL_UPDATED: return {
       ...state,
       meals: state.meals.map(meal =>
-        meal.type === 'meal' && meal.id === action.meta.mealId
+        meal.id === action.meta.mealId
           ? { ...meal, ...action.payload }
           : meal
       )
