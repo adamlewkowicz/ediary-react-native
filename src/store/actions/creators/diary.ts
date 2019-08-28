@@ -13,7 +13,7 @@ import {
 import { DiaryActions } from '../types';
 import { MealId, ProductId, TemplateId } from '../../../types';
 import { Meal, IProduct, IProductMerged } from '../../../database/entities';
-import { DiaryMeal, DiaryProduct } from '../../reducers/types/diary';
+import { DiaryMeal, DiaryProduct, DiaryMealId } from '../../reducers/types/diary';
 
 export const mealsLoaded = (
   meals: Meal[]
@@ -72,10 +72,10 @@ export const productUpdated = (
 });
 
 export const mealToggled = (
-  mealId: MealId | null
+  mealId: DiaryMealId | null
 ): DiaryActions => ({
   type: MEAL_TOGGLED,
-  meta: { targetId: mealId }
+  meta: { mealId }
 });
 
 export const productCreated = (

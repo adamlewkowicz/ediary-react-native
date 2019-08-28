@@ -161,7 +161,7 @@ export function diaryReducer(
       toggledProductId: null,
       meals: state.meals.map(meal => ({
         ...meal,
-        isToggled: action.meta.targetId === meal.id
+        isToggled: action.meta.mealId === meal.id
           ? !meal.isToggled
           : false
       }))

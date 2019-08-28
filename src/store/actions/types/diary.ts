@@ -12,7 +12,7 @@ import {
 } from '../../consts';
 import { Meal, Product, IProductMerged, IProduct } from '../../../database/entities';
 import { ProductId, TemplateId, MealId } from '../../../types';
-import { DiaryMeal, DiaryProduct } from '../../reducers/types/diary';
+import { DiaryMeal, DiaryProduct, DiaryMealId } from '../../reducers/types/diary';
 
 export type MealUpdated = {
   type: typeof MEAL_UPDATED
@@ -50,7 +50,7 @@ export type ProductUpdated = {
 export type MealToggled = {
   type: typeof MEAL_TOGGLED
   meta: {
-    targetId: MealId | null
+    mealId: DiaryMealId | null
   }
 }
 

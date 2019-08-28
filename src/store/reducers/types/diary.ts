@@ -11,8 +11,10 @@ import {
 } from '../../../types';
 import { IProduct } from '../../../database/entities';
 
+export type DiaryMealId = MealId | TemplateIdReverted;
+
 export interface DiaryMealBase {
-  id: MealId | TemplateIdReverted
+  id: DiaryMealId
   name: string
   carbs: number
   prots: number

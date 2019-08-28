@@ -49,7 +49,7 @@ const calcedMeals = createSelector(
   })
 );
 
-const mealsWithRatio = createSelector(
+export const mealsWithRatio = createSelector(
   calcedMeals,
   meals => meals.map(meal => {
     const macroSum = meal.carbs + meal.prots + meal.fats;

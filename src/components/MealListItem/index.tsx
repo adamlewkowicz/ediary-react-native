@@ -8,19 +8,24 @@ import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native'
 import { MealsWithRatio } from '../../store/selectors';
 import { Button } from 'react-native-ui-kitten';
 import { BASE_MACRO_ELEMENTS } from '../../common/consts';
-import { Template } from '../../store/reducers/diary';
+import { DiaryMealId } from '../../store/reducers/types/diary';
 
 interface MealListItemProps {
   meal: MealsWithRatio[number]
-  onToggle: (mealId: MealId) => void
+  onToggle: (mealId: DiaryMealId) => void
   onLongPress?: TouchableOpacityProps['onLongPress']
   onProductAdd: () => void
-  onProductDelete: (productId: ProductId) => void
-  onProductToggle: (productId: ProductId) => void
-  onProductQuantityUpdate: (productId: ProductId, quantity: number) => void
+  onProductDelete?: (productId: ProductId) => void
+  onProductToggle?: (productId: ProductId) => void
+  onProductQuantityUpdate?: (productId: ProductId, quantity: number) => void
   toggledProductId: ProductId | null
 }
-export const MealListItem = (props: MealListItemProps) => (
+export const MealListItem = ({
+  onProductDelete = () => {},
+  onProductToggle = () => {},
+  onProductQuantityUpdate = () => {},
+  ...props
+}: MealListItemProps) => (
   <Container>
     <TouchableOpacity
       onPress={() => props.onToggle(props.meal.id)}
@@ -63,9 +68,9 @@ export const MealListItem = (props: MealListItemProps) => (
             <ProductItem
               key={item.id}
               product={item}
-              onDelete={props.onProductDelete}
-              onToggle={props.onProductToggle}
-              onQuantityUpdate={props.onProductQuantityUpdate}
+              onDelete={onProductDelete}
+              onToggle={onProductToggle}
+              onQuantityUpdate={onProductQuantityUpdate}
               isToggled={props.toggledProductId === item.id}
             />
           )}

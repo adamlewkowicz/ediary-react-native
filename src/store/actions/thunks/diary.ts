@@ -27,7 +27,7 @@ const debounceA = debounce_();
 export const mealCreate = (
   name: Meal['name'],
   date: Date,
-  templateId: TemplateId,
+  templateId: TemplateId | null,
 ): Thunk => async (dispatch) => {
   const meal = await Meal.saveWithDate({ name }, date);
   dispatch(mealToggled(null));
