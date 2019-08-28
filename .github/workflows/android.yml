@@ -16,4 +16,4 @@ jobs:
         npm i --silent
         npx jetify
     - name: Build with Gradle
-      run: cd android && chmod +x ./gradlew && ./gradlew assembleRelease
+      run: cd android && chmod +x ./gradlew && ./gradlew assembleDebug
