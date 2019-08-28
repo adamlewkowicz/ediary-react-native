@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { Theme, nutritionColors } from '../../common/theme';
-import { ProductId, MealId, TemplateId } from '../../types';
+import { ProductId, TemplateId } from '../../types';
 import { ProgressBar } from '../ProgressBar';
 import { ProductItem } from '../ProductItem';
 import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native';
@@ -140,8 +140,7 @@ export const MealListItemTemplate = (props: MealListItemTemplateProps) => (
 );
 
 
-const Container = styled.View`
-`
+const Container = styled.View``
 
 const InfoContainer = styled.View`
   padding: 20px;
@@ -155,7 +154,7 @@ const Title = styled.Text<{
   theme: Theme
 }>`
   font-family: 'DMSans-Bold';
-  font-size: 15px;
+  font-size: ${props => props.theme.fontSize};
 `
 
 const Calories = styled.Text<{
@@ -163,7 +162,7 @@ const Calories = styled.Text<{
 }>`
   font-family: ${props => props.theme.fontFamily};
   color: ${props => props.theme.colors.lightBlue};
-  font-size: 15px;
+  font-size: ${props => props.theme.fontSize};
 `
 
 const NutritionBar = styled.View`
@@ -173,7 +172,7 @@ const NutritionBar = styled.View`
 `
 
 const NutritionStripe = styled.View`
-  width: 33%;
+  flex: 1;
 `
 
 const NutritionDetails = styled.View`
@@ -191,9 +190,9 @@ const NutritionValue = styled.Text<{
   theme: Theme
 }>`
   font-family: ${props => props.theme.fontFamily};
+  font-size: ${props => props.theme.fontSize};
   color: #fff;
   text-align: center;
-  font-size: 15px;
   margin-bottom: 2px;
 `
 
