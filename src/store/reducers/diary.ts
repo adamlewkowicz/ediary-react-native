@@ -10,30 +10,16 @@ import {
   MEAL_ADDED,
   MEALS_LOADED,
 } from '../consts';
-import {
-  DateTime,
-  TemplateId,
-} from '../../types';
 import { DiaryActions } from '../actions';
 import { calcMacroByQuantity, getRevertedTemplateId, normalizeMeal } from '../helpers/diary';
 import { getDayFromDate, getTimeFromDate } from '../../common/utils';
 import { DiaryState, DiaryMeal, DiaryMealTemplate } from './types/diary';
+import { defaultTemplates } from '../../common/helpers';
 
 const initialState: DiaryState = {
   meals: [],
   products: [],
-  templates: [
-    {
-      id: 1 as any as TemplateId,
-      name: 'Śniadanie',
-      time: '08:30:00' as any as DateTime,
-    },
-    {
-      id: 2 as any as TemplateId,
-      name: 'Obiad',
-      time: '12:00:00' as any as DateTime,
-    }
-  ],
+  templates: defaultTemplates as any,
   recentProducts: [],
   toggledProductId: null
 }

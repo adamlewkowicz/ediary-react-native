@@ -30,7 +30,7 @@ interface HomeProps extends NavigationScreenProps {
   dispatch: Dispatch
 }
 const Home = (props: HomeProps) => {
-  const [name, setName] = useState('Śniadanie');
+  const [name, setName] = useState('Trening');
   const [menuOpened, setMenuOpened] = useState(false);
   const { dispatch } = props;
 
