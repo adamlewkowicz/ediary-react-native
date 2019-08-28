@@ -7,13 +7,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+
     - name: Run npm install
       run: |
         npm i --silent
         npx jetify
+
     - name: Build with Gradle
       run: cd android && chmod +x ./gradlew && ./gradlew assembleDebug
+
+    - uses: actions/upload-artifact@master
+      with:
+        name: ediary-debug
+        path: ./android/app/build/outputs/apk/debug/app-debug.apk
