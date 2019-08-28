@@ -18,7 +18,7 @@ import {
   mealsLoaded,
 } from '../creators';
 import { DateDay, ProductId, MealId, TemplateId } from '../../../types';
-import { debounce_ } from '../../../common/utils';
+import { debounce_, findOrFail } from '../../../common/utils';
 import { Thunk } from '../..';
 import { DiaryMeal, DiaryProduct, DiaryTemplate } from '../../reducers/types/diary';
 
@@ -60,9 +60,17 @@ export const mealProductCreate = (
 export const mealProductDelete = (
   mealId: Meal['id'],
   productId: Product['id']
-): Thunk => async (dispatch) => {
-  dispatch(mealProductDeleted(mealId, productId));
-  await MealProduct.delete({ mealId, productId });
+): Thunk => async (dispatch, getState) => {
+  const { meals } = getState().diary;
+  const meal = findOrFail(meals, meal => meal.id === mealId);
+  
+  if (meal.productIds.length === 1 && meal.templateId !== null) {
+    dispatch(mealDeleted(mealId));
+    await Meal.delete(mealId);
+  } else {
+    dispatch(mealProductDeleted(mealId, productId));
+    await MealProduct.delete({ mealId, productId });
+  }
 }
 
 export const mealProductQuantityUpdate = (

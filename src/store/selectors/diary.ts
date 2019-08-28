@@ -9,7 +9,6 @@ const macroNeedsElement = { diff: 0, ratio: 0, eaten: 0, needed: 0 };
 
 const meals = (state: StoreState) => state.diary.meals;
 const products = (state: StoreState) => state.diary.products;
-const templates = (state: StoreState) => state.diary.templates;
 
 const calcedProducts = createSelector(
   products,

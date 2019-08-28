@@ -169,7 +169,7 @@ export function diaryReducer(
     case MEAL_UPDATED: return {
       ...state,
       meals: state.meals.map(meal =>
-        meal.id === action.meta.mealId
+        meal.type === 'meal' && meal.id === action.meta.mealId
           ? { ...meal, ...action.payload }
           : meal
       )
