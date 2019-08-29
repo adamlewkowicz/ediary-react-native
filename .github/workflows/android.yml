@@ -19,9 +19,13 @@ jobs:
         npx jetify
 
     - name: Build with Gradle
-      run: cd android && chmod +x ./gradlew && ./gradlew assembleDebug
+      run: |
+        cd android
+        echo $RELEASE_KEYSTORE_BASE64 | base64 -d > .app/release-key.keystore
+        chmod +x ./gradlew
+        ./gradlew assembleRelease
 
     - uses: actions/upload-artifact@master
       with:
-        name: ediary-debug
-        path: ./android/app/build/outputs/apk/debug/app-debug.apk
+        name: ediary-release
+        path: ./android/app/build/outputs/apk/release/app-release.apk
