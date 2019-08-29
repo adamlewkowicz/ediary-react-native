@@ -21,7 +21,7 @@ jobs:
     - name: Build with Gradle
       run: |
         cd android
-        echo $RELEASE_KEYSTORE_BASE64 | base64 -d > .app/release-key.keystore
+        echo $RELEASE_KEYSTORE_BASE64 | base64 -d > ./app/release-key.keystore
         chmod +x ./gradlew
         ./gradlew assembleRelease
 
