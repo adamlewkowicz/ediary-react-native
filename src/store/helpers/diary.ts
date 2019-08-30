@@ -1,4 +1,4 @@
-import { MacroElements, DateTime, TemplateId, TemplateIdReverted } from '../../types';
+import { MacroElements, TemplateId, TemplateIdReverted } from '../../types';
 import { MACRO_ELEMENTS } from '../../common/consts';
 import { Meal } from '../../database/entities';
 import { getDayFromDate, getTimeFromDate } from '../../common/utils';
@@ -13,24 +13,12 @@ export const calcMacroByQuantity = <T extends CalcMacroByQuantityData>(
   element
 }));
 
-export const getDataFromTemplate = (template: Template) => ({
-  carbs: 0,
-  prots: 0,
-  fats: 0,
-  kcal: 0,
-});
-
-interface Template {
-  name: string
-  time: DateTime
-}
-
 export const normalizeMeals = <T extends Meal[]>(
   payload: T,
   templateId: TemplateId | null = null,
 ) => {
   const meals = payload.map(meal => {
-    const { mealProducts, ...data } = meal;
+    const { mealProducts = [], ...data } = meal;
     return {
       ...data,
       isToggled: templateId != null,
@@ -41,8 +29,8 @@ export const normalizeMeals = <T extends Meal[]>(
       templateId,
     }
   });
-  const products = payload.flatMap(meal => {
-    return meal.mealProducts.map(mealProduct => {
+  const products = payload.flatMap(({ mealProducts = [] }) => {
+    return mealProducts.map(mealProduct => {
       const { meal, product, ...data } = mealProduct;
       const normalizedProduct = {
         ...data,
@@ -62,7 +50,7 @@ export const normalizeMeal = (
   meal: Meal,
   templateId: TemplateId | null = null,
 ) => {
-  const { mealProducts, ...data } = meal;
+  const { mealProducts = [], ...data } = meal;
   const normalizedMeal = {
     ...data,
     isToggled: false,
@@ -89,10 +77,6 @@ export const normalizeMeal = (
     products: normalizedProducts,
   }
 }
-
-// export const getEmptyMealFromTemplate = (
-//   template: DiaryTemplate
-// )
 
 export const getRevertedTemplateId = (
   templateId: TemplateId

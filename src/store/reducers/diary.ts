@@ -54,7 +54,7 @@ export function diaryReducer(
           }];
         }),
         ...action.payload.map(meal => {
-          const { mealProducts, ...data } = meal;
+          const { mealProducts = [], ...data } = meal;
           const type: DiaryMeal['type'] = 'meal';
           return {
             ...data,
@@ -67,8 +67,8 @@ export function diaryReducer(
           }
         })
       ],
-      products: action.payload.flatMap(meal => {
-        return meal.mealProducts.map(mealProduct => {
+      products: action.payload.flatMap(({ mealProducts = [] }) => {
+        return mealProducts.map(mealProduct => {
           const { meal, product, ...data } = mealProduct;
           const normalizedProduct = {
             ...data,
@@ -96,7 +96,7 @@ export function diaryReducer(
                 ...action.payload,
                 day: getDayFromDate(action.payload.date),
                 time: getTimeFromDate(action.payload.date),
-                productIds: products.map(product => product.id),
+                productIds: meal.productIds,
                 isToggled: true,
                 templateId: templateId || null,
                 type: 'meal'

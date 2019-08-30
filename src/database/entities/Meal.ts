@@ -48,7 +48,7 @@ export class Meal extends GenericEntity {
     mealProduct => mealProduct.meal,
     { cascade: true }
   )
-  mealProducts!: MealProduct[]
+  mealProducts?: MealProduct[]
 
   @Column('number', { default: null, nullable: true })
   userId!: UserId | null;
