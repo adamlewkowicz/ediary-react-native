@@ -3,6 +3,7 @@ import {
   render,
   fireEvent,
   wait,
+  within,
 } from '@testing-library/react-native';
 import { App } from '../../../__tests__/utils';
 import { Meal, Product, MealProduct } from '../../database/entities';
@@ -146,15 +147,14 @@ test('updates product\'s quantity', async () => {
   const productQuantityInput = await findByLabelText('Zmień ilość produktu');
   fireEvent.changeText(productQuantityInput, quantityMock);
 
-  const [productCarbsText] = await findAllByLabelText('Makroskładniki produktu');
+  const [productMacroData] = await findAllByLabelText('Makroskładniki produktu');
 
-  expect(productCarbsText).toHaveTextContent(`${carbsAfterQuantityUpdate} g`);
   expect(productQuantityText).toHaveTextContent(`${quantityMock}g`); // /180\s+g/
+  await within(productMacroData).findByText(carbsAfterQuantityUpdate.toString());
   await wait(async () => {
     const mealProduct = await MealProduct.findOneOrFail({
       mealId,
-      productId,
-      quantity: quantityMock
+      productId
     });
     expect(mealProduct.quantity).toEqual(quantityMock);
   });
