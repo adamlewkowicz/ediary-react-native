@@ -44,13 +44,15 @@ export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>
             <Name numberOfLines={props.isToggled ? undefined : 1}>
               {props.product.name}
             </Name>
-            <Quantity>{props.product.quantity}g</Quantity>
+            <Quantity accessibilityLabel="Ilość produktu">
+              {props.product.quantity}g
+            </Quantity>
             <Calories>{props.product.kcal} kcal</Calories>
           </Block>
           {props.isToggled && (
             <>
               <InputRow
-                title="Ilość"
+                title="Zmień ilość"
                 accessibilityLabel="Zmień ilość produktu"
                 value={props.product.quantity.toString()}
                 onChangeText={quantity => props.onQuantityUpdate(productId, Number(quantity))}
@@ -62,6 +64,7 @@ export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>
                     key={element}
                     element={element}
                     value={props.product[element]}
+                    accessibilityLabel="Makroskładniki produktu"
                   />
                 ))}
               </Block>
