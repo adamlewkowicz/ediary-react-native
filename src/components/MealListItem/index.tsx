@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { Theme, nutritionColors } from '../../common/theme';
-import { ProductId, TemplateId } from '../../types';
+import { ProductId } from '../../types';
 import { ProgressBar } from '../ProgressBar';
 import { ProductItem } from '../ProductItem';
 import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native';
@@ -86,59 +86,6 @@ export const MealListItem = ({
     )}
   </Container>
 );
-
-interface MealListItemTemplateProps {
-  meal: Template
-  onToggle: (templateId: TemplateId) => void
-  onProductAdd: () => void
-}
-export const MealListItemTemplate = (props: MealListItemTemplateProps) => (
-  <Container>
-    <TouchableOpacity
-      onPress={() => props.onToggle(props.meal.id)}
-      accessibilityLabel="Pokaż szczegóły posiłku"
-      accessibilityHint={`Wyświetla makroskładniki i produkty posiłku - ${props.meal.name}`}
-      accessibilityRole="radio"
-    >
-      <InfoContainer>
-        <Title numberOfLines={1}>{props.meal.name}</Title>
-        <Calories>{0} kcal</Calories>
-      </InfoContainer>
-      <NutritionBar>
-        {BASE_MACRO_ELEMENTS.map(element => (
-          <NutritionStripe key={element}>
-            <ProgressBar
-              percentages={0}
-              colors={nutritionColors[element]}
-              rounded={false}
-              width="8px"
-            />
-          </NutritionStripe>
-        ))}
-      </NutritionBar>
-    </TouchableOpacity>
-    {props.meal.isToggled && (
-      <>
-        <NutritionDetails>
-          {BASE_MACRO_ELEMENTS.map(element => (
-            <NutritionElement key={element}>
-              <NutritionValue>{0}g</NutritionValue>
-              <NutritionTitle>Węgle</NutritionTitle>
-            </NutritionElement>
-          ))}
-        </NutritionDetails>
-        <Button
-          onPress={props.onProductAdd}
-          accessibilityLabel="Wyszukaj produkt do posiłku"
-          accessibilityRole="link"
-        >
-          Dodaj produkt
-        </Button>
-      </>
-    )}
-  </Container>
-);
-
 
 const Container = styled.View``
 

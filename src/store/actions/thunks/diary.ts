@@ -29,7 +29,7 @@ export const mealCreate = (
   date: Date,
   templateId: TemplateId | null,
 ): Thunk => async (dispatch) => {
-  const meal = await Meal.saveWithDate({ name }, date);
+  const meal = await Meal.createWithDate({ name }, date);
   dispatch(mealToggled(null));
   dispatch(mealAdded(meal, templateId));
 }

@@ -6,7 +6,6 @@ import {
   ManyToOne,
   JoinColumn,
   Between,
-  BeforeInsert,
 } from 'typeorm';
 import { Product, IProductMerged } from './Product';
 import { MealProduct } from './MealProduct';
@@ -17,7 +16,7 @@ import { EntityType } from '../types';
 import { GenericEntity } from '../generics/GenericEntity';
 import dayjs from 'dayjs';
 import { DATE_FORMAT, DATE_DAY } from '../../common/consts';
-import { DiaryTemplate } from '../../store/reducers/diary';
+import { DiaryTemplate } from '../../store/reducers/types/diary';
 
 @Entity('meal')
 export class Meal extends GenericEntity {
@@ -57,7 +56,7 @@ export class Meal extends GenericEntity {
   @JoinColumn({ name: 'userId' })
   user!: User;
 
-  static saveWithDate(
+  static createWithDate(
     payload: DeepPartial<IMeal>,
     date: Date
   ): Promise<Meal> {

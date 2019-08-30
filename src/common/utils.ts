@@ -162,7 +162,7 @@ export function parseNumber(
 export function findOrFail<T>(
   array: T[],
   matcher: (item: T, index: number, self: T[]) => boolean
-) {
+): T {
   const foundItem = array.find(matcher);
   if (!foundItem) {
     throw new Error(
@@ -170,17 +170,4 @@ export function findOrFail<T>(
     );
   }
   return foundItem;
-}
-
-export function filterAndReturn<T>(
-  array: T[],
-  filterCond: (item: T, index: number, self: T[]) => boolean
-) {
-  return array.reduce((result, item) => {
-    
-  }, { removed: [], persisted: [] });
-}
-
-interface FilterAndReturnResult {
-
 }
