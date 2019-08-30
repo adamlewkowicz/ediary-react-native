@@ -12,6 +12,10 @@ export const PORTION_TYPES = [
 
 export const WEIGHT_GOAL = ['decrease', 'maintain', 'increase'] as const;
 
-export const IS_DEV: boolean = (global as any).__DEV__ || true;
+export const IS_DEV: boolean = __DEV__;
 
 export const APP_ENV = (process.env.APP_ENV || 'development') as Environment;
+
+export const DATE_DAY = 'YYYY-MM-DD';
+export const DATE_TIME = 'HH:mm:ss';
+export const DATE_FORMAT = `${DATE_DAY} ${DATE_TIME}`;

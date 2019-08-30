@@ -1,56 +1,54 @@
-import { DiaryMealPayload, DiaryProductPayload } from '../../reducers/diary';
 import {
-  MEAL_CREATED,
   MEAL_UPDATED,
   MEAL_DELETED,
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED,
   MEAL_TOGGLED,
   PRODUCT_CREATED,
-  MEALS_ADDED,
   PRODUCT_TOGGLED,
-  MEAL_PRODUCT_ADDED
+  MEAL_PRODUCT_ADDED,
+  MEAL_ADDED,
+  MEALS_LOADED,
 } from '../../consts';
-import {
-  MealDeleted,
-  MealUpdated,
-  MealCreated,
-  MealProductDeleted,
-  ProductUpdated,
-  MealToggled,
-  ProductCreated,
-  MealsAdded,
-  ProductToggled,
-  MealProductAdded
-} from '../types';
-import { MealId, ProductId } from '../../../types';
-import { Meal, IProduct } from '../../../database/entities';
+import { DiaryActions } from '../types';
+import { MealId, ProductId, TemplateId } from '../../../types';
+import { Meal, IProduct, IProductMerged } from '../../../database/entities';
+import { DiaryMeal, DiaryProduct, DiaryMealId } from '../../reducers/types/diary';
 
-export const mealCreated = (
-  meal: DiaryMealPayload
-): MealCreated => ({
-  type: MEAL_CREATED,
-  payload: meal
+export const mealsLoaded = (
+  meals: Meal[]
+): DiaryActions => ({
+  type: MEALS_LOADED,
+  payload: meals
+});
+
+export const mealAdded = (
+  meal: Meal,
+  templateId: TemplateId | null
+): DiaryActions => ({
+  type: MEAL_ADDED,
+  payload: meal,
+  meta: { templateId }
 });
 
 export const mealUpdated = (
   mealId: MealId,
-  meal: Partial<DiaryMealPayload>
-): MealUpdated => ({
+  meal: Partial<DiaryMeal>
+): DiaryActions => ({
   type: MEAL_UPDATED,
   payload: meal,
   meta: { mealId }
 });
 
-export const mealDeleted = (mealId: MealId): MealDeleted => ({
+export const mealDeleted = (mealId: MealId): DiaryActions => ({
   type: MEAL_DELETED,
   meta: { mealId }
 });
 
 export const mealProductAdded = (
   mealId: MealId,
-  product: DiaryProductPayload
-): MealProductAdded => ({
+  product: IProductMerged
+): DiaryActions => ({
   type: MEAL_PRODUCT_ADDED,
   payload: product,
   meta: { mealId }
@@ -59,44 +57,37 @@ export const mealProductAdded = (
 export const mealProductDeleted = (
   mealId: MealId,
   productId: ProductId
-): MealProductDeleted => ({
+): DiaryActions => ({
   type: MEAL_PRODUCT_DELETED,
   meta: { mealId, productId }
 });
 
 export const productUpdated = (
   productId: ProductId,
-  product: Partial<DiaryProductPayload>
-): ProductUpdated => ({
+  product: Partial<DiaryProduct>
+): DiaryActions => ({
   type: PRODUCT_UPDATED,
   payload: product,
   meta: { productId }
 });
 
 export const mealToggled = (
-  mealId: MealId | null
-): MealToggled => ({
+  mealId: DiaryMealId | null
+): DiaryActions => ({
   type: MEAL_TOGGLED,
   meta: { mealId }
 });
 
 export const productCreated = (
   product: IProduct
-): ProductCreated => ({
+): DiaryActions => ({
   type: PRODUCT_CREATED,
   payload: product
 });
 
-export const mealsAdded = (
-  meals: Meal[]
-): MealsAdded => ({
-  type: MEALS_ADDED,
-  payload: meals
-});
-
 export const productToggled = (
   productId: ProductId | null
-): ProductToggled => ({
+): DiaryActions => ({
   type: PRODUCT_TOGGLED,
   payload: productId
 });

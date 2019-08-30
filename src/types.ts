@@ -53,4 +53,16 @@ export interface DateDay extends String {
   _dateDayBrand: 'YYYY-MM-DD';
 }
 
+export interface DateTime extends String {
+  _dateTimeBrand: 'HH:mm:ss'
+}
+
+export interface TemplateId extends Number {
+  _templateIdBrand: number;
+}
+
+export interface TemplateIdReverted extends Number {
+  _TemplateIdRevertedBrand: number;
+}
+
 export type Environment = 'development' | 'test' | 'production';

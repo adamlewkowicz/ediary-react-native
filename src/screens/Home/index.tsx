@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
 import * as Actions from '../../store/actions';
-import { AppState, Dispatch } from '../../store';
+import { StoreState, Dispatch } from '../../store';
 import { FlatList, ScrollView, Alert } from 'react-native';
 import * as selectors from '../../store/selectors';
 import { DateChanger } from '../../components/DateChanger';
@@ -19,17 +19,18 @@ import { ProductCreateParams } from '../ProductCreate';
 import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
 import { elementTitles } from '../../common/helpers';
 import { MealId } from '../../types';
+import { DiaryMealTemplate, DiaryMeal } from '../../store/reducers/types/diary';
 
 interface HomeProps extends NavigationScreenProps {
-  mealsWithRatio: selectors.MealsWithRatio
-  appDate: AppState['application']['date']
-  appDateDay: AppState['application']['day']
+  appDate: StoreState['application']['date']
+  appDateDay: StoreState['application']['day']
   macroNeedsLeft: selectors.MacroNeedsLeft
-  toggledProductId: AppState['diary']['toggledProductId']
+  toggledProductId: StoreState['diary']['toggledProductId']
+  mealsWithRatio: selectors.MealsWithRatio
   dispatch: Dispatch
 }
 const Home = (props: HomeProps) => {
-  const [name, setName] = useState('Śniadanie');
+  const [name, setName] = useState('Trening');
   const [menuOpened, setMenuOpened] = useState(false);
   const { dispatch } = props;
 
@@ -37,11 +38,23 @@ const Home = (props: HomeProps) => {
     dispatch(Actions.mealsFindByDay(props.appDateDay));
   }, [props.appDateDay]);
 
-  const handleProductFinderNavigation = (mealId: MealId) => {
+  const handleProductFinderNavigation = (
+    meal: DiaryMeal | DiaryMealTemplate
+  ) => {
     const screenParams: ProductFindParams = {
       onItemPress(foundProduct) {
         props.navigation.navigate('Home');
-        dispatch(mealProductAdd(mealId, foundProduct.id));
+        if (meal.type === 'template') {
+          const { name, templateId, time } = meal;
+          const template = { id: templateId, name, templateId, time };
+          dispatch(
+            Actions.mealCreateFromTemplate(
+              template, props.appDate, foundProduct.id
+            )
+          );
+        } else {
+          dispatch(mealProductAdd(meal.id, foundProduct.id));
+        }
       }
     }
     props.navigation.navigate('ProductFind', screenParams);
@@ -56,10 +69,10 @@ const Home = (props: HomeProps) => {
     props.navigation.navigate('ProductCreate', screenParams);
   }
 
-  const handleMealDelete = (meal: HomeProps['mealsWithRatio'][number]) => {
+  const handleMealDelete = <T extends { name: string, id: MealId }>(meal: T) => {
     Alert.alert(
       'Usuń posiłek',
-      `Czy jesteś pewnien że chcesz usunąć: ${meal.name}?`,
+      `Czy jesteś pewnien że chcesz usunąć "${meal.name}"?`,
       [
         {
           text: 'Anuluj',
@@ -102,15 +115,17 @@ const Home = (props: HomeProps) => {
           renderItem={({ item }) => (
             <MealListItem
               meal={item}
-              onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
-              onLongPress={IS_DEV ? undefined : () => handleMealDelete(item)}
-              onProductAdd={() => handleProductFinderNavigation(item.id)}
-              onProductDelete={productId => dispatch(Actions.mealProductDelete(item.id, productId))}
-              onProductToggle={productId => dispatch(Actions.productToggled(productId))}
-              onProductQuantityUpdate={(productId, quantity) => dispatch(Actions.mealProductQuantityUpdate(
-                item.id, productId, quantity
-              ))}
               toggledProductId={props.toggledProductId}
+              onProductAdd={() => handleProductFinderNavigation(item)}
+              onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
+              onLongPress={IS_DEV || item.type === 'template' ? undefined : () => handleMealDelete(item)}
+              {...item.type === 'meal' && {
+                onProductDelete: (productId) => dispatch(Actions.mealProductDelete(item.id, productId)),
+                onProductToggle: (productId) => dispatch(Actions.productToggled(productId)),
+                onProductQuantityUpdate: (productId, quantity) => dispatch(
+                  Actions.mealProductQuantityUpdate(item.id, productId, quantity)
+                )
+              }}
             />
           )}
         />
@@ -123,7 +138,7 @@ const Home = (props: HomeProps) => {
         />
         <Button
           accessibilityLabel="Utwórz nowy posiłek"
-          onPress={() => dispatch(Actions.mealCreate(name, props.appDate))}
+          onPress={() => dispatch(Actions.mealCreate(name, props.appDate, null))}
         >
           Dodaj posiłek
         </Button>
@@ -139,12 +154,12 @@ const Home = (props: HomeProps) => {
 }
 
 const HomeConnected = connect(
-  (state: AppState) => ({
-    mealsWithRatio: selectors.mealsWithRatio(state),
+  (state: StoreState) => ({
     macroNeedsLeft: selectors.macroNeedsLeft(state),
     toggledProductId: state.diary.toggledProductId,
     appDate: state.application.date,
     appDateDay: state.application.day,
+    mealsWithRatio: selectors.mealsWithRatio(state),
   })
 )(Home);
 

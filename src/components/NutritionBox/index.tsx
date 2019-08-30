@@ -4,6 +4,7 @@ import { WheatIcon, SteakIcon, DropIcon, FireIcon } from '../Icons';
 import { TextMeta } from '../Elements';
 import { nutritionColorSolid } from '../../common/theme';
 import { toLocaleString } from '../../common/utils';
+import { ViewProps } from 'react-native';
 
 const nutritionIcon = {
   carbs: WheatIcon,
@@ -12,22 +13,26 @@ const nutritionIcon = {
   kcal: FireIcon
 }
 
-interface NutritionBoxProps {
+interface NutritionBoxProps extends ViewProps {
   value: number
   element: 'carbs' | 'prots' | 'fats' | 'kcal'
 }
-export const NutritionBox = (props: NutritionBoxProps) => {
-  const GenericIcon = nutritionIcon[props.element];
+export const NutritionBox = ({
+  value,
+  element,
+  ...props
+}: NutritionBoxProps) => {
+  const GenericIcon = nutritionIcon[element];
   return (
-    <Container>
+    <Container {...props}>
       <GenericIcon
         width={22}
         height={22}
-        fill={nutritionColorSolid[props.element]}
+        fill={nutritionColorSolid[element]}
       />
       <TextMeta
-        value={toLocaleString(props.value)}
-        meta={props.element === 'kcal' ? 'kcal' : 'g'}
+        value={toLocaleString(value)}
+        meta={element === 'kcal' ? 'kcal' : 'g'}
         valueFontSize={16}
         metaFontSize={13}
         marginTop="9px"

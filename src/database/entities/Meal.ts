@@ -14,6 +14,9 @@ import { User } from './User';
 import { DeepPartial } from 'typeorm';
 import { EntityType } from '../types';
 import { GenericEntity } from '../generics/GenericEntity';
+import dayjs from 'dayjs';
+import { DATE_FORMAT, DATE_DAY } from '../../common/consts';
+import { DiaryTemplate } from '../../store/reducers/types/diary';
 
 @Entity('meal')
 export class Meal extends GenericEntity {
@@ -44,7 +47,7 @@ export class Meal extends GenericEntity {
     mealProduct => mealProduct.meal,
     { cascade: true }
   )
-  mealProducts!: MealProduct[]
+  mealProducts?: MealProduct[]
 
   @Column('number', { default: null, nullable: true })
   userId!: UserId | null;
@@ -52,6 +55,17 @@ export class Meal extends GenericEntity {
   @ManyToOne(type => User, { nullable: true })
   @JoinColumn({ name: 'userId' })
   user!: User;
+
+  static createWithDate(
+    payload: DeepPartial<IMeal>,
+    date: Date
+  ): Promise<Meal> {
+    const formattedDate = dayjs(date).format(DATE_FORMAT);
+    return this.save({
+      ...payload,
+      date: formattedDate
+    });
+  }
 
   static findByDay(dateDay: DateDay) {
     return this.find({
@@ -101,24 +115,40 @@ export class Meal extends GenericEntity {
   }
 
   static async createWithProduct(
-    payload: DeepPartial<IMeal>,
+    payload: DeepPartial<Meal>,
     productId: ProductId,
     quantity?: number
   ): Promise<Meal> {
     const product = await Product.findOneOrFail(productId);
 
-    const newMeal = {
-      ...payload,
-      mealProducts: [
-        {
-          productId: product.id,
-          quantity: quantity ? quantity : product.portion
-        }
-      ]
-    }
+    const createdMeal = await Meal.save(payload);
+    await MealProduct.save({
+      mealId: createdMeal.id,
+      productId: product.id,
+      quantity: quantity || product.portion
+    });
+    
+    const mealWithRelations = await Meal.findOneOrFail(createdMeal.id, {
+      relations: ['mealProducts', 'mealProducts.product']
+    });
+    return mealWithRelations; 
+  }
 
-    const createdMeal = await Meal.save(newMeal);
-    return createdMeal; 
+  static createFromTemplate(
+    template: DiaryTemplate,
+    date: Date,
+    productId: ProductId,
+    quantity?: number,
+  ): Promise<Meal> {
+    const newMeal = {
+      name: template.name,
+      date: dayjs(date).format(`${DATE_DAY} ${template.time}`)
+    }
+    return Meal.createWithProduct(
+      newMeal,
+      productId,
+      quantity
+    );
   }
 
 }

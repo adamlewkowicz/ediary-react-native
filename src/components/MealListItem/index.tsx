@@ -1,30 +1,38 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { Theme, nutritionColors } from '../../common/theme';
-import { MacroElements, ProductId, MealId } from '../../types';
+import { ProductId } from '../../types';
 import { ProgressBar } from '../ProgressBar';
-import { ProductPartial, ProductItem } from '../ProductItem';
+import { ProductItem } from '../ProductItem';
 import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { MealsWithRatio } from '../../store/selectors';
 import { Button } from 'react-native-ui-kitten';
+import { BASE_MACRO_ELEMENTS } from '../../common/consts';
+import { DiaryMealId } from '../../store/reducers/types/diary';
+import { elementTitles } from '../../common/helpers';
 
 interface MealListItemProps {
   meal: MealsWithRatio[number]
-  onToggle: (mealId: MealId) => void
+  onToggle: (mealId: DiaryMealId) => void
   onLongPress?: TouchableOpacityProps['onLongPress']
   onProductAdd: () => void
-  onProductDelete: (productId: ProductId) => void
-  onProductToggle: (productId: ProductId) => void
-  onProductQuantityUpdate: (productId: ProductId, quantity: number) => void
+  onProductDelete?: (productId: ProductId) => void
+  onProductToggle?: (productId: ProductId) => void
+  onProductQuantityUpdate?: (productId: ProductId, quantity: number) => void
   toggledProductId: ProductId | null
 }
-export const MealListItem = (props: MealListItemProps) => (
+export const MealListItem = ({
+  onProductDelete = () => {},
+  onProductToggle = () => {},
+  onProductQuantityUpdate = () => {},
+  ...props
+}: MealListItemProps) => (
   <Container>
     <TouchableOpacity
       onPress={() => props.onToggle(props.meal.id)}
       onLongPress={props.onLongPress}
       accessibilityLabel="Pokaż szczegóły posiłku"
-      accessibilityHint={`Wyświetla makroskładniki or produkty posiłku - ${props.meal.name}`}
+      accessibilityHint={`Wyświetla makroskładniki i produkty posiłku - ${props.meal.name}`}
       accessibilityRole="radio"
     >
       <InfoContainer>
@@ -47,18 +55,12 @@ export const MealListItem = (props: MealListItemProps) => (
     {props.meal.isToggled && (
       <>
         <NutritionDetails>
-          <NutritionElement>
-            <NutritionValue>{props.meal.carbs}g</NutritionValue>
-            <NutritionTitle>Węgle</NutritionTitle>
-          </NutritionElement>
-          <NutritionElement>
-            <NutritionValue>{props.meal.prots}g</NutritionValue>
-            <NutritionTitle>Białka</NutritionTitle>
-          </NutritionElement>
-          <NutritionElement>
-            <NutritionValue>{props.meal.fats}g</NutritionValue>
-            <NutritionTitle>Tłuszcze</NutritionTitle>
-          </NutritionElement>
+          {BASE_MACRO_ELEMENTS.map(element => (
+            <NutritionElement key={element}>
+              <NutritionValue>{props.meal[element]}g</NutritionValue>
+              <NutritionTitle>{elementTitles[element]}</NutritionTitle>
+            </NutritionElement>
+          ))}
         </NutritionDetails>
         <FlatList
           data={props.meal.products}
@@ -67,9 +69,9 @@ export const MealListItem = (props: MealListItemProps) => (
             <ProductItem
               key={item.id}
               product={item}
-              onDelete={props.onProductDelete}
-              onToggle={props.onProductToggle}
-              onQuantityUpdate={props.onProductQuantityUpdate}
+              onDelete={onProductDelete}
+              onToggle={onProductToggle}
+              onQuantityUpdate={onProductQuantityUpdate}
               isToggled={props.toggledProductId === item.id}
             />
           )}
@@ -86,8 +88,7 @@ export const MealListItem = (props: MealListItemProps) => (
   </Container>
 );
 
-const Container = styled.View`
-`
+const Container = styled.View``
 
 const InfoContainer = styled.View`
   padding: 20px;
@@ -101,7 +102,7 @@ const Title = styled.Text<{
   theme: Theme
 }>`
   font-family: 'DMSans-Bold';
-  font-size: 15px;
+  font-size: ${props => props.theme.fontSize};
 `
 
 const Calories = styled.Text<{
@@ -109,7 +110,7 @@ const Calories = styled.Text<{
 }>`
   font-family: ${props => props.theme.fontFamily};
   color: ${props => props.theme.colors.lightBlue};
-  font-size: 15px;
+  font-size: ${props => props.theme.fontSize};
 `
 
 const NutritionBar = styled.View`
@@ -119,7 +120,7 @@ const NutritionBar = styled.View`
 `
 
 const NutritionStripe = styled.View`
-  width: 33%;
+  flex: 1;
 `
 
 const NutritionDetails = styled.View`
@@ -137,9 +138,9 @@ const NutritionValue = styled.Text<{
   theme: Theme
 }>`
   font-family: ${props => props.theme.fontFamily};
+  font-size: ${props => props.theme.fontSize};
   color: #fff;
   text-align: center;
-  font-size: 15px;
   margin-bottom: 2px;
 `
 
@@ -150,13 +151,3 @@ const NutritionTitle = styled.Text<{
   color: #646464;
   text-align: center;
 `
-
-interface MealPartial extends MacroElements {
-  id: number
-  name: string
-  carbsRatio?: number
-  protsRatio?: number
-  fatsRatio?: number
-  isToggled: boolean
-  products: ProductPartial[]
-}

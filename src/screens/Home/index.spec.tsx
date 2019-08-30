@@ -2,8 +2,8 @@ import React from 'react';
 import {
   render,
   fireEvent,
-  findByText,
   wait,
+  within,
 } from '@testing-library/react-native';
 import { App } from '../../../__tests__/utils';
 import { Meal, Product, MealProduct } from '../../database/entities';
@@ -33,7 +33,6 @@ test('creates new meal and displays it', async () => {
   const mealName = 'Cucumber soup';
 
   const {
-    findByLabelText,
     getByPlaceholderText,
     getByLabelText,
     findByText,
@@ -47,10 +46,10 @@ test('creates new meal and displays it', async () => {
   const createMealConfirmButton = getByLabelText('Utwórz nowy posiłek');
   fireEvent.press(createMealConfirmButton);
   
-  const toggleMealButton = await findByLabelText('Pokaż szczegóły posiłku');
+  const toggleMealButton = await findByText(mealName);
 
   expect(toggleMealButton).toBeTruthy();
-  await expect(findByText(mealName)).toBeTruthy();
+  expect(await Meal.findOneOrFail({ name: mealName })).toBeTruthy();
 });
 
 test('creates meal using correct date', async () => {
@@ -81,19 +80,20 @@ test('creates meal using correct date', async () => {
 });
 
 test('navigates to product search screen and adds product to meal', async () => {
-  const mealMock = await Meal.save({ name: 'Tomato soup' });
   const productMock = await Product.save({ name: 'Tomatoes' });
-  const mealId = mealMock.id;
   const productId = productMock.id;
+  const mealId = 1;
 
   const {
     findByLabelText,
     findByPlaceholderText,
+    findAllByLabelText,
+    findByText,
   } = render(
     <App />
   );
 
-  const toggleMealButton = await findByLabelText('Pokaż szczegóły posiłku');
+  const [toggleMealButton] = await findAllByLabelText('Pokaż szczegóły posiłku');
   fireEvent.press(toggleMealButton);
 
   const addMealProductNavButton = await findByLabelText('Wyszukaj produkt do posiłku');
@@ -110,8 +110,11 @@ test('navigates to product search screen and adds product to meal', async () => 
 
   // check if page changed to Home
 
-  await expect(findByText(toggleMealButton, productMock.name)).toBeTruthy();
-  await expect(MealProduct.findOne({ productId, mealId })).toBeTruthy();
+  await wait(async () => {
+    const mealProduct = await MealProduct.findOne({ mealId, productId });
+    expect(mealProduct).toBeTruthy();
+  });
+  expect(await findByText(productMock.name)).toBeTruthy();
 });
 
 // test('removes product from meal', async () => {});
@@ -124,29 +127,35 @@ test('updates product\'s quantity', async () => {
   const productId = productMock.id;
   const mealMock = await Meal.createWithProduct({ name: 'Milk soup' }, productId);
   const mealId = mealMock.id;
+  const baseQuantity = 100;
 
-  const { findByLabelText } = render(<App />);
+  const {
+    findByLabelText,
+    findByText,
+    findAllByLabelText,
+  } = render(<App />);
 
-  const toggleMealButton = await findByLabelText('Pokaż szczegóły posiłku');
+  const toggleMealButton = await findByText(mealMock.name);
   fireEvent.press(toggleMealButton);
 
   const toggleProductButton = await findByLabelText('Pokaż szczegóły produktu');
   fireEvent.press(toggleProductButton);
-  
+
+  const productQuantityText = await findByLabelText('Ilość produktu');
+  expect(productQuantityText).toHaveTextContent(`${baseQuantity}g`);
+
   const productQuantityInput = await findByLabelText('Zmień ilość produktu');
   fireEvent.changeText(productQuantityInput, quantityMock);
-  
-  await findByText(
-    toggleProductButton,
-    quantityMock.toString(),
-    { exact: false }
-  );
-  await findByText(
-    toggleProductButton,
-    carbsAfterQuantityUpdate.toString()
-  );
+
+  const [productMacroData] = await findAllByLabelText('Makroskładniki produktu');
+
+  expect(productQuantityText).toHaveTextContent(`${quantityMock}g`); // /180\s+g/
+  await within(productMacroData).findByText(carbsAfterQuantityUpdate.toString());
   await wait(async () => {
-    const mealProduct = await MealProduct.findOneOrFail({ mealId });
+    const mealProduct = await MealProduct.findOneOrFail({
+      mealId,
+      productId
+    });
     expect(mealProduct.quantity).toEqual(quantityMock);
   });
 });

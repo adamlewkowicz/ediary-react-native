@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import { DateDay, UnitType } from '../types';
-import { UNIT_TYPES } from './consts';
+import { DateDay, UnitType, DateTime } from '../types';
+import { UNIT_TYPES, DATE_TIME, DATE_DAY } from './consts';
 
 let timeout: NodeJS.Timeout;
 
@@ -38,8 +38,15 @@ export const mapAsyncSequence = async <T, R>(
 export function getDayFromDate(
   date: dayjs.ConfigType
 ): DateDay {
-  const dateDay: DateDay = dayjs(date).format('YYYY-MM-DD') as any;
+  const dateDay: DateDay = dayjs(date).format(DATE_DAY) as any;
   return dateDay;
+}
+
+export function getTimeFromDate(
+  date: dayjs.ConfigType
+) {
+  const dateTime: DateTime = dayjs(date).format(DATE_TIME) as any;
+  return dateTime;
 }
 
 
@@ -150,4 +157,17 @@ export function parseNumber(
   }
 
   return cleaned;
+}
+
+export function findOrFail<T>(
+  array: T[],
+  matcher: (item: T, index: number, self: T[]) => boolean
+): T {
+  const foundItem = array.find(matcher);
+  if (!foundItem) {
+    throw new Error(
+      '[findOrFail] - No item could be found for specified criteria'
+    );
+  }
+  return foundItem;
 }

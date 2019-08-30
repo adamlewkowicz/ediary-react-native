@@ -50,15 +50,20 @@ const calcedMeals = createSelector(
 
 export const mealsWithRatio = createSelector(
   calcedMeals,
-  meals => meals.map(meal => {
-    const macroSum = meal.carbs + meal.prots + meal.fats;
-    const macroRatio = BASE_MACRO_ELEMENTS.map(element => ({
-      value: meal[element] / macroSum,
-      element
-    }));
-
-    return { ...meal, macroRatio };
-  })
+  meals => meals
+    .map(meal => {
+      const macroSum = meal.carbs + meal.prots + meal.fats;
+      const macroRatio = BASE_MACRO_ELEMENTS.map(element => ({
+        value: meal[element] / macroSum,
+        element
+      }));
+      return { ...meal, macroRatio };
+    })
+    .sort((a, b) => {
+      const timeA = Number(a.time.replace(/:/g, ''));
+      const timeB = Number(b.time.replace(/:/g, ''));
+      return timeA > timeB ? 1 : -1;
+    })
 );
 
 const mealsMacroSum = createSelector(
@@ -71,7 +76,6 @@ const mealsMacroSum = createSelector(
     kcal: Math.round(sum.kcal + meal.kcal)
   }), { ...baseMacro })
 );
-
 
 export const macroNeedsLeft = createSelector(
   mealsMacroSum,
