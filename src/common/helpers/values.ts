@@ -1,5 +1,5 @@
 export const elementTitles = {
-  carbs: 'Węglowodany',
+  carbs: 'Węgle',
   prots: 'Białka',
   fats: 'Tłuszcze',
   kcal: 'Kalorie'

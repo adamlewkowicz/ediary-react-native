@@ -9,6 +9,7 @@ import { MealsWithRatio } from '../../store/selectors';
 import { Button } from 'react-native-ui-kitten';
 import { BASE_MACRO_ELEMENTS } from '../../common/consts';
 import { DiaryMealId } from '../../store/reducers/types/diary';
+import { elementTitles } from '../../common/helpers';
 
 interface MealListItemProps {
   meal: MealsWithRatio[number]
@@ -57,7 +58,7 @@ export const MealListItem = ({
           {BASE_MACRO_ELEMENTS.map(element => (
             <NutritionElement key={element}>
               <NutritionValue>{props.meal[element]}g</NutritionValue>
-              <NutritionTitle>Węgle</NutritionTitle>
+              <NutritionTitle>{elementTitles[element]}</NutritionTitle>
             </NutritionElement>
           ))}
         </NutritionDetails>

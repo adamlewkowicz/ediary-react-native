@@ -36,7 +36,6 @@ export interface DiaryMealTemplate extends DiaryMealBase {
   id: TemplateIdReverted
   date: null
   day: null
-  // productIds: []
   templateId: TemplateId
   type: 'template'
 }
