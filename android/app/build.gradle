@@ -78,6 +78,9 @@ import com.android.build.OutputFile
 project.ext.react = [
     entryFile: "index.js",
     enableHermes: false,  // clean and rebuild if changing
+    // staging
+    devDisabledInStaging: true,
+    bundleInStaging: true,
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -170,6 +173,10 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
+        }
+        staging {
+            matchingFallbacks = ['debug']
+            signingConfig signingConfigs.debug
         }
     }
     // applicationVariants are e.g. debug, release
