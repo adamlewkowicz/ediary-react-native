@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, Store, Action } from 'redux';
 import { rootReducer } from './reducers';
 import thunk, { ThunkAction } from 'redux-thunk'
-import { composeWithDevTools } from 'remote-redux-devtools';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 export function configureStore(
   initialState?: Partial<StoreState>
