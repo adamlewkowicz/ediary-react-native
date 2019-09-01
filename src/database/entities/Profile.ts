@@ -13,9 +13,11 @@ import { WEIGHT_GOAL } from '../../common/consts';
 import { Macro } from '../embeds/Macro';
 import { User } from './User';
 import { measureMacroNeeds } from '../../common/helpers';
+import { GenericEntity } from '../generics/GenericEntity';
+import { EntityType } from '../types';
 
 @Entity('profile')
-export class Profile {
+export class Profile extends GenericEntity {
 
   @PrimaryGeneratedColumn()
   id!: ProfileId;
@@ -59,3 +61,13 @@ export class Profile {
     this.macroNeeds = macroNeeds;
   }
 }
+
+export type IProfile = EntityType<Profile>;
+export type IProfileRequired = Pick<Profile,
+  | 'weight'
+  | 'height'
+  | 'age'
+  | 'male'
+  | 'weightGoal'
+  | 'userId'
+>;

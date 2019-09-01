@@ -85,6 +85,16 @@ export class User extends GenericEntity {
 
     return user;
   }
+
+  static async createProfile(
+    userId: UserId,
+    profile: DeepPartial<Profile>
+  ): Promise<Profile> {
+    return Profile.save({ 
+      ...profile,
+      userId
+    });
+  }
 }
 
 export type IUser = EntityType<User>;

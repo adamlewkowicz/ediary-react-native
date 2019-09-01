@@ -56,7 +56,7 @@ export abstract class GenericEntity extends BaseEntity {
   async validate() {
     const [error] = await validate(this);
     if (error) {
-      const [firstErrorMessage] = Object.values(error.constraints)
+      const [firstErrorMessage] = Object.values(error.constraints);
       throw new EntityValidationError(firstErrorMessage);
     }
   }

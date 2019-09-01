@@ -11,6 +11,7 @@ import { WeightGoal, Screen } from '../../types';
 import { useDispatch } from 'react-redux';
 import * as Actions from '../../store/actions';
 import { NavigationScreenProps } from 'react-navigation';
+import { useUserId } from '../../common/hooks';
 
 interface ProfileCreateProps extends NavigationScreenProps{}
 export const ProfileCreate = (props: ProfileCreateProps) => {
@@ -21,9 +22,10 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
   const [age, setAge] = useState(55);
   const [weightGoal, setWeightGoal] = useState<WeightGoal>('maintain');
   const dispatch = useDispatch();
+  const userId = useUserId();
 
   async function handleProfileCreate() {
-    const payload = { male, height, weightGoal, weight, age };
+    const payload = { male, height, weightGoal, weight, age, userId };
 
     await dispatch(
       Actions.userProfileCreate(payload)
