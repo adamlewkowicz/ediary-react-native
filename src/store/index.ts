@@ -18,7 +18,7 @@ export function configureStore(
   );
 
   if (module.hot) {
-    module.hot.accept('./reducers', () => {
+    module.hot.accept(() => {
       const { rootReducer } = require('./reducers');
       store.replaceReducer(rootReducer);
     });
