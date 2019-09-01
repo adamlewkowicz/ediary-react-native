@@ -1,4 +1,4 @@
-import { productFinder } from '.';
+import { ilewazyApi } from '.';
 import ilewazyResponseMock from './__mocks__/ilewazy.json';
 (global as any).fetch = require('node-fetch');
 
@@ -17,7 +17,7 @@ test('Ilewazy - products are parsed correctly', async () => {
     }
   }));
 
-  const [firstProduct] = await productFinder.findByName(name);
+  const [firstProduct] = await ilewazyApi.findByName(name);
 
-  expect(fetch).toHaveBeenCalledTimes(1);
+  expect(fetchMock).toHaveBeenCalledTimes(1);
 });

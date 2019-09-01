@@ -1,11 +1,11 @@
-import { IleWazyPayload, PortionMap, IleWazyPortionType, NormalizedProduct } from './types';
+import {
+  IleWazyPayload,
+  PortionMap,
+  IleWazyPortionType,
+} from './types';
 import { round } from '../../common/utils';
-import { BarcodeId } from '../../types';
-import { FriscoApi, friscoApi } from '../FriscoApi';
 
-export class ProductFinder {
-
-  constructor(private readonly friscoApi: FriscoApi) {}
+export class IlewazyApi {
 
   async findByName(name: string) {
     const parsedName = encodeURIComponent(name);
@@ -14,7 +14,6 @@ export class ProductFinder {
       `http://www.ilewazy.pl/ajax/load-products/ppage/14/keyword/${parsedName}`,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }
     });
-
     const { data = [] }: IleWazyPayload = await response.json();
 
     const portionMap: PortionMap = {
@@ -27,7 +26,7 @@ export class ProductFinder {
     }
     const knownPortionTypes = Object.keys(portionMap);
 
-    const normalizedResults = data.map(record => {
+    const normalizedProducts = data.map(record => {
       const _id = record.id;
       let name = record.ingredient_name.replace('WA:ŻYWO', '').trim();
       const prots = Number(record.bialko);
@@ -78,13 +77,8 @@ export class ProductFinder {
       return normalizedProduct;
     });
 
-    return normalizedResults;
-  }
-
-  async findByBarcode(barcodeId: BarcodeId): Promise<NormalizedProduct[]> {
-    const fetchedProducts = await this.friscoApi.findByQuery(barcodeId);
-    return fetchedProducts;
+    return normalizedProducts;
   }
 }
 
-export const productFinder = new ProductFinder(friscoApi);
+export const ilewazyApi = new IlewazyApi;

@@ -1,7 +1,7 @@
 import { BarcodeId, MacroElement, MacroElements } from '../../types';
 import { round, getNumAndUnitFromString } from '../../common/utils';
 import { baseMacro } from '../../common/helpers';
-import { NormalizedProduct } from '../ProductFinder/types';
+import { NormalizedProduct } from '../IlewazyApi/types';
 import { FriscoResponse, FriscoNutritionBrandbank } from './types/response';
 import { FriscoProductId } from './types/common';
 import { FriscoQueryResponse } from './types';

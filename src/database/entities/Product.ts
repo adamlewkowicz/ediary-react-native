@@ -17,7 +17,7 @@ import { SqliteENUM } from '../decorators';
 import { EntityType } from '../types';
 import { Optional, Omit } from 'utility-types';
 import { PRODUCT_UNITS } from '../../common/consts';
-import { productFinder } from '../../services/ProductFinder';
+import { ilewazyApi } from '../../services/IlewazyApi';
 import { mapAsyncSequence, filterByUniqueId } from '../../common/utils';
 import { MinLength } from 'class-validator';
 import { GenericEntity } from '../generics/GenericEntity';
@@ -112,7 +112,7 @@ export class Product extends GenericEntity {
     const savedProducts = await Product.findByNameLike(name);
 
     if (savedProducts.length <= 3) {
-      const fetchedProducts = await productFinder.findByName(name);
+      const fetchedProducts = await ilewazyApi.findByName(name);
 
       if (fetchedProducts.length) {
         const foundOrCreatedProducts = await mapAsyncSequence(
