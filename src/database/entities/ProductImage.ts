@@ -3,6 +3,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   Column,
+  JoinColumn,
 } from 'typeorm';
 import { Product } from './Product';
 
@@ -20,6 +21,7 @@ export class ProductImage {
     product => product.images,
     { onDelete: 'CASCADE' }
   )
+  @JoinColumn()
   product?: Product;
 
 }
