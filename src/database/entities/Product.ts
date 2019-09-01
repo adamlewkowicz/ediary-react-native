@@ -21,6 +21,7 @@ import { ilewazyApi } from '../../services/IlewazyApi';
 import { mapAsyncSequence, filterByUniqueId } from '../../common/utils';
 import { MinLength } from 'class-validator';
 import { GenericEntity } from '../generics/GenericEntity';
+import { ProductImage } from './ProductImage';
 
 @Entity('product')
 // @Unique(['name', 'userId'])
@@ -90,6 +91,13 @@ export class Product extends GenericEntity {
   )
   portions?: ProductPortion[];
 
+  @OneToMany(
+    type => ProductImage,
+    productImage => productImage,
+    { cascade: true }
+  )
+  images?: ProductImage[];
+
   get portion(): number {
     const defaultPortion = 100;
 
@@ -122,10 +130,11 @@ export class Product extends GenericEntity {
               name: product.name,
               verified: true
             }
-          }, Object.assign(new Product,
-              { ...product, verified: true }
-            )
-          )
+          }, {
+            ...product,
+            images: product.images.map(url => ({ url })),
+            verified: true
+          })
         );
 
         const mergedProducts = [...savedProducts, ...foundOrCreatedProducts]
@@ -150,7 +159,11 @@ export class Product extends GenericEntity {
       const fetchedProducts = await friscoApi.findByQuery(barcode);
       const createdProducts = await mapAsyncSequence(
         fetchedProducts,
-        ({ unit, portion, portions, ...product }) => this.save({ ...product, verified: true })
+        ({ unit, portion, portions, images = [], ...product }) => this.save({
+          ...product,
+          images: images.map(url => ({ url })),
+          verified: true
+        })
       );
 
       return [...savedProducts, ...createdProducts];
@@ -162,5 +175,5 @@ export class Product extends GenericEntity {
 }
 
 export type IProduct = Omit<EntityType<Product>, 'portion'>;
-export type IProductOptional = Optional<IProduct, 'id' | 'updatedAt' | 'createdAt' | 'mealProducts' | 'portions' | 'user' | 'verified'>;
+export type IProductOptional = Optional<IProduct, 'id' | 'updatedAt' | 'createdAt' | 'mealProducts' | 'portions' | 'user' | 'verified' | 'images'>;
 export type IProductMerged = IProduct & IMealProduct;
