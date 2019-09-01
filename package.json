@@ -10,7 +10,8 @@
     "type-check": "tsc --noEmit",
     "clean:android": "cd android && gradlew clean && cd .. && react-native run-android",
     "typeorm": "ts-node ./node_modules/typeorm/cli -f ./src/database/config.migration.ts",
-    "test:db": "ts-node-dev --respawn ./scripts/test-db"
+    "test:db": "ts-node-dev --respawn ./scripts/test-db",
+    "postversion": "react-native-version"
   },
   "dependencies": {
     "@eva-design/eva": "^1.0.1",
@@ -67,6 +68,7 @@
     "metro-react-native-babel-preset": "0.54.1",
     "node-fetch": "^2.6.0",
     "react-native-svg-transformer": "^0.13.0",
+    "react-native-version": "^3.1.0",
     "react-test-renderer": "16.8.6",
     "reflect-metadata": "^0.1.13",
     "remote-redux-devtools": "^0.5.16",
