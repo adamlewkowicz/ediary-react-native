@@ -2,6 +2,7 @@ import { MacroElements, TemplateId, TemplateIdReverted } from '../../types';
 import { MACRO_ELEMENTS } from '../../common/consts';
 import { Meal } from '../../database/entities';
 import { getDayFromDate, getTimeFromDate } from '../../common/utils';
+import { DiaryMealType } from '../reducers/types/diary';
 
 interface CalcMacroByQuantityData extends MacroElements {
   quantity: number
@@ -51,6 +52,7 @@ export const normalizeMeal = (
   templateId: TemplateId | null = null,
 ) => {
   const { mealProducts = [], ...data } = meal;
+  const type: DiaryMealType = 'meal';
   const normalizedMeal = {
     ...data,
     isToggled: false,
@@ -58,7 +60,8 @@ export const normalizeMeal = (
     day: getDayFromDate(meal.date),
     time: getTimeFromDate(meal.date),
     productIds: mealProducts.map(mealProduct => mealProduct.productId),
-    templateId
+    templateId,
+    type,
   }
   const normalizedProducts = mealProducts.map(mealProduct => {
     const { meal, product, ...data } = mealProduct;

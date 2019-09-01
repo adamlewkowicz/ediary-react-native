@@ -12,6 +12,7 @@ import {
 import { IProduct } from '../../../database/entities';
 
 export type DiaryMealId = MealId | TemplateIdReverted;
+export type DiaryMealType = 'meal' | 'template';
 
 export interface DiaryMealBase {
   id: DiaryMealId
@@ -25,7 +26,7 @@ export interface DiaryMealBase {
   updatedAt?: number
   createdAt?: number
   //
-  type: 'meal' | 'template'
+  type: DiaryMealType
   isToggled: boolean
   productIds: ProductId[]
   templateId: TemplateId | null

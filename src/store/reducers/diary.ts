@@ -84,7 +84,7 @@ export function diaryReducer(
     }
     case MEAL_ADDED: {
       const { templateId } = action.meta;
-      const { meal, products } = normalizeMeal(action.payload, templateId);
+      const { meal: normalizedMeal, products } = normalizeMeal(action.payload, templateId);
 
       if (templateId !== null) {
         return {
@@ -92,15 +92,7 @@ export function diaryReducer(
           products: [...state.products, ...products],
           meals: state.meals.map(meal => {
             if (meal.type === 'template' && meal.templateId === templateId) {
-              return {
-                ...action.payload,
-                day: getDayFromDate(action.payload.date),
-                time: getTimeFromDate(action.payload.date),
-                productIds: meal.productIds,
-                isToggled: true,
-                templateId: templateId || null,
-                type: 'meal'
-              }
+              return { ...normalizedMeal, isToggled: true };
             }
             return meal;
           })
@@ -109,7 +101,7 @@ export function diaryReducer(
       return {
         ...state,
         products: [...state.products, ...products],
-        meals: [...state.meals, { ...meal, type: 'meal' }]
+        meals: [...state.meals, { ...normalizedMeal, type: 'meal' }]
       }
     }
     case MEAL_DELETED: return {
