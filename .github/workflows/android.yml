@@ -23,9 +23,9 @@ jobs:
         cd android
         echo $RELEASE_KEYSTORE_BASE64 | base64 -d > ./app/release-key.keystore
         chmod +x ./gradlew
-        ./gradlew assembleRelease
+        ./gradlew assembleStaging
 
     - uses: actions/upload-artifact@master
       with:
         name: ediary-release
-        path: ./android/app/build/outputs/apk/release/app-release.apk
+        path: ./android/app/build/outputs/apk/staging/app-staging.apk
