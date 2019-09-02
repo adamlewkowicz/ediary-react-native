@@ -4,13 +4,12 @@ import { Meal } from '../../database/entities';
 import { getDayFromDate, getTimeFromDate } from '../../common/utils';
 import { DiaryMealType } from '../reducers/types/diary';
 
-interface CalcMacroByQuantityData extends MacroElements {
-  quantity: number
-}
+interface CalcMacroByQuantityData extends MacroElements {}
 export const calcMacroByQuantity = <T extends CalcMacroByQuantityData>(
-  macroData: T
+  macroData: T,
+  quantity: number
 ) => MACRO_ELEMENTS.map(element => ({
-  value: Math.round(macroData[element] * macroData.quantity / 100),
+  value: Math.round(macroData[element] * quantity / 100),
   element
 }));
 
@@ -40,7 +39,7 @@ export const normalizeMeals = <T extends Meal[]>(
       return {
         ...normalizedProduct,
         isToggled: false,
-        macro: calcMacroByQuantity(normalizedProduct)
+        calcedMacro: calcMacroByQuantity(normalizedProduct.macro, normalizedProduct.quantity)
       }
     })
   });
@@ -72,7 +71,7 @@ export const normalizeMeal = (
     return {
       ...normalizedProduct,
       isToggled: false,
-      macro: calcMacroByQuantity(normalizedProduct)
+      calcedMacro: calcMacroByQuantity(normalizedProduct.macro, normalizedProduct.quantity)
     }
   });
   return {

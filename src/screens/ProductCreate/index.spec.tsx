@@ -9,11 +9,13 @@ test('creates new product', async () => {
     name: 'Orange Juice',
     producer: 'Gardens',
     quantity: 140,
-    carbs: 249,
-    prots: 25,
-    fats: 12,
-    kcal: 319,
-    barcode: '391287145'
+    barcode: '391287145',
+    macro: {
+      carbs: 249,
+      prots: 25,
+      fats: 12,
+      kcal: 319,
+    },
   }
   const productSaveSpy = jest.spyOn(Product, 'save');
   const {
@@ -33,10 +35,10 @@ test('creates new product', async () => {
   fireEvent.changeText(nameInput, productMock.name);
   fireEvent.changeText(producerInput, productMock.producer);
   fireEvent.changeText(quantityInput, productMock.quantity.toString());
-  fireEvent.changeText(carbsInput, productMock.carbs.toString());
-  fireEvent.changeText(protsInput, productMock.prots.toString());
-  fireEvent.changeText(fatsInput, productMock.fats.toString());
-  fireEvent.changeText(kcalInput, productMock.kcal.toString());
+  fireEvent.changeText(carbsInput, productMock.macro.carbs.toString());
+  fireEvent.changeText(protsInput, productMock.macro.prots.toString());
+  fireEvent.changeText(fatsInput, productMock.macro.fats.toString());
+  fireEvent.changeText(kcalInput, productMock.macro.kcal.toString());
   fireEvent.changeText(barcodeInput, productMock.barcode);
   fireEvent.press(saveProductButton);
 

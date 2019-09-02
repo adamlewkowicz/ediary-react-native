@@ -40,10 +40,12 @@ export function diaryReducer(
           return [{
             id: getRevertedTemplateId(template.id),
             name: template.name,
-            carbs: 0,
-            prots: 0,
-            fats: 0,
-            kcal: 0,
+            macro: {
+              carbs: 0,
+              prots: 0,
+              fats: 0,
+              kcal: 0,
+            },
             day: null,
             date: null,
             time: template.time,
@@ -77,7 +79,7 @@ export function diaryReducer(
           return {
             ...normalizedProduct,
             isToggled: false,
-            macro: calcMacroByQuantity(normalizedProduct)
+            calcedMacro: calcMacroByQuantity(normalizedProduct.macro, normalizedProduct.quantity)
           }
         })
       })
@@ -115,10 +117,12 @@ export function diaryReducer(
             const { templateId, name, time } = meal;
             return [{
               id: getRevertedTemplateId(meal.templateId),
-              carbs: 0,
-              prots: 0,
-              fats: 0,
-              kcal: 0,
+              macro: {
+                carbs: 0,
+                prots: 0,
+                fats: 0,
+                kcal: 0,
+              },
               day: null,
               date: null,
               type: 'template',
@@ -164,7 +168,7 @@ export function diaryReducer(
         {
           ...action.payload,
           isToggled: false,
-          macro: calcMacroByQuantity(action.payload)
+          calcedMacro: calcMacroByQuantity(action.payload.macro, action.payload.quantity),
         }
       ]
     }
@@ -192,7 +196,7 @@ export function diaryReducer(
           ) {
             return {
               ...merged,
-              macro: calcMacroByQuantity(merged)
+              calcedMacro: calcMacroByQuantity(merged.macro, merged.quantity)
             }
           }
           return merged;

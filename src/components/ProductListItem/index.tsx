@@ -9,10 +9,12 @@ interface ProductListItemProps extends TouchableOpacityProps {
   product: {
     name: string
     portion: number
-    carbs: number
-    prots: number
-    fats: number
-    kcal: number
+    macro: {
+      carbs: number
+      prots: number
+      fats: number
+      kcal: number
+    }
     brand?: string
   }
   phrase?: string
@@ -37,19 +39,19 @@ export const ProductListItem = ({
         <Content>
           <Info>
             <Quantity>{product.portion}g</Quantity>
-            <Kcal>{product.kcal} kcal</Kcal>
+            <Kcal>{product.macro.kcal} kcal</Kcal>
           </Info>
           <NutritionContainer>
             <NutritionBox
-              value={product.carbs}
+              value={product.macro.carbs}
               element="carbs"
             />
             <NutritionBox
-              value={product.prots}
+              value={product.macro.prots}
               element="prots"
             />
             <NutritionBox
-              value={product.fats}
+              value={product.macro.fats}
               element="fats"
             />
           </NutritionContainer>

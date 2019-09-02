@@ -2,9 +2,9 @@ import {
   Meal,
   Product,
   MealProduct,
-  IProduct,
   IProductOptional,
   IMeal,
+  IProductRequired,
 } from '../../../database/entities';
 import {
   mealDeleted,
@@ -51,7 +51,7 @@ export const mealUpdate = (
 
 export const mealProductCreate = (
   mealId: Meal['id'],
-  payload: IProduct
+  payload: IProductRequired
 ): Thunk => async (dispatch) => {
   const newProduct = await Meal.addAndCreateProduct(mealId, payload);
   dispatch(mealProductAdded(mealId, { mealId, ...newProduct }));
@@ -93,7 +93,7 @@ export const productUpdate = (
 }
 
 /**
- * @deprecated - is this action needed, when it doesn't add product to meal?
+ * @deprecated - this action is needed, when it doesn't add product to meal
  */
 export const productCreate = (
   product: IProductOptional

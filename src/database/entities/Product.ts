@@ -14,7 +14,7 @@ import { User } from './User';
 import { ProductPortion } from './ProductPortion';
 import { friscoApi } from '../../services/FriscoApi';
 import { SqliteENUM } from '../decorators';
-import { EntityType } from '../types';
+import { EntityType, EntityRequired } from '../types';
 import { Optional, Omit } from 'utility-types';
 import { PRODUCT_UNITS } from '../../common/consts';
 import { ilewazyApi } from '../../services/IlewazyApi';
@@ -22,12 +22,13 @@ import { mapAsyncSequence, filterByUniqueId } from '../../common/utils';
 import { MinLength } from 'class-validator';
 import { GenericEntity } from '../generics/GenericEntity';
 import { ProductImage } from './ProductImage';
+import { Macro } from '../embeds/Macro';
 
 @Entity('product')
 // @Unique(['name', 'userId'])
-// @Unique(['name', 'verified'])
+// @Unique(['name', 'isVerified'])
 @Unique(['barcode', 'userId'])
-@Unique(['barcode', 'verified'])
+@Unique(['barcode', 'isVerified'])
 export class Product extends GenericEntity {
 
   @PrimaryGeneratedColumn()
@@ -40,19 +41,10 @@ export class Product extends GenericEntity {
   name!: string;
 
   @Column('text', { nullable: true })
-  barcode!: BarcodeId | null
+  barcode!: BarcodeId | null;
 
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  carbs!: number
-
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  prots!: number
-  
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  fats!: number
-
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  kcal!: number
+  @Column(type => Macro)
+  macro!: Macro;
 
   /**
    * Type of unit that describes macro values.
@@ -75,7 +67,7 @@ export class Product extends GenericEntity {
   mealProducts?: MealProduct[]
 
   @Column('boolean', { default: false })
-  verified!: boolean;
+  isVerified!: boolean;
 
   @Column('int', { nullable: true })
   userId!: UserId | null;
@@ -123,19 +115,22 @@ export class Product extends GenericEntity {
       const fetchedProducts = await ilewazyApi.findByName(name);
 
       if (fetchedProducts.length) {
-        const foundOrCreatedProducts = await mapAsyncSequence(
-          fetchedProducts,
-          product => this.findOneOrSave({
+        const foundOrCreatedProducts = await mapAsyncSequence(fetchedProducts, product => {
+          const { carbs, prots, fats, kcal, ...data } = product;
+          const parsedProduct = {
+            ...data,
+            images: product.images.map(url => ({ url })),
+            isVerified: true,
+            macro: { carbs, prots, fats, kcal },
+          }
+          const query = {
             where: {
               name: product.name,
-              verified: true
+              isVerified: true
             }
-          }, {
-            ...product,
-            images: product.images.map(url => ({ url })),
-            verified: true
-          })
-        );
+          }
+          return this.findOneOrSave(query, parsedProduct);
+        });
 
         const mergedProducts = [...savedProducts, ...foundOrCreatedProducts]
           .filter(filterByUniqueId);
@@ -153,18 +148,31 @@ export class Product extends GenericEntity {
 
   static async findAndFetchByBarcode(barcode: BarcodeId): Promise<Product[]> {
     const savedProducts = await this.findByBarcode(barcode);
-    const hasVerifiedProduct = savedProducts.some(product => product.verified);
+    const hasVerifiedProduct = savedProducts.some(product => product.isVerified);
     
     if (!savedProducts.length || !hasVerifiedProduct) {
       const fetchedProducts = await friscoApi.findByQuery(barcode);
-      const createdProducts = await mapAsyncSequence(
-        fetchedProducts,
-        ({ unit, portion, portions, images = [], ...product }) => this.save({
-          ...product,
+      const createdProducts = await mapAsyncSequence(fetchedProducts, product => {
+        const {
+          unit,
+          portion,
+          portions,
+          images = [],
+          carbs,
+          prots,
+          fats,
+          kcal,
+          ...data
+        } = product;
+        const macro = { carbs, prots, fats, kcal };
+        const parsedProduct = {
+          ...data,
           images: images.map(url => ({ url })),
-          verified: true
-        })
-      );
+          isVerified: true,
+          macro
+        }
+        return this.save(parsedProduct);
+      });
 
       return [...savedProducts, ...createdProducts];
     }
@@ -174,6 +182,10 @@ export class Product extends GenericEntity {
 
 }
 
-export type IProduct = Omit<EntityType<Product>, 'portion'>;
-export type IProductOptional = Optional<IProduct, 'id' | 'updatedAt' | 'createdAt' | 'mealProducts' | 'portions' | 'user' | 'verified' | 'images'>;
+export type IProduct = EntityType<Product, 'portion'>;
+export type IProductOptional = Optional<IProduct, 'id' | 'updatedAt' | 'createdAt' | 'mealProducts' | 'portions' | 'user' | 'isVerified' | 'images'>;
+export type IProductRequired = EntityRequired<IProduct,
+  | 'name'
+  | 'macro'
+>;
 export type IProductMerged = IProduct & IMealProduct;
