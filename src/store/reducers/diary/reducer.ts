@@ -9,12 +9,16 @@ import {
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
   MEALS_LOADED,
-} from '../consts';
-import { DiaryActions } from '../actions';
-import { calcMacroByQuantity, getRevertedTemplateId, normalizeMeal } from '../helpers/diary';
-import { getDayFromDate, getTimeFromDate } from '../../common/utils';
-import { DiaryState, DiaryMeal, DiaryMealTemplate } from './types/diary';
-import { defaultTemplates } from '../../common/helpers';
+} from '../../consts';
+import {
+  calcMacroByQuantity,
+  getRevertedTemplateId,
+  normalizeMeal,
+} from './helpers';
+import { DiaryActions } from '../../actions';
+import { getDayFromDate, getTimeFromDate } from '../../../common/utils';
+import { DiaryState, DiaryMeal, DiaryMealTemplate } from './types';
+import { defaultTemplates } from '../../../common/helpers';
 
 const initialState: DiaryState = {
   meals: [],

@@ -20,7 +20,7 @@ import {
 import { DateDay, ProductId, MealId, TemplateId } from '../../../types';
 import { debounce_, findOrFail } from '../../../common/utils';
 import { Thunk } from '../..';
-import { DiaryMeal, DiaryProduct, DiaryTemplate } from '../../reducers/types/diary';
+import { DiaryMeal, DiaryProduct, DiaryTemplate } from '../../reducers/diary';
 
 const debounceA = debounce_();
 

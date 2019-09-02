@@ -1,12 +1,13 @@
-import { AppActions } from '../actions/types/application';
+import { AppActions } from '../../actions/types/application';
 import {
   APP_DATE_UPDATED,
   APP_CONNECTION_STATUS_UPDATED,
   APP_INITIALIZED
-} from '../consts';
-import { DateDay } from '../../types';
-import { getDayFromDate } from '../../common/utils';
+} from '../../consts';
+import { DateDay } from '../../../types';
+import { getDayFromDate } from '../../../common/utils';
 import dayjs from 'dayjs';
+import { ApplicationState } from './types';
 
 const date = new Date;
 
@@ -38,12 +39,4 @@ export function applicationReducer(
     }
     default: return state;
   }
-}
-
-interface ApplicationState {
-  date: Date
-  day: DateDay
-  isConnected: boolean
-  initialized: boolean
-  status: 'INITIALIZING' | 'CREATING PROFILE'
 }

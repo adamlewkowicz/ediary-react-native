@@ -8,8 +8,8 @@ import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native'
 import { MealsWithRatio } from '../../store/selectors';
 import { Button } from 'react-native-ui-kitten';
 import { BASE_MACRO_ELEMENTS } from '../../common/consts';
-import { DiaryMealId } from '../../store/reducers/types/diary';
 import { elementTitles } from '../../common/helpers';
+import { DiaryMealId } from '../../store/reducers/diary';
 
 interface MealListItemProps {
   meal: MealsWithRatio[number]

@@ -19,7 +19,7 @@ import { ProductCreateParams } from '../ProductCreate';
 import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
 import { elementTitles } from '../../common/helpers';
 import { MealId } from '../../types';
-import { DiaryMealTemplate, DiaryMeal } from '../../store/reducers/types/diary';
+import { DiaryMealTemplate, DiaryMeal } from '../../store/reducers/diary';
 
 interface HomeProps extends NavigationScreenProps {
   appDate: StoreState['application']['date']

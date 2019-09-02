@@ -16,8 +16,8 @@ import { EntityType } from '../types';
 import { GenericEntity } from '../generics/GenericEntity';
 import dayjs from 'dayjs';
 import { DATE_FORMAT, DATE_DAY } from '../../common/consts';
-import { DiaryTemplate } from '../../store/reducers/types/diary';
 import { Macro } from '../embeds/Macro';
+import { DiaryTemplate } from '../../store/reducers/diary';
 
 @Entity('meal')
 export class Meal extends GenericEntity {

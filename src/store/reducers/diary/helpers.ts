@@ -1,8 +1,8 @@
-import { MacroElements, TemplateId, TemplateIdReverted } from '../../types';
-import { MACRO_ELEMENTS } from '../../common/consts';
-import { Meal } from '../../database/entities';
-import { getDayFromDate, getTimeFromDate } from '../../common/utils';
-import { DiaryMealType } from '../reducers/types/diary';
+import { MacroElements, TemplateId, TemplateIdReverted } from '../../../types';
+import { MACRO_ELEMENTS } from '../../../common/consts';
+import { Meal } from '../../../database/entities';
+import { getDayFromDate, getTimeFromDate } from '../../../common/utils';
+import { DiaryMealType } from './types';
 
 interface CalcMacroByQuantityData extends MacroElements {}
 export const calcMacroByQuantity = <T extends CalcMacroByQuantityData>(

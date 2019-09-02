@@ -13,7 +13,7 @@ import {
 import { DiaryActions } from '../types';
 import { MealId, ProductId, TemplateId } from '../../../types';
 import { Meal, IProduct, IProductMerged } from '../../../database/entities';
-import { DiaryMeal, DiaryProduct, DiaryMealId } from '../../reducers/types/diary';
+import { DiaryMeal, DiaryProduct, DiaryMealId } from '../../reducers/diary';
 
 export const mealsLoaded = (
   meals: Meal[]

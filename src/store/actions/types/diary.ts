@@ -12,7 +12,7 @@ import {
 } from '../../consts';
 import { Meal, IProductMerged, IProduct } from '../../../database/entities';
 import { ProductId, TemplateId, MealId } from '../../../types';
-import { DiaryProduct, DiaryMealId, DiaryMeal } from '../../reducers/types/diary';
+import { DiaryMeal, DiaryProduct, DiaryMealId } from '../../reducers/diary';
 
 export type MealUpdated = {
   type: typeof MEAL_UPDATED
