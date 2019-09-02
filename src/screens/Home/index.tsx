@@ -20,6 +20,7 @@ import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
 import { elementTitles } from '../../common/helpers';
 import { MealId } from '../../types';
 import { DiaryMealTemplate, DiaryMeal } from '../../store/reducers/diary';
+import { RoundedStripe } from '../../components/RoundedStripe';
 
 interface HomeProps extends NavigationScreenProps {
   appDate: StoreState['application']['date']
@@ -97,6 +98,7 @@ const Home = (props: HomeProps) => {
           value={props.appDate}
           onChange={date => dispatch(Actions.appDateUpdated(date))}
         />
+        <RoundedStripe value={props.macroNeedsLeft.kcal.ratio} />
         <MacroCards>
           {BASE_MACRO_ELEMENTS.map(element => (
             <MacroCard
