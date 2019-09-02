@@ -15,7 +15,7 @@ afterEach(async () => {
   await getConnection().close();
 });
 
-jest.mock('NativeAnimatedHelper');
+// jest.mock('NativeAnimatedHelper');
 
 Object.assign(NativeModules, {
   RNGestureHandlerModule: {
@@ -26,7 +26,7 @@ Object.assign(NativeModules, {
     State: {},
     Directions: {}
   },
-  PlatformConstants: {
-    forceTouchAvailable: false,
-  }}
-);
+  // PlatformConstants: {
+  //   forceTouchAvailable: false,
+  // }
+});
