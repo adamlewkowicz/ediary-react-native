@@ -38,14 +38,6 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
   const steps = [
     (
       <>
-        <Heading
-          value="Wybierz płeć"
-          size={20}
-          align="center"
-          css={css`
-            margin-bottom: 15px;
-          `}
-        />
         <Block row space="space-around">
           <SelectionBox 
             value={male}
@@ -75,10 +67,10 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
       </>
     ),
     (
-      <>
+      <MetricsContainer>
         <Heading
-          value="Twój wzrost"
-          size={20}
+          value="Wzrost"
+          size={17}
           align="center"
           css={css`
             margin-bottom: 15px;
@@ -96,8 +88,8 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           maximumTrackTintColor="rgba(157, 163, 180, 0.10)"
         />
         <Heading
-          value="Twoja waga"
-          size={20}
+          value="Waga"
+          size={17}
           align="center"
           css={css`
             margin: 40px 0 15px 0;
@@ -115,8 +107,8 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           maximumTrackTintColor="rgba(157, 163, 180, 0.10)"
         />
         <Heading
-          value="Twój wiek"
-          size={20}
+          value="Wiek"
+          size={17}
           align="center"
           css={css`
             margin: 40px 0 15px 0;
@@ -133,55 +125,50 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           minimumTrackTintColor={theme.colors.secondary}
           maximumTrackTintColor="rgba(157, 163, 180, 0.10)"
         />
-      </>
+      </MetricsContainer>
     ),
     (
-      <>
-        <Block space="space-around" row={false}>
-          <SelectionBox 
-            value={weightGoal === 'decrease'}
-            onChange={() => setWeightGoal('decrease')}
-            title="Redukcja"
-            description="Chcę zmniejszyć wagę"
-            noFlex
-            icon={(
-              <FemaleBodyIcon
-                fill={weightGoal === 'decrease' ? themeProps.focusColor : 'rgba(1,1,1,.7)'}
-                width={45}
-                height={45}
-              />
-            )}
-          />
-          <SelectionBox
-            value={weightGoal === 'maintain'}
-            onChange={() => setWeightGoal('maintain')}
-            title="Utrzymanie"
-            description="Chcę utrzymać obecną wagę"
-            noFlex
-            icon={(
-              <MeasureIcon
-                fill={weightGoal === 'maintain' ? themeProps.focusColor : 'rgba(1,1,1,.7)'}
-                width={45}
-                height={45}
-              />
-            )}
-          />
-          <SelectionBox
-            value={weightGoal === 'increase'}
-            onChange={() => setWeightGoal('increase')}
-            title="Zwiększenie"
-            description="Chcę zwiększyć wagę"
-            noFlex
-            icon={(
-              <MuscleIcon
-                fill={weightGoal === 'increase' ? themeProps.focusColor : 'rgba(1,1,1,.7)'}
-                width={45}
-                height={45}
-              />
-            )}
-          />
-        </Block>
-      </>
+      <Block space="space-evenly" row={false} align="center">
+        <SelectionBox
+          value={weightGoal === 'decrease'}
+          onChange={() => setWeightGoal('decrease')}
+          title="Redukcja"
+          description="Chcę zmniejszyć wagę"
+          icon={(
+            <FemaleBodyIcon
+              fill={weightGoal === 'decrease' ? themeProps.focusColor : 'rgba(1,1,1,.7)'}
+              width={45}
+              height={45}
+            />
+          )}
+        />
+        <SelectionBox
+          value={weightGoal === 'maintain'}
+          onChange={() => setWeightGoal('maintain')}
+          title="Utrzymanie"
+          description="Chcę utrzymać obecną wagę"
+          icon={(
+            <MeasureIcon
+              fill={weightGoal === 'maintain' ? themeProps.focusColor : 'rgba(1,1,1,.7)'}
+              width={45}
+              height={45}
+            />
+          )}
+        />
+        <SelectionBox
+          value={weightGoal === 'increase'}
+          onChange={() => setWeightGoal('increase')}
+          title="Zwiększenie"
+          description="Chcę zwiększyć wagę"
+          icon={(
+            <MuscleIcon
+              fill={weightGoal === 'increase' ? themeProps.focusColor : 'rgba(1,1,1,.7)'}
+              width={45}
+              height={45}
+            />
+          )}
+        />
+      </Block>
     )
   ];
 
@@ -189,12 +176,18 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
 
   return (
     <Container>
+      <Heading
+        value={(stepTitles as any)[step]}
+        size={20}
+        align="center"
+        css={HeadingStyle}
+      />
       <Content>
         {steps[step]}
       </Content>
       <InfoContainer>
         <Button
-          title={isLastStep ? "Zapisz" : "Kontynuuj"}
+          title={isLastStep ? 'Zapisz' : 'Kontynuuj'}
           onPress={() => {
             if (isLastStep) {
               handleProfileCreate();
@@ -209,14 +202,26 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
 }
 
 const Container = styled.View`
-  padding: 70px 10px;
+  padding: 10px;
   justify-content: space-between;
-  height: 100%;
+  flex: 1;
 `
 
-const Content = styled.View``
+const HeadingStyle = css`
+  margin: 15px 0 25px 0;
+`
 
-const InfoContainer = styled.View``
+const Content = styled.ScrollView`
+  padding: 10px;
+`
+
+const MetricsContainer = styled.View`
+  padding: 5px 0;
+`
+
+const InfoContainer = styled.View`
+  padding: 25px 15px;
+`
 
 const SliderValue = styled.Text`
   text-align: center;
@@ -250,4 +255,10 @@ const theme = {
     body: 14,
     caption: 12,
   }
+}
+
+const stepTitles = {
+  0: 'Wybierz płeć',
+  1: 'Twoje pomiary',
+  2: 'Wybierz cel',
 }

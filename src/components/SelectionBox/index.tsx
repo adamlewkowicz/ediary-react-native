@@ -54,7 +54,8 @@ const TouchableWrapper = styled.TouchableOpacity<{
   border-width: 1px;
   align-items: center;
   margin: 20px;
-  flex: ${props => props.noFlex ? 'none' : 1};
+  width: 100%;
+  flex: 1;
 `
 
 const Title = styled.Text<{
