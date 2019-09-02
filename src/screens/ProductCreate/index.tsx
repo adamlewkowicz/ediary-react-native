@@ -47,7 +47,17 @@ export const ProductCreate = (props: ProductCreateProps) => {
   }
 
   async function handleProductCreate() {
-    const { portionOption, portionOptions, portion, barcode, ...data } = state;
+    const {
+      portionOption,
+      portionOptions,
+      portion,
+      barcode,
+      carbs,
+      prots,
+      fats,
+      kcal,
+      ...data
+    } = state;
 
     if (!data.name.length) {
       return;
@@ -58,10 +68,12 @@ export const ProductCreate = (props: ProductCreateProps) => {
       name: data.name.trim(),
       barcode: barcode.length ? barcode : null,
       userId,
-      carbs: Number(data.carbs),
-      prots: Number(data.prots),
-      fats: Number(data.fats),
-      kcal: Number(data.kcal),
+      macro: {
+        carbs: Number(carbs),
+        prots: Number(prots),
+        fats: Number(fats),
+        kcal: Number(kcal),
+      }
     });
 
     if (params.onProductCreated) {

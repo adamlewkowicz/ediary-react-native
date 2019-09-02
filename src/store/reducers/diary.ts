@@ -77,7 +77,7 @@ export function diaryReducer(
           return {
             ...normalizedProduct,
             isToggled: false,
-            macro: calcMacroByQuantity(normalizedProduct)
+            calcedMacro: calcMacroByQuantity(normalizedProduct.macro, normalizedProduct.quantity)
           }
         })
       })
@@ -164,7 +164,7 @@ export function diaryReducer(
         {
           ...action.payload,
           isToggled: false,
-          macro: calcMacroByQuantity(action.payload)
+          calcedMacro: calcMacroByQuantity(action.payload.macro, action.payload.quantity),
         }
       ]
     }
@@ -192,7 +192,7 @@ export function diaryReducer(
           ) {
             return {
               ...merged,
-              macro: calcMacroByQuantity(merged)
+              calcedMacro: calcMacroByQuantity(merged.macro, merged.quantity)
             }
           }
           return merged;

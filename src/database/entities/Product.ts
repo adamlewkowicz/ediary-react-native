@@ -22,6 +22,7 @@ import { mapAsyncSequence, filterByUniqueId } from '../../common/utils';
 import { MinLength } from 'class-validator';
 import { GenericEntity } from '../generics/GenericEntity';
 import { ProductImage } from './ProductImage';
+import { Macro } from '../embeds/Macro';
 
 @Entity('product')
 // @Unique(['name', 'userId'])
@@ -42,17 +43,8 @@ export class Product extends GenericEntity {
   @Column('text', { nullable: true })
   barcode!: BarcodeId | null
 
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  carbs!: number
-
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  prots!: number
-  
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  fats!: number
-
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  kcal!: number
+  @Column(type => Macro)
+  macro!: Macro;
 
   /**
    * Type of unit that describes macro values.
@@ -123,19 +115,22 @@ export class Product extends GenericEntity {
       const fetchedProducts = await ilewazyApi.findByName(name);
 
       if (fetchedProducts.length) {
-        const foundOrCreatedProducts = await mapAsyncSequence(
-          fetchedProducts,
-          product => this.findOneOrSave({
+        const foundOrCreatedProducts = await mapAsyncSequence(fetchedProducts, product => {
+          const { carbs, prots, fats, kcal, ...data } = product;
+          const parsedProduct = {
+            ...data,
+            images: product.images.map(url => ({ url })),
+            verified: true,
+            macro: { carbs, prots, fats, kcal },
+          }
+          const query = {
             where: {
               name: product.name,
               verified: true
             }
-          }, {
-            ...product,
-            images: product.images.map(url => ({ url })),
-            verified: true
-          })
-        );
+          }
+          return this.findOneOrSave(query, parsedProduct);
+        });
 
         const mergedProducts = [...savedProducts, ...foundOrCreatedProducts]
           .filter(filterByUniqueId);
@@ -157,14 +152,27 @@ export class Product extends GenericEntity {
     
     if (!savedProducts.length || !hasVerifiedProduct) {
       const fetchedProducts = await friscoApi.findByQuery(barcode);
-      const createdProducts = await mapAsyncSequence(
-        fetchedProducts,
-        ({ unit, portion, portions, images = [], ...product }) => this.save({
-          ...product,
+      const createdProducts = await mapAsyncSequence(fetchedProducts, product => {
+        const {
+          unit,
+          portion,
+          portions,
+          images = [],
+          carbs,
+          prots,
+          fats,
+          kcal,
+          ...data
+        } = product;
+        const macro = { carbs, prots, fats, kcal };
+        const parsedProduct = {
+          ...data,
           images: images.map(url => ({ url })),
-          verified: true
-        })
-      );
+          verified: true,
+          macro
+        }
+        return this.save(parsedProduct);
+      });
 
       return [...savedProducts, ...createdProducts];
     }
