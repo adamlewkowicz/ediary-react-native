@@ -28,7 +28,7 @@ import { Macro } from '../embeds/Macro';
 // @Unique(['name', 'userId'])
 // @Unique(['name', 'verified'])
 @Unique(['barcode', 'userId'])
-@Unique(['barcode', 'verified'])
+@Unique(['barcode', 'isVerified'])
 export class Product extends GenericEntity {
 
   @PrimaryGeneratedColumn()
@@ -67,7 +67,7 @@ export class Product extends GenericEntity {
   mealProducts?: MealProduct[]
 
   @Column('boolean', { default: false })
-  verified!: boolean;
+  isVerified!: boolean;
 
   @Column('int', { nullable: true })
   userId!: UserId | null;
@@ -148,7 +148,7 @@ export class Product extends GenericEntity {
 
   static async findAndFetchByBarcode(barcode: BarcodeId): Promise<Product[]> {
     const savedProducts = await this.findByBarcode(barcode);
-    const hasVerifiedProduct = savedProducts.some(product => product.verified);
+    const hasVerifiedProduct = savedProducts.some(product => product.isVerified);
     
     if (!savedProducts.length || !hasVerifiedProduct) {
       const fetchedProducts = await friscoApi.findByQuery(barcode);
@@ -183,5 +183,5 @@ export class Product extends GenericEntity {
 }
 
 export type IProduct = Omit<EntityType<Product>, 'portion'>;
-export type IProductOptional = Optional<IProduct, 'id' | 'updatedAt' | 'createdAt' | 'mealProducts' | 'portions' | 'user' | 'verified' | 'images'>;
+export type IProductOptional = Optional<IProduct, 'id' | 'updatedAt' | 'createdAt' | 'mealProducts' | 'portions' | 'user' | 'isVerified' | 'images'>;
 export type IProductMerged = IProduct & IMealProduct;
