@@ -17,6 +17,7 @@ import { GenericEntity } from '../generics/GenericEntity';
 import dayjs from 'dayjs';
 import { DATE_FORMAT, DATE_DAY } from '../../common/consts';
 import { DiaryTemplate } from '../../store/reducers/types/diary';
+import { Macro } from '../embeds/Macro';
 
 @Entity('meal')
 export class Meal extends GenericEntity {
@@ -27,17 +28,8 @@ export class Meal extends GenericEntity {
   @Column()
   name!: string;
 
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  carbs!: number
-
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  prots!: number
-  
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  fats!: number
-
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  kcal!: number
+  @Column(type => Macro)
+  macro!: Macro;
 
   @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   date!: string;
@@ -47,7 +39,7 @@ export class Meal extends GenericEntity {
     mealProduct => mealProduct.meal,
     { cascade: true }
   )
-  mealProducts?: MealProduct[]
+  mealProducts?: MealProduct[];
 
   @Column('number', { default: null, nullable: true })
   userId!: UserId | null;

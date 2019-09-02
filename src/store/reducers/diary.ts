@@ -40,10 +40,12 @@ export function diaryReducer(
           return [{
             id: getRevertedTemplateId(template.id),
             name: template.name,
-            carbs: 0,
-            prots: 0,
-            fats: 0,
-            kcal: 0,
+            macro: {
+              carbs: 0,
+              prots: 0,
+              fats: 0,
+              kcal: 0,
+            },
             day: null,
             date: null,
             time: template.time,
@@ -115,10 +117,12 @@ export function diaryReducer(
             const { templateId, name, time } = meal;
             return [{
               id: getRevertedTemplateId(meal.templateId),
-              carbs: 0,
-              prots: 0,
-              fats: 0,
-              kcal: 0,
+              macro: {
+                carbs: 0,
+                prots: 0,
+                fats: 0,
+                kcal: 0,
+              },
               day: null,
               date: null,
               type: 'template',

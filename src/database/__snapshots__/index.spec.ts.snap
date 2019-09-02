@@ -4,12 +4,12 @@ exports[`entity sql matches snapshot: meal 1`] = `
 "CREATE TABLE \\"meal\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"name\\" varchar NOT NULL,
-  \\"carbs\\" decimal(5, 2) NOT NULL DEFAULT (0),
-  \\"prots\\" decimal(5, 2) NOT NULL DEFAULT (0),
-  \\"fats\\" decimal(5, 2) NOT NULL DEFAULT (0),
-  \\"kcal\\" decimal(5, 2) NOT NULL DEFAULT (0),
   \\"date\\" text NOT NULL DEFAULT (CURRENT_TIMESTAMP),
   \\"userId\\" integer,
+  \\"macroCarbs\\" decimal(6, 2) NOT NULL DEFAULT (0),
+  \\"macroProts\\" decimal(6, 2) NOT NULL DEFAULT (0),
+  \\"macroFats\\" decimal(6, 2) NOT NULL DEFAULT (0),
+  \\"macroKcal\\" decimal(6, 2) NOT NULL DEFAULT (0),
   CONSTRAINT \\"FK_419ad998c5e3b37a7cce0f872f5\\" FOREIGN KEY (\\"userId\\") REFERENCES \\"user\\" (\\"id\\") ON DELETE NO ACTION ON UPDATE NO ACTION
 )"
 `;
