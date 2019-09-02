@@ -77,7 +77,6 @@ export class Meal extends GenericEntity {
       quantity,
       mealId
     });
-
     return { ...product, ...mealProduct };
   }
 

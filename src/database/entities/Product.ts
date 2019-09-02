@@ -14,7 +14,7 @@ import { User } from './User';
 import { ProductPortion } from './ProductPortion';
 import { friscoApi } from '../../services/FriscoApi';
 import { SqliteENUM } from '../decorators';
-import { EntityType } from '../types';
+import { EntityType, EntityRequired } from '../types';
 import { Optional, Omit } from 'utility-types';
 import { PRODUCT_UNITS } from '../../common/consts';
 import { ilewazyApi } from '../../services/IlewazyApi';
@@ -26,7 +26,7 @@ import { Macro } from '../embeds/Macro';
 
 @Entity('product')
 // @Unique(['name', 'userId'])
-// @Unique(['name', 'verified'])
+// @Unique(['name', 'isVerified'])
 @Unique(['barcode', 'userId'])
 @Unique(['barcode', 'isVerified'])
 export class Product extends GenericEntity {
@@ -41,7 +41,7 @@ export class Product extends GenericEntity {
   name!: string;
 
   @Column('text', { nullable: true })
-  barcode!: BarcodeId | null
+  barcode!: BarcodeId | null;
 
   @Column(type => Macro)
   macro!: Macro;
@@ -120,13 +120,13 @@ export class Product extends GenericEntity {
           const parsedProduct = {
             ...data,
             images: product.images.map(url => ({ url })),
-            verified: true,
+            isVerified: true,
             macro: { carbs, prots, fats, kcal },
           }
           const query = {
             where: {
               name: product.name,
-              verified: true
+              isVerified: true
             }
           }
           return this.findOneOrSave(query, parsedProduct);
@@ -168,7 +168,7 @@ export class Product extends GenericEntity {
         const parsedProduct = {
           ...data,
           images: images.map(url => ({ url })),
-          verified: true,
+          isVerified: true,
           macro
         }
         return this.save(parsedProduct);
@@ -182,6 +182,10 @@ export class Product extends GenericEntity {
 
 }
 
-export type IProduct = Omit<EntityType<Product>, 'portion'>;
+export type IProduct = EntityType<Product, 'portion'>;
 export type IProductOptional = Optional<IProduct, 'id' | 'updatedAt' | 'createdAt' | 'mealProducts' | 'portions' | 'user' | 'isVerified' | 'images'>;
+export type IProductRequired = EntityRequired<IProduct,
+  | 'name'
+  | 'macro'
+>;
 export type IProductMerged = IProduct & IMealProduct;
