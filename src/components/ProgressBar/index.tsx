@@ -38,6 +38,7 @@ export const ProgressBar = ({
       vertical={vertical}
       length={length}
       marginVertical={marginVertical}
+      rounded={rounded}
     >
       <BackgroundStripe
         vertical={vertical}
@@ -62,10 +63,13 @@ const Container = styled.View<{
   vertical: boolean
   length: string
   marginVertical: number
+  rounded: boolean
 }>`
   position: relative;
   height: ${props => props.vertical ? props.length : 'auto'};
   margin: ${props => `${props.marginVertical}px 0`};
+  overflow: hidden;
+  border-radius: ${props => props.rounded ? '50px' : '0px'};
 `
 
 const BackgroundStripe = styled.View<{
