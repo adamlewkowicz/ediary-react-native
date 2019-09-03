@@ -98,7 +98,12 @@ const Home = (props: HomeProps) => {
           value={props.appDate}
           onChange={date => dispatch(Actions.appDateUpdated(date))}
         />
-        <RoundedStripe value={props.macroNeedsLeft.kcal.ratio} />
+        <RoundedStripe
+          value={props.macroNeedsLeft.kcal.ratio}
+          needed={props.macroNeedsLeft.kcal.needed}
+          data={props.macroNeedsLeft.kcal}
+          colors={['#815DCF', '#D4C1FD']}  
+        />
         <MacroCards>
           {BASE_MACRO_ELEMENTS.map(element => (
             <MacroCard
@@ -120,7 +125,7 @@ const Home = (props: HomeProps) => {
               toggledProductId={props.toggledProductId}
               onProductAdd={() => handleProductFinderNavigation(item)}
               onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
-              onLongPress={IS_DEV || item.type === 'template' ? undefined : () => handleMealDelete(item)}
+              onLongPress={item.type === 'template' ? undefined : () => handleMealDelete(item)}
               {...item.type === 'meal' && {
                 onProductDelete: (productId) => dispatch(Actions.mealProductDelete(item.id, productId)),
                 onProductToggle: (productId) => dispatch(Actions.productToggled(productId)),

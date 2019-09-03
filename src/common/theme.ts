@@ -18,7 +18,8 @@ export const themeProps = {
   secondaryColor: '#C7C6CB',
   fontSize: 15,
   colors: {
-    lightBlue: '#6BB4DD'
+    lightBlue: '#6BB4DD',
+    gray: '#BCBAC6',
   }
 }
 
