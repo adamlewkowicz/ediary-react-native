@@ -20,6 +20,7 @@ export const themeProps = {
   colors: {
     lightBlue: '#6BB4DD',
     gray: '#BCBAC6',
+    lighterBlue: '#f7fdff',
   }
 }
 

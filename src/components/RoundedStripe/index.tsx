@@ -7,45 +7,41 @@ import Svg, {
 } from 'react-native-svg';
 import { useSpring, config, animated } from 'react-spring';
 import styled from 'styled-components/native';
-import { Theme } from '../../common/theme';
+import { Theme, themeProps } from '../../common/theme';
 
-interface RoundedStripeProps {
-  value: number
-  needed: number
+interface KcalChartProps {
   data: {
     diff: number
     ratio: number
     eaten: number
     needed: number
   }
-  colors: [string, string]
 }
-export const RoundedStripe = (props: RoundedStripeProps) => {
-  const { value, colors, data } = props;
-  const [firstColor, secondColor] = colors;
+export const KcalChart = (props: KcalChartProps) => {
+  const width = 170;
+  const height = 170;
+  const thickness = 10;
+  const radius = 80;
   const style: any = useSpring({
-    from: { value: data.ratio },
-    to: { value: data.ratio },
+    from: { value: props.data.ratio },
+    to: { value: props.data.ratio },
     delay: 100,
     config: config.wobbly
   });
-  const width = 200;
-  const height = 200;
-  const positionFromTop = 82;
 
   return (
     <Container>
-      <Svg height={height} width={width} style={{ alignSelf: 'center', position: 'relative' }}>
+      <SvgContainer height={height} width={width}>
         <Defs>
           <LinearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
             <Stop
               offset="0%"
-              stopColor={secondColor}
+              stopColor="#C0FDCA"
               stopOpacity="1"
             />
             <Stop
               offset="100%"
-              stopColor={firstColor}
+              stopColor="#61C4D1"
               stopOpacity="1"
             />
           </LinearGradient>
@@ -53,17 +49,23 @@ export const RoundedStripe = (props: RoundedStripeProps) => {
         <AnimatedCircle
           cx={width / 2}
           cy={height / 2}
-          r="90"
-          fill="white"
-          stroke="url(#grad1)"
-          strokeWidth="13"
-          // 407
-          strokeDasharray="407"
-          strokeDashoffset={705}
-          strokeLinecap="round"
-          transform={`rotate(180 ${width / 2} ${positionFromTop})`}
+          r={radius}
+          fill="none"
+          stroke={themeProps.colors.lighterBlue}
+          strokeWidth={thickness}
         />
-      </Svg>
+        <AnimatedCircle
+          cx={width / 2}
+          cy={height / 2}
+          r={radius}
+          fill="none"
+          stroke="url(#grad1)"
+          strokeWidth={thickness}
+          strokeDasharray="1000"
+          strokeDashoffset={style.value.interpolate(...interpolation)}
+          strokeLinecap="round"
+        />
+      </SvgContainer>
       <Info>
         <Eaten>{props.data.eaten}</Eaten>
         <Needed>z {props.data.needed} kalorii</Needed>
@@ -71,6 +73,12 @@ export const RoundedStripe = (props: RoundedStripeProps) => {
     </Container>
   );
 }
+
+const SvgContainer = styled(Svg)`
+  align-self: center;
+  position: relative;
+  transform: rotate(-180deg);
+`
 
 const Container = styled.View`
   position: relative;
@@ -81,7 +89,7 @@ const Info = styled.View`
   align-items: center;
   align-self: center;
   position: absolute;
-  top: 38px;
+  top: 50px;
   margin: 0 auto;
 `
 
@@ -101,8 +109,8 @@ const Needed = styled.Text<{
 `
 
 const interpolation = [
-  [1, 25, 50, 75, 100],
-  [249, 205, 185, 155, 125]
+  [1, 100],
+  [1000, 430]
 ];
 
 const AnimatedCircle = animated(Circle);
