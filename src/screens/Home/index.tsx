@@ -10,7 +10,6 @@ import { MacroCard } from '../../components/MacroCard';
 import { nutritionColors } from '../../common/theme';
 import styled from 'styled-components/native';
 import { MealListItem } from '../../components/MealListItem';
-import { FloatingButton } from '../../components/FloatingButton';
 import { BasicInput } from '../../components/BasicInput';
 import { NavigationScreenProps } from 'react-navigation';
 import { ProductFindParams } from '../ProductFind';
@@ -31,7 +30,6 @@ interface HomeProps extends NavigationScreenProps {
 }
 const Home = (props: HomeProps) => {
   const [name, setName] = useState('Trening');
-  const [menuOpened, setMenuOpened] = useState(false);
   const { dispatch } = props;
 
   useEffect(() => {
@@ -88,10 +86,6 @@ const Home = (props: HomeProps) => {
   
   return (
     <Container>
-      <FloatingButton
-        children="+"
-        onPress={() => setMenuOpened(status => !status)}
-      />
       <ScrollView>
         <DateChanger
           value={props.appDate}
