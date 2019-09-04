@@ -8,21 +8,22 @@ import {
   Unique,
   Like,
 } from 'typeorm';
-import { MealProduct, IMealProduct } from './MealProduct';
-import { BarcodeId, ProductId, UserId, ProductUnit } from '../../types';
-import { User } from './User';
-import { ProductPortion } from './ProductPortion';
-import { friscoApi } from '../../services/FriscoApi';
-import { SqliteENUM } from '../decorators';
-import { EntityType, EntityRequired } from '../types';
+import { MealProduct, IMealProduct } from '../MealProduct';
+import { BarcodeId, ProductId, UserId, ProductUnit } from '../../../types';
+import { User } from '../User';
+import { ProductPortion } from '../ProductPortion';
+import { friscoApi } from '../../../services/FriscoApi';
+import { SqliteENUM } from '../../decorators';
+import { EntityType, EntityRequired } from '../../types';
 import { Optional } from 'utility-types';
-import { PRODUCT_UNITS } from '../../common/consts';
-import { ilewazyApi } from '../../services/IlewazyApi';
-import { mapAsyncSequence, filterByUniqueId } from '../../common/utils';
+import { PRODUCT_UNITS } from '../../../common/consts';
+import { ilewazyApi } from '../../../services/IlewazyApi';
+import { mapAsyncSequence, filterByUniqueId } from '../../../common/utils';
 import { MinLength } from 'class-validator';
-import { GenericEntity } from '../generics/GenericEntity';
-import { ProductImage } from './ProductImage';
-import { Macro } from '../embeds/Macro';
+import { GenericEntity } from '../../generics/GenericEntity';
+import { ProductImage } from '../ProductImage';
+import { Macro } from '../../embeds/Macro';
+import { FindMostUsedResult } from './types';
 
 @Entity('product')
 // @Unique(['name', 'userId'])
@@ -106,6 +107,15 @@ export class Product extends GenericEntity {
       where: { name: Like(`%${name}%`) },
       take: limit
     });
+  }
+
+  static findMostUsed(): Promise<FindMostUsedResult[]> {
+    return MealProduct
+      .createQueryBuilder('meal_product')
+      .select('meal_product.productId', 'productId')
+      .addSelect('SUM(meal_product.productId)', 'count')
+      .limit(50)
+      .getRawMany();
   }
 
   static async findAndFetchByNameLike(name: string): Promise<Product[]> {
