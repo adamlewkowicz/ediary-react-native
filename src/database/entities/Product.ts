@@ -15,7 +15,7 @@ import { ProductPortion } from './ProductPortion';
 import { friscoApi } from '../../services/FriscoApi';
 import { SqliteENUM } from '../decorators';
 import { EntityType, EntityRequired } from '../types';
-import { Optional, Omit } from 'utility-types';
+import { Optional } from 'utility-types';
 import { PRODUCT_UNITS } from '../../common/consts';
 import { ilewazyApi } from '../../services/IlewazyApi';
 import { mapAsyncSequence, filterByUniqueId } from '../../common/utils';
@@ -116,10 +116,19 @@ export class Product extends GenericEntity {
 
       if (fetchedProducts.length) {
         const foundOrCreatedProducts = await mapAsyncSequence(fetchedProducts, product => {
-          const { carbs, prots, fats, kcal, ...data } = product;
+          const {
+            images = [],
+            carbs,
+            prots,
+            fats,
+            kcal,
+            unit,
+            portion,
+            ...data
+          } = product;
           const parsedProduct = {
             ...data,
-            images: product.images.map(url => ({ url })),
+            images: images.map(url => ({ url })),
             isVerified: true,
             macro: { carbs, prots, fats, kcal },
           }

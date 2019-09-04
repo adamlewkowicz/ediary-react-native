@@ -5,7 +5,7 @@ import {
   NormalizedProduct,
 } from './types';
 import { round } from '../../common/utils';
-import { ProductUnit } from '../../types';
+import { ProductUnit, PortionType } from '../../types';
 
 export class IlewazyApi {
 
@@ -36,6 +36,7 @@ export class IlewazyApi {
       let carbs = Number(record.weglowodany);
       let fats = Number(record.tluszcz);
       const unit: ProductUnit = 'g';
+      const defaultPortionType: PortionType = 'portion';
 
       if (name.charAt(name.length - 1) === '.') {
         name = name.slice(0, -1);
@@ -58,7 +59,7 @@ export class IlewazyApi {
         .entries(record.unitdata)
         .filter(([key]) => knownPortionTypes.includes(key))
         .map(([key, data]) => ({
-          type: portionMap[key as IleWazyPortionType],
+          type: portionMap[key as IleWazyPortionType] || defaultPortionType,
           value: Number(data!.unit_weight),
           unit,
         }));

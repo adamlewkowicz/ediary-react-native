@@ -1,4 +1,4 @@
-import { BarcodeId, MacroElement, MacroElements } from '../../types';
+import { BarcodeId, MacroElement, MacroElements, PortionType } from '../../types';
 import { round, getNumAndUnitFromString } from '../../common/utils';
 import { baseMacro } from '../../common/helpers';
 import { NormalizedProduct } from '../IlewazyApi/types';
@@ -126,8 +126,9 @@ export class FriscoApi {
       const { value, unit } = getNumAndUnitFromString(heading);
 
       if ((unit === 'g' || unit === 'ml') && value !== null) {
+        const type: PortionType = 'portion';
         return [{
-          type: null,
+          type,
           value,
           unit
         }];
