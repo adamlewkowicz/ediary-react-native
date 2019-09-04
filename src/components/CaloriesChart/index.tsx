@@ -9,7 +9,7 @@ import { useSpring, config, animated } from 'react-spring';
 import styled from 'styled-components/native';
 import { Theme, themeProps } from '../../common/theme';
 
-interface KcalChartProps {
+interface CaloriesChartProps {
   data: {
     diff: number
     ratio: number
@@ -17,7 +17,7 @@ interface KcalChartProps {
     needed: number
   }
 }
-export const KcalChart = (props: KcalChartProps) => {
+export const CaloriesChart = (props: CaloriesChartProps) => {
   const width = 170;
   const height = 170;
   const thickness = 10;
