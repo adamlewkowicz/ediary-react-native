@@ -2,12 +2,14 @@ import {
   IleWazyPayload,
   PortionMap,
   IleWazyPortionType,
+  NormalizedProduct,
 } from './types';
 import { round } from '../../common/utils';
+import { ProductUnit } from '../../types';
 
 export class IlewazyApi {
 
-  async findByName(name: string) {
+  async findByName(name: string): Promise<NormalizedProduct[]> {
     const parsedName = encodeURIComponent(name);
 
     const response = await fetch(
@@ -33,6 +35,7 @@ export class IlewazyApi {
       const kcal = Number(record.energia);
       let carbs = Number(record.weglowodany);
       let fats = Number(record.tluszcz);
+      const unit: ProductUnit = 'g';
 
       if (name.charAt(name.length - 1) === '.') {
         name = name.slice(0, -1);
@@ -56,14 +59,15 @@ export class IlewazyApi {
         .filter(([key]) => knownPortionTypes.includes(key))
         .map(([key, data]) => ({
           type: portionMap[key as IleWazyPortionType],
-          value: Number(data!.unit_weight)
+          value: Number(data!.unit_weight),
+          unit,
         }));
 
       const images = Object
         .values(record.unitdata)
         .map(unitdata => `http://static.ilewazy.pl/dziennik/470/${unitdata!.filename}`);
 
-      const normalizedProduct = {
+      const normalizedProduct: NormalizedProduct = {
         _id,
         name,
         prots,
