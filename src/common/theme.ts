@@ -13,14 +13,21 @@ export const nutritionColorSolid = {
 }
 
 export const themeProps = {
+  /** @deprecated */
   fontFamily: 'DMSans-Regular',
   focusColor: '#5361E0',
   secondaryColor: '#C7C6CB',
   fontSize: 15,
+  font: {
+    regular: 'DMSans-Regular',
+    medium: 'DMSans-Medium',
+    size: 15,
+  },
   colors: {
     lightBlue: '#6BB4DD',
-    gray: '#BCBAC6',
     lighterBlue: '#f7fdff',
+    gray: '#BCBAC6',
+    lightGray: '#f1f0f5',
   }
 }
 

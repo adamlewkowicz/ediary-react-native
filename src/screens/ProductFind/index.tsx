@@ -125,6 +125,11 @@ export const ProductFind = (props: ProductFindProps) => {
           onPress={handleBarcodeScanNavigation}
         />
       </Block>
+      {!name.length && (
+        <Title marginVertical={15}>
+          Ostatnie produkty:
+        </Title>
+      )}
       <FlatList
         data={products}
         keyExtractor={product => product.id.toString()}
@@ -145,6 +150,18 @@ export const ProductFind = (props: ProductFindProps) => {
 const Container = styled.View`
   padding: 20px;
 `
+
+const Title = styled.Text<{
+  theme: Theme
+  marginVertical?: number
+}>`
+  font-family: ${props => props.theme.font.medium};
+  text-transform: uppercase;
+  color: ${props => props.theme.colors.gray};
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  margin-vertical: ${props => props.marginVertical || 0};
+`;
 
 const NotFoundInfo = styled.Text<{
   theme: Theme
