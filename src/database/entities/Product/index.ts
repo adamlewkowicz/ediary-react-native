@@ -23,7 +23,7 @@ import { MinLength } from 'class-validator';
 import { GenericEntity } from '../../generics/GenericEntity';
 import { ProductImage } from '../ProductImage';
 import { Macro } from '../../embeds/Macro';
-import { FindMostUsedResult } from './types';
+import { FindMostUsedResult, FindMostProductIdsResult } from './types';
 
 @Entity('product')
 // @Unique(['name', 'userId'])
@@ -109,13 +109,24 @@ export class Product extends GenericEntity {
     });
   }
 
-  static findMostUsed(): Promise<FindMostUsedResult[]> {
-    return MealProduct
+  static async findMostUsed(): Promise<FindMostUsedResult[]> {
+    const productIds: FindMostProductIdsResult[] = await MealProduct
       .createQueryBuilder('meal_product')
       .select('meal_product.productId', 'productId')
-      .addSelect('SUM(meal_product.productId)', 'count')
-      .limit(50)
+      .addSelect('COUNT(*)', 'count')
+      .groupBy('meal_product.productId')
+      .orderBy('count', 'DESC')
+      .limit(100)
       .getRawMany();
+
+    const productIds_ = productIds.map(data => data.productId);
+
+    const products = await Product.findByIds(productIds_);
+    const normalized: FindMostUsedResult[] = products.map((product, index) => ({
+      product,
+      ...productIds[index]
+    }));
+    return normalized;
   }
 
   static async findAndFetchByNameLike(name: string): Promise<Product[]> {

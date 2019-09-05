@@ -18,17 +18,16 @@ test('Product.findMostUsed', async () => {
     productId: product.id,
     quantity: 150
   });
-  // await MealProduct.save({
-  //   mealId: meal.id,
-  //   productId: product2.id,
-  //   quantity: 150
-  // });
+  await MealProduct.save({
+    mealId: meal.id,
+    productId: product2.id,
+    quantity: 150
+  });
 
-  const data = await Product.findMostUsed();
-  console.log(data)
+  const [firstProduct, secondProduct] = await Product.findMostUsed();
 
-  expect(data).toEqual([
-    { productId: product.id, count: 2 },
-    // { productId: product2.id, count: 1 }
-  ]);
+  expect(firstProduct.productId).toBe(product.id);
+  expect(firstProduct.count).toBe(2);
+  expect(secondProduct.productId).toBe(product2.id);
+  expect(secondProduct.count).toBe(1);
 });
