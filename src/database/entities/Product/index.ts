@@ -110,7 +110,7 @@ export class Product extends GenericEntity {
   }
 
   static async findMostUsed(): Promise<FindMostUsedResult[]> {
-    const productIds: FindMostProductIdsResult[] = await MealProduct
+    const result: FindMostProductIdsResult[] = await MealProduct
       .createQueryBuilder('meal_product')
       .select('meal_product.productId', 'productId')
       .addSelect('COUNT(*)', 'count')
@@ -119,14 +119,27 @@ export class Product extends GenericEntity {
       .limit(100)
       .getRawMany();
 
-    const productIds_ = productIds.map(data => data.productId);
+    const productIds = result.map(data => data.productId);
 
-    const products = await Product.findByIds(productIds_);
+    const products = await Product.findByIds(productIds);
     const normalized: FindMostUsedResult[] = products.map((product, index) => ({
       product,
-      ...productIds[index]
+      ...result[index]
     }));
     return normalized;
+  }
+
+  static async findRecentlyUsed(): Promise<Product[]> {
+    const result: { id: ProductId }[] = await MealProduct
+      .createQueryBuilder('meal_product')
+      .select('meal_product.productId', 'id')
+      .groupBy('meal_product.productId')
+      .orderBy('meal_product.mealId', 'DESC')
+      .getRawMany();
+
+    const productIds = result.map(data => data.id);
+
+    return Product.findByIds(productIds);
   }
 
   static async findAndFetchByNameLike(name: string): Promise<Product[]> {
