@@ -16,7 +16,7 @@ import {
   normalizeMeal,
 } from './helpers';
 import { DiaryActions } from '../../actions';
-import { getDayFromDate, getTimeFromDate } from '../../../common/utils';
+import { getDayFromDate, getTimeFromDate, filterByUniqueId } from '../../../common/utils';
 import { DiaryState, DiaryMeal, DiaryMealTemplate } from './types';
 import { defaultTemplates } from '../../../common/helpers';
 
@@ -90,7 +90,7 @@ export function diaryReducer(
     }
     case MEAL_ADDED: {
       const { templateId } = action.meta;
-      const { meal: normalizedMeal, products } = normalizeMeal(action.payload, templateId);
+      const { meal: normalizedMeal, products, rawProducts } = normalizeMeal(action.payload, templateId);
 
       if (templateId !== null) {
         return {
@@ -107,7 +107,8 @@ export function diaryReducer(
       return {
         ...state,
         products: [...state.products, ...products],
-        meals: [...state.meals, { ...normalizedMeal, type: 'meal' }]
+        meals: [...state.meals, { ...normalizedMeal, type: 'meal' }],
+        recentProducts: [...rawProducts, ...state.recentProducts].filter(filterByUniqueId)
       }
     }
     case MEAL_DELETED: return {
@@ -174,7 +175,10 @@ export function diaryReducer(
           isToggled: false,
           calcedMacro: calcMacroByQuantity(action.payload.macro, action.payload.quantity),
         }
-      ]
+      ],
+      recentProducts: action.meta.rawProduct
+        ? [action.meta.rawProduct, ...state.recentProducts].filter(filterByUniqueId)
+        : state.recentProducts
     }
     case MEAL_PRODUCT_DELETED: return {
       ...state,

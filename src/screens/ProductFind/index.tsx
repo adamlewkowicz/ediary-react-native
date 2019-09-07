@@ -1,11 +1,10 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components/native';
 import { sortByMostAccurateName, debounce_ } from '../../common/utils';
-import { FlatList } from 'react-native';
 import { Product } from '../../database/entities';
 import { ProductListItem } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
-import { NavigationScreenProps } from 'react-navigation';
+import { NavigationScreenProps, SectionList } from 'react-navigation';
 import { Theme } from '../../common/theme';
 import { Block } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
@@ -14,6 +13,8 @@ import { Screen, BarcodeId } from '../../types';
 import { Button } from 'react-native-ui-kitten';
 import { ProductCreateParams } from '../ProductCreate';
 import { useConnected } from '../../common/hooks';
+import { useSelector } from 'react-redux';
+import { StoreState } from '../../store';
 
 const debounceA = debounce_();
 
@@ -28,6 +29,7 @@ export const ProductFind = (props: ProductFindProps) => {
   const { current: params } = useRef<ProductFindParams>({
     onItemPress: props.navigation.getParam('onItemPress')
   });
+  const recentProducts = useSelector((state: StoreState) => state.diary.recentProducts);
 
   function handleProductSearch(name: string) {
     setName(name);
@@ -125,14 +127,16 @@ export const ProductFind = (props: ProductFindProps) => {
           onPress={handleBarcodeScanNavigation}
         />
       </Block>
-      {!name.length && (
-        <Title marginVertical={15}>
-          Ostatnie produkty:
-        </Title>
-      )}
-      <FlatList
+      <SectionList
         data={products}
-        keyExtractor={product => product.id.toString()}
+        keyExtractor={(product, index) => `${product.id}${index}`}
+        renderSectionHeader={({section: { title }}) => (
+          <Title marginVertical={15}>{title}</Title>
+        )}
+        sections={[
+          { title: 'Znalezione produkty:', data: products },
+          { title: 'Ostatnie produkty:', data: recentProducts },
+        ]}
         renderItem={({ item, index }) => (
           <ProductListItem
             product={item}

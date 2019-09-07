@@ -129,7 +129,7 @@ export const mealProductAdd = (
   productId: ProductId,
   quantity?: number
 ): Thunk => async (dispatch) => {
-  const { product, action } = await Meal.addProduct(
+  const { product, action, rawProduct } = await Meal.addProduct(
     mealId,
     productId,
     quantity
@@ -140,7 +140,7 @@ export const mealProductAdd = (
     );
   } else {
     dispatch(
-      mealProductAdded(mealId, product)
+      mealProductAdded(mealId, product, rawProduct)
     );
   }
 }

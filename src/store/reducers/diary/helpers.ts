@@ -29,6 +29,9 @@ export const normalizeMeals = <T extends Meal[]>(
       templateId,
     }
   });
+  const rawProducts = payload.flatMap(({ mealProducts = [] }) =>
+    mealProducts.map(mealProduct => mealProduct.product)
+  );
   const products = payload.flatMap(({ mealProducts = [] }) => {
     return mealProducts.map(mealProduct => {
       const { meal, product, ...data } = mealProduct;
@@ -43,7 +46,7 @@ export const normalizeMeals = <T extends Meal[]>(
       }
     })
   });
-  return { meals, products };
+  return { meals, products, rawProducts };
 }
 
 export const normalizeMeal = (
@@ -62,6 +65,7 @@ export const normalizeMeal = (
     templateId,
     type,
   }
+  const rawProducts = mealProducts.map(mealProduct => mealProduct.product);
   const normalizedProducts = mealProducts.map(mealProduct => {
     const { meal, product, ...data } = mealProduct;
     const normalizedProduct = {
@@ -77,6 +81,7 @@ export const normalizeMeal = (
   return {
     meal: normalizedMeal,
     products: normalizedProducts,
+    rawProducts,
   }
 }
 

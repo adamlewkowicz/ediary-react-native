@@ -10,7 +10,7 @@ import {
   MEAL_ADDED,
   MEALS_LOADED,
 } from '../../consts';
-import { Meal, IProductMerged, IProduct } from '../../../database/entities';
+import { Meal, IProductMerged, IProduct, Product } from '../../../database/entities';
 import { ProductId, TemplateId, MealId } from '../../../types';
 import { DiaryMeal, DiaryProduct, DiaryMealId } from '../../reducers/diary';
 
@@ -28,7 +28,10 @@ export type MealDeleted = {
 export type MealProductAdded = {
   type: typeof MEAL_PRODUCT_ADDED
   payload: IProductMerged
-  meta: { mealId: MealId }
+  meta: {
+    mealId: MealId
+    rawProduct?: Product
+  }
 }
 
 export type MealProductDeleted = {

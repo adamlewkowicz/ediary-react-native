@@ -84,16 +84,17 @@ export class Meal extends GenericEntity {
     mealId: MealId,
     productId: ProductId,
     quantity?: number
-  ): Promise<{ product: IProductMerged, action: 'create' | 'update' }> {
+  ): Promise<{ product: IProductMerged, rawProduct: Product, action: 'create' | 'update' }> {
     const product = await Product.findOneOrFail(productId);
     const mealProduct = await MealProduct.findOne({ mealId, productId });
     const portionValue = quantity ? quantity : product.portion;
+    const rawProduct = product;
 
     if (mealProduct) {
       mealProduct.quantity += portionValue;
       await mealProduct.save();
       const mergedProduct = { ...mealProduct, ...product };
-      return { product: mergedProduct, action: 'update'  };
+      return { product: mergedProduct, rawProduct, action: 'update' };
     } else {
       const createdMealProduct = await MealProduct.save({
         quantity: portionValue,
@@ -101,7 +102,7 @@ export class Meal extends GenericEntity {
         productId
       });
       const mergedProduct = { ...createdMealProduct, ...product };
-      return { product: mergedProduct, action: 'create' };
+      return { product: mergedProduct, rawProduct, action: 'create' };
     }
   }
 
