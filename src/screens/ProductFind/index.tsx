@@ -15,6 +15,8 @@ import { ProductCreateParams } from '../ProductCreate';
 import { useConnected } from '../../common/hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
+import { FoundProducts, FoundProductType } from './types';
+import { ilewazyApi } from '../../services/IlewazyApi';
 
 const debounceA = debounce_();
 
@@ -30,6 +32,7 @@ export const ProductFind = (props: ProductFindProps) => {
     onItemPress: props.navigation.getParam('onItemPress')
   });
   const recentProducts = useSelector((state: StoreState) => state.diary.recentProducts);
+  const [foundProducts, setFoundProducts] = useState<FoundProducts>([]);
 
   function handleProductSearch(name: string) {
     setName(name);
@@ -38,11 +41,14 @@ export const ProductFind = (props: ProductFindProps) => {
     const methodName = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
 
     debounceA(async () => {
-      const foundProducts = await Product[methodName](trimmedName);
-      const sortedProducts = foundProducts
-        .sort(sortByMostAccurateName(name));
+      const fetchedProducts = await ilewazyApi.findByName(name);
+      const type: FoundProductType = 'fetched';
 
-      setProducts(sortedProducts);
+      const parsedProducts = fetchedProducts
+        .sort(sortByMostAccurateName(name))
+        .map(data => ({ type, data }))
+
+      setFoundProducts(parsedProducts);
       setLoading(false);
     }, 600);
   }
@@ -128,18 +134,17 @@ export const ProductFind = (props: ProductFindProps) => {
         />
       </Block>
       <SectionList
-        data={products}
         keyExtractor={(product, index) => `${product.id}${index}`}
         renderSectionHeader={({section: { title }}) => (
           <Title marginVertical={15}>{title}</Title>
         )}
         sections={[
-          { title: 'Znalezione produkty:', data: products },
+          { title: 'Znalezione produkty:', data: foundProducts },
           { title: 'Ostatnie produkty:', data: recentProducts },
         ]}
         renderItem={({ item, index }) => (
           <ProductListItem
-            product={item}
+            product={'type' in item ? item.data : item}
             hideBottomLine={index === products.length - 1}
             onPress={() => params.onItemPress && params.onItemPress(item)}
             phrase={name}
