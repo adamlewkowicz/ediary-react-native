@@ -1,4 +1,5 @@
 import { SvgProps } from 'react-native-svg';
+import { Theme } from './common/theme';
 
 declare global {
   declare module "react-native-swipeable" {
@@ -9,4 +10,8 @@ declare global {
     const content: React.ComponentClass<SvgProps, any>
     export default content
   }
+}
+
+declare module 'styled-components' {
+  export interface DefaultTheme extends Theme {}
 }
