@@ -52,11 +52,14 @@ export type PortionMap = {
 export interface NormalizedProduct {
   _id: string | number | FriscoProductId
   name: string
-  portion?: number | null
-  prots: number
-  carbs: number
-  fats: number
-  kcal: number
+  portion: number
+  brand?: string
+  macro: {
+    prots: number
+    carbs: number
+    fats: number
+    kcal: number
+  }
   portions: {
     type: PortionType
     unit: ProductUnit

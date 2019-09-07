@@ -9,6 +9,8 @@ import { ProductUnit, PortionType } from '../../types';
 
 export class IlewazyApi {
 
+  private defaultPortion = 100;
+
   async findByName(name: string): Promise<NormalizedProduct[]> {
     const parsedName = encodeURIComponent(name);
 
@@ -64,6 +66,8 @@ export class IlewazyApi {
           unit,
         }));
 
+      const portion = portions[0] ? portions[0].value : this.defaultPortion;
+
       const images = Object
         .values(record.unitdata)
         .map(unitdata => `http://static.ilewazy.pl/dziennik/470/${unitdata!.filename}`);
@@ -71,12 +75,15 @@ export class IlewazyApi {
       const normalizedProduct: NormalizedProduct = {
         _id,
         name,
-        prots,
-        carbs,
-        fats,
-        kcal,
         portions,
         images,
+        portion,
+        macro: {
+          prots,
+          carbs,
+          fats,
+          kcal
+        }
       }
       
       return normalizedProduct;

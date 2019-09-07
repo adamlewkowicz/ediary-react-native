@@ -8,6 +8,8 @@ import { FriscoQueryResponse } from './types';
 
 export class FriscoApi {
 
+  private defaultPortion = 100;
+
   private async findAndParseByQuery(
     query: string | BarcodeId
   ): Promise<{
@@ -139,12 +141,12 @@ export class FriscoApi {
 
     return {
       _id,
+      portion: portion === null ? this.defaultPortion : portion,
       name,
       description,
-      portion,
       portions,
       unit,
-      ...macro
+      macro,
     }
   }
 
@@ -193,7 +195,7 @@ export class FriscoApi {
         kcal: sustenanceCalories
       });
   
-      const normalizedProduct = {
+      const normalizedProduct: NormalizedProduct = {
         _id, 
         name, 
         description,
@@ -204,7 +206,7 @@ export class FriscoApi {
         brand,
         producer,
         portions,
-        ...macro
+        macro,
       }
   
       return [normalizedProduct];

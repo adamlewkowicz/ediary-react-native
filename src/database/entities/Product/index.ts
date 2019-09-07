@@ -152,10 +152,6 @@ export class Product extends GenericEntity {
         const foundOrCreatedProducts = await mapAsyncSequence(fetchedProducts, product => {
           const {
             images = [],
-            carbs,
-            prots,
-            fats,
-            kcal,
             unit,
             portion,
             ...data
@@ -164,7 +160,6 @@ export class Product extends GenericEntity {
             ...data,
             images: images.map(url => ({ url })),
             isVerified: true,
-            macro: { carbs, prots, fats, kcal },
           }
           const query = {
             where: {
@@ -201,18 +196,12 @@ export class Product extends GenericEntity {
           portion,
           portions,
           images = [],
-          carbs,
-          prots,
-          fats,
-          kcal,
           ...data
         } = product;
-        const macro = { carbs, prots, fats, kcal };
         const parsedProduct = {
           ...data,
           images: images.map(url => ({ url })),
           isVerified: true,
-          macro
         }
         return this.save(parsedProduct);
       });
