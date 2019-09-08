@@ -90,7 +90,15 @@ export function diaryReducer(
     }
     case MEAL_ADDED: {
       const { templateId } = action.meta;
-      const { meal: normalizedMeal, products, rawProducts } = normalizeMeal(action.payload, templateId);
+      const {
+        meal: normalizedMeal,
+        products,
+        rawProducts,
+      } = normalizeMeal(action.payload, templateId);
+      const recentProducts = [
+        ...rawProducts,
+        ...state.recentProducts
+      ].filter(filterByUniqueId);
 
       if (templateId !== null) {
         return {
@@ -101,14 +109,15 @@ export function diaryReducer(
               return { ...normalizedMeal, isToggled: true };
             }
             return meal;
-          })
+          }),
+          recentProducts
         }
       }
       return {
         ...state,
         products: [...state.products, ...products],
         meals: [...state.meals, { ...normalizedMeal, type: 'meal' }],
-        recentProducts: [...rawProducts, ...state.recentProducts].filter(filterByUniqueId)
+        recentProducts
       }
     }
     case MEAL_DELETED: return {
