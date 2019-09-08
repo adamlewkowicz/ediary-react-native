@@ -148,6 +148,8 @@ export class Product extends GenericEntity {
     if (savedProducts.length <= 3) {
       const fetchedProducts = await ilewazyApi.findByName(name);
 
+      await new Promise(r => setTimeout(r, 2000));
+
       if (fetchedProducts.length) {
         const foundOrCreatedProducts = await mapAsyncSequence(fetchedProducts, product => {
           const {

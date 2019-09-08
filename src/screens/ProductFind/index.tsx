@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
 
 const debounceA = debounce_();
+const debounceB = debounce_();
 
 interface ProductFindProps extends NavigationScreenProps {}
 export const ProductFind = (props: ProductFindProps) => {
@@ -29,22 +30,45 @@ export const ProductFind = (props: ProductFindProps) => {
   const { current: params } = useRef<ProductFindParams>({
     onItemPress: props.navigation.getParam('onItemPress')
   });
+  const [isTyping, setTyping] = useState(false);
   const recentProducts = useSelector((state: StoreState) => state.diary.recentProducts);
+  const [calls, setCalls] = useState(0);
+
+  async function finder(name: string) {
+    const methodName = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
+
+    if (!name.length) return;
+    setCalls(calls => calls + 1);
+    const foundProducts = await Product[methodName](name);
+    console.log({ foundProductsL: foundProducts.length })
+    // const sortedProducts = foundProducts
+    //   .sort(sortByMostAccurateName(name));
+
+    setProducts(foundProducts);
+    setLoading(false);
+  }
 
   function handleProductSearch(name: string) {
     setName(name);
+    setTyping(true);
     if (!isLoading) setLoading(true);
     const trimmedName = name.trim();
     const methodName = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
 
-    debounceA(async () => {
-      const foundProducts = await Product[methodName](trimmedName);
-      const sortedProducts = foundProducts
-        .sort(sortByMostAccurateName(name));
+    debounceB(() => setTyping(false), 1000);
 
-      setProducts(sortedProducts);
-      setLoading(false);
-    }, 600);
+    debounceA(() => finder(trimmedName), 800);
+    // debounceA(async () => {
+    //   if (!name.length) return;
+    //   setCalls(calls => calls + 1);
+    //   const foundProducts = await Product[methodName](trimmedName);
+    //   console.log({ foundProductsL: foundProducts.length })
+    //   // const sortedProducts = foundProducts
+    //   //   .sort(sortByMostAccurateName(name));
+
+    //   setProducts(foundProducts);
+    //   setLoading(false);
+    // }, 600);
   }
 
   function handleBarcodeScanNavigation() {
@@ -127,6 +151,8 @@ export const ProductFind = (props: ProductFindProps) => {
           onPress={handleBarcodeScanNavigation}
         />
       </Block>
+      <Title marginVertical={15}>Calls: {calls}</Title>
+      <Title marginVertical={15}>Calls: {calls}</Title>
       <SectionList
         data={products}
         keyExtractor={(product, index) => `${product.id}${index}`}
