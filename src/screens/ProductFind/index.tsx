@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
 
 const debounceA = debounce_();
+const FOUND_PRODUCTS = 'FOUND_PRODUCTS';
 
 interface ProductFindProps extends NavigationScreenProps {}
 export const ProductFind = (props: ProductFindProps) => {
@@ -130,11 +131,14 @@ export const ProductFind = (props: ProductFindProps) => {
       <SectionList
         data={products}
         keyExtractor={(product, index) => `${product.id}${index}`}
-        renderSectionHeader={({section: { title }}) => (
-          <Title marginVertical={15}>{title}</Title>
+        renderSectionHeader={({ section: { title, key }}) => (
+          <>
+            <Title marginVertical={15}>{title}</Title>
+            {key === FOUND_PRODUCTS && renderInfo()}
+          </>
         )}
         sections={[
-          { title: 'Znalezione produkty:', data: products },
+          { title: 'Znalezione produkty:', data: products, key: FOUND_PRODUCTS },
           { title: 'Ostatnie produkty:', data: recentProducts },
         ]}
         renderItem={({ item, index }) => (
@@ -146,7 +150,6 @@ export const ProductFind = (props: ProductFindProps) => {
           />
         )}
       />
-      {renderInfo()}
     </Container>
   );
 }
