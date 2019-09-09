@@ -5,7 +5,7 @@ import Svg, {
   LinearGradient,
   Stop,
 } from 'react-native-svg';
-import { useSpring, config, animated } from 'react-spring';
+import { useSpring, animated } from 'react-spring';
 import styled from 'styled-components/native';
 import { Theme, themeProps } from '../../common/theme';
 
@@ -18,10 +18,10 @@ interface CaloriesChartProps {
   }
 }
 export const CaloriesChart = (props: CaloriesChartProps) => {
-  const value = props.data.ratio > 100 ? 100 : props.data.ratio;
-  const style: any = useSpring({
-    from: { value },
-    to: { value },
+  const ratio = props.data.ratio > 100 ? 100 : props.data.ratio;
+  const ratioSpring: any = useSpring({
+    from: { value: ratio },
+    to: { value: ratio },
     delay: 100,
     config: {
       tension: 140,
@@ -66,7 +66,7 @@ export const CaloriesChart = (props: CaloriesChartProps) => {
           stroke="url(#grad1)"
           strokeWidth={thickness}
           strokeDasharray="1000"
-          strokeDashoffset={style.value.interpolate(...interpolation)}
+          strokeDashoffset={ratioSpring.value.interpolate(...interpolation)}
           strokeLinecap="round"
         />
       </SvgContainer>
@@ -97,9 +97,7 @@ const Info = styled.View`
   margin: 0 auto;
 `
 
-const Eaten = styled.Text<{
-  theme: Theme
-}>`
+const Eaten = styled.Text`
   font-family: ${props => props.theme.fontFamily};
   font-size: 36px;
   margin-bottom: 3px;
