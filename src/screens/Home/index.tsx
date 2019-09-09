@@ -3,7 +3,7 @@ import { Button } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
 import * as Actions from '../../store/actions';
 import { StoreState, Dispatch } from '../../store';
-import { FlatList, ScrollView, Alert } from 'react-native';
+import { FlatList, Alert } from 'react-native';
 import * as selectors from '../../store/selectors';
 import { DateChanger } from '../../components/DateChanger';
 import { MacroCard } from '../../components/MacroCard';
@@ -96,47 +96,55 @@ const Home = (props: HomeProps) => {
   
   return (
     <Container>
-      <ScrollView>
-        <DateChanger
-          value={props.appDate}
-          onChange={date => dispatch(Actions.appDateUpdated(date))}
-        />
-        <CaloriesChart data={props.macroNeedsLeft.kcal} />
-        <MacroCards>
-          {BASE_MACRO_ELEMENTS.map(element => (
-            <MacroCard
-              key={element}
-              colors={nutritionColors[element]}
-              percentages={props.macroNeedsLeft[element].ratio}
-              title={elementTitles[element]}
-              reached={props.macroNeedsLeft[element].eaten}
-              goal={props.macroNeedsLeft[element].needed}
-            />
-          ))}
-        </MacroCards>
-        <FlatList
-          data={props.mealsWithRatio}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({ item }) => (
-            <MealListItem
-              meal={item}
-              toggledProductId={props.toggledProductId}
-              onProductAdd={() => handleProductFinderNavigation(item)}
-              onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
-              onLongPress={IS_DEV || item.type === 'template' ? undefined : () => handleMealDelete(item)}
-              isBeingProcessed={processedMealId === item.id}
-              {...item.type === 'meal' && {
-                onProductDelete: (productId) => dispatch(Actions.mealProductDelete(item.id, productId)),
-                onProductToggle: (productId) => dispatch(Actions.productToggled(productId)),
-                onProductQuantityUpdate: (productId, quantity) => dispatch(
-                  Actions.mealProductQuantityUpdate(item.id, productId, quantity)
-                )
-              }}
-            />
-          )}
-        />
+      <DateChanger
+        value={props.appDate}
+        onChange={date => dispatch(Actions.appDateUpdated(date))}
+      />
+      <CaloriesChart data={props.macroNeedsLeft.kcal} />
+      <MacroCards>
+        {BASE_MACRO_ELEMENTS.map(element => (
+          <MacroCard
+            key={element}
+            colors={nutritionColors[element]}
+            percentages={props.macroNeedsLeft[element].ratio}
+            title={elementTitles[element]}
+            reached={props.macroNeedsLeft[element].eaten}
+            goal={props.macroNeedsLeft[element].needed}
+          />
+        ))}
+      </MacroCards>
+      <FlatList
+        data={props.mealsWithRatio}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item }) => (
+          <MealListItem
+            meal={item}
+            toggledProductId={props.toggledProductId}
+            onProductAdd={() => handleProductFinderNavigation(item)}
+            onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
+            onLongPress={IS_DEV || item.type === 'template' ? undefined : () => handleMealDelete(item)}
+            isBeingProcessed={processedMealId === item.id}
+            {...item.type === 'meal' && {
+              onProductDelete: (productId) => dispatch(Actions.mealProductDelete(item.id, productId)),
+              onProductToggle: (productId) => dispatch(Actions.productToggled(productId)),
+              onProductQuantityUpdate: (productId, quantity) => dispatch(
+                Actions.mealProductQuantityUpdate(item.id, productId, quantity)
+              )
+            }}
+          />
+        )}
+      />
+      <Button
+        onPress={handleProductCreatorNavigation}
+        style={{
+          marginVertical: 40,
+          marginHorizontal: 5 
+        }}
+      >
+        Dodaj własny produkt
+      </Button>
+      <CreateMealContainer>
         <BasicInput
-          marginVertical={15}
           placeholder="Nazwa nowego posiłku"
           label="Nazwa posiłku"
           value={name}
@@ -148,13 +156,7 @@ const Home = (props: HomeProps) => {
         >
           Dodaj posiłek
         </Button>
-        <Button
-          style={{ marginTop: 30 }}
-          onPress={handleProductCreatorNavigation}
-        >
-          Dodaj własny produkt
-        </Button>
-      </ScrollView>
+      </CreateMealContainer>
     </Container>
   );
 }
@@ -173,10 +175,7 @@ const HomeConnected = connect(
   header: null
 }
 
-const Container = styled.View`
-  display: flex;
-  min-height: 100%;
-`
+const Container = styled.ScrollView``
 
 const MacroCards = styled.View`
   display: flex;
@@ -184,6 +183,10 @@ const MacroCards = styled.View`
   justify-content: space-around;
   margin-top: 10px;
   margin-bottom: 50px;
+`
+
+const CreateMealContainer = styled.View`
+  padding: 10px 5px;
 `
 
 export { HomeConnected as Home };
