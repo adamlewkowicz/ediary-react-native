@@ -18,16 +18,20 @@ interface CaloriesChartProps {
   }
 }
 export const CaloriesChart = (props: CaloriesChartProps) => {
+  const value = props.data.ratio > 100 ? 100 : props.data.ratio;
+  const style: any = useSpring({
+    from: { value },
+    to: { value },
+    delay: 100,
+    config: {
+      tension: 140,
+      friction: 18,
+    }
+  });
   const width = 170;
   const height = 170;
   const thickness = 10;
   const radius = 80;
-  const style: any = useSpring({
-    from: { value: props.data.ratio },
-    to: { value: props.data.ratio },
-    delay: 100,
-    config: config.wobbly
-  });
 
   return (
     <Container>
@@ -110,7 +114,7 @@ const Needed = styled.Text<{
 
 const interpolation = [
   [1, 100],
-  [1000, 430]
+  [1000, 495]
 ];
 
 const AnimatedCircle = animated(Circle);
