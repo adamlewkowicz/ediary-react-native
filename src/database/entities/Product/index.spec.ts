@@ -2,7 +2,7 @@ import { Product } from '.'
 import { MealProduct } from '../MealProduct';
 import { Meal } from '../Meal';
 
-test('Product.findMostUsed', async () => {
+test('Product.findMostUsed - returns most used products sorted descendingly ', async () => {
   const product = await Product.save({ name: 'Cucumber' });
   const product2 = await Product.save({ name: 'Cucumber 2' });
   const meal = await Meal.save({ name: 'Cucumber soup' });
@@ -32,7 +32,7 @@ test('Product.findMostUsed', async () => {
   expect(secondProduct.count).toBe(1);
 });
 
-test('Product.findRecentlyUsed', async () => {
+test('Product.findRecentlyUsed - returns recently used products sorted by meal id', async () => {
   const product = await Product.save({ name: 'Cucumber' });
   const product2 = await Product.save({ name: 'Cucumber 2' });
   const meal = await Meal.save({ name: 'Cucumber soup' });
