@@ -18,7 +18,7 @@ import { ProductCreateParams } from '../ProductCreate';
 import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
 import { elementTitles } from '../../common/helpers';
 import { MealId } from '../../types';
-import { DiaryMealTemplate, DiaryMeal } from '../../store/reducers/diary';
+import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
 import { CaloriesChart } from '../../components/CaloriesChart';
 
 interface HomeProps extends NavigationScreenProps {
@@ -31,6 +31,7 @@ interface HomeProps extends NavigationScreenProps {
 }
 const Home = (props: HomeProps) => {
   const [name, setName] = useState('Trening');
+  const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
   const { dispatch } = props;
 
   useEffect(() => {
@@ -45,19 +46,23 @@ const Home = (props: HomeProps) => {
     meal: DiaryMeal | DiaryMealTemplate
   ) => {
     const screenParams: ProductFindParams = {
-      onItemPress(foundProduct) {
+      async onItemPress(foundProduct) {
         props.navigation.navigate('Home');
+        setProcessedMealId(meal.id);
+
         if (meal.type === 'template') {
           const { name, templateId, time } = meal;
           const template = { id: templateId, name, templateId, time };
-          dispatch(
+          await dispatch(
             Actions.mealCreateFromTemplate(
               template, props.appDate, foundProduct.id
             )
           );
         } else {
-          dispatch(mealProductAdd(meal.id, foundProduct.id));
+          await dispatch(mealProductAdd(meal.id, foundProduct.id));
         }
+
+        setProcessedMealId(null);
       }
     }
     props.navigation.navigate('ProductFind', screenParams);
@@ -119,6 +124,7 @@ const Home = (props: HomeProps) => {
               onProductAdd={() => handleProductFinderNavigation(item)}
               onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
               onLongPress={IS_DEV || item.type === 'template' ? undefined : () => handleMealDelete(item)}
+              isBeingProcessed={processedMealId === item.id}
               {...item.type === 'meal' && {
                 onProductDelete: (productId) => dispatch(Actions.mealProductDelete(item.id, productId)),
                 onProductToggle: (productId) => dispatch(Actions.productToggled(productId)),

@@ -116,7 +116,7 @@ export const mealCreateFromTemplate = (
   date: Date,
   productId: ProductId,
   quantity?: number,
-): Thunk => async (dispatch) => {
+): Thunk<Promise<void>> => async (dispatch) => {
   const createdMeal = await Meal.createFromTemplate(
     template, date, productId, quantity
   );
@@ -129,7 +129,7 @@ export const mealProductAdd = (
   mealId: MealId,
   productId: ProductId,
   quantity?: number
-): Thunk => async (dispatch) => {
+): Thunk<Promise<void>> => async (dispatch) => {
   const { product, action, rawProduct } = await Meal.addProduct(
     mealId,
     productId,

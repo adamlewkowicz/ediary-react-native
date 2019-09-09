@@ -20,6 +20,7 @@ interface MealListItemProps {
   onProductToggle?: (productId: ProductId) => void
   onProductQuantityUpdate?: (productId: ProductId, quantity: number) => void
   toggledProductId: ProductId | null
+  isBeingProcessed: boolean
 }
 export const MealListItem = ({
   onProductDelete = () => {},
@@ -76,6 +77,7 @@ export const MealListItem = ({
             />
           )}
         />
+        {props.isBeingProcessed && <Spinner />}
         <Button
           onPress={props.onProductAdd}
           accessibilityLabel="Wyszukaj produkt do posiłku"
@@ -150,4 +152,8 @@ const NutritionTitle = styled.Text<{
   font-family: ${props => props.theme.fontFamily};
   color: #646464;
   text-align: center;
+`
+
+const Spinner = styled.ActivityIndicator`
+  margin-vertical: 10px;
 `
