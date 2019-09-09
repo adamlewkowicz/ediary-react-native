@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { TextInputProps, TextInput } from 'react-native';
-import { Theme } from '../../common/theme';
 import { TextAlignProperty } from 'csstype';
 
 export interface BasicInputProps extends TextInputProps {
@@ -9,7 +8,6 @@ export interface BasicInputProps extends TextInputProps {
   minWidth?: number
   textAlign?: TextAlignProperty
   forwardedRef?: React.Ref<TextInput>
-  marginVertical?: number
 }
 export const BasicInput = ({
   label,
@@ -18,13 +16,11 @@ export const BasicInput = ({
   forwardedRef,
   textAlign,
   minWidth,
-  marginVertical = 0,
   ...props
 }: BasicInputProps) => {
   const [isFocused, setFocused] = useState(false);
   return (
     <Container
-      marginVertical={marginVertical}
       isFocused={isFocused}
       minWidth={minWidth}
     >
@@ -49,8 +45,6 @@ export const BasicInput = ({
 const Container = styled.View<{
   isFocused: boolean
   minWidth?: number
-  marginVertical: number
-  theme: Theme
 }>`
   font-family: ${props => props.theme.fontFamily};
   border-bottom-width: 1px;
@@ -59,12 +53,10 @@ const Container = styled.View<{
   font-weight: 900;
   margin-bottom: 20px;
   min-width: ${props => props.minWidth || '100%'};
-  margin: ${props => `${props.marginVertical}px 0px`};
+  margin-bottom: 10px;
 `
 
-const Label = styled.Text<{
-  theme: Theme
-}>`
+const Label = styled.Text`
   font-family: ${props => props.theme.fontFamily};
   color: #D0CFD2;
   font-size: 15px;

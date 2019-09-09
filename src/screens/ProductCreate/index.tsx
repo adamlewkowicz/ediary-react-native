@@ -1,5 +1,5 @@
 import React, { useReducer, useRef, createRef, useEffect } from 'react';
-import styled from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
 import { BasicInput, BasicInputRef } from '../../components/BasicInput';
 import {
   productCreateReducer,
@@ -8,7 +8,6 @@ import {
   initProductCreateReducer
 } from './reducer';
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import { Theme } from '../../common/theme';
 import { MacroElement, BarcodeId } from '../../types';
 import { InputRow } from '../../components/InputRow';
 import { Options } from '../../components/Options';
@@ -111,12 +110,14 @@ export const ProductCreate = (props: ProductCreateProps) => {
           onSubmitEditing={() => refsList.portion.current!.focus()}
           ref={refsList.producer}
         />
-        <InfoTitle>Wartości odżywcze na:</InfoTitle>
-        <Options
-          value={state.portionOptions}
-          /** Temporary */
-          onChange={(option: any) => handlePortionOptionChange(option)}
-        />
+        <OptionsContainer>
+          <InfoTitle>Wartości odżywcze na:</InfoTitle>
+          <Options
+            value={state.portionOptions}
+            /** Temporary */
+            onChange={(option: any) => handlePortionOptionChange(option)}
+          />
+        </OptionsContainer>
         <InputRow
           title={portionTitle[state.portionOption]}
           value={state.portion}
@@ -124,6 +125,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
           onSubmitEditing={() => refsList.carbs.current!.focus()}
           ref={refsList.portion}
           accessibilityLabel="Ilość produktu"
+          css={InputCss}
         />
         {nutritionInputs.map(data => (
           <InputRow
@@ -134,6 +136,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
             onSubmitEditing={() => refsList[data.nextRef].current!.focus()}
             ref={refsList[data.property]}
             accessibilityLabel={data.title}
+            css={InputCss}
           />
         ))}
         <InputRow
@@ -144,35 +147,38 @@ export const ProductCreate = (props: ProductCreateProps) => {
           onChangeText={barcode => handleUpdate({ barcode })}
           onSubmitEditing={handleProductCreate}
           accessibilityLabel="Kod kreskowy"
+          css={InputCss}
         />
       </Container>
     </ScrollView>
   );
 }
 
-const Container = styled.KeyboardAvoidingView<{
-  theme: Theme
-}>`
+const Container = styled.KeyboardAvoidingView`
   padding: 20px;
 `
 
-const InfoTitle = styled.Text<{
-  theme: Theme
-}>`
+const InfoTitle = styled.Text`
   text-align: center;
   font-size: ${props => props.theme.fontSize};
-  font-family: ${props => props.theme.fontFamily};
+  font-family: ${props => props.theme.font.regular};
 `
 
 const SaveButton = styled(TouchableOpacity)`
   margin-right: 10px;
 `
 
-const SaveText = styled.Text<{
-  theme: Theme
-}>`
+const SaveText = styled.Text`
   font-family: ${props => props.theme.fontFamily};
   color: ${props => props.theme.focusColor};
+`
+
+const OptionsContainer = styled.View`
+  margin: 10px 0;
+`
+
+const InputCss = css`
+  margin-bottom: 10px;
 `
 
 const portionTitle = {
