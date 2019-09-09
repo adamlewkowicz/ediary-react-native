@@ -138,6 +138,7 @@ export const ProductFind = (props: ProductFindProps) => {
       <SectionList
         data={products}
         keyExtractor={(product, index) => `${product.id}${index}`}
+        keyboardShouldPersistTaps="handled"
         ItemSeparatorComponent={Separator}
         renderSectionHeader={({ section: { title, key }}) => (
           <SectionTitleContainer isFirst={key === FOUND_PRODUCTS}>
