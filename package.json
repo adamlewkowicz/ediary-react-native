@@ -48,7 +48,7 @@
     "@react-native-community/eslint-config": "0.0.3",
     "@storybook/react-native": "^5.1.10",
     "@testing-library/jest-native": "^3.0.2",
-    "@testing-library/react-native": "git+https://github.com/alk831/native-testing-library.git#5.0.0",
+    "@testing-library/react-native": "^4.0.9",
     "@types/jest": "24.0.15",
     "@types/node": "^12.6.8",
     "@types/react": "16.8.23",
