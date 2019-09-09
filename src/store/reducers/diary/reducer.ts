@@ -9,6 +9,7 @@ import {
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
   MEALS_LOADED,
+  PRODUCTS_RECENT_LOADED,
 } from '../../consts';
 import {
   calcMacroByQuantity,
@@ -236,6 +237,10 @@ export function diaryReducer(
           ? !product.isToggled
           : false
       }))
+    }
+    case PRODUCTS_RECENT_LOADED: return {
+      ...state,
+      recentProducts: action.payload
     }
     default: return state;
   }

@@ -37,6 +37,10 @@ const Home = (props: HomeProps) => {
     dispatch(Actions.mealsFindByDay(props.appDateDay));
   }, [props.appDateDay]);
 
+  useEffect(() => {
+    dispatch(Actions.productsLoadRecent());
+  }, []);
+
   const handleProductFinderNavigation = (
     meal: DiaryMeal | DiaryMealTemplate
   ) => {

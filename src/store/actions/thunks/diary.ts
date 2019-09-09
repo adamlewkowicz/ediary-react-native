@@ -16,6 +16,7 @@ import {
   mealProductAdded,
   mealAdded,
   mealsLoaded,
+  productsRecentLoaded,
 } from '../creators';
 import { DateDay, ProductId, MealId, TemplateId } from '../../../types';
 import { debounce_, findOrFail } from '../../../common/utils';
@@ -142,5 +143,12 @@ export const mealProductAdd = (
     dispatch(
       mealProductAdded(mealId, product, rawProduct)
     );
+  }
+}
+
+export const productsLoadRecent = (): Thunk => async (dispatch) => {
+  const recentProducts = await Product.findRecentlyUsed();
+  if (recentProducts.length) {
+    dispatch(productsRecentLoaded(recentProducts));
   }
 }

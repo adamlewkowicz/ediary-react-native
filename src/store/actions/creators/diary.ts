@@ -9,6 +9,7 @@ import {
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
   MEALS_LOADED,
+  PRODUCTS_RECENT_LOADED,
 } from '../../consts';
 import { DiaryActions } from '../types';
 import { MealId, ProductId, TemplateId } from '../../../types';
@@ -91,4 +92,11 @@ export const productToggled = (
 ): DiaryActions => ({
   type: PRODUCT_TOGGLED,
   payload: productId
+});
+
+export const productsRecentLoaded = (
+  products: Product[]
+): DiaryActions => ({
+  type: PRODUCTS_RECENT_LOADED,
+  payload: products
 });

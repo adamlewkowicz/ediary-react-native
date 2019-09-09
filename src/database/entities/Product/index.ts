@@ -135,6 +135,7 @@ export class Product extends GenericEntity {
       .select('meal_product.productId', 'id')
       .groupBy('meal_product.productId')
       .orderBy('meal_product.mealId', 'DESC')
+      .limit(4)
       .getRawMany();
 
     const productIds = result.map(data => data.id);
