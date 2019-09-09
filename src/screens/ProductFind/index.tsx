@@ -31,6 +31,7 @@ export const ProductFind = (props: ProductFindProps) => {
     onItemPress: props.navigation.getParam('onItemPress')
   });
   const recentProducts = useSelector((state: StoreState) => state.diary.recentProducts);
+  const hasBeenPressed = useRef(false);
 
   function handleProductSearch(name: string) {
     setName(name);
@@ -115,6 +116,13 @@ export const ProductFind = (props: ProductFindProps) => {
     );
   }
 
+  function handleItemPress(item: Product) {
+    if (params.onItemPress && !hasBeenPressed.current) {
+      hasBeenPressed.current = true;
+      params.onItemPress(item);
+    }
+  }
+
   return (
     <Container>
       <Block space="space-between" align="center">
@@ -145,7 +153,7 @@ export const ProductFind = (props: ProductFindProps) => {
           <ProductListItem
             product={item}
             hideBottomLine={index === products.length - 1}
-            onPress={() => params.onItemPress && params.onItemPress(item)}
+            onPress={() => handleItemPress(item)}
             phrase={name}
           />
         )}
