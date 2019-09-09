@@ -6,7 +6,7 @@ import { ProductListItem } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
 import { NavigationScreenProps, SectionList } from 'react-navigation';
 import { Theme } from '../../common/theme';
-import { Block } from '../../components/Elements';
+import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { BarcodeScanParams } from '../BarcodeScan';
 import { Screen, BarcodeId } from '../../types';
@@ -165,18 +165,6 @@ export const ProductFind = (props: ProductFindProps) => {
 const Container = styled.View`
   padding: 20px;
 `
-
-const Title = styled.Text<{
-  theme: Theme
-  marginVertical?: number
-}>`
-  font-family: ${props => props.theme.font.medium};
-  text-transform: uppercase;
-  color: ${props => props.theme.colors.gray};
-  font-size: 14px;
-  letter-spacing: 0.5px;
-  margin-vertical: ${props => props.marginVertical || 0};
-`;
 
 const NotFoundInfo = styled.Text<{
   theme: Theme

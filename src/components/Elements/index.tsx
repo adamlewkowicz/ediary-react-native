@@ -1,4 +1,4 @@
 export * from './TextMeta';
 export * from './Block';
 export * from './Heading';
-export * from './Elements';
+export * from './Main';
