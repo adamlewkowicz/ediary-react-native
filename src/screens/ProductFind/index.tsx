@@ -2,10 +2,9 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components/native';
 import { sortByMostAccurateName, debounce_ } from '../../common/utils';
 import { Product } from '../../database/entities';
-import { ProductListItem } from '../../components/ProductListItem';
+import { ProductListItem, Separator } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
 import { NavigationScreenProps, SectionList } from 'react-navigation';
-import { Theme } from '../../common/theme';
 import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { BarcodeScanParams } from '../BarcodeScan';
@@ -139,11 +138,12 @@ export const ProductFind = (props: ProductFindProps) => {
       <SectionList
         data={products}
         keyExtractor={(product, index) => `${product.id}${index}`}
+        ItemSeparatorComponent={Separator}
         renderSectionHeader={({ section: { title, key }}) => (
-          <>
-            <Title marginVertical={15}>{title}</Title>
+          <SectionTitleContainer isFirst={key === FOUND_PRODUCTS}>
+            <Title>{title}</Title>
             {key === FOUND_PRODUCTS && renderInfo()}
-          </>
+          </SectionTitleContainer>
         )}
         sections={[
           { title: 'Znalezione produkty:', data: products, key: FOUND_PRODUCTS },
@@ -163,16 +163,20 @@ export const ProductFind = (props: ProductFindProps) => {
 }
 
 const Container = styled.View`
-  padding: 20px;
+  padding: 20px 20px 60px 20px;
 `
 
-const NotFoundInfo = styled.Text<{
-  theme: Theme
-}>`
+const NotFoundInfo = styled.Text`
   margin-top: 25px;
   text-align: center;
   font-family: ${props => props.theme.fontFamily};
   padding: 0 50px;
+`
+
+const SectionTitleContainer = styled.View<{
+  isFirst: boolean
+}>`
+  padding: ${props => props.isFirst ? '10px 0 5px 0' : '30px 0 5px 0'}
 `
 
 ProductFind.navigationOptions = {

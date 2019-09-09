@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Theme } from '../../common/theme';
-import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
+import { TouchableOpacityProps } from 'react-native';
 import { NutritionBox } from '../NutritionBox';
 
 interface ProductListItemProps extends TouchableOpacityProps {
@@ -26,47 +25,42 @@ export const ProductListItem = ({
   ...props
 }: ProductListItemProps) => {
   return (
-    <TouchableOpacity
+    <Container
       {...props}
       accessibilityLabel="Dodaj produkt do posiłku"
       accessibilityHint="Wraca na główną stronę i dodaje produkt do posiłku"
     >
-      <Container>
-        <Name>
-          {product.name}
-          {product.brand && ` (${product.brand})`}
-        </Name>
-        <Content>
-          <Info>
-            <Quantity>{product.portion}g</Quantity>
-            <Kcal>{product.macro.kcal} kcal</Kcal>
-          </Info>
-          <NutritionContainer>
-            <NutritionBox
-              value={product.macro.carbs}
-              element="carbs"
-            />
-            <NutritionBox
-              value={product.macro.prots}
-              element="prots"
-            />
-            <NutritionBox
-              value={product.macro.fats}
-              element="fats"
-            />
-          </NutritionContainer>
-        </Content>
-        </Container>
-    </TouchableOpacity>
+      <Name>
+        {product.name}
+        {product.brand && ` (${product.brand})`}
+      </Name>
+      <Content>
+        <Info>
+          <Quantity>{product.portion}g</Quantity>
+          <Kcal>{product.macro.kcal} kcal</Kcal>
+        </Info>
+        <NutritionContainer>
+          <NutritionBox
+            value={product.macro.carbs}
+            element="carbs"
+          />
+          <NutritionBox
+            value={product.macro.prots}
+            element="prots"
+          />
+          <NutritionBox
+            value={product.macro.fats}
+            element="fats"
+          />
+        </NutritionContainer>
+      </Content>
+    </Container>
   );
 }
 
-const Container = styled.View<{
-  theme: Theme
+const Container = styled.TouchableOpacity<{
   hideBottomLine?: boolean
 }>`
-  border-bottom-width: 1px;
-  border-bottom-color: ${props => props.hideBottomLine ? 'transparent' : '#E1E1E1'};
   padding: 18px 0;
 `
 
@@ -77,8 +71,8 @@ const Content = styled.View`
 
 const Name = styled.Text`
   font-family: DMSans-Medium;
-  font-size: 16px;
-  margin-bottom: 9px;
+  font-size: 15px;
+  margin-bottom: 15px;
 `
 
 const Info = styled.View`
@@ -86,26 +80,28 @@ const Info = styled.View`
   align-items: center;
 `
 
-const Quantity = styled.Text<{
-  theme: Theme
-}>`
+const Quantity = styled.Text`
   border-right-width: 1px;
   width: 55px;
-  font-size: ${props => props.theme.fontSize};
-  color: ${props => props.theme.secondaryColor};
-  border-right-color: ${props => props.theme.secondaryColor};
+  font-size: ${props => props.theme.font.size};
+  color: ${props => props.theme.colors.gray};
+  border-right-color: ${props => props.theme.colors.lightGray};
   margin-right: 16px;
 `
 
-const Kcal = styled.Text<{
-  theme: Theme
-}>`
+const Kcal = styled.Text`
   width: 65px;
   font-size: ${props => props.theme.fontSize};
-  color: ${props => props.theme.secondaryColor};
+  color: ${props => props.theme.colors.gray};
 `
 
 const NutritionContainer = styled.View`
   flex-direction: row;
   justify-content: space-around;
+`
+
+export const Separator = styled.View`
+  height: 1px;
+  width: 100%;
+  background: ${props => props.theme.colors.lightGray};
 `
