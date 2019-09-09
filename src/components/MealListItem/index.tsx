@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Theme, nutritionColors } from '../../common/theme';
+import { nutritionColors } from '../../common/theme';
 import { ProductId } from '../../types';
 import { ProgressBar } from '../ProgressBar';
 import { ProductItem } from '../ProductItem';
@@ -100,19 +100,15 @@ const InfoContainer = styled.View`
   align-items: center;
 `
 
-const Title = styled.Text<{
-  theme: Theme
-}>`
-  font-family: 'DMSans-Bold';
-  font-size: ${props => props.theme.fontSize};
+const Title = styled.Text`
+  font-family: ${props => props.theme.font.bold};
+  font-size: ${props => props.theme.font.size};
 `
 
-const Calories = styled.Text<{
-  theme: Theme
-}>`
-  font-family: ${props => props.theme.fontFamily};
+const Calories = styled.Text`
+  font-family: ${props => props.theme.font.regular};
   color: ${props => props.theme.colors.lightBlue};
-  font-size: ${props => props.theme.fontSize};
+  font-size: ${props => props.theme.font.size};
 `
 
 const NutritionBar = styled.View`
@@ -136,20 +132,17 @@ const NutritionDetails = styled.View`
 const NutritionElement = styled.View`
 `
 
-const NutritionValue = styled.Text<{
-  theme: Theme
-}>`
-  font-family: ${props => props.theme.fontFamily};
-  font-size: ${props => props.theme.fontSize};
+const NutritionValue = styled.Text`
+  font-family: ${props => props.theme.font.regular};
+  font-size: ${props => props.theme.font.size};
   color: #fff;
   text-align: center;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 `
 
-const NutritionTitle = styled.Text<{
-  theme: Theme
-}>`
-  font-family: ${props => props.theme.fontFamily};
+const NutritionTitle = styled.Text`
+  font-family: ${props => props.theme.font.regular};
+  font-size: 12px;
   color: #646464;
   text-align: center;
 `

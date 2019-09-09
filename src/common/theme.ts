@@ -17,17 +17,19 @@ export const themeProps = {
   fontFamily: 'DMSans-Regular',
   focusColor: '#5361E0',
   secondaryColor: '#C7C6CB',
-  fontSize: 15,
+  fontSize: 14,
   font: {
     regular: 'DMSans-Regular',
     medium: 'DMSans-Medium',
-    size: 15,
+    bold: 'DMSans-Bold',
+    size: 14,
   },
   colors: {
     lightBlue: '#6BB4DD',
     lighterBlue: '#f7fdff',
     gray: '#BCBAC6',
     lightGray: '#f1f0f5',
+    midGray: '#cdcbd6',
   }
 }
 
