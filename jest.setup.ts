@@ -8,7 +8,8 @@ import { NativeModules } from 'react-native';
 // console.disableYellowBox = true;
 
 beforeEach(async () => {
-  await createConnection(config.test);
+  const connection = await createConnection(config.test);
+  await connection.runMigrations();
 });
 
 afterEach(async () => {

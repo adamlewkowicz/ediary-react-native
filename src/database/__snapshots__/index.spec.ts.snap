@@ -1,106 +1,41 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`entity generated sql matches migrations sql: [meal] - generated to migrated 1`] = `
-"Snapshot Diff:
-- First value
-+ Second value
-
-@@ -4,7 +4,8 @@
-    \\"date\\" text NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-    \\"userId\\" integer,
-    \\"macroCarbs\\" decimal(6, 2) NOT NULL DEFAULT (0),
-    \\"macroProts\\" decimal(6, 2) NOT NULL DEFAULT (0),
-    \\"macroFats\\" decimal(6, 2) NOT NULL DEFAULT (0),
--   \\"macroKcal\\" decimal(6, 2) NOT NULL DEFAULT (0)
-+   \\"macroKcal\\" decimal(6, 2) NOT NULL DEFAULT (0),
-+   CONSTRAINT \\"FK_419ad998c5e3b37a7cce0f872f5\\" FOREIGN KEY (\\"userId\\") REFERENCES \\"user\\" (\\"id\\") ON DELETE NO ACTION ON UPDATE NO ACTION
-  )"
-`;
-
-exports[`entity generated sql matches migrations sql: [meal_product] - generated to migrated 1`] = `
-"Snapshot Diff:
-- First value
-+ Second value
-
-  CREATE TABLE \\"meal_product\\" (
-    \\"mealId\\" integer NOT NULL,
-    \\"productId\\" integer NOT NULL,
-    \\"quantity\\" decimal(4, 1) NOT NULL,
-+   CONSTRAINT \\"FK_ad97c8c16a4ff39daaf8f464279\\" FOREIGN KEY (\\"mealId\\") REFERENCES \\"meal\\" (\\"id\\") ON DELETE CASCADE ON UPDATE NO ACTION,
-+   CONSTRAINT \\"FK_769d3e5caceede515715277c784\\" FOREIGN KEY (\\"productId\\") REFERENCES \\"product\\" (\\"id\\") ON DELETE NO ACTION ON UPDATE NO ACTION,
-    PRIMARY KEY (\\"mealId\\", \\"productId\\")
-  )"
-`;
-
-exports[`entity generated sql matches migrations sql: [product] - generated to migrated 1`] = `
-"Snapshot Diff:
-- First value
-+ Second value
-
-@@ -12,7 +12,8 @@
-    \\"macroFats\\" decimal(6, 2) NOT NULL DEFAULT (0),
-    \\"macroKcal\\" decimal(6, 2) NOT NULL DEFAULT (0),
-    CONSTRAINT \\"UQ_3e46cda47a776b779fa6faaed10\\" UNIQUE (\\"barcode\\", \\"isVerified\\"),
-    CONSTRAINT \\"UQ_c1dd1975fe160d2190161668c52\\" UNIQUE (\\"barcode\\", \\"userId\\"),
-    CONSTRAINT \\"UQ_905c0fed2f9ceb88491e43331ec\\" UNIQUE (\\"name\\", \\"isVerified\\"),
--   CONSTRAINT \\"CHK_fc8bb6dce3ee11546ec5f9d2bb\\" CHECK (\\"unit\\" IN ('g', 'ml'))
-+   CONSTRAINT \\"CHK_fc8bb6dce3ee11546ec5f9d2bb\\" CHECK (\\"unit\\" IN ('g', 'ml')),
-+   CONSTRAINT \\"FK_329b8ae12068b23da547d3b4798\\" FOREIGN KEY (\\"userId\\") REFERENCES \\"user\\" (\\"id\\") ON DELETE NO ACTION ON UPDATE NO ACTION
-  )"
-`;
-
-exports[`entity generated sql matches migrations sql: [product_images] - generated to migrated 1`] = `
-"Snapshot Diff:
-- First value
-+ Second value
-
-  CREATE TABLE \\"product_images\\" (
-    \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-    \\"url\\" varchar NOT NULL,
--   \\"productId\\" integer
-+   \\"productId\\" integer,
-+   CONSTRAINT \\"FK_b367708bf720c8dd62fc6833161\\" FOREIGN KEY (\\"productId\\") REFERENCES \\"product\\" (\\"id\\") ON DELETE CASCADE ON UPDATE NO ACTION
-  )"
-`;
-
-exports[`entity generated sql matches migrations sql: [product_portions] - generated to migrated 1`] = `
-"Snapshot Diff:
-- First value
-+ Second value
-
-  CREATE TABLE \\"product_portions\\" (
-    \\"productId\\" integer NOT NULL,
-    \\"type\\" varchar NOT NULL,
-    \\"value\\" integer NOT NULL,
-    CONSTRAINT \\"UQ_422bab5f9d32229ab5eec6f1631\\" UNIQUE (\\"productId\\", \\"type\\"),
-+   CONSTRAINT \\"FK_03c8a652a50d45ef2abcda1db18\\" FOREIGN KEY (\\"productId\\") REFERENCES \\"product\\" (\\"id\\") ON DELETE CASCADE ON UPDATE NO ACTION,
-    PRIMARY KEY (\\"productId\\", \\"type\\")
-  )"
-`;
-
-exports[`entity generated sql matches migrations sql: [profile] - generated to migrated 1`] = `
-"Snapshot Diff:
-- First value
-+ Second value
-
-@@ -11,7 +11,8 @@
-    \\"macroNeedsFats\\" decimal(6, 2) NOT NULL DEFAULT (0),
-    \\"macroNeedsKcal\\" decimal(6, 2) NOT NULL DEFAULT (0),
-    CONSTRAINT \\"REL_a24972ebd73b106250713dcddd\\" UNIQUE (\\"userId\\"),
-    CONSTRAINT \\"CHK_e13c7952dc8655e48c8f83608a\\" CHECK (
-      \\"weightGoal\\" IN ('decrease', 'maintain', 'increase')
--   )
-+   ),
-+   CONSTRAINT \\"FK_a24972ebd73b106250713dcddd9\\" FOREIGN KEY (\\"userId\\") REFERENCES \\"user\\" (\\"id\\") ON DELETE NO ACTION ON UPDATE NO ACTION
-  )"
-`;
-
-exports[`entity generated sql matches migrations sql: [user] - generated to migrated 1`] = `
+exports[`entity generated sql matches migration's sql: [meal] - generated to migrated 1`] = `
 "Snapshot Diff:
 Compared values have no visual difference."
 `;
 
-exports[`entity sql matches snapshot: meal 1`] = `
+exports[`entity generated sql matches migration's sql: [meal_product] - generated to migrated 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
+`;
+
+exports[`entity generated sql matches migration's sql: [product] - generated to migrated 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
+`;
+
+exports[`entity generated sql matches migration's sql: [product_images] - generated to migrated 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
+`;
+
+exports[`entity generated sql matches migration's sql: [product_portions] - generated to migrated 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
+`;
+
+exports[`entity generated sql matches migration's sql: [profile] - generated to migrated 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
+`;
+
+exports[`entity generated sql matches migration's sql: [user] - generated to migrated 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
+`;
+
+exports[`entity generated sql matches snapshot: meal 1`] = `
 "CREATE TABLE \\"meal\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"name\\" varchar NOT NULL,
@@ -114,7 +49,7 @@ exports[`entity sql matches snapshot: meal 1`] = `
 )"
 `;
 
-exports[`entity sql matches snapshot: meal_product 1`] = `
+exports[`entity generated sql matches snapshot: meal_product 1`] = `
 "CREATE TABLE \\"meal_product\\" (
   \\"mealId\\" integer NOT NULL,
   \\"productId\\" integer NOT NULL,
@@ -125,7 +60,7 @@ exports[`entity sql matches snapshot: meal_product 1`] = `
 )"
 `;
 
-exports[`entity sql matches snapshot: product 1`] = `
+exports[`entity generated sql matches snapshot: product 1`] = `
 "CREATE TABLE \\"product\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"name\\" varchar NOT NULL,
@@ -147,7 +82,7 @@ exports[`entity sql matches snapshot: product 1`] = `
 )"
 `;
 
-exports[`entity sql matches snapshot: product_images 1`] = `
+exports[`entity generated sql matches snapshot: product_images 1`] = `
 "CREATE TABLE \\"product_images\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"url\\" varchar NOT NULL,
@@ -156,7 +91,7 @@ exports[`entity sql matches snapshot: product_images 1`] = `
 )"
 `;
 
-exports[`entity sql matches snapshot: product_portions 1`] = `
+exports[`entity generated sql matches snapshot: product_portions 1`] = `
 "CREATE TABLE \\"product_portions\\" (
   \\"productId\\" integer NOT NULL,
   \\"type\\" varchar NOT NULL,
@@ -167,7 +102,7 @@ exports[`entity sql matches snapshot: product_portions 1`] = `
 )"
 `;
 
-exports[`entity sql matches snapshot: profile 1`] = `
+exports[`entity generated sql matches snapshot: profile 1`] = `
 "CREATE TABLE \\"profile\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"weight\\" tinyint NOT NULL,
@@ -188,7 +123,7 @@ exports[`entity sql matches snapshot: profile 1`] = `
 )"
 `;
 
-exports[`entity sql matches snapshot: user 1`] = `
+exports[`entity generated sql matches snapshot: user 1`] = `
 "CREATE TABLE \\"user\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"email\\" text,

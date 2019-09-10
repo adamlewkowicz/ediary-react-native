@@ -2,14 +2,6 @@ import { getDatabaseSchema } from './utils/getSchema';
 import { getConnection } from 'typeorm';
 import snapshotDiff from 'snapshot-diff';
 
-test('entity sql matches snapshot', async () => {
-  const schema = await getDatabaseSchema();
-
-  for (const { prettySql, tbl_name } of schema) {
-    expect(prettySql).toMatchSnapshot(tbl_name);
-  }
-});
-
 test('migrations run up and down without issues', async () => {
   const connection = getConnection();
   await connection.dropDatabase();
@@ -18,9 +10,23 @@ test('migrations run up and down without issues', async () => {
   for (const migration of connection.migrations) {
     await connection.undoLastMigration();
   }
+
+  const tables = await getDatabaseSchema();
+  expect(tables.length).toBe(0);
 });
 
-test('entity generated sql matches migrations sql', async () => {
+test('entity generated sql matches snapshot', async () => {
+  const connection = getConnection();
+  await connection.dropDatabase();
+  await connection.synchronize();
+  const schema = await getDatabaseSchema();
+
+  for (const { prettySql, tbl_name } of schema) {
+    expect(prettySql).toMatchSnapshot(tbl_name);
+  }
+});
+
+test('entity generated sql matches migration\'s sql', async () => {
   const connection = getConnection();
 
   await connection.dropDatabase();

@@ -21,7 +21,8 @@ export const config: DatabaseConfig = {
   test: {
     type: 'sqlite',
     database: ':memory:',
-    synchronize: true,
+    dropSchema: false,
+    synchronize: false,
     logging: ['error'],
     migrations: migrationsArray,
     entities: entitiesArray
