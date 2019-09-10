@@ -13,8 +13,12 @@ test('entity sql matches snapshot', async () => {
   }
 });
 
-test('migrations run without issues', async () => {
+test('migrations run up and down without issues', async () => {
   const connection = getConnection();
   await connection.dropDatabase();
   await connection.runMigrations();
+
+  for (const migration of connection.migrations) {
+    await connection.undoLastMigration();
+  }
 });
