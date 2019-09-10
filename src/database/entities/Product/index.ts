@@ -150,7 +150,7 @@ export class Product extends GenericEntity {
       const fetchedProducts = await ilewazyApi.findByName(name);
 
       if (fetchedProducts.length) {
-        const foundOrCreatedProducts = await mapAsyncSequence(fetchedProducts, product => {
+        const foundOrCreatedProducts = await mapAsyncSequence(fetchedProducts, async (product) => {
           const {
             images = [],
             carbs,
@@ -173,6 +173,8 @@ export class Product extends GenericEntity {
               isVerified: true
             }
           }
+          // temporary workaround to typeorm simultaneous transaction bug 
+          await new Promise(r => setTimeout(r, 400));
           return this.findOneOrSave(query, parsedProduct);
         });
 

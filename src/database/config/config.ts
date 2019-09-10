@@ -33,7 +33,7 @@ export const config: DatabaseConfig = {
     location: 'ediary.sqlite',
     logging: false,
     dropSchema: false,
-    synchronize: true,
+    synchronize: false,
     migrations: migrationsArray,
     entities: entitiesArray
   }

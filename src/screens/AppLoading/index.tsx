@@ -38,11 +38,11 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
       TRANSACTIONAL, { name: TRANSACTIONAL, ...databaseConfig }
     );
 
-    // const hasMigrationsToRun = await defaultConnection.showMigrations();
+    const hasMigrationsToRun = await defaultConnection.showMigrations();
 
-    // if (hasMigrationsToRun) {
-      // await defaultConnection.runMigrations();
-    // }
+    if (hasMigrationsToRun) {
+      await defaultConnection.runMigrations();
+    }
 
     const user = await User.getOrCreate({
       id: USER_ID_UNSYNCED,
