@@ -6,12 +6,17 @@
     "start": "react-native start",
     "test": "jest",
     "test:win": "set APP_ENV=test&& jest",
-    "lint": "eslint .",
+    "lint": "eslint --ext js,ts,tsx src",
     "type-check": "tsc --noEmit",
     "clean:android": "cd android && gradlew clean && cd .. && react-native run-android",
     "typeorm": "ts-node ./node_modules/typeorm/cli -f ./src/database/config/config.migration.ts",
     "test:db": "ts-node-dev --respawn ./scripts/test-db",
     "postversion": "react-native-version"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run type-check"
+    }
   },
   "dependencies": {
     "@eva-design/eva": "^1.0.1",
@@ -58,10 +63,14 @@
     "@types/redux": "^3.6.0",
     "@types/remote-redux-devtools": "^0.5.3",
     "@types/styled-components": "^4.1.18",
+    "@typescript-eslint/eslint-plugin": "^2.2.0",
+    "@typescript-eslint/parser": "^2.2.0",
     "babel-jest": "^24.9.0",
     "babel-plugin-transform-typescript-metadata": "^0.2.2",
     "core-js": "^3.2.1",
-    "eslint": "^6.2.2",
+    "eslint": "^6.3.0",
+    "eslint-plugin-react": "^7.14.3",
+    "husky": "^3.0.5",
     "jest": "^24.9.0",
     "jetifier": "^1.6.4",
     "metro-minify-terser": "^0.56.0",

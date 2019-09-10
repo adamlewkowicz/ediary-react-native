@@ -5,7 +5,7 @@ import { NavigationScreenProps } from 'react-navigation';
 import { BarcodeId } from '../../types';
 
 interface BarcodeScanProps extends NavigationScreenProps<BarcodeScanParams, BarcodeScanNavigationOptions> {}
-export class BarcodeScan extends React.Component {
+export class BarcodeScan extends React.Component<BarcodeScanProps> {
 
   static navigationOptions: BarcodeScanProps['navigationOptions'] = {
     title: 'Zeskanuj kod kreskowy'
