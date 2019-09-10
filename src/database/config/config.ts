@@ -28,9 +28,9 @@ export const config: DatabaseConfig = {
   },
   production: {
     type: 'react-native',
-    database: 'test',
-    location: 'default',
-    logging: ['error', 'query', 'schema'],
+    database: 'ediary',
+    location: 'ediary.sqlite',
+    logging: false,
     dropSchema: false,
     synchronize: true,
     migrations: migrationsArray,
