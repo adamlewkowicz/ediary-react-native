@@ -12,7 +12,7 @@ import {
   ProfileCreate,
   BarcodeScan,
 } from '../screens';
-import { themeProps } from '../common/theme';
+import { theme } from '../common/theme';
 import { IS_DEV } from '../common/consts';
 import { Screen } from '../types';
 
@@ -29,7 +29,7 @@ export function createHomeStack(
     headerMode: 'screen',
     defaultNavigationOptions: {
       headerTitleStyle: {
-        fontFamily: themeProps.fontFamily
+        fontFamily: theme.fontWeight.regular
       }
     }
   });

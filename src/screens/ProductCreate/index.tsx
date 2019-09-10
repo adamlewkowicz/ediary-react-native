@@ -160,8 +160,8 @@ const Container = styled.KeyboardAvoidingView`
 
 const InfoTitle = styled.Text`
   text-align: center;
-  font-size: ${props => props.theme.fontSize};
-  font-family: ${props => props.theme.font.regular};
+  font-size: ${props => props.theme.fontSize.regular};
+  font-family: ${props => props.theme.fontWeight.regular};
 `
 
 const SaveButton = styled(TouchableOpacity)`
@@ -169,8 +169,8 @@ const SaveButton = styled(TouchableOpacity)`
 `
 
 const SaveText = styled.Text`
-  font-family: ${props => props.theme.fontFamily};
-  color: ${props => props.theme.focusColor};
+  font-family: ${props => props.theme.fontWeight.regular};
+  color: ${props => props.theme.color.focus};
 `
 
 const OptionsContainer = styled.View`

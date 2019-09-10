@@ -12,19 +12,15 @@ export const Button = ({ title, ...props }: ButtonProps) => (
   </Container>
 );
 
-const Container = styled.TouchableOpacity<{
-  theme: Theme
-}>`
-  background-color: ${props => props.theme.focusColor};
+const Container = styled.TouchableOpacity`
+  background-color: ${props => props.theme.fontWeight.regular};
   border-radius: 8px;
   padding: 12px 15px;
 `
 
-const Title = styled.Text<{
-  theme: Theme
-}>`
+const Title = styled.Text`
   color: #fff;
-  font-family: ${props => props.theme.fontFamily};
+  font-family: ${props => props.theme.fontWeight.regular};
   text-align: center;
   text-transform: capitalize;
   font-size: 16px;

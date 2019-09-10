@@ -70,8 +70,8 @@ const Content = styled.View`
 `
 
 const Name = styled.Text`
-  font-family: DMSans-Medium;
-  font-size: 15px;
+  font-family: ${props => props.theme.fontWeight.medium};
+  font-size: ${props => props.theme.fontSize.regular};
   margin-bottom: 15px;
 `
 
@@ -83,16 +83,16 @@ const Info = styled.View`
 const Quantity = styled.Text`
   border-right-width: 1px;
   width: 55px;
-  font-size: ${props => props.theme.font.size};
-  color: ${props => props.theme.colors.gray};
-  border-right-color: ${props => props.theme.colors.lightGray};
+  font-size: ${props => props.theme.fontSize.regular};
+  color: ${props => props.theme.color.gray30};
+  border-right-color: ${props => props.theme.color.gray10};
   margin-right: 16px;
 `
 
 const Kcal = styled.Text`
   width: 65px;
-  font-size: ${props => props.theme.fontSize};
-  color: ${props => props.theme.colors.gray};
+  font-size: ${props => props.theme.fontSize.regular};
+  color: ${props => props.theme.color.gray30};
 `
 
 const NutritionContainer = styled.View`
@@ -103,5 +103,5 @@ const NutritionContainer = styled.View`
 export const Separator = styled.View`
   height: 1px;
   width: 100%;
-  background: ${props => props.theme.colors.lightGray};
+  background: ${props => props.theme.color.gray10};
 `

@@ -2,7 +2,6 @@ import React from 'react';
 import { BasicInput, BasicInputProps } from '../BasicInput';
 import { TextInput } from 'react-native';
 import styled from 'styled-components/native';
-import { Theme } from '../../common/theme';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
 interface NutritionRowProps extends BasicInputProps {
@@ -43,9 +42,7 @@ const Container = styled.View<{
   ${props => props.css};
 `
 
-const Title = styled.Text<{
-  theme: Theme
-}>`
-  font-size: ${props => props.theme.fontSize};
-  font-family: ${props => props.theme.fontFamily};
+const Title = styled.Text`
+  font-size: ${props => props.theme.fontSize.regular};
+  font-family: ${props => props.theme.fontWeight.regular};
 `

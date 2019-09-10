@@ -35,13 +35,13 @@ const Container = styled.View`
 `
 
 const Eaten = styled.Text`
-  font-family: ${props => props.theme.font.regular};
+  font-family: ${props => props.theme.fontWeight.regular};
   font-size: 20px;
 `
 
 const Needed = styled.Text`
   font-size: 13px;
-  font-family: ${props => props.theme.font.regular};
+  font-family: ${props => props.theme.fontWeight.regular};
   color: ${props => props.theme.colors.midGray};
 `
 
@@ -51,10 +51,10 @@ const Slash = styled.Text`
 `
 
 const Title = styled.Text`
-  font-family: ${props => props.theme.font.regular};
+  font-family: ${props => props.theme.fontWeight.regular};
   color: ${props => props.theme.colors.midGray};
   text-align: center;
-  font-size: 11px;
+  font-size: ${props => props.theme.fontSize.tiny};
   text-transform: uppercase;
   letter-spacing: 0.5px;
 `

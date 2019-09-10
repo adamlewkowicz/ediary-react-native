@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { WheatIcon, SteakIcon, DropIcon, FireIcon } from '../Icons';
 import { TextMeta } from '../Elements';
-import { nutritionColorSolid, themeProps } from '../../common/theme';
+import { theme } from '../../common/theme';
 import { toLocaleString } from '../../common/utils';
 import { ViewProps } from 'react-native';
 
@@ -30,12 +30,12 @@ export const NutritionBox = ({
       <GenericIcon
         width={ICON_SIZE}
         height={ICON_SIZE}
-        fill={nutritionColorSolid[element]}
+        fill={theme.color[element]}
       />
       <TextMeta
         value={toLocaleString(value)}
         meta={element === 'kcal' ? 'kcal' : 'g'}
-        valueFontSize={themeProps.font.size}
+        valueFontSize={theme.fontSize.regular}
         metaFontSize={11}
         marginTop="7px"
       />

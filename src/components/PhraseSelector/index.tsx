@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Theme } from '../../common/theme';
 
 interface PhraseSelectorProps {
   value: string
@@ -56,19 +55,17 @@ const Container = styled.View<{
 `
 
 const TextNormal = styled.Text<{
-  theme: Theme
   fontSize?: number
   marginBottom?: number
 }>`
   margin-bottom: ${props => props.marginBottom || 0};
-  font-size: ${props => props.fontSize || props.theme.fontSize};
-  font-family: DMSans-Medium;
+  font-size: ${props => props.fontSize || props.theme.fontSize.regular};
+  font-family: ${props => props.theme.fontWeight.regular};
 `
 
 const TextBold = styled(TextNormal)<{
-  theme: Theme
   fontSize?: number
 }>`
-  font-size: ${props => props.fontSize || props.theme.fontSize};
-  font-family: DMSans-Bold;
+  font-size: ${props => props.fontSize || props.theme.fontSize.regular};
+  font-family: ${props => props.theme.fontWeight.bold};
 `

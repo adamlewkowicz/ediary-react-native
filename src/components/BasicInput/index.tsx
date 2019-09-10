@@ -46,9 +46,9 @@ const Container = styled.View<{
   isFocused: boolean
   minWidth?: number
 }>`
-  font-family: ${props => props.theme.fontFamily};
+  font-family: ${props => props.theme.fontWeight.regular};
   border-bottom-width: 1px;
-  border-bottom-color: ${props => props.isFocused ? props.theme.focusColor : '#D7D7D7'};
+  border-bottom-color: ${props => props.isFocused ? props.theme.color.focus : '#D7D7D7'};
   font-size: 15px;
   font-weight: 900;
   margin-bottom: 20px;
@@ -57,7 +57,7 @@ const Container = styled.View<{
 `
 
 const Label = styled.Text`
-  font-family: ${props => props.theme.fontFamily};
+  font-family: ${props => props.theme.fontWeight.regular};
   color: #D0CFD2;
   font-size: 15px;
   color: #BCBCBC;

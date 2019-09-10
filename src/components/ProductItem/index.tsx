@@ -86,23 +86,23 @@ const InputRowStyle = css`
 `
 
 const Name = styled.Text`
-  font-family: ${props => props.theme.font.regular};
-  font-size: ${props => props.theme.font.size};
+  font-family: ${props => props.theme.fontWeight.regular};
+  font-size: ${props => props.theme.fontSize.regular};
   flex: 1;
   margin-right: 14px;
 `
 
 const Quantity = styled.Text`
-  font-family: ${props => props.theme.font.regular};
-  font-size: ${props => props.theme.font.size};
+  font-family: ${props => props.theme.fontWeight.regular};
+  font-size: ${props => props.theme.fontSize.regular};
   color: #848484;
   margin-left: auto;
   margin-right: 10px;
 `
 
 const Calories = styled.Text`
-  font-family: ${props => props.theme.font.regular};
-  font-size: ${props => props.theme.font.size};
+  font-family: ${props => props.theme.fontWeight.regular};
+  font-size: ${props => props.theme.fontSize.regular};
   color: #848484;
   text-align: right;
   color: ${props => props.theme.colors.lightBlue};

@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components/native';
 import { SelectionBox } from '../../components/SelectionBox';
 import { Block } from '../../components/Elements';
 import { WomanIcon, ManIcon, MuscleIcon, MeasureIcon, FemaleBodyIcon } from '../../components/Icons';
-import { themeProps } from '../../common/theme';
+import { theme } from '../../common/theme';
 import { Button } from '../../components/Button';
 import { Heading } from '../../components/Elements/Heading';
 import Slider from '@react-native-community/slider';
@@ -45,7 +45,7 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
             title="Mężczyzna"
             icon={(
               <ManIcon
-                fill={male ? themeProps.focusColor : 'rgba(1,1,1,.7)'}
+                fill={male ? theme.color.focus : 'rgba(1,1,1,.7)'}
                 width={45}
                 height={45}
               />
@@ -57,7 +57,7 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
             title="Kobieta"
             icon={(
               <WomanIcon
-                fill={!male ? themeProps.focusColor : 'rgba(1,1,1,.7)'}
+                fill={!male ? theme.color.focus : 'rgba(1,1,1,.7)'}
                 width={45}
                 height={45}
               />
@@ -136,7 +136,7 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           description="Chcę zmniejszyć wagę"
           icon={(
             <FemaleBodyIcon
-              fill={weightGoal === 'decrease' ? themeProps.focusColor : 'rgba(1,1,1,.7)'}
+              fill={weightGoal === 'decrease' ? theme.color.focus : 'rgba(1,1,1,.7)'}
               width={45}
               height={45}
             />
@@ -149,7 +149,7 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           description="Chcę utrzymać obecną wagę"
           icon={(
             <MeasureIcon
-              fill={weightGoal === 'maintain' ? themeProps.focusColor : 'rgba(1,1,1,.7)'}
+              fill={weightGoal === 'maintain' ? theme.color.focus : 'rgba(1,1,1,.7)'}
               width={45}
               height={45}
             />
@@ -162,7 +162,7 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           description="Chcę zwiększyć wagę"
           icon={(
             <MuscleIcon
-              fill={weightGoal === 'increase' ? themeProps.focusColor : 'rgba(1,1,1,.7)'}
+              fill={weightGoal === 'increase' ? theme.color.focus : 'rgba(1,1,1,.7)'}
               width={45}
               height={45}
             />
@@ -228,34 +228,6 @@ const SliderValue = styled.Text`
   font-size: 20px;
   margin-bottom: 10px;
 `
-
-const theme = {
-  colors: {
-    accent: "#F3534A",
-    primary: "#0AC4BA",
-    secondary: "#2BDA8E",
-    tertiary: "#FFE358",
-    black: "#323643",
-    white: "#FFFFFF",
-    gray: "#9DA3B4",
-    gray2: "#C5CCD6",
-  },
-  sizes: {
-    // global sizes
-    base: 16,
-    font: 14,
-    radius: 6,
-    padding: 25,
-    // font sizes
-    h1: 26,
-    h2: 20,
-    h3: 18,
-    title: 18,
-    header: 16,
-    body: 14,
-    caption: 12,
-  }
-}
 
 const stepTitles = {
   0: 'Wybierz płeć',

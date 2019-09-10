@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react-native';
 import { SelectionBox } from '.';
 import { WomanIcon } from '../Icons';
-import { themeProps } from '../../common/theme';
+import { theme } from '../../common/theme';
 
 storiesOf('SelectionBox', module)
   .add('default', () => (
@@ -12,7 +12,7 @@ storiesOf('SelectionBox', module)
       title="Kobieta"
       icon={(
         <WomanIcon
-          fill={themeProps.focusColor}
+          fill={theme.color.focus}
           width={45}
           height={45}
         />

@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { nutritionColors } from '../../common/theme';
 import { ProductId } from '../../types';
 import { ProgressBar } from '../ProgressBar';
 import { ProductItem } from '../ProductItem';
@@ -10,6 +9,7 @@ import { Button } from 'react-native-ui-kitten';
 import { BASE_MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitles } from '../../common/helpers';
 import { DiaryMealId } from '../../store/reducers/diary';
+import { theme } from '../../common/theme';
 
 interface MealListItemProps {
   meal: MealsWithRatio[number]
@@ -45,7 +45,7 @@ export const MealListItem = ({
           <NutritionStripe key={ratio.element}>
             <ProgressBar
               percentages={ratio.value * 100}
-              colors={nutritionColors[ratio.element]}
+              colors={theme.gradient[ratio.element]}
               rounded={false}
               width="8px"
             />
@@ -101,14 +101,14 @@ const InfoContainer = styled.View`
 `
 
 const Title = styled.Text`
-  font-family: ${props => props.theme.font.bold};
-  font-size: ${props => props.theme.font.size};
+  font-family: ${props => props.theme.fontWeight.bold};
+  font-size: ${props => props.theme.fontSize.regular};
 `
 
 const Calories = styled.Text`
-  font-family: ${props => props.theme.font.regular};
-  color: ${props => props.theme.colors.lightBlue};
-  font-size: ${props => props.theme.font.size};
+  font-family: ${props => props.theme.fontWeight.regular};
+  color: ${props => props.theme.color.blue20};
+  font-size: ${props => props.theme.fontSize.regular};
 `
 
 const NutritionBar = styled.View`
@@ -133,17 +133,17 @@ const NutritionElement = styled.View`
 `
 
 const NutritionValue = styled.Text`
-  font-family: ${props => props.theme.font.regular};
-  font-size: ${props => props.theme.font.size};
+  font-family: ${props => props.theme.fontWeight.regular};
+  font-size: ${props => props.theme.fontSize.regular};
   color: #fff;
   text-align: center;
   margin-bottom: 4px;
 `
 
 const NutritionTitle = styled.Text`
-  font-family: ${props => props.theme.font.regular};
-  font-size: 12px;
-  color: #646464;
+  font-family: ${props => props.theme.fontWeight.regular};
+  font-size: ${props => props.theme.fontSize.small};
+  color: ${props => props.theme.color.gray40};
   text-align: center;
 `
 

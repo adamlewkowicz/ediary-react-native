@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { TextProps } from 'react-native';
-import { Theme } from '../../common/theme';
 import { TextAlignProperty } from 'csstype';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
@@ -19,13 +18,12 @@ export const Heading = ({ value, children = value, ...props }: HeadingProps) => 
 );
 
 const Container = styled.Text<{
-  theme: Theme
   size?: number
   align?: TextAlignProperty
   css?: FlattenSimpleInterpolation
 }>`
   font-family: DMSans-Medium;
-  font-size: ${props => props.size || props.theme.fontSize}px;
+  font-size: ${props => props.size || props.theme.fontSize.regular};
   text-align: ${props => props.align || 'left'};
   ${props => props.css};
 `

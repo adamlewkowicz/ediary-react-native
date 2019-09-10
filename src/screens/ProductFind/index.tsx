@@ -170,7 +170,7 @@ const Container = styled.View`
 const NotFoundInfo = styled.Text`
   margin-top: 25px;
   text-align: center;
-  font-family: ${props => props.theme.fontFamily};
+  font-family: ${props => props.theme.fontWeight.regular};
   padding: 0 50px;
 `
 

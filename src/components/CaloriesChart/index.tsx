@@ -7,7 +7,7 @@ import Svg, {
 } from 'react-native-svg';
 import { useSpring, animated } from 'react-spring';
 import styled from 'styled-components/native';
-import { Theme, themeProps } from '../../common/theme';
+import { theme } from '../../common/theme';
 
 interface CaloriesChartProps {
   data: {
@@ -40,12 +40,12 @@ export const CaloriesChart = (props: CaloriesChartProps) => {
           <LinearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
             <Stop
               offset="0%"
-              stopColor="#C0FDCA"
+              stopColor={theme.gradient.kcal[0]}
               stopOpacity="1"
             />
             <Stop
               offset="100%"
-              stopColor="#61C4D1"
+              stopColor={theme.gradient.kcal[1]}
               stopOpacity="1"
             />
           </LinearGradient>
@@ -55,7 +55,7 @@ export const CaloriesChart = (props: CaloriesChartProps) => {
           cy={height / 2}
           r={radius}
           fill="none"
-          stroke={themeProps.colors.lighterBlue}
+          stroke={theme.colors.blue10}
           strokeWidth={thickness}
         />
         <AnimatedCircle
@@ -98,15 +98,13 @@ const Info = styled.View`
 `
 
 const Eaten = styled.Text`
-  font-family: ${props => props.theme.fontFamily};
+  font-family: ${props => props.theme.fontWeight.regular};
   font-size: 36px;
   margin-bottom: 3px;
 `
 
-const Needed = styled.Text<{
-  theme: Theme
-}>`
-  font-family: ${props => props.theme.fontFamily};
+const Needed = styled.Text`
+  font-family: ${props => props.theme.fontWeight.regular};
   color: ${props => props.theme.colors.gray};
 `
 

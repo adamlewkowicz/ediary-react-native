@@ -3,7 +3,6 @@ import { RNCamera, RNCameraProps, TakePictureResponse } from 'react-native-camer
 import styled from 'styled-components/native';
 import { NavigationScreenProps } from 'react-navigation';
 import { BarcodeId } from '../../types';
-import { Theme } from '../../common/theme';
 
 interface BarcodeScanProps extends NavigationScreenProps<BarcodeScanParams, BarcodeScanNavigationOptions> {}
 export class BarcodeScan extends React.Component {
@@ -103,10 +102,8 @@ const PhotoButton = styled.TouchableOpacity`
   background: #fff;
 `
 
-const PhotoTitle = styled.Text<{
-  theme: Theme
-}>`
-  font-family: ${props => props.theme.fontFamily};
+const PhotoTitle = styled.Text`
+  font-family: ${props => props.theme.fontWeight.regular};
   padding: 15px;
   border-radius: 5px;
   text-align: center;

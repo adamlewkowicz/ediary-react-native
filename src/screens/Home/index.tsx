@@ -7,7 +7,7 @@ import { FlatList, Alert } from 'react-native';
 import * as selectors from '../../store/selectors';
 import { DateChanger } from '../../components/DateChanger';
 import { MacroCard } from '../../components/MacroCard';
-import { nutritionColors } from '../../common/theme';
+import { theme } from '../../common/theme';
 import styled from 'styled-components/native';
 import { MealListItem } from '../../components/MealListItem';
 import { BasicInput } from '../../components/BasicInput';
@@ -105,7 +105,7 @@ const Home = (props: HomeProps) => {
         {BASE_MACRO_ELEMENTS.map(element => (
           <MacroCard
             key={element}
-            colors={nutritionColors[element]}
+            colors={theme.gradient[element]}
             percentages={props.macroNeedsLeft[element].ratio}
             title={elementTitles[element]}
             reached={props.macroNeedsLeft[element].eaten}
