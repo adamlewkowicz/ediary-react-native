@@ -28,7 +28,7 @@ export class IlewazyApi {
     }
     const knownPortionTypes = Object.keys(portionMap);
 
-    const normalizedProducts = data.map(record => {
+    const normalizedProducts: NormalizedProduct[] = data.map(record => {
       const _id = record.id;
       let name = record.ingredient_name.replace('WA:ŻYWO', '').trim();
       const prots = Number(record.bialko);

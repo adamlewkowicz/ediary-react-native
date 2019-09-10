@@ -27,7 +27,7 @@ import { FindMostUsedResult, FindMostProductIdsResult } from './types';
 
 @Entity('product')
 // @Unique(['name', 'userId'])
-// @Unique(['name', 'isVerified'])
+@Unique(['name', 'isVerified'])
 @Unique(['barcode', 'userId'])
 @Unique(['barcode', 'isVerified'])
 export class Product extends GenericEntity {
@@ -67,8 +67,8 @@ export class Product extends GenericEntity {
   )
   mealProducts?: MealProduct[]
 
-  @Column('boolean', { default: false })
-  isVerified!: boolean;
+  @Column('boolean', { nullable: true })
+  isVerified!: boolean | null;
 
   @Column('int', { nullable: true })
   userId!: UserId | null;
