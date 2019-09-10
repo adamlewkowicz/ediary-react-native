@@ -33,7 +33,7 @@ exports[`entity sql matches snapshot: product 1`] = `
   \\"unit\\" text NOT NULL DEFAULT ('g'),
   \\"createdAt\\" text NOT NULL DEFAULT (CURRENT_TIMESTAMP),
   \\"updatedAt\\" text NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-  \\"isVerified\\" boolean NOT NULL DEFAULT (0),
+  \\"isVerified\\" boolean,
   \\"userId\\" integer,
   \\"macroCarbs\\" decimal(6, 2) NOT NULL DEFAULT (0),
   \\"macroProts\\" decimal(6, 2) NOT NULL DEFAULT (0),
@@ -41,6 +41,7 @@ exports[`entity sql matches snapshot: product 1`] = `
   \\"macroKcal\\" decimal(6, 2) NOT NULL DEFAULT (0),
   CONSTRAINT \\"UQ_3e46cda47a776b779fa6faaed10\\" UNIQUE (\\"barcode\\", \\"isVerified\\"),
   CONSTRAINT \\"UQ_c1dd1975fe160d2190161668c52\\" UNIQUE (\\"barcode\\", \\"userId\\"),
+  CONSTRAINT \\"UQ_905c0fed2f9ceb88491e43331ec\\" UNIQUE (\\"name\\", \\"isVerified\\"),
   CONSTRAINT \\"CHK_fc8bb6dce3ee11546ec5f9d2bb\\" CHECK (\\"unit\\" IN ('g', 'ml')),
   CONSTRAINT \\"FK_329b8ae12068b23da547d3b4798\\" FOREIGN KEY (\\"userId\\") REFERENCES \\"user\\" (\\"id\\") ON DELETE NO ACTION ON UPDATE NO ACTION
 )"
