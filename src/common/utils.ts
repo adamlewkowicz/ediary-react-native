@@ -49,7 +49,6 @@ export function getTimeFromDate(
   return dateTime;
 }
 
-
 export function getValAndUnitFromString(value: string): {
   value: number | null
   unit: UnitType | null
@@ -71,7 +70,7 @@ export function sortByMostAccurateName(
 ) {
   const phraseLowered = phrase.toLowerCase();
 
-  return function<T extends SortByName>(
+  return function<T extends { name: string }>(
     a: T,
     b: T
   ): -1 | 0 | 1 {
@@ -100,10 +99,6 @@ export function sortByMostAccurateName(
   
     return orderByShorter;
   }
-}
-
-interface SortByName {
-  name: string
 }
 
 export function getNumAndUnitFromString(value: string): {

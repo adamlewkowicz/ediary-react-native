@@ -13,7 +13,6 @@ import {
   BarcodeScan,
 } from '../screens';
 import { theme } from '../common/theme';
-import { IS_DEV } from '../common/consts';
 import { Screen } from '../types';
 
 export function createHomeStack(
@@ -38,11 +37,9 @@ export function createHomeStack(
 const HomeStack = createHomeStack();
 
 const MainStack = createBottomTabNavigator({
-  // ...IS_DEV && { StoryBook: require('../../storybook').StorybookUIRoot },
   Home: HomeStack,
 }, {
   initialRouteName: 'Home',
-  // initialRouteName: IS_DEV ? 'StoryBook' : 'Home',
 });
 
 const RootNavigator = createSwitchNavigator({
