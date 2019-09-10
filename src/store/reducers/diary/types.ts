@@ -60,7 +60,7 @@ export interface DiaryProduct {
   unit: ProductUnit
   mealId: MealId | null
   userId?: number | null
-  isVerified: boolean
+  isVerified: boolean | null
   updatedAt: Date
   createdAt: Date
   macro: {
