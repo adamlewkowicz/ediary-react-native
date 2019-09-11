@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { sortByMostAccurateName, debounce_ } from '../../common/utils';
 import { Product } from '../../database/entities';
@@ -12,25 +12,34 @@ import { Screen, BarcodeId } from '../../types';
 import { Button } from 'react-native-ui-kitten';
 import { ProductCreateParams } from '../ProductCreate';
 import { useConnected } from '../../common/hooks';
-import { useSelector } from 'react-redux';
-import { StoreState } from '../../store';
+import { useSelector, useDispatch } from 'react-redux';
+import { StoreState, Actions } from '../../store';
 
 const debounceA = debounce_();
 const FOUND_PRODUCTS = 'FOUND_PRODUCTS';
 
 interface ProductFindProps extends NavigationScreenProps {}
 export const ProductFind = (props: ProductFindProps) => {
+  const { current: params } = useRef<ProductFindParams>({
+    onItemPress: props.navigation.getParam('onItemPress')
+  });
   const [name, setName] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setLoading] = useState(false);
   const [barcode, setBarcode] = useState<BarcodeId | null>(null);
   const isConnected = useConnected();
   const productsAreEmpty = !products.length;
-  const { current: params } = useRef<ProductFindParams>({
-    onItemPress: props.navigation.getParam('onItemPress')
-  });
   const recentProducts = useSelector((state: StoreState) => state.diary.recentProducts);
+  const dispatch = useDispatch();
   const hasBeenPressed = useRef(false);
+
+  useEffect(() => {
+    if (!recentProducts.length) {
+      setLoading(true);
+      dispatch(Actions.productsLoadRecent());
+      setLoading(false);
+    }
+  }, [recentProducts]);
 
   function handleProductSearch(name: string) {
     setName(name);
@@ -150,12 +159,10 @@ export const ProductFind = (props: ProductFindProps) => {
           { title: 'Znalezione produkty:', data: products, key: FOUND_PRODUCTS },
           { title: 'Ostatnie produkty:', data: recentProducts },
         ]}
-        renderItem={({ item, index }) => (
+        renderItem={({ item }) => (
           <ProductListItem
             product={item}
-            hideBottomLine={index === products.length - 1}
             onPress={() => handleItemPress(item)}
-            phrase={name}
           />
         )}
       />

@@ -3,7 +3,7 @@ import { Button } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
 import * as Actions from '../../store/actions';
 import { StoreState, Dispatch } from '../../store';
-import { FlatList, Alert } from 'react-native';
+import { FlatList, Alert, InteractionManager } from 'react-native';
 import * as selectors from '../../store/selectors';
 import { DateChanger } from '../../components/DateChanger';
 import { MacroCard } from '../../components/MacroCard';
@@ -38,31 +38,29 @@ const Home = (props: HomeProps) => {
     dispatch(Actions.mealsFindByDay(props.appDateDay));
   }, [props.appDateDay]);
 
-  useEffect(() => {
-    dispatch(Actions.productsLoadRecent());
-  }, []);
-
   const handleProductFinderNavigation = (
     meal: DiaryMeal | DiaryMealTemplate
   ) => {
     const screenParams: ProductFindParams = {
-      async onItemPress(foundProduct) {
-        props.navigation.navigate('Home');
-        setProcessedMealId(meal.id);
-
-        if (meal.type === 'template') {
-          const { name, templateId, time } = meal;
-          const template = { id: templateId, name, templateId, time };
-          await dispatch(
-            Actions.mealCreateFromTemplate(
-              template, props.appDate, foundProduct.id
-            )
-          );
-        } else {
-          await dispatch(mealProductAdd(meal.id, foundProduct.id));
-        }
-
-        setProcessedMealId(null);
+      onItemPress(foundProduct) {
+        InteractionManager.runAfterInteractions(async () => {
+          props.navigation.navigate('Home');
+          setProcessedMealId(meal.id);
+  
+          if (meal.type === 'template') {
+            const { name, templateId, time } = meal;
+            const template = { id: templateId, name, templateId, time };
+            await dispatch(
+              Actions.mealCreateFromTemplate(
+                template, props.appDate, foundProduct.id
+              )
+            );
+          } else {
+            await dispatch(mealProductAdd(meal.id, foundProduct.id));
+          }
+  
+          setProcessedMealId(null);
+        });
       }
     }
     props.navigation.navigate('ProductFind', screenParams);

@@ -7,7 +7,7 @@ import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native'
 import { MealsWithRatio } from '../../store/selectors';
 import { Button } from 'react-native-ui-kitten';
 import { BASE_MACRO_ELEMENTS } from '../../common/consts';
-import { elementTitles } from '../../common/helpers';
+import { elementTitlesLong } from '../../common/helpers';
 import { DiaryMealId } from '../../store/reducers/diary';
 import { theme } from '../../common/theme';
 
@@ -59,7 +59,7 @@ export const MealListItem = ({
           {BASE_MACRO_ELEMENTS.map(element => (
             <NutritionElement key={element}>
               <NutritionValue>{props.meal[element]}g</NutritionValue>
-              <NutritionTitle>{elementTitles[element]}</NutritionTitle>
+              <NutritionTitle>{elementTitlesLong[element]}</NutritionTitle>
             </NutritionElement>
           ))}
         </NutritionDetails>
@@ -123,13 +123,14 @@ const NutritionStripe = styled.View`
 
 const NutritionDetails = styled.View`
   background: #313131;
-  padding: 10px;
+  padding: 10px 0;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
 `
 
 const NutritionElement = styled.View`
+  flex: 1;
 `
 
 const NutritionValue = styled.Text`

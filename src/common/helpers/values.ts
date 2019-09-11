@@ -4,3 +4,8 @@ export const elementTitles = {
   fats: 'Tłuszcze',
   kcal: 'Kalorie'
 }
+
+export const elementTitlesLong = {
+  ...elementTitles,
+  carbs: 'Węglowodany'
+}

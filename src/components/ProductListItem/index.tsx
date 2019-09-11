@@ -4,7 +4,6 @@ import { TouchableOpacityProps } from 'react-native';
 import { NutritionBox } from '../NutritionBox';
 
 interface ProductListItemProps extends TouchableOpacityProps {
-  hideBottomLine?: boolean
   product: {
     name: string
     portion: number
@@ -16,12 +15,9 @@ interface ProductListItemProps extends TouchableOpacityProps {
     }
     brand?: string
   }
-  phrase?: string
 }
 export const ProductListItem = ({
   product,
-  hideBottomLine = false,
-  phrase,
   ...props
 }: ProductListItemProps) => {
   return (
