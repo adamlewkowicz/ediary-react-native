@@ -40,13 +40,17 @@ test('entity generated sql matches migration\'s sql', async () => {
   generatedSchema.forEach((generatedTable, index) => {
     const migratedTable = migrationsSchema[index];
     const snapshotName = `[${generatedTable.tbl_name}] - generated to migrated`;
-    
+    const diff = snapshotDiff(
+      migratedTable.prettySql,
+      generatedTable.prettySql,
+      {
+        contextLines: 0,
+        aAnnotation: 'Generated table',
+        bAnnotation: 'Migrated table',
+      }
+    );
+
     expect(generatedTable.tbl_name).toEqual(migratedTable.tbl_name);
-    expect(
-      snapshotDiff(
-        migratedTable.prettySql,
-        generatedTable.prettySql
-      )
-    ).toMatchSnapshot(snapshotName);
+    expect(diff).toMatchSnapshot(snapshotName);
   });
 });

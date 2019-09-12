@@ -86,7 +86,7 @@ export class Product extends GenericEntity {
 
   @OneToMany(
     type => ProductImage,
-    productImage => productImage,
+    productImage => productImage.product,
     { cascade: true }
   )
   images?: ProductImage[];
@@ -148,6 +148,7 @@ export class Product extends GenericEntity {
 
     if (savedProducts.length <= 3) {
       const fetchedProducts = await ilewazyApi.findByName(name);
+      console.log('fetchedProducts', { fetchedProducts })
 
       if (fetchedProducts.length) {
         const foundOrCreatedProducts = await mapAsyncSequence(fetchedProducts, async (product) => {
@@ -173,8 +174,6 @@ export class Product extends GenericEntity {
               isVerified: true
             }
           }
-          // temporary workaround to typeorm simultaneous transaction bug 
-          await new Promise(r => setTimeout(r, 400));
           return this.findOneOrSave(query, parsedProduct);
         });
 

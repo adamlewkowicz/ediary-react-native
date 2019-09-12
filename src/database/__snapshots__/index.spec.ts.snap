@@ -86,7 +86,8 @@ exports[`entity generated sql matches snapshot: product_images 1`] = `
 "CREATE TABLE \\"product_images\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"url\\" varchar NOT NULL,
-  \\"productId\\" integer,
+  \\"productId\\" integer NOT NULL,
+  CONSTRAINT \\"UQ_58730e63386a62e577a24031ab2\\" UNIQUE (\\"url\\"),
   CONSTRAINT \\"FK_b367708bf720c8dd62fc6833161\\" FOREIGN KEY (\\"productId\\") REFERENCES \\"product\\" (\\"id\\") ON DELETE CASCADE ON UPDATE NO ACTION
 )"
 `;
