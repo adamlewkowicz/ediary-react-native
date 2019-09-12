@@ -26,7 +26,6 @@ import { Macro } from '../../embeds/Macro';
 import { FindMostUsedResult, FindMostProductIdsResult } from './types';
 
 @Entity('product')
-// @Unique(['name', 'userId'])
 @Unique(['name', 'isVerified'])
 @Unique(['barcode', 'userId'])
 @Unique(['barcode', 'isVerified'])
@@ -102,7 +101,7 @@ export class Product extends GenericEntity {
     return defaultPortion;
   }
 
-  static findByNameLike(name: string, limit: number = 10): Promise<Product[]> {
+  static findByNameLike(name: string, limit = 10): Promise<Product[]> {
     return this.find({
       where: { name: Like(`%${name}%`) },
       take: limit
