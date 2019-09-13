@@ -11,6 +11,7 @@ import {
   AppLoading,
   ProfileCreate,
   BarcodeScan,
+  DiarySummary,
 } from '../screens';
 import { theme } from '../common/theme';
 import { Screen } from '../types';
@@ -38,6 +39,7 @@ const HomeStack = createHomeStack();
 
 const MainStack = createBottomTabNavigator({
   Home: HomeStack,
+  DiarySummary,
 }, {
   initialRouteName: 'Home',
 });
