@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import dayjs from 'dayjs';
 import { DatePickerAndroid, DatePickerAndroidDateSetAction } from 'react-native';
 import { Block } from '../Elements';
+import { RightArrowIcon } from '../Icons';
 
 interface DateChangerProps {
   value: Date
@@ -10,6 +11,7 @@ interface DateChangerProps {
 }
 export const DateChanger = (props: DateChangerProps) => {
   const dayjsDate = dayjs(props.value);
+  const iconSize = 26;
 
   async function handleDateChange() {
     try {
@@ -28,27 +30,47 @@ export const DateChanger = (props: DateChangerProps) => {
 
   return (
     <Block marginVertical={8} align="center" space="space-between">
+
       <DayChangeButton
-        title="Poprzedni"
         accessibilityLabel="Poprzedni dzień"
         onPress={() => props.onChange(
           dayjsDate.add(-1, 'day').toDate()
         )}
-      />
+      >
+        <LeftIcon
+          fill="#17A7F2"
+          width={iconSize}
+          height={iconSize}
+        />
+      </DayChangeButton>
       <CalendarButton onPress={handleDateChange}>
         <Title>{dayjsDate.format('dddd')}</Title>
         <DateInfo>{dayjsDate.format('dddd DD MMMM')}</DateInfo>
       </CalendarButton>
       <DayChangeButton
-        title="Następny"
         accessibilityLabel="Następny dzień"
         onPress={() => props.onChange(
           dayjsDate.add(1, 'day').toDate()
         )}
-      />
+      >
+        <RightIcon
+          fill="#17A7F2"
+          width={iconSize}
+          height={iconSize}
+        />
+      </DayChangeButton>
     </Block>
   );
 }
+
+const DayChangeButton = styled.TouchableOpacity`
+  padding: 20px;
+`
+
+const RightIcon = styled(RightArrowIcon)``
+const LeftIcon = styled(RightIcon)`
+  transform: rotate(180deg);
+`
 
 const CalendarButton = styled.TouchableOpacity`
   display: flex;
@@ -66,5 +88,3 @@ const DateInfo = styled.Text`
   margin-top: 8px;
   font-family: 'DMSans-Regular';
 `
-
-const DayChangeButton = styled.Button``;

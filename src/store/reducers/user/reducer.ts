@@ -1,9 +1,9 @@
-import { WeightGoal, UserId, ProfileId } from '../../types';
-import { UserActions } from '../actions';
+import { UserState } from './types';
+import { UserActions } from '../../actions';
 import {
   APP_INITIALIZED,
-  USER_PROFILE_CREATED
-} from '../consts';
+  USER_PROFILE_CREATED,
+} from '../../consts';
 
 const initialState: UserState = {
   data: null,
@@ -46,28 +46,5 @@ export function userReducer(
       }
     }
     default: return state;
-  }
-}
-
-
-interface UserPayload {}
-
-export interface UserState extends UserPayload {
-  data: null | {
-    id: UserId
-    login: string
-  }
-  profile: null | {
-    id: ProfileId
-    weight: number
-    age: number
-    gender: 'male' | 'female'
-    weightGoal: WeightGoal
-  }
-  macroNeeds: {
-    carbs: number
-    prots: number
-    fats: number
-    kcal: number 
   }
 }

@@ -1,16 +1,15 @@
-import { MacroElements, TemplateId, TemplateIdReverted } from '../../types';
-import { MACRO_ELEMENTS } from '../../common/consts';
-import { Meal } from '../../database/entities';
-import { getDayFromDate, getTimeFromDate } from '../../common/utils';
-import { DiaryMealType } from '../reducers/types/diary';
+import { MacroElements, TemplateId, TemplateIdReverted } from '../../../types';
+import { MACRO_ELEMENTS } from '../../../common/consts';
+import { Meal } from '../../../database/entities';
+import { getDayFromDate, getTimeFromDate } from '../../../common/utils';
+import { DiaryMealType } from './types';
 
-interface CalcMacroByQuantityData extends MacroElements {
-  quantity: number
-}
+interface CalcMacroByQuantityData extends MacroElements {}
 export const calcMacroByQuantity = <T extends CalcMacroByQuantityData>(
-  macroData: T
+  macroData: T,
+  quantity: number
 ) => MACRO_ELEMENTS.map(element => ({
-  value: Math.round(macroData[element] * macroData.quantity / 100),
+  value: Math.round(macroData[element] * quantity / 100),
   element
 }));
 
@@ -30,6 +29,9 @@ export const normalizeMeals = <T extends Meal[]>(
       templateId,
     }
   });
+  const rawProducts = payload.flatMap(({ mealProducts = [] }) =>
+    mealProducts.map(mealProduct => mealProduct.product)
+  );
   const products = payload.flatMap(({ mealProducts = [] }) => {
     return mealProducts.map(mealProduct => {
       const { meal, product, ...data } = mealProduct;
@@ -40,11 +42,11 @@ export const normalizeMeals = <T extends Meal[]>(
       return {
         ...normalizedProduct,
         isToggled: false,
-        macro: calcMacroByQuantity(normalizedProduct)
+        calcedMacro: calcMacroByQuantity(normalizedProduct.macro, normalizedProduct.quantity)
       }
     })
   });
-  return { meals, products };
+  return { meals, products, rawProducts };
 }
 
 export const normalizeMeal = (
@@ -63,6 +65,7 @@ export const normalizeMeal = (
     templateId,
     type,
   }
+  const rawProducts = mealProducts.map(mealProduct => mealProduct.product);
   const normalizedProducts = mealProducts.map(mealProduct => {
     const { meal, product, ...data } = mealProduct;
     const normalizedProduct = {
@@ -72,12 +75,13 @@ export const normalizeMeal = (
     return {
       ...normalizedProduct,
       isToggled: false,
-      macro: calcMacroByQuantity(normalizedProduct)
+      calcedMacro: calcMacroByQuantity(normalizedProduct.macro, normalizedProduct.quantity)
     }
   });
   return {
     meal: normalizedMeal,
     products: normalizedProducts,
+    rawProducts,
   }
 }
 

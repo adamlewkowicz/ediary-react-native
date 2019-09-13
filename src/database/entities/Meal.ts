@@ -16,7 +16,8 @@ import { EntityType } from '../types';
 import { GenericEntity } from '../generics/GenericEntity';
 import dayjs from 'dayjs';
 import { DATE_FORMAT, DATE_DAY } from '../../common/consts';
-import { DiaryTemplate } from '../../store/reducers/types/diary';
+import { Macro } from '../embeds/Macro';
+import { DiaryTemplate } from '../../store/reducers/diary';
 
 @Entity('meal')
 export class Meal extends GenericEntity {
@@ -27,17 +28,8 @@ export class Meal extends GenericEntity {
   @Column()
   name!: string;
 
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  carbs!: number
-
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  prots!: number
-  
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  fats!: number
-
-  @Column('decimal', { precision: 5, scale: 2, default: 0 })
-  kcal!: number
+  @Column(type => Macro)
+  macro!: Macro;
 
   @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   date!: string;
@@ -47,7 +39,7 @@ export class Meal extends GenericEntity {
     mealProduct => mealProduct.meal,
     { cascade: true }
   )
-  mealProducts?: MealProduct[]
+  mealProducts?: MealProduct[];
 
   @Column('number', { default: null, nullable: true })
   userId!: UserId | null;
@@ -85,7 +77,6 @@ export class Meal extends GenericEntity {
       quantity,
       mealId
     });
-
     return { ...product, ...mealProduct };
   }
 
@@ -93,16 +84,17 @@ export class Meal extends GenericEntity {
     mealId: MealId,
     productId: ProductId,
     quantity?: number
-  ): Promise<{ product: IProductMerged, action: 'create' | 'update' }> {
+  ): Promise<{ product: IProductMerged, rawProduct: Product, action: 'create' | 'update' }> {
     const product = await Product.findOneOrFail(productId);
     const mealProduct = await MealProduct.findOne({ mealId, productId });
     const portionValue = quantity ? quantity : product.portion;
+    const rawProduct = product;
 
     if (mealProduct) {
       mealProduct.quantity += portionValue;
       await mealProduct.save();
       const mergedProduct = { ...mealProduct, ...product };
-      return { product: mergedProduct, action: 'update'  };
+      return { product: mergedProduct, rawProduct, action: 'update' };
     } else {
       const createdMealProduct = await MealProduct.save({
         quantity: portionValue,
@@ -110,7 +102,7 @@ export class Meal extends GenericEntity {
         productId
       });
       const mergedProduct = { ...createdMealProduct, ...product };
-      return { product: mergedProduct, action: 'create' };
+      return { product: mergedProduct, rawProduct, action: 'create' };
     }
   }
 

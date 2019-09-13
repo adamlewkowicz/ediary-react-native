@@ -5,13 +5,14 @@ import { ProductListItem } from '.';
 storiesOf('ProductListItem', module)
   .add('default', () => (
     <ProductListItem
-      phrase="pad"
       product={{
         name: 'Pad Thai',
-        carbs: 51,
-        prots: 291,
-        fats: 102,
-        kcal: 861,
+        macro: {
+          carbs: 51,
+          prots: 291,
+          fats: 102,
+          kcal: 861,
+        },
         portion: 150
       }}
     />

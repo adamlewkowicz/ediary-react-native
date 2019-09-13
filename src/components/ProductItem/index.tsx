@@ -9,7 +9,6 @@ import { Block } from '../Elements';
 import { NutritionBox } from '../NutritionBox';
 import { MACRO_ELEMENTS } from '../../common/consts';
 import { InputRow } from '../InputRow';
-import { Theme } from '../../common/theme';
 
 interface ProductItemProps<P extends ProductPartial> {
   product: P
@@ -40,7 +39,7 @@ export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>
           onPress={() => props.onToggle(productId)}
           accessibilityLabel="Pokaż szczegóły produktu"
         >
-          <Block align="stretch" space="space-between">
+          <Block align="flex-start" space="space-between">
             <Name numberOfLines={props.isToggled ? undefined : 1}>
               {props.product.name}
             </Name>
@@ -79,7 +78,7 @@ const TouchableContent = styled(TouchableOpacity)`
   background: #F5F7F9;
   border-bottom-width: 1px;
   border-bottom-color: #E3E7EC;
-  padding: 16px 25px;
+  padding: 16px 20px;
 `
 
 const InputRowStyle = css`
@@ -87,33 +86,32 @@ const InputRowStyle = css`
 `
 
 const Name = styled.Text`
-  font-family: 'DMSans-Regular';
-  font-size: 15px;
+  font-family: ${props => props.theme.fontWeight.regular};
+  font-size: ${props => props.theme.fontSize.regular};
   flex: 1;
   margin-right: 14px;
 `
 
 const Quantity = styled.Text`
-  font-family: 'DMSans-Regular';
-  font-size: 15px;
+  font-family: ${props => props.theme.fontWeight.regular};
+  font-size: ${props => props.theme.fontSize.regular};
   color: #848484;
   margin-left: auto;
-  margin-right: 14px;
+  margin-right: 10px;
 `
 
-const Calories = styled.Text<{
-  theme: Theme
-}>`
-  font-family: 'DMSans-Regular';
-  font-size: 15px;
+const Calories = styled.Text`
+  font-family: ${props => props.theme.fontWeight.regular};
+  font-size: ${props => props.theme.fontSize.regular};
   color: #848484;
   text-align: right;
   color: ${props => props.theme.colors.lightBlue};
+  min-width: 65px;
 `
 
 const DeleteContainer = styled.View`
-  background-color: #e74c3c;
   flex: 1;
+  background-color: #e74c3c;
   justify-content: center;
   align-items: center;
   padding-left: 10px;

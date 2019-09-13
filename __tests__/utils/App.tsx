@@ -6,7 +6,7 @@ import { AppState, configureStore } from '../../src/store';
 import { Screen } from '../../src/types';
 import { ApplicationProvider } from 'react-native-ui-kitten';
 import { mapping, light as lightTheme } from '@eva-design/eva';
-import { themeProps } from '../../src/common/theme';
+import { theme } from '../../src/common/theme';
 import { ThemeProvider } from 'styled-components/native';
 import { Store } from 'redux';
 import { User } from '../../src/database/entities';
@@ -49,7 +49,7 @@ export function App({
 
   return (
     <Provider store={store}>
-      <ThemeProvider theme={themeProps}>
+      <ThemeProvider theme={theme}>
         <ApplicationProvider
           mapping={mapping}
           theme={lightTheme}

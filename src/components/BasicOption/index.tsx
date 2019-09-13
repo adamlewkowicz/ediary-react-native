@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Theme } from '../../common/theme';
 import { TouchableOpacity } from 'react-native';
 
 interface BasicOptionProps {
@@ -33,19 +32,17 @@ const Wrapper = styled(TouchableOpacity)<{
 
 const Container = styled.View<{
   isActive: boolean
-  theme: Theme
 }>`
   border-radius: 50;
   border-width: 2px; 
-  border-color: ${props => props.isActive ? props.theme.focusColor : '#d6d6d6'};
+  border-color: ${props => props.isActive ? props.theme.color.focus : '#d6d6d6'};
   padding: 8px;
 `
 
 const Text = styled.Text<{
   isActive: boolean
-  theme: Theme
 }>`
   text-align: center;
-  color: ${props => props.isActive ? props.theme.focusColor : '#858585'};
-  font-family: ${props => props.theme.fontFamily};
+  color: ${props => props.isActive ? props.theme.color.focus : '#858585'};
+  font-family: ${props => props.theme.fontWeight.regular};
 `

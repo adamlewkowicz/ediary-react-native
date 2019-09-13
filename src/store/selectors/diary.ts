@@ -14,10 +14,10 @@ const calcedProducts = createSelector(
   products,
   products => products.map(product => ({
     ...product,
-    carbs: Math.round(product.carbs * product.quantity / 100),
-    prots: Math.round(product.prots * product.quantity / 100),
-    fats: Math.round(product.fats * product.quantity / 100),
-    kcal: Math.round(product.kcal * product.quantity / 100)
+    carbs: Math.round(product.macro.carbs * product.quantity / 100),
+    prots: Math.round(product.macro.prots * product.quantity / 100),
+    fats: Math.round(product.macro.fats * product.quantity / 100),
+    kcal: Math.round(product.macro.kcal * product.quantity / 100)
   })
 ));
 
@@ -33,7 +33,7 @@ const mealsWithProducts = createSelector(
   }))
 );
 
-const calcedMeals = createSelector(
+export const calcedMeals = createSelector(
   mealsWithProducts,
   meals => meals.map(meal => {
     const summedMacro = meal.products.reduce((macro, product) => ({

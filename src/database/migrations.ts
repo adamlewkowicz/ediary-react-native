@@ -1,1 +1,1 @@
-export * from './migrations/1565856561248-Initial';
+export * from './migrations/1568310202209-Initial';

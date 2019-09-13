@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { ProgressBar } from '../ProgressBar';
 import { Block } from '../Elements';
-import { Theme } from '../../common/theme';
 
 interface MacroCardProps {
   colors: string[],
@@ -24,8 +23,7 @@ export const MacroCard = (props: MacroCardProps) => {
         percentages={props.percentages}
         marginVertical={8}
       />
-      <Title>{props.title}</Title>
-      <Unit>(g)</Unit>
+      <Title>{props.title} (G)</Title>
     </Container>
   );
 }
@@ -36,33 +34,27 @@ const Container = styled.View`
   width: 100px;
 `
 
-const Eaten = styled.Text<{
-  theme: Theme
-}>`
-  font-family: ${props => props.theme.fontFamily};
-  font-size: 22px;
+const Eaten = styled.Text`
+  font-family: ${props => props.theme.fontWeight.regular};
+  font-size: 20px;
 `
 
 const Needed = styled.Text`
   font-size: 13px;
-  color: #c7c7c7;
+  font-family: ${props => props.theme.fontWeight.regular};
+  color: ${props => props.theme.colors.midGray};
 `
 
 const Slash = styled.Text`
-  color: #dbdbdb;
-  margin: 0 3px;
+  color: ${props => props.theme.colors.midGray};
+  margin: 0 4px;
 `
 
-const Title = styled.Text<{
-  theme: Theme
-}>`
-  font-family: ${props => props.theme.fontFamily};
+const Title = styled.Text`
+  font-family: ${props => props.theme.fontWeight.regular};
+  color: ${props => props.theme.colors.midGray};
   text-align: center;
-  font-size: 13px;
-  color: #c7c7c7;
-`
-
-const Unit = styled(Title)`
-  font-size: 12px;
-  margin-top: 1px;
+  font-size: ${props => props.theme.fontSize.tiny};
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 `

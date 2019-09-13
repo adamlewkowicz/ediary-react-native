@@ -2,65 +2,71 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
 import * as Actions from '../../store/actions';
-import { StoreState, Dispatch } from '../../store';
-import { FlatList, ScrollView, Alert } from 'react-native';
-import * as selectors from '../../store/selectors';
+import { StoreState, Dispatch, Selectors } from '../../store';
+import { FlatList, Alert } from 'react-native';
 import { DateChanger } from '../../components/DateChanger';
 import { MacroCard } from '../../components/MacroCard';
-import { nutritionColors } from '../../common/theme';
+import { theme } from '../../common/theme';
 import styled from 'styled-components/native';
 import { MealListItem } from '../../components/MealListItem';
-import { FloatingButton } from '../../components/FloatingButton';
 import { BasicInput } from '../../components/BasicInput';
-import { NavigationScreenProps } from 'react-navigation';
+import { NavigationScreenProps, ScrollView } from 'react-navigation';
 import { ProductFindParams } from '../ProductFind';
 import { mealProductAdd } from '../../store/actions';
 import { ProductCreateParams } from '../ProductCreate';
 import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
 import { elementTitles } from '../../common/helpers';
 import { MealId } from '../../types';
-import { DiaryMealTemplate, DiaryMeal } from '../../store/reducers/types/diary';
+import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
+import { CaloriesChart } from '../../components/CaloriesChart';
+import { useAfterInteractions } from '../../common/hooks';
 
 interface HomeProps extends NavigationScreenProps {
   appDate: StoreState['application']['date']
   appDateDay: StoreState['application']['day']
-  macroNeedsLeft: selectors.MacroNeedsLeft
+  macroNeedsLeft: Selectors.MacroNeedsLeft
   toggledProductId: StoreState['diary']['toggledProductId']
-  mealsWithRatio: selectors.MealsWithRatio
+  mealsWithRatio: Selectors.MealsWithRatio
   dispatch: Dispatch
 }
 const Home = (props: HomeProps) => {
   const [name, setName] = useState('Trening');
-  const [menuOpened, setMenuOpened] = useState(false);
+  const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
   const { dispatch } = props;
+
+  useAfterInteractions(() => dispatch(Actions.productsRecentLoad()));
 
   useEffect(() => {
     dispatch(Actions.mealsFindByDay(props.appDateDay));
   }, [props.appDateDay]);
 
-  const handleProductFinderNavigation = (
+  const handleProductFindNavigation = (
     meal: DiaryMeal | DiaryMealTemplate
   ) => {
     const screenParams: ProductFindParams = {
-      onItemPress(foundProduct) {
+      async onItemPress(foundProduct) {
         props.navigation.navigate('Home');
+        setProcessedMealId(meal.id);
+
         if (meal.type === 'template') {
           const { name, templateId, time } = meal;
           const template = { id: templateId, name, templateId, time };
-          dispatch(
+          await dispatch(
             Actions.mealCreateFromTemplate(
               template, props.appDate, foundProduct.id
             )
           );
         } else {
-          dispatch(mealProductAdd(meal.id, foundProduct.id));
+          await dispatch(mealProductAdd(meal.id, foundProduct.id));
         }
+
+        setProcessedMealId(null);
       }
     }
     props.navigation.navigate('ProductFind', screenParams);
   }
   
-  const handleProductCreatorNavigation = () => {
+  const handleProductCreateNavigation = () => {
     const screenParams: ProductCreateParams = {
       onProductCreated() {
         props.navigation.navigate('Home');
@@ -87,50 +93,50 @@ const Home = (props: HomeProps) => {
   }
   
   return (
-    <Container>
-      <FloatingButton
-        children="+"
-        onPress={() => setMenuOpened(status => !status)}
+    <ScrollView>
+      <DateChanger
+        value={props.appDate}
+        onChange={date => dispatch(Actions.appDateUpdated(date))}
       />
-      <ScrollView>
-        <DateChanger
-          value={props.appDate}
-          onChange={date => dispatch(Actions.appDateUpdated(date))}
-        />
-        <MacroCards>
-          {BASE_MACRO_ELEMENTS.map(element => (
-            <MacroCard
-              key={element}
-              colors={nutritionColors[element]}
-              percentages={props.macroNeedsLeft[element].ratio}
-              title={elementTitles[element]}
-              reached={props.macroNeedsLeft[element].eaten}
-              goal={props.macroNeedsLeft[element].needed}
-            />
-          ))}
-        </MacroCards>
-        <FlatList
-          data={props.mealsWithRatio}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({ item }) => (
-            <MealListItem
-              meal={item}
-              toggledProductId={props.toggledProductId}
-              onProductAdd={() => handleProductFinderNavigation(item)}
-              onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
-              onLongPress={IS_DEV || item.type === 'template' ? undefined : () => handleMealDelete(item)}
-              {...item.type === 'meal' && {
-                onProductDelete: (productId) => dispatch(Actions.mealProductDelete(item.id, productId)),
-                onProductToggle: (productId) => dispatch(Actions.productToggled(productId)),
-                onProductQuantityUpdate: (productId, quantity) => dispatch(
-                  Actions.mealProductQuantityUpdate(item.id, productId, quantity)
-                )
-              }}
-            />
-          )}
-        />
+      <CaloriesChart data={props.macroNeedsLeft.kcal} />
+      <MacroCards>
+        {BASE_MACRO_ELEMENTS.map(element => (
+          <MacroCard
+            key={element}
+            colors={theme.gradient[element]}
+            percentages={props.macroNeedsLeft[element].ratio}
+            title={elementTitles[element]}
+            reached={props.macroNeedsLeft[element].eaten}
+            goal={props.macroNeedsLeft[element].needed}
+          />
+        ))}
+      </MacroCards>
+      <FlatList
+        data={props.mealsWithRatio}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item: meal }) => (
+          <MealListItem
+            meal={meal}
+            toggledProductId={props.toggledProductId}
+            onProductAdd={() => handleProductFindNavigation(meal)}
+            onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
+            onLongPress={IS_DEV || meal.type === 'template' ? undefined : () => handleMealDelete(meal)}
+            isBeingProcessed={processedMealId === meal.id}
+            {...meal.type === 'meal' && {
+              onProductDelete: (productId) => dispatch(Actions.mealProductDelete(meal.id, productId)),
+              onProductToggle: (productId) => dispatch(Actions.productToggled(productId)),
+              onProductQuantityUpdate: (productId, quantity) => dispatch(
+                Actions.mealProductQuantityUpdate(meal.id, productId, quantity)
+              )
+            }}
+          />
+        )}
+      />
+      <CreateProductButton onPress={handleProductCreateNavigation}>
+        Dodaj własny produkt
+      </CreateProductButton>
+      <CreateMealContainer>
         <BasicInput
-          marginVertical={15}
           placeholder="Nazwa nowego posiłku"
           label="Nazwa posiłku"
           value={name}
@@ -142,41 +148,39 @@ const Home = (props: HomeProps) => {
         >
           Dodaj posiłek
         </Button>
-        <Button
-          style={{ marginTop: 30 }}
-          onPress={handleProductCreatorNavigation}
-        >
-          Dodaj własny produkt
-        </Button>
-      </ScrollView>
-    </Container>
+      </CreateMealContainer>
+    </ScrollView>
   );
 }
 
-const HomeConnected = connect(
-  (state: StoreState) => ({
-    macroNeedsLeft: selectors.macroNeedsLeft(state),
-    toggledProductId: state.diary.toggledProductId,
-    appDate: state.application.date,
-    appDateDay: state.application.day,
-    mealsWithRatio: selectors.mealsWithRatio(state),
-  })
-)(Home);
-
-(HomeConnected as any).navigationOptions = {
-  header: null
-}
-
-const Container = styled.View`
-  display: flex;
-  min-height: 100%;
+const CreateProductButton = styled(Button)`
+  margin: 40px 5px;
 `
 
 const MacroCards = styled.View`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  margin-top: 10px;
   margin-bottom: 50px;
 `
+
+const CreateMealContainer = styled.View`
+  padding: 10px 5px;
+`
+
+const mapStateToProps = (state: StoreState) => ({
+  macroNeedsLeft: Selectors.macroNeedsLeft(state),
+  toggledProductId: state.diary.toggledProductId,
+  appDate: state.application.date,
+  appDateDay: state.application.day,
+  mealsWithRatio: Selectors.mealsWithRatio(state),
+});
+
+const HomeConnected = connect(mapStateToProps)(Home);
+
+(HomeConnected as any).navigationOptions = {
+  header: null,
+}
 
 export { HomeConnected as Home };

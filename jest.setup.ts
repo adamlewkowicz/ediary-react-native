@@ -5,17 +5,16 @@ import { createConnection, getConnection } from 'typeorm';
 import { config } from './src/database/config/config';
 import { NativeModules } from 'react-native';
 
-// console.disableYellowBox = true;
+(global as any).requestIdleCallback = jest.fn((callback: () => void) => callback());
 
 beforeEach(async () => {
-  await createConnection(config.test);
+  const connection = await createConnection(config.test);
+  await connection.runMigrations();
 });
 
 afterEach(async () => {
   await getConnection().close();
 });
-
-jest.mock('NativeAnimatedHelper');
 
 Object.assign(NativeModules, {
   RNGestureHandlerModule: {
@@ -24,9 +23,6 @@ Object.assign(NativeModules, {
     dropGestureHandler: jest.fn(),
     updateGestureHandler: jest.fn(),
     State: {},
-    Directions: {}
-  },
-  PlatformConstants: {
-    forceTouchAvailable: false,
-  }}
-);
+    Directions: {},
+  }
+});

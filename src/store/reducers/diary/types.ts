@@ -17,10 +17,12 @@ export type DiaryMealType = 'meal' | 'template';
 export interface DiaryMealBase {
   id: DiaryMealId
   name: string
-  carbs: number
-  prots: number
-  fats: number
-  kcal: number
+  macro: {
+    carbs: number
+    prots: number
+    fats: number
+    kcal: number
+  }
   date: string | null
   time: DateTime
   updatedAt?: number
@@ -56,17 +58,19 @@ export interface DiaryProduct {
   barcode: BarcodeId | null
   quantity: number
   unit: ProductUnit
-  carbs: number
-  prots: number
-  fats: number
-  kcal: number
   mealId: MealId | null
   userId?: number | null
-  verified: boolean
+  isVerified: boolean | null
   updatedAt: Date
   createdAt: Date
-  //
   macro: {
+    carbs: number
+    prots: number
+    fats: number
+    kcal: number
+  }
+  //
+  calcedMacro: {
     element: MacroElement
     value: number
   }[]

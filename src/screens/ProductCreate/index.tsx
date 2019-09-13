@@ -1,5 +1,5 @@
 import React, { useReducer, useRef, createRef, useEffect } from 'react';
-import styled from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
 import { BasicInput, BasicInputRef } from '../../components/BasicInput';
 import {
   productCreateReducer,
@@ -8,7 +8,6 @@ import {
   initProductCreateReducer
 } from './reducer';
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import { Theme } from '../../common/theme';
 import { MacroElement, BarcodeId } from '../../types';
 import { InputRow } from '../../components/InputRow';
 import { Options } from '../../components/Options';
@@ -21,7 +20,8 @@ interface ProductCreateProps extends NavigationScreenProps<ProductCreateParams, 
 export const ProductCreate = (props: ProductCreateProps) => {
   const { current: params } = useRef<ProductCreateParams>({
     onProductCreated: props.navigation.getParam('onProductCreated'),
-    barcode: props.navigation.getParam('barcode')
+    barcode: props.navigation.getParam('barcode'),
+    name: props.navigation.getParam('name'),
   });
   const [state, dispatch] = useReducer(
     productCreateReducer,
@@ -47,7 +47,17 @@ export const ProductCreate = (props: ProductCreateProps) => {
   }
 
   async function handleProductCreate() {
-    const { portionOption, portionOptions, portion, barcode, ...data } = state;
+    const {
+      portionOption,
+      portionOptions,
+      portion,
+      barcode,
+      carbs,
+      prots,
+      fats,
+      kcal,
+      ...data
+    } = state;
 
     if (!data.name.length) {
       return;
@@ -58,10 +68,12 @@ export const ProductCreate = (props: ProductCreateProps) => {
       name: data.name.trim(),
       barcode: barcode.length ? barcode : null,
       userId,
-      carbs: Number(data.carbs),
-      prots: Number(data.prots),
-      fats: Number(data.fats),
-      kcal: Number(data.kcal),
+      macro: {
+        carbs: Number(carbs),
+        prots: Number(prots),
+        fats: Number(fats),
+        kcal: Number(kcal),
+      }
     });
 
     if (params.onProductCreated) {
@@ -98,12 +110,14 @@ export const ProductCreate = (props: ProductCreateProps) => {
           onSubmitEditing={() => refsList.portion.current!.focus()}
           ref={refsList.producer}
         />
-        <InfoTitle>Wartości odżywcze na:</InfoTitle>
-        <Options
-          value={state.portionOptions}
-          /** Temporary */
-          onChange={(option: any) => handlePortionOptionChange(option)}
-        />
+        <OptionsContainer>
+          <InfoTitle>Wartości odżywcze na:</InfoTitle>
+          <Options
+            value={state.portionOptions}
+            /** Temporary */
+            onChange={(option: any) => handlePortionOptionChange(option)}
+          />
+        </OptionsContainer>
         <InputRow
           title={portionTitle[state.portionOption]}
           value={state.portion}
@@ -111,6 +125,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
           onSubmitEditing={() => refsList.carbs.current!.focus()}
           ref={refsList.portion}
           accessibilityLabel="Ilość produktu"
+          css={InputCss}
         />
         {nutritionInputs.map(data => (
           <InputRow
@@ -121,6 +136,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
             onSubmitEditing={() => refsList[data.nextRef].current!.focus()}
             ref={refsList[data.property]}
             accessibilityLabel={data.title}
+            css={InputCss}
           />
         ))}
         <InputRow
@@ -131,35 +147,38 @@ export const ProductCreate = (props: ProductCreateProps) => {
           onChangeText={barcode => handleUpdate({ barcode })}
           onSubmitEditing={handleProductCreate}
           accessibilityLabel="Kod kreskowy"
+          css={InputCss}
         />
       </Container>
     </ScrollView>
   );
 }
 
-const Container = styled.KeyboardAvoidingView<{
-  theme: Theme
-}>`
+const Container = styled.KeyboardAvoidingView`
   padding: 20px;
 `
 
-const InfoTitle = styled.Text<{
-  theme: Theme
-}>`
+const InfoTitle = styled.Text`
   text-align: center;
-  font-size: ${props => props.theme.fontSize};
-  font-family: ${props => props.theme.fontFamily};
+  font-size: ${props => props.theme.fontSize.regular};
+  font-family: ${props => props.theme.fontWeight.regular};
 `
 
 const SaveButton = styled(TouchableOpacity)`
   margin-right: 10px;
 `
 
-const SaveText = styled.Text<{
-  theme: Theme
-}>`
-  font-family: ${props => props.theme.fontFamily};
-  color: ${props => props.theme.focusColor};
+const SaveText = styled.Text`
+  font-family: ${props => props.theme.fontWeight.regular};
+  color: ${props => props.theme.color.focus};
+`
+
+const OptionsContainer = styled.View`
+  margin: 10px 0;
+`
+
+const InputCss = css`
+  margin-bottom: 10px;
 `
 
 const portionTitle = {

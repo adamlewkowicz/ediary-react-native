@@ -2,6 +2,8 @@ import { createStore, applyMiddleware, Store, Action } from 'redux';
 import { rootReducer } from './reducers';
 import thunk, { ThunkAction } from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension';
+import * as Actions from './actions';
+import * as Selectors from './selectors';
 
 export function configureStore(
   initialState?: Partial<StoreState>
@@ -18,7 +20,8 @@ export function configureStore(
   );
 
   if (module.hot) {
-    module.hot.accept('./reducers', () => {
+    module.hot.accept(() => {
+      // eslint-disable-next-line
       const { rootReducer } = require('./reducers');
       store.replaceReducer(rootReducer);
     });
@@ -38,3 +41,6 @@ export interface Dispatch {
   <R>(action: Thunk<R>): R
   <A extends Action>(action: A): A
 }
+
+export { Actions };
+export { Selectors };

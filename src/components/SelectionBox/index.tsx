@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components/native';
-import { Theme, themeProps } from '../../common/theme';
+import { theme } from '../../common/theme';
 import { CheckedIcon } from '../Icons';
 import { TouchableOpacityProps } from 'react-native';
 
@@ -30,7 +30,7 @@ export const SelectionBox = (props: SelectionBoxProps) => {
       )}
       {props.value && (
         <CheckedStyled
-          fill={themeProps.focusColor}
+          fill={theme.color.focus}
           width={CHECKED_ICON_SIZE}
           height={CHECKED_ICON_SIZE}
         />
@@ -43,23 +43,21 @@ export const SelectionBox = (props: SelectionBoxProps) => {
 const CHECKED_ICON_SIZE = 16;
 
 const TouchableWrapper = styled.TouchableOpacity<{
-  theme: Theme
   isActive: boolean
   noFlex?: boolean
 }>`
   border-radius: 5px;
   padding: 10px;
   position: relative;
-  border-color: ${props => props.isActive ? props.theme.focusColor : props.theme.secondaryColor};
+  border-color: ${props => props.theme.color[props.isActive ? 'focus' : 'secondary']};
   border-width: 1px;
   align-items: center;
   margin: 20px;
-  flex: ${props => props.noFlex ? 'none' : 1};
+  width: 100%;
+  flex: 1;
 `
 
-const Title = styled.Text<{
-  theme: Theme
-}>`
+const Title = styled.Text`
   font-size: 16px;
   font-family: DMSans-Medium;
   margin: 10px 0;
@@ -77,10 +75,8 @@ const CheckedStyled = styled(CheckedIcon)`
   top: ${-CHECKED_ICON_SIZE / 2};
 `
 
-const Description = styled.Text<{
-  theme: Theme
-}>`
-  font-family: ${props => props.theme.fontFamily};
+const Description = styled.Text`
+  font-family: ${props => props.theme.fontWeight.regular};
   text-align: center;
   margin: 5px 0;
 `

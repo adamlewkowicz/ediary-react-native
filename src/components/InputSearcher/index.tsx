@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { TextInputProps, ActivityIndicator } from 'react-native';
-import { Theme } from '../../common/theme';
 import { LoupeIcon } from '../Icons';
-import { _InputSearcherLoupe } from '../../common/zIndex';
 
-const LOUPE_SIZE = 18;
+const LOUPE_SIZE = 16;
 
 interface InputSearcherProps extends TextInputProps {
   showLabel?: boolean
@@ -45,7 +43,6 @@ export const InputSearcher = ({
         fill="#272733"
         width={LOUPE_SIZE}
         height={LOUPE_SIZE}
-        zIndex={_InputSearcherLoupe}
         style={{ transform: [{ translateY: -LOUPE_SIZE / 2 }] }}
       />
     </Container>
@@ -70,27 +67,25 @@ const StyledLoupeIcon = styled(LoupeIcon)`
   left: 15px;
 `
 
-const Input = styled.TextInput<{
-  theme: Theme
-}>`
+const Input = styled.TextInput`
   background-color: #E3E3E3;
+  background-color: ${props => props.theme.colors.lightGray};
   border-radius: 30;
-  font-family: ${props => props.theme.fontFamily};
-  font-size: ${props => props.theme.fontSize};
+  font-family: ${props => props.theme.fontWeight.regular};
+  font-size: ${props => props.theme.fontSize.regular};
   padding: 10px 45px;
 `
 
 const Label = styled.Text<{
-  theme: Theme
   isFocused: boolean
 }>`
   position: absolute;
-  left: ${45};
-  font-family: ${props => props.theme.fontFamily};
-  font-size: ${props => props.theme.fontSize};
+  left: 45px;
+  font-family: ${props => props.theme.fontWeight.regular};
+  font-size: ${props => props.theme.fontSize.regular};
   top: 50%;
   height: 20px;
   color: #8F8F8F;
-  color: ${props => props.isFocused ? props.theme.focusColor : '#8F8F8F'};
+  color: ${props => props.isFocused ? props.theme.color.focus : '#8F8F8F'};
   transform: ${props => `translateY(${props.isFocused ? -50 : -10}px)`};
 `

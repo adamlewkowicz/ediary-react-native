@@ -9,12 +9,17 @@ import {
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
   MEALS_LOADED,
-} from '../consts';
-import { DiaryActions } from '../actions';
-import { calcMacroByQuantity, getRevertedTemplateId, normalizeMeal } from '../helpers/diary';
-import { getDayFromDate, getTimeFromDate } from '../../common/utils';
-import { DiaryState, DiaryMeal, DiaryMealTemplate } from './types/diary';
-import { defaultTemplates } from '../../common/helpers';
+  PRODUCTS_RECENT_LOADED,
+} from '../../consts';
+import {
+  calcMacroByQuantity,
+  getRevertedTemplateId,
+  normalizeMeal,
+} from './helpers';
+import { DiaryActions } from '../../actions';
+import { getDayFromDate, getTimeFromDate, filterByUniqueId } from '../../../common/utils';
+import { DiaryState, DiaryMeal, DiaryMealTemplate } from './types';
+import { defaultTemplates } from '../../../common/helpers';
 
 const initialState: DiaryState = {
   meals: [],
@@ -40,10 +45,12 @@ export function diaryReducer(
           return [{
             id: getRevertedTemplateId(template.id),
             name: template.name,
-            carbs: 0,
-            prots: 0,
-            fats: 0,
-            kcal: 0,
+            macro: {
+              carbs: 0,
+              prots: 0,
+              fats: 0,
+              kcal: 0,
+            },
             day: null,
             date: null,
             time: template.time,
@@ -77,14 +84,22 @@ export function diaryReducer(
           return {
             ...normalizedProduct,
             isToggled: false,
-            macro: calcMacroByQuantity(normalizedProduct)
+            calcedMacro: calcMacroByQuantity(normalizedProduct.macro, normalizedProduct.quantity)
           }
         })
       })
     }
     case MEAL_ADDED: {
       const { templateId } = action.meta;
-      const { meal: normalizedMeal, products } = normalizeMeal(action.payload, templateId);
+      const {
+        meal: normalizedMeal,
+        products,
+        rawProducts,
+      } = normalizeMeal(action.payload, templateId);
+      const recentProducts = [
+        ...rawProducts,
+        ...state.recentProducts
+      ].filter(filterByUniqueId);
 
       if (templateId !== null) {
         return {
@@ -95,13 +110,15 @@ export function diaryReducer(
               return { ...normalizedMeal, isToggled: true };
             }
             return meal;
-          })
+          }),
+          recentProducts
         }
       }
       return {
         ...state,
         products: [...state.products, ...products],
-        meals: [...state.meals, { ...normalizedMeal, type: 'meal' }]
+        meals: [...state.meals, { ...normalizedMeal, type: 'meal' }],
+        recentProducts
       }
     }
     case MEAL_DELETED: return {
@@ -115,10 +132,12 @@ export function diaryReducer(
             const { templateId, name, time } = meal;
             return [{
               id: getRevertedTemplateId(meal.templateId),
-              carbs: 0,
-              prots: 0,
-              fats: 0,
-              kcal: 0,
+              macro: {
+                carbs: 0,
+                prots: 0,
+                fats: 0,
+                kcal: 0,
+              },
               day: null,
               date: null,
               type: 'template',
@@ -164,9 +183,12 @@ export function diaryReducer(
         {
           ...action.payload,
           isToggled: false,
-          macro: calcMacroByQuantity(action.payload)
+          calcedMacro: calcMacroByQuantity(action.payload.macro, action.payload.quantity),
         }
-      ]
+      ],
+      recentProducts: action.meta.rawProduct
+        ? [action.meta.rawProduct, ...state.recentProducts].filter(filterByUniqueId)
+        : state.recentProducts
     }
     case MEAL_PRODUCT_DELETED: return {
       ...state,
@@ -192,7 +214,7 @@ export function diaryReducer(
           ) {
             return {
               ...merged,
-              macro: calcMacroByQuantity(merged)
+              calcedMacro: calcMacroByQuantity(merged.macro, merged.quantity)
             }
           }
           return merged;
@@ -215,6 +237,10 @@ export function diaryReducer(
           ? !product.isToggled
           : false
       }))
+    }
+    case PRODUCTS_RECENT_LOADED: return {
+      ...state,
+      recentProducts: action.payload
     }
     default: return state;
   }

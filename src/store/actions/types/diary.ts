@@ -9,10 +9,11 @@ import {
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
   MEALS_LOADED,
+  PRODUCTS_RECENT_LOADED,
 } from '../../consts';
-import { Meal, IProductMerged, IProduct } from '../../../database/entities';
+import { Meal, IProductMerged, IProduct, Product } from '../../../database/entities';
 import { ProductId, TemplateId, MealId } from '../../../types';
-import { DiaryProduct, DiaryMealId, DiaryMeal } from '../../reducers/types/diary';
+import { DiaryMeal, DiaryProduct, DiaryMealId } from '../../reducers/diary';
 
 export type MealUpdated = {
   type: typeof MEAL_UPDATED
@@ -28,7 +29,10 @@ export type MealDeleted = {
 export type MealProductAdded = {
   type: typeof MEAL_PRODUCT_ADDED
   payload: IProductMerged
-  meta: { mealId: MealId }
+  meta: {
+    mealId: MealId
+    rawProduct?: Product
+  }
 }
 
 export type MealProductDeleted = {
@@ -77,6 +81,11 @@ export type MealAdded = {
   }
 }
 
+export type ProductsRecentLoaded = {
+  type: typeof PRODUCTS_RECENT_LOADED
+  payload: Product[]
+}
+
 export type DiaryActions =
   | MealUpdated 
   | MealDeleted 
@@ -88,3 +97,4 @@ export type DiaryActions =
   | MealsLoaded
   | ProductToggled
   | MealAdded
+  | ProductsRecentLoaded

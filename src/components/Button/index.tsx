@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { TouchableOpacityProps } from 'react-native';
-import { Theme } from '../../common/theme';
 
 interface ButtonProps extends TouchableOpacityProps {
   title: string
@@ -12,21 +11,16 @@ export const Button = ({ title, ...props }: ButtonProps) => (
   </Container>
 );
 
-const Container = styled.TouchableOpacity<{
-  theme: Theme
-}>`
-  background-color: ${props => props.theme.focusColor};
+const Container = styled.TouchableOpacity`
+  background-color: ${props => props.theme.color.focus};
   border-radius: 8px;
   padding: 12px 15px;
 `
 
-const Title = styled.Text<{
-  theme: Theme
-}>`
+const Title = styled.Text`
   color: #fff;
-  font-family: ${props => props.theme.fontFamily};
+  font-family: ${props => props.theme.fontWeight.medium};
   text-align: center;
   text-transform: capitalize;
-  font-size: 16px;
-  font-family: DMSans-Medium;
+  font-size: ${props => props.theme.fontSize.large};
 `
