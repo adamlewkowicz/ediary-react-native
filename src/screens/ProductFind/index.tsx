@@ -11,12 +11,16 @@ import { BarcodeScanParams } from '../BarcodeScan';
 import { Screen, BarcodeId } from '../../types';
 import { Button } from 'react-native-ui-kitten';
 import { ProductCreateParams } from '../ProductCreate';
-import { useConnected } from '../../common/hooks';
+import { useConnected, useIdleStatus } from '../../common/hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
+import { ActivityIndicator } from 'react-native';
 
 const debounceA = debounce_();
-const FOUND_PRODUCTS = 'FOUND_PRODUCTS';
+const SECTION_TITLE = {
+  foundProducts: 'Znalezione produkty:',
+  recentProducts: 'Ostatnie produkty:',
+}
 
 interface ProductFindProps extends NavigationScreenProps {}
 export const ProductFind = (props: ProductFindProps) => {
@@ -31,6 +35,7 @@ export const ProductFind = (props: ProductFindProps) => {
   const productsAreEmpty = !products.length;
   const recentProducts = useSelector((state: StoreState) => state.diary.recentProducts);
   const hasBeenPressed = useRef(false);
+  const isIdle = useIdleStatus();
 
   function handleProductSearch(name: string) {
     setName(name);
@@ -140,15 +145,16 @@ export const ProductFind = (props: ProductFindProps) => {
         keyExtractor={(product, index) => `${product.id}${index}`}
         keyboardShouldPersistTaps="handled"
         ItemSeparatorComponent={Separator}
-        renderSectionHeader={({ section: { title, key }}) => (
-          <SectionTitleContainer isFirst={key === FOUND_PRODUCTS}>
+        renderSectionHeader={({ section: { title }}) => (
+          <SectionTitleContainer isFirst={title === SECTION_TITLE.foundProducts}>
             <Title>{title}</Title>
-            {key === FOUND_PRODUCTS && renderInfo()}
+            {title === SECTION_TITLE.foundProducts && renderInfo()}
+            {title === SECTION_TITLE.recentProducts && !isIdle && <ActivityIndicator />}
           </SectionTitleContainer>
         )}
         sections={[
-          { title: 'Znalezione produkty:', data: products, key: FOUND_PRODUCTS },
-          { title: 'Ostatnie produkty:', data: recentProducts },
+          { title: SECTION_TITLE.foundProducts, data: products },
+          { title: SECTION_TITLE.recentProducts, data: isIdle ? recentProducts : [] },
         ]}
         renderItem={({ item }) => (
           <ProductListItem
