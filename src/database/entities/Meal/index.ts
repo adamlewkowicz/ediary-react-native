@@ -7,17 +7,18 @@ import {
   JoinColumn,
   Between,
 } from 'typeorm';
-import { Product, IProductMerged } from './Product';
-import { MealProduct } from './MealProduct';
-import { MealId, UserId, DateDay, ProductId } from '../../types';
-import { User } from './User';
+import { Product, IProductMerged } from '../Product';
+import { MealProduct } from '../MealProduct';
+import { MealId, UserId, DateDay, ProductId } from '../../../types';
+import { User } from '../User';
 import { DeepPartial } from 'typeorm';
-import { EntityType } from '../types';
-import { GenericEntity } from '../generics/GenericEntity';
+import { EntityType } from '../../types';
+import { GenericEntity } from '../../generics/GenericEntity';
 import dayjs from 'dayjs';
-import { DATE_FORMAT, DATE_DAY } from '../../common/consts';
-import { Macro } from '../embeds/Macro';
-import { DiaryTemplate } from '../../store/reducers/diary';
+import { DATE_FORMAT, DATE_DAY } from '../../../common/consts';
+import { Macro } from '../../embeds/Macro';
+import { DiaryTemplate } from '../../../store/reducers/diary';
+import { getDayFromDate } from '../../../common/utils';
 
 @Entity('meal')
 export class Meal extends GenericEntity {
@@ -141,6 +142,27 @@ export class Meal extends GenericEntity {
       productId,
       quantity
     );
+  }
+
+  static async getMacroSummary(
+    startDay: DateDay,
+    periodInDays = 7,
+  ) {
+    const datePeriod = dayjs(startDay as any).add(periodInDays, 'day');
+    const endDay = getDayFromDate(datePeriod);
+
+    const result = await Meal.createQueryBuilder('meal')
+      .select('DATE(meal.date)', 'day')
+      .addSelect('SUM(meal.carbs)', 'carbs')
+      .addSelect('SUM(meal.prots)', 'prots')
+      .addSelect('SUM(meal.fats)', 'fats')
+      .addSelect('SUM(meal.kcal)', 'kcal')
+      .where('meal.date >= :startDate', { startDate: `${startDay} 00:00:00` })
+      .andWhere('meal.date <= :endDate', { endDate: `${endDay} 23:59:00` })
+      .groupBy('day')
+      .getRawMany();
+
+    return result;
   }
 
 }
