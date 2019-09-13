@@ -2,16 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
 import * as Actions from '../../store/actions';
-import { StoreState, Dispatch } from '../../store';
-import { FlatList, Alert, InteractionManager } from 'react-native';
-import * as selectors from '../../store/selectors';
+import { StoreState, Dispatch, Selectors } from '../../store';
+import { FlatList, Alert } from 'react-native';
 import { DateChanger } from '../../components/DateChanger';
 import { MacroCard } from '../../components/MacroCard';
 import { theme } from '../../common/theme';
 import styled from 'styled-components/native';
 import { MealListItem } from '../../components/MealListItem';
 import { BasicInput } from '../../components/BasicInput';
-import { NavigationScreenProps } from 'react-navigation';
+import { NavigationScreenProps, ScrollView } from 'react-navigation';
 import { ProductFindParams } from '../ProductFind';
 import { mealProductAdd } from '../../store/actions';
 import { ProductCreateParams } from '../ProductCreate';
@@ -25,50 +24,49 @@ import { useAfterInteractions } from '../../common/hooks';
 interface HomeProps extends NavigationScreenProps {
   appDate: StoreState['application']['date']
   appDateDay: StoreState['application']['day']
-  macroNeedsLeft: selectors.MacroNeedsLeft
+  macroNeedsLeft: Selectors.MacroNeedsLeft
   toggledProductId: StoreState['diary']['toggledProductId']
-  mealsWithRatio: selectors.MealsWithRatio
+  mealsWithRatio: Selectors.MealsWithRatio
   dispatch: Dispatch
 }
 const Home = (props: HomeProps) => {
   const [name, setName] = useState('Trening');
   const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
   const { dispatch } = props;
+
   useAfterInteractions(() => dispatch(Actions.productsRecentLoad()));
 
   useEffect(() => {
     dispatch(Actions.mealsFindByDay(props.appDateDay));
   }, [props.appDateDay]);
 
-  const handleProductFinderNavigation = (
+  const handleProductFindNavigation = (
     meal: DiaryMeal | DiaryMealTemplate
   ) => {
     const screenParams: ProductFindParams = {
-      onItemPress(foundProduct) {
-        InteractionManager.runAfterInteractions(async () => {
-          props.navigation.navigate('Home');
-          setProcessedMealId(meal.id);
-  
-          if (meal.type === 'template') {
-            const { name, templateId, time } = meal;
-            const template = { id: templateId, name, templateId, time };
-            await dispatch(
-              Actions.mealCreateFromTemplate(
-                template, props.appDate, foundProduct.id
-              )
-            );
-          } else {
-            await dispatch(mealProductAdd(meal.id, foundProduct.id));
-          }
-  
-          setProcessedMealId(null);
-        });
+      async onItemPress(foundProduct) {
+        props.navigation.navigate('Home');
+        setProcessedMealId(meal.id);
+
+        if (meal.type === 'template') {
+          const { name, templateId, time } = meal;
+          const template = { id: templateId, name, templateId, time };
+          await dispatch(
+            Actions.mealCreateFromTemplate(
+              template, props.appDate, foundProduct.id
+            )
+          );
+        } else {
+          await dispatch(mealProductAdd(meal.id, foundProduct.id));
+        }
+
+        setProcessedMealId(null);
       }
     }
     props.navigation.navigate('ProductFind', screenParams);
   }
   
-  const handleProductCreatorNavigation = () => {
+  const handleProductCreateNavigation = () => {
     const screenParams: ProductCreateParams = {
       onProductCreated() {
         props.navigation.navigate('Home');
@@ -95,7 +93,7 @@ const Home = (props: HomeProps) => {
   }
   
   return (
-    <Container>
+    <ScrollView>
       <DateChanger
         value={props.appDate}
         onChange={date => dispatch(Actions.appDateUpdated(date))}
@@ -116,33 +114,27 @@ const Home = (props: HomeProps) => {
       <FlatList
         data={props.mealsWithRatio}
         keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => (
+        renderItem={({ item: meal }) => (
           <MealListItem
-            meal={item}
+            meal={meal}
             toggledProductId={props.toggledProductId}
-            onProductAdd={() => handleProductFinderNavigation(item)}
+            onProductAdd={() => handleProductFindNavigation(meal)}
             onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
-            onLongPress={IS_DEV || item.type === 'template' ? undefined : () => handleMealDelete(item)}
-            isBeingProcessed={processedMealId === item.id}
-            {...item.type === 'meal' && {
-              onProductDelete: (productId) => dispatch(Actions.mealProductDelete(item.id, productId)),
+            onLongPress={IS_DEV || meal.type === 'template' ? undefined : () => handleMealDelete(meal)}
+            isBeingProcessed={processedMealId === meal.id}
+            {...meal.type === 'meal' && {
+              onProductDelete: (productId) => dispatch(Actions.mealProductDelete(meal.id, productId)),
               onProductToggle: (productId) => dispatch(Actions.productToggled(productId)),
               onProductQuantityUpdate: (productId, quantity) => dispatch(
-                Actions.mealProductQuantityUpdate(item.id, productId, quantity)
+                Actions.mealProductQuantityUpdate(meal.id, productId, quantity)
               )
             }}
           />
         )}
       />
-      <Button
-        onPress={handleProductCreatorNavigation}
-        style={{
-          marginVertical: 40,
-          marginHorizontal: 5 
-        }}
-      >
+      <CreateProductButton onPress={handleProductCreateNavigation}>
         Dodaj własny produkt
-      </Button>
+      </CreateProductButton>
       <CreateMealContainer>
         <BasicInput
           placeholder="Nazwa nowego posiłku"
@@ -157,25 +149,13 @@ const Home = (props: HomeProps) => {
           Dodaj posiłek
         </Button>
       </CreateMealContainer>
-    </Container>
+    </ScrollView>
   );
 }
 
-const HomeConnected = connect(
-  (state: StoreState) => ({
-    macroNeedsLeft: selectors.macroNeedsLeft(state),
-    toggledProductId: state.diary.toggledProductId,
-    appDate: state.application.date,
-    appDateDay: state.application.day,
-    mealsWithRatio: selectors.mealsWithRatio(state),
-  })
-)(Home);
-
-(HomeConnected as any).navigationOptions = {
-  header: null
-}
-
-const Container = styled.ScrollView``
+const CreateProductButton = styled(Button)`
+  margin: 40px 5px;
+`
 
 const MacroCards = styled.View`
   display: flex;
@@ -188,5 +168,19 @@ const MacroCards = styled.View`
 const CreateMealContainer = styled.View`
   padding: 10px 5px;
 `
+
+const mapStateToProps = (state: StoreState) => ({
+  macroNeedsLeft: Selectors.macroNeedsLeft(state),
+  toggledProductId: state.diary.toggledProductId,
+  appDate: state.application.date,
+  appDateDay: state.application.day,
+  mealsWithRatio: Selectors.mealsWithRatio(state),
+});
+
+const HomeConnected = connect(mapStateToProps)(Home);
+
+(HomeConnected as any).navigationOptions = {
+  header: null,
+}
 
 export { HomeConnected as Home };
