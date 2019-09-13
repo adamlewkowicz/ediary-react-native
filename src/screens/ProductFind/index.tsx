@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components/native';
 import { sortByMostAccurateName, debounce_ } from '../../common/utils';
 import { Product } from '../../database/entities';
@@ -12,8 +12,8 @@ import { Screen, BarcodeId } from '../../types';
 import { Button } from 'react-native-ui-kitten';
 import { ProductCreateParams } from '../ProductCreate';
 import { useConnected } from '../../common/hooks';
-import { useSelector, useDispatch } from 'react-redux';
-import { StoreState, Actions } from '../../store';
+import { useSelector } from 'react-redux';
+import { StoreState } from '../../store';
 
 const debounceA = debounce_();
 const FOUND_PRODUCTS = 'FOUND_PRODUCTS';
@@ -30,16 +30,7 @@ export const ProductFind = (props: ProductFindProps) => {
   const isConnected = useConnected();
   const productsAreEmpty = !products.length;
   const recentProducts = useSelector((state: StoreState) => state.diary.recentProducts);
-  const dispatch = useDispatch();
   const hasBeenPressed = useRef(false);
-
-  useEffect(() => {
-    if (!recentProducts.length) {
-      setLoading(true);
-      dispatch(Actions.productsLoadRecent());
-      setLoading(false);
-    }
-  }, [recentProducts]);
 
   function handleProductSearch(name: string) {
     setName(name);

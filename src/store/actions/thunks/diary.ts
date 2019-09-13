@@ -160,7 +160,7 @@ export const mealProductAdd = (
   _updateMealMacro(mealId, getState());
 }
 
-export const productsLoadRecent = (): Thunk => async (dispatch) => {
+export const productsRecentLoad = (): Thunk => async (dispatch) => {
   const recentProducts = await Product.findRecentlyUsed();
   if (recentProducts.length) {
     dispatch(productsRecentLoaded(recentProducts));
