@@ -33,7 +33,7 @@ const mealsWithProducts = createSelector(
   }))
 );
 
-const calcedMeals = createSelector(
+export const calcedMeals = createSelector(
   mealsWithProducts,
   meals => meals.map(meal => {
     const summedMacro = meal.products.reduce((macro, product) => ({

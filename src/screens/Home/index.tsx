@@ -20,6 +20,7 @@ import { elementTitles } from '../../common/helpers';
 import { MealId } from '../../types';
 import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
 import { CaloriesChart } from '../../components/CaloriesChart';
+import { Meal } from '../../database/entities';
 
 interface HomeProps extends NavigationScreenProps {
   appDate: StoreState['application']['date']
@@ -36,6 +37,7 @@ const Home = (props: HomeProps) => {
 
   useEffect(() => {
     dispatch(Actions.mealsFindByDay(props.appDateDay));
+    Meal.find().then(console.log)
   }, [props.appDateDay]);
 
   const handleProductFinderNavigation = (

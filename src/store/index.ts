@@ -3,6 +3,7 @@ import { rootReducer } from './reducers';
 import thunk, { ThunkAction } from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension';
 import * as Actions from './actions';
+import * as Selectors from './selectors';
 
 export function configureStore(
   initialState?: Partial<StoreState>
@@ -42,3 +43,4 @@ export interface Dispatch {
 }
 
 export { Actions };
+export { Selectors };
