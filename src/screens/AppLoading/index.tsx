@@ -7,6 +7,7 @@ import { User } from '../../database/entities';
 import { NavigationScreenProps } from 'react-navigation';
 import { databaseConfig } from '../../database/config/config';
 import { getOrCreateConnection } from '../../database/utils/getOrCreateConnection';
+import styled from 'styled-components/native';
 
 interface AppLoadingProps extends NavigationScreenProps {}
 interface AppLoadingState {}
@@ -70,10 +71,11 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
 
   render() {
     return (
-      <ActivityIndicator
-        size="large"
-        style={{ flex: 1 }}
-      />
+      <Spinner size="large" />
     );
   }
 }
+
+const Spinner = styled(ActivityIndicator)`
+  flex: 1;
+`

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useSpring, config, animated } from 'react-spring';
@@ -9,8 +9,6 @@ interface ProgressBarProps {
   vertical?: boolean
   length?: string
   width?: string
-  children?: ReactNode
-  renderContent?: any
   colors: string[]
   rounded?: boolean
   marginVertical?: number
@@ -43,10 +41,8 @@ export const ProgressBar = ({
       <BackgroundStripe
         vertical={vertical}
         width={width}
-        rounded={rounded}
       />
       <AnimatedGradientLine
-        rounded={rounded}
         colors={colors}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -75,10 +71,8 @@ const Container = styled.View<{
 const BackgroundStripe = styled.View<{
   vertical: boolean
   width: string
-  rounded: boolean
 }>`
   background-color: #EBF8FE;
-  border-radius: ${props => props.rounded ? '50px' : '0px'};
   height: ${props => props.vertical ? '100%' : props.width};
   width: ${props => props.vertical ? props.width : '100%'};
 `
@@ -87,10 +81,8 @@ const GradientLine = styled(LinearGradient)<{
   vertical: boolean
   width: string
   percentages: string
-  rounded: boolean
 }>`
   height: ${props => props.vertical ? props.percentages : props.width};
-  border-radius: ${props => props.rounded ? '50px' : '0px'};
   min-height: ${props => props.vertical ? '0' : props.width};
   position: absolute;
   width: ${props => props.vertical ? props.width : props.percentages};
