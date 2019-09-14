@@ -19,7 +19,8 @@ import { DATE_FORMAT, DATE_DAY } from '../../../common/consts';
 import { Macro } from '../../embeds/Macro';
 import { DiaryTemplate } from '../../../store/reducers/diary';
 import { getDayFromDate } from '../../../common/utils';
-import { GetMacroSummaryResult } from './types';
+import { GetMacroSummaryResult, GetMacroHistoryResult } from './types';
+import { baseMacro } from '../../../common/helpers';
 
 @Entity('meal')
 export class Meal extends GenericEntity {
@@ -145,14 +146,14 @@ export class Meal extends GenericEntity {
     );
   }
 
-  static async getMacroSummary(
+  static async getMacroHistory(
     startDay: DateDay,
     periodInDays = 7,
-  ): Promise<GetMacroSummaryResult[]> {
+  ): Promise<GetMacroHistoryResult[]> {
     const datePeriod = dayjs(startDay as any).add(periodInDays, 'day');
     const endDay = getDayFromDate(datePeriod);
 
-    const result: GetMacroSummaryResult[] = await Meal
+    const result: GetMacroHistoryResult[] = await Meal
       .createQueryBuilder('meal')
       .select('DATE(meal.date)', 'day')
       .addSelect('SUM(meal.carbs)', 'carbs')
@@ -165,6 +166,38 @@ export class Meal extends GenericEntity {
       .getRawMany();
 
     return result;
+  }
+
+  static async getMacroSummary(
+    startDay: DateDay,
+    periodInDays?: number,
+  ): Promise<GetMacroSummaryResult> {
+    const macroHistory = await this.getMacroHistory(startDay, periodInDays);
+
+    const macroAverages = macroHistory.reduce((macro, record, index, self) => {
+      const summedMacro = {
+        carbs: macro.carbs + record.carbs,
+        prots: macro.prots + record.prots,
+        fats: macro.fats + record.fats,
+        kcal: macro.kcal + record.kcal
+      }
+      if (index === self.length - 1) {
+        return {
+          carbs: summedMacro.carbs / self.length,
+          prots: summedMacro.prots / self.length,
+          fats: summedMacro.fats / self.length,
+          kcal: summedMacro.kcal / self.length 
+        }
+      }
+      return summedMacro;
+    }, { ...baseMacro });
+
+    const macroSummary: GetMacroSummaryResult = {
+      data: macroHistory,
+      average: macroAverages
+    }
+
+    return macroSummary;
   }
 
 }
