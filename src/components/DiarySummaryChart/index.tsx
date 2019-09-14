@@ -14,16 +14,14 @@ const Gradient = ({ index }: any) => (
 );
 
 interface DiarySummaryChartProps {
-  data: {
-    value: number
-    day: DateDay
-  }[]
+  values: number[]
+  labels: (string | DateDay)[]
 }
 export const DiarySummaryChart = (props: DiarySummaryChartProps) => {
   return (
     <AreaChart
       style={{ height: 200 }}
-      data={props.data.map(data => data.value)}
+      data={props.values}
       contentInset={{ top: 20, bottom: 20 }}
       svg={{ fill: 'url(#gradient)' }}
       curve={shape.curveNatural}

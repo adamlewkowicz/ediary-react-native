@@ -19,6 +19,7 @@ import { DATE_FORMAT, DATE_DAY } from '../../../common/consts';
 import { Macro } from '../../embeds/Macro';
 import { DiaryTemplate } from '../../../store/reducers/diary';
 import { getDayFromDate } from '../../../common/utils';
+import { GetMacroSummaryResult } from './types';
 
 @Entity('meal')
 export class Meal extends GenericEntity {
@@ -147,11 +148,12 @@ export class Meal extends GenericEntity {
   static async getMacroSummary(
     startDay: DateDay,
     periodInDays = 7,
-  ) {
+  ): Promise<GetMacroSummaryResult[]> {
     const datePeriod = dayjs(startDay as any).add(periodInDays, 'day');
     const endDay = getDayFromDate(datePeriod);
 
-    const result = await Meal.createQueryBuilder('meal')
+    const result: GetMacroSummaryResult[] = await Meal
+      .createQueryBuilder('meal')
       .select('DATE(meal.date)', 'day')
       .addSelect('SUM(meal.carbs)', 'carbs')
       .addSelect('SUM(meal.prots)', 'prots')
