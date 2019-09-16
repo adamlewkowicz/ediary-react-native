@@ -55,3 +55,5 @@ export const theme = {
 }
 
 export type Theme = typeof theme;
+export type ThemeColor = keyof Theme['color'];
+export type ThemeFontSize = keyof Theme['fontSize'];

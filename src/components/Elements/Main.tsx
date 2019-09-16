@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { Theme } from '../../common/theme';
+import { ThemeColor, ThemeFontSize } from '../../common/theme';
 import { WheatIcon, SteakIcon, DropIcon, FireIcon } from '../Icons';
 import { TextAlignProperty } from 'csstype';
 
@@ -23,17 +23,20 @@ export const Layout = styled.View`
   background: #fff;
 `;
 
-export const Text = styled.Text<{
+export interface TextProps {
   priority?: 0 | 1 | 2 | 3 | 4
-  size?: keyof Theme['fontSize']
+  size?: ThemeFontSize
   margin?: string
   align?: TextAlignProperty
-}>`
+  color?: ThemeColor
+}
+export const Text = styled.Text<TextProps>`
   font-family: ${props => props.theme.fontWeight.regular};
   font-size: ${props => props.theme.fontSize[props.size || 'regular']};
   margin: ${props => props.margin || '0'};
   text-align: ${props => props.align || 'left'};
   color: ${props => {
+    if (props.color) return props.theme.color[props.color];
     if (!props.priority) return '#000';
     return {
       0: '#000',

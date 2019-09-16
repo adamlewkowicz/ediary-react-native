@@ -7,11 +7,12 @@ import { useSelector, connect } from 'react-redux';
 import { StoreState, Selectors } from '../../store';
 import { GetMacroHistoryResult } from '../../database/entities/Meal/types';
 import dayjs from 'dayjs';
-import { getDayFromDate } from '../../common/utils';
+import { getDayFromDate, calcMacroNeedsLeft } from '../../common/utils';
 import { DateDay, MacroElements } from '../../types';
 import styled from 'styled-components/native';
 import { MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitlesLong, baseMacro } from '../../common/helpers';
+import { RatioInfo } from '../../components/RatioInfo';
 
 interface DiarySummaryProps extends MapStateProps, NavigationScreenProps {}
 const DiarySummary = (props: DiarySummaryProps) => {
@@ -39,6 +40,11 @@ const DiarySummary = (props: DiarySummaryProps) => {
   const summaryLabels = useMemo(() => 
     macroHistory.map(record => record.day),
     [macroHistory]
+  );
+
+  const macroNeeds = useMemo(() => 
+    calcMacroNeedsLeft(macroSummary, props.macroNeeds),
+    [macroSummary, props.macroNeeds] 
   );
 
   return (
@@ -71,6 +77,13 @@ const DiarySummary = (props: DiarySummaryProps) => {
             ({element === 'kcal' ? 'kcal' : 'g'})
           </Text>
           <Block align="flex-end">
+            <RatioInfo
+              allowedDiff={15}
+              ratio={macroNeeds[element].ratio}
+              value={macroNeeds[element].diff}
+              margin="0 8px 0 0"
+              size="tiny"
+            />
             <Text size="big" margin="0 5px 0 0">
               {Math.round(macroSummary[element])}
             </Text>
