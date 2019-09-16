@@ -147,11 +147,11 @@ export class Meal extends GenericEntity {
   }
 
   static async getMacroHistory(
-    startDay: DateDay,
-    periodInDays = 7,
+    endDay: DateDay,
+    daysToSubtract = 7,
   ): Promise<GetMacroHistoryResult[]> {
-    const datePeriod = dayjs(startDay as any).add(periodInDays, 'day');
-    const endDay = getDayFromDate(datePeriod);
+    const datePeriod = dayjs(endDay as any).subtract(daysToSubtract, 'day');
+    const startDay = getDayFromDate(datePeriod);
 
     const result: GetMacroHistoryResult[] = await Meal
       .createQueryBuilder('meal')
