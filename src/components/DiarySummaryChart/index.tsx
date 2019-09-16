@@ -27,15 +27,15 @@ interface DiarySummaryChartProps {
 }
 export const DiarySummaryChart = (props: DiarySummaryChartProps) => {
 
-  const axesSvg = { fontSize: 10, fill: 'grey' };
+  const axesSvg = { fontSize: 10, fill: theme.color.gray20, fontFamily: theme.fontWeight.regular };
   const verticalContentInset = { top: 10, bottom: 10 }
   const xAxisHeight = 30
 
   return (
-    <View style={{ height: 200, flexDirection: 'row', padding: 15 }}>
+    <View style={{ height: 200, flexDirection: 'row', marginBottom: 20 }}>
       <YAxis
         data={props.records.map(record => record.value)}
-        style={{ marginBottom: xAxisHeight }}
+        style={{ marginBottom: xAxisHeight, minWidth: 30 }}
         contentInset={verticalContentInset}
         svg={axesSvg}
         numberOfTicks={5}
@@ -48,18 +48,19 @@ export const DiarySummaryChart = (props: DiarySummaryChartProps) => {
           svg={{ fill: 'url(#gradient)' }}
           curve={shape.curveNatural}
         >
-          <Grid svg={{ opacity: 0.3 }} />
+          <Grid svg={{ stroke: theme.color.gray10 }} />
           <Gradient />
         </AreaChart>
         <XAxis
           data={props.records}
           svg={{
-              fill: 'black',
-              fontSize: 8,
-              fontWeight: 'bold',
-              rotation: 20,
-              originY: 30,
-              y: 5,
+            fill: 'black',
+            fontSize: 8,
+            fontWeight: 'bold',
+            rotation: 20,
+            originY: 30,
+            y: 5,
+            fontFamily: theme.fontWeight.regular
           }}
           xAccessor={ ({ item }) => item.label }
           scale={ scale.scaleTime }

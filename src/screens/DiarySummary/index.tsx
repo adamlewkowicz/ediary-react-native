@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { NavigationScreenProps } from 'react-navigation';
-import { H1, Text, Block } from '../../components/Elements';
+import { H1, Text, Block, TitleSecondary } from '../../components/Elements';
 import { DiarySummaryChart } from '../../components/DiarySummaryChart';
 import { Meal } from '../../database/entities';
 import { useSelector, connect } from 'react-redux';
@@ -43,7 +43,10 @@ const DiarySummary = (props: DiarySummaryProps) => {
 
   return (
     <Container>
-      <H1>Podsumowanie</H1>
+      <H1 margin="5px 0">Podsumowanie</H1>
+      <TitleSecondary margin="0 0 10px 0">
+        Dzienne spożycie kalorii
+      </TitleSecondary>
       <DiarySummaryChart
         records={macroHistory.map((record, index) => ({
           value: record.kcal,
@@ -52,7 +55,10 @@ const DiarySummary = (props: DiarySummaryProps) => {
         values={summaryValues}
         labels={summaryLabels}
       />
-      <H1>Makroskładniki</H1>
+      <H1 margin="5px 0">Makroskładniki</H1>
+      <TitleSecondary margin="0 0 10px 0">
+        Średnie dzienne spożycie
+      </TitleSecondary>
       {MACRO_ELEMENTS.map(element => (
         <Block
           key={element}
@@ -60,7 +66,7 @@ const DiarySummary = (props: DiarySummaryProps) => {
           align="flex-end"
           marginVertical={12}
         >
-          <Text priority={2}>
+          <Text priority={0}>
             {elementTitlesLong[element]}{' '}
             ({element === 'kcal' ? 'kcal' : 'g'})
           </Text>
