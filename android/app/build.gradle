@@ -77,7 +77,7 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     entryFile: "index.js",
-    enableHermes: true,  // clean and rebuild if changing
+    enableHermes: false,  // clean and rebuild if changing
     // staging
     devDisabledInStaging: true,
     bundleInStaging: true,
@@ -218,6 +218,7 @@ dependencies {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
         releaseImplementation files(hermesPath + "hermes-release.aar")
+        stagingImplementation files(hermesPath + "hermes-release.aar")
     } else {
         implementation jscFlavor
     }
