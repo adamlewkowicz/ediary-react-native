@@ -1,8 +1,9 @@
 import React from 'react';
 import Svg, { G, Path, SvgProps, Rect } from 'react-native-svg';
+import { theme } from '../../common/theme';
 const StyledPath = Path as any;
 
-export const SteakIcon = (props: any) => (
+export const SteakIcon = (props: SvgProps) => (
   <Svg
     id="Capa_1"
     x="0px"
@@ -10,6 +11,7 @@ export const SteakIcon = (props: any) => (
     viewBox="0 0 229.202 229.202"
     style={{ enableBackground: 'new 0 0 229.202 229.202' }}
     xmlSpace="preserve"
+    fill={theme.color.prots}
     {...props}
   >
     <G>
@@ -36,7 +38,7 @@ export const SteakIcon = (props: any) => (
   </Svg>
 );
 
-export const WheatIcon = (props: any) => (
+export const WheatIcon = (props: SvgProps) => (
   <Svg
     id="Capa_1"
     x="0px"
@@ -44,9 +46,10 @@ export const WheatIcon = (props: any) => (
     width="950.002px"
     height="950.002px"
     viewBox="0 0 950.002 950.002"
-    style={{
-      enableBackground: 'new 0 0 950.002 950.002',
-    }}
+    fill={theme.color.carbs}
+    // style={{
+    //   enableBackground: 'new 0 0 950.002 950.002',
+    // }}
     xmlSpace="preserve"
     {...props}
   >
@@ -430,3 +433,13 @@ export const RightArrowIcon = (props: any) => (
     <Path d="M40.4 121.3c-.8.8-1.8 1.2-2.9 1.2s-2.1-.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8 0l53.9 53.9c1.6 1.6 1.6 4.2 0 5.8l-53.9 53.9z" />
   </Svg>
 );
+
+interface NutritionIconProps {
+  element: 'carbs' | 'prots' | 'fats' | 'kcal'
+}
+export const NutritionIcon = ({ element }: NutritionIconProps) => ({
+  carbs: WheatIcon,
+  prots: null,
+  fats: null,
+  kcal: null,
+}[element]);

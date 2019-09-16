@@ -1,28 +1,34 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { NavigationScreenProps } from 'react-navigation';
-import { View } from 'react-native';
-import { Title } from '../../components/Elements';
+import { H1, Text, Block } from '../../components/Elements';
 import { DiarySummaryChart } from '../../components/DiarySummaryChart';
 import { Meal } from '../../database/entities';
-import { useSelector } from 'react-redux';
-import { StoreState } from '../../store';
+import { useSelector, connect } from 'react-redux';
+import { StoreState, Selectors } from '../../store';
 import { GetMacroHistoryResult } from '../../database/entities/Meal/types';
 import dayjs from 'dayjs';
 import { getDayFromDate } from '../../common/utils';
-import { DateDay } from '../../types';
+import { DateDay, MacroElements } from '../../types';
+import styled from 'styled-components/native';
+import { MACRO_ELEMENTS } from '../../common/consts';
+import { elementTitlesLong, baseMacro } from '../../common/helpers';
 
-interface DiarySummaryProps extends NavigationScreenProps {}
-export const DiarySummary = (props: DiarySummaryProps) => {
+interface DiarySummaryProps extends MapStateProps, NavigationScreenProps {}
+const DiarySummary = (props: DiarySummaryProps) => {
   const appDateDay = useSelector((state: StoreState) => state.application.day);
   const [dateDay, setDateDay] = useState<DateDay>(() => {
     const date = dayjs(appDateDay as any);
     return getDayFromDate(date);
   });
   const [macroHistory, setMacroHistory] = useState<GetMacroHistoryResult[]>([]);
+  const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...baseMacro }));
 
   useEffect(() => {
-    Meal.getMacroHistory(dateDay)
-      .then(result => setMacroHistory(result))
+    Meal.getMacroSummary(dateDay)
+      .then(result => {
+        setMacroHistory(result.data);
+        setMacroSummary(result.average);
+      })
       .catch(console.error);
   }, [appDateDay]);
 
@@ -36,8 +42,8 @@ export const DiarySummary = (props: DiarySummaryProps) => {
   );
 
   return (
-    <View>
-      <Title>Podsumowanie</Title>
+    <Container>
+      <H1>Podsumowanie</H1>
       <DiarySummaryChart
         records={macroHistory.map((record, index) => ({
           value: record.kcal,
@@ -46,6 +52,45 @@ export const DiarySummary = (props: DiarySummaryProps) => {
         values={summaryValues}
         labels={summaryLabels}
       />
-    </View>
+      <H1>Makroskładniki</H1>
+      {MACRO_ELEMENTS.map(element => (
+        <Block
+          key={element}
+          space="space-between"
+          align="flex-end"
+          marginVertical={12}
+        >
+          <Text priority={2}>
+            {elementTitlesLong[element]}{' '}
+            ({element === 'kcal' ? 'kcal' : 'g'})
+          </Text>
+          <Block align="flex-end">
+            <Text size="big" margin="0 5px 0 0">
+              {Math.round(macroSummary[element])}
+            </Text>
+            <Text size="regular" priority={3}>
+              / {props.macroNeeds[element]}
+            </Text>
+          </Block>
+        </Block>
+      ))}
+    </Container>
   );
 }
+
+const Container = styled.ScrollView`
+  padding: 15px;
+  background: #fff;
+  min-height: 100%;
+`
+
+interface MapStateProps {
+  macroNeeds: Selectors.MacroNeeds
+}
+
+const mapStateToProps = (state: StoreState): MapStateProps => ({
+  macroNeeds: Selectors.macroNeeds(state)
+});
+const DiarySummaryConnected = connect(mapStateToProps)(DiarySummary);
+
+export { DiarySummaryConnected as DiarySummary }; 

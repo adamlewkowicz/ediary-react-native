@@ -105,3 +105,4 @@ export const macroNeedsLeft = createSelector(
 
 export type MacroNeedsLeft = ReturnType<typeof macroNeedsLeft>;
 export type MealsWithRatio = ReturnType<typeof mealsWithRatio>;
+export type MacroNeeds = ReturnType<typeof macroNeeds>;
