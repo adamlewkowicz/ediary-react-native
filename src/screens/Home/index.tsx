@@ -21,12 +21,7 @@ import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/
 import { CaloriesChart } from '../../components/CaloriesChart';
 import { useAfterInteractions } from '../../common/hooks';
 
-interface HomeProps extends NavigationScreenProps {
-  appDate: StoreState['application']['date']
-  appDateDay: StoreState['application']['day']
-  macroNeedsLeft: Selectors.MacroNeedsLeft
-  toggledProductId: StoreState['diary']['toggledProductId']
-  mealsWithRatio: Selectors.MealsWithRatio
+interface HomeProps extends NavigationScreenProps, MapStateProps {
   dispatch: Dispatch
 }
 const Home = (props: HomeProps) => {
@@ -169,7 +164,15 @@ const CreateMealContainer = styled.View`
   padding: 10px 5px;
 `
 
-const mapStateToProps = (state: StoreState) => ({
+interface MapStateProps {
+  appDate: StoreState['application']['date']
+  appDateDay: StoreState['application']['day']
+  macroNeedsLeft: Selectors.MacroNeedsLeft
+  toggledProductId: StoreState['diary']['toggledProductId']
+  mealsWithRatio: Selectors.MealsWithRatio
+}
+
+const mapStateToProps = (state: StoreState): MapStateProps => ({
   macroNeedsLeft: Selectors.macroNeedsLeft(state),
   toggledProductId: state.diary.toggledProductId,
   appDate: state.application.date,
