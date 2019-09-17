@@ -15,9 +15,7 @@
     "postversion": "react-native-version"
   },
   "husky": {
-    "hooks": {
-      "pre-commit": "npm run type-check"
-    }
+    "hooks": {}
   },
   "dependencies": {
     "@eva-design/eva": "^1.0.1",
