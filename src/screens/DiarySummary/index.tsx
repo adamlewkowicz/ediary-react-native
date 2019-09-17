@@ -3,11 +3,9 @@ import { NavigationScreenProps } from 'react-navigation';
 import { H1, Text, Block, TitleSecondary } from '../../components/Elements';
 import { DiarySummaryChart } from '../../components/DiarySummaryChart';
 import { Meal } from '../../database/entities';
-import { useSelector, connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { StoreState, Selectors } from '../../store';
-import { GetMacroHistoryResult } from '../../database/entities/Meal/types';
-import dayjs from 'dayjs';
-import { getDayFromDate, calcMacroNeedsLeft } from '../../common/utils';
+import { calcMacroNeedsLeft } from '../../common/utils';
 import { DateDay, MacroElements } from '../../types';
 import styled from 'styled-components/native';
 import { MACRO_ELEMENTS } from '../../common/consts';
@@ -17,32 +15,22 @@ import { useFocusState } from 'react-navigation-hooks';
 
 interface DiarySummaryProps extends MapStateProps, NavigationScreenProps {}
 const DiarySummary = (props: DiarySummaryProps) => {
-  const appDateDay = useSelector((state: StoreState) => state.application.day);
-  const [dateDay, setDateDay] = useState<DateDay>(() => {
-    const date = dayjs(appDateDay as any);
-    return getDayFromDate(date);
-  });
-  const [macroHistory, setMacroHistory] = useState<GetMacroHistoryResult[]>([]);
   const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...baseMacro }));
+  const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]);
   const { isFocused } = useFocusState();
 
   async function handleMacroSummaryFetch() {
-    const result = await Meal.getMacroSummary(dateDay);
-    setMacroHistory(result.data);
+    const result = await Meal.getMacroSummary(props.appDateDay);
     setMacroSummary(result.average);
+    setHistoryRecords(result.data.map(record => ({
+      value: record.kcal,
+      date: new Date(record.day as any)
+    })));
   }
 
   useEffect(() => {
     handleMacroSummaryFetch();
   }, [isFocused]);
-
-  const records = useMemo(() =>
-    macroHistory.map(record => ({
-      value: record.kcal,
-      date: new Date(record.day as any)
-    })),
-    [macroHistory]
-  );
 
   const macroNeeds = useMemo(() => 
     calcMacroNeedsLeft(macroSummary, props.macroNeeds),
@@ -57,7 +45,7 @@ const DiarySummary = (props: DiarySummaryProps) => {
       </TitleSecondary>
       <DiarySummaryChart
         dateFormat="ddd - DD.MM"
-        data={records}
+        data={historyRecords}
       />
       <H1 margin="5px 0">Makroskładniki</H1>
       <TitleSecondary margin="0 0 10px 0">
@@ -103,11 +91,18 @@ const Container = styled.ScrollView`
 
 interface MapStateProps {
   macroNeeds: Selectors.MacroNeeds
+  appDateDay: DateDay
 }
 
 const mapStateToProps = (state: StoreState): MapStateProps => ({
-  macroNeeds: Selectors.macroNeeds(state)
+  macroNeeds: Selectors.macroNeeds(state),
+  appDateDay: state.application.day,
 });
 const DiarySummaryConnected = connect(mapStateToProps)(DiarySummary);
 
-export { DiarySummaryConnected as DiarySummary }; 
+export { DiarySummaryConnected as DiarySummary };
+
+type HistoryRecord = {
+  value: number
+  date: Date
+}
