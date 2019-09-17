@@ -16,8 +16,7 @@
     "postversion": "react-native-version"
   },
   "husky": {
-    "hooks": {
-    }
+    "hooks": {}
   },
   "dependencies": {
     "@eva-design/eva": "^1.0.1",
@@ -38,6 +37,7 @@
     "react-native-swipeable": "^0.6.0",
     "react-native-ui-kitten": "^4.1.0",
     "react-navigation": "^3.11.1",
+    "react-navigation-hooks": "^1.0.3",
     "react-redux": "^7.1.0",
     "react-spring": "^8.0.27",
     "redux": "^4.0.4",

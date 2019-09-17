@@ -13,6 +13,7 @@ import styled from 'styled-components/native';
 import { MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitlesLong, baseMacro } from '../../common/helpers';
 import { RatioInfo } from '../../components/RatioInfo';
+import { useFocusState } from 'react-navigation-hooks';
 
 interface DiarySummaryProps extends MapStateProps, NavigationScreenProps {}
 const DiarySummary = (props: DiarySummaryProps) => {
@@ -23,15 +24,17 @@ const DiarySummary = (props: DiarySummaryProps) => {
   });
   const [macroHistory, setMacroHistory] = useState<GetMacroHistoryResult[]>([]);
   const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...baseMacro }));
+  const { isFocused } = useFocusState();
+
+  async function handleMacroSummaryFetch() {
+    const result = await Meal.getMacroSummary(dateDay);
+    setMacroHistory(result.data);
+    setMacroSummary(result.average);
+  }
 
   useEffect(() => {
-    Meal.getMacroSummary(dateDay)
-      .then(result => {
-        setMacroHistory(result.data);
-        setMacroSummary(result.average);
-      })
-      .catch(console.error);
-  }, [appDateDay]);
+    handleMacroSummaryFetch();
+  }, [isFocused]);
 
   const records = useMemo(() =>
     macroHistory.map(record => ({
