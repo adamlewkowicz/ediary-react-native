@@ -33,12 +33,11 @@ const DiarySummary = (props: DiarySummaryProps) => {
       .catch(console.error);
   }, [appDateDay]);
 
-  const summaryValues = useMemo(() =>
-    macroHistory.map(record => record.kcal),
-    [macroHistory]
-  );
-  const summaryLabels = useMemo(() => 
-    macroHistory.map(record => record.day),
+  const records = useMemo(() =>
+    macroHistory.map(record => ({
+      value: record.kcal,
+      date: new Date(record.day as any)
+    })),
     [macroHistory]
   );
 
@@ -54,12 +53,8 @@ const DiarySummary = (props: DiarySummaryProps) => {
         Dzienne spożycie kalorii
       </TitleSecondary>
       <DiarySummaryChart
-        records={macroHistory.map((record, index) => ({
-          value: record.kcal,
-          label: new Date(record.day as any),
-        }))}
-        values={summaryValues}
-        labels={summaryLabels}
+        dateFormat="ddd - DD.MM"
+        data={records}
       />
       <H1 margin="5px 0">Makroskładniki</H1>
       <TitleSecondary margin="0 0 10px 0">
