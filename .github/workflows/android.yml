@@ -25,12 +25,7 @@ jobs:
         chmod +x ./gradlew
         ./gradlew assembleStaging
 
-    - name: Rename built apk
-      run: |
-        cd ./android/app/build/outputs/apk/staging
-        mv app-staging.apk app-${GITHUB_REF}.apk
-
     - uses: actions/upload-artifact@master
       with:
-        name: ediary-staging-${GITHUB_REF}
-        path: ./android/app/build/outputs/apk/staging/app-${GITHUB_REF}.apk
+        name: ediary-release
+        path: ./android/app/build/outputs/apk/staging/app-staging.apk
