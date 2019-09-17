@@ -57,7 +57,7 @@ export const mealUpdate = (
 ): Thunk => async (dispatch, getState) => {
   dispatch(mealUpdated(mealId, meal));
   await Meal.update(mealId, meal);
-  _updateMealMacro(mealId, getState());
+  await _updateMealMacro(mealId, getState());
 }
 
 export const mealProductCreate = (
@@ -66,7 +66,7 @@ export const mealProductCreate = (
 ): Thunk => async (dispatch, getState) => {
   const newProduct = await Meal.addAndCreateProduct(mealId, payload);
   dispatch(mealProductAdded(mealId, { mealId, ...newProduct }));
-  _updateMealMacro(mealId, getState());
+  await _updateMealMacro(mealId, getState());
 }
 
 export const mealProductDelete = (
@@ -82,6 +82,7 @@ export const mealProductDelete = (
   } else {
     dispatch(mealProductDeleted(mealId, productId));
     await MealProduct.delete({ mealId, productId });
+    await _updateMealMacro(mealId, getState());
   }
 }
 
@@ -93,7 +94,7 @@ export const mealProductQuantityUpdate = (
   dispatch(productUpdated(productId, { quantity }));
   debounceA(async () => {
     await MealProduct.update({ mealId, productId }, { quantity });
-    _updateMealMacro(mealId, getState());
+    await _updateMealMacro(mealId, getState());
   }, 300);
 }
 
@@ -135,7 +136,7 @@ export const mealCreateFromTemplate = (
   dispatch(
     mealAdded(createdMeal, template.id)
   );
-  _updateMealMacro(createdMeal.id, getState());
+  await _updateMealMacro(createdMeal.id, getState());
 }
 
 export const mealProductAdd = (
@@ -157,7 +158,7 @@ export const mealProductAdd = (
       mealProductAdded(mealId, product, rawProduct)
     );
   }
-  _updateMealMacro(mealId, getState());
+  await _updateMealMacro(mealId, getState());
 }
 
 export const productsRecentLoad = (): Thunk => async (dispatch) => {
