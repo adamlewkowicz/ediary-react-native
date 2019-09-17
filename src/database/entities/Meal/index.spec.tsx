@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { DATE_FORMAT } from '../../../common/consts';
 
 test('Meal.getMacroHistory - groups meals by day and returns summed macro values', async () => {
-  const dayAMock = '2019-01-01';
+  const dayAMock = '2019-01-07';
   const dayBMock = '2019-01-03';
 
   const dateA = new Date(dayAMock);

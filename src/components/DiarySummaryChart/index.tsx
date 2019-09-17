@@ -29,7 +29,7 @@ const XAxisSvg = {
 const AreaChartSvg = { fill: `url(#${GRADIENT_ID})` };
 const AreaChartContentInset = { top: 15, bottom: 15 };
 const GridSvg = { stroke: theme.color.gray10 };
-const XAxisContentInset = { left: 10, right: 25 };
+const XAxisContentInset = { left: 10, right: 30 };
 
 interface DiarySummaryChartProps {
   dateFormat: string
@@ -62,7 +62,6 @@ export const DiarySummaryChart = (props: DiarySummaryChartProps) => {
           svg={XAxisSvg as any}
           xAccessor={({ item }: any) => item.date}
           scale={scale.scaleTime}
-          numberOfTicks={6}
           contentInset={XAxisContentInset}
           formatLabel={value => dayjs(value).format(props.dateFormat)}
         />
@@ -88,7 +87,7 @@ const Container = styled.View`
 
 const YAxis = styled(SvgCharts.YAxis)`
   margin-bottom: ${X_AXIS_HEIGHT};
-  min-width: 30px;  
+  min-width: 30px;
 `
 
 const ChartContainer = styled.View`

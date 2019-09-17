@@ -72,7 +72,7 @@ export class Meal extends GenericEntity {
   static async addAndCreateProduct(
     mealId: MealId,
     payload: DeepPartial<Product>,
-    quantity: number = 100
+    quantity: 100
   ): Promise<IProductMerged> {
     const product = await Product.save(payload);
     const mealProduct = await MealProduct.save({
@@ -150,8 +150,9 @@ export class Meal extends GenericEntity {
     endDay: DateDay,
     daysToSubtract = 7,
   ): Promise<GetMacroHistoryResult[]> {
-    const datePeriod = dayjs(endDay as any).subtract(daysToSubtract, 'day');
-    const startDay = getDayFromDate(datePeriod);
+    const date = dayjs(endDay as any);
+    const endDate = date.subtract(daysToSubtract, 'day');
+    const startDay = getDayFromDate(endDate);
 
     const result: GetMacroHistoryResult[] = await Meal
       .createQueryBuilder('meal')
@@ -165,14 +166,25 @@ export class Meal extends GenericEntity {
       .groupBy('day')
       .getRawMany();
 
-    return result;
+    const filledRecords: GetMacroHistoryResult[] = Array
+      .from({ length: daysToSubtract })
+      .map((_, index) => {
+        const day = getDayFromDate(endDate.add(index + 1, 'day'));
+        const existingRecord = result.find(record => record.day === day);
+        if (existingRecord) {
+          return existingRecord;
+        }
+        return { day, ...baseMacro };
+      });
+
+    return filledRecords;
   }
 
   static async getMacroSummary(
     startDay: DateDay,
-    periodInDays?: number,
+    daysToSubtract = 7,
   ): Promise<GetMacroSummaryResult> {
-    const macroHistory = await this.getMacroHistory(startDay, periodInDays);
+    const macroHistory = await this.getMacroHistory(startDay, daysToSubtract);
 
     const macroAverages = macroHistory.reduce((macro, record, index, self) => {
       const summedMacro = {

@@ -20,7 +20,7 @@ const DiarySummary = (props: DiarySummaryProps) => {
   const { isFocused } = useFocusState();
 
   async function handleMacroSummaryFetch() {
-    const result = await Meal.getMacroSummary(props.appDateDay);
+    const result = await Meal.getMacroSummary(props.todayDay);
     setMacroSummary(result.average);
     setHistoryRecords(result.data.map(record => ({
       value: record.kcal,
@@ -44,7 +44,7 @@ const DiarySummary = (props: DiarySummaryProps) => {
         Dzienne spożycie kalorii
       </TitleSecondary>
       <DiarySummaryChart
-        dateFormat="ddd - DD.MM"
+        dateFormat="ddd D/M"
         data={historyRecords}
       />
       <H1 margin="5px 0">Makroskładniki</H1>
@@ -91,12 +91,12 @@ const Container = styled.ScrollView`
 
 interface MapStateProps {
   macroNeeds: Selectors.MacroNeeds
-  appDateDay: DateDay
+  todayDay: DateDay
 }
 
 const mapStateToProps = (state: StoreState): MapStateProps => ({
   macroNeeds: Selectors.macroNeeds(state),
-  appDateDay: state.application.day,
+  todayDay: state.application.todayDay,
 });
 const DiarySummaryConnected = connect(mapStateToProps)(DiarySummary);
 
