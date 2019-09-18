@@ -1,5 +1,7 @@
-import { observable, flow } from 'mobx';
+import { observable, flow, computed, reaction, IReactionDisposer } from 'mobx';
 import { RootStore } from '.';
+import { Meal } from '../../database/entities';
+import { MealId } from '../../types';
 
 const trainingsMock = [
   {
@@ -28,8 +30,11 @@ export class TrainingStore {
   @observable trainings: Training[] = [];
   @observable exercises: Exercise[] = [];
   @observable sets: Sets[] = [];
+  @observable meals: Meal[] = [];
+  @observable mealsMap: Map<MealId, Meal> = new Map();
 
-  constructor(private readonly rootStore: RootStore) {}
+  constructor(private readonly rootStore: RootStore) {
+  }
 
   loadTrainings = flow(function*(this: TrainingStore) {
 
@@ -50,7 +55,50 @@ export class TrainingStore {
       }, { trainings: [], exercises: [], sets: [] });
 
     this.trainings = trainings;
-  },);
+  });
+
+  updateMeal = flow(function*(this: TrainingStore, mealId: MealId) {
+    const meal = this.mealsMap.get(mealId);
+    if (meal) {
+      yield meal.save();
+    }
+  });
+
+  @computed
+  get activeTraining(): Training | null {
+    const foundTraining = this.trainings.find(training => training.isActive);
+    if (foundTraining) {
+      return foundTraining;
+    }
+    return null;
+  }
+}
+
+class MealStore {
+  @observable isToggled: boolean = false;
+  @observable entity: Meal | null = null;
+
+  saveHandler: IReactionDisposer | null = null;
+
+  constructor(
+    private readonly rootStore: RootStore,
+    mealEntity: Meal
+  ) {
+    this.entity = mealEntity;
+
+    this.saveHandler = reaction(
+      () => this.entity,
+      async () => {
+        if (this.entity) {
+          await this.entity.save();
+        }
+      }
+    );
+  }
+
+  updateMeal = flow(function*(this: MealStore, payload: Partial<Meal>) {
+    Object.assign(this.entity, payload);
+  });
 
 }
 
