@@ -4,7 +4,7 @@ import { userProfileCreated } from '../creators/user';
 
 export const userProfileCreate = (
   profile: IProfileRequired
-): Thunk => async (dispatch) => {
+): Thunk<Promise<void>> => async (dispatch) => {
   const { userId, ...data } = profile;
   const createdProfile = await User.createProfile(userId, data);
 

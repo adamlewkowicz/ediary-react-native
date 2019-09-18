@@ -4,20 +4,22 @@ import ilewazyResponseMock from './__mocks__/ilewazy.json';
 
 jest.mock('node-fetch');
 
-test('Ilewazy - products are parsed correctly', async () => {
-  const name = 'jabl';
-  const [firstMockedProduct] = ilewazyResponseMock.data;
+test('findByName - products are normalized correctly', async () => {
+  const name = 'apple';
+  const fetchMock = fetch;
 
-  // strongly typed mock
-  const fetchMock: jest.Mock<GlobalFetch['fetch']> = fetch as any;
-
-  (fetch as jest.Mock).mockImplementationOnce(async () => ({
+  (fetchMock as jest.Mock).mockImplementationOnce(async () => ({
     async json() {
       return ilewazyResponseMock;
     }
   }));
 
-  const [firstProduct] = await ilewazyApi.findByName(name);
+  const [
+    firstNormalizedProduct,
+    secondNormalizedProduct,
+  ] = await ilewazyApi.findByName(name);
 
   expect(fetchMock).toHaveBeenCalledTimes(1);
+  expect(firstNormalizedProduct).toMatchSnapshot();
+  expect(secondNormalizedProduct).toMatchSnapshot();
 });
