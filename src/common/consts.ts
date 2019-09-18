@@ -1,5 +1,7 @@
 import { Environment } from '../types';
 
+export const DEFAULT_CONNECTION: 'default' = 'default';
+
 export const UNIT_TYPES = ['g', 'mg', 'kg', 'ml', 'l'] as const;
 export const PRODUCT_UNITS = ['g', 'ml'] as const;
 export const BASE_MACRO_ELEMENTS = ['carbs', 'prots', 'fats'] as const
