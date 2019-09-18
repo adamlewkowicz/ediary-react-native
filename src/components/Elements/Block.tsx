@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import React, { ReactNode } from 'react';
-import { FlexStyle } from 'react-native';
+import { FlexStyle, ViewProps } from 'react-native';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
 interface BlockProps extends BlockParams {
@@ -12,7 +12,7 @@ export const Block = ({ children, row = true, ...props }: BlockProps) => (
   </Container>
 );
 
-interface BlockParams {
+interface BlockParams extends ViewProps {
   row?: boolean
   align?: FlexStyle['alignItems']
   alignCtn?: FlexStyle['alignContent']

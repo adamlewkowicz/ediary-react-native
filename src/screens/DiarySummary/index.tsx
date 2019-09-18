@@ -57,6 +57,7 @@ const DiarySummary = (props: DiarySummaryProps) => {
           space="space-between"
           align="flex-end"
           marginVertical={12}
+          accessibilityLabel="Średnia wartość makroskładniku"
         >
           <Text priority={0}>
             {elementTitlesLong[element]}{' '}
