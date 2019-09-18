@@ -18,6 +18,7 @@ import {
 import { theme } from '../common/theme';
 import { Screen } from '../types';
 import { DishIcon, ReportIcon } from '../components/Icons';
+import { Training } from '../screens/Training';
 
 const BAR_ICON_SIZE = 22;
 
@@ -65,6 +66,19 @@ export function createMainStack(
       screen: DiarySummary,
       navigationOptions: {
         tabBarLabel: 'Podsumowanie',
+        tabBarIcon: ({ tintColor }: any) => (
+          <ReportIcon
+            width={BAR_ICON_SIZE}
+            height={BAR_ICON_SIZE}
+            fill={tintColor}
+          />
+        ),
+      }
+    },
+    Training: {
+      screen: Training,
+      navigationOptions: {
+        tabBarLabel: 'Trening',
         tabBarIcon: ({ tintColor }: any) => (
           <ReportIcon
             width={BAR_ICON_SIZE}

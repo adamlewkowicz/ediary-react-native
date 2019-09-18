@@ -1,76 +1,53 @@
 import { observable, flow, computed, reaction, IReactionDisposer } from 'mobx';
 import { RootStore } from '.';
-import { Meal } from '../../database/entities';
-import { MealId } from '../../types';
-
-const trainingsMock = [
-  {
-    id: 1,
-    name: 'Chest and legs',
-    duration: 0,
-    exercises: [
-      {
-        id: 1,
-        name: 'Bench press',
-        trainingId: 1,
-        sets: [
-          {
-            id: 1,
-            repeats: 3,
-            loadWeight: 6,
-            exerciseId: 1,
-          }
-        ]
-      }
-    ]
-  }
-]
+import { Meal, Training, Exercise } from '../../database/entities';
+import { MealId, ExerciseId, TrainingId, ExerciseSetId } from '../../types';
+import { normalizeTrainings } from './utils';
 
 export class TrainingStore {
-  @observable trainings: Training[] = [];
-  @observable exercises: Exercise[] = [];
-  @observable sets: Sets[] = [];
-  @observable meals: Meal[] = [];
+  @observable trainings: TrainingState[] = [];
+  @observable exercises: ExerciseState[] = [];
+  @observable exerciseSets: ExerciseSetState[] = [];
   @observable mealsMap: Map<MealId, Meal> = new Map();
 
-  constructor(private readonly rootStore: RootStore) {
-  }
+  constructor(private readonly rootStore: RootStore) {}
 
   loadTrainings = flow(function*(this: TrainingStore) {
-
-    const { trainings } = trainingsMock
-      .reduce((normalized, { exercises, ...training }) => {
-        const normalizedTraining: Training = {
-          ...training,
-          isActive: false,
-          exerciseIds: exercises.map(exercise => exercise.id)
-        }
-        const normalizedExercises: any[] = exercises
-          .reduce((normalized, { sets, ...exercise }) => , [[], []]);
-
-        return {
-          ...normalized,
-          trainings: [...normalized.trainings, normalizedTraining]
-        }
-      }, { trainings: [], exercises: [], sets: [] });
+    const foundTrainings: Training[] = yield Exercise.find();
+    const { trainings, exercises, exerciseSets } = normalizeTrainings(foundTrainings);
 
     this.trainings = trainings;
-  });
-
-  updateMeal = flow(function*(this: TrainingStore, mealId: MealId) {
-    const meal = this.mealsMap.get(mealId);
-    if (meal) {
-      yield meal.save();
-    }
+    this.exercises = exercises;
+    this.exerciseSets = exerciseSets;
   });
 
   @computed
-  get activeTraining(): Training | null {
-    const foundTraining = this.trainings.find(training => training.isActive);
-    if (foundTraining) {
-      return foundTraining;
-    }
-    return null;
+  get mergedTrainings() {
+    return this.trainings.map(training => ({
+      ...training,
+      exercises: training.exerciseIds.flatMap(exerciseId => {
+        const exercise = this.exercises.find(
+          exercise => exercise.id === exerciseId
+        );
+        if (exercise) {
+          return {
+            ...exercise,
+            sets: exercise.setIds.flatMap(exerciseSetId => {
+              const exerciseSet = this.exerciseSets.find(
+                exerciseSet => exerciseSet.id === exerciseSetId
+              );
+              return exerciseSet ? exerciseSet : [];
+            })
+          }
+        }
+        return [];
+      })
+    }))
+  }
+
+  @computed
+  get activeTraining(): TrainingState | null {
+    return this.trainings.find(training => training.isActive) || null;
   }
 }
 
@@ -102,22 +79,23 @@ class MealStore {
 
 }
 
-interface Training {
-  id: number
-  name: string
+export interface TrainingState {
+  id: TrainingId
   duration: number
   isActive: boolean
-  exerciseIds: number[]
+  exerciseIds: ExerciseId[]
 }
 
-interface Exercise {
-  id: number
+export interface ExerciseState {
+  id: ExerciseId
   name: string
-  setIds: number[]
+  setIds: ExerciseSetId[]
+  trainingId: TrainingId
 }
 
-interface Sets {
-  id: number
+export interface ExerciseSetState {
+  id: ExerciseSetId
   repeats: number
   loadWeight: number
+  exerciseId: ExerciseId
 }
