@@ -72,7 +72,7 @@ export class Meal extends GenericEntity {
   static async addAndCreateProduct(
     mealId: MealId,
     payload: DeepPartial<Product>,
-    quantity: 100
+    quantity = 100
   ): Promise<IProductMerged> {
     const product = await Product.save(payload);
     const mealProduct = await MealProduct.save({
