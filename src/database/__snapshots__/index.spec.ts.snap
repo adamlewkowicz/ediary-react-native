@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`entity generated sql matches migration's sql: [exercise_sets] - generated to migrated 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
+`;
+
+exports[`entity generated sql matches migration's sql: [exercises] - generated to migrated 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
+`;
+
 exports[`entity generated sql matches migration's sql: [meal] - generated to migrated 1`] = `
 "Snapshot Diff:
 Compared values have no visual difference."
@@ -30,9 +40,33 @@ exports[`entity generated sql matches migration's sql: [profile] - generated to 
 Compared values have no visual difference."
 `;
 
+exports[`entity generated sql matches migration's sql: [trainings] - generated to migrated 1`] = `
+"Snapshot Diff:
+Compared values have no visual difference."
+`;
+
 exports[`entity generated sql matches migration's sql: [user] - generated to migrated 1`] = `
 "Snapshot Diff:
 Compared values have no visual difference."
+`;
+
+exports[`entity generated sql matches snapshot: exercise_sets 1`] = `
+"CREATE TABLE \\"exercise_sets\\" (
+  \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+  \\"repeats\\" integer NOT NULL,
+  \\"loadWeight\\" integer NOT NULL,
+  \\"exerciseId\\" integer NOT NULL,
+  CONSTRAINT \\"FK_5cc32a0e8c2a829a1fe4aac8cc6\\" FOREIGN KEY (\\"exerciseId\\") REFERENCES \\"exercises\\" (\\"id\\") ON DELETE CASCADE ON UPDATE NO ACTION
+)"
+`;
+
+exports[`entity generated sql matches snapshot: exercises 1`] = `
+"CREATE TABLE \\"exercises\\" (
+  \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+  \\"name\\" varchar NOT NULL,
+  \\"trainingId\\" integer NOT NULL,
+  CONSTRAINT \\"FK_178f6e5dd865d9fc8616c10ab7e\\" FOREIGN KEY (\\"trainingId\\") REFERENCES \\"trainings\\" (\\"id\\") ON DELETE CASCADE ON UPDATE NO ACTION
+)"
 `;
 
 exports[`entity generated sql matches snapshot: meal 1`] = `
@@ -121,6 +155,15 @@ exports[`entity generated sql matches snapshot: profile 1`] = `
     \\"weightGoal\\" IN ('decrease', 'maintain', 'increase')
   ),
   CONSTRAINT \\"FK_a24972ebd73b106250713dcddd9\\" FOREIGN KEY (\\"userId\\") REFERENCES \\"user\\" (\\"id\\") ON DELETE NO ACTION ON UPDATE NO ACTION
+)"
+`;
+
+exports[`entity generated sql matches snapshot: trainings 1`] = `
+"CREATE TABLE \\"trainings\\" (
+  \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+  \\"duration\\" integer NOT NULL,
+  \\"userId\\" integer NOT NULL,
+  CONSTRAINT \\"FK_adbccaa03aace385b09be0157c1\\" FOREIGN KEY (\\"userId\\") REFERENCES \\"user\\" (\\"id\\") ON DELETE CASCADE ON UPDATE NO ACTION
 )"
 `;
 

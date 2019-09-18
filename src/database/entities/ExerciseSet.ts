@@ -26,7 +26,8 @@ export class ExerciseSet extends GenericEntity {
 
   @ManyToOne(
     type => Exercise,
-    exercise => exercise.sets
+    exercise => exercise.sets,
+    { onDelete: 'CASCADE' }
   )
   @JoinColumn({ name: 'exerciseId' })
   exercise?: Exercise;

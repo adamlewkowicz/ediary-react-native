@@ -32,7 +32,8 @@ export class Training extends GenericEntity {
 
   @ManyToOne(
     type => User,
-    user => user.trainings
+    user => user.trainings,
+    { onDelete: 'CASCADE' }
   )
   @JoinColumn({ name: 'userId' })
   user?: User;
