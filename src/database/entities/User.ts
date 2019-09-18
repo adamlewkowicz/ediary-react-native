@@ -19,6 +19,7 @@ import { Profile } from './Profile';
 import { GenericEntity } from '../generics/GenericEntity';
 import { DeepPartial } from 'redux';
 import { EntityType } from '../types';
+import { Training } from './Training';
 
 @Entity('user')
 export class User extends GenericEntity {
@@ -62,6 +63,12 @@ export class User extends GenericEntity {
     profile => profile.user
   )
   profile?: Profile; 
+
+  @OneToMany(
+    type => Training,
+    training => training.user
+  )
+  trainings?: Training[];
   
   async getProfile(): Promise<Profile> {
     const profile = await getRepository(Profile).findOneOrFail(this.id);

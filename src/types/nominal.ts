@@ -28,3 +28,9 @@ export type MealId = MealIdBrand & number;
 
 enum UserIdBrand {};
 export type UserId = UserIdBrand & number;
+
+export interface TrainingId extends Number {};
+
+export interface ExerciseId extends Number {};
+
+export interface ExerciseSetId extends Number {};
