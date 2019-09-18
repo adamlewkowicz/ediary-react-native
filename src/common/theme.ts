@@ -16,6 +16,8 @@ const color = {
   gray30: '#BCBAC6',
   gray40: '#646464',
 
+  dark: '#353344',
+
   /** @deprecated color names */
   lightBlue: '#6BB4DD',
   lighterBlue: '#f7fdff',
@@ -26,6 +28,8 @@ const color = {
 
 export const theme = {
   fontSize: {
+    huge: 25,
+    big: 22,
     large: 16,
     regular: 14,
     small: 12,
@@ -51,3 +55,5 @@ export const theme = {
 }
 
 export type Theme = typeof theme;
+export type ThemeColor = keyof Theme['color'];
+export type ThemeFontSize = keyof Theme['fontSize'];

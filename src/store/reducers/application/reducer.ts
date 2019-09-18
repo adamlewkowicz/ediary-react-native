@@ -10,10 +10,13 @@ import dayjs from 'dayjs';
 import { ApplicationState } from './types';
 
 const date = new Date;
+const todayDateDay = getDayFromDate(date);
 
 const initialState: ApplicationState = {
   date,
-  day: getDayFromDate(date),
+  day: todayDateDay,
+  todayDate: date,
+  todayDay: todayDateDay,
   isConnected: false,
   initialized: false,
   status: 'INITIALIZING'

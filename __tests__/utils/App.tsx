@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react';
-import { createAppContainer } from 'react-navigation';
-import { createHomeStack } from '../../src/navigation';
+import React, { ReactNode, useState } from 'react';
+import { createAppContainer, NavigationContainer } from 'react-navigation';
+import { MainStackScreen, createMainStack } from '../../src/navigation';
 import { Provider } from 'react-redux';
 import { AppState, configureStore, Actions } from '../../src/store';
 import { Screen } from '../../src/types';
@@ -30,16 +30,22 @@ interface AppProps {
   initialRouteName?: Screen
   store?: Store<AppState>
   screen?: Screen
+  stack?: MainStackScreen
   children?: ReactNode
 }
 export function App({
   initialState,
   store = configureStore(initialState),
+  stack,
   screen = 'Home',
   children,
 }: AppProps) {
-  const HomeStack = createHomeStack(screen);
-  const AppContainer = createAppContainer(HomeStack);
+  // preserve instance between re-renders
+  const [AppContainer] = useState<NavigationContainer>(() => {
+    const MainStack = createMainStack(screen, stack);
+    const AppContainer = createAppContainer(MainStack);
+    return AppContainer;
+  });
 
   if (!isInitialized) {
     store.dispatch(
