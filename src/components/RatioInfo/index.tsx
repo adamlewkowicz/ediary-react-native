@@ -12,14 +12,14 @@ export const RatioInfo = ({
   value,
   ...props
 }: RatioInfoProps) => {
-  const ratioWithout100 = ratio - 100;
+  const parsedRatio = ratio - 100;
   const diffReverted = value * -1;
-  const isBelowAllowed = ratioWithout100 > 0
-    ? ratioWithout100 > allowedDiff
-    : ratioWithout100 < (allowedDiff * -1);
+  const isBelowAllowed = parsedRatio > 0
+    ? parsedRatio > allowedDiff
+    : parsedRatio < (allowedDiff * -1);
 
   return (
-    <Text {...props} color={isBelowAllowed ? 'kcal' : 'carbs'}>
+    <Text color={isBelowAllowed ? 'kcal' : 'carbs'} {...props}>
       ({diffReverted > 0 ? `+${diffReverted}` : diffReverted})
     </Text>
   );

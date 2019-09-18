@@ -245,3 +245,5 @@ export function diaryReducer(
     default: return state;
   }
 }
+
+export { initialState as diaryInitialState };

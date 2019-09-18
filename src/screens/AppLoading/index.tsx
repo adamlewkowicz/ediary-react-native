@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, Alert } from 'react-native';
-import { USER_ID_UNSYNCED } from '../../common/consts';
+import { USER_ID_UNSYNCED, DEFAULT_CONNECTION } from '../../common/consts';
 import { store } from '../../store';
 import * as Actions from '../../store/actions';
 import { User } from '../../database/entities';
@@ -10,8 +10,7 @@ import { getOrCreateConnection } from '../../database/utils/getOrCreateConnectio
 import styled from 'styled-components/native';
 
 interface AppLoadingProps extends NavigationScreenProps {}
-interface AppLoadingState {}
-export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState> {
+export class AppLoading extends React.Component<AppLoadingProps> {
 
   constructor(props: AppLoadingProps) {
     super(props);
@@ -29,14 +28,8 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
   }
 
   async setup() {
-    const DEFAULT = 'default';
-    const TRANSACTIONAL = 'transactional';
-
     const defaultConnection = await getOrCreateConnection(
-      DEFAULT, { name: DEFAULT, ...databaseConfig }
-    );
-    await getOrCreateConnection(
-      TRANSACTIONAL, { name: TRANSACTIONAL, ...databaseConfig }
+      DEFAULT_CONNECTION, { name: DEFAULT_CONNECTION, ...databaseConfig }
     );
 
     const hasMigrationsToRun = await defaultConnection.showMigrations();
@@ -61,12 +54,6 @@ export class AppLoading extends React.Component<AppLoadingProps, AppLoadingState
     } else {
       this.props.navigation.navigate('Main');
     }
-  }
-
-  handleConnectionStatusUpdate(status: boolean) {
-    store.dispatch(
-      Actions.appConnectionStatusUpdated(status)
-    );
   }
 
   render() {

@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`findByName - products are normalized correctly 1`] = `
+Object {
+  "_id": "16390",
+  "carbs": 104,
+  "fats": 7.8,
+  "images": Array [
+    "http://static.ilewazy.pl/dziennik/470/bagatelka-ciastka-jablko-z-cynamonem-1.jpg",
+    "http://static.ilewazy.pl/dziennik/470/bagatelka-ciastka-jablko-z-cynamonem-2.jpg",
+  ],
+  "kcal": 365,
+  "name": "Bagatelka owocowa, kruche ciasteczka z nadzieniem jabłkowym z cynamonem",
+  "portions": Array [
+    Object {
+      "type": "piece",
+      "unit": "g",
+      "value": 16,
+    },
+    Object {
+      "type": "portion",
+      "unit": "g",
+      "value": 48,
+    },
+  ],
+  "prots": 7,
+}
+`;
+
+exports[`findByName - products are normalized correctly 2`] = `
+Object {
+  "_id": "17551",
+  "carbs": 135,
+  "fats": 3.6,
+  "images": Array [
+    "http://static.ilewazy.pl/dziennik/470/baton-marchew-jablko-pomarancza-freeyu-1.jpg",
+  ],
+  "kcal": 333,
+  "name": "Baton jabłkowo-pomarańczowy z marchwią",
+  "portions": Array [
+    Object {
+      "type": "piece",
+      "unit": "g",
+      "value": 40,
+    },
+  ],
+  "prots": 1.4,
+}
+`;
