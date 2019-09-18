@@ -1,6 +1,6 @@
 import { observable, flow, computed, reaction, IReactionDisposer } from 'mobx';
 import { RootStore } from '.';
-import { Meal, Training, Exercise } from '../../database/entities';
+import { Meal, Training } from '../../database/entities';
 import { MealId, ExerciseId, TrainingId, ExerciseSetId } from '../../types';
 import { normalizeTrainings } from './utils';
 
@@ -13,7 +13,7 @@ export class TrainingStore {
   constructor(private readonly rootStore: RootStore) {}
 
   loadTrainings = flow(function*(this: TrainingStore) {
-    const foundTrainings: Training[] = yield Exercise.find();
+    const foundTrainings: Training[] = yield Training.find();
     const { trainings, exercises, exerciseSets } = normalizeTrainings(foundTrainings);
 
     this.trainings = trainings;

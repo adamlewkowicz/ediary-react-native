@@ -17,8 +17,11 @@ export class Training extends GenericEntity {
   @PrimaryGeneratedColumn()
   id!: TrainingId;
 
-  /** Duration of training in seconds */
   @Column()
+  name!: string;
+
+  /** Duration of training in seconds */
+  @Column({ default: 0 })
   duration!: number;
 
   @Column()
