@@ -66,6 +66,7 @@ export class IlewazyApi {
 
       const images = Object
         .values(record.unitdata)
+        .filter(unitdata => unitdata && unitdata.filename)
         .map(unitdata => `http://static.ilewazy.pl/dziennik/470/${unitdata!.filename}`);
 
       const normalizedProduct: NormalizedProduct = {
