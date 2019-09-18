@@ -195,10 +195,10 @@ export class Meal extends GenericEntity {
       }
       if (index === self.length - 1) {
         return {
-          carbs: summedMacro.carbs / self.length,
-          prots: summedMacro.prots / self.length,
-          fats: summedMacro.fats / self.length,
-          kcal: summedMacro.kcal / self.length 
+          carbs: Math.round(summedMacro.carbs / self.length),
+          prots: Math.round(summedMacro.prots / self.length),
+          fats: Math.round(summedMacro.fats / self.length),
+          kcal: Math.round(summedMacro.kcal / self.length)
         }
       }
       return summedMacro;
@@ -215,4 +215,4 @@ export class Meal extends GenericEntity {
 }
 
 export type IMeal = EntityType<Meal>;
-export type IMealRequired = IMeal
+export type IMealRequired = IMeal;
