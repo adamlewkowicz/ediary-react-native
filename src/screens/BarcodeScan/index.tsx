@@ -15,6 +15,12 @@ export class BarcodeScan extends React.Component<BarcodeScanProps> {
   onBarcodeDetected: BarcodeScanParams['onBarcodeDetected'];
   onPhotoTaken: BarcodeScanParams['onPhotoTaken'];
   prevBarcodeId: BarcodeId | null
+  androidCameraPermissions = {
+    title: 'Uprawnienia kamery',
+    message: 'Potrzebuję uprawnień kamery do zeskanowania kodu kreskowego',
+    buttonPositive: 'Ok',
+    buttonNegative: 'Anuluj',
+  }
 
   constructor(props: BarcodeScanProps) {
     super(props);
@@ -66,19 +72,14 @@ export class BarcodeScan extends React.Component<BarcodeScanProps> {
           ref={this.camera}
           type="back"
           flashMode="auto"
-          androidCameraPermissionOptions={{
-            title: 'Uprawnienia kamery',
-            message: 'Potrzebuję uprawnień kamery do zeskanowania kodu kreskowego',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Anuluj',
-          }}
+          androidCameraPermissionOptions={this.androidCameraPermissions}
           onBarCodeRead={this.onBarcodeDetected && this.handleBarcodeDetection}
           onGoogleVisionBarcodesDetected={this.onBarcodeDetected && this.handleGoogleBarcodeDetection}
           onTextRecognized={null as any}
           onFacesDetected={null as any}
           captureAudio={false}
         />
-        {this.onPhotoTaken && (
+        {this.onPhotoTaken != null && (
           <PhotoButton onPress={this.takePicture}>
             <PhotoTitle>Zrób zdjęcie</PhotoTitle>
           </PhotoButton>
