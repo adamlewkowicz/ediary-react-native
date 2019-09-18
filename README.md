@@ -5,12 +5,13 @@ Dzięki aplikacji możesz z łatwością kontrolować dzienne spożycie kalorii.
 
 ## Funkcje
 - obliczanie dziennego zapotrzebowania kalorycznego na podstawie płci, wagi, wieku, wzrostu oraz celu
-- wyszukiwarka z obszerną listą gotowych produktów
+- wyszukiwarka z dużą listą gotowych produktów
 - skaner kodów kreskowych do łatwego wyszukiwania oraz dodawania produktów
 - tworzenie własnych posiłków oraz produktów
+- pełne wsparcie dla korzystania z aplikacji w trybie offline
+- wykresy z procentową ilością spożytych makroskładników, oraz zawartością w danych posiłkach
 - tygodniowe podsumowanie spożytych kalorii na wykresie
-- średnie spożycie makroskładników 
-- pełnoprawne wsparcie dla korzystania z aplikacji w trybie offline
+- średnie tygodniowe spożycie makroskładników ze wskazaniem na braki/nadmiar
 
 ## Stack
 - TypeScript
@@ -29,7 +30,7 @@ Dzięki aplikacji możesz z łatwością kontrolować dzienne spożycie kalorii.
 ![Własne posiłki](https://i.imgur.com/RyvtNe1.png)
 
 ## Roadmap
-- ### Śledzenie i pomiary wagi ciała
-- ### Śledzenie dziennego spożycia wody
-- ### Treningi siłowe oraz areobowe (podział na ćwiczenia, serie, obciążenie i powtórzenia)
-- ### Treningi wytrzymałowściowe z możliwością śledzenia przebytej trasy na mapie (bieganie, jazda na rowerze)
+- Śledzenie i pomiary wagi ciała
+- Śledzenie dziennego spożycia wody
+- Treningi siłowe oraz areobowe (podział na ćwiczenia, serie, obciążenie i powtórzenia)
+- Treningi wytrzymałowściowe z możliwością śledzenia przebytej trasy na mapie (bieganie, jazda na rowerze)
