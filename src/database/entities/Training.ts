@@ -10,6 +10,7 @@ import { GenericEntity } from '../generics/GenericEntity';
 import { TrainingId, UserId } from '../../types';
 import { Exercise } from './Exercise';
 import { User } from './User';
+import { observable } from 'mobx';
 
 @Entity('trainings')
 export class Training extends GenericEntity {
@@ -21,6 +22,7 @@ export class Training extends GenericEntity {
   name!: string;
 
   /** Duration of training in seconds */
+  @observable
   @Column({ default: 0 })
   duration!: number;
 

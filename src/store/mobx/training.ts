@@ -9,16 +9,34 @@ export class TrainingStore {
   @observable exercises: ExerciseState[] = [];
   @observable exerciseSets: ExerciseSetState[] = [];
   @observable mealsMap: Map<MealId, Meal> = new Map();
+  @observable isLoaded: boolean = false;
+  @observable entity: Training | null = null;
 
-  constructor(private readonly rootStore: RootStore) {}
+  constructor(private readonly rootStore: RootStore) {
+    reaction(
+      () => this.entityJSON,
+      () => {
+        if (this.entity) {
+          this.entity.save();
+        }
+      }
+    )
+  }
+
+  @computed
+  get entityJSON() {
+    return { ...this.entity }
+  }
 
   loadTrainings = flow(function*(this: TrainingStore) {
     const foundTrainings: Training[] = yield Training.find();
     const { trainings, exercises, exerciseSets } = normalizeTrainings(foundTrainings);
+    this.entity = foundTrainings[0];
 
     this.trainings = trainings;
     this.exercises = exercises;
     this.exerciseSets = exerciseSets;
+    this.isLoaded = true;
   });
 
   @computed

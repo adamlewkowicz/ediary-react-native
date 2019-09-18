@@ -1,7 +1,7 @@
 import { TrainingStore } from './training';
 import { configure } from 'mobx';
 
-configure({ enforceActions: 'observed' });
+// configure({ enforceActions: 'observed' });
 
 export class RootStore {
 
