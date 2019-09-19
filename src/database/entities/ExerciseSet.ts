@@ -4,6 +4,7 @@ import {
   ManyToOne,
   JoinColumn,
   Entity,
+  AfterUpdate,
 } from 'typeorm';
 import { GenericEntity } from '../generics/GenericEntity';
 import { ExerciseId, ExerciseSetId } from '../../types';
@@ -31,5 +32,10 @@ export class ExerciseSet extends GenericEntity {
   )
   @JoinColumn({ name: 'exerciseId' })
   exercise?: Exercise;
+
+  @AfterUpdate()
+  halo() {
+    console.log('AFTER UPDEJT')
+  }
 
 }

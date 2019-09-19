@@ -1,15 +1,16 @@
 import { observable, flow, computed, reaction, IReactionDisposer } from 'mobx';
 import { RootStore } from '.';
-import { Meal, Training } from '../../database/entities';
+import { Meal, Training, ExerciseSet } from '../../database/entities';
 import { MealId, ExerciseId, TrainingId, ExerciseSetId } from '../../types';
 import { normalizeTrainings } from './utils';
+import { findById } from '../../common/utils';
 
 export class TrainingStore {
   @observable trainings: TrainingState[] = [];
   @observable exercises: ExerciseState[] = [];
   @observable exerciseSets: ExerciseSetState[] = [];
   @observable mealsMap: Map<MealId, Meal> = new Map();
-  @observable isLoaded: boolean = false;
+  @observable isLoading: boolean = false;
   @observable entity: Training | null = null;
 
   constructor(private readonly rootStore: RootStore) {
@@ -28,19 +29,35 @@ export class TrainingStore {
     return { ...this.entity }
   }
 
+  // @ts-ignore
   loadTrainings = flow(function*(this: TrainingStore) {
-    const foundTrainings: Training[] = yield Training.find();
+    this.isLoading = true;
+    const foundTrainings: Training[] = yield Training.find({
+      relations: ['exercises', 'exercises.sets']
+    }) as any;
     const { trainings, exercises, exerciseSets } = normalizeTrainings(foundTrainings);
     this.entity = foundTrainings[0];
 
     this.trainings = trainings;
     this.exercises = exercises;
     this.exerciseSets = exerciseSets;
-    this.isLoaded = true;
+    this.isLoading = false;
+  });
+
+  exerciseSetUpdate = flow(function*(this: TrainingStore,
+    exerciseSetId: ExerciseSetId,
+    payload: Partial<ExerciseSetState>
+  ) {
+    const exerciseSet = findById(this.exerciseSets, exerciseSetId);
+    if (exerciseSet) {
+      Object.assign(exerciseSet, payload);
+      yield ExerciseSet.update(exerciseSetId as number, payload);
+    }
   });
 
   @computed
   get mergedTrainings() {
+    console.log('mergedTrainings RECOMPUTED')
     return this.trainings.map(training => ({
       ...training,
       exercises: training.exerciseIds.flatMap(exerciseId => {

@@ -194,3 +194,10 @@ export function calcMacroNeedsLeft(
     kcal: { ...macroNeedsElement }
   });
 }
+
+export function findById<ID, T extends { id: ID }>(
+  items: T[],
+  itemId: ID
+): T | undefined {
+  return items.find(item => item.id === itemId);
+}

@@ -1,11 +1,14 @@
 import { NormalizedTrainings, NormalizedExercises } from './types';
 import { Training } from '../../database/entities';
-import { TrainingState, ExerciseState } from './training';
+import { TrainingState, ExerciseState, ExerciseSetState } from './training';
 
 export function normalizeTrainings(payload: Training[]): NormalizedTrainings {
   return payload.reduce((
-    normalized: NormalizedTrainings, { exercises = [], ...training }
+    normalized: NormalizedTrainings,
+    trainingEntity
   ): NormalizedTrainings => {
+    const { exercises = [], ...training } = trainingEntity;
+    
     const normalizedTraining: TrainingState = {
       ...training,
       isActive: false,
@@ -16,13 +19,16 @@ export function normalizeTrainings(payload: Training[]): NormalizedTrainings {
       exercises: normalizedExercises,
       exerciseSets: normalizedExerciseSets
     } = exercises.reduce((
-      normalized: NormalizedExercises, { sets = [], ...exercise }
+      normalized: NormalizedExercises,
+      exerciseEntity,
     ): NormalizedExercises => {
+      const { sets = [], ...exercise } = exerciseEntity;
+
       const normalizedExercise: ExerciseState = {
         ...exercise,
-        setIds: sets.map(set => set.id)
+        setIds: sets.map(set => set.id),
       }
-      const normalizedSets = sets.map(set => ({ ...set }));
+      const normalizedSets: ExerciseSetState[] = sets.map(set => ({ ...set }));
 
       return {
         exercises: [...normalized.exercises, normalizedExercise],
