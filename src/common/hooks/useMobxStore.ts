@@ -5,7 +5,7 @@ import { useObserver } from 'mobx-react';
 
 export function useMobxStore<S>(
   storeSelector: (store: RootStore) => S
-): S {
+): RootStore {
   const rootStore = useContext(MobxStoreContext);
   
   if (!rootStore) {
@@ -14,5 +14,6 @@ export function useMobxStore<S>(
     );
   }
 
-  return useObserver(() => storeSelector(rootStore));
+  return rootStore;
+  // return useObserver(() => storeSelector(rootStore));
 }

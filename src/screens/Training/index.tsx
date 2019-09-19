@@ -7,7 +7,8 @@ import { useObserver } from 'mobx-react';
 
 interface TrainingScreenProps {}
 export const TrainingScreen = (props: TrainingScreenProps) => {
-  const trainingStore = useMobxStore(store => store.training);
+  const rootStore = useMobxStore(store => store.training);
+  const trainingStore = rootStore.training;
   const userId = useUserId();
 
   useEffect(() => {
@@ -17,24 +18,40 @@ export const TrainingScreen = (props: TrainingScreenProps) => {
   return useObserver(() => (
     <Container>
       <Text>Twoje treningi</Text>
+      <Text>
+        Aktywny trening:
+        {trainingStore.activeTraining ? trainingStore.activeTraining.name : 'Brak'}
+      </Text>
       {trainingStore.mergedTrainings.map(training => (
         <View key={training.id as any}>
-          <Text>
-            Training: {training.id}{'\n'}
-            Czas: {training.duration}
-          </Text>
-          {training.exercises.map(exercise => (
-            <View key={exercise.id as any}>
+          <TrainingItem
+            onPress={() => trainingStore.trainingStart(training.id)}
+            isActive={training.isActive}
+            isPaused={training.isPaused}
+          >
+            <Text>
+              Training: {training.id}{'\n'}
+              Czas: {training.duration}
+            </Text>
+          </TrainingItem>
+          {training.isActive && training.exercises.map(exercise => (
+            <Exercise key={exercise.id as any}>
+              <Text>Ćwiczenie: {exercise.id}</Text>
               {exercise.sets.map(exerciseSet => (
-                <View key={exerciseSet.id as any}>
+                <ExerciseSet
+                  key={exerciseSet.id as any}
+                  isActive={exerciseSet.isActive}
+                  onPress={() => trainingStore.exerciseSetToggle(exerciseSet.id)}
+                >
                   <Text>
-                    Exercise set
-                    {exerciseSet.loadWeight}
-                    {JSON.stringify(exerciseSet)}
+                    Seria: {exerciseSet.id}{'\n'}
+                    Czas: {exerciseSet.duration}{'\n'}
+                    Przerwa: {exerciseSet.breakDuration}{'\n'}
+                    Obciążenie {exerciseSet.loadWeight}{'\n'}
                   </Text>
-                </View>
+                </ExerciseSet>
               ))}
-            </View>
+            </Exercise>
           ))}
         </View>
       ))}
@@ -48,5 +65,37 @@ export const TrainingScreen = (props: TrainingScreenProps) => {
 }
 
 const Container = styled.ScrollView`
+`
 
+const TrainingItem = styled.TouchableOpacity<{
+  isActive: boolean
+  isPaused: boolean
+}>`
+  background: ${props => {
+    if (props.isPaused) {
+      return 'lightgray';
+    } else if (props.isActive) {
+      return 'lightskyblue';
+    }
+    return 'lightsteelblue';
+  }};
+  padding: 20px;
+  margin-bottom: 10px;
+`
+
+const Exercise = styled.View`
+  padding: 10px;
+`
+
+const ExerciseSet = styled.TouchableOpacity<{
+  isActive: boolean
+}>`
+  padding: 15px;
+  background: lightgreen;
+  background: ${props => {
+    if (props.isActive) {
+      'lightgreen';
+    }
+    return 'lightpink';
+  }}
 `

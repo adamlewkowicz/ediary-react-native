@@ -1,4 +1,4 @@
-import { observable, flow, computed, reaction, IReactionDisposer } from 'mobx';
+import { observable, flow, computed, reaction, IReactionDisposer, action, runInAction, when } from 'mobx';
 import { RootStore } from '.';
 import { Meal, Training, ExerciseSet } from '../../database/entities';
 import { MealId, ExerciseId, TrainingId, ExerciseSetId } from '../../types';
@@ -12,6 +12,8 @@ export class TrainingStore {
   @observable mealsMap: Map<MealId, Meal> = new Map();
   @observable isLoading: boolean = false;
   @observable entity: Training | null = null;
+  
+  durationInterval!: NodeJS.Timeout;
 
   constructor(private readonly rootStore: RootStore) {
     reaction(
@@ -21,7 +23,19 @@ export class TrainingStore {
           this.entity.save();
         }
       }
-    )
+    );
+    reaction(
+      () => this.activeTraining && this.activeTraining.isPaused,
+      () => {
+        if (this.activeTraining) {
+          if (this.activeTraining.isPaused) {
+            clearInterval(this.durationInterval);
+          } else {
+            this.durationInterval = setInterval(this.trainingDurationIncrement, 1000);
+          }
+        }
+      }
+    );
   }
 
   @computed
@@ -55,8 +69,38 @@ export class TrainingStore {
     }
   });
 
-  @computed
-  get mergedTrainings() {
+  @action trainingStart(trainingId: TrainingId) {
+    this.trainings.forEach(training => {
+      if (training.id === trainingId) {
+        if (this.activeTraining === null) {
+          training.isActive = true;
+        } else if (training.isActive) {
+          training.isPaused = !training.isPaused;
+        }
+      }
+    });
+  }
+
+  @action.bound trainingDurationIncrement() {
+    if (this.activeTraining) this.activeTraining.duration++;
+    if (this.activeExercise) this.activeExercise.duration++;
+    if (this.activeExerciseSet) {
+      this.activeExerciseSet.duration++;
+      if (this.activeExerciseSet.isBreak) {
+        this.activeExerciseSet.restDuration++;
+      }
+    }
+  }
+
+  @action exerciseSetToggle(exerciseSetId: ExerciseSetId) {
+    this.exerciseSets.forEach(exerciseSet => {
+      if (exerciseSet.id === exerciseSetId) {
+        exerciseSet.isActive = !exerciseSet.isActive;
+      }
+    });
+  }
+
+  @computed get mergedTrainings() {
     console.log('mergedTrainings RECOMPUTED')
     return this.trainings.map(training => ({
       ...training,
@@ -80,10 +124,29 @@ export class TrainingStore {
     }))
   }
 
-  @computed
-  get activeTraining(): TrainingState | null {
+  @computed get activeTraining(): TrainingState | null {
     return this.trainings.find(training => training.isActive) || null;
   }
+
+  @computed get activeExerciseSet(): ExerciseSetState | null {
+    if (this.activeTraining === null) {
+      return null;
+    }
+    return this.exerciseSets.find(exerciseSet => exerciseSet.isActive) || null;
+  }
+  
+  @computed get activeExercise(): ExerciseState | null {
+    if (this.activeExerciseSet !== null) {
+      const exercise = this.exercises.find(exercise => 
+        exercise.id === this.activeExerciseSet!.exerciseId
+      );
+      if (exercise) {
+        return exercise;
+      }
+    }
+    return null;
+  }
+
 }
 
 class MealStore {
@@ -116,8 +179,10 @@ class MealStore {
 
 export interface TrainingState {
   id: TrainingId
+  name: string
   duration: number
   isActive: boolean
+  isPaused: boolean
   exerciseIds: ExerciseId[]
 }
 
@@ -126,6 +191,7 @@ export interface ExerciseState {
   name: string
   setIds: ExerciseSetId[]
   trainingId: TrainingId
+  duration: number
 }
 
 export interface ExerciseSetState {
@@ -133,4 +199,9 @@ export interface ExerciseSetState {
   repeats: number
   loadWeight: number
   exerciseId: ExerciseId
+  duration: number
+  restTime: number
+  restDuration: number
+  isActive: boolean
+  isBreak: boolean
 }

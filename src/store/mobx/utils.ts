@@ -12,6 +12,7 @@ export function normalizeTrainings(payload: Training[]): NormalizedTrainings {
     const normalizedTraining: TrainingState = {
       ...training,
       isActive: false,
+      isPaused: false,
       exerciseIds: exercises.map(exercise => exercise.id)
     }
 
@@ -28,7 +29,7 @@ export function normalizeTrainings(payload: Training[]): NormalizedTrainings {
         ...exercise,
         setIds: sets.map(set => set.id),
       }
-      const normalizedSets: ExerciseSetState[] = sets.map(set => ({ ...set }));
+      const normalizedSets: ExerciseSetState[] = sets.map(set => ({ ...set, isActive: false }));
 
       return {
         exercises: [...normalized.exercises, normalizedExercise],

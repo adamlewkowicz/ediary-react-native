@@ -201,3 +201,16 @@ export function findById<ID, T extends { id: ID }>(
 ): T | undefined {
   return items.find(item => item.id === itemId);
 }
+
+export function findByIdOrFail<ID, T extends { id: ID }>(
+  items: T[],
+  itemId: ID
+): T {
+  const item = findById(items, itemId);
+  if (item === undefined) {
+    throw new Error(
+      '[findByIdOrFail] - No item could be found for specified criteria'
+    );
+  }
+  return item;
+}
