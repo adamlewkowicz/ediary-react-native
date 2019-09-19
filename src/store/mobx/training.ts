@@ -10,7 +10,7 @@ export class TrainingStore {
   @observable exercises: ExerciseState[] = [];
   @observable exerciseSets: ExerciseSetState[] = [];
   @observable mealsMap: Map<MealId, Meal> = new Map();
-  @observable isLoading: boolean = false;
+  @observable isLoading = false;
   @observable entity: Training | null = null;
   
   durationInterval!: NodeJS.Timeout;
@@ -86,8 +86,20 @@ export class TrainingStore {
     if (this.activeExercise) this.activeExercise.duration++;
     if (this.activeExerciseSet) {
       this.activeExerciseSet.duration++;
-      if (this.activeExerciseSet.isBreak) {
+
+      if (this.activeExerciseSet.isRest) {
         this.activeExerciseSet.restDuration++;
+        const restHasFinished = this.activeExerciseSet.restDuration >= this.activeExerciseSet.restTime;
+
+        if (restHasFinished) {
+          this.activeExerciseSet.isDone = true;
+          this.activeExerciseSet.isActive = false;
+          this.activeExerciseSet.isRest = false;
+
+          if (this.nextExerciseSet) {
+            this.nextExerciseSet.isActive = true;
+          }
+        }
       }
     }
   }
@@ -147,6 +159,13 @@ export class TrainingStore {
     return null;
   }
 
+  @computed get nextExerciseSet(): ExerciseSetState | null {
+    return this.exerciseSets.find(exerciseSet => 
+      exerciseSet.isDone === false &&
+      exerciseSet.isActive === false
+    ) || null;
+  }
+
 }
 
 class MealStore {
@@ -194,7 +213,7 @@ export interface ExerciseState {
   duration: number
 }
 
-export interface ExerciseSetState {
+interface ExerciseSetBase {
   id: ExerciseSetId
   repeats: number
   loadWeight: number
@@ -203,5 +222,42 @@ export interface ExerciseSetState {
   restTime: number
   restDuration: number
   isActive: boolean
-  isBreak: boolean
+  isRest: boolean
+  isDone: boolean
+}
+
+interface ExerciseSetFinished extends ExerciseSetBase {
+  isActive: false
+  isRest: false
+  isDone: true
+}
+
+interface ExerciseSetTraining extends ExerciseSetBase {
+  isActive: true
+  isRest: false
+  isDone: false
+}
+
+interface ExerciseSetRest extends ExerciseSetBase {
+  isActive: true
+  isRest: true
+  isDone: false
+}
+
+export type ExerciseSetState = ExerciseSetFinished | ExerciseSetTraining | ExerciseSetRest
+
+
+
+export interface ExerciseSetState_ {
+  id: ExerciseSetId
+  repeats: number
+  loadWeight: number
+  exerciseId: ExerciseId
+  duration: number
+  restTime: number
+  restDuration: number
+  isActive: boolean
+  isRest: boolean
+  isDone: boolean
+  status: 'inactive' | 'training' | 'rest' | 'finished'
 }
