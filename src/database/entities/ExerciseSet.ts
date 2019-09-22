@@ -33,9 +33,4 @@ export class ExerciseSet extends GenericEntity {
   @JoinColumn({ name: 'exerciseId' })
   exercise?: Exercise;
 
-  @AfterUpdate()
-  halo() {
-    console.log('AFTER UPDEJT')
-  }
-
 }

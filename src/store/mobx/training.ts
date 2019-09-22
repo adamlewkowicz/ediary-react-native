@@ -9,10 +9,11 @@ import { Training, ExerciseSet } from '../../database/entities';
 import { ExerciseId, TrainingId, ExerciseSetId } from '../../types';
 import { normalizeTrainings } from './utils';
 import { findById } from '../../common/utils';
+import { ExerciseStore } from './ExerciseStore';
 
 export class TrainingStore {
   @observable trainings: TrainingState[] = [];
-  @observable exercises: ExerciseState[] = [];
+  @observable exercises: ExerciseStore[] = [];
   @observable exerciseSets: ExerciseSetState[] = [];
   @observable isLoading = false;
   @observable entity: Training | null = null;
@@ -169,7 +170,7 @@ export class TrainingStore {
     return null;
   }
   
-  @computed get activeExercise(): ExerciseState | null {
+  @computed get activeExercise(): ExerciseStore | null {
     if (this.activeExerciseSet !== null) {
       const exercise = this.exercises.find(exercise => 
         exercise.id === this.activeExerciseSet!.exerciseId
