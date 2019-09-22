@@ -40,15 +40,35 @@ export const TrainingScreen = observer((props: TrainingScreenProps) => {
               {exercise.sets.map(exerciseSet => (
                 <ExerciseSet
                   key={exerciseSet.id as any}
-                  isActive={exerciseSet.isActive}
+                  isActive={exerciseSet.state === 'active'}
+                  isRest={exerciseSet.isRest}
                   onPress={() => trainingStore.exerciseSetToggle(exerciseSet.id)}
                 >
-                  <Text>
-                    Seria: {exerciseSet.id}{'\n'}
-                    Czas: {exerciseSet.duration}{'\n'}
-                    Przerwa: {exerciseSet.breakDuration}{'\n'}
-                    Obciążenie {exerciseSet.loadWeight}{'\n'}
-                  </Text>
+                  <>
+                    <Text>
+                      Seria: {exerciseSet.id}{'\n'}
+                      Czas: {exerciseSet.duration}{'\n'}
+                      Czas przerwy: {exerciseSet.restTime}{'\n'}
+                      Przerwa: {exerciseSet.restDuration}{'\n'}
+                      Obciążenie {exerciseSet.loadWeight}{'\n'}
+                    </Text>
+                    <Button
+                      title="Aktywuj przerwę"
+                      onPress={() => trainingStore.exerciseSetRestActivate()}
+                    />
+                    {exerciseSet.isRest && (
+                      <>
+                        <Text>
+                          Do końca przerwy:
+                          {exerciseSet.restTime - exerciseSet.restDuration}
+                        </Text>
+                        <Button
+                          title="Przedłuż przerwę o 10"
+                          onPress={() => trainingStore.exerciseSetRestExpand()}
+                        />
+                      </>
+                    )}
+                  </>
                 </ExerciseSet>
               ))}
             </Exercise>
@@ -89,12 +109,16 @@ const Exercise = styled.View`
 
 const ExerciseSet = styled.TouchableOpacity<{
   isActive: boolean
+  isRest: boolean
 }>`
   padding: 15px;
   background: lightgreen;
   background: ${props => {
     if (props.isActive) {
       'lightgreen';
+    }
+    if (props.isRest) {
+      return 'lightgray';
     }
     return 'lightpink';
   }}

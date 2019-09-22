@@ -36,7 +36,7 @@ export class TrainingStore {
           if (this.activeTraining.isPaused) {
             clearInterval(this.durationInterval);
           } else {
-            this.durationInterval = setInterval(this.trainingDurationIncrement, 1000);
+            this.durationInterval = setInterval(this.trainingDurationTickHandle, 1000);
           }
         }
       }
@@ -75,18 +75,36 @@ export class TrainingStore {
   });
 
   @action trainingStart(trainingId: TrainingId) {
-    this.trainings.forEach(training => {
-      if (training.id === trainingId) {
-        if (this.activeTraining === null) {
-          training.isActive = true;
-        } else if (training.isActive) {
-          training.isPaused = !training.isPaused;
-        }
-      }
-    });
+    if (this.activeTraining !== null) {
+      return this.activeTraining.isPaused = true;
+    }
+    const training = findById(this.trainings, trainingId);
+
+    if (training) {
+      training.isActive = true;
+      this.exerciseSetNextActivate();
+    }
   }
 
-  @action.bound private trainingDurationIncrement() {
+  @action exerciseSetNextActivate() {
+    if (this.nextExerciseSet) {
+      this.nextExerciseSet.state = 'active';
+    }
+  }
+
+  @action exerciseSetRestActivate() {
+    if (this.activeExerciseSet) {
+      this.activeExerciseSet.isRest = true;
+    }
+  }
+
+  @action exerciseSetRestExpand(expandInSeconds = 10) {
+    if (this.activeExerciseSet) {
+      this.activeExerciseSet.restTime += expandInSeconds;
+    }
+  }
+
+  @action.bound private trainingDurationTickHandle() {
     if (this.activeTraining) this.activeTraining.duration++;
     if (this.activeExercise) this.activeExercise.duration++;
     if (this.activeExerciseSet) {
@@ -117,7 +135,6 @@ export class TrainingStore {
   }
 
   @computed get mergedTrainings() {
-    console.log('mergedTrainings RECOMPUTED')
     return this.trainings.map(training => ({
       ...training,
       exercises: training.exerciseIds.flatMap(exerciseId => {
