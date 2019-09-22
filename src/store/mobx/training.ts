@@ -5,7 +5,6 @@ import {
   reaction,
   action,
 } from 'mobx';
-import { RootStore } from '.';
 import { Training, ExerciseSet } from '../../database/entities';
 import { ExerciseId, TrainingId, ExerciseSetId } from '../../types';
 import { normalizeTrainings } from './utils';
@@ -20,7 +19,7 @@ export class TrainingStore {
   
   durationInterval!: NodeJS.Timeout;
 
-  constructor(private readonly rootStore: RootStore) {
+  constructor() {
     reaction(
       () => this.entityJSON,
       () => {
@@ -87,6 +86,10 @@ export class TrainingStore {
   }
 
   @action exerciseSetNextActivate() {
+    if (this.activeExerciseSet) {
+      this.activeExerciseSet.isRest = false;
+      this.activeExerciseSet.state = 'finished';
+    }
     if (this.nextExerciseSet) {
       this.nextExerciseSet.state = 'active';
     }
@@ -115,12 +118,7 @@ export class TrainingStore {
         this.activeExerciseSet.restDuration++;
 
         if (restHasFinished) {
-          this.activeExerciseSet.isRest = false;
-          this.activeExerciseSet.state = 'finished';
-
-          if (this.nextExerciseSet) {
-            this.nextExerciseSet.state = 'active';
-          }
+          this.exerciseSetNextActivate();
         }
       }
     }
