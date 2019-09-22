@@ -3,10 +3,10 @@ import styled from 'styled-components/native';
 import { useMobxStore } from '../../common/hooks/useMobxStore';
 import { Text, Button, View } from 'react-native';
 import { useUserId } from '../../common/hooks';
-import { useObserver } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 interface TrainingScreenProps {}
-export const TrainingScreen = (props: TrainingScreenProps) => {
+export const TrainingScreen = observer((props: TrainingScreenProps) => {
   const rootStore = useMobxStore(store => store.training);
   const trainingStore = rootStore.training;
   const userId = useUserId();
@@ -15,7 +15,7 @@ export const TrainingScreen = (props: TrainingScreenProps) => {
     trainingStore.loadTrainings();
   }, []);
 
-  return useObserver(() => (
+  return (
     <Container>
       <Text>Twoje treningi</Text>
       <Text>
@@ -61,8 +61,8 @@ export const TrainingScreen = (props: TrainingScreenProps) => {
         title="Increment duration"
       />
     </Container>
-  ));
-}
+  );
+});
 
 const Container = styled.ScrollView`
 `

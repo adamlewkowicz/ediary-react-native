@@ -1,7 +1,13 @@
-import { observable, flow, computed, reaction, IReactionDisposer, action, runInAction, when } from 'mobx';
+import {
+  observable,
+  flow,
+  computed,
+  reaction,
+  action,
+} from 'mobx';
 import { RootStore } from '.';
-import { Meal, Training, ExerciseSet } from '../../database/entities';
-import { MealId, ExerciseId, TrainingId, ExerciseSetId } from '../../types';
+import { Training, ExerciseSet } from '../../database/entities';
+import { ExerciseId, TrainingId, ExerciseSetId } from '../../types';
 import { normalizeTrainings } from './utils';
 import { findById } from '../../common/utils';
 
@@ -9,7 +15,6 @@ export class TrainingStore {
   @observable trainings: TrainingState[] = [];
   @observable exercises: ExerciseState[] = [];
   @observable exerciseSets: ExerciseSetState[] = [];
-  @observable mealsMap: Map<MealId, Meal> = new Map();
   @observable isLoading = false;
   @observable entity: Training | null = null;
   
@@ -81,23 +86,22 @@ export class TrainingStore {
     });
   }
 
-  @action.bound trainingDurationIncrement() {
+  @action.bound private trainingDurationIncrement() {
     if (this.activeTraining) this.activeTraining.duration++;
     if (this.activeExercise) this.activeExercise.duration++;
     if (this.activeExerciseSet) {
       this.activeExerciseSet.duration++;
 
       if (this.activeExerciseSet.isRest) {
-        this.activeExerciseSet.restDuration++;
         const restHasFinished = this.activeExerciseSet.restDuration >= this.activeExerciseSet.restTime;
+        this.activeExerciseSet.restDuration++;
 
         if (restHasFinished) {
-          this.activeExerciseSet.isDone = true;
-          this.activeExerciseSet.isActive = false;
           this.activeExerciseSet.isRest = false;
+          this.activeExerciseSet.state = 'finished';
 
           if (this.nextExerciseSet) {
-            this.nextExerciseSet.isActive = true;
+            this.nextExerciseSet.state = 'active';
           }
         }
       }
@@ -107,7 +111,7 @@ export class TrainingStore {
   @action exerciseSetToggle(exerciseSetId: ExerciseSetId) {
     this.exerciseSets.forEach(exerciseSet => {
       if (exerciseSet.id === exerciseSetId) {
-        exerciseSet.isActive = !exerciseSet.isActive;
+        exerciseSet.state = 'active';
       }
     });
   }
@@ -141,10 +145,13 @@ export class TrainingStore {
   }
 
   @computed get activeExerciseSet(): ExerciseSetState | null {
-    if (this.activeTraining === null) {
-      return null;
+    if (this.activeTraining !== null) {
+      const exerciseSet = this.exerciseSets.find(exerciseSet => 
+        exerciseSet.state === 'active'
+      );
+      if (exerciseSet) return exerciseSet;
     }
-    return this.exerciseSets.find(exerciseSet => exerciseSet.isActive) || null;
+    return null;
   }
   
   @computed get activeExercise(): ExerciseState | null {
@@ -152,47 +159,16 @@ export class TrainingStore {
       const exercise = this.exercises.find(exercise => 
         exercise.id === this.activeExerciseSet!.exerciseId
       );
-      if (exercise) {
-        return exercise;
-      }
+      if (exercise) return exercise;
     }
     return null;
   }
 
   @computed get nextExerciseSet(): ExerciseSetState | null {
     return this.exerciseSets.find(exerciseSet => 
-      exerciseSet.isDone === false &&
-      exerciseSet.isActive === false
+      exerciseSet.state === 'unfinished'
     ) || null;
   }
-
-}
-
-class MealStore {
-  @observable isToggled: boolean = false;
-  @observable entity: Meal | null = null;
-
-  saveHandler: IReactionDisposer | null = null;
-
-  constructor(
-    private readonly rootStore: RootStore,
-    mealEntity: Meal
-  ) {
-    this.entity = mealEntity;
-
-    this.saveHandler = reaction(
-      () => this.entity,
-      async () => {
-        if (this.entity) {
-          await this.entity.save();
-        }
-      }
-    );
-  }
-
-  updateMeal = flow(function*(this: MealStore, payload: Partial<Meal>) {
-    Object.assign(this.entity, payload);
-  });
 
 }
 
@@ -213,7 +189,7 @@ export interface ExerciseState {
   duration: number
 }
 
-interface ExerciseSetBase {
+export interface ExerciseSetState {
   id: ExerciseSetId
   repeats: number
   loadWeight: number
@@ -221,43 +197,7 @@ interface ExerciseSetBase {
   duration: number
   restTime: number
   restDuration: number
-  isActive: boolean
   isRest: boolean
-  isDone: boolean
-}
-
-interface ExerciseSetFinished extends ExerciseSetBase {
-  isActive: false
-  isRest: false
-  isDone: true
-}
-
-interface ExerciseSetTraining extends ExerciseSetBase {
-  isActive: true
-  isRest: false
-  isDone: false
-}
-
-interface ExerciseSetRest extends ExerciseSetBase {
-  isActive: true
-  isRest: true
-  isDone: false
-}
-
-export type ExerciseSetState = ExerciseSetFinished | ExerciseSetTraining | ExerciseSetRest
-
-
-
-export interface ExerciseSetState_ {
-  id: ExerciseSetId
-  repeats: number
-  loadWeight: number
-  exerciseId: ExerciseId
-  duration: number
-  restTime: number
-  restDuration: number
-  isActive: boolean
-  isRest: boolean
-  isDone: boolean
-  status: 'inactive' | 'training' | 'rest' | 'finished'
+  state: 'unfinished' | 'active' | 'finished'
+  // state: 'unfinished' | 'training' | 'rest' | 'finished'
 }
