@@ -1,6 +1,28 @@
 import { Exercise } from '../../database/entities';
 import { ExerciseId, ExerciseSetId, TrainingId } from '../../types';
 import { computed, reaction, observable, IReactionDisposer } from 'mobx';
+import { GenericEntity } from '../../database/generics/GenericEntity';
+
+abstract class EntityStore_<Entity extends GenericEntity> {
+  abstract entity: Entity;
+  abstract entityWatcher: EntityWatcher<Entity>
+  disposeSaveHandler: IReactionDisposer
+
+  constructor() {
+    this.disposeSaveHandler = reaction(
+      () => this.entityWatcher,
+      async (entityPayload) => {
+        Object.assign(this.entity, entityPayload);
+        await this.entity.save();
+      }
+    );
+  }
+
+  async remove() {
+    this.disposeSaveHandler();
+    await this.entity.remove();
+  }
+}
 
 export class ExerciseStore implements EntityStore<Exercise> {
   readonly id!: ExerciseId;
