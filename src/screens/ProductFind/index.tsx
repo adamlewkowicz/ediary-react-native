@@ -33,7 +33,7 @@ export const ProductFind = (props: ProductFindProps) => {
   const [barcode, setBarcode] = useState<BarcodeId | null>(null);
   const isConnected = useConnected();
   const productsAreEmpty = !products.length;
-  const recentProducts = useSelector((state: StoreState) => state.diary.recentProducts);
+  const recentProducts = useSelector((state: StoreState) => state.productHistory);
   const hasBeenPressed = useRef(false);
   const isIdle = useIdleStatus();
 
