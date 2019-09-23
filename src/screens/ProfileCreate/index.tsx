@@ -11,7 +11,7 @@ import { WeightGoal, Screen } from '../../types';
 import { useDispatch } from 'react-redux';
 import * as Actions from '../../store/actions';
 import { NavigationScreenProps } from 'react-navigation';
-import { useUserId } from '../../common/hooks';
+import { useUserId } from '../../hooks';
 
 export interface ProfileCreateProps extends NavigationScreenProps {}
 export const ProfileCreate = (props: ProfileCreateProps) => {

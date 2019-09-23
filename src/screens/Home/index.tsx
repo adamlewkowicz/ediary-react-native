@@ -19,7 +19,7 @@ import { elementTitles } from '../../common/helpers';
 import { MealId } from '../../types';
 import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
 import { CaloriesChart } from '../../components/CaloriesChart';
-import { useAfterInteractions } from '../../common/hooks';
+import { useAfterInteractions } from '../../hooks';
 
 interface HomeProps extends NavigationScreenProps, MapStateProps {
   dispatch: Dispatch

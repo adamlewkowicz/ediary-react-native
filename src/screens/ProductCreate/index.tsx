@@ -12,7 +12,7 @@ import { MacroElement, BarcodeId } from '../../types';
 import { InputRow } from '../../components/InputRow';
 import { Options } from '../../components/Options';
 import { NavigationScreenProps } from 'react-navigation';
-import { useUserId } from '../../common/hooks';
+import { useUserId } from '../../hooks';
 import { Product } from '../../database/entities';
 import { parseNumber } from '../../common/utils';
 
