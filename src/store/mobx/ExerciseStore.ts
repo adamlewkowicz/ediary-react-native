@@ -3,7 +3,7 @@ import { ExerciseId, ExerciseSetId, TrainingId } from '../../types';
 import { computed, reaction, observable, IReactionDisposer } from 'mobx';
 
 export class ExerciseStore implements EntityStore<Exercise> {
-  id!: ExerciseId;
+  readonly id!: ExerciseId;
   entity!: Exercise;
   disposeSaveHandler: IReactionDisposer;
   @observable name!: string;
@@ -62,7 +62,8 @@ type EntityWatcher<Entity> = Partial<{
   [K in keyof Entity]: K
 }>
 
-interface EntityStore<Entity> {
+interface EntityStore<Entity extends { id: unknown }> {
+  id: Entity['id']
   entity: Entity
   entityWatcher: EntityWatcher<Entity>
   disposeSaveHandler: IReactionDisposer
