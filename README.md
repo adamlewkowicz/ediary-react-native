@@ -1,7 +1,17 @@
+<img
+  src="https://i.imgur.com/vqb5yyq.png"
+  data-canonical-src="https://i.imgur.com/vqb5yyq.png"
+  alt="E-diary logo"
+  align="left"
+/>
+
 # E-diary
 
-# Cel
-Dzięki aplikacji możesz z łatwością kontrolować dzienne spożycie kalorii.
+*E-diary* - kontroluj z łatwością dzienne spożycie kalorii.
+
+</br >
+</br >
+</br >
 
 ## Funkcje
 - obliczanie dziennego zapotrzebowania kalorycznego na podstawie płci, wagi, wieku, wzrostu oraz celu
@@ -22,6 +32,9 @@ Dzięki aplikacji możesz z łatwością kontrolować dzienne spożycie kalorii.
 - Sqlite3 and TypeORM (data persistence)
 - Jest and React Testing Library (testing)
 - Figma (design, UI prototyping)
+
+## Podgląd
+![Preview](https://i.imgur.com/x7qMs8U.jpg)
 
 ## Zdjęcia
 ![Śledzenie kalorii](https://i.imgur.com/tVUkQcN.png)
