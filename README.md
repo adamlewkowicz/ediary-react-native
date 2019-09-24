@@ -7,7 +7,7 @@
 
 # E-diary
 
-*E-diary* - kontroluj z łatwością dzienne spożycie kalorii.
+Kontroluj z łatwością dzienne spożycie kalorii.
 
 </br >
 </br >
@@ -15,26 +15,26 @@
 
 ## Funkcje
 - obliczanie dziennego zapotrzebowania kalorycznego na podstawie płci, wagi, wieku, wzrostu oraz celu
-- wyszukiwarka z dużą listą gotowych produktów
+- wyszukiwarka z listą gotowych produktów
 - skaner kodów kreskowych do łatwego wyszukiwania oraz dodawania produktów
 - tworzenie własnych posiłków oraz produktów
 - pełne wsparcie dla korzystania z aplikacji w trybie offline
-- wykresy z procentową ilością spożytych makroskładników, oraz zawartością w danych posiłkach
+- wykresy z procentową ilością spożytych makroskładników, oraz procentową zawartością w danych posiłkach
 - tygodniowe podsumowanie spożytych kalorii na wykresie
-- średnie tygodniowe spożycie makroskładników ze wskazaniem na braki/nadmiar
+- średnie tygodniowe spożycie makroskładników ze wskazaniem na braki/nadmiar zależne od zapotrzebowania
 
 ## Stack
 - TypeScript
 - React Native
 - Hooks API, Context
 - React Navigation
-- Redux, Redux Thunk, Reselect (global state)
+- Redux, Redux Thunk, Reselect (global state management)
 - Sqlite3 and TypeORM (data persistence)
-- Jest and React Testing Library (testing)
+- Jest and React Testing Library (unit and integration tests)
 - Figma (design, UI prototyping)
 
 ## Podgląd
-![Preview](https://i.imgur.com/x7qMs8U.jpg)
+![Podgląd](https://i.imgur.com/x7qMs8U.jpg)
 
 ## Zdjęcia
 ![Śledzenie kalorii](https://i.imgur.com/tVUkQcN.png)
