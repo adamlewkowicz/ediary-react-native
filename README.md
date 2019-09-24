@@ -34,7 +34,7 @@ Kontroluj z łatwością dzienne spożycie kalorii.
 - Figma (design, UI prototyping)
 
 ## Podgląd
-![Podgląd](https://i.imgur.com/x7qMs8U.jpg)
+![Podgląd](https://i.imgur.com/332xkTl.jpg)
 
 ## Zdjęcia
 ![Śledzenie kalorii](https://i.imgur.com/tVUkQcN.png)
