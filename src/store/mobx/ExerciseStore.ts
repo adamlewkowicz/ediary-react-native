@@ -3,7 +3,8 @@ import { ExerciseId, ExerciseSetId, TrainingId } from '../../types';
 import { computed, reaction, observable, IReactionDisposer } from 'mobx';
 import { GenericEntity } from '../../database/generics/GenericEntity';
 
-abstract class EntityStore_<Entity extends GenericEntity> {
+export abstract class EntityStore_<Entity extends GenericEntity> {
+  abstract id: any;
   abstract entity: Entity;
   abstract entityWatcher: EntityWatcher<Entity>
   disposeSaveHandler: IReactionDisposer
@@ -18,8 +19,12 @@ abstract class EntityStore_<Entity extends GenericEntity> {
     );
   }
 
-  async remove() {
+  dispose() {
     this.disposeSaveHandler();
+  }
+
+  async remove() {
+    this.dispose();
     await this.entity.remove();
   }
 }
@@ -80,8 +85,8 @@ interface NormalizedExercise {
   entity: Exercise
 }
 
-type EntityWatcher<Entity> = Partial<{
-  [K in keyof Entity]: K
+export type EntityWatcher<Entity> = Partial<{
+  [K in keyof Entity]: Entity[K]
 }>
 
 interface EntityStore<Entity extends { id: unknown }> {

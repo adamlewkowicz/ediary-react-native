@@ -38,7 +38,7 @@ export const TrainingScreen = observer((props: TrainingScreenProps) => {
             <Exercise key={exercise.id as any}>
               <Text>Ćwiczenie: {exercise.id}</Text>
               {exercise.sets.map(exerciseSet => (
-                <ExerciseSet
+                <ExerciseSetButton
                   key={exerciseSet.id as any}
                   isActive={exerciseSet.state === 'active'}
                   isRest={exerciseSet.isRest}
@@ -69,7 +69,7 @@ export const TrainingScreen = observer((props: TrainingScreenProps) => {
                       </>
                     )}
                   </>
-                </ExerciseSet>
+                </ExerciseSetButton>
               ))}
             </Exercise>
           ))}
@@ -107,19 +107,19 @@ const Exercise = styled.View`
   padding: 10px;
 `
 
-const ExerciseSet = styled.TouchableOpacity<{
+const ExerciseSetButton = styled.TouchableOpacity<{
   isActive: boolean
   isRest: boolean
 }>`
   padding: 15px;
   background: lightgreen;
   background: ${props => {
-    if (props.isActive) {
-      'lightgreen';
-    }
     if (props.isRest) {
       return 'lightgray';
     }
+    if (props.isActive) {
+      return 'lightgreen';
+    } 
     return 'lightpink';
   }}
 `
