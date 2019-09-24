@@ -9,6 +9,7 @@ import {
 import { GenericEntity } from '../generics/GenericEntity';
 import { ExerciseId, ExerciseSetId } from '../../types';
 import { Exercise } from './Exercise';
+import { EntityType, EntityRequired } from '../types';
 
 @Entity('exercise_sets')
 export class ExerciseSet extends GenericEntity {
@@ -34,3 +35,10 @@ export class ExerciseSet extends GenericEntity {
   exercise?: Exercise;
 
 }
+
+export type IExerciseSet = EntityType<ExerciseSet>;
+export type IExerciseSetRequired = EntityRequired<IExerciseSet,
+  | 'exerciseId'
+  | 'loadWeight'
+  | 'repeats'
+>;

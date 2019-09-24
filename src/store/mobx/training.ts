@@ -4,6 +4,7 @@ import {
   computed,
   reaction,
   action,
+  IReactionDisposer,
 } from 'mobx';
 import { Training, ExerciseSet } from '../../database/entities';
 import { ExerciseId, TrainingId, ExerciseSetId } from '../../types';
@@ -17,7 +18,8 @@ export class TrainingStore {
   @observable exerciseSets: ExerciseSetState[] = [];
   @observable isLoading = false;
   @observable entity: Training | null = null;
-  
+
+  dispose: IReactionDisposer;  
   durationInterval!: NodeJS.Timeout;
 
   constructor() {
@@ -29,18 +31,21 @@ export class TrainingStore {
         }
       }
     );
-    reaction(
+    this.dispose = reaction(
       () => this.activeTraining && this.activeTraining.isPaused,
       () => {
         if (this.activeTraining) {
           if (this.activeTraining.isPaused) {
             clearInterval(this.durationInterval);
           } else {
-            this.durationInterval = setInterval(this.trainingDurationTickHandle, 1000);
+            this.durationInterval = setInterval(this.trainingDurationTickHandle, 10000);
           }
         }
       }
     );
+    if (module.hot) {
+      clearInterval(this.durationInterval);
+    }
   }
 
   @computed

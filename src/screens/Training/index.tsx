@@ -53,6 +53,14 @@ export const TrainingScreen = observer((props: TrainingScreenProps) => {
                       Obciążenie {exerciseSet.loadWeight}{'\n'}
                     </Text>
                     <Button
+                      title="Usuń"
+                      onPress={() => trainingStore.entity!.removeExercise(exercise.id)}
+                    />
+                    <Button
+                      title="Dodaj serię"
+                      onPress={() => exercise.entity._addExerciseSet({ loadWeight: 40, repeats: 12 })}
+                    />
+                    <Button
                       title="Aktywuj przerwę"
                       onPress={() => trainingStore.exerciseSetRestActivate()}
                     />

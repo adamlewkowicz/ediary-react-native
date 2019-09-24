@@ -2,7 +2,7 @@ import { TrainingStore } from './training';
 import { configure, observable } from 'mobx';
 import mobxRemotedev from 'mobx-remotedev';
 
-configure({ enforceActions: 'observed' });
+// configure({ enforceActions: 'observed' });
 
 @mobxRemotedev({
   name: 'MobX',

@@ -42,8 +42,8 @@ export class ExerciseStore implements EntityStore<Exercise> {
     const { sets = [], ...exercise } = entity;
 
     // drop relations to lower memory usage
-    delete entity.sets;
-    delete entity.trainings;
+    // delete entity.sets;
+    // delete entity.trainings;
 
     Object.assign(this, {
       ...exercise,

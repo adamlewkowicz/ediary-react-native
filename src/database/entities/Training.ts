@@ -7,10 +7,10 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { GenericEntity } from '../generics/GenericEntity';
-import { TrainingId, UserId } from '../../types';
+import { TrainingId, UserId, ExerciseId } from '../../types';
 import { Exercise } from './Exercise';
 import { User } from './User';
-import { observable } from 'mobx';
+import { observable, flow } from 'mobx';
 
 @Entity('trainings')
 export class Training extends GenericEntity {
@@ -31,7 +31,7 @@ export class Training extends GenericEntity {
 
   @OneToMany(
     type => Exercise,
-    exercise => exercise.trainings
+    exercise => exercise.training
   )
   exercises?: Exercise[];
 
@@ -42,5 +42,14 @@ export class Training extends GenericEntity {
   )
   @JoinColumn({ name: 'userId' })
   user?: User;
+
+  removeExercise = flow(function*(this: Training,
+    exerciseId: ExerciseId
+  ) {
+    if (this.exercises) {
+      this.exercises.filter(exercise => exercise.id !== exerciseId);
+    }
+    yield Exercise.delete(exerciseId as number);
+  });
 
 }
