@@ -1,19 +1,24 @@
+import {
+  MEAL_PRODUCT_ADDED,
+  PRODUCT_HISTORY_RECENT_ADDED,
+  MEAL_ADDED,
+} from '../../consts';
 import { Product } from '../../../database/entities';
 import { ProductHistoryAction } from '../../actions/types/productHistory';
-import { MEAL_PRODUCT_ADDED, PRODUCT_HISTORY_RECENT_ADDED, MEAL_ADDED } from '../../consts';
 import { filterByUniqueId } from '../../../common/utils';
 
 const getProductsFromAction = (action: ProductHistoryAction): Product[] => {
-  if (action.type === MEAL_PRODUCT_ADDED) {
-    return action.meta.rawProduct ? [action.meta.rawProduct] : [];
-  } else if (action.type === PRODUCT_HISTORY_RECENT_ADDED) {
-    return action.payload;
-  } else if (action.type === MEAL_ADDED) {
-    const { mealProducts = [] } = action.payload;
-    const products = mealProducts.flatMap(mealProduct => mealProduct.product);
-    return products;
+  switch(action.type) {
+    case PRODUCT_HISTORY_RECENT_ADDED: return action.payload;
+    case MEAL_PRODUCT_ADDED: return action.meta.rawProduct
+      ? [action.meta.rawProduct]
+      : [];
+    case MEAL_ADDED: 
+      const { mealProducts = [] } = action.payload;
+      const products = mealProducts.flatMap(mealProduct => mealProduct.product);
+      return products;
+    default: return [];
   }
-  return [];
 }
 
 export function productHistoryReducer(
