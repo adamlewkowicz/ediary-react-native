@@ -9,8 +9,8 @@
     "test:watch": "jest --watch",
     "lint": "eslint --ext js,ts,tsx src",
     "type-check": "tsc --noEmit && echo \"No type errors found\"",
-    "clean:android": "cd android && gradlew clean && cd .. && react-native run-android",
-    "android:clean": "npm run clean:android",
+    "android:clean": "cd android && gradlew clean && cd .. && react-native run-android",
+    "android": "npm run android:clean",
     "typeorm": "ts-node ./node_modules/typeorm/cli -f ./src/database/config/config.migration.ts",
     "test:db": "ts-node-dev --respawn ./scripts/test-db",
     "postversion": "react-native-version"
@@ -98,8 +98,5 @@
     "assets": [
       "./assets/fonts/"
     ]
-  },
-  "jest": {
-    "preset": "react-native"
   }
 }

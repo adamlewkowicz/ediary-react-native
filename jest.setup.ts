@@ -5,7 +5,12 @@ import { createConnection, getConnection } from 'typeorm';
 import { config } from './src/database/config/config';
 import { NativeModules } from 'react-native';
 
-(global as any).requestIdleCallback = jest.fn((callback: () => void) => callback());
+(global as any).requestIdleCallback = jest.fn(
+  (callback: () => void) => {
+    callback();
+    return jest.fn();
+  }
+);
 
 beforeEach(async () => {
   const connection = await createConnection(config.test);

@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
-import { StoreState } from '../../store';
-import { UserId } from '../../types';
-import { UserIdCannotBeNullError } from '../error';
+import { StoreState } from '../store';
+import { UserId } from '../types';
+import { UserIdCannotBeNullError } from '../common/error';
 
 export function useUserId(): UserId {
   const userId = useSelector<StoreState, UserId | null>(
