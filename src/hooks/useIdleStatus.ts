@@ -4,8 +4,8 @@ export function useIdleStatus(): boolean {
   const [idle, setIdle] = useState(false);
   
   useEffect(() => {
-    const cancel = global.requestIdleCallback(() => setIdle(true));
-    return () => cancel();
+    const idleCallback = global.requestIdleCallback(() => setIdle(true));
+    return () => global.cancelIdleCallback(idleCallback);
   }, []);
 
   return idle;
