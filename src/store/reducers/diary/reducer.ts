@@ -15,7 +15,7 @@ import {
   normalizeMeal,
 } from './helpers';
 import { DiaryActions } from '../../actions';
-import { getDayFromDate, getTimeFromDate, filterByUniqueId } from '../../../common/utils';
+import { getDayFromDate, getTimeFromDate } from '../../../common/utils';
 import { DiaryState, DiaryMeal, DiaryMealTemplate } from './types';
 import { defaultTemplates } from '../../../common/helpers';
 

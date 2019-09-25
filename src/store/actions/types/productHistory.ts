@@ -1,12 +1,6 @@
-import { PRODUCTS_RECENT_LOADED } from '../../consts'
-import { Product } from '../../../database/entities'
-import { MealProductAdded } from './diary'
-
-export type ProductsRecentLoaded = {
-  type: typeof PRODUCTS_RECENT_LOADED
-  payload: Product[]
-}
+import { MealProductAdded } from './diary';
+import { ProductHistoryRecentLoaded } from '../creators';
 
 export type ProductHistoryAction = 
   | MealProductAdded
-  | ProductsRecentLoaded
+  | ProductHistoryRecentLoaded
