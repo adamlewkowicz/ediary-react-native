@@ -5,9 +5,9 @@ import { GenericEntity } from '../../database/generics/GenericEntity';
 
 export abstract class EntityStore_<Entity extends GenericEntity> {
   abstract id: any;
-  abstract entity: Entity;
-  abstract entityWatcher: EntityWatcher<Entity>
-  disposeSaveHandler: IReactionDisposer
+  protected abstract entity: Entity;
+  protected abstract entityWatcher: EntityWatcher<Entity>
+  protected disposeSaveHandler: IReactionDisposer
 
   constructor() {
     this.disposeSaveHandler = reaction(
@@ -19,11 +19,11 @@ export abstract class EntityStore_<Entity extends GenericEntity> {
     );
   }
 
-  dispose() {
+  protected dispose() {
     this.disposeSaveHandler();
   }
 
-  async remove() {
+  protected async remove() {
     this.dispose();
     await this.entity.remove();
   }
