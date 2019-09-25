@@ -1,6 +1,6 @@
 import { Product } from '../../../database/entities';
 import { ProductHistoryAction } from '../../actions/types/productHistory';
-import { MEAL_PRODUCT_ADDED, PRODUCT_HISTORY_RECENT_ADDED } from '../../consts';
+import { MEAL_PRODUCT_ADDED, PRODUCT_HISTORY_RECENT_ADDED, MEAL_ADDED } from '../../consts';
 import { filterByUniqueId } from '../../../common/utils';
 
 const getProductsFromAction = (action: ProductHistoryAction): Product[] => {
@@ -8,6 +8,10 @@ const getProductsFromAction = (action: ProductHistoryAction): Product[] => {
     return action.meta.rawProduct ? [action.meta.rawProduct] : [];
   } else if (action.type === PRODUCT_HISTORY_RECENT_ADDED) {
     return action.payload;
+  } else if (action.type === MEAL_ADDED) {
+    const { mealProducts = [] } = action.payload;
+    const products = mealProducts.flatMap(mealProduct => mealProduct.product);
+    return products;
   }
   return [];
 }
@@ -17,12 +21,15 @@ export function productHistoryReducer(
   action: ProductHistoryAction
 ): ProductHistoryState {
   const products = getProductsFromAction(action);
-  const maxNumberOfProducts = 8;
-  const mergedProducts = [...state, ...products]
-    .filter(filterByUniqueId)
-    .splice(0, maxNumberOfProducts);
-
-  return mergedProducts;
+  if (products.length) {
+    const maxNumberOfProducts = 8;
+    const mergedProducts = [...products, ...state]
+      .filter(filterByUniqueId)
+      .splice(0, maxNumberOfProducts);
+  
+    return mergedProducts;
+  }
+  return state;
 }
 
 type ProductHistoryState = Product[];

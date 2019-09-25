@@ -1,4 +1,4 @@
-import { MealProductAdded } from './diary';
+import { MealProductAdded, MealAdded } from './diary';
 import { PRODUCT_HISTORY_RECENT_ADDED } from '../../consts';
 import { Product } from '../../../database/entities';
 
@@ -10,3 +10,4 @@ export type ProductHistoryRecentAdded = {
 export type ProductHistoryAction = 
   | MealProductAdded
   | ProductHistoryRecentAdded
+  | MealAdded
