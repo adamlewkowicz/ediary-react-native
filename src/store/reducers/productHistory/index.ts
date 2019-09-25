@@ -1,12 +1,12 @@
 import { Product } from '../../../database/entities';
 import { ProductHistoryAction } from '../../actions/types/productHistory';
-import { MEAL_PRODUCT_ADDED, PRODUCT_HISTORY_RECENT_LOADED } from '../../consts';
+import { MEAL_PRODUCT_ADDED, PRODUCT_HISTORY_RECENT_ADDED } from '../../consts';
 import { filterByUniqueId } from '../../../common/utils';
 
 const getProductsFromAction = (action: ProductHistoryAction): Product[] => {
   if (action.type === MEAL_PRODUCT_ADDED) {
     return action.meta.rawProduct ? [action.meta.rawProduct] : [];
-  } else if (action.type === PRODUCT_HISTORY_RECENT_LOADED) {
+  } else if (action.type === PRODUCT_HISTORY_RECENT_ADDED) {
     return action.payload;
   }
   return [];

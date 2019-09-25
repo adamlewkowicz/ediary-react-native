@@ -1,9 +1,7 @@
-import { PRODUCT_HISTORY_RECENT_LOADED } from '../../consts';
+import { PRODUCT_HISTORY_RECENT_ADDED } from '../../consts';
 import { Product } from '../../../database/entities';
 
-export const productHistoryRecentLoaded = (products: Product[]) => ({
-  type: PRODUCT_HISTORY_RECENT_LOADED,
+export const productHistoryRecentAdded = (products: Product[]) => ({
+  type: PRODUCT_HISTORY_RECENT_ADDED,
   payload: products
 });
-
-export type ProductHistoryRecentLoaded = ReturnType<typeof productHistoryRecentLoaded>;
