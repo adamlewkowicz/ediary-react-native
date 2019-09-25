@@ -13,7 +13,7 @@ export const config: DatabaseConfig = {
     database: 'test',
     location: 'default',
     logging: ['error', 'query', 'schema'],
-    dropSchema: false,
+    dropSchema: true,
     synchronize: false,
     migrations: migrationsArray,
     entities: entitiesArray
