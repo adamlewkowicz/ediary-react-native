@@ -9,7 +9,6 @@ import {
   ProductUnit,
   MacroElement,
 } from '../../../types';
-import { IProduct } from '../../../database/entities';
 
 export type DiaryMealId = MealId | TemplateIdReverted;
 export type DiaryMealType = 'meal' | 'template';

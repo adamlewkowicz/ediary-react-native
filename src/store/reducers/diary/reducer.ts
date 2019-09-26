@@ -16,7 +16,7 @@ import {
 } from './helpers';
 import { DiaryActions } from '../../actions';
 import { getDayFromDate, getTimeFromDate } from '../../../common/utils';
-import { DiaryState, DiaryMeal, DiaryMealTemplate } from './types';
+import { DiaryState, DiaryMeal, DiaryMealTemplate, DiaryMealType } from './types';
 import { defaultTemplates } from '../../../common/helpers';
 
 const initialState: DiaryState = {
@@ -37,7 +37,7 @@ export function diaryReducer(
           if (action.payload.some(meal => meal.name === template.name)) {
             return [];
           }
-          const type: DiaryMealTemplate['type'] = 'template';
+          const type: DiaryMealType = 'template';
           return [{
             id: getRevertedTemplateId(template.id),
             name: template.name,
