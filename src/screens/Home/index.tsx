@@ -112,7 +112,6 @@ const Home = (props: HomeProps) => {
         renderItem={({ item: meal }) => (
           <MealListItem
             meal={meal}
-            toggledProductId={props.toggledProductId}
             onProductAdd={() => handleProductFindNavigation(meal)}
             onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
             onLongPress={IS_DEV || meal.type === 'template' ? undefined : () => handleMealDelete(meal)}
@@ -168,13 +167,11 @@ interface MapStateProps {
   appDate: StoreState['application']['date']
   appDateDay: StoreState['application']['day']
   macroNeedsLeft: Selectors.MacroNeedsLeft
-  toggledProductId: StoreState['diary']['toggledProductId']
   mealsWithRatio: Selectors.MealsWithRatio
 }
 
 const mapStateToProps = (state: StoreState): MapStateProps => ({
   macroNeedsLeft: Selectors.macroNeedsLeft(state),
-  toggledProductId: state.diary.toggledProductId,
   appDate: state.application.date,
   appDateDay: state.application.day,
   mealsWithRatio: Selectors.mealsWithRatio(state),

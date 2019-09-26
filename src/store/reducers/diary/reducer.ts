@@ -22,8 +22,7 @@ import { defaultTemplates } from '../../../common/helpers';
 const initialState: DiaryState = {
   meals: [],
   products: [],
-  templates: defaultTemplates as any,
-  toggledProductId: null
+  templates: defaultTemplates as any
 }
 
 export function diaryReducer(
@@ -142,7 +141,6 @@ export function diaryReducer(
     }
     case MEAL_TOGGLED: return {
       ...state,
-      toggledProductId: null,
       meals: state.meals.map(meal => ({
         ...meal,
         isToggled: action.meta.mealId === meal.id
@@ -208,9 +206,6 @@ export function diaryReducer(
     }
     case PRODUCT_TOGGLED: return {
       ...state,
-      toggledProductId: state.toggledProductId === action.payload
-        ? null
-        : action.payload,
       products: state.products.map(product => ({
         ...product,
         isToggled: action.payload === product.id
