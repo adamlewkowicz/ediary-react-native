@@ -8,7 +8,14 @@ import {
   BarcodeId,
   ProductUnit,
   MacroElement,
+  MacroElements,
 } from '../../../types';
+
+export interface DiaryState {
+  meals: (DiaryMeal | DiaryMealTemplate)[]
+  products: DiaryProduct[]
+  templates: MealTemplate[]
+}
 
 export type DiaryMealId = MealId | TemplateIdReverted;
 export type DiaryMealType = 'meal' | 'template';
@@ -30,6 +37,7 @@ export interface DiaryMealBase {
   type: DiaryMealType
   isToggled: boolean
   productIds: ProductId[]
+  /** @deprecated - Remove `templateId` and rely on meal's name instead of template id */
   templateId: TemplateId | null
   day: DateDay | null
 }
@@ -76,14 +84,20 @@ export interface DiaryProduct {
   isToggled: boolean
 }
 
-export interface DiaryTemplate {
+export interface MealTemplate {
   id: TemplateId
   name: string
   time: DateTime
 }
 
-export interface DiaryState {
-  meals: (DiaryMeal | DiaryMealTemplate)[]
+export type NormalizeMealsResult = {
+  meals: DiaryMeal[]
   products: DiaryProduct[]
-  templates: DiaryTemplate[]
 }
+
+export type NormalizeMealResult = {
+  meal: DiaryMeal
+  products: DiaryProduct[]
+}
+
+export interface CalcMacroByQuantityData extends MacroElements {}

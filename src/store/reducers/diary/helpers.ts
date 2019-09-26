@@ -1,10 +1,16 @@
-import { MacroElements, TemplateId, TemplateIdReverted } from '../../../types';
+import { TemplateId, TemplateIdReverted } from '../../../types';
 import { MACRO_ELEMENTS } from '../../../common/consts';
 import { Meal } from '../../../database/entities';
 import { getDayFromDate, getTimeFromDate } from '../../../common/utils';
-import { DiaryMealType } from './types';
+import {
+  DiaryMealTemplate,
+  MealTemplate,
+  NormalizeMealsResult,
+  DiaryMeal,
+  DiaryProduct,
+  CalcMacroByQuantityData,
+} from './types';
 
-interface CalcMacroByQuantityData extends MacroElements {}
 export const calcMacroByQuantity = <T extends CalcMacroByQuantityData>(
   macroData: T,
   quantity: number
@@ -13,80 +19,75 @@ export const calcMacroByQuantity = <T extends CalcMacroByQuantityData>(
   element
 }));
 
-export const normalizeMeals = <T extends Meal[]>(
-  payload: T,
-  templateId: TemplateId | null = null,
-) => {
-  const meals = payload.map(meal => {
-    const { mealProducts = [], ...data } = meal;
-    return {
-      ...data,
-      isToggled: templateId != null,
-      isTemplate: false,
-      day: getDayFromDate(meal.date),
-      time: getTimeFromDate(meal.date),
-      productIds: mealProducts.map(mealProduct => mealProduct.productId),
-      templateId,
-    }
-  });
-  const rawProducts = payload.flatMap(({ mealProducts = [] }) =>
-    mealProducts.map(mealProduct => mealProduct.product)
-  );
-  const products = payload.flatMap(({ mealProducts = [] }) => {
-    return mealProducts.map(mealProduct => {
-      const { meal, product, ...data } = mealProduct;
-      const normalizedProduct = {
-        ...data,
-        ...product,
-      }
-      return {
-        ...normalizedProduct,
-        isToggled: false,
-        calcedMacro: calcMacroByQuantity(normalizedProduct.macro, normalizedProduct.quantity)
-      }
-    })
-  });
-  return { meals, products, rawProducts };
-}
-
-export const normalizeMeal = (
-  meal: Meal,
-  templateId: TemplateId | null = null,
-) => {
-  const { mealProducts = [], ...data } = meal;
-  const type: DiaryMealType = 'meal';
-  const normalizedMeal = {
-    ...data,
-    isToggled: false,
-    isTemplate: templateId != null,
-    day: getDayFromDate(meal.date),
-    time: getTimeFromDate(meal.date),
-    productIds: mealProducts.map(mealProduct => mealProduct.productId),
-    templateId,
-    type,
-  }
-  const rawProducts = mealProducts.map(mealProduct => mealProduct.product);
-  const normalizedProducts = mealProducts.map(mealProduct => {
-    const { meal, product, ...data } = mealProduct;
-    const normalizedProduct = {
-      ...data,
-      ...product,
-    }
-    return {
-      ...normalizedProduct,
-      isToggled: false,
-      calcedMacro: calcMacroByQuantity(normalizedProduct.macro, normalizedProduct.quantity)
-    }
-  });
-  return {
-    meal: normalizedMeal,
-    products: normalizedProducts,
-    rawProducts,
-  }
-}
-
 export const getRevertedTemplateId = (
   templateId: TemplateId
 ): TemplateIdReverted => {
   return <any>(<any>templateId * -1);
+}
+
+export const getMealFromTemplate = (
+  template: MealTemplate
+): DiaryMealTemplate => {
+  return {
+    id: getRevertedTemplateId(template.id),
+    name: template.name,
+    type: 'template',
+    macro: {
+      carbs: 0,
+      prots: 0,
+      fats: 0,
+      kcal: 0,
+    },
+    day: null,
+    date: null,
+    time: template.time,
+    isToggled: false,
+    templateId: template.id,
+    productIds: [],
+  }
+}
+
+export const normalizeMeal = (
+  mealEntity: Meal,
+  templateId: TemplateId | null = null
+) => {
+  const { mealProducts = [], ...meal } = mealEntity;
+
+  const normalizedMeal: DiaryMeal = {
+    ...meal,
+    type: 'meal',
+    isToggled: false,
+    day: getDayFromDate(meal.date),
+    time: getTimeFromDate(meal.date),
+    productIds: mealProducts.map(mealProduct => mealProduct.productId),
+    templateId,
+  }
+
+  const normalizedProducts = mealProducts.map<DiaryProduct>(mealProductEntity => {
+    const { meal, product, ...data } = mealProductEntity;
+    const normalizedProduct: DiaryProduct = {
+      ...data,
+      ...product,
+      isToggled: false,
+      calcedMacro: calcMacroByQuantity(product.macro, data.quantity)
+    }
+    return normalizedProduct;
+  });
+
+  return {
+    meal: normalizedMeal,
+    products: normalizedProducts
+  }
+}
+
+export const normalizeMeals = (
+  payload: Meal[]
+): NormalizeMealsResult => {
+  return payload.reduce<NormalizeMealsResult>((normalized, mealEntity) => {
+    const { meal, products } = normalizeMeal(mealEntity);
+    return {
+      meals: [...normalized.meals, meal],
+      products: [...normalized.products, ...products]
+    }
+  }, { meals: [], products: [] });
 }
