@@ -29,7 +29,7 @@ const Home = (props: HomeProps) => {
   const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
   const { dispatch } = props;
 
-  useAfterInteractions(() => dispatch(Actions.productsRecentLoad()));
+  useAfterInteractions(() => dispatch(Actions.productHistoryRecentLoad()));
 
   useEffect(() => {
     dispatch(Actions.mealsFindByDay(props.appDateDay));

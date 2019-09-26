@@ -12,11 +12,9 @@ import {
   mealProductDeleted,
   productUpdated,
   mealToggled,
-  productCreated,
   mealProductAdded,
   mealAdded,
   mealsLoaded,
-  productsRecentLoaded,
 } from '../creators';
 import { DateDay, ProductId, MealId, TemplateId } from '../../../types';
 import { debounce_, findOrFail } from '../../../common/utils';
@@ -106,17 +104,6 @@ export const productUpdate = (
   await Product.update(productId, product);
 }
 
-/**
- * @deprecated - this action is needed, when it doesn't add product to meal
- */
-export const productCreate = (
-  product: IProductOptional
-): Thunk<Promise<Product>> => async (dispatch): Promise<Product> => {
-  const newProduct = await Product.save(product);
-  dispatch(productCreated({ ...product, ...newProduct }));
-  return newProduct;
-}
-
 export const mealsFindByDay = (
   dateDay: DateDay
 ): Thunk => async (dispatch) => {
@@ -159,11 +146,4 @@ export const mealProductAdd = (
     );
   }
   await _updateMealMacro(mealId, getState());
-}
-
-export const productsRecentLoad = (): Thunk => async (dispatch) => {
-  const recentProducts = await Product.findRecentlyUsed();
-  if (recentProducts.length) {
-    dispatch(productsRecentLoaded(recentProducts));
-  }
 }

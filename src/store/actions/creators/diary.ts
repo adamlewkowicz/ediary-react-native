@@ -4,16 +4,14 @@ import {
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED,
   MEAL_TOGGLED,
-  PRODUCT_CREATED,
   PRODUCT_TOGGLED,
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
   MEALS_LOADED,
-  PRODUCTS_RECENT_LOADED,
 } from '../../consts';
 import { DiaryActions } from '../types';
 import { MealId, ProductId, TemplateId } from '../../../types';
-import { Meal, IProduct, IProductMerged, Product } from '../../../database/entities';
+import { Meal, IProductMerged, Product } from '../../../database/entities';
 import { DiaryMeal, DiaryProduct, DiaryMealId } from '../../reducers/diary';
 
 export const mealsLoaded = (
@@ -80,23 +78,9 @@ export const mealToggled = (
   meta: { mealId }
 });
 
-export const productCreated = (
-  product: IProduct
-): DiaryActions => ({
-  type: PRODUCT_CREATED,
-  payload: product
-});
-
 export const productToggled = (
   productId: ProductId | null
 ): DiaryActions => ({
   type: PRODUCT_TOGGLED,
   payload: productId
-});
-
-export const productsRecentLoaded = (
-  products: Product[]
-): DiaryActions => ({
-  type: PRODUCTS_RECENT_LOADED,
-  payload: products
 });

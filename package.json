@@ -8,7 +8,7 @@
     "test:win": "set APP_ENV=test&& jest",
     "test:watch": "jest --watch",
     "lint": "eslint --ext js,ts,tsx src",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --noEmit && echo \"No type errors found\"",
     "android:clean": "cd android && gradlew clean && cd .. && react-native run-android",
     "android": "npm run android:clean",
     "typeorm": "ts-node ./node_modules/typeorm/cli -f ./src/database/config/config.migration.ts",

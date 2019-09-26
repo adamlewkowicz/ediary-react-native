@@ -86,7 +86,6 @@ export interface DiaryTemplate {
 export interface DiaryState {
   meals: (DiaryMeal | DiaryMealTemplate)[]
   products: DiaryProduct[]
-  recentProducts: IProduct[]
   toggledProductId: ProductId | null
   templates: DiaryTemplate[]
 }
