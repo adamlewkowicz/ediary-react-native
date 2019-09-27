@@ -138,7 +138,7 @@ const Home = (props: HomeProps) => {
         />
         <Button
           accessibilityLabel="Utwórz nowy posiłek"
-          onPress={() => dispatch(Actions.mealCreate(name, props.appDate, null))}
+          onPress={() => dispatch(Actions.mealCreate(name, props.appDate))}
         >
           Dodaj posiłek
         </Button>

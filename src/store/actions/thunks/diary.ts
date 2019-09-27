@@ -35,11 +35,10 @@ async function _updateMealMacro(mealId: MealId, store: StoreState) {
 export const mealCreate = (
   name: Meal['name'],
   date: Date,
-  templateId: TemplateId | null,
 ): Thunk => async (dispatch) => {
   const meal = await Meal.createWithDate({ name }, date);
   dispatch(mealToggled(null));
-  dispatch(mealAdded(meal, templateId));
+  dispatch(mealAdded(meal));
 }
 
 export const mealDelete = (
@@ -124,7 +123,7 @@ export const mealCreateFromTemplate = (
     template, date, productId, quantity
   );
   dispatch(
-    mealAdded(createdMeal, template.id)
+    mealAdded(createdMeal)
   );
   await _updateMealMacro(createdMeal.id, getState());
 }
