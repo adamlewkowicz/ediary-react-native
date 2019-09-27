@@ -22,7 +22,7 @@ import { defaultTemplates } from '../../../common/helpers';
 const initialState: DiaryState = {
   meals: [],
   products: [],
-  templates: defaultTemplates as any
+  templates: defaultTemplates
 }
 
 export function diaryReducer(
