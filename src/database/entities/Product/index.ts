@@ -26,9 +26,9 @@ import { Macro } from '../../embeds/Macro';
 import { FindMostUsedResult, FindMostProductIdsResult } from './types';
 
 @Entity('product')
-@Unique(['name', 'isVerified'])
-@Unique(['barcode', 'userId'])
-@Unique(['barcode', 'isVerified'])
+@Unique<Product>(['name', 'isVerified'])
+@Unique<Product>(['barcode', 'userId'])
+@Unique<Product>(['barcode', 'isVerified'])
 export class Product extends GenericEntity {
 
   @PrimaryGeneratedColumn()
