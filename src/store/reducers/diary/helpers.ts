@@ -22,7 +22,7 @@ export const calcMacroByQuantity = <T extends CalcMacroByQuantityData>(
 export const getRevertedTemplateId = (
   templateId: TemplateId
 ): TemplateIdReverted => {
-  return <any>(<any>templateId * -1);
+  return ((templateId as any) * -1) as any;
 }
 
 export const getMealFromTemplate = (
@@ -60,7 +60,6 @@ export const normalizeMeal = (
     day: getDayFromDate(meal.date),
     time: getTimeFromDate(meal.date),
     productIds: mealProducts.map(mealProduct => mealProduct.productId),
-    templateId,
   }
 
   const normalizedProducts = mealProducts.map<DiaryProduct>(mealProductEntity => {

@@ -78,10 +78,11 @@ export function diaryReducer(
       ),
       meals: state.meals.flatMap(meal => {
         if (meal.id === action.meta.mealId) {
-          if (meal.templateId) {
-            const { templateId: id, name, time } = meal;
-            const template = { id, name, time };
-            const mealFromTemplate = getMealFromTemplate(template);
+          const foundTemplate = state.templates.find(template => 
+            template.name === meal.name  
+          );
+          if (foundTemplate) {
+            const mealFromTemplate = getMealFromTemplate(foundTemplate);
             return [mealFromTemplate];
           }
           return [];

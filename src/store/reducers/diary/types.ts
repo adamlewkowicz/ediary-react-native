@@ -33,12 +33,9 @@ export interface DiaryMealBase {
   time: DateTime
   updatedAt?: number
   createdAt?: number
-  //
   type: DiaryMealType
   isToggled: boolean
   productIds: ProductId[]
-  /** @deprecated - Remove `templateId` and rely on meal's name instead of template id */
-  templateId: TemplateId | null
   day: DateDay | null
 }
 
@@ -76,7 +73,6 @@ export interface DiaryProduct {
     fats: number
     kcal: number
   }
-  //
   calcedMacro: {
     element: MacroElement
     value: number

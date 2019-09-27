@@ -71,10 +71,13 @@ export const mealProductDelete = (
   mealId: Meal['id'],
   productId: Product['id']
 ): Thunk => async (dispatch, getState) => {
-  const { meals } = getState().diary;
+  const { meals, templates } = getState().diary;
   const meal = findOrFail(meals, meal => meal.id === mealId);
+  const template = templates.find(template => template.name === meal.name);
+  const isLatestProductOfMeal = meal.productIds.length === 1;
+  const isCreatedFromTemplate = template !== undefined;
   
-  if (meal.productIds.length === 1 && meal.templateId !== null) {
+  if (isLatestProductOfMeal && isCreatedFromTemplate) {
     dispatch(mealDeleted(mealId));
     await Meal.delete(mealId);
   } else {
