@@ -14,7 +14,7 @@ import {
 export interface DiaryState {
   meals: (DiaryMeal | DiaryMealTemplate)[]
   products: DiaryProduct[]
-  templates: MealTemplate[]
+  templates: DiaryTemplate[]
 }
 
 export type DiaryMealId = MealId | TemplateIdReverted;
@@ -80,7 +80,7 @@ export interface DiaryProduct {
   isToggled: boolean
 }
 
-export interface MealTemplate {
+export interface DiaryTemplate {
   id: TemplateId
   name: string
   time: DateTime

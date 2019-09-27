@@ -4,7 +4,7 @@ import { Meal } from '../../../database/entities';
 import { getDayFromDate, getTimeFromDate } from '../../../common/utils';
 import {
   DiaryMealTemplate,
-  MealTemplate,
+  DiaryTemplate,
   NormalizeMealsResult,
   DiaryMeal,
   DiaryProduct,
@@ -26,7 +26,7 @@ export const getRevertedTemplateId = (
 }
 
 export const getMealFromTemplate = (
-  template: MealTemplate
+  template: DiaryTemplate
 ): DiaryMealTemplate => {
   return {
     id: getRevertedTemplateId(template.id),
@@ -48,8 +48,7 @@ export const getMealFromTemplate = (
 }
 
 export const normalizeMeal = (
-  mealEntity: Meal,
-  templateId: TemplateId | null = null
+  mealEntity: Meal
 ) => {
   const { mealProducts = [], ...meal } = mealEntity;
 

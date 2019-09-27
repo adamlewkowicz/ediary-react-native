@@ -47,18 +47,18 @@ export function diaryReducer(
         ]
       }
     case MEAL_ADDED: {
-      const { templateId } = action.meta;
-      const isMealCreatedFromTemplate = templateId !== null;
-      const { meal: normalizedMeal, products: normalizedProducts } = normalizeMeal(
-        action.payload, action.meta.templateId
+      const { meal: normalizedMeal, products: normalizedProducts } = normalizeMeal(action.payload);
+      const foundTemplate = state.templates.find(template =>
+        template.name === normalizedMeal.name
       );
+      const isMealCreatedFromTemplate = foundTemplate !== undefined;
       
       if (isMealCreatedFromTemplate) {
         return {
           ...state,
           products: [...state.products, ...normalizedProducts],
           meals: state.meals.map(meal => {
-            if (meal.type === 'template' && meal.templateId === templateId) {
+            if (meal.type === 'template' && meal.templateId === foundTemplate!.id) {
               return { ...normalizedMeal, isToggled: true };
             }
             return meal;
