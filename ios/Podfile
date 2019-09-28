@@ -1,8 +1,8 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'EdiaryMobileApp' do
-  # Pods for EdiaryMobileApp
+target 'Ediary' do
+  # Pods for Ediary
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -46,7 +46,7 @@ target 'EdiaryMobileApp' do
 
   pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
 
-  target 'EdiaryMobileAppTests' do
+  target 'EdiaryTests' do
     inherit! :search_paths
     # Pods for testing
   end
@@ -54,10 +54,10 @@ target 'EdiaryMobileApp' do
   use_native_modules!
 end
 
-target 'EdiaryMobileApp-tvOS' do
-  # Pods for EdiaryMobileApp-tvOS
+target 'Ediary-tvOS' do
+  # Pods for Ediary-tvOS
 
-  target 'EdiaryMobileApp-tvOSTests' do
+  target 'Ediary-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end
