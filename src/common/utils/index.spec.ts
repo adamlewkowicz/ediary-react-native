@@ -19,8 +19,6 @@ test('debounce - debounced function gets called only once', () => {
   jest.advanceTimersByTime(debounceTime);
 
   expect(actionMock).toHaveBeenCalledTimes(1);
-
-  jest.clearAllTimers();
 });
 
 test('mapAsyncSequence - runs promises in a sequence', async () => {
