@@ -14,7 +14,8 @@
     "android": "npm run android:clean",
     "typeorm": "ts-node ./node_modules/typeorm/cli -f ./src/database/config/config.migration.ts",
     "test:db": "ts-node-dev --respawn ./scripts/test-db",
-    "postversion": "react-native-version"
+    "postversion": "react-native-version",
+    "beta": "npm version prerelease --preid=beta"
   },
   "husky": {
     "hooks": {}
