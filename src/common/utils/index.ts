@@ -21,6 +21,11 @@ export const round = (value: number, scale = 10) => Math.round(value * scale) / 
 
 export const toLocaleString = (value: number) => new Intl.NumberFormat('pl-PL').format(value);
 
+/**
+ * Maps over an array and runs promise returned from a callback in a sequence.
+ * @param items array of elements to iterate on
+ * @param callback callback that is executed on each iteration
+ */
 export const mapAsyncSequence = async <T, R>(
   items: T[],
   callback: (item: T) => Promise<R>
