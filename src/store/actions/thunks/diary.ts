@@ -17,11 +17,11 @@ import {
   mealsLoaded,
 } from '../creators';
 import { DateDay, ProductId, MealId, TemplateId } from '../../../types';
-import { debounce_, findOrFail } from '../../../common/utils';
+import { debounce, findOrFail } from '../../../common/utils';
 import { Thunk, StoreState, Selectors } from '../..';
 import { DiaryMeal, DiaryProduct, DiaryTemplate } from '../../reducers/diary';
 
-const debounceA = debounce_();
+const debounceA = debounce();
 
 async function _updateMealMacro(mealId: MealId, store: StoreState) {
   const meals = Selectors.calcedMeals(store);
