@@ -1,6 +1,6 @@
 import {
   calcMacroNeedsLeft,
-  debounce_,
+  debounce,
   mapAsyncSequence,
   filterByUniqueId,
   findOrFail,
@@ -10,7 +10,7 @@ import {
 test('debounce - debounced function gets called only once', () => {
   jest.useFakeTimers();
   const actionMock = jest.fn();
-  const debounceHandler = debounce_();
+  const debounceHandler = debounce();
   const debounceTime = 150;
 
   debounceHandler(actionMock, debounceTime);
