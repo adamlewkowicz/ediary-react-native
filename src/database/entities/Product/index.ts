@@ -15,7 +15,6 @@ import { ProductPortion } from '../ProductPortion';
 import { friscoApi } from '../../../services/FriscoApi';
 import { SqliteENUM } from '../../decorators';
 import { EntityType, EntityRequired } from '../../types';
-import { Optional } from 'utility-types';
 import { PRODUCT_UNITS } from '../../../common/consts';
 import { ilewazyApi } from '../../../services/IlewazyApi';
 import { mapAsyncSequence, filterByUniqueId } from '../../../common/utils';
@@ -227,7 +226,6 @@ export class Product extends GenericEntity {
 }
 
 export type IProduct = EntityType<Product, 'portion'>;
-export type IProductOptional = Optional<IProduct, 'id' | 'updatedAt' | 'createdAt' | 'mealProducts' | 'portions' | 'user' | 'isVerified' | 'images'>;
 export type IProductRequired = EntityRequired<IProduct,
   | 'name'
   | 'macro'

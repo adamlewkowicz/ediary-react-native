@@ -7,7 +7,7 @@ test('migrations run up and down without issues', async () => {
   await connection.dropDatabase();
   await connection.runMigrations();
 
-  for (const migration of connection.migrations) {
+  for (const _migration of connection.migrations) {
     await connection.undoLastMigration();
   }
 
