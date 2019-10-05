@@ -167,7 +167,7 @@ exports[`renders without crashing 1`] = `
                         <View
                           style={
                             Object {
-                              "backgroundColor": "#FFF",
+                              "backgroundColor": "#fff",
                             }
                           }
                         >
@@ -175,8 +175,8 @@ exports[`renders without crashing 1`] = `
                             pointerEvents="box-none"
                             style={
                               Object {
-                                "backgroundColor": "#FFF",
-                                "borderBottomColor": "#A7A7AA",
+                                "backgroundColor": "#fff",
+                                "borderBottomColor": "#a7a7aa",
                                 "borderBottomWidth": 0.5,
                                 "height": 64,
                                 "paddingBottom": 0,
@@ -228,7 +228,7 @@ exports[`renders without crashing 1`] = `
                                     numberOfLines={1}
                                     style={
                                       Object {
-                                        "color": "rgba(0, 0, 0, .9)",
+                                        "color": "rgba(0, 0, 0, 0.9)",
                                         "fontFamily": "DMSans-Regular",
                                         "fontSize": 17,
                                         "fontWeight": "600",
@@ -269,7 +269,7 @@ exports[`renders without crashing 1`] = `
           style={
             Object {
               "backgroundColor": "#fff",
-              "borderTopColor": "rgba(0, 0, 0, .3)",
+              "borderTopColor": "#a7a7aa",
               "borderTopWidth": 0.5,
               "flexDirection": "row",
               "height": 49,
@@ -347,6 +347,7 @@ exports[`renders without crashing 1`] = `
                     bbHeight={22}
                     bbWidth={22}
                     fill="#6BB4DD"
+                    focusable={false}
                     height={22}
                     id="Capa_1"
                     meetOrSlice={0}
@@ -361,7 +362,9 @@ exports[`renders without crashing 1`] = `
                         Object {
                           "enableBackground": "new 0 0 512 512",
                         },
-                        null,
+                        Object {
+                          "opacity": 1,
+                        },
                         Object {
                           "flex": 0,
                           "height": 22,
@@ -1067,7 +1070,8 @@ exports[`renders without crashing 1`] = `
                     align="xMidYMid"
                     bbHeight={22}
                     bbWidth={22}
-                    fill="#8E8E93"
+                    fill="#8e8e93"
+                    focusable={false}
                     height={22}
                     id="Capa_1"
                     meetOrSlice={0}
@@ -1082,7 +1086,9 @@ exports[`renders without crashing 1`] = `
                         Object {
                           "enableBackground": "new 0 0 512 512",
                         },
-                        null,
+                        Object {
+                          "opacity": 1,
+                        },
                         Object {
                           "flex": 0,
                           "height": 22,
@@ -1853,6 +1859,7 @@ exports[`renders without crashing 1`] = `
                     bbWidth={22}
                     enableBackground="new 0 0 512 512"
                     fill="#6BB4DD"
+                    focusable={false}
                     height={22}
                     id="Capa_1"
                     meetOrSlice={0}
@@ -1865,7 +1872,9 @@ exports[`renders without crashing 1`] = `
                           "borderWidth": 0,
                         },
                         undefined,
-                        null,
+                        Object {
+                          "opacity": 1,
+                        },
                         Object {
                           "flex": 0,
                           "height": 22,
@@ -2354,7 +2363,8 @@ exports[`renders without crashing 1`] = `
                     bbHeight={22}
                     bbWidth={22}
                     enableBackground="new 0 0 512 512"
-                    fill="#8E8E93"
+                    fill="#8e8e93"
+                    focusable={false}
                     height={22}
                     id="Capa_1"
                     meetOrSlice={0}
@@ -2367,7 +2377,9 @@ exports[`renders without crashing 1`] = `
                           "borderWidth": 0,
                         },
                         undefined,
-                        null,
+                        Object {
+                          "opacity": 1,
+                        },
                         Object {
                           "flex": 0,
                           "height": 22,
@@ -2844,7 +2856,7 @@ exports[`renders without crashing 1`] = `
                 style={
                   Object {
                     "backgroundColor": "transparent",
-                    "color": "#8E8E93",
+                    "color": "#8e8e93",
                     "fontFamily": "DMSans-Regular",
                     "fontSize": 11,
                     "marginBottom": 1.5,
