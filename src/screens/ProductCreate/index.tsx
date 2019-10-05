@@ -122,8 +122,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
           <InfoTitle>Wartości odżywcze na:</InfoTitle>
           <Options
             value={state.portionOptions}
-            /** Temporary */
-            onChange={(option: any) => handlePortionOptionChange(option)}
+            onChange={option => handlePortionOptionChange(option)}
           />
         </OptionsContainer>
         <InputRow
