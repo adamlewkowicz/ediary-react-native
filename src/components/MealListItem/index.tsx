@@ -19,7 +19,6 @@ interface MealListItemProps {
   onProductDelete?: (productId: ProductId) => void
   onProductToggle?: (productId: ProductId) => void
   onProductQuantityUpdate?: (productId: ProductId, quantity: number) => void
-  toggledProductId: ProductId | null
   isBeingProcessed: boolean
 }
 export const MealListItem = ({
@@ -66,14 +65,14 @@ export const MealListItem = ({
         <FlatList
           data={props.meal.products}
           keyExtractor={item => item.id.toString()}
-          renderItem={({ item }) => (
+          renderItem={({ item: product }) => (
             <ProductItem
-              key={item.id}
-              product={item}
+              key={product.id}
+              product={product}
               onDelete={onProductDelete}
               onToggle={onProductToggle}
               onQuantityUpdate={onProductQuantityUpdate}
-              isToggled={props.toggledProductId === item.id}
+              isToggled={product.isToggled}
             />
           )}
         />

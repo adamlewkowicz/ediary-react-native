@@ -19,7 +19,7 @@ import { elementTitles } from '../../common/helpers';
 import { MealId } from '../../types';
 import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
 import { CaloriesChart } from '../../components/CaloriesChart';
-import { useAfterInteractions } from '../../common/hooks';
+import { useAfterInteractions } from '../../hooks';
 
 interface HomeProps extends NavigationScreenProps, MapStateProps {
   dispatch: Dispatch
@@ -29,7 +29,7 @@ const Home = (props: HomeProps) => {
   const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
   const { dispatch } = props;
 
-  useAfterInteractions(() => dispatch(Actions.productsRecentLoad()));
+  useAfterInteractions(() => dispatch(Actions.productHistoryRecentLoad()));
 
   useEffect(() => {
     dispatch(Actions.mealsFindByDay(props.appDateDay));
@@ -112,7 +112,6 @@ const Home = (props: HomeProps) => {
         renderItem={({ item: meal }) => (
           <MealListItem
             meal={meal}
-            toggledProductId={props.toggledProductId}
             onProductAdd={() => handleProductFindNavigation(meal)}
             onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
             onLongPress={IS_DEV || meal.type === 'template' ? undefined : () => handleMealDelete(meal)}
@@ -139,7 +138,7 @@ const Home = (props: HomeProps) => {
         />
         <Button
           accessibilityLabel="Utwórz nowy posiłek"
-          onPress={() => dispatch(Actions.mealCreate(name, props.appDate, null))}
+          onPress={() => dispatch(Actions.mealCreate(name, props.appDate))}
         >
           Dodaj posiłek
         </Button>
@@ -168,13 +167,11 @@ interface MapStateProps {
   appDate: StoreState['application']['date']
   appDateDay: StoreState['application']['day']
   macroNeedsLeft: Selectors.MacroNeedsLeft
-  toggledProductId: StoreState['diary']['toggledProductId']
   mealsWithRatio: Selectors.MealsWithRatio
 }
 
 const mapStateToProps = (state: StoreState): MapStateProps => ({
   macroNeedsLeft: Selectors.macroNeedsLeft(state),
-  toggledProductId: state.diary.toggledProductId,
   appDate: state.application.date,
   appDateDay: state.application.day,
   mealsWithRatio: Selectors.mealsWithRatio(state),

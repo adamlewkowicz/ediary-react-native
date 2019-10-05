@@ -4,15 +4,13 @@ import {
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED,
   MEAL_TOGGLED,
-  PRODUCT_CREATED,
   PRODUCT_TOGGLED,
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
   MEALS_LOADED,
-  PRODUCTS_RECENT_LOADED,
 } from '../../consts';
-import { Meal, IProductMerged, IProduct, Product } from '../../../database/entities';
-import { ProductId, TemplateId, MealId } from '../../../types';
+import { Meal, IProductMerged, Product } from '../../../database/entities';
+import { ProductId, MealId } from '../../../types';
 import { DiaryMeal, DiaryProduct, DiaryMealId } from '../../reducers/diary';
 
 export type MealUpdated = {
@@ -58,11 +56,6 @@ export type MealToggled = {
   }
 }
 
-export type ProductCreated = {
-  type: typeof PRODUCT_CREATED
-  payload: IProduct
-}
-
 export type MealsLoaded = {
   type: typeof MEALS_LOADED
   payload: Meal[]
@@ -76,14 +69,6 @@ export type ProductToggled = {
 export type MealAdded = {
   type: typeof MEAL_ADDED
   payload: Meal
-  meta: {
-    templateId: TemplateId | null
-  }
-}
-
-export type ProductsRecentLoaded = {
-  type: typeof PRODUCTS_RECENT_LOADED
-  payload: Product[]
 }
 
 export type DiaryActions =
@@ -93,8 +78,6 @@ export type DiaryActions =
   | MealProductDeleted
   | ProductUpdated
   | MealToggled
-  | ProductCreated
   | MealsLoaded
   | ProductToggled
   | MealAdded
-  | ProductsRecentLoaded

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components/native';
-import { sortByMostAccurateName, debounce_ } from '../../common/utils';
+import { sortByMostAccurateName, debounce } from '../../common/utils';
 import { Product } from '../../database/entities';
 import { ProductListItem, Separator } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
@@ -11,12 +11,12 @@ import { BarcodeScanParams } from '../BarcodeScan';
 import { Screen, BarcodeId } from '../../types';
 import { Button } from 'react-native-ui-kitten';
 import { ProductCreateParams } from '../ProductCreate';
-import { useConnected, useIdleStatus } from '../../common/hooks';
+import { useConnected, useIdleStatus } from '../../hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
 import { ActivityIndicator } from 'react-native';
 
-const debounceA = debounce_();
+const debounceA = debounce();
 const SECTION_TITLE = {
   foundProducts: 'Znalezione produkty:',
   recentProducts: 'Ostatnie produkty:',
@@ -33,7 +33,7 @@ export const ProductFind = (props: ProductFindProps) => {
   const [barcode, setBarcode] = useState<BarcodeId | null>(null);
   const isConnected = useConnected();
   const productsAreEmpty = !products.length;
-  const recentProducts = useSelector((state: StoreState) => state.diary.recentProducts);
+  const recentProducts = useSelector((state: StoreState) => state.productHistory);
   const hasBeenPressed = useRef(false);
   const isIdle = useIdleStatus();
 

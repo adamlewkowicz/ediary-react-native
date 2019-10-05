@@ -12,9 +12,11 @@ import { MacroElement, BarcodeId } from '../../types';
 import { InputRow } from '../../components/InputRow';
 import { Options } from '../../components/Options';
 import { NavigationScreenProps } from 'react-navigation';
-import { useUserId } from '../../common/hooks';
+import { useUserId } from '../../hooks';
 import { Product } from '../../database/entities';
 import { parseNumber } from '../../common/utils';
+import { useDispatch } from 'react-redux';
+import { Actions } from '../../store';
 
 interface ProductCreateProps extends NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
 export const ProductCreate = (props: ProductCreateProps) => {
@@ -28,6 +30,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
     params,
     initProductCreateReducer
   );
+  const storeDispatch = useDispatch();
   const userId = useUserId();
   const { current: refsList } = useRef({
     producer: createRef<TextInput>(),
@@ -75,6 +78,10 @@ export const ProductCreate = (props: ProductCreateProps) => {
         kcal: Number(kcal),
       }
     });
+
+    storeDispatch(
+      Actions.productHistoryRecentAdded([newProduct])
+    );
 
     if (params.onProductCreated) {
       params.onProductCreated(newProduct);

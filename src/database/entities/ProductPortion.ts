@@ -12,7 +12,7 @@ import { EntityType } from '../types';
 import { GenericEntity } from '../generics/GenericEntity';
 
 @Entity('product_portions')
-@Unique(['productId', 'type'])
+@Unique<ProductPortion>(['productId', 'type'])
 export class ProductPortion extends GenericEntity {
 
   @PrimaryColumn()

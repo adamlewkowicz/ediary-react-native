@@ -10,8 +10,8 @@ import { Product } from './Product';
 import { GenericEntity } from '../generics/GenericEntity';
 import { ProductId } from '../../types';
 
-@Unique(['url', 'productId'])
 @Entity('product_images')
+@Unique<ProductImage>(['url', 'productId'])
 export class ProductImage extends GenericEntity {
 
   @PrimaryGeneratedColumn()

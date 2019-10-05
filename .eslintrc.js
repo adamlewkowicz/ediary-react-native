@@ -13,9 +13,10 @@ module.exports = {
     '@typescript-eslint'
   ],
   rules: {
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    'react/prop-types': 'off',
-    '@typescript-eslint/member-delimiter-style': 'off',
-    '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/explicit-function-return-type': 0,
+    'react/prop-types': 0,
+    '@typescript-eslint/member-delimiter-style': 0,
+    '@typescript-eslint/no-empty-interface': 0,
+    'no-param-reassign': 2
   }
 };

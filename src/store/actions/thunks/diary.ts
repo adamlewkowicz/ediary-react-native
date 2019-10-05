@@ -12,18 +12,16 @@ import {
   mealProductDeleted,
   productUpdated,
   mealToggled,
-  productCreated,
   mealProductAdded,
   mealAdded,
   mealsLoaded,
-  productsRecentLoaded,
 } from '../creators';
 import { DateDay, ProductId, MealId, TemplateId } from '../../../types';
-import { debounce_, findOrFail } from '../../../common/utils';
+import { debounce, findOrFail } from '../../../common/utils';
 import { Thunk, StoreState, Selectors } from '../..';
 import { DiaryMeal, DiaryProduct, DiaryTemplate } from '../../reducers/diary';
 
-const debounceA = debounce_();
+const debounceA = debounce();
 
 async function _updateMealMacro(mealId: MealId, store: StoreState) {
   const meals = Selectors.calcedMeals(store);
@@ -37,11 +35,10 @@ async function _updateMealMacro(mealId: MealId, store: StoreState) {
 export const mealCreate = (
   name: Meal['name'],
   date: Date,
-  templateId: TemplateId | null,
 ): Thunk => async (dispatch) => {
   const meal = await Meal.createWithDate({ name }, date);
   dispatch(mealToggled(null));
-  dispatch(mealAdded(meal, templateId));
+  dispatch(mealAdded(meal));
 }
 
 export const mealDelete = (
@@ -73,10 +70,13 @@ export const mealProductDelete = (
   mealId: Meal['id'],
   productId: Product['id']
 ): Thunk => async (dispatch, getState) => {
-  const { meals } = getState().diary;
+  const { meals, templates } = getState().diary;
   const meal = findOrFail(meals, meal => meal.id === mealId);
+  const template = templates.find(template => template.name === meal.name);
+  const isLatestProductOfMeal = meal.productIds.length === 1;
+  const isCreatedFromTemplate = template !== undefined;
   
-  if (meal.productIds.length === 1 && meal.templateId !== null) {
+  if (isLatestProductOfMeal && isCreatedFromTemplate) {
     dispatch(mealDeleted(mealId));
     await Meal.delete(mealId);
   } else {
@@ -106,17 +106,6 @@ export const productUpdate = (
   await Product.update(productId, product);
 }
 
-/**
- * @deprecated - this action is needed, when it doesn't add product to meal
- */
-export const productCreate = (
-  product: IProductOptional
-): Thunk<Promise<Product>> => async (dispatch): Promise<Product> => {
-  const newProduct = await Product.save(product);
-  dispatch(productCreated({ ...product, ...newProduct }));
-  return newProduct;
-}
-
 export const mealsFindByDay = (
   dateDay: DateDay
 ): Thunk => async (dispatch) => {
@@ -134,7 +123,7 @@ export const mealCreateFromTemplate = (
     template, date, productId, quantity
   );
   dispatch(
-    mealAdded(createdMeal, template.id)
+    mealAdded(createdMeal)
   );
   await _updateMealMacro(createdMeal.id, getState());
 }
@@ -159,11 +148,4 @@ export const mealProductAdd = (
     );
   }
   await _updateMealMacro(mealId, getState());
-}
-
-export const productsRecentLoad = (): Thunk => async (dispatch) => {
-  const recentProducts = await Product.findRecentlyUsed();
-  if (recentProducts.length) {
-    dispatch(productsRecentLoaded(recentProducts));
-  }
 }
