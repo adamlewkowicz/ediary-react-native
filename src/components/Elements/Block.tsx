@@ -6,6 +6,7 @@ import { FlattenSimpleInterpolation } from 'styled-components';
 interface BlockProps extends BlockParams {
   children: ReactNode
 }
+
 export const Block = ({ children, row = true, ...props }: BlockProps) => (
   <Container row={row} {...props}>
     {children}

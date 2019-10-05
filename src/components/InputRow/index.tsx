@@ -8,6 +8,7 @@ interface NutritionRowProps extends BasicInputProps {
   title: string
   css?: FlattenSimpleInterpolation
 }
+
 export const InputRow = React.forwardRef<TextInput, NutritionRowProps>((
   {
     title,

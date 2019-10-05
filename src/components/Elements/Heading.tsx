@@ -11,6 +11,7 @@ interface HeadingProps extends TextProps {
   align?: TextAlignProperty
   css?: FlattenSimpleInterpolation
 }
+
 export const Heading = ({ value, children = value, ...props }: HeadingProps) => (
   <Container {...props}>
     {children}

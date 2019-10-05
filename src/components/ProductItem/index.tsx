@@ -17,6 +17,7 @@ interface ProductItemProps<P extends ProductPartial> {
   onToggle: (productId: ProductId) => void
   isToggled: boolean
 }
+
 export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>) {
   const productId = props.product.id;
 

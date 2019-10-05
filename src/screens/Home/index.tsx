@@ -24,6 +24,7 @@ import { useAfterInteractions } from '../../hooks';
 interface HomeProps extends NavigationScreenProps, MapStateProps {
   dispatch: Dispatch
 }
+
 const Home = (props: HomeProps) => {
   const [name, setName] = useState('Trening');
   const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);

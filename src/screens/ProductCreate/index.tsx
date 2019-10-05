@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
 
 interface ProductCreateProps extends NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
+
 export const ProductCreate = (props: ProductCreateProps) => {
   const { current: params } = useRef<ProductCreateParams>({
     onProductCreated: props.navigation.getParam('onProductCreated'),

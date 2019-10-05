@@ -10,6 +10,7 @@ import { getOrCreateConnection } from '../../database/utils/getOrCreateConnectio
 import styled from 'styled-components/native';
 
 interface AppLoadingProps extends NavigationScreenProps {}
+
 export class AppLoading extends React.Component<AppLoadingProps> {
 
   constructor(props: AppLoadingProps) {

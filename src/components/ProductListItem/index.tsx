@@ -16,6 +16,7 @@ interface ProductListItemProps extends TouchableOpacityProps {
     brand?: string
   }
 }
+
 export const ProductListItem = ({
   product,
   ...props

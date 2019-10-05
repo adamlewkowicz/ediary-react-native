@@ -21,6 +21,7 @@ interface MealListItemProps {
   onProductQuantityUpdate?: (productId: ProductId, quantity: number) => void
   isBeingProcessed: boolean
 }
+
 export const MealListItem = ({
   onProductDelete = () => {},
   onProductToggle = () => {},

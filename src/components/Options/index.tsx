@@ -10,9 +10,6 @@ interface OptionsProps {
   }[]
   onChange: (value: string) => void
 }
-/**
- * @todo make value generic (union type)
- */
 export function Options({ onChange, ...props }: OptionsProps) {
   return (
     <Container>
