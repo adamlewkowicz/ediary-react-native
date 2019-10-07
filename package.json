@@ -1,8 +1,9 @@
 {
   "name": "Ediary",
-  "version": "0.3.0-0",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
+    "postinstall": "npx jetify",
     "start": "react-native start",
     "test": "jest",
     "test:win": "set APP_ENV=test&& jest",
@@ -13,7 +14,8 @@
     "android": "npm run android:clean",
     "typeorm": "ts-node ./node_modules/typeorm/cli -f ./src/database/config/config.migration.ts",
     "test:db": "ts-node-dev --respawn ./scripts/test-db",
-    "postversion": "react-native-version"
+    "postversion": "react-native-version",
+    "beta": "npm version prerelease --preid=beta"
   },
   "husky": {
     "hooks": {}

@@ -9,6 +9,7 @@ export interface BasicInputProps extends TextInputProps {
   textAlign?: TextAlignProperty
   forwardedRef?: React.Ref<TextInput>
 }
+
 export const BasicInput = ({
   label,
   onBlur,

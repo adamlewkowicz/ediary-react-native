@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components/native';
-import { sortByMostAccurateName, debounce_ } from '../../common/utils';
+import { sortByMostAccurateName, debounce } from '../../common/utils';
 import { Product } from '../../database/entities';
 import { ProductListItem, Separator } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
@@ -16,13 +16,14 @@ import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
 import { ActivityIndicator } from 'react-native';
 
-const debounceA = debounce_();
+const debounceA = debounce();
 const SECTION_TITLE = {
   foundProducts: 'Znalezione produkty:',
   recentProducts: 'Ostatnie produkty:',
 }
 
 interface ProductFindProps extends NavigationScreenProps {}
+
 export const ProductFind = (props: ProductFindProps) => {
   const { current: params } = useRef<ProductFindParams>({
     onItemPress: props.navigation.getParam('onItemPress')

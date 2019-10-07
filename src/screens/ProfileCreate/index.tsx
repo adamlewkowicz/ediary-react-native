@@ -14,6 +14,7 @@ import { NavigationScreenProps } from 'react-navigation';
 import { useUserId } from '../../hooks';
 
 export interface ProfileCreateProps extends NavigationScreenProps {}
+
 export const ProfileCreate = (props: ProfileCreateProps) => {
   const [step, setStep] = useState(0);
   const [male, setMale] = useState(true);

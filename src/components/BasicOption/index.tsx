@@ -8,6 +8,7 @@ interface BasicOptionProps {
   maxWidth?: number
   onChange: (status: boolean) => void
 }
+
 export const BasicOption = (props: BasicOptionProps) => {
   return (
     <Wrapper

@@ -2,25 +2,23 @@ import dayjs from 'dayjs';
 import { DateDay, UnitType, DateTime, MacroElements } from '../../types';
 import { UNIT_TYPES, DATE_TIME, DATE_DAY, MACRO_ELEMENTS } from '../consts';
 
-let timeout: NodeJS.Timeout;
-
-export const debounce_ = () => {
+export const debounce = () => {
   let timeout: NodeJS.Timeout;
-  return (fn: () => void, delay = 250) => {
+  return (callback: () => void, delay = 250) => {
     clearTimeout(timeout);
-    timeout = setTimeout(fn, delay);
+    timeout = setTimeout(callback, delay);
   }
-}
-
-export const debounce = (fn: () => void, delay = 150) => {
-  clearTimeout(timeout);
-  timeout = setTimeout(fn, delay);
 }
 
 export const round = (value: number, scale = 10) => Math.round(value * scale) / scale;
 
 export const toLocaleString = (value: number) => new Intl.NumberFormat('pl-PL').format(value);
 
+/**
+ * Maps over an array and runs promise returned from a callback in a sequence.
+ * @param items array of elements to iterate on
+ * @param callback callback that is executed on each iteration
+ */
 export const mapAsyncSequence = async <T, R>(
   items: T[],
   callback: (item: T) => Promise<R>
@@ -74,26 +72,29 @@ export function sortByMostAccurateName(
     a: T,
     b: T
   ): -1 | 0 | 1 {
-    const aLowered = a.name.toLowerCase();
-    const bLowered = b.name.toLowerCase();
+    const aNameLowered = a.name.toLowerCase();
+    const bNameLowered = b.name.toLowerCase();
   
-    const aIndex = aLowered.indexOf(phraseLowered);
-    const bIndex = bLowered.indexOf(phraseLowered);
+    const aIndex = aNameLowered.indexOf(phraseLowered);
+    const bIndex = bNameLowered.indexOf(phraseLowered);
   
     const notFoundIndex = -1;
-    const orderByShorter = aLowered.length > bLowered.length ? 1 : -1;
+    const orderByShorter = aNameLowered.length > bNameLowered.length ? 1 : -1;
+
+    const aNameHasNotBeenFound = aIndex === notFoundIndex;
+    const bNameHasNotBeenFound = bIndex === notFoundIndex;
   
-    if (aIndex === notFoundIndex && bIndex === notFoundIndex) {
+    if (aNameHasNotBeenFound && bNameHasNotBeenFound) {
       return -1;
     }
-    if (aIndex === notFoundIndex) {
+    if (aNameHasNotBeenFound) {
       return 1;
     }
-    if (bIndex === notFoundIndex) {
+    if (bNameHasNotBeenFound) {
       return -1;
     }
   
-    if (aLowered.length === bLowered.length) {
+    if (aNameLowered.length === bNameLowered.length) {
       return 0;
     }
   
