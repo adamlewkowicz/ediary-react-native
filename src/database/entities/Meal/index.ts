@@ -147,7 +147,7 @@ export class Meal extends GenericEntity {
   }
 
   static async getMacroHistory(
-    endDay: DateDay,
+    endDay: DateDay = getDayFromDate(dayjs()),
     daysToSubtract = 7,
   ): Promise<GetMacroHistoryResult[]> {
     const date = dayjs(endDay as any);
@@ -181,7 +181,7 @@ export class Meal extends GenericEntity {
   }
 
   static async getMacroSummary(
-    startDay: DateDay,
+    startDay: DateDay = getDayFromDate(dayjs()),
     daysToSubtract = 7,
   ): Promise<GetMacroSummaryResult> {
     const macroHistory = await this.getMacroHistory(startDay, daysToSubtract);
