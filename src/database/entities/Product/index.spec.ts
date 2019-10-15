@@ -6,7 +6,7 @@ import { NormalizedProduct } from '../../../services/IlewazyApi/types';
 describe('Product', () => {
 
   describe('findMostUsed()' ,() => {
-    it('should most used products sorted descendingly ', async () => {
+    it('should return most used products sorted descendingly ', async () => {
       const product = await Product.save({ name: 'Cucumber' });
       const product2 = await Product.save({ name: 'Cucumber 2' });
       const meal = await Meal.save({ name: 'Cucumber soup' });
