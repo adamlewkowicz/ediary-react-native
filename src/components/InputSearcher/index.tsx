@@ -9,6 +9,7 @@ interface InputSearcherProps extends TextInputProps {
   showLabel?: boolean
   isLoading?: boolean
 }
+
 export const InputSearcher = ({
   placeholder,
   onBlur,

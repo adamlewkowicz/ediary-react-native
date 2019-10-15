@@ -2,7 +2,6 @@ import {
   Meal,
   Product,
   MealProduct,
-  IProductOptional,
   IMeal,
   IProductRequired,
 } from '../../../database/entities';
@@ -16,7 +15,7 @@ import {
   mealAdded,
   mealsLoaded,
 } from '../creators';
-import { DateDay, ProductId, MealId, TemplateId } from '../../../types';
+import { DateDay, ProductId, MealId } from '../../../types';
 import { debounce, findOrFail } from '../../../common/utils';
 import { Thunk, StoreState, Selectors } from '../..';
 import { DiaryMeal, DiaryProduct, DiaryTemplate } from '../../reducers/diary';

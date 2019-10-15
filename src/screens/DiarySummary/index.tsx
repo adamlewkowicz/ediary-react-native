@@ -14,6 +14,7 @@ import { RatioInfo } from '../../components/RatioInfo';
 import { useFocusState } from 'react-navigation-hooks';
 
 interface DiarySummaryProps extends MapStateProps, NavigationScreenProps {}
+
 const DiarySummary = (props: DiarySummaryProps) => {
   const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...baseMacro }));
   const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]);

@@ -24,6 +24,7 @@ const SECTION_TITLE = {
 }
 
 interface ProductFindProps extends NavigationScreenProps {}
+
 export const ProductFind = (props: ProductFindProps) => {
   const { current: params } = useRef<ProductFindParams>({
     onItemPress: props.navigation.getParam('onItemPress')

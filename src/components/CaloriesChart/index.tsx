@@ -17,6 +17,7 @@ interface CaloriesChartProps {
     needed: number
   }
 }
+
 export const CaloriesChart = (props: CaloriesChartProps) => {
   const ratio = props.data.ratio > 100 ? 100 : props.data.ratio;
   const ratioSpring: any = useSpring({

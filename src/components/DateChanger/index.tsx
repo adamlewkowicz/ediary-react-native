@@ -9,6 +9,7 @@ interface DateChangerProps {
   value: Date
   onChange: (date: Date) => void
 }
+
 export const DateChanger = (props: DateChangerProps) => {
   const dayjsDate = dayjs(props.value);
   const iconSize = 26;

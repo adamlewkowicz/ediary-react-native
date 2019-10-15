@@ -17,6 +17,7 @@ interface ProductItemProps<P extends ProductPartial> {
   onToggle: (productId: ProductId) => void
   isToggled: boolean
 }
+
 export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>) {
   const productId = props.product.id;
 
@@ -55,7 +56,7 @@ export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>
                 accessibilityLabel="Zmień ilość produktu"
                 value={props.product.quantity.toString()}
                 onChangeText={quantity => props.onQuantityUpdate(productId, Number(quantity))}
-                css={InputRowStyle}
+                styles={InputRowStyle}
               />
               <Block space="space-evenly">
                 {MACRO_ELEMENTS.map(element => (
