@@ -132,7 +132,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
           onSubmitEditing={() => refsList.carbs.current!.focus()}
           ref={refsList.portion}
           accessibilityLabel="Ilość produktu"
-          css={InputCss}
+          styles={InputCss}
         />
         {nutritionInputs.map(data => (
           <InputRow
@@ -143,7 +143,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
             onSubmitEditing={() => refsList[data.nextRef].current!.focus()}
             ref={refsList[data.property]}
             accessibilityLabel={data.title}
-            css={InputCss}
+            styles={InputCss}
           />
         ))}
         <InputRow
@@ -154,7 +154,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
           onChangeText={barcode => handleUpdate({ barcode })}
           onSubmitEditing={handleProductCreate}
           accessibilityLabel="Kod kreskowy"
-          css={InputCss}
+          styles={InputCss}
         />
       </Container>
     </ScrollView>

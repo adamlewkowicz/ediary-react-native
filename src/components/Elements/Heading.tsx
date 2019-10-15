@@ -9,7 +9,7 @@ interface HeadingProps extends TextProps {
   children?: string
   size?: number
   align?: TextAlignProperty
-  css?: FlattenSimpleInterpolation
+  styles?: FlattenSimpleInterpolation
 }
 
 export const Heading = ({ value, children = value, ...props }: HeadingProps) => (
@@ -21,10 +21,10 @@ export const Heading = ({ value, children = value, ...props }: HeadingProps) => 
 const Container = styled.Text<{
   size?: number
   align?: TextAlignProperty
-  css?: FlattenSimpleInterpolation
+  styles?: FlattenSimpleInterpolation
 }>`
   font-family: DMSans-Medium;
   font-size: ${props => props.size || props.theme.fontSize.regular};
   text-align: ${props => props.align || 'left'};
-  ${props => props.css};
+  ${props => props.styles};
 `
