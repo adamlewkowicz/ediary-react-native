@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Product saveNormalizedProduct() should properly parse and save normalized product 1`] = `
+Object {
+  "barcode": null,
+  "createdAt": Any<String>,
+  "id": Any<Number>,
+  "images": Array [],
+  "isVerified": true,
+  "macro": Macro {
+    "carbs": 0,
+    "fats": 0,
+    "kcal": 0,
+    "prots": 0,
+  },
+  "mealProducts": undefined,
+  "name": "Abc",
+  "portions": Array [],
+  "unit": "g",
+  "updatedAt": Any<String>,
+  "user": undefined,
+  "userId": null,
+}
+`;
