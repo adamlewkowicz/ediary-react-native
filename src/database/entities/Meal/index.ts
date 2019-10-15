@@ -109,7 +109,7 @@ export class Meal extends GenericEntity {
     }
   }
 
-  static async createWithProduct(
+  static async createWithProductId(
     payload: DeepPartial<Meal>,
     productId: ProductId,
     quantity?: number
@@ -139,7 +139,7 @@ export class Meal extends GenericEntity {
       name: template.name,
       date: dayjs(date).format(`${DATE_DAY} ${template.time}`)
     }
-    return Meal.createWithProduct(
+    return Meal.createWithProductId(
       newMeal,
       productId,
       quantity

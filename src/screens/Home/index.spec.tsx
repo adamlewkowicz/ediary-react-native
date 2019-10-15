@@ -117,7 +117,7 @@ test('navigates to product search screen and adds product to meal', async () => 
   expect(await findByText(productMock.name)).toBeTruthy();
 });
 
-// test('removes product from meal', async () => {});
+test.todo('removes product from meal');
 
 test('updates product\'s quantity', async () => {
   const carbsMock = 10;
@@ -125,7 +125,7 @@ test('updates product\'s quantity', async () => {
   const carbsAfterQuantityUpdate = 18;
   const productMock = await Product.save({ name: 'Milk', macro: { carbs: carbsMock }});
   const productId = productMock.id;
-  const mealMock = await Meal.createWithProduct({ name: 'Milk soup' }, productId);
+  const mealMock = await Meal.createWithProductId({ name: 'Milk soup' }, productId);
   const mealId = mealMock.id;
   const baseQuantity = 100;
 

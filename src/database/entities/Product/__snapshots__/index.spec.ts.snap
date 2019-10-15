@@ -13,12 +13,10 @@ Object {
     "kcal": 0,
     "prots": 0,
   },
-  "mealProducts": undefined,
   "name": "Abc",
   "portions": Array [],
   "unit": "g",
   "updatedAt": Any<String>,
-  "user": undefined,
   "userId": null,
 }
 `;

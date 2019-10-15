@@ -1,63 +1,29 @@
 import { Product } from '.'
-import { MealProduct } from '../MealProduct';
 import { Meal } from '../Meal';
 import { NormalizedProduct } from '../../../services/IlewazyApi/types';
 
 describe('Product', () => {
 
   describe('findMostUsed()' ,() => {
-    it('should return most used products sorted descendingly ', async () => {
+    it('should find most used products', async () => {
       const product = await Product.save({ name: 'Cucumber' });
-      const product2 = await Product.save({ name: 'Cucumber 2' });
-      const meal = await Meal.save({ name: 'Cucumber soup' });
-      const meal2 = await Meal.save({ name: 'Cucumber soup 2' });
+      await Meal.createWithProductId({ name: 'Cucumber soup' }, product.id);
+
+      const [foundProduct] = await Product.findMostUsed();
     
-      await MealProduct.save({
-        mealId: meal.id,
-        productId: product.id,
-        quantity: 150
-      });
-      await MealProduct.save({
-        mealId: meal2.id,
-        productId: product.id,
-        quantity: 150
-      });
-      await MealProduct.save({
-        mealId: meal.id,
-        productId: product2.id,
-        quantity: 150
-      });
-    
-      const [firstProduct, secondProduct] = await Product.findMostUsed();
-    
-      expect(firstProduct.productId).toBe(product.id);
-      expect(firstProduct.count).toBe(2);
-      expect(secondProduct.productId).toBe(product2.id);
-      expect(secondProduct.count).toBe(1);
+      expect(foundProduct.productId).toBe(product.id);
+      expect(foundProduct.count).toBe(1);
     });
   });
 
   describe('findRecentlyUsed()', () => {
-    it('should return recently used products sorted by meal id', async () => {
+    it('should find recently used products', async () => {
       const product = await Product.save({ name: 'Cucumber' });
-      const product2 = await Product.save({ name: 'Cucumber 2' });
-      const meal = await Meal.save({ name: 'Cucumber soup' });
-      
-      await MealProduct.save({
-        mealId: meal.id,
-        productId: product.id,
-        quantity: 120
-      });
-      await MealProduct.save({
-        mealId: meal.id,
-        productId: product2.id,
-        quantity: 120
-      });
+      await Meal.createWithProductId({ name: 'Cucumber soup' }, product.id);
+
+      const [foundProduct] = await Product.findRecentlyUsed();
     
-      const [firstProduct, secondProduct] = await Product.findRecentlyUsed();
-    
-      expect(firstProduct.id).toBe(product.id);
-      expect(secondProduct.id).toBe(product2.id);
+      expect(foundProduct.id).toBe(product.id);
     });
   });
 
@@ -72,8 +38,10 @@ describe('Product', () => {
         kcal: 0,
         portions: [],
       }
+      const saveSpy = jest.spyOn(Product, 'save');
       const result = await Product.saveNormalizedProduct(normalizedProduct);
-      
+
+      expect(saveSpy).toHaveBeenCalledTimes(1);
       expect(result).toMatchSnapshot({
         id: expect.any(Number),
         updatedAt: expect.any(String),

@@ -17,7 +17,7 @@ import { SqliteENUM } from '../../decorators';
 import { EntityType, EntityRequired } from '../../types';
 import { PRODUCT_UNITS } from '../../../common/consts';
 import { ilewazyApi } from '../../../services/IlewazyApi';
-import { mapAsyncSequence, filterByUniqueId } from '../../../common/utils';
+import { mapAsyncSequence } from '../../../common/utils';
 import { MinLength } from 'class-validator';
 import { GenericEntity } from '../../generics/GenericEntity';
 import { ProductImage } from '../ProductImage';
