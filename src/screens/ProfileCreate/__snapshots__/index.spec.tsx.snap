@@ -35,13 +35,6 @@ exports[`renders without crashing 1`] = `
     >
       <Text
         align="center"
-        css={
-          Array [
-            "
-  margin: 15px 0 25px 0;
-",
-          ]
-        }
         size={20}
         style={
           Array [
@@ -54,6 +47,13 @@ exports[`renders without crashing 1`] = `
               "marginTop": 15,
               "textAlign": "center",
             },
+          ]
+        }
+        styles={
+          Array [
+            "
+  margin: 15px 0 25px 0;
+",
           ]
         }
       >
