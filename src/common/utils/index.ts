@@ -130,14 +130,17 @@ export function getNumAndUnitFromString(value: string): {
   }
 }
 
-export function filterByUniqueId<T extends { id: number | string }>(
-  item: T,
-  index: number,
-  self: T[]
-): boolean {
-  const foundIndex = self.findIndex(anyItem => anyItem.id === item.id);
+export const filterByUniqueProperty = <
+  E extends object,
+  A extends E[]
+>(property: keyof E) => (element: E, index: number, self: A): boolean => {
+  const foundIndex = self.findIndex(anyElement =>
+    anyElement[property] === element[property]
+  );
   return foundIndex === index;
 }
+
+export const filterByUniqueId = filterByUniqueProperty('id');
 
 export function parseNumber(
   value: string,

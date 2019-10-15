@@ -24,6 +24,7 @@ import { GenericEntity } from '../../generics/GenericEntity';
 import { ProductImage } from '../ProductImage';
 import { Macro } from '../../embeds/Macro';
 import { FindMostUsedResult, FindMostProductIdsResult } from './types';
+import { NormalizedProduct } from '../../../services/IlewazyApi/types';
 
 @Entity('product')
 @Unique<Product>(['name', 'isVerified'])
@@ -142,44 +143,14 @@ export class Product extends GenericEntity {
     return Product.findByIds(productIds);
   }
 
-  static async findAndFetchByNameLike(name: string): Promise<Product[]> {
+  static async findAndFetchByNameLike(name: string): Promise<(Product | NormalizedProduct)[]> {
     const savedProducts = await Product.findByNameLike(name);
 
     if (savedProducts.length <= 3) {
       const fetchedProducts = await ilewazyApi.findByName(name);
-      console.log('fetchedProducts', { fetchedProducts })
 
       if (fetchedProducts.length) {
-        const foundOrCreatedProducts = await mapAsyncSequence(fetchedProducts, async (product) => {
-          const {
-            images = [],
-            carbs,
-            prots,
-            fats,
-            kcal,
-            unit,
-            portion,
-            ...data
-          } = product;
-          const parsedProduct = {
-            ...data,
-            images: images.map(url => ({ url })),
-            isVerified: true,
-            macro: { carbs, prots, fats, kcal },
-          }
-          const query = {
-            where: {
-              name: product.name,
-              isVerified: true
-            }
-          }
-          return this.findOneOrSave(query, parsedProduct);
-        });
-
-        const mergedProducts = [...savedProducts, ...foundOrCreatedProducts]
-          .filter(filterByUniqueId);
-        
-        return mergedProducts;
+        return [...savedProducts, ...fetchedProducts];
       }
     }
 
@@ -190,33 +161,44 @@ export class Product extends GenericEntity {
     return this.find({ barcode });
   }
 
+  static saveNormalizedProduct(payload: NormalizedProduct): Promise<Product> {
+    const {
+      images = [],
+      carbs,
+      prots,
+      fats,
+      kcal,
+      unit,
+      portion,
+      ...data
+    } = payload;
+
+    const parsedProduct = {
+      ...data,
+      images: images.map(url => ({ url })),
+      isVerified: true,
+      macro: { carbs, prots, fats, kcal },
+    }
+
+    const query = {
+      where: {
+        name: payload.name,
+        isVerified: true,
+      }
+    }
+
+    return this.findOneOrSave(query, parsedProduct);
+  }
+
   static async findAndFetchByBarcode(barcode: BarcodeId): Promise<Product[]> {
     const savedProducts = await this.findByBarcode(barcode);
     const hasVerifiedProduct = savedProducts.some(product => product.isVerified);
     
     if (!savedProducts.length || !hasVerifiedProduct) {
       const fetchedProducts = await friscoApi.findByQuery(barcode);
-      const createdProducts = await mapAsyncSequence(fetchedProducts, product => {
-        const {
-          unit,
-          portion,
-          portions,
-          images = [],
-          carbs,
-          prots,
-          fats,
-          kcal,
-          ...data
-        } = product;
-        const macro = { carbs, prots, fats, kcal };
-        const parsedProduct = {
-          ...data,
-          images: images.map(url => ({ url })),
-          isVerified: true,
-          macro
-        }
-        return this.save(parsedProduct);
-      });
+      const createdProducts = await mapAsyncSequence(
+        fetchedProducts, this.saveNormalizedProduct
+      );
 
       return [...savedProducts, ...createdProducts];
     }

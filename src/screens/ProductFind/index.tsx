@@ -15,6 +15,7 @@ import { useConnected, useIdleStatus } from '../../hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
 import { ActivityIndicator } from 'react-native';
+import { NormalizedProduct } from '../../services/IlewazyApi/types';
 
 const debounceA = debounce();
 const SECTION_TITLE = {
@@ -28,7 +29,7 @@ export const ProductFind = (props: ProductFindProps) => {
     onItemPress: props.navigation.getParam('onItemPress')
   });
   const [name, setName] = useState('');
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<(Product | NormalizedProduct)[]>([]);
   const [isLoading, setLoading] = useState(false);
   const [barcode, setBarcode] = useState<BarcodeId | null>(null);
   const isConnected = useConnected();
@@ -120,10 +121,15 @@ export const ProductFind = (props: ProductFindProps) => {
     );
   }
 
-  function handleItemPress(item: Product) {
+  async function handleItemPress(product: Product | NormalizedProduct) {
     if (params.onItemPress && !hasBeenPressed.current) {
       hasBeenPressed.current = true;
-      params.onItemPress(item);
+      if (product instanceof Product) {
+        params.onItemPress(product);
+      } else {
+        const savedProduct = await Product.saveNormalizedProduct(product);
+        params.onItemPress(savedProduct);
+      }
     }
   }
 
