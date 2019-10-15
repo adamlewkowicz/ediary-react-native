@@ -6,7 +6,7 @@ import { FlattenSimpleInterpolation } from 'styled-components';
 
 interface NutritionRowProps extends BasicInputProps {
   title: string
-  css?: FlattenSimpleInterpolation
+  styles?: FlattenSimpleInterpolation
 }
 
 export const InputRow = React.forwardRef<TextInput, NutritionRowProps>((
@@ -15,12 +15,12 @@ export const InputRow = React.forwardRef<TextInput, NutritionRowProps>((
     minWidth = 100,
     textAlign = 'center',
     keyboardType = 'numeric',
-    css,
+    styles,
     ...inputProps
   },
   ref
 ) => (
-  <Container css={css}>
+  <Container styles={styles}>
     <Title>
       {title}
     </Title>
@@ -35,12 +35,12 @@ export const InputRow = React.forwardRef<TextInput, NutritionRowProps>((
 ));
 
 const Container = styled.View<{
-  css?: FlattenSimpleInterpolation
+  styles?: FlattenSimpleInterpolation
 }>`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  ${props => props.css};
+  ${props => props.styles};
 `
 
 const Title = styled.Text`
