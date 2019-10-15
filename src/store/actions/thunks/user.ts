@@ -1,6 +1,6 @@
 import { User, IProfileRequired } from '../../../database/entities';
 import { Thunk } from '../..';
-import { userProfileCreated } from '../creators/user';
+import { userProfileCreated } from '../creators';
 
 export const userProfileCreate = (
   profile: IProfileRequired
