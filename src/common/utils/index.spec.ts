@@ -27,7 +27,7 @@ describe('mapAsyncSequence()', () => {
     const promiseMock = jest.fn().mockImplementation(async () => {});
     const dataMock = [1, 2];
   
-    await mapAsyncSequence(dataMock, value => promiseMock(value));
+    await mapAsyncSequence(dataMock, promiseMock);
   
     expect(promiseMock).toHaveBeenCalledTimes(dataMock.length);
     expect(promiseMock).toHaveBeenNthCalledWith(1, dataMock[0]);
