@@ -5,9 +5,7 @@ Object {
   "_id": "9295",
   "barcode": "54490086",
   "brand": "COCA-COLA",
-  "carbs": 21.2,
   "description": "Napój gazowany o smaku cola.<br/>Naturalne aromaty. Bez dodatku substancji konserwujących.<br/>Od 1886 Coca-Cola każdego dnia dostarcza radość i orzeźwienie ludziom na całym świecie.<br/>To najpopularniejszy i najchętniej kupowany napój gazowany w historii, jak również najlepiej znany produkt na świecie.<br/>Tajemnica Coca-Coli tkwi w unikalnej recepturze, opierającej się na składnikach pochodzenia naturalnego, która nie zmieniła się od przeszło 125 lat.",
-  "fats": 0,
   "images": Array [
     "https://res.cloudinary.com/dj484tw6k/image/upload/v1500521101/bb/9295.png",
   ],
@@ -19,11 +17,15 @@ Object {
     "kwas: kwas fosforowy",
     "naturalne aromaty w tym kofeina",
   ],
-  "kcal": 42,
+  "macro": Object {
+    "carbs": 21.2,
+    "fats": 0,
+    "kcal": 42,
+    "prots": 0,
+  },
   "name": "Napój gazowany (szkło) (cena zawiera 0,40 zł kaucji za butelkę)",
   "portion": 250,
   "portions": Array [],
   "producer": "COCA-COLA",
-  "prots": 0,
 }
 `;
