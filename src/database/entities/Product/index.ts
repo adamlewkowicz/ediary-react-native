@@ -90,15 +90,14 @@ export class Product extends GenericEntity {
   )
   images?: ProductImage[];
 
-  get portion(): number {
-    const defaultPortion = 100;
+  static defaultPortion = 100;
 
-    if (this.portions && this.portions.length) {
+  get portion(): number {
+    if (this.portions?.length) {
       const [firstPortion] = this.portions;
       return firstPortion.value;
     }
-
-    return defaultPortion;
+    return Product.defaultPortion;
   }
 
   static findByNameLike(name: string, limit = 10): Promise<Product[]> {
@@ -163,10 +162,6 @@ export class Product extends GenericEntity {
   static saveNormalizedProduct(payload: NormalizedProduct): Promise<Product> {
     const {
       images = [],
-      carbs,
-      prots,
-      fats,
-      kcal,
       unit,
       portion,
       ...data
@@ -176,7 +171,6 @@ export class Product extends GenericEntity {
       ...data,
       images: images.map(url => ({ url })),
       isVerified: true,
-      macro: { carbs, prots, fats, kcal },
     }
 
     const query = {

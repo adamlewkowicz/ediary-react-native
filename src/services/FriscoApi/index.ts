@@ -5,6 +5,7 @@ import { NormalizedProduct } from '../IlewazyApi/types';
 import { FriscoResponse, FriscoNutritionBrandbank } from './types/response';
 import { FriscoProductId } from './types/common';
 import { FriscoQueryResponse } from './types';
+import { Product } from '../../database/entities';
 
 export class FriscoApi {
 
@@ -81,7 +82,12 @@ export class FriscoApi {
       return null;
     }
 
-    const { value: portion, unit } = getNumAndUnitFromString(portionHeading);
+    const {
+      value: nullablePortion,
+      unit
+    } = getNumAndUnitFromString(portionHeading);
+
+    const portion = nullablePortion ?? Product.defaultPortion;
 
     if (unit !== 'g' && unit !== 'ml') {
       return null;
@@ -144,7 +150,7 @@ export class FriscoApi {
       portion,
       portions,
       unit,
-      ...macro
+      macro,
     }
   }
 
@@ -204,7 +210,7 @@ export class FriscoApi {
         brand,
         producer,
         portions,
-        ...macro
+        macro,
       }
   
       return [normalizedProduct];

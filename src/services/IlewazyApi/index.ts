@@ -6,6 +6,7 @@ import {
 } from './types';
 import { round } from '../../common/utils';
 import { ProductUnit, PortionType } from '../../types';
+import { Product } from '../../database/entities';
 
 export class IlewazyApi {
 
@@ -64,20 +65,22 @@ export class IlewazyApi {
           unit,
         }));
 
+      const portion = portions[0]?.value ?? Product.defaultPortion;
+
       const images = Object
         .values(record.unitdata)
         .filter(unitdata => unitdata && unitdata.filename)
         .map(unitdata => `http://static.ilewazy.pl/dziennik/470/${unitdata!.filename}`);
 
+      const macro = { prots, carbs, fats, kcal };
+
       const normalizedProduct: NormalizedProduct = {
         _id,
         name,
-        prots,
-        carbs,
-        fats,
-        kcal,
+        macro,
         portions,
         images,
+        portion,
       }
       
       return normalizedProduct;

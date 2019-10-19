@@ -30,7 +30,7 @@ export const ProductFind = (props: ProductFindProps) => {
     onItemPress: props.navigation.getParam('onItemPress')
   });
   const [name, setName] = useState('');
-  const [products, setProducts] = useState<(Product | NormalizedProduct)[]>([]);
+  const [products, setProducts] = useState<ProductState[]>([]);
   const [isLoading, setLoading] = useState(false);
   const [barcode, setBarcode] = useState<BarcodeId | null>(null);
   const isConnected = useConnected();
@@ -122,7 +122,7 @@ export const ProductFind = (props: ProductFindProps) => {
     );
   }
 
-  async function handleItemPress(product: Product | NormalizedProduct) {
+  async function handleItemPress(product: ProductState) {
     if (params.onItemPress && !hasBeenPressed.current) {
       hasBeenPressed.current = true;
       if (product instanceof Product) {
@@ -163,10 +163,10 @@ export const ProductFind = (props: ProductFindProps) => {
           { title: SECTION_TITLE.foundProducts, data: products },
           { title: SECTION_TITLE.recentProducts, data: isIdle ? recentProducts : [] },
         ]}
-        renderItem={({ item }) => (
+        renderItem={({ item: product }: { item: ProductState }) => (
           <ProductListItem
-            product={item}
-            onPress={() => handleItemPress(item)}
+            product={product}
+            onPress={() => handleItemPress(product)}
           />
         )}
       />
@@ -199,3 +199,5 @@ export type HandleItemPressHandler = ((product: Product) => void) | undefined;
 export type ProductFindParams = {
   onItemPress?: HandleItemPressHandler
 }
+
+type ProductState = NormalizedProduct | Product;
