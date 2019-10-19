@@ -95,6 +95,21 @@ export const ProductFind = (props: ProductFindProps) => {
     props.navigation.navigate(screen, screenParams);
   }
 
+  async function handleItemPress(product: ProductState) {
+    if (params.onItemPress && !hasBeenPressed.current) {
+      hasBeenPressed.current = true;
+
+      const productResolver: ProductResolver = async () => {
+        if (product instanceof Product) {
+          return product;
+        }
+        return Product.saveNormalizedProduct(product);
+      }
+
+      params.onItemPress(productResolver);
+    }
+  }
+
   function renderInfo() {
     if (
       isLoading ||
@@ -120,21 +135,6 @@ export const ProductFind = (props: ProductFindProps) => {
         </Button>
       </>
     );
-  }
-
-  async function handleItemPress(product: ProductState) {
-    if (params.onItemPress && !hasBeenPressed.current) {
-      hasBeenPressed.current = true;
-
-      const productResolver: ProductResolver = async () => {
-        if (product instanceof Product) {
-          return product;
-        }
-        return Product.saveNormalizedProduct(product);
-      }
-
-      params.onItemPress(productResolver);
-    }
   }
 
   return (
