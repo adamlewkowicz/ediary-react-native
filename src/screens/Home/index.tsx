@@ -40,9 +40,10 @@ const Home = (props: HomeProps) => {
     meal: DiaryMeal | DiaryMealTemplate
   ) => {
     const screenParams: ProductFindParams = {
-      async onItemPress(foundProduct) {
+      async onItemPress(productResolver) {
         props.navigation.navigate('Home');
         setProcessedMealId(meal.id);
+        const foundProduct = await productResolver();
 
         if (meal.type === 'template') {
           const { name, templateId, time } = meal;

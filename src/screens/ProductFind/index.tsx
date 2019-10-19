@@ -125,12 +125,15 @@ export const ProductFind = (props: ProductFindProps) => {
   async function handleItemPress(product: ProductState) {
     if (params.onItemPress && !hasBeenPressed.current) {
       hasBeenPressed.current = true;
-      if (product instanceof Product) {
-        params.onItemPress(product);
-      } else {
-        const savedProduct = await Product.saveNormalizedProduct(product);
-        params.onItemPress(savedProduct);
+
+      const productResolver: ProductResolver = async () => {
+        if (product instanceof Product) {
+          return product;
+        }
+        return Product.saveNormalizedProduct(product);
       }
+
+      params.onItemPress(productResolver);
     }
   }
 
@@ -195,9 +198,10 @@ ProductFind.navigationOptions = {
   headerTitle: 'Znajdź produkt'
 }
 
-export type HandleItemPressHandler = ((product: Product) => void) | undefined;
+export type ItemPressHandler = (productResolver: ProductResolver) => void;
 export type ProductFindParams = {
-  onItemPress?: HandleItemPressHandler
+  onItemPress?: ItemPressHandler
 }
 
 type ProductState = NormalizedProduct | Product;
+type ProductResolver = () => Promise<Product>;
