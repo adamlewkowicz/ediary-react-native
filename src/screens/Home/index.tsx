@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
-import * as Actions from '../../store/actions';
-import { StoreState, Dispatch, Selectors } from '../../store';
+import { StoreState, Dispatch, Selectors, Actions } from '../../store';
 import { FlatList, Alert } from 'react-native';
 import { DateChanger } from '../../components/DateChanger';
 import { MacroCard } from '../../components/MacroCard';
@@ -12,7 +11,6 @@ import { MealListItem } from '../../components/MealListItem';
 import { BasicInput } from '../../components/BasicInput';
 import { NavigationScreenProps, ScrollView } from 'react-navigation';
 import { ProductFindParams } from '../ProductFind';
-import { mealProductAdd } from '../../store/actions';
 import { ProductCreateParams } from '../ProductCreate';
 import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
 import { elementTitles } from '../../common/helpers';
@@ -44,17 +42,13 @@ const Home = (props: HomeProps) => {
         props.navigation.navigate('Home');
         setProcessedMealId(meal.id);
 
-        if (meal.type === 'template') {
-          const { name, templateId, time } = meal;
-          const template = { id: templateId, name, templateId, time };
-          await dispatch(
-            Actions.mealCreateFromTemplate(
-              template, props.appDate, foundProduct.id
-            )
-          );
-        } else {
-          await dispatch(mealProductAdd(meal.id, foundProduct.id));
-        }
+        await dispatch(
+          Actions.mealOrTemplateProductAdd(
+            meal,
+            foundProduct.id,
+            props.appDate
+          )
+        );
 
         setProcessedMealId(null);
       }

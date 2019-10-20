@@ -18,7 +18,12 @@ import {
 import { DateDay, ProductId, MealId } from '../../../types';
 import { debounce, findOrFail } from '../../../common/utils';
 import { Thunk, StoreState, Selectors } from '../..';
-import { DiaryMeal, DiaryProduct, DiaryTemplate } from '../../reducers/diary';
+import {
+  DiaryMeal,
+  DiaryProduct,
+  DiaryTemplate,
+  DiaryMealTemplate,
+} from '../../reducers/diary';
 
 const debounceA = debounce();
 
@@ -147,4 +152,22 @@ export const mealProductAdd = (
     );
   }
   await _updateMealMacro(mealId, getState());
+}
+
+export const mealOrTemplateProductAdd = (
+  meal: DiaryMeal | DiaryMealTemplate,
+  productId: ProductId,
+  date: Date,
+): Thunk<Promise<void>> => async (dispatch) => {
+  if (meal.type === 'template') {
+    const { name, templateId, time } = meal;
+    const template: DiaryTemplate = { id: templateId, name, time };
+    await dispatch(
+      mealCreateFromTemplate(
+        template, date, productId
+      )
+    );
+  } else {
+    await dispatch(mealProductAdd(meal.id, productId));
+  }
 }
