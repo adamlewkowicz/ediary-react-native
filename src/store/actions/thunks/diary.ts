@@ -53,7 +53,7 @@ export const mealDelete = (
 }
 
 export const mealUpdate = (
-  mealId: Meal['id'],
+  mealId: MealId,
   meal: Partial<DiaryMeal & IMeal>
 ): Thunk => async (dispatch, getState) => {
   dispatch(mealUpdated(mealId, meal));
@@ -62,7 +62,7 @@ export const mealUpdate = (
 }
 
 export const mealProductCreate = (
-  mealId: Meal['id'],
+  mealId: MealId,
   payload: IProductRequired
 ): Thunk => async (dispatch, getState) => {
   const newProduct = await Meal.addAndCreateProduct(mealId, payload);
@@ -71,8 +71,8 @@ export const mealProductCreate = (
 }
 
 export const mealProductDelete = (
-  mealId: Meal['id'],
-  productId: Product['id']
+  mealId: MealId,
+  productId: ProductId
 ): Thunk => async (dispatch, getState) => {
   const { meals, templates } = getState().diary;
   const meal = findOrFail(meals, meal => meal.id === mealId);
@@ -91,8 +91,8 @@ export const mealProductDelete = (
 }
 
 export const mealProductQuantityUpdate = (
-  mealId: Meal['id'],
-  productId: Product['id'],
+  mealId: MealId,
+  productId: ProductId,
   quantity: number
 ): Thunk => async (dispatch, getState) => {
   dispatch(productUpdated(productId, { quantity }));
@@ -103,7 +103,7 @@ export const mealProductQuantityUpdate = (
 }
 
 export const productUpdate = (
-  productId: Product['id'],
+  productId: ProductId,
   product: Partial<DiaryProduct>
 ): Thunk => async (dispatch) => {
   dispatch(productUpdated(productId, product));

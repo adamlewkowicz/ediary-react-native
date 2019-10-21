@@ -84,9 +84,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
       Actions.productHistoryRecentAdded([newProduct])
     );
 
-    if (params.onProductCreated) {
-      params.onProductCreated(newProduct);
-    }
+    params.onProductCreated?.(newProduct);
   }
   
   useEffect(() => {
@@ -108,14 +106,14 @@ export const ProductCreate = (props: ProductCreateProps) => {
           accessibilityLabel="Nazwa produktu"
           value={state.name}
           onChangeText={name => handleUpdate({ name })}
-          onSubmitEditing={() => refsList.producer.current!.focus()}
+          onSubmitEditing={refsList.producer.current?.focus}
         />
         <BasicInputRef
           label="Producent"
           accessibilityLabel="Producent"
           value={state.producer}
           onChangeText={producer => handleUpdate({ producer })}
-          onSubmitEditing={() => refsList.portion.current!.focus()}
+          onSubmitEditing={refsList.portion.current?.focus}
           ref={refsList.producer}
         />
         <OptionsContainer>
@@ -129,7 +127,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
           title={portionTitle[state.portionOption]}
           value={state.portion}
           onChangeText={portion => handleUpdate({ portion: parseNumber(portion, 10000, 6) })}
-          onSubmitEditing={() => refsList.carbs.current!.focus()}
+          onSubmitEditing={refsList.carbs.current?.focus}
           ref={refsList.portion}
           accessibilityLabel="Ilość produktu"
           styles={InputCss}
@@ -140,7 +138,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
             title={data.title}
             value={state[data.property]}
             onChangeText={value => handleUpdate({ [data.property]: parseNumber(value, 10000, 6) })}
-            onSubmitEditing={() => refsList[data.nextRef].current!.focus()}
+            onSubmitEditing={refsList[data.nextRef].current?.focus}
             ref={refsList[data.property]}
             accessibilityLabel={data.title}
             styles={InputCss}
