@@ -1,4 +1,5 @@
 import 'core-js/features/array/flat-map';
+import 'core-js/features/object/from-entries';
 import { AppRegistry } from 'react-native';
 import { App } from './src/App';
 import { name as appName } from './app.json';
