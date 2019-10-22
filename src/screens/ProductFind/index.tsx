@@ -15,6 +15,7 @@ import { useConnected, useIdleStatus } from '../../hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
 import { ActivityIndicator } from 'react-native';
+import { useNavigationParams } from '../../hooks/useNavigationParams';
 
 const debounceA = debounce();
 const SECTION_TITLE = {
@@ -25,9 +26,7 @@ const SECTION_TITLE = {
 interface ProductFindProps extends NavigationScreenProps {}
 
 export const ProductFind = (props: ProductFindProps) => {
-  const { current: params } = useRef<ProductFindParams>({
-    onItemPress: props.navigation.getParam('onItemPress')
-  });
+  const params = useNavigationParams<ProductFindParams>(['onItemPress']);
   const [name, setName] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setLoading] = useState(false);

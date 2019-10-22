@@ -5,7 +5,7 @@ import {
   productCreateReducer,
   ProductCreateState,
   PortionOption,
-  initProductCreateReducer
+  initProductCreateReducer,
 } from './reducer';
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { MacroElement, BarcodeId } from '../../types';
@@ -17,15 +17,16 @@ import { Product } from '../../database/entities';
 import { parseNumber } from '../../common/utils';
 import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
+import { useNavigationParams } from '../../hooks/useNavigationParams';
 
 interface ProductCreateProps extends NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
 
 export const ProductCreate = (props: ProductCreateProps) => {
-  const { current: params } = useRef<ProductCreateParams>({
-    onProductCreated: props.navigation.getParam('onProductCreated'),
-    barcode: props.navigation.getParam('barcode'),
-    name: props.navigation.getParam('name'),
-  });
+  const params = useNavigationParams<ProductCreateParams>([
+    'onProductCreated',
+    'barcode',
+    'name',
+  ]);
   const [state, dispatch] = useReducer(
     productCreateReducer,
     params,
