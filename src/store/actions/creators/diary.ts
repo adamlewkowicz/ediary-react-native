@@ -10,7 +10,7 @@ import {
   MEALS_LOADED,
 } from '../../consts';
 import { DiaryActions } from '../types';
-import { MealId, ProductId, TemplateId } from '../../../types';
+import { MealId, ProductId } from '../../../types';
 import { Meal, IProductMerged, Product } from '../../../database/entities';
 import { DiaryMeal, DiaryProduct, DiaryMealId } from '../../reducers/diary';
 
@@ -22,12 +22,10 @@ export const mealsLoaded = (
 });
 
 export const mealAdded = (
-  meal: Meal,
-  templateId: TemplateId | null
+  meal: Meal
 ): DiaryActions => ({
   type: MEAL_ADDED,
   payload: meal,
-  meta: { templateId }
 });
 
 export const mealUpdated = (

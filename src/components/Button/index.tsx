@@ -5,6 +5,7 @@ import { TouchableOpacityProps } from 'react-native';
 interface ButtonProps extends TouchableOpacityProps {
   title: string
 }
+
 export const Button = ({ title, ...props }: ButtonProps) => (
   <Container {...props}>
     <Title>{title}</Title>

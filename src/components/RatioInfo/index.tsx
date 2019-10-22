@@ -6,6 +6,7 @@ interface RatioInfoProps extends TextProps {
   ratio: number
   value: number
 }
+
 export const RatioInfo = ({
   ratio,
   allowedDiff,

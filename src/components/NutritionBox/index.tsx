@@ -17,6 +17,7 @@ interface NutritionBoxProps extends ViewProps {
   value: number
   element: 'carbs' | 'prots' | 'fats' | 'kcal'
 }
+
 export const NutritionBox = ({
   value,
   element,

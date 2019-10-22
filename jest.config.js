@@ -1,4 +1,5 @@
 const jestPreset = require('@testing-library/react-native/jest-preset');
+const { defaults: tsjPreset } = require('ts-jest/presets');
 
 module.exports = {
   preset: '@testing-library/react-native',
@@ -19,4 +20,7 @@ module.exports = {
   transformIgnorePatterns: [
     "node_modules/(?!(react-native|@testing-library|react-navigation|@react-navigation/.*|react-native-ui-kitten|react-native-linear-gradient|react-native-svg|@react-native-community/slider|react-native-camera|react-native-screens|react-navigation-stack|react-navigation-tabs|react-native-swipe-gestures|react-native-gesture-handler|react-native-safe-area-view|react-native-svg-charts)/)"
   ],
+  transform: {
+    ...tsjPreset.transform,
+  }
 }

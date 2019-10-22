@@ -14,6 +14,7 @@ import { NavigationScreenProps } from 'react-navigation';
 import { useUserId } from '../../hooks';
 
 export interface ProfileCreateProps extends NavigationScreenProps {}
+
 export const ProfileCreate = (props: ProfileCreateProps) => {
   const [step, setStep] = useState(0);
   const [male, setMale] = useState(true);
@@ -72,9 +73,7 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           value="Wzrost"
           size={17}
           align="center"
-          css={css`
-            margin-bottom: 15px;
-          `}
+          styles={Heading1Style}
         />
         <SliderValue>{height} cm</SliderValue>
         <Slider
@@ -91,9 +90,7 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           value="Waga"
           size={17}
           align="center"
-          css={css`
-            margin: 40px 0 15px 0;
-          `}
+          styles={Heading2Style}
         />
         <SliderValue>{weight} kg</SliderValue>
         <Slider
@@ -110,9 +107,7 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           value="Wiek"
           size={17}
           align="center"
-          css={css`
-            margin: 40px 0 15px 0;
-          `}
+          styles={Heading2Style}
         />
         <SliderValue>{age} lat</SliderValue>
         <Slider
@@ -180,7 +175,7 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
         value={(stepTitles as any)[step]}
         size={20}
         align="center"
-        css={HeadingStyle}
+        styles={Heading3Style}
       />
       <Content>
         {steps[step]}
@@ -207,7 +202,15 @@ const Container = styled.View`
   flex: 1;
 `
 
-const HeadingStyle = css`
+const Heading1Style = css`
+  margin-bottom: 15px;
+`
+
+const Heading2Style = css`
+  margin: 40px 0 15px 0;
+`
+
+const Heading3Style = css`
   margin: 15px 0 25px 0;
 `
 

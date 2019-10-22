@@ -21,6 +21,34 @@ declare global {
   }
 }
 
+declare module "typeorm" {
+  /**
+  * Composite unique constraint must be set on entity classes and must specify entity's fields to be unique.
+  */
+  export declare function Unique<Entity>(name: string, fields: (keyof Entity)[]): Function;
+  /**
+   * Composite unique constraint must be set on entity classes and must specify entity's fields to be unique.
+   */
+  export declare function Unique<Entity>(fields: (keyof Entity)[]): Function;
+  /**
+   * Composite unique constraint must be set on entity classes and must specify entity's fields to be unique.
+   */
+  export declare function Unique<Entity>(
+    fields: (object?: any) => ((keyof Entity)[] | {
+      [key in keyof Entity]?: number;
+    })
+  ): Function;
+  /**
+   * Composite unique constraint must be set on entity classes and must specify entity's fields to be unique.
+   */
+  export declare function Unique<Entity>(
+    name: string,
+    fields: (object?: any) => ((keyof Entity)[] | {
+      [key in keyof Entity]?: number;
+    })
+  ): Function;
+}
+
 declare module "styled-components" {
   export interface DefaultTheme extends Theme {}
 }

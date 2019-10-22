@@ -4,6 +4,7 @@ import { BarcodeIcon } from '../Icons';
 import { TouchableOpacityProps } from 'react-native';
 
 interface BarcodeButtonProps extends TouchableOpacityProps {}
+
 export const BarcodeButton = (props: BarcodeButtonProps) => (
   <Container {...props}>
     <BarcodeIcon

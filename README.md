@@ -9,6 +9,9 @@
 
 Kontroluj z łatwością dzienne spożycie kalorii.
 
+[![Download on Google 
+Play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=com.ediarymobileapp)
+
 </br >
 </br >
 </br >

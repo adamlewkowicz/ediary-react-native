@@ -2,18 +2,12 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { BasicOption } from '../BasicOption';
 
-interface OptionsProps {
-  value: {
-    title: string
-    value: string
-    selected: boolean
-  }[]
-  onChange: (value: string) => void
+interface OptionsProps<T> {
+  value: SingleOption<T>[]
+  onChange: (value: T) => void
 }
-/**
- * @todo make value generic (union type)
- */
-export function Options({ onChange, ...props }: OptionsProps) {
+
+export function Options<T>({ onChange, ...props }: OptionsProps<T>) {
   return (
     <Container>
       {props.value.map(option => (
@@ -33,3 +27,9 @@ const Container = styled.View`
   justify-content: space-around;
   margin: 15px 0;
 `
+
+interface SingleOption<T> {
+  title: string
+  value: T
+  selected: boolean
+}

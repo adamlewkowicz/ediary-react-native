@@ -35,13 +35,6 @@ exports[`renders without crashing 1`] = `
     >
       <Text
         align="center"
-        css={
-          Array [
-            "
-  margin: 15px 0 25px 0;
-",
-          ]
-        }
         size={20}
         style={
           Array [
@@ -54,6 +47,13 @@ exports[`renders without crashing 1`] = `
               "marginTop": 15,
               "textAlign": "center",
             },
+          ]
+        }
+        styles={
+          Array [
+            "
+  margin: 15px 0 25px 0;
+",
           ]
         }
       >
@@ -130,6 +130,7 @@ exports[`renders without crashing 1`] = `
                 bbHeight={45}
                 bbWidth={45}
                 fill="#5361E0"
+                focusable={false}
                 height={45}
                 id="Capa_1"
                 meetOrSlice={0}
@@ -144,7 +145,9 @@ exports[`renders without crashing 1`] = `
                     Object {
                       "enableBackground": "new 0 0 297 297",
                     },
-                    null,
+                    Object {
+                      "opacity": 1,
+                    },
                     Object {
                       "flex": 0,
                       "height": 45,
@@ -884,6 +887,7 @@ exports[`renders without crashing 1`] = `
               bbHeight={16}
               bbWidth={16}
               fill="#5361E0"
+              focusable={false}
               height={16}
               id="Capa_1"
               meetOrSlice={0}
@@ -902,7 +906,9 @@ exports[`renders without crashing 1`] = `
                       "top": -8,
                     },
                   ],
-                  null,
+                  Object {
+                    "opacity": 1,
+                  },
                   Object {
                     "flex": 0,
                     "height": 16,
@@ -1752,6 +1758,7 @@ exports[`renders without crashing 1`] = `
                 bbHeight={45}
                 bbWidth={45}
                 fill="rgba(1,1,1,.7)"
+                focusable={false}
                 height={45}
                 id="Capa_1"
                 meetOrSlice={0}
@@ -1766,7 +1773,9 @@ exports[`renders without crashing 1`] = `
                     Object {
                       "enableBackground": "new 0 0 296.999 296.999",
                     },
-                    null,
+                    Object {
+                      "opacity": 1,
+                    },
                     Object {
                       "flex": 0,
                       "height": 45,

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
-import * as Actions from '../../store/actions';
-import { StoreState, Dispatch, Selectors } from '../../store';
+import { StoreState, Dispatch, Selectors, Actions } from '../../store';
 import { FlatList, Alert } from 'react-native';
 import { DateChanger } from '../../components/DateChanger';
 import { MacroCard } from '../../components/MacroCard';
@@ -12,7 +11,6 @@ import { MealListItem } from '../../components/MealListItem';
 import { BasicInput } from '../../components/BasicInput';
 import { NavigationScreenProps, ScrollView } from 'react-navigation';
 import { ProductFindParams } from '../ProductFind';
-import { mealProductAdd } from '../../store/actions';
 import { ProductCreateParams } from '../ProductCreate';
 import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
 import { elementTitles } from '../../common/helpers';
@@ -24,6 +22,7 @@ import { useAfterInteractions } from '../../hooks';
 interface HomeProps extends NavigationScreenProps, MapStateProps {
   dispatch: Dispatch
 }
+
 const Home = (props: HomeProps) => {
   const [name, setName] = useState('Trening');
   const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
@@ -43,17 +42,13 @@ const Home = (props: HomeProps) => {
         props.navigation.navigate('Home');
         setProcessedMealId(meal.id);
 
-        if (meal.type === 'template') {
-          const { name, templateId, time } = meal;
-          const template = { id: templateId, name, templateId, time };
-          await dispatch(
-            Actions.mealCreateFromTemplate(
-              template, props.appDate, foundProduct.id
-            )
-          );
-        } else {
-          await dispatch(mealProductAdd(meal.id, foundProduct.id));
-        }
+        await dispatch(
+          Actions.mealOrTemplateProductAdd(
+            meal,
+            foundProduct.id,
+            props.appDate
+          )
+        );
 
         setProcessedMealId(null);
       }
@@ -112,7 +107,6 @@ const Home = (props: HomeProps) => {
         renderItem={({ item: meal }) => (
           <MealListItem
             meal={meal}
-            toggledProductId={props.toggledProductId}
             onProductAdd={() => handleProductFindNavigation(meal)}
             onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
             onLongPress={IS_DEV || meal.type === 'template' ? undefined : () => handleMealDelete(meal)}
@@ -139,7 +133,7 @@ const Home = (props: HomeProps) => {
         />
         <Button
           accessibilityLabel="Utwórz nowy posiłek"
-          onPress={() => dispatch(Actions.mealCreate(name, props.appDate, null))}
+          onPress={() => dispatch(Actions.mealCreate(name, props.appDate))}
         >
           Dodaj posiłek
         </Button>
@@ -168,13 +162,11 @@ interface MapStateProps {
   appDate: StoreState['application']['date']
   appDateDay: StoreState['application']['day']
   macroNeedsLeft: Selectors.MacroNeedsLeft
-  toggledProductId: StoreState['diary']['toggledProductId']
   mealsWithRatio: Selectors.MealsWithRatio
 }
 
 const mapStateToProps = (state: StoreState): MapStateProps => ({
   macroNeedsLeft: Selectors.macroNeedsLeft(state),
-  toggledProductId: state.diary.toggledProductId,
   appDate: state.application.date,
   appDateDay: state.application.day,
   mealsWithRatio: Selectors.mealsWithRatio(state),

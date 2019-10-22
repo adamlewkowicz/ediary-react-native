@@ -2,7 +2,6 @@ import {
   Meal,
   Product,
   MealProduct,
-  IProductOptional,
   IMeal,
   IProductRequired,
 } from '../../../database/entities';
@@ -16,12 +15,17 @@ import {
   mealAdded,
   mealsLoaded,
 } from '../creators';
-import { DateDay, ProductId, MealId, TemplateId } from '../../../types';
-import { debounce_, findOrFail } from '../../../common/utils';
+import { DateDay, ProductId, MealId } from '../../../types';
+import { debounce, findOrFail } from '../../../common/utils';
 import { Thunk, StoreState, Selectors } from '../..';
-import { DiaryMeal, DiaryProduct, DiaryTemplate } from '../../reducers/diary';
+import {
+  DiaryMeal,
+  DiaryProduct,
+  DiaryTemplate,
+  DiaryMealTemplate,
+} from '../../reducers/diary';
 
-const debounceA = debounce_();
+const debounceA = debounce();
 
 async function _updateMealMacro(mealId: MealId, store: StoreState) {
   const meals = Selectors.calcedMeals(store);
@@ -35,11 +39,10 @@ async function _updateMealMacro(mealId: MealId, store: StoreState) {
 export const mealCreate = (
   name: Meal['name'],
   date: Date,
-  templateId: TemplateId | null,
 ): Thunk => async (dispatch) => {
   const meal = await Meal.createWithDate({ name }, date);
   dispatch(mealToggled(null));
-  dispatch(mealAdded(meal, templateId));
+  dispatch(mealAdded(meal));
 }
 
 export const mealDelete = (
@@ -71,10 +74,13 @@ export const mealProductDelete = (
   mealId: Meal['id'],
   productId: Product['id']
 ): Thunk => async (dispatch, getState) => {
-  const { meals } = getState().diary;
+  const { meals, templates } = getState().diary;
   const meal = findOrFail(meals, meal => meal.id === mealId);
+  const template = templates.find(template => template.name === meal.name);
+  const isLatestProductOfMeal = meal.productIds.length === 1;
+  const isCreatedFromTemplate = template !== undefined;
   
-  if (meal.productIds.length === 1 && meal.templateId !== null) {
+  if (isLatestProductOfMeal && isCreatedFromTemplate) {
     dispatch(mealDeleted(mealId));
     await Meal.delete(mealId);
   } else {
@@ -121,7 +127,7 @@ export const mealCreateFromTemplate = (
     template, date, productId, quantity
   );
   dispatch(
-    mealAdded(createdMeal, template.id)
+    mealAdded(createdMeal)
   );
   await _updateMealMacro(createdMeal.id, getState());
 }
@@ -146,4 +152,22 @@ export const mealProductAdd = (
     );
   }
   await _updateMealMacro(mealId, getState());
+}
+
+export const mealOrTemplateProductAdd = (
+  meal: DiaryMeal | DiaryMealTemplate,
+  productId: ProductId,
+  date: Date,
+): Thunk<Promise<void>> => async (dispatch) => {
+  if (meal.type === 'template') {
+    const { name, templateId, time } = meal;
+    const template: DiaryTemplate = { id: templateId, name, time };
+    await dispatch(
+      mealCreateFromTemplate(
+        template, date, productId
+      )
+    );
+  } else {
+    await dispatch(mealProductAdd(meal.id, productId));
+  }
 }

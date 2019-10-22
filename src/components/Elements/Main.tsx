@@ -30,6 +30,7 @@ export interface TextProps {
   align?: TextAlignProperty
   color?: ThemeColor
 }
+
 export const Text = styled.Text<TextProps>`
   font-family: ${props => props.theme.fontWeight.regular};
   font-size: ${props => props.theme.fontSize[props.size || 'regular']};
