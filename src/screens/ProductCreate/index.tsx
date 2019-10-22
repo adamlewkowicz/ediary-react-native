@@ -92,7 +92,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
   }
   
   useEffect(() => {
-    props.navigation.setParams({ handleProductCreate });
+    props.navigation.setParams({ _handleProductCreate: handleProductCreate });
   }, [state]);
 
   function handlePortionOptionChange(option: PortionOption) {
@@ -227,7 +227,7 @@ const navigationOptions: ProductCreateProps['navigationOptions'] = ({ navigation
   headerTitle: 'Stwórz produkt',
   headerRight: (
     <SaveButton
-      onPress={navigation.getParam('handleProductCreate')}
+      onPress={navigation.getParam('_handleProductCreate')}
       accessibilityLabel="Zapisz produkt"  
     >
       <SaveText>Zapisz</SaveText>

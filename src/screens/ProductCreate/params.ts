@@ -5,5 +5,6 @@ export interface ProductCreateParams {
   barcode?: BarcodeId
   name?: string
   onProductCreated?: (product: Product) => void
-  handleProductCreate?: () => void
+  /** Internal param for navigation options. */
+  _handleProductCreate?: () => void
 }
