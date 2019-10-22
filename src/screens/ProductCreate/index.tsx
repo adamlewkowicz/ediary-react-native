@@ -8,7 +8,7 @@ import {
   initProductCreateReducer
 } from './reducer';
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import { MacroElement, BarcodeId } from '../../types';
+import { MacroElement } from '../../types';
 import { InputRow } from '../../components/InputRow';
 import { Options } from '../../components/Options';
 import { NavigationScreenProps } from 'react-navigation';
@@ -17,8 +17,10 @@ import { Product } from '../../database/entities';
 import { parseNumber } from '../../common/utils';
 import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
+import { ProductCreateParams } from './params';
 
-interface ProductCreateProps extends NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
+interface ProductCreateProps extends
+  NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
 
 export const ProductCreate = (props: ProductCreateProps) => {
   const { current: params } = useRef<ProductCreateParams>({
@@ -234,16 +236,6 @@ const navigationOptions: ProductCreateProps['navigationOptions'] = ({ navigation
 });
 
 ProductCreate.navigationOptions = navigationOptions;
-
-export interface ProductDataParams {
-  barcode?: BarcodeId
-  name?: string
-}
-export interface ProductCreateParams extends ProductDataParams {
-  onProductCreated?: (product: Product) => void
-  handleProductCreate?: () => void
-}
-
 interface ProductCreateOptions {
   headerTitle: string
   headerRight: JSX.Element

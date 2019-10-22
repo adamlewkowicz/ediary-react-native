@@ -2,6 +2,7 @@ import React from 'react';
 import { ProfileCreate } from '.';
 import { render } from '@testing-library/react-native';
 import { App } from '../../../__tests__/utils';
+import { NavigationContext } from 'react-navigation';
 
 test('renders without crashing', () => {
   const navigationMock: any = {
@@ -10,7 +11,9 @@ test('renders without crashing', () => {
 
   const { container } = render(
     <App>
-      <ProfileCreate navigation={navigationMock} />
+      <NavigationContext.Provider value={navigationMock}>
+        <ProfileCreate />
+      </NavigationContext.Provider>
     </App>
   );
 

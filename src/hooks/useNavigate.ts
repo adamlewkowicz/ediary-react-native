@@ -1,16 +1,15 @@
 import { useNavigation } from 'react-navigation-hooks';
-import { Screen } from '../types';
-import { ScreenParams } from '../navigation/params';
+import { ScreenParamsMap } from '../navigation/params';
 
-export function useNavigate(
-  screenName: Screen,
-  screenParams: ScreenParams<Screen>
-) {
+export function useNavigate() {
   const navigation = useNavigation();
-  
-  function handleNavigation() {
-    navigation.navigate(screenName, screenParams);
+
+  const handleNavigate = <K extends keyof ScreenParamsMap>(
+    screenName: K,
+    screenParams?: ScreenParamsMap[K],
+  ): boolean => {
+    return navigation.navigate(screenName, screenParams);
   }
   
-  return handleNavigation; 
+  return handleNavigate;
 }
