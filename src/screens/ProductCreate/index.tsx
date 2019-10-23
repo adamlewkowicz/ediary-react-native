@@ -68,7 +68,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
       return;
     }
 
-    const newProduct = await Product.save({
+    const createdProduct = await Product.save({
       ...data,
       name: data.name.trim(),
       barcode: barcode.length ? barcode : null,
@@ -82,10 +82,10 @@ export const ProductCreate = (props: ProductCreateProps) => {
     });
 
     storeDispatch(
-      Actions.productHistoryRecentAdded([newProduct])
+      Actions.productHistoryRecentAdded([createdProduct])
     );
 
-    params.onProductCreated?.(newProduct);
+    params.onProductCreated?.(createdProduct);
   }
   
   useEffect(() => {
@@ -121,7 +121,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
           <InfoTitle>Wartości odżywcze na:</InfoTitle>
           <Options
             value={state.portionOptions}
-            onChange={option => handlePortionOptionChange(option)}
+            onChange={handlePortionOptionChange}
           />
         </OptionsContainer>
         <InputRow
