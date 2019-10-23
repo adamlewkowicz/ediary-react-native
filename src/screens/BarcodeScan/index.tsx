@@ -82,7 +82,7 @@ export class BarcodeScan extends React.Component<BarcodeScanProps> {
           onFacesDetected={null as any}
           captureAudio={false}
         />
-        {this.onPhotoTaken != null && (
+        {this.onPhotoTaken && (
           <PhotoButton onPress={this.takePicture}>
             <PhotoTitle>Zrób zdjęcie</PhotoTitle>
           </PhotoButton>
