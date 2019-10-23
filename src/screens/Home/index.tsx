@@ -10,14 +10,12 @@ import styled from 'styled-components/native';
 import { MealListItem } from '../../components/MealListItem';
 import { BasicInput } from '../../components/BasicInput';
 import { NavigationScreenProps, ScrollView } from 'react-navigation';
-import { ProductFindParams } from '../ProductFind';
-import { ProductCreateParams } from '../ProductCreate';
 import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
 import { elementTitles } from '../../common/helpers';
 import { MealId } from '../../types';
 import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
 import { CaloriesChart } from '../../components/CaloriesChart';
-import { useAfterInteractions } from '../../hooks';
+import { useAfterInteractions, useNavigate } from '../../hooks';
 
 interface HomeProps extends NavigationScreenProps, MapStateProps {
   dispatch: Dispatch
@@ -27,6 +25,7 @@ const Home = (props: HomeProps) => {
   const [name, setName] = useState('Trening');
   const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
   const { dispatch } = props;
+  const navigate = useNavigate();
 
   useAfterInteractions(() => dispatch(Actions.productHistoryRecentLoad()));
 
@@ -37,9 +36,9 @@ const Home = (props: HomeProps) => {
   const handleProductFindNavigation = (
     meal: DiaryMeal | DiaryMealTemplate
   ) => {
-    const screenParams: ProductFindParams = {
+    navigate('ProductFind', {
       async onItemPress(productResolver) {
-        props.navigation.navigate('Home');
+        navigate('Home');
         setProcessedMealId(meal.id);
         const foundProduct = await productResolver();
 
@@ -53,17 +52,13 @@ const Home = (props: HomeProps) => {
 
         setProcessedMealId(null);
       }
-    }
-    props.navigation.navigate('ProductFind', screenParams);
+    });
   }
   
   const handleProductCreateNavigation = () => {
-    const screenParams: ProductCreateParams = {
-      onProductCreated() {
-        props.navigation.navigate('Home');
-      }
-    }
-    props.navigation.navigate('ProductCreate', screenParams);
+    navigate('ProductCreate', {
+      onProductCreated: () => navigate('Home')
+    });
   }
 
   const handleMealDelete = <T extends { name: string, id: MealId }>(meal: T) => {

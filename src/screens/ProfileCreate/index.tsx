@@ -2,18 +2,24 @@ import React, { useState } from 'react';
 import styled, { css } from 'styled-components/native';
 import { SelectionBox } from '../../components/SelectionBox';
 import { Block } from '../../components/Elements';
-import { WomanIcon, ManIcon, MuscleIcon, MeasureIcon, FemaleBodyIcon } from '../../components/Icons';
+import {
+  WomanIcon,
+  ManIcon,
+  MuscleIcon,
+  MeasureIcon,
+  FemaleBodyIcon,
+} from '../../components/Icons';
 import { theme } from '../../common/theme';
 import { Button } from '../../components/Button';
 import { Heading } from '../../components/Elements/Heading';
 import Slider from '@react-native-community/slider';
-import { WeightGoal, Screen } from '../../types';
+import { WeightGoal } from '../../types';
 import { useDispatch } from 'react-redux';
 import * as Actions from '../../store/actions';
-import { NavigationScreenProps } from 'react-navigation';
-import { useUserId } from '../../hooks';
+import { useUserId, useNavigate } from '../../hooks';
+import { IProfileRequired } from '../../database/entities';
 
-export interface ProfileCreateProps extends NavigationScreenProps {}
+export interface ProfileCreateProps {}
 
 export const ProfileCreate = (props: ProfileCreateProps) => {
   const [step, setStep] = useState(0);
@@ -24,16 +30,16 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
   const [weightGoal, setWeightGoal] = useState<WeightGoal>('maintain');
   const dispatch = useDispatch();
   const userId = useUserId();
+  const navigate = useNavigate();
 
   async function handleProfileCreate() {
-    const payload = { male, height, weightGoal, weight, age, userId };
+    const payload: IProfileRequired = { male, height, weightGoal, weight, age, userId };
 
     await dispatch(
       Actions.userProfileCreate(payload)
     );
 
-    const screen: Screen = 'Main';
-    props.navigation.navigate(screen);
+    navigate('Main');
   }
 
   const steps = [

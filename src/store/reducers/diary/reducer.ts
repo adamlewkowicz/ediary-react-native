@@ -58,7 +58,7 @@ export function diaryReducer(
           ...state,
           products: [...state.products, ...normalizedProducts],
           meals: state.meals.map(meal => {
-            if (meal.type === 'template' && meal.templateId === foundTemplate!.id) {
+            if (meal.type === 'template' && meal.templateId === foundTemplate?.id) {
               return { ...normalizedMeal, isToggled: true };
             }
             return meal;

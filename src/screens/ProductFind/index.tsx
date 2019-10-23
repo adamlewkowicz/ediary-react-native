@@ -7,15 +7,15 @@ import { InputSearcher } from '../../components/InputSearcher';
 import { NavigationScreenProps, SectionList } from 'react-navigation';
 import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
-import { BarcodeScanParams } from '../BarcodeScan';
-import { Screen, BarcodeId } from '../../types';
+import { BarcodeId } from '../../types';
 import { Button } from 'react-native-ui-kitten';
-import { ProductCreateParams } from '../ProductCreate';
-import { useConnected, useIdleStatus } from '../../hooks';
+import { useConnected, useIdleStatus, useNavigate } from '../../hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
 import { ActivityIndicator } from 'react-native';
 import { NormalizedProduct } from '../../services/IlewazyApi/types';
+import { ProductFindParams } from './params';
+import { useNavigationParams } from '../../hooks/useNavigationParams';
 
 const debounceA = debounce();
 const SECTION_TITLE = {
@@ -23,12 +23,10 @@ const SECTION_TITLE = {
   recentProducts: 'Ostatnie produkty:',
 }
 
-interface ProductFindProps extends NavigationScreenProps {}
+interface ProductFindProps extends NavigationScreenProps<ProductFindParams> {}
 
 export const ProductFind = (props: ProductFindProps) => {
-  const { current: params } = useRef<ProductFindParams>({
-    onItemPress: props.navigation.getParam('onItemPress')
-  });
+  const params = useNavigationParams<ProductFindParams>(['onItemPress']);
   const [name, setName] = useState('');
   const [products, setProducts] = useState<ProductState[]>([]);
   const [isLoading, setLoading] = useState(false);
@@ -38,6 +36,7 @@ export const ProductFind = (props: ProductFindProps) => {
   const recentProducts = useSelector((state: StoreState) => state.productHistory);
   const hasBeenPressed = useRef(false);
   const isIdle = useIdleStatus();
+  const navigate = useNavigate();
 
   function handleProductSearch(name: string) {
     setName(name);
@@ -56,10 +55,9 @@ export const ProductFind = (props: ProductFindProps) => {
   }
 
   function handleBarcodeScanNavigation() {
-    const screenParams: BarcodeScanParams = {
+    navigate('BarcodeScan', {
       async onBarcodeDetected(barcode) {
-        const finderScreen: Screen = 'ProductFind';
-        props.navigation.navigate(finderScreen);
+        navigate('ProductFind');
         setName('');
         setProducts([]);
         setLoading(true);
@@ -74,25 +72,20 @@ export const ProductFind = (props: ProductFindProps) => {
         }
         setLoading(false);
       }
-    }
-    
-    const barcodeScreen: Screen = 'BarcodeScan';
-    props.navigation.navigate(barcodeScreen, screenParams);
+    });
   }
 
   function handleProductCreateNavigation() {
-    const screen: Screen = 'ProductCreate';
-    const screenParams: ProductCreateParams = {
-      barcode: barcode ? barcode : undefined,
+    navigate('ProductCreate', {
+      barcode: barcode !== null ? barcode : undefined,
       name: name.trim(),
       onProductCreated(createdProduct) {
         setBarcode(null);
         setProducts([createdProduct]);
         setLoading(false);
-        props.navigation.navigate('ProductFind');
+        navigate('ProductFind');
       }
-    }
-    props.navigation.navigate(screen, screenParams);
+    });
   }
 
   async function handleItemPress(product: ProductState) {
@@ -198,10 +191,5 @@ ProductFind.navigationOptions = {
   headerTitle: 'Znajdź produkt'
 }
 
-export type ItemPressHandler = (productResolver: ProductResolver) => void;
-export type ProductFindParams = {
-  onItemPress?: ItemPressHandler
-}
-
 type ProductState = NormalizedProduct | Product;
-type ProductResolver = () => Promise<Product>;
+export type ProductResolver = () => Promise<Product>;
