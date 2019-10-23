@@ -41,11 +41,8 @@ test('filterByUniqueId - filters items by unique id', () => {
 
 test('findOrFail - throws error if no item was found', () => {
   const items = [{ name: 'A' }];
-  try {
-    findOrFail(items, item => item.name === 'B');
-  } catch (error) {
-    expect(error).toBeInstanceOf(Error);
-  }
+  const subject = () => findOrFail(items, item => item.name === 'B');
+  expect(subject).toThrowError();
 });
 
 test('calcMacroNeedsLeft', () => {
