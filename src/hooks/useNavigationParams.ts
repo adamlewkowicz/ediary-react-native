@@ -7,16 +7,16 @@ export const useNavigationParams = <
 >(
   paramNames: readonly K[]
 ): T => {
-  type ParamEntries = [K, T[K]][];
-  
   const navigation = useNavigation();
 
   const getParamsObject = (): T => {
-    const paramEntries = paramNames.map<ParamEntries>(paramName => [
-      paramName, navigation.getParam(paramName as string)
-    ]);
-    const paramsObject: T = Object.fromEntries(paramEntries);
-    return paramsObject;
+    return paramNames.reduce<T>(
+      (normalized, paramName) => ({
+        ...normalized,
+        [paramName]: navigation.getParam(paramName as string)
+      }),
+      {} as T
+    );
   }
 
   const [params] = useState<T>(getParamsObject);
