@@ -1,5 +1,5 @@
 import { ProductUnit, BarcodeId } from '../../types';
-import { ProductDataParams } from '.';
+import { ProductCreateParams } from './params';
 
 export interface ProductCreateState {
   name: string
@@ -73,7 +73,7 @@ export function productCreateReducer(
 export function initProductCreateReducer({
   barcode = '',
   name = ''
-}: ProductDataParams): ProductCreateState {
+}: ProductCreateParams): ProductCreateState {
   return {
     ...initialState,
     name,

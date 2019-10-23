@@ -8,7 +8,7 @@ import {
   initProductCreateReducer,
 } from './reducer';
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import { MacroElement, BarcodeId } from '../../types';
+import { MacroElement } from '../../types';
 import { InputRow } from '../../components/InputRow';
 import { Options } from '../../components/Options';
 import { NavigationScreenProps } from 'react-navigation';
@@ -17,9 +17,11 @@ import { Product } from '../../database/entities';
 import { parseNumber } from '../../common/utils';
 import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
+import { ProductCreateParams } from './params';
 import { useNavigationParams } from '../../hooks/useNavigationParams';
 
-interface ProductCreateProps extends NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
+interface ProductCreateProps extends
+  NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
 
 export const ProductCreate = (props: ProductCreateProps) => {
   const params = useNavigationParams<ProductCreateParams>([
@@ -89,7 +91,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
   }
   
   useEffect(() => {
-    props.navigation.setParams({ handleProductCreate });
+    props.navigation.setParams({ _handleProductCreate: handleProductCreate });
   }, [state]);
 
   function handlePortionOptionChange(option: PortionOption) {
@@ -224,7 +226,7 @@ const navigationOptions: ProductCreateProps['navigationOptions'] = ({ navigation
   headerTitle: 'Stwórz produkt',
   headerRight: (
     <SaveButton
-      onPress={navigation.getParam('handleProductCreate')}
+      onPress={navigation.getParam('_handleProductCreate')}
       accessibilityLabel="Zapisz produkt"  
     >
       <SaveText>Zapisz</SaveText>
@@ -233,16 +235,6 @@ const navigationOptions: ProductCreateProps['navigationOptions'] = ({ navigation
 });
 
 ProductCreate.navigationOptions = navigationOptions;
-
-export interface ProductDataParams {
-  barcode?: BarcodeId
-  name?: string
-}
-export interface ProductCreateParams extends ProductDataParams {
-  onProductCreated?: (product: Product) => void
-  handleProductCreate?: () => void
-}
-
 interface ProductCreateOptions {
   headerTitle: string
   headerRight: JSX.Element
