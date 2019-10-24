@@ -15,9 +15,10 @@ import { Heading } from '../../components/Elements/Heading';
 import Slider from '@react-native-community/slider';
 import { WeightGoal } from '../../types';
 import { useDispatch } from 'react-redux';
-import * as Actions from '../../store/actions';
 import { useUserId, useNavigate } from '../../hooks';
 import { IProfileRequired } from '../../database/entities';
+import { STEP_TITLES } from './consts';
+import { Actions } from '../../store';
 
 export interface ProfileCreateProps {}
 
@@ -175,10 +176,18 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
 
   const isLastStep = steps.length - 1 === step;
 
+  const handleNextStepButtonPress = () => {
+    if (isLastStep) {
+      handleProfileCreate();
+    } else {
+      setStep(step + 1);
+    }
+  }
+
   return (
     <Container>
       <Heading
-        value={(stepTitles as any)[step]}
+        value={(STEP_TITLES as any)[step]}
         size={20}
         align="center"
         styles={Heading3Style}
@@ -189,13 +198,7 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
       <InfoContainer>
         <Button
           title={isLastStep ? 'Zapisz' : 'Kontynuuj'}
-          onPress={() => {
-            if (isLastStep) {
-              handleProfileCreate();
-            } else {
-              setStep(step + 1);
-            }
-          }}
+          onPress={handleNextStepButtonPress}
         />
       </InfoContainer>
     </Container>
@@ -237,9 +240,3 @@ const SliderValue = styled.Text`
   font-size: 20px;
   margin-bottom: 10px;
 `
-
-const stepTitles = {
-  0: 'Wybierz płeć',
-  1: 'Twoje pomiary',
-  2: 'Wybierz cel',
-}
