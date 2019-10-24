@@ -168,7 +168,7 @@ export class Meal extends GenericEntity {
 
     const filledRecords: GetMacroHistoryResult[] = Array
       .from({ length: daysToSubtract })
-      .map((_, index) => {
+      .map<GetMacroHistoryResult>((_, index) => {
         const day = getDayFromDate(endDate.add(index + 1, 'day'));
         const existingRecord = result.find(record => record.day === day);
         if (existingRecord) {
