@@ -3,6 +3,7 @@ import MapView, { AnimatedRegion, Region, Polyline, Marker } from 'react-native-
 import { Platform } from 'react-native';
 import haversine from 'haversine';
 import styled from 'styled-components/native';
+import { Coordinate } from '../../types';
 
 export class RunningScreen extends React.Component<{}, RunningScreenState> {
 
@@ -35,23 +36,29 @@ export class RunningScreen extends React.Component<{}, RunningScreenState> {
     return haversine(prevLatLng, newLatLng) || 0;
   }
 
+  handleCoordinateAnimation(
+    newCoordinate: Coordinate,
+    coordinate: AnimatedRegion
+  ) {
+    if (Platform.OS === 'android') {
+      this.markerRef.current?.animateMarkerToCoordinate(
+        newCoordinate,
+        500
+      );
+    } else {
+      coordinate.timing(newCoordinate).start();
+    }
+  }
+
   componentDidMount() {
     this.watchID = navigator.geolocation.watchPosition(
       position => {
         const { coordinate, routeCoordinates, distanceTravelled } = this.state;
         const { latitude, longitude } = position.coords;
-        
         const newCoordinate = { latitude, longitude };
-        if (Platform.OS === "android") {
-          if (this.marker) {
-            this.marker._component.animateMarkerToCoordinate(
-              newCoordinate,
-              500
-            );
-          }
-        } else {
-          coordinate.timing(newCoordinate).start();
-        }
+
+        this.handleCoordinateAnimation(newCoordinate, coordinate);
+
         this.setState({
           latitude,
           longitude,
@@ -65,6 +72,11 @@ export class RunningScreen extends React.Component<{}, RunningScreenState> {
     );
   }
 
+  componentWillUnmount() {
+    if (this.watchID) {
+      navigator.geolocation.clearWatch(this.watchID);
+    }
+  }
 
   render() {
     return (
@@ -100,5 +112,3 @@ interface RunningScreenState {
   prevLatLng: Coordinate
   coordinate: AnimatedRegion
 }
-
-type Coordinate = { latitude: number, longitude: number };

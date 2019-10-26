@@ -5,12 +5,14 @@ import {
   RUNNING_TRAINING_PAUSED,
   RUNNING_TRAINING_FINISHED,
   RUNNING_TRAINING_TICK,
+  RUNNING_TRAINING_COORD_UPDATED,
 } from '../../consts';
 
 const initialState: RunningTrainingState = {
   duration: 0,
   distance: 0,
   velocity: 0,
+  routeCoordinates: [],
   isActive: false,
   isPaused: false,
 }
@@ -36,6 +38,10 @@ export function runningTrainingReducer(
       ...state,
       isActive: false,
       isPaused: false
+    }
+    case RUNNING_TRAINING_COORD_UPDATED: return {
+      ...state,
+      routeCoordinates: [...state.routeCoordinates, action.payload]
     }
     default: return state;
   }
