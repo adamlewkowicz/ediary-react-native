@@ -17,7 +17,7 @@ import { SqliteENUM } from '../../decorators';
 import { EntityType, EntityRequired } from '../../types';
 import { PRODUCT_UNITS } from '../../../common/consts';
 import { ilewazyApi } from '../../../services/IlewazyApi';
-import { mapAsyncSequence } from '../../../common/utils';
+import { mapAsyncSequence, reduceByCompare, filterByCompare } from '../../../common/utils';
 import { MinLength } from 'class-validator';
 import { GenericEntity } from '../../generics/GenericEntity';
 import { ProductImage } from '../ProductImage';
@@ -141,14 +141,25 @@ export class Product extends GenericEntity {
     return Product.findByIds(productIds);
   }
 
-  static async findAndFetchByNameLike(name: string): Promise<(Product | NormalizedProduct)[]> {
+  static async findAndFetchByNameLike(name: string): Promise<ProductOrNormalizedProduct[]> {
     const savedProducts = await Product.findByNameLike(name);
 
     if (savedProducts.length <= 3) {
       const fetchedProducts = await ilewazyApi.findByName(name);
 
       if (fetchedProducts.length) {
-        return [...savedProducts, ...fetchedProducts];
+        const filteredProducts = reduceByCompare(
+          [...savedProducts, ...fetchedProducts],
+          (a, b) => {
+            if ('isVerified' in a) {
+              const filterByNameIfVerified = a.isVerified === true && a.name === b.name;
+              return !filterByNameIfVerified;
+            }
+            return false;
+          }
+        );
+
+        return filteredProducts;
       }
     }
 
@@ -207,3 +218,4 @@ export type IProductRequired = EntityRequired<IProduct,
   | 'macro'
 >;
 export type IProductMerged = IProduct & IMealProduct;
+export type ProductOrNormalizedProduct = Product | NormalizedProduct;

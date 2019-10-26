@@ -198,3 +198,29 @@ export function calcMacroNeedsLeft(
     kcal: { ...macroNeedsElement }
   });
 }
+
+export const filterByCompare = <
+  E,
+  A extends readonly E[] = E[]
+>(
+  predicate: (a: E, b: E) => boolean,
+) => (element: E, index: number, self: A): boolean => {
+  const foundIndex = self.findIndex(anyElement =>
+    predicate(element, anyElement)
+  );
+  return foundIndex === index;
+}
+
+export const reduceByCompare = <E>(
+  array: E[],
+  predicate: (a: E, b: E) => boolean,
+): E[] => {
+  return array.reduce((acc, current) => {
+    return acc.filter(element => {
+      if (element !== current) {
+        return predicate(current, element);
+      }
+      return true;
+    });
+  }, array);
+}
