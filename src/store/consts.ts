@@ -20,3 +20,9 @@ export const USER_PROFILE_CREATED = 'USER_PROFILE_CREATED' as const;
 
 // Product history
 export const PRODUCT_HISTORY_RECENT_ADDED = 'PRODUCT_HISTORY_RECENT_ADDED' as const;
+
+// Running training
+export const RUNNING_TRAINING_STARTED = 'RUNNING_TRAINING_STARTED 🏃' as const;
+export const RUNNING_TRAINING_PAUSED = 'RUNNING_TRAINING_PAUSED 🏃' as const;
+export const RUNNING_TRAINING_FINISHED = 'RUNNING_TRAINING_FINISHED 🏃' as const;
+export const RUNNING_TRAINING_TICK = 'RUNNING_TRAINING_TICK 🏃' as const;
