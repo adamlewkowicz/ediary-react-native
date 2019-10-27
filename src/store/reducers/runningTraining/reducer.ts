@@ -6,13 +6,21 @@ import {
   RUNNING_TRAINING_FINISHED,
   RUNNING_TRAINING_TICK,
   RUNNING_TRAINING_COORD_UPDATED,
+  RUNNING_TRAINING_POSITION_UPDATED,
 } from '../../consts';
+import { Coordinate } from '../../../types';
+import haversine from 'haversine';
+
+const calcDistance = (prevLatLng: Coordinate, nextLatLng: Coordinate): number => {
+  return haversine(prevLatLng, nextLatLng) || 0;
+}
 
 const initialState: RunningTrainingState = {
   duration: 0,
   distance: 0,
   velocity: 0,
   routeCoordinates: [],
+  prevLatLng: { latitude: 0, longitude: 0 },
   isActive: false,
   isPaused: false,
 }
@@ -43,6 +51,18 @@ export function runningTrainingReducer(
       ...state,
       routeCoordinates: [...state.routeCoordinates, action.payload]
     }
+    case RUNNING_TRAINING_POSITION_UPDATED:
+      const { longitude, latitude } = action.payload.coords;
+      const nextCoordinate: Coordinate = { longitude, latitude };
+
+      const distance = calcDistance(state.prevLatLng, nextCoordinate);
+
+      return {
+        ...state,
+        distance: state.distance + distance,
+        routeCoordinates: [...state.routeCoordinates, nextCoordinate],
+        prevLatLng: nextCoordinate,
+      }
     default: return state;
   }
 }

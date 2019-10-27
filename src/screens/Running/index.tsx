@@ -4,8 +4,12 @@ import { Platform } from 'react-native';
 import haversine from 'haversine';
 import styled from 'styled-components/native';
 import { Coordinate } from '../../types';
+import { connect, DispatchProp } from 'react-redux';
+import { Actions } from '../../store';
 
-export class RunningScreen extends React.Component<{}, RunningScreenState> {
+interface RunningScreenProps extends DispatchProp {}
+
+class RunningScreen extends React.Component<RunningScreenProps, RunningScreenState> {
 
   watchID?: number;
   markerRef = React.createRef<Marker>();
@@ -57,6 +61,7 @@ export class RunningScreen extends React.Component<{}, RunningScreenState> {
         const { latitude, longitude } = position.coords;
         const newCoordinate = { latitude, longitude };
 
+        this.props.dispatch(Actions.runningTrainingPositionUpdated(position));
         this.handleCoordinateAnimation(newCoordinate, coordinate);
 
         this.setState({
@@ -103,6 +108,9 @@ export class RunningScreen extends React.Component<{}, RunningScreenState> {
 }
 
 const Container = styled.View``
+
+const RunningScreenConnected = connect()(RunningScreen);
+export { RunningScreenConnected as RunningScreen };
 
 interface RunningScreenState {
   latitude: number

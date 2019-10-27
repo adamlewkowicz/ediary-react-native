@@ -5,6 +5,7 @@ export interface RunningTrainingState {
   distance: number
   velocity: number
   routeCoordinates: Coordinate[]
+  prevLatLng: Coordinate
   isActive: boolean
   isPaused: boolean
 }
