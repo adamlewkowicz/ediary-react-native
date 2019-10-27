@@ -14,6 +14,7 @@ import {
   ProfileCreate,
   BarcodeScan,
   DiarySummary,
+  RunningScreen,
 } from '../screens';
 import { theme } from '../common/theme';
 import { Screen } from '../types';
@@ -28,7 +29,7 @@ export function createHomeStack(
     Home,
     ProductCreate,
     ProductFind,
-    BarcodeScan,
+    BarcodeScan  
   }, {
     initialRouteName: initialScreen,
     headerMode: 'screen',
@@ -74,6 +75,19 @@ export function createMainStack(
         ),
       }
     },
+    RunningScreen: {
+      screen: RunningScreen,
+      navigationOptions: {
+        tabBarLabel: 'Bieganie',
+        tabBarIcon: ({ tintColor }: any) => (
+          <ReportIcon
+            width={BAR_ICON_SIZE}
+            height={BAR_ICON_SIZE}
+            fill={tintColor}
+          />
+        ),
+      }
+    }
   }, {
     initialRouteName: initialStack,
     tabBarOptions: {
