@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { DateDay, UnitType, DateTime, MacroElements } from '../../types';
 import { UNIT_TYPES, DATE_TIME, DATE_DAY, MACRO_ELEMENTS } from '../consts';
+import Geolocation, { GeolocationResponse } from '@react-native-community/geolocation';
 
 export const debounce = () => {
   let timeout: NodeJS.Timeout;
@@ -194,4 +195,29 @@ export function calcMacroNeedsLeft(
     fats: { ...macroNeedsElement },
     kcal: { ...macroNeedsElement }
   });
+}
+
+export const getCurrentPosition = (): Promise<GeolocationResponse> => {
+  return new Promise((resolve, reject) => {
+    Geolocation.getCurrentPosition(
+      resolve,
+      reject
+    );
+  });
+}
+
+const padTime = (time: number) => {
+  return String(time).padStart(2, '0');
+}
+
+export const formatDuration = (duration: number): string => {
+  const seconds = duration;
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+
+  console.log(seconds, minutes, hours)
+
+  const parsedTime = [hours, minutes, seconds].map(padTime).join(':');
+  console.log(parsedTime)
+  return parsedTime;
 }

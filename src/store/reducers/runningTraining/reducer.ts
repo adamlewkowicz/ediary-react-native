@@ -22,6 +22,7 @@ const initialState: RunningTrainingState = {
   velocity: 0,
   routeCoordinates: [],
   prevLatLng: { latitude: 0, longitude: 0 },
+  startCoordinate: { latitude: 0, longitude: 0 },
   error: null,
   isActive: false,
   isPaused: false,
@@ -32,9 +33,16 @@ export function runningTrainingReducer(
   action: RunningTrainingAction
 ): RunningTrainingState {
   switch(action.type) {
-    case RUNNING_TRAINING_STARTED: return {
-      ...state,
-      isActive: true
+    case RUNNING_TRAINING_STARTED: {
+      const { latitude, longitude } = action.payload.coords;
+      const startCoordinate: Coordinate = { latitude, longitude };
+      return {
+        ...initialState,
+        isActive: true,
+        prevLatLng: startCoordinate,
+        routeCoordinates: [startCoordinate],
+        startCoordinate
+      }
     }
     case RUNNING_TRAINING_TICK: return {
       ...state,

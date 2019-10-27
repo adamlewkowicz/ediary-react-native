@@ -5,10 +5,13 @@ import haversine from 'haversine';
 import styled from 'styled-components/native';
 import { Coordinate } from '../../types';
 import { connect, DispatchProp } from 'react-redux';
-import { Actions } from '../../store';
+import { Actions, StoreState } from '../../store';
 import Geolocation, { GeolocationResponse } from '@react-native-community/geolocation';
+import { LabeledValue } from '../../components/LabeledValue';
+import { Block } from '../../components/Elements';
+import { formatDuration } from '../../common/utils';
 
-interface RunningScreenProps extends DispatchProp {}
+interface RunningScreenProps extends DispatchProp, MapStateToProps {}
 
 class RunningScreen extends React.Component<RunningScreenProps, RunningScreenState> {
 
@@ -96,7 +99,11 @@ class RunningScreen extends React.Component<RunningScreenProps, RunningScreenSta
       routeCoordinates: [newCoordinate, newCoordinate]
     });
 
-    this.watchID =  Geolocation.watchPosition(
+    this.props.dispatch(
+      Actions.runningTrainingStart() as any
+    );
+
+    this.watchID = Geolocation.watchPosition(
       position => {
         const { coordinate, routeCoordinates, distanceTravelled } = this.state;
         const { latitude, longitude } = position.coords;
@@ -121,12 +128,25 @@ class RunningScreen extends React.Component<RunningScreenProps, RunningScreenSta
   componentWillUnmount() {
     if (this.watchID) {
       Geolocation.clearWatch(this.watchID);
+      this.props.dispatch(Actions.runningTrainingFinish() as any);
     }
   }
 
   render() {
     return (
       <Container>
+        <DataContainer>
+          <LabeledValue
+            value={this.props.runningTraining.distance.toString()}
+            label="km"
+          />
+          <Block marginVertical={10}>
+            <LabeledValue
+              value={formatDuration(this.props.runningTraining.duration)}
+              label="Czas"
+            />
+          </Block>
+        </DataContainer>
         <StyledMapView
           showsUserLocation
           followsUserLocation
@@ -148,12 +168,21 @@ const Container = styled.View`
   flex: 1;
 `
 
+const DataContainer = styled.View`
+  padding: 10px 0;
+  align-items: center;
+  justify-content: space-around;
+`
+
 const StyledMapView = styled(MapView)`
   flex: 1;
 `
 
+const mapStateToProps = (store: StoreState) => ({
+  runningTraining: store.runningTraining
+});
 
-const RunningScreenConnected = connect()(RunningScreen);
+const RunningScreenConnected = connect(mapStateToProps)(RunningScreen);
 export { RunningScreenConnected as RunningScreen };
 
 interface RunningScreenState {
@@ -164,3 +193,5 @@ interface RunningScreenState {
   prevLatLng: Coordinate
   coordinate: AnimatedRegion
 }
+
+type MapStateToProps = ReturnType<typeof mapStateToProps>;

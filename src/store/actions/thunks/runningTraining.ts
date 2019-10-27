@@ -1,4 +1,5 @@
 import { Thunk } from '../..';
+import Geolocation from '@react-native-community/geolocation';
 import {
   runningTrainingStarted,
   runningTrainingTick,
@@ -6,16 +7,19 @@ import {
   runningTrainingPositionUpdated,
   runningTrainingPositionFailed,
 } from '../creators';
+import { getCurrentPosition } from '../../../common/utils';
 
 let interval: NodeJS.Timeout;
 let navigatorId: number;
 
-export const runningTrainingStart = (): Thunk => (dispatch) => {
-  dispatch(runningTrainingStarted());
+export const runningTrainingStart = (): Thunk => async (dispatch) => {
+  const currentPosition = await getCurrentPosition();
+
+  dispatch(runningTrainingStarted(currentPosition));
 
   interval = setInterval(() => dispatch(runningTrainingTick()), 1000);
 
-  navigatorId = navigator.geolocation.watchPosition(position => {
+  navigatorId = Geolocation.watchPosition(position => {
     dispatch(runningTrainingPositionUpdated(position));
   }, error => {
     dispatch(runningTrainingPositionFailed(error));
@@ -24,8 +28,8 @@ export const runningTrainingStart = (): Thunk => (dispatch) => {
   });
 }
 
-export const runningTrainingStop = (): Thunk => (dispatch) => {
+export const runningTrainingFinish = (): Thunk => (dispatch) => {
   clearInterval(interval);
-  navigator.geolocation.clearWatch(navigatorId);
+  Geolocation.clearWatch(navigatorId);
   dispatch(runningTrainingFinished());
 }

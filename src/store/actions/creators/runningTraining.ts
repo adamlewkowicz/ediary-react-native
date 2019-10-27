@@ -10,8 +10,9 @@ import {
 import { Coordinate } from '../../../types';
 import { GeolocationReturnType, GeolocationError } from 'react-native';
 
-export const runningTrainingStarted = () => ({
-  type: RUNNING_TRAINING_STARTED
+export const runningTrainingStarted = (position: GeolocationReturnType) => ({
+  type: RUNNING_TRAINING_STARTED,
+  payload: position
 });
 
 export const runningTrainingPaused = () => ({
