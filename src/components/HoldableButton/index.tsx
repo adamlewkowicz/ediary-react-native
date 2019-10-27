@@ -2,10 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components/native';
 import { Animated } from 'react-native';
 
-let timeout: NodeJS.Timeout;
+let timeout: number;
 
 interface HoldableButtonProps {
-  holdDuration: number
+  holdDuration?: number
   onHoldEnd: () => void
 }
 
@@ -50,4 +50,9 @@ HoldableButton.defaultProps = {
   holdDuration: 500
 }
 
-const Container = styled.TouchableOpacity``
+const Container = styled.TouchableOpacity`
+  border-radius: 50;
+  background-color: #e67e22;
+  width: 80px;
+  height: 80px;
+`

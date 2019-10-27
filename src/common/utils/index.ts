@@ -211,13 +211,10 @@ const padTime = (time: number) => {
 }
 
 export const formatDuration = (duration: number): string => {
-  const seconds = duration;
-  const minutes = Math.floor(seconds / 60);
+  const seconds = duration % 60;
+  const minutes = Math.floor(duration / 60);
   const hours = Math.floor(minutes / 60);
 
-  console.log(seconds, minutes, hours)
-
   const parsedTime = [hours, minutes, seconds].map(padTime).join(':');
-  console.log(parsedTime)
   return parsedTime;
 }

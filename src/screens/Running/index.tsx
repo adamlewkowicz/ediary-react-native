@@ -10,6 +10,7 @@ import Geolocation, { GeolocationResponse } from '@react-native-community/geoloc
 import { LabeledValue } from '../../components/LabeledValue';
 import { Block } from '../../components/Elements';
 import { formatDuration } from '../../common/utils';
+import { HoldableButton } from '../../components/HoldableButton';
 
 interface RunningScreenProps extends DispatchProp, MapStateToProps {}
 
@@ -146,6 +147,9 @@ class RunningScreen extends React.Component<RunningScreenProps, RunningScreenSta
               label="Czas"
             />
           </Block>
+          <HoldableButton
+            onHoldEnd={() => {}}
+          />
         </DataContainer>
         <StyledMapView
           showsUserLocation
