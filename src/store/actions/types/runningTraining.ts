@@ -5,6 +5,7 @@ import {
   runningTrainingTick,
   runningTrainingCoordUpdated,
   runningTrainingPositionUpdated,
+  runningTrainingPositionFailed,
 } from '../creators';
 
 type RunningTrainingStarted = ReturnType<typeof runningTrainingStarted>;
@@ -13,6 +14,7 @@ type RunningTrainingFinished = ReturnType<typeof runningTrainingFinished>;
 type RunningTrainingTick = ReturnType<typeof runningTrainingTick>;
 type RunningTrainingCoordUpdated = ReturnType<typeof runningTrainingCoordUpdated>;
 type RunningTrainingPositionUpdated = ReturnType<typeof runningTrainingPositionUpdated>;
+type RunningTrainingPositionFailed = ReturnType<typeof runningTrainingPositionFailed>;
 
 export type RunningTrainingAction = 
   | RunningTrainingStarted
@@ -21,3 +23,4 @@ export type RunningTrainingAction =
   | RunningTrainingTick
   | RunningTrainingCoordUpdated
   | RunningTrainingPositionUpdated
+  | RunningTrainingPositionFailed

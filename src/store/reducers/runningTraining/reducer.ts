@@ -7,6 +7,7 @@ import {
   RUNNING_TRAINING_TICK,
   RUNNING_TRAINING_COORD_UPDATED,
   RUNNING_TRAINING_POSITION_UPDATED,
+  RUNNING_TRAINING_POSITION_FAILED,
 } from '../../consts';
 import { Coordinate } from '../../../types';
 import haversine from 'haversine';
@@ -21,6 +22,7 @@ const initialState: RunningTrainingState = {
   velocity: 0,
   routeCoordinates: [],
   prevLatLng: { latitude: 0, longitude: 0 },
+  error: null,
   isActive: false,
   isPaused: false,
 }
@@ -63,6 +65,10 @@ export function runningTrainingReducer(
         routeCoordinates: [...state.routeCoordinates, nextCoordinate],
         prevLatLng: nextCoordinate,
       }
+    case RUNNING_TRAINING_POSITION_FAILED: return {
+      ...state,
+      error: action.error
+    }
     default: return state;
   }
 }

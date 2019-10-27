@@ -1,4 +1,5 @@
 import { Coordinate } from '../../../types';
+import { GeolocationError } from 'react-native';
 
 export interface RunningTrainingState {
   duration: number
@@ -6,6 +7,7 @@ export interface RunningTrainingState {
   velocity: number
   routeCoordinates: Coordinate[]
   prevLatLng: Coordinate
+  error: GeolocationError | null
   isActive: boolean
   isPaused: boolean
 }
