@@ -3,6 +3,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
       android:name=".MainApplication"
@@ -11,6 +12,7 @@
 
       android:allowBackup="false"
       android:theme="@style/AppTheme">
+
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
@@ -21,7 +23,13 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+      
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+
+      <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyBrJTaC6e0sIn074iIWbw2F0OEK2drIwc8" />
+
     </application>
 
 </manifest>

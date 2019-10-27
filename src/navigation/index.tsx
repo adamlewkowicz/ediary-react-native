@@ -43,7 +43,7 @@ export function createHomeStack(
 
 export function createMainStack(
   initialScreen: Screen = 'Home',
-  initialStack: MainStackScreen = 'Home',
+  initialStack: MainStackScreen = 'RunningScreen',
 ): NavigationContainer {
   const HomeStack = createHomeStack(initialScreen); 
 
@@ -111,4 +111,4 @@ const RootNavigator = createSwitchNavigator({
 
 export const AppContainer = createAppContainer(RootNavigator);
 
-export type MainStackScreen = 'Home' | 'DiarySummary';
+export type MainStackScreen = 'Home' | 'DiarySummary' | 'RunningScreen';
