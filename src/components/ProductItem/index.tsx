@@ -47,7 +47,9 @@ export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>
             <Quantity accessibilityLabel="Ilość produktu">
               {props.product.quantity}g
             </Quantity>
-            <Calories>{props.product.kcal} kcal</Calories>
+            <Calories accessibilityLabel="Kalorie w produkcie">
+              {props.product.kcal} kcal
+            </Calories>
           </Block>
           {props.isToggled && (
             <>

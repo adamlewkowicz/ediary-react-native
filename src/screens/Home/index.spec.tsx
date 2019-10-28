@@ -5,8 +5,95 @@ import {
   wait,
   within,
 } from '@testing-library/react-native';
-import { App } from '../../../__tests__/utils';
+import { App, renderSetup } from '../../../__tests__/utils';
 import { Meal, Product, MealProduct } from '../../database/entities';
+import { Home } from '.';
+
+describe('<Home />', () => {
+
+  it('should create new meal and display it', async () => {
+    const mealName = 'Cucumber soup';
+    const ctx = renderSetup(<Home />);
+
+    const createMealNameInput = ctx.getByPlaceholderText('Nazwa nowego posiłku');
+    fireEvent.changeText(createMealNameInput, mealName);
+  
+    const createMealConfirmButton = ctx.getByLabelText('Utwórz nowy posiłek');
+    fireEvent.press(createMealConfirmButton);
+    
+    const toggleMealButton = await ctx.findByText(mealName);
+  
+    expect(toggleMealButton).toBeTruthy();
+    expect(await Meal.findOneOrFail({ name: mealName })).toBeInstanceOf(Meal);
+  });
+
+  describe('when user adds new product to meal 🥗', () => {
+
+    it('should navigate to product find screen 🧭', async () => {
+      const ctx = renderSetup(<Home />);
+    
+      const [toggleMealButton] = await ctx.findAllByLabelText('Pokaż szczegóły posiłku');
+      fireEvent.press(toggleMealButton);
+    
+      const addMealProductNavButton = await ctx.findByLabelText('Wyszukaj produkt do posiłku');
+      fireEvent.press(addMealProductNavButton);
+
+      expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledTimes(1);
+      expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledWith('ProductFind', expect.any(Object));
+    });
+
+    it('should add selected product to meal', async () => {
+      const productMock = await Product.save({ name: 'Tomatoes' });
+      const ctx = renderSetup(<Home />);
+
+      ctx.mocks.navigationContext.navigate
+        .mockImplementationOnce((screenName, params) => params.onItemPress(productMock))
+        .mockImplementationOnce(() => {});
+
+      const [toggleMealButton] = await ctx.findAllByLabelText('Pokaż szczegóły posiłku');
+      fireEvent.press(toggleMealButton);
+    
+      const addMealProductNavButton = await ctx.findByLabelText('Wyszukaj produkt do posiłku');
+      fireEvent.press(addMealProductNavButton);
+
+      const addedProduct = await ctx.findByText(productMock.name);
+
+      expect(addedProduct).toBeTruthy();
+      expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledTimes(2);
+      expect(ctx.mocks.navigationContext.navigate).toHaveBeenNthCalledWith(2, 'Home', undefined);
+      expect(await MealProduct.findOneOrFail({ productId: productMock.id })).toBeInstanceOf(MealProduct);
+    });
+    
+  });
+
+  it('should update product\'s quantity', async () => {
+    const quantityMock = 180;
+    const productMock = await Product.save({ name: 'Milk', macro: { kcal: 100 }});
+    const mealMock = await Meal.createWithProduct({ name: 'Milk soup' }, productMock.id);
+    const ctx = renderSetup(<Home />);
+
+    const toggleMealButton = await ctx.findByText(mealMock.name);
+    fireEvent.press(toggleMealButton);
+  
+    const toggleProductButton = await ctx.findByLabelText('Pokaż szczegóły produktu');
+    fireEvent.press(toggleProductButton);
+  
+    const productQuantityInput = await ctx.findByLabelText('Zmień ilość produktu');
+    fireEvent.changeText(productQuantityInput, quantityMock);
+
+    const [productMacroData] = await ctx.findAllByLabelText('Makroskładniki produktu');
+
+    const productQuantityText = await ctx.findByLabelText('Ilość produktu');
+    const productCaloriesText = await ctx.findByLabelText('Kalorie w produkcie');
+
+    expect(productQuantityText).toHaveTextContent(`${quantityMock}g`);
+    await wait(async () => {
+      const productCaloriesText = await ctx.findByLabelText('Kalorie w produkcie');
+      expect(productCaloriesText).not.toHaveTextContent('0 kcal');
+    });
+  });
+
+});
 
 test('changing date display accurate meals', async () => {
   const mealMock = await Meal.save({ name: 'Salad' });

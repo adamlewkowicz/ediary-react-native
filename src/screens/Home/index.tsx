@@ -169,7 +169,7 @@ const mapStateToProps = (state: StoreState): MapStateProps => ({
 
 const HomeConnected = connect(mapStateToProps)(Home);
 
-(HomeConnected as any).navigationOptions = {
+HomeConnected.navigationOptions = {
   header: null,
 }
 

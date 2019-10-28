@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-import { createAppContainer, NavigationContainer } from 'react-navigation';
+import { createAppContainer, NavigationContainer, NavigationContext } from 'react-navigation';
 import { MainStackScreen, createMainStack } from '../../src/navigation';
 import { Provider } from 'react-redux';
 import { AppState, configureStore, Actions } from '../../src/store';
@@ -11,9 +11,16 @@ import { ThemeProvider } from 'styled-components/native';
 import { Store } from 'redux';
 import { User } from '../../src/database/entities';
 import { USER_ID_UNSYNCED } from '../../src/common/consts';
+import { render } from '@testing-library/react-native';
 
 let user: User;
 let isInitialized = false;
+
+const createNavigationCtxMock = () => ({
+  getParam: jest.fn(),
+  navigate: jest.fn(),
+  addListener: jest.fn(),
+});
 
 beforeEach(async () => {
   isInitialized = false;
@@ -32,6 +39,7 @@ interface AppProps {
   screen?: Screen
   stack?: MainStackScreen
   children?: ReactNode
+  navigationContext?: any
 }
 export function App({
   initialState,
@@ -39,6 +47,7 @@ export function App({
   stack,
   screen = 'Home',
   children,
+  navigationContext = createNavigationCtxMock()
 }: AppProps) {
   // preserve instance between re-renders
   const [AppContainer] = useState<NavigationContainer>(() => {
@@ -61,9 +70,25 @@ export function App({
           mapping={mapping}
           theme={lightTheme}
         >
-          {children ? children : <AppContainer />}
+          <NavigationContext.Provider value={navigationContext}>
+            {children ? children : <AppContainer />}
+          </NavigationContext.Provider>
         </ApplicationProvider>
       </ThemeProvider>
     </Provider>
   );
+}
+
+export const renderSetup = (ui: React.ReactElement, options?: {}) => {
+  const navigationCtxMock = createNavigationCtxMock();
+  return {
+    ...render(
+      <App navigationContext={navigationCtxMock}>
+        {ui}
+      </App>
+    ),
+    mocks: {
+      navigationContext: navigationCtxMock,
+    },
+  }
 }
