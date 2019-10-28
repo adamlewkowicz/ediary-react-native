@@ -1,5 +1,5 @@
 import { RunningTrainingState } from './types';
-import { RunningTrainingAction } from '../../actions/types/runningTraining';
+import { _RunningTrainingAction } from '../../actions/types/runningTraining';
 import {
   RUNNING_TRAINING_STARTED,
   RUNNING_TRAINING_PAUSED,
@@ -8,6 +8,8 @@ import {
   RUNNING_TRAINING_COORD_UPDATED,
   RUNNING_TRAINING_POSITION_UPDATED,
   RUNNING_TRAINING_POSITION_FAILED,
+  RUNNING_TRAINING_PAUSE_TOGGLED,
+  RUNNING_TRAINING_UNPAUSED,
 } from '../../consts';
 import { Coordinate } from '../../../types';
 import haversine from 'haversine';
@@ -30,7 +32,7 @@ const initialState: RunningTrainingState = {
 
 export function runningTrainingReducer(
   state = initialState,
-  action: RunningTrainingAction
+  action: _RunningTrainingAction
 ): RunningTrainingState {
   switch(action.type) {
     case RUNNING_TRAINING_STARTED: {
@@ -76,6 +78,14 @@ export function runningTrainingReducer(
     case RUNNING_TRAINING_POSITION_FAILED: return {
       ...state,
       error: action.error
+    }
+    case RUNNING_TRAINING_PAUSE_TOGGLED: return {
+      ...state,
+      isPaused: !state.isPaused
+    }
+    case RUNNING_TRAINING_UNPAUSED: return {
+      ...state,
+      isPaused: false
     }
     default: return state;
   }

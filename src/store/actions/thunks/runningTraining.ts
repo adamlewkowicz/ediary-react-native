@@ -6,17 +6,20 @@ import {
   runningTrainingFinished,
   runningTrainingPositionUpdated,
   runningTrainingPositionFailed,
+  runningTrainingPaused,
+  runningTrainingUnpaused,
 } from '../creators';
 import { getCurrentPosition } from '../../../common/utils';
 
 let interval: NodeJS.Timeout;
 let navigatorId: number;
 
-export const runningTrainingStart = (): Thunk => async (dispatch) => {
-  const currentPosition = await getCurrentPosition();
+const _clearEffects = () => {
+  clearInterval(interval);
+  Geolocation.clearWatch(navigatorId);
+}
 
-  dispatch(runningTrainingStarted(currentPosition));
-
+const runningTrainingStartEffects = (): Thunk => async (dispatch) => {
   interval = setInterval(() => dispatch(runningTrainingTick()), 1000);
 
   navigatorId = Geolocation.watchPosition(position => {
@@ -28,8 +31,25 @@ export const runningTrainingStart = (): Thunk => async (dispatch) => {
   });
 }
 
+export const runningTrainingStart = (): Thunk => async (dispatch) => {
+  const currentPosition = await getCurrentPosition();
+  dispatch(runningTrainingStarted(currentPosition));
+  dispatch(runningTrainingStartEffects());
+}
+
+export const runningTrainingPauseToggle = (
+  enablePause: boolean
+): Thunk => async (dispatch) => {
+  if (enablePause) {
+    _clearEffects();
+    dispatch(runningTrainingPaused());
+  } else {
+    dispatch(runningTrainingUnpaused());
+    dispatch(runningTrainingStartEffects());
+  }
+}
+
 export const runningTrainingFinish = (): Thunk => (dispatch) => {
-  clearInterval(interval);
-  Geolocation.clearWatch(navigatorId);
+  _clearEffects();
   dispatch(runningTrainingFinished());
 }
