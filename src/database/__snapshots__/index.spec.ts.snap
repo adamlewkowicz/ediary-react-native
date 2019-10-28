@@ -124,6 +124,25 @@ exports[`entity generated sql matches snapshot: profile 1`] = `
 )"
 `;
 
+exports[`entity generated sql matches snapshot: running_coords 1`] = `
+"CREATE TABLE \\"running_coords\\" (
+  \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+  \\"latitude\\" integer NOT NULL,
+  \\"longitude\\" integer NOT NULL,
+  \\"trainingId\\" integer NOT NULL,
+  CONSTRAINT \\"FK_ab4c0c27d674d779129307699b5\\" FOREIGN KEY (\\"trainingId\\") REFERENCES \\"running_trainings\\" (\\"id\\") ON DELETE CASCADE ON UPDATE NO ACTION
+)"
+`;
+
+exports[`entity generated sql matches snapshot: running_trainings 1`] = `
+"CREATE TABLE \\"running_trainings\\" (
+  \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+  \\"duration\\" integer NOT NULL,
+  \\"userId\\" integer NOT NULL,
+  CONSTRAINT \\"FK_a162c402b4b6bc8366f13f13c4f\\" FOREIGN KEY (\\"userId\\") REFERENCES \\"user\\" (\\"id\\") ON DELETE CASCADE ON UPDATE NO ACTION
+)"
+`;
+
 exports[`entity generated sql matches snapshot: user 1`] = `
 "CREATE TABLE \\"user\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
