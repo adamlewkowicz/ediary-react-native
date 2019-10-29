@@ -8,8 +8,15 @@ import {
 import { App, renderSetup } from '../../../__tests__/utils';
 import { Meal, Product, MealProduct } from '../../database/entities';
 import { Home } from '.';
+import { Alert } from 'react-native';
 
 describe('<Home />', () => {
+
+  const mockMealAndProduct = async () => {
+    const productMock = await Product.save({ name: 'Milk', macro: { kcal: 100 }});
+    const mealMock = await Meal.createWithProduct({ name: 'Milk soup' }, productMock.id);
+    return { productMock, mealMock };
+  }
 
   it('should create new meal and display it', async () => {
     const mealName = 'Cucumber soup';
@@ -114,6 +121,22 @@ describe('<Home />', () => {
       expect(mealProductUpdateSpy).toHaveBeenCalledWith({ productId, mealId  },{ quantity });
     });
 
+  });
+
+  it('removing meal should work 🗑️', async () => {
+    const productMock = await Product.save({ name: 'Milk', macro: { kcal: 100 }});
+    const mealMock = await Meal.createWithProduct({ name: 'Milk soup' }, productMock.id);
+    const mealDeleteSpy = jest.spyOn(Meal, 'delete');
+    const alertSpy = jest.spyOn(Alert, 'alert')
+      .mockImplementationOnce((title, msg, [onCancel, onSuccess]: any) => onSuccess.onPress());
+    const ctx = renderSetup(<Home />);
+
+    const removeMealButton = await ctx.findByText(mealMock.name);
+    fireEvent.longPress(removeMealButton);
+
+    expect(alertSpy).toHaveBeenCalledTimes(1);
+    expect(mealDeleteSpy).toHaveBeenCalledTimes(1);
+    await wait(() => expect(ctx.queryByText(mealMock.name)).toBeNull());
   });
 
 });
