@@ -66,31 +66,54 @@ describe('<Home />', () => {
     
   });
 
-  it('should update product\'s quantity', async () => {
-    const quantityMock = 180;
-    const productMock = await Product.save({ name: 'Milk', macro: { kcal: 100 }});
-    const mealMock = await Meal.createWithProduct({ name: 'Milk soup' }, productMock.id);
-    const ctx = renderSetup(<Home />);
+  describe('when user changes product\'s quantity', () => {
 
-    const toggleMealButton = await ctx.findByText(mealMock.name);
-    fireEvent.press(toggleMealButton);
+    const arrange = async () => {
+      const quantityMock = 180;
+      const productMock = await Product.save({ name: 'Milk', macro: { kcal: 100 }});
+      const mealMock = await Meal.createWithProduct({ name: 'Milk soup' }, productMock.id);
+      const ctx = renderSetup(<Home />);
   
-    const toggleProductButton = await ctx.findByLabelText('Pokaż szczegóły produktu');
-    fireEvent.press(toggleProductButton);
-  
-    const productQuantityInput = await ctx.findByLabelText('Zmień ilość produktu');
-    fireEvent.changeText(productQuantityInput, quantityMock);
+      const toggleMealButton = await ctx.findByText(mealMock.name);
+      fireEvent.press(toggleMealButton);
+    
+      const toggleProductButton = await ctx.findByLabelText('Pokaż szczegóły produktu');
+      fireEvent.press(toggleProductButton);
+    
+      const productQuantityInput = await ctx.findByLabelText('Zmień ilość produktu');
+      fireEvent.changeText(productQuantityInput, quantityMock);
 
-    const [productMacroData] = await ctx.findAllByLabelText('Makroskładniki produktu');
+      return {
+        ...ctx,
+        toggleProductButton,
+        mocks: {
+          ...ctx.mocks,
+          quantity: quantityMock,
+          product: productMock,
+          meal: mealMock,
+        }
+      }
+    }
 
-    const productQuantityText = await ctx.findByLabelText('Ilość produktu');
-    const productCaloriesText = await ctx.findByLabelText('Kalorie w produkcie');
+    it('should update displayed quantity 🧮', async () => {
+      const ctx = await arrange();
+      
+      const productQuantityText = await within(ctx.toggleProductButton).findByLabelText('Ilość produktu');
 
-    expect(productQuantityText).toHaveTextContent(`${quantityMock}g`);
-    await wait(async () => {
-      const productCaloriesText = await ctx.findByLabelText('Kalorie w produkcie');
-      expect(productCaloriesText).not.toHaveTextContent('0 kcal');
+      expect(productQuantityText).toHaveTextContent(ctx.mocks.quantity + 'g');
     });
+
+    it('should update quantity in database 🗄️', async () => {
+      const mealProductUpdateSpy = jest.spyOn(MealProduct, 'update');
+      const ctx = await arrange();
+      const productId = ctx.mocks.product.id;
+      const mealId = ctx.mocks.meal.id;
+      const quantity = ctx.mocks.quantity;
+
+      await wait(() => expect(mealProductUpdateSpy).toHaveBeenCalledTimes(1));
+      expect(mealProductUpdateSpy).toHaveBeenCalledWith({ productId, mealId  },{ quantity });
+    });
+
   });
 
 });
