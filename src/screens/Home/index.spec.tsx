@@ -141,6 +141,7 @@ describe('<Home />', () => {
   it('removing product from meal should work 🗑️', async () => {
     const { productMock, mealMock } = await mockMealWithProduct(); 
     const ctx = renderSetup(<Home />);
+    const mealProductDeleteSpy = jest.spyOn(MealProduct, 'delete');
     const alertSpy = jest.spyOn(Alert, 'alert')
       .mockImplementationOnce((title, msg, [onCancel, onSuccess]: any) => onSuccess.onPress());
 
@@ -151,6 +152,7 @@ describe('<Home />', () => {
     fireEvent.longPress(productDeleteButton);
 
     expect(alertSpy).toHaveBeenCalledTimes(1);
+    expect(mealProductDeleteSpy).toHaveBeenCalledTimes(1);
     await wait(() => expect(ctx.queryByText(productMock.name)).toBeNull());
   });
 
