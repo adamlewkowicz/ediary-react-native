@@ -79,7 +79,7 @@ export function App({
   );
 }
 
-export const renderSetup = (ui: React.ReactElement, options?: {}) => {
+export const renderSetup = (ui: React.ReactElement) => {
   const navigationCtxMock = createNavigationCtxMock();
   return {
     ...render(
