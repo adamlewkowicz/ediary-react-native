@@ -132,7 +132,6 @@ const Home = (props: HomeProps) => {
             renderProduct={(product) => meal.type === 'template' ? null : (
               <ProductItem
                 product={product}
-                isToggled={product.isToggled}
                 onDelete={() => handleProductDelete(meal.id, product)}
                 onToggle={() => dispatch(Actions.productToggled(product.id))}
                 onQuantityUpdate={(quantity) => dispatch(
