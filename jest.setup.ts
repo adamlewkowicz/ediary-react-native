@@ -19,6 +19,7 @@ beforeEach(async () => {
 afterEach(async () => {
   await getConnection().close();
   jest.clearAllTimers();
+  jest.clearAllMocks();
 });
 
 Object.assign(NativeModules, {

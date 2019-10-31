@@ -12,8 +12,8 @@ import { InputRow } from '../InputRow';
 
 interface ProductItemProps<P extends ProductPartial> {
   product: P
-  onQuantityUpdate: (productId: ProductId, quantity: number) => void
-  onDelete: (productId: ProductId) => void
+  onQuantityUpdate: (quantity: number) => void
+  onDelete: (product: P) => void
   onToggle: (productId: ProductId) => void
   isToggled: boolean
 }
@@ -23,7 +23,7 @@ export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>
 
   return (
       <Swipeable
-        onRightActionRelease={() => props.onDelete(productId)}
+        onRightActionRelease={() => props.onDelete(props.product)}
         rightActionActivationDistance={200}
         rightButtonWidth={200}
         rightContent={props.isToggled ? null : (
@@ -38,7 +38,9 @@ export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>
       >
         <TouchableContent
           onPress={() => props.onToggle(productId)}
-          accessibilityLabel="Pokaż szczegóły produktu"
+          onLongPress={() => props.onDelete(props.product)}
+          accessibilityLabel="Pokaż szczegóły lub usuń produkt"
+          accessibilityHint="Pokaż szczegóły produktu, lub przytrzymaj dłużej aby go usunąć"
         >
           <Block align="flex-start" space="space-between">
             <Name numberOfLines={props.isToggled ? undefined : 1}>
@@ -57,7 +59,7 @@ export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>
                 title="Zmień ilość"
                 accessibilityLabel="Zmień ilość produktu"
                 value={props.product.quantity.toString()}
-                onChangeText={quantity => props.onQuantityUpdate(productId, Number(quantity))}
+                onChangeText={quantity => props.onQuantityUpdate(Number(quantity))}
                 styles={InputRowStyle}
               />
               <Block space="space-evenly">

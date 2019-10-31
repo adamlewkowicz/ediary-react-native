@@ -84,7 +84,7 @@ describe('<Home />', () => {
       const toggleMealButton = await ctx.findByText(mealMock.name);
       fireEvent.press(toggleMealButton);
     
-      const toggleProductButton = await ctx.findByLabelText('Pokaż szczegóły produktu');
+      const toggleProductButton = await ctx.findByLabelText('Pokaż szczegóły lub usuń produkt');
       fireEvent.press(toggleProductButton);
     
       const productQuantityInput = await ctx.findByLabelText('Zmień ilość produktu');
@@ -139,7 +139,21 @@ describe('<Home />', () => {
     await wait(() => expect(ctx.queryByText(mealMock.name)).toBeNull());
   });
 
-  it.todo('removing product from meal should work');
+  it('removing product from meal should work 🗑️', async () => {
+    const { productMock, mealMock } = await mockMealAndProduct(); 
+    const ctx = renderSetup(<Home />);
+    const alertSpy = jest.spyOn(Alert, 'alert')
+      .mockImplementationOnce((title, msg, [onCancel, onSuccess]: any) => onSuccess.onPress());
+
+    const toggleMealButton = await ctx.findByText(mealMock.name);
+    fireEvent.press(toggleMealButton);
+
+    const productDeleteButton = await ctx.findByLabelText('Pokaż szczegóły lub usuń produkt');
+    fireEvent.longPress(productDeleteButton);
+
+    expect(alertSpy).toHaveBeenCalledTimes(1);
+    await wait(() => expect(ctx.queryByText(productMock.name)).toBeNull());
+  });
 
 });
 
@@ -273,7 +287,7 @@ test('updates product\'s quantity', async () => {
   const toggleMealButton = await findByText(mealMock.name);
   fireEvent.press(toggleMealButton);
 
-  const toggleProductButton = await findByLabelText('Pokaż szczegóły produktu');
+  const toggleProductButton = await findByLabelText('Pokaż szczegóły lub usuń produkt');
   fireEvent.press(toggleProductButton);
 
   const productQuantityText = await findByLabelText('Ilość produktu');
