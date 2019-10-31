@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components/native';
 import { TrashIcon } from '../Icons';
 // @ts-ignore
 import Swipeable from 'react-native-swipeable';
-import { ProductId, MacroElements } from '../../types';
+import { MacroElements } from '../../types';
 import { TouchableOpacity } from 'react-native';
 import { Block } from '../Elements';
 import { NutritionBox } from '../NutritionBox';
@@ -12,66 +12,67 @@ import { InputRow } from '../InputRow';
 
 interface ProductItemProps<P extends ProductPartial> {
   product: P
-  onQuantityUpdate: (productId: ProductId, quantity: number) => void
-  onDelete: (productId: ProductId) => void
-  onToggle: (productId: ProductId) => void
-  isToggled: boolean
+  onQuantityUpdate: (quantity: number) => void
+  onDelete: () => void
+  onToggle: () => void
 }
 
 export function ProductItem<P extends ProductPartial>(props: ProductItemProps<P>) {
-  const productId = props.product.id;
-
   return (
-      <Swipeable
-        onRightActionRelease={() => props.onDelete(productId)}
-        rightActionActivationDistance={200}
-        rightButtonWidth={200}
-        rightContent={props.isToggled ? null : (
-          <DeleteContainer>
-            <TrashIcon
-              width={20}
-              height={20}
-              fill="#fff"
-            />
-          </DeleteContainer>
-        )}
+    <Swipeable
+      onRightActionRelease={() => props.onDelete()}
+      rightActionActivationDistance={200}
+      rightButtonWidth={200}
+      rightContent={props.product.isToggled ? null : (
+        <DeleteContainer>
+          <TrashIcon
+            width={20}
+            height={20}
+            fill="#fff"
+          />
+        </DeleteContainer>
+      )}
+    >
+      <TouchableContent
+        onPress={() => props.onToggle()}
+        onLongPress={() => props.onDelete()}
+        accessibilityLabel="Pokaż szczegóły lub usuń produkt"
+        accessibilityHint="Pokaż szczegóły produktu, lub przytrzymaj dłużej aby go usunąć"
       >
-        <TouchableContent
-          onPress={() => props.onToggle(productId)}
-          accessibilityLabel="Pokaż szczegóły produktu"
-        >
-          <Block align="flex-start" space="space-between">
-            <Name numberOfLines={props.isToggled ? undefined : 1}>
-              {props.product.name}
-            </Name>
-            <Quantity accessibilityLabel="Ilość produktu">
-              {props.product.quantity}g
-            </Quantity>
-            <Calories>{props.product.kcal} kcal</Calories>
-          </Block>
-          {props.isToggled && (
-            <>
-              <InputRow
-                title="Zmień ilość"
-                accessibilityLabel="Zmień ilość produktu"
-                value={props.product.quantity.toString()}
-                onChangeText={quantity => props.onQuantityUpdate(productId, Number(quantity))}
-                styles={InputRowStyle}
-              />
-              <Block space="space-evenly">
-                {MACRO_ELEMENTS.map(element => (
-                  <NutritionBox
-                    key={element}
-                    element={element}
-                    value={props.product[element]}
-                    accessibilityLabel="Makroskładniki produktu"
-                  />
-                ))}
-              </Block>
-            </>
-          )}
-        </TouchableContent>
-      </Swipeable>
+        <Block align="flex-start" space="space-between">
+          <Name numberOfLines={props.product.isToggled ? undefined : 1}>
+            {props.product.name}
+          </Name>
+          <Quantity accessibilityLabel="Ilość produktu">
+            {props.product.quantity}g
+          </Quantity>
+          <Calories accessibilityLabel="Kalorie w produkcie">
+            {props.product.kcal} kcal
+          </Calories>
+        </Block>
+        {props.product.isToggled && (
+          <>
+            <InputRow
+              title="Zmień ilość"
+              accessibilityLabel="Zmień ilość produktu"
+              value={props.product.quantity.toString()}
+              onChangeText={quantity => props.onQuantityUpdate(Number(quantity))}
+              styles={InputRowStyle}
+            />
+            <Block space="space-evenly">
+              {MACRO_ELEMENTS.map(element => (
+                <NutritionBox
+                  key={element}
+                  element={element}
+                  value={props.product[element]}
+                  accessibilityLabel="Makroskładniki produktu"
+                />
+              ))}
+            </Block>
+          </>
+        )}
+      </TouchableContent>
+    </Swipeable>
   );
 }
 
@@ -122,4 +123,5 @@ export interface ProductPartial extends MacroElements {
   id: number
   name: string
   quantity: number
+  isToggled: boolean
 }
