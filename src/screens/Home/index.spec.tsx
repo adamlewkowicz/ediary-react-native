@@ -139,6 +139,8 @@ describe('<Home />', () => {
     await wait(() => expect(ctx.queryByText(mealMock.name)).toBeNull());
   });
 
+  it.todo('removing product from meal should work');
+
 });
 
 test('changing date display accurate meals', async () => {

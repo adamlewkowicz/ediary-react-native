@@ -10,7 +10,7 @@ import styled from 'styled-components/native';
 import { MealListItem } from '../../components/MealListItem';
 import { BasicInput } from '../../components/BasicInput';
 import { NavigationScreenProps, ScrollView } from 'react-navigation';
-import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
+import { BASE_MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitles } from '../../common/helpers';
 import { MealId } from '../../types';
 import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
@@ -104,7 +104,7 @@ const Home = (props: HomeProps) => {
             meal={meal}
             onProductAdd={() => handleProductFindNavigation(meal)}
             onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
-            onLongPress={IS_DEV || meal.type === 'template' ? undefined : () => handleMealDelete(meal)}
+            onLongPress={__DEV__ || meal.type === 'template' ? undefined : () => handleMealDelete(meal)}
             isBeingProcessed={processedMealId === meal.id}
             {...meal.type === 'meal' && {
               onProductDelete: (productId) => dispatch(Actions.mealProductDelete(meal.id, productId)),

@@ -6,6 +6,8 @@ import { createConnection, getConnection } from 'typeorm';
 import { config } from './src/database/config/config';
 import { NativeModules } from 'react-native';
 
+(global as any).__DEV__ = false;
+
 global.requestIdleCallback = jest.fn((callback: any) => callback());
 global.cancelIdleCallback = jest.fn();
 
