@@ -4,7 +4,7 @@ import {
   wait,
   within,
 } from '@testing-library/react-native';
-import { App, renderSetup } from '../../../__tests__/utils';
+import { renderSetup } from '../../../__tests__/utils';
 import { Meal, Product, MealProduct } from '../../database/entities';
 import { Home } from '.';
 import { Alert } from 'react-native';
