@@ -4,3 +4,5 @@ export const STEP_TITLES = {
   '1': 'Twoje pomiary',
   '2': 'Wybierz cel',
 };
+
+export const ICON_SIZE = 45;
