@@ -10,12 +10,13 @@ import styled from 'styled-components/native';
 import { MealListItem } from '../../components/MealListItem';
 import { BasicInput } from '../../components/BasicInput';
 import { NavigationScreenProps, ScrollView } from 'react-navigation';
-import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
+import { BASE_MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitles } from '../../common/helpers';
-import { MealId } from '../../types';
+import { MealId, ProductId } from '../../types';
 import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
 import { CaloriesChart } from '../../components/CaloriesChart';
 import { useAfterInteractions, useNavigate } from '../../hooks';
+import { ProductItem } from '../../components/ProductItem';
 
 interface HomeProps extends NavigationScreenProps, MapStateProps, DispatchProp {}
 
@@ -58,7 +59,9 @@ const Home = (props: HomeProps) => {
     });
   }
 
-  const handleMealDelete = <T extends { name: string, id: MealId }>(meal: T) => {
+  const handleMealDelete = <T extends { id: MealId, name: string }>(
+    meal: T
+  ) => {
     Alert.alert(
       'Usuń posiłek',
       `Czy jesteś pewnien że chcesz usunąć "${meal.name}"?`,
@@ -74,7 +77,27 @@ const Home = (props: HomeProps) => {
       ]
     );
   }
-  
+
+  const handleProductDelete = <T extends { id: ProductId; name: string }>(
+    mealId: MealId,
+    product: T
+  ) => {
+    Alert.alert(
+      'Usuń produkt',
+      `Czy jesteś pewnien że chcesz usunąć "${product.name}"?`,
+      [
+        {
+          text: 'Anuluj',
+          style: 'cancel'
+        },
+        {
+          text: 'OK',
+          onPress: () => dispatch(Actions.mealProductDelete(mealId, product.id))
+        }
+      ]
+    );
+  }
+
   return (
     <ScrollView>
       <DateChanger
@@ -100,17 +123,20 @@ const Home = (props: HomeProps) => {
         renderItem={({ item: meal }) => (
           <MealListItem
             meal={meal}
+            isBeingProcessed={processedMealId === meal.id}
             onProductAdd={() => handleProductFindNavigation(meal)}
             onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
-            onLongPress={IS_DEV || meal.type === 'template' ? undefined : () => handleMealDelete(meal)}
-            isBeingProcessed={processedMealId === meal.id}
-            {...meal.type === 'meal' && {
-              onProductDelete: (productId) => dispatch(Actions.mealProductDelete(meal.id, productId)),
-              onProductToggle: (productId) => dispatch(Actions.productToggled(productId)),
-              onProductQuantityUpdate: (productId, quantity) => dispatch(
-                Actions.mealProductQuantityUpdate(meal.id, productId, quantity)
-              )
-            }}
+            onLongPress={__DEV__ || meal.type === 'template' ? undefined : () => handleMealDelete(meal)}
+            renderProduct={(product) => meal.type === 'template' ? null : (
+              <ProductItem
+                product={product}
+                onDelete={() => handleProductDelete(meal.id, product)}
+                onToggle={() => dispatch(Actions.productToggled(product.id))}
+                onQuantityUpdate={(quantity) => dispatch(
+                  Actions.mealProductQuantityUpdate(meal.id, product.id, quantity)
+                )}
+              />
+            )}
           />
         )}
       />
@@ -167,7 +193,7 @@ const mapStateToProps = (state: StoreState): MapStateProps => ({
 
 const HomeConnected = connect(mapStateToProps)(Home);
 
-(HomeConnected as any).navigationOptions = {
+HomeConnected.navigationOptions = {
   header: null,
 }
 
