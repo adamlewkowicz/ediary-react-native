@@ -4,8 +4,8 @@ import { Platform, PermissionsAndroid } from 'react-native';
 import haversine from 'haversine';
 import styled from 'styled-components/native';
 import { Coordinate } from '../../types';
-import { connect, DispatchProp } from 'react-redux';
-import { Actions, StoreState } from '../../store';
+import { connect } from 'react-redux';
+import { Actions, StoreState, DispatchProp } from '../../store';
 import Geolocation, { GeolocationResponse } from '@react-native-community/geolocation';
 import { LabeledValue } from '../../components/LabeledValue';
 import { Block } from '../../components/Elements';
@@ -101,7 +101,7 @@ class RunningScreen extends React.Component<RunningScreenProps, RunningScreenSta
     });
 
     this.props.dispatch(
-      Actions.runningTrainingStart() as any
+      Actions.runningTrainingStart()
     );
 
     this.watchID = Geolocation.watchPosition(
@@ -129,7 +129,7 @@ class RunningScreen extends React.Component<RunningScreenProps, RunningScreenSta
   componentWillUnmount() {
     if (this.watchID) {
       Geolocation.clearWatch(this.watchID);
-      this.props.dispatch(Actions.runningTrainingFinish() as any);
+      this.props.dispatch(Actions.runningTrainingFinish());
     }
   }
 

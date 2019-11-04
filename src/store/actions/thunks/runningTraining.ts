@@ -19,7 +19,7 @@ const _clearEffects = () => {
   Geolocation.clearWatch(navigatorId);
 }
 
-const runningTrainingStartEffects = (): Thunk => async (dispatch) => {
+const runningTrainingEffectsStart: Thunk = () => async (dispatch) => {
   interval = setInterval(() => dispatch(runningTrainingTick()), 1000);
 
   navigatorId = Geolocation.watchPosition(position => {
@@ -31,25 +31,25 @@ const runningTrainingStartEffects = (): Thunk => async (dispatch) => {
   });
 }
 
-export const runningTrainingStart = (): Thunk => async (dispatch) => {
+export const runningTrainingStart: Thunk = () => async (dispatch) => {
   const currentPosition = await getCurrentPosition();
   dispatch(runningTrainingStarted(currentPosition));
-  dispatch(runningTrainingStartEffects());
+  dispatch(runningTrainingEffectsStart());
 }
 
-export const runningTrainingPauseToggle = (
+export const runningTrainingPauseToggle: Thunk = (
   enablePause: boolean
-): Thunk => async (dispatch) => {
+) => async (dispatch) => {
   if (enablePause) {
     _clearEffects();
     dispatch(runningTrainingPaused());
   } else {
     dispatch(runningTrainingUnpaused());
-    dispatch(runningTrainingStartEffects());
+    dispatch(runningTrainingEffectsStart());
   }
 }
 
-export const runningTrainingFinish = (): Thunk => (dispatch) => {
+export const runningTrainingFinish: Thunk<void> = () => (dispatch) => {
   _clearEffects();
   dispatch(runningTrainingFinished());
 }
