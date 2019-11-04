@@ -14,7 +14,7 @@ import { getCurrentPosition } from '../../../common/utils';
 let interval: NodeJS.Timeout;
 let navigatorId: number;
 
-const _clearEffects = () => {
+const _runningTrainingEffectsStop = () => {
   clearInterval(interval);
   Geolocation.clearWatch(navigatorId);
 }
@@ -37,11 +37,11 @@ export const runningTrainingStart: Thunk = () => async (dispatch) => {
   dispatch(runningTrainingEffectsStart());
 }
 
-export const runningTrainingPauseToggle: Thunk = (
+export const runningTrainingPauseToggle: Thunk<void> = (
   enablePause: boolean
-) => async (dispatch) => {
+) => (dispatch) => {
   if (enablePause) {
-    _clearEffects();
+    _runningTrainingEffectsStop();
     dispatch(runningTrainingPaused());
   } else {
     dispatch(runningTrainingUnpaused());
@@ -50,6 +50,6 @@ export const runningTrainingPauseToggle: Thunk = (
 }
 
 export const runningTrainingFinish: Thunk<void> = () => (dispatch) => {
-  _clearEffects();
+  _runningTrainingEffectsStop();
   dispatch(runningTrainingFinished());
 }
