@@ -1,13 +1,14 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { fireEvent } from '@testing-library/react-native';
 import { RunningScreen } from './';
 import Geolocation, { GeolocationResponse } from '@react-native-community/geolocation';
+import { renderSetup } from '../../../__tests__/utils';
 
 describe('<RunningScreen />', () => {
 
   it('should increment training duration', () => {
     jest.useFakeTimers();
-    const ctx = render(<RunningScreen />);
+    const ctx = renderSetup(<RunningScreen />);
 
     const trainingDurationText = ctx.getByLabelText('Czas trwania treningu');
     jest.advanceTimersByTime(1000);
@@ -15,15 +16,18 @@ describe('<RunningScreen />', () => {
     expect(trainingDurationText).toEqual('00:00:01');
   });
 
-  it('should pause training when clicked on pause a button', () => {
+  it('should pause training when clicked on a pause button', () => {
     jest.useFakeTimers();
-    const ctx = render(<RunningScreen />);
+    const ctx = renderSetup(<RunningScreen />);
 
     const pauseTrainingButton = ctx.getByLabelText('Zatrzymaj/kontynuuj trening');
-
     fireEvent.pressIn(pauseTrainingButton);
-    jest.advanceTimersByTime(500);
 
+    jest.advanceTimersByTime(1000);
+
+    const trainingDurationText = ctx.getByLabelText('Czas trwania treningu');
+
+    expect(trainingDurationText).toEqual('00:00:00');
   });
 
   it('should calculate correct session distance', () => {
@@ -39,7 +43,7 @@ describe('<RunningScreen />', () => {
         const watchId = 1;
         return watchId;
       })
-    const ctx = render(<RunningScreen />);
+    const ctx = renderSetup(<RunningScreen />);
     
     const trainingDistanceText = ctx.findByLabelText('Przebyty dystans');
 
