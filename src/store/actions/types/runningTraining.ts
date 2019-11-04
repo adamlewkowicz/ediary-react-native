@@ -9,10 +9,9 @@ import {
   runningTrainingPauseToggled,
 } from '../creators';
 import * as runningTrainingCreators from '../creators/runningTraining';
+import { ActionUnion } from '../..';
 
-const creatorsArray = Object.values(runningTrainingCreators);
-
-export type _RunningTrainingAction = ReturnType<typeof creatorsArray[number]>;
+export type _RunningTrainingAction = ActionUnion<typeof runningTrainingCreators>;
 
 type RunningTrainingStarted = ReturnType<typeof runningTrainingStarted>;
 type RunningTrainingPaused = ReturnType<typeof runningTrainingPaused>;

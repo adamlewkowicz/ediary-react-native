@@ -49,5 +49,9 @@ interface Dispatch {
   <A extends Action>(action: A): A
 }
 
+type ActionsModule = { [key: string]: (...args: any) => any };
+
+export type ActionUnion<T extends ActionsModule> = ReturnType<T[keyof T]>;
+
 export { Actions };
 export { Selectors };
