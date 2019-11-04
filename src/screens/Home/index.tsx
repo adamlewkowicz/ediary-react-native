@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
-import { StoreState, Dispatch, Selectors, Actions } from '../../store';
+import { StoreState, Selectors, Actions, DispatchProp } from '../../store';
 import { FlatList, Alert } from 'react-native';
 import { DateChanger } from '../../components/DateChanger';
 import { MacroCard } from '../../components/MacroCard';
@@ -18,9 +18,7 @@ import { CaloriesChart } from '../../components/CaloriesChart';
 import { useAfterInteractions, useNavigate } from '../../hooks';
 import { ProductItem } from '../../components/ProductItem';
 
-interface HomeProps extends NavigationScreenProps, MapStateProps {
-  dispatch: Dispatch
-}
+interface HomeProps extends NavigationScreenProps, MapStateProps, DispatchProp {}
 
 const Home = (props: HomeProps) => {
   const [name, setName] = useState('Trening');

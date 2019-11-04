@@ -8,7 +8,6 @@ import {
   initProductCreateReducer,
 } from './reducer';
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import { MacroElement } from '../../types';
 import { InputRow } from '../../components/InputRow';
 import { Options } from '../../components/Options';
 import { NavigationScreenProps } from 'react-navigation';
@@ -19,6 +18,7 @@ import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
 import { ProductCreateParams } from './params';
 import { useNavigationParams } from '../../hooks/useNavigationParams';
+import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
 
 interface ProductCreateProps extends
   NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
@@ -127,7 +127,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
           />
         </OptionsContainer>
         <InputRow
-          title={portionTitle[state.portionOption]}
+          title={PORTION_TITLE[state.portionOption]}
           value={state.portion}
           onChangeText={portion => handleUpdate({ portion: parseNumber(portion, 10000, 6) })}
           onSubmitEditing={refsList.carbs.current?.focus}
@@ -135,7 +135,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
           accessibilityLabel="Ilość produktu"
           styles={InputCss}
         />
-        {nutritionInputs.map(data => (
+        {NUTRITION_INPUTS.map(data => (
           <InputRow
             key={data.title}
             title={data.title}
@@ -188,39 +188,6 @@ const OptionsContainer = styled.View`
 const InputCss = css`
   margin-bottom: 10px;
 `
-
-const portionTitle = {
-  '100g': 'Opakowanie zawiera',
-  'portion': 'Porcja zawiera',
-  'package': 'Opakowanie zawiera'
-}
-
-const nutritionInputs: {
-  title: string
-  property: MacroElement
-  nextRef: MacroElement | 'barcode'
-}[] = [
-  {
-    title: 'Węglowodany',
-    property: 'carbs',
-    nextRef: 'prots'
-  },
-  {
-    title: 'Białka',
-    property: 'prots',
-    nextRef: 'fats'
-  },
-  {
-    title: 'Tłuszcze',
-    property: 'fats',
-    nextRef: 'kcal'
-  },
-  {
-    title: 'Kalorie',
-    property: 'kcal',
-    nextRef: 'barcode'
-  }
-]
 
 const navigationOptions: ProductCreateProps['navigationOptions'] = ({ navigation }) => ({
   headerTitle: 'Stwórz produkt',
