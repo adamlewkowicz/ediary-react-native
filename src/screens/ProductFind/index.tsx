@@ -4,7 +4,7 @@ import { sortByMostAccurateName, debounce } from '../../common/utils';
 import { Product } from '../../database/entities';
 import { ProductListItem, Separator } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
-import { NavigationScreenProps, SectionList } from 'react-navigation';
+import { SectionList } from 'react-navigation';
 import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { BarcodeId } from '../../types';
@@ -22,7 +22,7 @@ const SECTION_TITLE = {
   recentProducts: 'Ostatnie produkty:',
 }
 
-interface ProductFindProps extends NavigationScreenProps<ProductFindParams> {}
+interface ProductFindProps {}
 
 export const ProductFind = (props: ProductFindProps) => {
   const params = useNavigationParams<ProductFindParams>(['onItemPress']);
@@ -127,6 +127,7 @@ export const ProductFind = (props: ProductFindProps) => {
         <InputSearcher
           value={name}
           placeholder="Nazwa produktu"
+          accessibilityLabel="Nazwa szukanego produktu"
           onChangeText={handleProductSearch}
           isLoading={isLoading}
         />
