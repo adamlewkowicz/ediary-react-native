@@ -33,7 +33,7 @@ describe('<Home />', () => {
     expect(await Meal.findOneOrFail({ name: mealName })).toBeInstanceOf(Meal);
   });
 
-  describe('when user adds new product to meal 🥗', () => {
+  describe('when adds new product to meal 🥗', () => {
 
     it('should navigate to product find screen 🧭', async () => {
       const ctx = renderSetup(<Home />);
@@ -72,7 +72,7 @@ describe('<Home />', () => {
     
   });
 
-  describe('when user changes product\'s quantity', () => {
+  describe('when changes product\'s quantity', () => {
 
     const arrange = async () => {
       const quantityMock = 180;
@@ -156,7 +156,7 @@ describe('<Home />', () => {
     await wait(() => expect(ctx.queryByText(productMock.name)).toBeNull());
   });
 
-  describe('when date is being changed 📅', () => {
+  describe('when changes date 📅', () => {
 
     it('should display accurate meals', async () => {
       const { mealMock } = await mockMealWithProduct();
