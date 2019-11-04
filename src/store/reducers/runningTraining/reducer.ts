@@ -18,13 +18,19 @@ const calcDistance = (prevLatLng: Coordinate, nextLatLng: Coordinate): number =>
   return haversine(prevLatLng, nextLatLng) || 0;
 }
 
+const calcVelocity = (durationInSeconds: number, distanceInKm: number): number => {
+  if (durationInSeconds === 0 || distanceInKm === 0) return 0;
+  const durationInHours = durationInSeconds / 60 / 60;
+  const velocity = distanceInKm / durationInHours;
+  return velocity;
+}
+
 const initialState: RunningTrainingState = {
   duration: 0,
   distance: 0,
   velocity: 0,
   routeCoordinates: [],
   prevLatLng: { latitude: 0, longitude: 0 },
-  startCoordinate: { latitude: 0, longitude: 0 },
   error: null,
   isActive: false,
   isPaused: false,
@@ -35,20 +41,18 @@ export function runningTrainingReducer(
   action: _RunningTrainingAction
 ): RunningTrainingState {
   switch(action.type) {
-    case RUNNING_TRAINING_STARTED: {
-      const { latitude, longitude } = action.payload.coords;
-      const startCoordinate: Coordinate = { latitude, longitude };
-      return {
-        ...initialState,
-        isActive: true,
-        prevLatLng: startCoordinate,
-        routeCoordinates: [startCoordinate],
-        startCoordinate
-      }
+    case RUNNING_TRAINING_STARTED: return {
+      ...initialState,
+      isActive: true,
     }
-    case RUNNING_TRAINING_TICK: return {
-      ...state,
-      duration: state.duration + 1
+    case RUNNING_TRAINING_TICK: {
+      const duration = state.duration + 1;
+
+      if (duration % 5 === 0) {
+        const velocity = calcVelocity(duration, state.distance);
+        return { ...state, duration, velocity };
+      }
+      return { ...state, duration };
     }
     case RUNNING_TRAINING_PAUSED: return {
       ...state,
@@ -66,14 +70,17 @@ export function runningTrainingReducer(
     case RUNNING_TRAINING_POSITION_UPDATED:
       const { longitude, latitude } = action.payload.coords;
       const nextCoordinate: Coordinate = { longitude, latitude };
-
-      const distance = calcDistance(state.prevLatLng, nextCoordinate);
+      const prevCoordinate = state.routeCoordinates[state.routeCoordinates.length - 1];
+      
+      const nextDistance = prevCoordinate ? calcDistance(prevCoordinate, nextCoordinate) : 0;
+      const distance = state.distance + nextDistance;
 
       return {
         ...state,
-        distance: state.distance + distance,
+        distance,
         routeCoordinates: [...state.routeCoordinates, nextCoordinate],
         prevLatLng: nextCoordinate,
+        velocity: calcVelocity(state.duration, distance),
       }
     case RUNNING_TRAINING_POSITION_FAILED: return {
       ...state,

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import MapView, { AnimatedRegion, Region, Polyline, Marker } from 'react-native-maps';
 import { Platform, PermissionsAndroid } from 'react-native';
-import haversine from 'haversine';
 import styled from 'styled-components/native';
 import { Coordinate } from '../../types';
 import { connect } from 'react-redux';
@@ -39,11 +38,6 @@ class RunningScreen extends React.Component<RunningScreenProps, RunningScreenSta
     latitudeDelta: 0,
     longitudeDelta: 0,
   });
-
-  calcDistance(newLatLng: Coordinate): number {
-    const { prevLatLng } = this.state;
-    return haversine(prevLatLng, newLatLng) || 0;
-  }
 
   handleCoordinateAnimation(
     newCoordinate: Coordinate,
@@ -103,27 +97,6 @@ class RunningScreen extends React.Component<RunningScreenProps, RunningScreenSta
     this.props.dispatch(
       Actions.runningTrainingStart()
     );
-
-    this.watchID = Geolocation.watchPosition(
-      position => {
-        const { coordinate, routeCoordinates, distanceTravelled } = this.state;
-        const { latitude, longitude } = position.coords;
-        const newCoordinate = { latitude, longitude };
-
-        this.props.dispatch(Actions.runningTrainingPositionUpdated(position));
-        this.handleCoordinateAnimation(newCoordinate, coordinate);
-
-        this.setState({
-          latitude,
-          longitude,
-          routeCoordinates: [...routeCoordinates, newCoordinate],
-          distanceTravelled: distanceTravelled + this.calcDistance(newCoordinate),
-          prevLatLng: newCoordinate
-        });
-      },
-      error => console.log(error),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
   }
 
   componentWillUnmount() {
@@ -138,15 +111,19 @@ class RunningScreen extends React.Component<RunningScreenProps, RunningScreenSta
       <Container>
         <DataContainer>
           <LabeledValue
-            value={this.props.runningTraining.distance.toString()}
+            value={this.props.runningTraining.distance.toFixed(1)}
             label="km"
           />
-          <Block marginVertical={10}>
+          <Block marginVertical={10} space="space-between">
             <LabeledValue
               value={formatDuration(this.props.runningTraining.duration)}
               label="Czas"
             />
           </Block>
+          <LabeledValue
+            value={this.props.runningTraining.velocity.toFixed(2)}
+            label="km/h"
+          />
           <HoldableButton
             onHoldEnd={() => {}}
           />
@@ -158,7 +135,7 @@ class RunningScreen extends React.Component<RunningScreenProps, RunningScreenSta
           region={this.getMapRegion()}
         >
           <Polyline
-            coordinates={this.state.routeCoordinates}
+            coordinates={this.props.runningTraining.routeCoordinates}
             strokeWidth={5}
           />
         </StyledMapView>

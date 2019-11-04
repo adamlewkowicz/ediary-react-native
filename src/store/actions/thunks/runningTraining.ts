@@ -9,7 +9,6 @@ import {
   runningTrainingPaused,
   runningTrainingUnpaused,
 } from '../creators';
-import { getCurrentPosition } from '../../../common/utils';
 
 let interval: NodeJS.Timeout;
 let navigatorId: number;
@@ -32,8 +31,7 @@ const runningTrainingEffectsStart: Thunk = () => async (dispatch) => {
 }
 
 export const runningTrainingStart: Thunk = () => async (dispatch) => {
-  const currentPosition = await getCurrentPosition();
-  dispatch(runningTrainingStarted(currentPosition));
+  dispatch(runningTrainingStarted());
   dispatch(runningTrainingEffectsStart());
 }
 
