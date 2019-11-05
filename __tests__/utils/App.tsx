@@ -20,6 +20,7 @@ const createNavigationCtxMock = <P extends object>(params?: P) => ({
   getParam: jest.fn(),
   navigate: jest.fn(),
   addListener: jest.fn(),
+  setParams: jest.fn(),
   state: { params }
 });
 

@@ -19,6 +19,7 @@ import { Actions } from '../../store';
 import { ProductCreateParams } from './params';
 import { useNavigationParams } from '../../hooks/useNavigationParams';
 import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
+import { useNavigation } from 'react-navigation-hooks';
 
 interface ProductCreateProps extends
   NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
@@ -45,6 +46,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
     kcal: createRef<TextInput>(),
     barcode: createRef<TextInput>(),
   });
+  const navigation = useNavigation();
 
   function handleUpdate(payload: Partial<ProductCreateState>) {
     dispatch({
@@ -91,7 +93,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
   }
   
   useEffect(() => {
-    props.navigation.setParams({ _handleProductCreate: handleProductCreate });
+    navigation.setParams({ _handleProductCreate: handleProductCreate });
   }, [state]);
 
   function handlePortionOptionChange(option: PortionOption) {

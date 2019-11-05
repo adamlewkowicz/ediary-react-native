@@ -1,53 +1,48 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { fireEvent, render } from '@testing-library/react-native';
 import { App } from '../../../__tests__/utils';
 import { Product } from '../../database/entities';
-import { USER_ID_UNSYNCED } from '../../common/consts';
 
-test('creates new product', async () => {
-  const productMock = {
-    name: 'Orange Juice',
-    producer: 'Gardens',
-    quantity: 140,
-    barcode: '391287145',
-    macro: {
-      carbs: 249,
-      prots: 25,
-      fats: 12,
-      kcal: 319,
-    },
-  }
-  const productSaveSpy = jest.spyOn(Product, 'save');
-  const {
-    getByLabelText
-  } = render(<App screen="ProductCreate" />);
+describe('<ProductCreate />', () => {
 
-  const nameInput = getByLabelText('Nazwa produktu');
-  const producerInput = getByLabelText('Producent');
-  const quantityInput = getByLabelText('Ilość produktu');
-  const carbsInput = getByLabelText('Węglowodany');
-  const protsInput = getByLabelText('Białka');
-  const fatsInput = getByLabelText('Tłuszcze');
-  const kcalInput = getByLabelText('Kalorie');
-  const barcodeInput = getByLabelText('Kod kreskowy');
-  const saveProductButton = getByLabelText('Zapisz produkt');
+  it('should create new product', async () => {
+    const productMock = {
+      name: 'Orange Juice',
+      producer: 'Gardens',
+      quantity: 140,
+      barcode: '391287145',
+      macro: {
+        carbs: 249,
+        prots: 25,
+        fats: 12,
+        kcal: 319,
+      },
+    }
+    const productSaveSpy = jest.spyOn(Product, 'save');
+    // need to render whole app with navigation top bar button
+    const ctx = render(<App screen="ProductCreate" />);
 
-  fireEvent.changeText(nameInput, productMock.name);
-  fireEvent.changeText(producerInput, productMock.producer);
-  fireEvent.changeText(quantityInput, productMock.quantity.toString());
-  fireEvent.changeText(carbsInput, productMock.macro.carbs.toString());
-  fireEvent.changeText(protsInput, productMock.macro.prots.toString());
-  fireEvent.changeText(fatsInput, productMock.macro.fats.toString());
-  fireEvent.changeText(kcalInput, productMock.macro.kcal.toString());
-  fireEvent.changeText(barcodeInput, productMock.barcode);
-  fireEvent.press(saveProductButton);
-
-  const { quantity, ...mockData } = productMock;
+    const nameInput = ctx.getByLabelText('Nazwa produktu');
+    const producerInput = ctx.getByLabelText('Producent');
+    const quantityInput = ctx.getByLabelText('Ilość produktu');
+    const carbsInput = ctx.getByLabelText('Węglowodany');
+    const protsInput = ctx.getByLabelText('Białka');
+    const fatsInput = ctx.getByLabelText('Tłuszcze');
+    const kcalInput = ctx.getByLabelText('Kalorie');
+    const barcodeInput = ctx.getByLabelText('Kod kreskowy');
+    const saveProductButton = ctx.getByLabelText('Zapisz produkt');
   
-  expect(productSaveSpy).toHaveBeenCalledTimes(1);
-  expect(productSaveSpy).toHaveBeenCalledWith({
-    ...mockData,
-    unit: 'g',
-    userId: USER_ID_UNSYNCED
+    fireEvent.changeText(nameInput, productMock.name);
+    fireEvent.changeText(producerInput, productMock.producer);
+    fireEvent.changeText(quantityInput, productMock.quantity.toString());
+    fireEvent.changeText(carbsInput, productMock.macro.carbs.toString());
+    fireEvent.changeText(protsInput, productMock.macro.prots.toString());
+    fireEvent.changeText(fatsInput, productMock.macro.fats.toString());
+    fireEvent.changeText(kcalInput, productMock.macro.kcal.toString());
+    fireEvent.changeText(barcodeInput, productMock.barcode);
+    fireEvent.press(saveProductButton);
+
+    expect(productSaveSpy).toHaveBeenCalledTimes(1);
   });
+
 });
