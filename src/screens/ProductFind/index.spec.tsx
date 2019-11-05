@@ -10,19 +10,14 @@ describe('<ProductFind />', () => {
 
   describe('when searches for product 🔎', () => {
 
-    const act = async () => {
+    it('should display found products', async () => {
       const productMock = await Product.save({ name: 'tomatoe' });
       const ctx = renderSetup(<ProductFind />);
   
       const productFindInput = ctx.getByLabelText('Nazwa szukanego produktu');
       fireEvent.changeText(productFindInput, productMock.name);
 
-      return { ...ctx, productFindInput, productMock };
-    }
-
-    it('should display found products', async () => {
-      const ctx = await act();
-      await ctx.findByText(ctx.productMock.name);
+      await ctx.findByText(productMock.name);
     });
 
     describe('when presses on found product', () => {
