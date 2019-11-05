@@ -19,8 +19,9 @@ let isInitialized = false;
 export const createNavigationCtxMock = <P extends object>(params?: P) => ({
   getParam: jest.fn(),
   navigate: jest.fn(),
-  addListener: jest.fn(),
+  addListener: jest.fn(() => ({ remove: jest.fn() })),
   setParams: jest.fn(),
+  isFocused: jest.fn(),
   state: { params }
 });
 
