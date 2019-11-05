@@ -76,8 +76,8 @@ export class BarcodeScan extends React.Component<BarcodeScanProps> {
           type="back"
           flashMode="auto"
           androidCameraPermissionOptions={this.androidCameraPermissions}
-          onBarCodeRead={this.onBarcodeDetected && this.handleBarcodeDetection}
-          onGoogleVisionBarcodesDetected={this.onBarcodeDetected && this.handleGoogleBarcodeDetection}
+          onBarCodeRead={this.handleBarcodeDetection}
+          onGoogleVisionBarcodesDetected={this.handleGoogleBarcodeDetection}
           onTextRecognized={null as any}
           onFacesDetected={null as any}
           captureAudio={false}

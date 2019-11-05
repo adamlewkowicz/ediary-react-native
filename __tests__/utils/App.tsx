@@ -16,7 +16,7 @@ import { render } from '@testing-library/react-native';
 let user: User;
 let isInitialized = false;
 
-const createNavigationCtxMock = <P extends object>(params?: P) => ({
+export const createNavigationCtxMock = <P extends object>(params?: P) => ({
   getParam: jest.fn(),
   navigate: jest.fn(),
   addListener: jest.fn(),
