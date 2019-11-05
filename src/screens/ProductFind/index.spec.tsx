@@ -4,6 +4,7 @@ import { renderSetup } from '../../../__tests__/utils';
 import { Product } from '../../database/entities';
 import { configureStore } from '../../store';
 import { ProductFind } from '.';
+import { ProductFindParams } from './params';
 
 describe('<ProductFind />', () => {
 
@@ -26,10 +27,12 @@ describe('<ProductFind />', () => {
 
     describe('when presses on found product', () => {
 
-      it('should navigate to home screen', async () => {
-        const onItemPress = jest.fn();
+      it('should return choosen product', async () => {
+        const params: ProductFindParams = {
+          onItemPress: jest.fn()
+        }
         const productMock = await Product.save({ name: 'tomatoe' });
-        const ctx = renderSetup(<ProductFind />, { params: { onItemPress }});
+        const ctx = renderSetup(<ProductFind />, { params });
     
         const productFindInput = ctx.getByLabelText('Nazwa szukanego produktu');
         fireEvent.changeText(productFindInput, productMock.name);
@@ -37,8 +40,8 @@ describe('<ProductFind />', () => {
         const addProductToMealButton = await ctx.findByLabelText('Dodaj produkt do posiłku');
         fireEvent.press(addProductToMealButton);
   
-        expect(ctx.mocks.params.onItemPress).toHaveBeenCalledTimes(1);
-        expect(ctx.mocks.params.onItemPress).toHaveBeenCalledWith({ ...productMock, portions: [] });
+        expect(params.onItemPress).toHaveBeenCalledTimes(1);
+        expect(params.onItemPress).toHaveBeenCalledWith({ ...productMock, portions: [] });
       });
 
     });
