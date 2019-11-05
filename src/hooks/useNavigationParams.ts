@@ -9,6 +9,7 @@ export const useNavigationParams = <
 ): T => {
   const navigation = useNavigation();
 
+  // TODO
   const getParamsObject = (): T => {
     return paramNames.reduce<T>(
       (normalized, paramName) => ({
@@ -19,7 +20,7 @@ export const useNavigationParams = <
     );
   }
 
-  const [params] = useState<T>(getParamsObject);
+  const [params] = useState<T>({ ...navigation.state.params } as T);
 
   return params;
 }

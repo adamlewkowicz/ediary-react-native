@@ -107,6 +107,7 @@ export const ProductFind = (props: ProductFindProps) => {
         <Button
           style={{ marginTop: 15 }}
           onPress={handleProductCreateNavigation}
+          accessibilityLabel="Dodaj własny produkt"
         >
           Dodaj własny
         </Button>
@@ -132,6 +133,7 @@ export const ProductFind = (props: ProductFindProps) => {
           isLoading={isLoading}
         />
         <BarcodeButton
+          accessibilityLabel="Zeskanuj kod kreskowy"
           onPress={handleBarcodeScanNavigation}
         />
       </Block>
