@@ -4,7 +4,7 @@ import { DiarySummary } from '.';
 
 describe('<DiarySummary />', () => {
 
-  it('should render without crashing', () => {
+  it('should render without crashing 💥', () => {
     renderSetup(<DiarySummary />);
   });
 
