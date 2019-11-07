@@ -82,9 +82,9 @@ export function App({
   );
 }
 
-export function renderSetup<P extends object>(
+export function renderSetup<Params extends object>(
   ui: React.ReactElement,
-  options?: RenderSetupOptions<P>
+  options?: RenderSetupOptions<Params>
 ) {
   const navigationCtxMock = createNavigationCtxMock(options?.params);
   const mergedOptions = {
@@ -102,7 +102,7 @@ export function renderSetup<P extends object>(
     ),
     mocks: {
       navigationContext: navigationCtxMock,
-      params: options?.params || {} as P
+      params: options?.params || {} as Params,
     },
   }
 }
