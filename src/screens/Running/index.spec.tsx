@@ -6,14 +6,18 @@ import { renderSetup } from '../../../__tests__/utils';
 
 describe('<RunningScreen />', () => {
 
-  it('should increment training duration', () => {
-    jest.useFakeTimers();
-    const ctx = renderSetup(<RunningScreen />);
+  describe.only('when training is active 🏃', () => {
 
-    const trainingDurationText = ctx.getByLabelText('Czas trwania treningu');
-    jest.advanceTimersByTime(1000);
+    it('should increment training duration ⌚', async () => {
+      jest.useFakeTimers();
+      const ctx = renderSetup(<RunningScreen />);
 
-    expect(trainingDurationText).toEqual('00:00:01');
+      jest.advanceTimersByTime(1000);
+      const trainingDurationText = ctx.getByLabelText('Czas trwania treningu');
+
+      expect(trainingDurationText).toHaveTextContent('00:00:01');
+    });
+
   });
 
   it('should pause training when clicked on a pause button', () => {

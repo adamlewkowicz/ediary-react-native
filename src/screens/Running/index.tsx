@@ -57,8 +57,8 @@ class RunningScreen extends React.Component<RunningScreenProps, RunningScreenSta
     const permissionStatus = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, 
       {
-        title: 'Zatwierdź uprawnienia',
-        message: 'Funkcja bieganie wymaga uprawnień lokalizacji.',
+        title: 'Uprawnienia lokalizacji',
+        message: 'Potrzebuję uprawnień lokalizacji aby mierzyć dystans.',
         buttonPositive: 'OK',
         buttonNegative: 'Anuluj',
       }
@@ -116,6 +116,7 @@ class RunningScreen extends React.Component<RunningScreenProps, RunningScreenSta
           />
           <Block marginVertical={10} space="space-between">
             <LabeledValue
+              accessibilityLabel="Czas trwania treningu"
               value={formatDuration(this.props.runningTraining.duration)}
               label="Czas"
             />

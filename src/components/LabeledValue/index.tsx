@@ -1,18 +1,26 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { Title, Text } from '../Elements';
+import { ViewProps } from 'react-native';
 
-interface LabeledValueProps {
+interface LabeledValueProps extends ViewProps {
   value: string
   label: string
   size?: 'medium' | 'large'
 }
 
-export const LabeledValue: React.FC<LabeledValueProps> = (props) => {
+export const LabeledValue: React.FC<LabeledValueProps> = ({
+  value,
+  label,
+  accessibilityLabel,
+  ...props
+}) => {
   return (
-    <Container>
-      <Value>{props.value}</Value>
-      <Title>{props.label}</Title>
+    <Container {...props}>
+      <Value accessibilityLabel={accessibilityLabel}>
+        {value}
+      </Value>
+      <Title>{label}</Title>
     </Container>
   );
 }
