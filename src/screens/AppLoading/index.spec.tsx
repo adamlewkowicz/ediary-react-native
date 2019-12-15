@@ -24,7 +24,7 @@ describe('<AppLoading />', () => {
 
   });
 
-  describe('when user has profile', () => {
+  describe('when has profile created', () => {
 
     it.todo('should navigate to main screen 🧭');
 
