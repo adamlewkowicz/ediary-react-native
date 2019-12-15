@@ -14,6 +14,7 @@ import {
   ProfileCreate,
   BarcodeScan,
   DiarySummary,
+  TrainingScreen,
 } from '../screens';
 import { theme } from '../common/theme';
 import { Screen } from '../types';
@@ -42,7 +43,7 @@ export function createHomeStack(
 
 export function createMainStack(
   initialScreen: Screen = 'Home',
-  initialStack: MainStackScreen = 'Home',
+  initialStack: MainStackScreen = 'Training',
 ): NavigationContainer {
   const HomeStack = createHomeStack(initialScreen); 
 
@@ -65,6 +66,19 @@ export function createMainStack(
       screen: DiarySummary,
       navigationOptions: {
         tabBarLabel: 'Podsumowanie',
+        tabBarIcon: ({ tintColor }: any) => (
+          <ReportIcon
+            width={BAR_ICON_SIZE}
+            height={BAR_ICON_SIZE}
+            fill={tintColor}
+          />
+        ),
+      }
+    },
+    Training: {
+      screen: TrainingScreen,
+      navigationOptions: {
+        tabBarLabel: 'Trening',
         tabBarIcon: ({ tintColor }: any) => (
           <ReportIcon
             width={BAR_ICON_SIZE}
@@ -97,4 +111,4 @@ const RootNavigator = createSwitchNavigator({
 
 export const AppContainer = createAppContainer(RootNavigator);
 
-export type MainStackScreen = 'Home' | 'DiarySummary';
+export type MainStackScreen = 'Home' | 'DiarySummary' | 'Training';
