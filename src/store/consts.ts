@@ -20,3 +20,6 @@ export const USER_PROFILE_CREATED = 'USER_PROFILE_CREATED' as const;
 
 // Product history
 export const PRODUCT_HISTORY_RECENT_ADDED = 'PRODUCT_HISTORY_RECENT_ADDED' as const;
+
+// Gym training
+export const GYM_DURATION_TICK = 'GYM_DURATION_TICK';

@@ -28,3 +28,5 @@ export type MealId = MealIdBrand & number;
 
 enum UserIdBrand {};
 export type UserId = UserIdBrand & number;
+
+export interface 
