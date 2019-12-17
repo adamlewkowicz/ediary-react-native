@@ -33,7 +33,7 @@ export class Exercise extends GenericEntity {
   @OneToMany(
     type => ExerciseSet,
     exerciseSet => exerciseSet.exercise,
-    { onDelete: 'CASCADE' }
+    { onDelete: 'CASCADE', cascade: ['insert'] }
   )
   sets?: ExerciseSet[];
 

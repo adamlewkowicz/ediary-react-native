@@ -1,7 +1,7 @@
 import { Training, ExerciseSet, Exercise } from '../database/entities';
 import { ExerciseSetState, ExerciseState, TrainingState } from './GymTrainingStore';
 
-const normalizeExerciseSet = (exerciseSet: ExerciseSet): ExerciseSetState => ({
+export const normalizeExerciseSet = (exerciseSet: ExerciseSet): ExerciseSetState => ({
   ...exerciseSet,
   duration: 0,
   isRest: false,

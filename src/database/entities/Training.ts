@@ -23,7 +23,7 @@ export class Training extends GenericEntity {
   duration!: number;
 
   @Column()
-  userId!: UserId;
+  userId!: number;
 
   @OneToMany(
     type => User,
@@ -35,7 +35,8 @@ export class Training extends GenericEntity {
 
   @OneToMany(
     type => Exercise,
-    exercise => exercise.training
+    exercise => exercise.training,
+    { onDelete: 'CASCADE', cascade: ['insert'] }
   )
   exercises?: Exercise[];
 

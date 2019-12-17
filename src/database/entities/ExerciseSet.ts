@@ -5,6 +5,7 @@ import {
   Entity,
   OneToMany,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Exercise } from './Exercise';
 import { ExerciseId, ExerciseSetId } from '../../types';
@@ -25,11 +26,12 @@ export class ExerciseSet extends GenericEntity {
   breakTime!: number;
 
   @Column()
-  exerciseId!: ExerciseId;
+  exerciseId!: number;
 
-  @OneToMany(
+  @ManyToOne(
     type => Exercise,
     exercise => exercise.sets,
+    { onDelete: 'CASCADE' }
   )
   @JoinColumn({ name: 'exerciseId' })
   exercise?: Exercise;

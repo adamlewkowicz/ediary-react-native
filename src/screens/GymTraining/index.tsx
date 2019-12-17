@@ -4,9 +4,9 @@ import { Text, Button, View } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import { useUserId, useMobxStore } from '../../hooks';
 
-interface TrainingScreenProps {}
+interface GymTrainingScreenProps {}
 
-export const TrainingScreen = observer((props: TrainingScreenProps) => {
+export const GymTrainingScreen = observer((props: GymTrainingScreenProps) => {
   const rootStore = useMobxStore();
   const trainingStore = rootStore.gymTraining;
   const userId = useUserId();
@@ -15,15 +15,20 @@ export const TrainingScreen = observer((props: TrainingScreenProps) => {
     trainingStore.loadTrainings();
   }, []);
 
+  const createTraining = () => {
+    trainingStore.trainingCreate('Plecy', userId);
+  }
+
   return (
     <Container>
+      <Button onPress={createTraining} title="Utwórz trening" />
       <Text>Twoje treningi</Text>
       <Text>
-        Aktywny trening:
+        Aktywny trening: {' '}
         {trainingStore.activeTraining ? trainingStore.activeTraining.name : 'Brak'}
       </Text>
       {trainingStore.mergedTrainings.map(training => (
-        <View key={training.id as any}>
+        <View key={training.id as number}>
           <TrainingItem
             onPress={() => trainingStore.trainingStart(training.id)}
             isActive={training.isActive}
@@ -35,14 +40,14 @@ export const TrainingScreen = observer((props: TrainingScreenProps) => {
             </Text>
           </TrainingItem>
           {training.isActive && training.exercises.map(exercise => (
-            <Exercise key={exercise.id as any}>
+            <Exercise key={exercise.id as number}>
               <Text>Ćwiczenie: {exercise.id}</Text>
               {exercise.sets.map(exerciseSet => (
                 <ExerciseSetButton
-                  key={exerciseSet.id as any}
+                  key={exerciseSet.id as number}
                   isActive={exerciseSet.state === 'active'}
                   isRest={exerciseSet.isRest}
-                  onPress={() => trainingStore.exerciseSetToggle(exerciseSet.id)}
+                  onPress={() => trainingStore.exerciseSetNextActivate(exerciseSet.id)}
                 >
                   <>
                     <Text>
@@ -50,15 +55,12 @@ export const TrainingScreen = observer((props: TrainingScreenProps) => {
                       Czas: {exerciseSet.duration}{'\n'}
                       Czas przerwy: {exerciseSet.restTime}{'\n'}
                       Przerwa: {exerciseSet.restDuration}{'\n'}
-                      Obciążenie {exerciseSet.loadWeight}{'\n'}
+                      Obciążenie: {exerciseSet.loadWeight}{'\n'}
+                      Status: {exerciseSet.state}{'\n'}
                     </Text>
                     <Button
-                      title="Usuń"
-                      onPress={() => trainingStore.entity!.removeExercise(exercise.id)}
-                    />
-                    <Button
-                      title="Dodaj serię"
-                      onPress={() => exercise.entity._addExerciseSet({ loadWeight: 40, repeats: 12 })}
+                      title="Usuń serię"
+                      onPress={() => trainingStore.exerciseSetDelete(exercise.id, exerciseSet.id)}
                     />
                     <Button
                       title="Aktywuj przerwę"
@@ -79,11 +81,15 @@ export const TrainingScreen = observer((props: TrainingScreenProps) => {
                   </>
                 </ExerciseSetButton>
               ))}
+              <Button
+                title="Dodaj serię"
+                onPress={() => trainingStore.exerciseSetCreate(exercise.id)}
+              />
             </Exercise>
           ))}
         </View>
       ))}
-      <Button onPress={() => trainingStore.entity!.duration++} title="Increment duration" />
+      <Button onPress={() => {}} title="Increment duration" />
       <Button
         onPress={() => trainingStore.exerciseSetUpdate(4, { loadWeight: Math.random() })}
         title="Increment duration"

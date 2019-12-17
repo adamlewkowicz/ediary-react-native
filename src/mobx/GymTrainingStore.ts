@@ -6,10 +6,10 @@ import {
   action,
   IReactionDisposer,
 } from 'mobx';
-import { Training, ExerciseSet } from '../database/entities';
-import { ExerciseId, TrainingId, ExerciseSetId } from '../types';
-import { findById } from '../common/utils';
-import { normalizeTrainings } from './utils';
+import { Training, ExerciseSet, Exercise } from '../database/entities';
+import { ExerciseId, TrainingId, ExerciseSetId, UserId } from '../types';
+import { findById, findByIdOrFail } from '../common/utils';
+import { normalizeTrainings, normalizeExerciseSet } from './utils';
 
 export class GymTrainingStore {
   @observable trainings: TrainingState[] = [];
@@ -28,13 +28,13 @@ export class GymTrainingStore {
           if (this.activeTraining.isPaused) {
             clearInterval(this.durationInterval);
           } else {
-            this.durationInterval = setInterval(this.trainingDurationTickHandle, 10000);
+            this.durationInterval = setInterval(this.trainingDurationTickHandle, 1000);
           }
         }
       }
     );
     if (module.hot) {
-      this.dispose();
+      // this.dispose();
       clearInterval(this.durationInterval);
     }
   }
@@ -44,7 +44,8 @@ export class GymTrainingStore {
 
     const foundTrainings: Training[] = yield Training.find({
       relations: ['exercises', 'exercises.sets']
-    });
+    }) as any;
+    console.log({ foundTrainings })
     
     const { trainings, exercises, exerciseSets } = normalizeTrainings(foundTrainings);
 
@@ -52,6 +53,34 @@ export class GymTrainingStore {
     this.exercises = exercises;
     this.exerciseSets = exerciseSets;
     this.isLoading = false;
+  });
+
+  trainingCreate = flow(function*(this: GymTrainingStore,
+    name: string,
+    userId: UserId
+  ) {
+    const training: Training = yield Training.save({
+      name,
+      userId,
+      exercises: [
+        {
+          name: 'Martwy ciąg',
+          sets: [
+            {
+              loadWeight: 10,
+              breakTime: 10,
+              repeats: 20,
+            }
+          ]
+        }
+      ]
+    });
+
+    const { trainings, exercises, exerciseSets } = normalizeTrainings([training]);
+
+    this.trainings = trainings;
+    this.exercises = exercises;
+    this.exerciseSets = exerciseSets;
   });
 
   exerciseSetUpdate = flow(function*(this: GymTrainingStore,
@@ -67,7 +96,8 @@ export class GymTrainingStore {
 
   @action trainingStart(trainingId: TrainingId) {
     if (this.activeTraining !== null) {
-      return this.activeTraining.isPaused = true;
+      this.activeTraining.isPaused = true;
+      return;
     }
     const training = findById(this.trainings, trainingId);
 
@@ -77,12 +107,15 @@ export class GymTrainingStore {
     }
   }
 
-  @action exerciseSetNextActivate() {
+  @action exerciseSetNextActivate(nextExerciseSetId?: ExerciseSetId) {
     if (this.activeExerciseSet) {
       this.activeExerciseSet.isRest = false;
       this.activeExerciseSet.state = 'finished';
     }
-    if (this.nextExerciseSet) {
+    if (nextExerciseSetId) {
+      const exerciseSet = findByIdOrFail(this.exerciseSets, nextExerciseSetId);
+      exerciseSet.state = 'active';
+    } else if (this.nextExerciseSet) {
       this.nextExerciseSet.state = 'active';
     }
   }
@@ -116,13 +149,50 @@ export class GymTrainingStore {
     }
   }
 
-  @action exerciseSetToggle(exerciseSetId: ExerciseSetId) {
-    this.exerciseSets.forEach(exerciseSet => {
-      if (exerciseSet.id === exerciseSetId) {
-        exerciseSet.state = 'active';
+  exerciseSetCreate = flow(function*(this: GymTrainingStore,
+    exerciseId: ExerciseId,
+    payload?: Partial<ExerciseSet>,
+  ) {
+    const loadWeight = this.activeExerciseSet?.loadWeight;
+    const repeats = this.activeExerciseSet?.repeats;
+    const breakTime = 10;
+
+    const foundExercise = findByIdOrFail(this.exercises, exerciseId);
+
+    if (!foundExercise) return;
+
+    const exerciseSet: ExerciseSet = yield ExerciseSet.save({
+      exerciseId,
+      loadWeight,
+      breakTime,
+      repeats,
+      ...payload,
+    } as any);
+
+    this.exerciseSets.push(normalizeExerciseSet(exerciseSet));
+    foundExercise.setIds.push(exerciseSet.id);
+  });
+
+  exerciseSetDelete = flow(function*(this: GymTrainingStore,
+    exerciseId: ExerciseId,
+    exerciseSetId: ExerciseSetId
+  ) {
+    this.exercises = this.exercises.map(exercise => {
+      if (exercise.id === exerciseId) {
+        return {
+          ...exercise,
+          setIds: exercise.setIds.filter(setId => setId === exerciseSetId)
+        }
       }
+      return exercise;
     });
-  }
+    
+    this.exerciseSets = this.exerciseSets.filter(
+      exerciseSet => exerciseSet.id === exerciseSetId
+    );
+
+    yield ExerciseSet.delete(exerciseSetId as number);
+  });
 
   @computed get mergedTrainings() {
     return this.trainings.map(training => ({

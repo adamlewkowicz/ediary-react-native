@@ -36,7 +36,7 @@ export class AppLoading extends React.Component<AppLoadingProps> {
     const hasMigrationsToRun = await defaultConnection.showMigrations();
 
     if (hasMigrationsToRun) {
-      await defaultConnection.runMigrations();
+      // await defaultConnection.runMigrations();
     }
 
     const user = await User.getOrCreate({

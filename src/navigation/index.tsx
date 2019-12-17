@@ -14,6 +14,7 @@ import {
   ProfileCreate,
   BarcodeScan,
   DiarySummary,
+  GymTrainingScreen,
 } from '../screens';
 import { theme } from '../common/theme';
 import { Screen } from '../types';
@@ -74,8 +75,21 @@ export function createMainStack(
         ),
       }
     },
+    GymTrainingScreen: {
+      screen: GymTrainingScreen,
+      navigationOptions: {
+        tabBarLabel: 'Siłownia',
+        tabBarIcon: ({ tintColor }: any) => (
+          <ReportIcon
+            width={BAR_ICON_SIZE}
+            height={BAR_ICON_SIZE}
+            fill={tintColor}
+          />
+        ),
+      }
+    },
   }, {
-    initialRouteName: initialStack,
+    initialRouteName: 'GymTrainingScreen',
     tabBarOptions: {
       showIcon: true,
       activeTintColor: theme.color.blue20,
