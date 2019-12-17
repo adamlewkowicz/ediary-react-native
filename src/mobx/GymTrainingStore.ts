@@ -8,15 +8,14 @@ import {
 } from 'mobx';
 import { Training, ExerciseSet } from '../database/entities';
 import { ExerciseId, TrainingId, ExerciseSetId } from '../types';
-// import { normalizeTrainings } from './utils';
 import { findById } from '../common/utils';
+import { normalizeTrainings } from './utils';
 
 export class GymTrainingStore {
   @observable trainings: TrainingState[] = [];
-  @observable exercises: ExerciseSetState[] = [];
+  @observable exercises: ExerciseState[] = [];
   @observable exerciseSets: ExerciseSetState[] = [];
   @observable isLoading = false;
-  @observable entity: Training | null = null;
 
   dispose: IReactionDisposer;  
   durationInterval!: NodeJS.Timeout;
@@ -40,19 +39,14 @@ export class GymTrainingStore {
     }
   }
 
-  @computed
-  get entityJSON() {
-    return { ...this.entity };
-  }
-
-  // @ts-ignore
   loadTrainings = flow(function*(this: GymTrainingStore) {
     this.isLoading = true;
+
     const foundTrainings: Training[] = yield Training.find({
       relations: ['exercises', 'exercises.sets']
-    }) as any;
+    });
+    
     const { trainings, exercises, exerciseSets } = normalizeTrainings(foundTrainings);
-    this.entity = foundTrainings[0];
 
     this.trainings = trainings;
     this.exercises = exercises;
@@ -167,7 +161,7 @@ export class GymTrainingStore {
     return null;
   }
   
-  @computed get activeExercise(): ExerciseStore | null {
+  @computed get activeExercise(): ExerciseState | null {
     if (this.activeExerciseSet !== null) {
       const exercise = this.exercises.find(exercise => 
         exercise.id === this.activeExerciseSet!.exerciseId
