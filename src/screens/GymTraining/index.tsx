@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components/native';
-import { Text, Button, View, Alert } from 'react-native';
+import { Text, Button, View, Alert, FlatList } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import { useUserId, useMobxStore } from '../../hooks';
 import { ExerciseSetState } from '../../mobx/GymTrainingStore';
@@ -99,47 +99,51 @@ export const GymTrainingScreen = observer((props: GymTrainingScreenProps) => {
           {training.isActive && training.exercises.map(exercise => (
             <Exercise key={exercise.id as number}>
               <Text>Ćwiczenie: {exercise.id}</Text>
-              {exercise.sets.map((exerciseSet, exerciseSetIndex) => (
-                <React.Fragment key={exerciseSetIndex}>
-                  <ExerciseSetButton
-                    key={exerciseSet.id as number}
-                    isActive={exerciseSet.state === 'active'}
-                    isRest={exerciseSet.isRest}
-                    onPress={() => handleExerciseSetActivation(exerciseSet, exerciseSetIndex)}
-                  >
-                    <ExerciseSet
-                      data={exerciseSet}
-                      index={exerciseSetIndex}
-                    />
-                  </ExerciseSetButton>
-                  {exerciseSet.state === 'active' && (
-                    <>
-                      {exerciseSet.isRest ? (
-                        <>
-                          <Text>
-                            Do końca przerwy:
-                            {exerciseSet.restTime - exerciseSet.restDuration}
-                          </Text>
-                          <Timer duration={exerciseSet.restTime - exerciseSet.restDuration} />
-                          <Button
-                            title="Przedłuż przerwę o 10"
-                            onPress={() => trainingStore.exerciseSetRestExpand()}
-                          />
-                        </>
-                      ) : (
-                        <Button
-                          title="Aktywuj przerwę"
-                          onPress={() => trainingStore.exerciseSetRestActivate()}
-                        />
-                      )}
-                      <Button
-                        title="Usuń serię"
-                        onPress={() => trainingStore.exerciseSetDelete(exercise.id, exerciseSet.id)}
+              <FlatList
+                data={exercise.sets}
+                keyExtractor={(exerciseSet: ExerciseSetState) => String(exerciseSet.id)}
+                renderItem={({ item: exerciseSet, index: exerciseSetIndex }) => (
+                  <>
+                    <ExerciseSetButton
+                      key={exerciseSet.id as number}
+                      isActive={exerciseSet.state === 'active'}
+                      isRest={exerciseSet.isRest}
+                      onPress={() => handleExerciseSetActivation(exerciseSet, exerciseSetIndex)}
+                    >
+                      <ExerciseSet
+                        data={exerciseSet}
+                        index={exerciseSetIndex}
                       />
-                    </>
-                  )}
-                </React.Fragment>
-              ))}
+                    </ExerciseSetButton>
+                    {exerciseSet.state === 'active' && (
+                      <>
+                        {exerciseSet.isRest ? (
+                          <>
+                            <Text>
+                              Do końca przerwy:
+                              {exerciseSet.restTime - exerciseSet.restDuration}
+                            </Text>
+                            <Timer duration={exerciseSet.restTime - exerciseSet.restDuration} />
+                            <Button
+                              title="Przedłuż przerwę o 10"
+                              onPress={() => trainingStore.exerciseSetRestExpand()}
+                            />
+                          </>
+                        ) : (
+                          <Button
+                            title="Aktywuj przerwę"
+                            onPress={() => trainingStore.exerciseSetRestActivate()}
+                          />
+                        )}
+                        <Button
+                          title="Usuń serię"
+                          onPress={() => trainingStore.exerciseSetDelete(exercise.id, exerciseSet.id)}
+                        />
+                      </>
+                    )}
+                  </>
+                )}
+              />
               <Button
                 title="Dodaj serię"
                 onPress={() => trainingStore.exerciseSetCreate(exercise.id)}
