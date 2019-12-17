@@ -4,6 +4,7 @@ import { Text, Button, View, Alert } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import { useUserId, useMobxStore } from '../../hooks';
 import { ExerciseSetState } from '../../mobx/GymTrainingStore';
+import { AsyncAlert } from '../../common/utils/async-alert';
 
 interface GymTrainingScreenProps {}
 
@@ -22,28 +23,30 @@ export const GymTrainingScreen = observer((props: GymTrainingScreenProps) => {
 
   const handleExerciseSetActivation = async (
     requestedExerciseSet: ExerciseSetState,
-    setIndex: number
+    exerciseSetIndex: number
   ): Promise<void> => {
+    // Queue alert actions to prevent race conditions between alerts
+    const queuedActions: Function[] = [];
     const activateNextSet = () => trainingStore.exerciseSetNextActivate(requestedExerciseSet.id);
     const activateRestOfActiveSet = trainingStore.exerciseSetRestActivate;
 
     if (trainingStore.activeExerciseSet?.isRest === false) {
-      return Alert.alert(
+      await AsyncAlert(
         'Przerwa',
-        `Nie zacząłeś jeszcze przerwy w obecnej serii, czy chcesz prześć już do następnej serii, ` +
+        `Nie zacząłeś jeszcze przerwy w obecnej serii. Chcesz przejść do następnej serii, ` +
         `czy wolisz rozpocząć przerwę?`,
         [
           {
             text: 'Anuluj',
-            style: 'cancel'
+            style: 'cancel',
           },
           {
             text: 'Przerwa',
-            onPress: activateRestOfActiveSet
+            onPress: () => queuedActions.push(activateRestOfActiveSet)
           },
           {
             text: 'Następna seria',
-            onPress: activateNextSet
+            onPress: () => queuedActions.push(activateNextSet)
           }
         ]
       );
@@ -52,7 +55,7 @@ export const GymTrainingScreen = observer((props: GymTrainingScreenProps) => {
     if (requestedExerciseSet.state === 'finished') {
       Alert.alert(
         'Kontynuacja serii',
-        `Seria ${setIndex + 1} została już zakończona, czy chcesz ją kontynuować?`,
+        `Seria ${exerciseSetIndex + 1} została już zakończona, czy chcesz ją kontynuować?`,
         [
           {
             text: 'Anuluj',
@@ -67,6 +70,8 @@ export const GymTrainingScreen = observer((props: GymTrainingScreenProps) => {
     } else {
       activateNextSet();
     }
+
+    queuedActions.forEach(action => action());
   }
 
   return (
