@@ -2,6 +2,13 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { ExerciseSetState } from '../../store/reducers/gymTraining/types';
 
+const getTime = (duration: number) => {
+  const date = new Date(null);
+  date.setSeconds(duration);
+  const timeString = date.toISOString().substr(14, 5);
+  return timeString;
+}
+
 interface ExerciseSetProps {
   data: ExerciseSetState
   index: number
@@ -9,19 +16,27 @@ interface ExerciseSetProps {
 
 export const ExerciseSet = (props: ExerciseSetProps) => {
   const isActive = props.data.state === 'active';
+  const isFinished = props.data.state === 'finished';
+  const duration = getTime(props.data.duration);
+
   return (
     <Container isActive={isActive}>
       {/* <SetIndex>{props.index + 1}</SetIndex> */}
       <StatusIndicator
-        isFinished={props.data.state === 'finished'}
+        isFinished={isFinished}
         isRest={props.data.isRest}
       />
-      <LoadWeight isActive={isActive}>
-        {props.data.loadWeight} kg
-      </LoadWeight>
-      <Repeats isActive={isActive}>
-        x {props.data.repeats}
-      </Repeats>
+      <InfoContainer>
+        <LoadWeight isActive={isActive}>
+          {props.data.loadWeight} kg
+        </LoadWeight>
+        <Repeats isActive={isActive}>
+          x {props.data.repeats}
+        </Repeats>
+      </InfoContainer>
+      <Duration isActive={isActive}>
+        {duration}
+      </Duration>
     </Container>
   );
 }
@@ -37,7 +52,7 @@ const Container = styled.View<{
   flex-direction: row;
   padding: 15px;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   background-color: ${props => props.isActive ? props.theme.color.focus : 'white'};
 `
 
@@ -52,7 +67,7 @@ const StatusIndicator = styled.View<{
   width: 12px;
   background-color: ${props => {
     if (props.isFinished) {
-      return props.theme.color.green10
+      return props.theme.color.green10;
     }
     if (props.isRest) {
       return props.theme.color.blue10;
@@ -61,13 +76,27 @@ const StatusIndicator = styled.View<{
   }};
 `
 
-const LoadWeight = styled.Text<{
+const InfoContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  min-width: 80px;
+`
+
+const BaseText = styled.Text<{
   isActive: boolean
 }>`
   font-family: ${props => props.theme.fontWeight.regular};
-  font-size: ${props => props.theme.fontSize.large};
   color: ${props => props.isActive ? 'white' : 'black'};
 `
 
-const Repeats = styled(LoadWeight)``
+const LoadWeight = styled(BaseText)`
+  font-size: ${props => props.theme.fontSize.large};
+`
 
+const Repeats = LoadWeight;
+
+const Duration = styled(BaseText)`
+  text-align: right;
+  min-width: 40px;
+  color: ${props => props.isActive ? 'white' : props.theme.color.gray20};
+`

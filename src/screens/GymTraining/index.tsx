@@ -114,10 +114,6 @@ export const GymTrainingScreen = observer((props: GymTrainingScreenProps) => {
                   </ExerciseSetButton>
                   {exerciseSet.state === 'active' && (
                     <>
-                      <Button
-                        title="Usuń serię"
-                        onPress={() => trainingStore.exerciseSetDelete(exercise.id, exerciseSet.id)}
-                      />
                       {exerciseSet.isRest ? (
                         <>
                           <Text>
@@ -136,6 +132,10 @@ export const GymTrainingScreen = observer((props: GymTrainingScreenProps) => {
                           onPress={() => trainingStore.exerciseSetRestActivate()}
                         />
                       )}
+                      <Button
+                        title="Usuń serię"
+                        onPress={() => trainingStore.exerciseSetDelete(exercise.id, exerciseSet.id)}
+                      />
                     </>
                   )}
                 </React.Fragment>
