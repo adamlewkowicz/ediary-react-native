@@ -120,8 +120,11 @@ export class GymTrainingStore {
     }
   }
 
-  @action exerciseSetRestActivate() {
+  @action.bound exerciseSetRestActivate() {
+    console.log(this);
+    console.log(this.activeExerciseSet)
     if (this.activeExerciseSet) {
+      console.log('Rest');
       this.activeExerciseSet.isRest = true;
     }
   }
@@ -181,14 +184,14 @@ export class GymTrainingStore {
       if (exercise.id === exerciseId) {
         return {
           ...exercise,
-          setIds: exercise.setIds.filter(setId => setId === exerciseSetId)
+          setIds: exercise.setIds.filter(setId => setId !== exerciseSetId)
         }
       }
       return exercise;
     });
     
     this.exerciseSets = this.exerciseSets.filter(
-      exerciseSet => exerciseSet.id === exerciseSetId
+      exerciseSet => exerciseSet.id !== exerciseSetId
     );
 
     yield ExerciseSet.delete(exerciseSetId as number);

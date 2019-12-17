@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components/native';
-import { Text, Button, View } from 'react-native';
+import { Text, Button, View, Alert } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import { useUserId, useMobxStore } from '../../hooks';
+import { ExerciseSetState } from '../../mobx/GymTrainingStore';
 
 interface GymTrainingScreenProps {}
 
@@ -15,13 +16,62 @@ export const GymTrainingScreen = observer((props: GymTrainingScreenProps) => {
     trainingStore.loadTrainings();
   }, []);
 
-  const createTraining = () => {
+  const handleTrainingCreate = () => {
     trainingStore.trainingCreate('Plecy', userId);
+  }
+
+  const handleExerciseSetActivation = async (
+    requestedExerciseSet: ExerciseSetState,
+    setIndex: number
+  ): Promise<void> => {
+    const activateNextSet = () => trainingStore.exerciseSetNextActivate(requestedExerciseSet.id);
+    const activateRestOfActiveSet = trainingStore.exerciseSetRestActivate;
+
+    if (trainingStore.activeExerciseSet?.isRest === false) {
+      return Alert.alert(
+        'Przerwa',
+        `Nie zacząłeś jeszcze przerwy w obecnej serii, czy chcesz prześć już do następnej serii, ` +
+        `czy wolisz rozpocząć przerwę?`,
+        [
+          {
+            text: 'Anuluj',
+            style: 'cancel'
+          },
+          {
+            text: 'Przerwa',
+            onPress: activateRestOfActiveSet
+          },
+          {
+            text: 'Następna seria',
+            onPress: activateNextSet
+          }
+        ]
+      );
+    }
+    
+    if (requestedExerciseSet.state === 'finished') {
+      Alert.alert(
+        'Kontynuacja serii',
+        `Seria ${setIndex + 1} została już zakończona, czy chcesz ją kontynuować?`,
+        [
+          {
+            text: 'Anuluj',
+            style: 'cancel'
+          },
+          {
+            text: 'OK',
+            onPress: activateNextSet
+          }
+        ]
+      );
+    } else {
+      activateNextSet();
+    }
   }
 
   return (
     <Container>
-      <Button onPress={createTraining} title="Utwórz trening" />
+      <Button onPress={handleTrainingCreate} title="Utwórz trening" />
       <Text>Twoje treningi</Text>
       <Text>
         Aktywny trening: {' '}
@@ -42,12 +92,12 @@ export const GymTrainingScreen = observer((props: GymTrainingScreenProps) => {
           {training.isActive && training.exercises.map(exercise => (
             <Exercise key={exercise.id as number}>
               <Text>Ćwiczenie: {exercise.id}</Text>
-              {exercise.sets.map(exerciseSet => (
+              {exercise.sets.map((exerciseSet, exerciseSetIndex) => (
                 <ExerciseSetButton
                   key={exerciseSet.id as number}
                   isActive={exerciseSet.state === 'active'}
                   isRest={exerciseSet.isRest}
-                  onPress={() => trainingStore.exerciseSetNextActivate(exerciseSet.id)}
+                  onPress={() => handleExerciseSetActivation(exerciseSet, exerciseSetIndex)}
                 >
                   <>
                     <Text>
