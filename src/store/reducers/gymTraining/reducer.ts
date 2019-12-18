@@ -8,11 +8,14 @@ import {
   GYM_EXERCISE_ADDED,
   GYM_EXERCISE_UPDATED,
   GYM_EXERCISE_DELETED,
+  GYM_TRAINING_ADDED,
+  GYM_TRAINING_UPDATED,
+  GYM_TRAINING_DELETED,
 } from '../../consts';
 import { GymTrainingAction } from '../../actions/creators/gymTraining';
 import { ExerciseSetState } from './types';
-import { ExerciseState } from '../../../mobx/GymTrainingStore';
-import { normalizeExercise, normalizeExerciseSet } from '../../../mobx/utils';
+import { ExerciseState, TrainingState } from '../../../mobx/GymTrainingStore';
+import { normalizeExercise, normalizeExerciseSet, normalizeTrainings } from '../../../mobx/utils';
 
 interface GymTrainingState {
   duration: number
@@ -22,6 +25,7 @@ interface GymTrainingState {
   activeExerciseSet: ExerciseSetState | null
   activeExerciseSetId: 4
 
+  trainings: TrainingState[]
   exercises: ExerciseState[]
   sets: ExerciseSetState[]
 
@@ -101,6 +105,34 @@ export function gymTrainingReducer(
         }
       }
       return state;
+    case GYM_TRAINING_ADDED: {
+      const { trainings, exerciseSets, exercises } = normalizeTrainings([action.payload]);
+
+      return {
+        ...state,
+        trainings: [...state.trainings, ...trainings],
+        exercises: [...state.exercises, ...exercises],
+        exerciseSets: [...state.exerciseSets, ...exerciseSets],
+      }
+    }
+    case GYM_TRAINING_UPDATED: return {
+      ...state,
+      trainings: updateById(
+        state.trainings,
+        action.meta.trainingId,
+        training => ({ ...training, ...action.payload })
+      )
+    }
+    /** TODO: delete exercise sets */
+    case GYM_TRAINING_DELETED: return {
+      ...state,
+      trainings: state.trainings.filter(
+        training => training.id !== action.meta.trainingId
+      ),
+      exercises: state.exercises.filter(
+        exercise => exercise.trainingId !== action.meta.trainingId
+      )
+    }
     case GYM_EXERCISE_ADDED:
       const { exercise, exerciseSets } = normalizeExercise(action.payload);
 

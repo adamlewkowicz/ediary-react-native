@@ -8,11 +8,14 @@ import {
   GYM_EXERCISE_SET_UPDATED,
   GYM_EXERCISE_SET_DELETED,
   GYM_EXERCISE_SET_ADDED,
+  GYM_TRAINING_ADDED,
+  GYM_TRAINING_UPDATED,
+  GYM_TRAINING_DELETED,
 } from '../../consts';
 import { ExerciseSetId, ExerciseId, TrainingId } from '../../../types';
 import { ExerciseSetState } from '../../reducers/gymTraining/types';
-import { ExerciseState } from '../../../mobx/GymTrainingStore';
-import { Exercise, ExerciseSet } from '../../../database/entities';
+import { ExerciseState, TrainingState } from '../../../mobx/GymTrainingStore';
+import { Exercise, ExerciseSet, Training } from '../../../database/entities';
 
 export const gymTrainingStarted = () => ({
   type: GYM_TRAINING_STARTED
@@ -24,6 +27,25 @@ export const gymTrainingDurationTick = () => ({
 
 export const gymTrainingFinished = () => ({
   type: GYM_TRAINING_FINISHED
+});
+
+export const gymTrainingAdded = (training: Training) => ({
+  type: GYM_TRAINING_ADDED,
+  payload: training,
+});
+
+export const gymTrainingUpdated = (
+  trainingId: TrainingId,
+  training: Partial<TrainingState>
+) => ({
+  type: GYM_TRAINING_UPDATED,
+  payload: training,
+  meta: { trainingId }
+});
+
+export const gymTrainingDeleted = (trainingId: TrainingId) => ({
+  type: GYM_TRAINING_DELETED,
+  meta: { trainingId }
 });
 
 export const gymExerciseAdded = (
@@ -96,6 +118,9 @@ export type GymTrainingAction =
   | ReturnType<typeof gymTrainingStarted>
   | ReturnType<typeof gymTrainingDurationTick>
   | ReturnType<typeof gymTrainingFinished>
+  | ReturnType<typeof gymTrainingAdded>
+  | ReturnType<typeof gymTrainingUpdated>
+  | ReturnType<typeof gymTrainingDeleted>
   | ReturnType<typeof gymExerciseAdded>
   | ReturnType<typeof gymExerciseUpdated>
   | ReturnType<typeof gymExerciseDeleted>
