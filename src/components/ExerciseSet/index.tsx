@@ -12,6 +12,7 @@ const getTime = (duration: number) => {
 interface ExerciseSetProps {
   data: ExerciseSetState
   index: number
+  onActivation: () => void
 }
 
 export const ExerciseSet = (props: ExerciseSetProps) => {
@@ -20,7 +21,7 @@ export const ExerciseSet = (props: ExerciseSetProps) => {
   const duration = getTime(props.data.duration);
 
   return (
-    <Container isActive={isActive}>
+    <Container isActive={isActive} onPress={props.onActivation}>
       {/* <SetIndex>{props.index + 1}</SetIndex> */}
       <StatusIndicator
         isFinished={isFinished}
@@ -41,7 +42,7 @@ export const ExerciseSet = (props: ExerciseSetProps) => {
   );
 }
 
-const Container = styled.View<{
+const Container = styled.TouchableOpacity<{
   isActive: boolean
 }>`
   border-radius: 30px;

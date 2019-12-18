@@ -1,5 +1,9 @@
 // import { GymTrainingState } from './types';
-import { GYM_DURATION_TICK, GYM_TRAINING_STARTED } from '../../consts';
+import {
+  GYM_TRAINING_DURATION_TICK,
+  GYM_TRAINING_STARTED,
+  GYM_EXERCISE_SET_UPDATED,
+} from '../../consts';
 import { GymTrainingAction } from '../../actions/creators/gymTraining';
 import { ExerciseSetState } from './types';
 
@@ -13,6 +17,8 @@ interface GymTrainingState {
 
   exercises: Exercise[]
   sets: ExerciseSetState[]
+
+  exerciseSets: ExerciseSetState[]
 }
 
 const initialState = {
@@ -54,7 +60,7 @@ export function gymTrainingReducer(
       ...state,
       isActive: true,
     }
-    case GYM_DURATION_TICK: 
+    case GYM_TRAINING_DURATION_TICK: 
       const { activeExerciseSet } = state;
 
       if (activeExerciseSet !== null) {
@@ -67,5 +73,13 @@ export function gymTrainingReducer(
         }
       }
       return state;
+    case GYM_EXERCISE_SET_UPDATED: return {
+      ...state,
+      exerciseSets: state.exerciseSets.map(set => {
+        if (set.id === action.meta.exerciseSetId) {
+          
+        }
+      })
+    }
   }
 } 

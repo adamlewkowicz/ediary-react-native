@@ -111,6 +111,7 @@ export const GymTrainingScreen = observer((props: GymTrainingScreenProps) => {
                       onPress={() => handleExerciseSetActivation(exerciseSet, exerciseSetIndex)}
                     >
                       <ExerciseSet
+                        onActivation={() => {}}
                         data={exerciseSet}
                         index={exerciseSetIndex}
                       />
