@@ -10,7 +10,7 @@ export const normalizeExerciseSet = (exerciseSet: ExerciseSet): ExerciseSetState
   state: 'unfinished',
 });
 
-const normalizeExercise = (exercise: Exercise) => {
+export const normalizeExercise = (exercise: Exercise) => {
   const { sets = [], ..._exercise } = exercise;
 
   const normalizedExerciseSets = sets.map(normalizeExerciseSet);
