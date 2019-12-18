@@ -11,19 +11,23 @@ import {
   GYM_TRAINING_ADDED,
   GYM_TRAINING_UPDATED,
   GYM_TRAINING_DELETED,
+  GYM_EXERCISE_SET_ACTIVATED,
 } from '../../consts';
 import { GymTrainingAction } from '../../actions/creators/gymTraining';
 import { ExerciseSetState } from './types';
 import { ExerciseState, TrainingState } from '../../../mobx/GymTrainingStore';
 import { normalizeExercise, normalizeExerciseSet, normalizeTrainings } from '../../../mobx/utils';
+import { ExerciseSetId } from '../../../types';
+import { findById } from '../../../common/utils';
 
 interface GymTrainingState {
   duration: number
   isPaused: boolean
   isFinished: boolean
 
+  // redundant - requires to store info about item in multiple places
   activeExerciseSet: ExerciseSetState | null
-  activeExerciseSetId: 4
+  activeExerciseSetId: ExerciseSetId
 
   trainings: TrainingState[]
   exercises: ExerciseState[]
@@ -60,7 +64,7 @@ const initialState = {
   ],
   // exercises: [],
   // sets: []
-}
+} as any;
 
 type ItemWithId<ID> = { id: ID }
 
@@ -85,7 +89,7 @@ const removeById = <ID, T extends ItemWithId<ID>>(
 }
 
 export function gymTrainingReducer(
-  state: GymTrainingState,
+  state: GymTrainingState = initialState,
   action: GymTrainingAction
 ): GymTrainingState {
   switch(action.type) {
@@ -104,6 +108,52 @@ export function gymTrainingReducer(
           }
         }
       }
+      return state;
+    case 'GYM_EXERCISE_SET_DISACTIVATED': return {
+      ...state,
+      exerciseSets: state.exerciseSets.map(exerciseSet => {
+        if (exerciseSet.state === 'active') {
+          return { ...exerciseSet, state: 'finished', isRest: false };
+        }
+        return exerciseSet;
+      })
+    }
+    case GYM_EXERCISE_SET_ACTIVATED:
+      const { exerciseSetId } = action.meta;
+
+      if (exerciseSetId) {
+        const foundExerciseSet = findById(state.exerciseSets, exerciseSetId);
+       
+        if (foundExerciseSet) {
+
+        }
+      }
+
+      const nextExerciseSet = state.exerciseSets.find(
+        exerciseSet => exerciseSet.state === 'unfinished'
+      );
+
+      if (nextExerciseSet) {
+        return {
+          ...state,
+          exerciseSets: state.exerciseSets.map(exerciseSet => {
+            const isActive = exerciseSet.state === 'active';
+            const isUnfinished = exerciseSet.id === nextExerciseSet.id &&
+              exerciseSet.state === 'unfinished';
+
+            if (isActive) {
+              return { ...exerciseSet, state: 'finished', isRest: false };
+            }
+
+            if (isUnfinished) {
+              return { ...exerciseSet, state: 'active' };
+            }
+
+            return exerciseSet;
+          })
+        }
+      }
+
       return state;
     case GYM_TRAINING_ADDED: {
       const { trainings, exerciseSets, exercises } = normalizeTrainings([action.payload]);
@@ -209,4 +259,28 @@ export function gymTrainingReducer(
     }
     default: return state;
   }
+}
+
+// POC
+
+interface BaseActiveTrainingState {
+  activeExerciseSetId: number | null
+  exerciseSetState: ExerciseSetState['state'] | null
+}
+
+interface ActiveTraining_active extends BaseActiveTrainingState {
+  activeExerciseSetId: number
+  exerciseSetState: ExerciseSetState['state']
+}
+
+interface ActiveTraining_unactive extends BaseActiveTrainingState {
+  activeExerciseSetId: null
+  exerciseSetState: null
+}
+
+type ActiveTrainingState = ActiveTraining_active | ActiveTraining_unactive
+
+const activeTrainingState: ActiveTrainingState = {
+  activeExerciseSetId: 1,
+  exerciseSetState: 'active',
 }
