@@ -7,6 +7,7 @@ import { ExerciseSetState } from '../../mobx/GymTrainingStore';
 import { AsyncAlert } from '../../common/utils/async-alert';
 import { Timer } from '../../components/Timer';
 import { ExerciseSet } from '../../components/ExerciseSet';
+import { useDispatch } from 'react-redux';
 
 interface GymTrainingScreenProps {}
 
@@ -14,6 +15,7 @@ export const GymTrainingScreen = observer((props: GymTrainingScreenProps) => {
   const rootStore = useMobxStore();
   const trainingStore = rootStore.gymTraining;
   const userId = useUserId();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     trainingStore.loadTrainings();

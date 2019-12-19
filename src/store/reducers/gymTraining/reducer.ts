@@ -12,6 +12,7 @@ import {
   GYM_TRAINING_UPDATED,
   GYM_TRAINING_DELETED,
   GYM_EXERCISE_SET_ACTIVATED,
+  GYM_EXERCISE_SET_REST_ACTIVATED,
 } from '../../consts';
 import { GymTrainingAction } from '../../actions/creators/gymTraining';
 import { ExerciseSetState } from './types';
@@ -109,6 +110,15 @@ export function gymTrainingReducer(
         }
       }
       return state;
+    case GYM_EXERCISE_SET_REST_ACTIVATED: return {
+      ...state,
+      exerciseSets: state.exerciseSets.map(exerciseSet => {
+        if (exerciseSet.state === 'active') {
+          return { ...exerciseSet, isRest: true };
+        }
+        return exerciseSet;
+      })
+    }
     case 'GYM_EXERCISE_SET_DISACTIVATED': return {
       ...state,
       exerciseSets: state.exerciseSets.map(exerciseSet => {

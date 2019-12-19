@@ -12,6 +12,7 @@ import {
   GYM_TRAINING_UPDATED,
   GYM_TRAINING_DELETED,
   GYM_EXERCISE_SET_ACTIVATED,
+  GYM_EXERCISE_SET_REST_ACTIVATED,
 } from '../../consts';
 import { ExerciseSetId, ExerciseId, TrainingId } from '../../../types';
 import { ExerciseSetState } from '../../reducers/gymTraining/types';
@@ -124,6 +125,15 @@ export const gymExerciseSetActivated = (
   }
 });
 
+// POC - composable action creator
+// export const gymExerciseSetRestActivated = (
+//   exerciseSetId: ExerciseSetId
+// ) => gymExerciseSetUpdated(exerciseSetId, { isRest: true });
+
+export const gymExerciseSetRestActivated = () => ({
+  type: GYM_EXERCISE_SET_REST_ACTIVATED
+});
+
 export type GymTrainingAction = 
   | ReturnType<typeof gymTrainingStarted>
   | ReturnType<typeof gymTrainingDurationTick>
@@ -138,3 +148,4 @@ export type GymTrainingAction =
   | ReturnType<typeof gymExerciseSetUpdated>
   | ReturnType<typeof gymExerciseSetDeleted>
   | ReturnType<typeof gymExerciseSetActivated>
+  | ReturnType<typeof gymExerciseSetRestActivated>

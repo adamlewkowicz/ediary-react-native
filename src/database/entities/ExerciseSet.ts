@@ -3,12 +3,12 @@ import {
   PrimaryGeneratedColumn,
   Column,
   Entity,
-  OneToMany,
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
 import { Exercise } from './Exercise';
 import { ExerciseId, ExerciseSetId } from '../../types';
+import { EntityType, EntityRequired } from '../types';
 
 @Entity('exercise_sets')
 export class ExerciseSet extends GenericEntity {
@@ -16,7 +16,7 @@ export class ExerciseSet extends GenericEntity {
   @PrimaryGeneratedColumn()
   id!: ExerciseSetId;
 
-  @Column()
+  @Column({ default: 8 })
   repeats!: number;
 
   @Column()
@@ -37,3 +37,10 @@ export class ExerciseSet extends GenericEntity {
   exercise?: Exercise;
 
 }
+
+export type IExerciseSet = EntityType<ExerciseSet>;
+export type IExerciseSetRequired = EntityRequired<IExerciseSet,
+  | 'loadWeight'
+  | 'breakTime'
+  | 'exerciseId'
+>;

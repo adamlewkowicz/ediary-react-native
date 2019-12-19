@@ -5,9 +5,17 @@ import {
   gymTrainingFinished,
   gymExerciseSetUpdated,
   gymExerciseSetActivated,
+  gymExerciseSetAdded,
+  gymExerciseSetDeleted,
+  gymExerciseDeleted,
 } from '../creators/gymTraining';
 import { batch } from 'react-redux';
-import { ExerciseSetId } from '../../../types';
+import { ExerciseSetId, ExerciseId, TrainingId } from '../../../types';
+import {
+  ExerciseSet,
+  Exercise,
+  IExerciseSetRequired,
+} from '../../../database/entities';
 
 let durationInterval: NodeJS.Timeout;
 
@@ -42,6 +50,33 @@ export const gymExerciseSetActivate: Thunk<void> = (
   } else {
     dispatch(gymTrainingFinish());
   }
+}
+
+export const gymExerciseSetAdd: Thunk = (
+  exerciseId: ExerciseId,
+  prevExerciseSet?: IExerciseSetRequired
+) => async (dispatch) => {
+  const exerciseSet = await ExerciseSet.save({ ...prevExerciseSet });
+
+  dispatch(gymExerciseSetAdded(exerciseId, exerciseSet));
+}
+
+export const gymExerciseSetDelete: Thunk = (
+  exerciseId: ExerciseId,
+  exerciseSetId: ExerciseSetId
+) => async (dispatch) => {
+  dispatch(gymExerciseSetDeleted(exerciseId, exerciseSetId));
+
+  await ExerciseSet.delete(exerciseSetId as number);
+}
+
+export const gymExerciseDelete: Thunk = (
+  trainingId: TrainingId,
+  exerciseId: ExerciseId
+) => async (dispatch) => {
+  dispatch(gymExerciseDeleted(trainingId, exerciseId));
+
+  await Exercise.delete(exerciseId as number);
 }
 
 export const gymTrainingFinish: Thunk<void> = () => (dispatch) => {
