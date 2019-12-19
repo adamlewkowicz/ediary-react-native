@@ -1,5 +1,5 @@
 import { Training, ExerciseSet, Exercise } from '../database/entities';
-import { ExerciseSetState, ExerciseState, TrainingState } from './GymTrainingStore';
+import { ExerciseSetState, ExerciseState, TrainingState } from '../store/reducers/gymTraining';
 
 export const normalizeExerciseSet = (exerciseSet: ExerciseSet): ExerciseSetState => ({
   ...exerciseSet,

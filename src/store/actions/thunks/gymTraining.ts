@@ -30,7 +30,7 @@ export const gymExerciseSetActivate: Thunk<void> = (
     batch(() => {
       dispatch(
         gymExerciseSetUpdated(
-          activeExerciseSet.id, { isRest: false, state: 'finished' }
+          activeExerciseSet.id, { state: 'finished', isRest: false }
         )
       );
       dispatch(
