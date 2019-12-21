@@ -8,6 +8,7 @@ import { AsyncAlert } from '../../common/utils/async-alert';
 import { Timer } from '../../components/Timer';
 import { ExerciseSet } from '../../components/ExerciseSet';
 import { useDispatch } from 'react-redux';
+import { Actions } from '../../store';
 
 interface GymTrainingScreenProps {}
 
@@ -19,10 +20,12 @@ export const GymTrainingScreen = observer((props: GymTrainingScreenProps) => {
 
   useEffect(() => {
     trainingStore.loadTrainings();
+    dispatch(Actions.gymTrainingsLoad());
   }, []);
 
   const handleTrainingCreate = () => {
     trainingStore.trainingCreate('Plecy', userId);
+    dispatch(Actions.gymTrainingCreate('Plecy', userId));
   }
 
   const handleExerciseSetActivation = async (
@@ -110,10 +113,13 @@ export const GymTrainingScreen = observer((props: GymTrainingScreenProps) => {
                       key={exerciseSet.id as number}
                       isActive={exerciseSet.state === 'active'}
                       isRest={exerciseSet.isRest}
-                      onPress={() => handleExerciseSetActivation(exerciseSet, exerciseSetIndex)}
+                      onPress={() => {
+                        handleExerciseSetActivation(exerciseSet, exerciseSetIndex);
+                        dispatch(Actions.gymExerciseSetActivated(exerciseSet.id));
+                      }}
                     >
                       <ExerciseSet
-                        onActivation={() => {}}
+                        onActivation={() => dispatch(Actions.gymExerciseSetActivated(exerciseSet.id))}
                         data={exerciseSet}
                         index={exerciseSetIndex}
                       />
@@ -129,18 +135,27 @@ export const GymTrainingScreen = observer((props: GymTrainingScreenProps) => {
                             <Timer duration={exerciseSet.restTime - exerciseSet.restDuration} />
                             <Button
                               title="Przedłuż przerwę o 10"
-                              onPress={() => trainingStore.exerciseSetRestExpand()}
+                              onPress={() => {
+                                trainingStore.exerciseSetRestExpand();
+                                dispatch(Actions.gymExerciseSetRestExpanded(exerciseSet.id))
+                              }}
                             />
                           </>
                         ) : (
                           <Button
                             title="Aktywuj przerwę"
-                            onPress={() => trainingStore.exerciseSetRestActivate()}
+                            onPress={() => {
+                              dispatch(Actions.gymExerciseSetRestActivated());
+                              trainingStore.exerciseSetRestActivate();
+                            }}
                           />
                         )}
                         <Button
                           title="Usuń serię"
-                          onPress={() => trainingStore.exerciseSetDelete(exercise.id, exerciseSet.id)}
+                          onPress={() => {
+                            trainingStore.exerciseSetDelete(exercise.id, exerciseSet.id);
+                            dispatch(Actions.gymExerciseSetDelete(exercise.id, exerciseSet.id));
+                          }}
                         />
                       </>
                     )}
@@ -149,7 +164,11 @@ export const GymTrainingScreen = observer((props: GymTrainingScreenProps) => {
               />
               <Button
                 title="Dodaj serię"
-                onPress={() => trainingStore.exerciseSetCreate(exercise.id)}
+                onPress={() => {
+                  trainingStore.exerciseSetCreate(exercise.id);
+                  // TODO:
+                  // dispatch(Actions.gymExerciseSetCreate(exercise.id, exercise));
+                }}
               />
             </Exercise>
           ))}

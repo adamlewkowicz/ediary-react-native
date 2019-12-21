@@ -8,11 +8,12 @@ import {
   GYM_EXERCISE_SET_UPDATED,
   GYM_EXERCISE_SET_DELETED,
   GYM_EXERCISE_SET_ADDED,
-  GYM_TRAINING_ADDED,
+  GYM_TRAININGS_ADDED,
   GYM_TRAINING_UPDATED,
   GYM_TRAINING_DELETED,
   GYM_EXERCISE_SET_ACTIVATED,
   GYM_EXERCISE_SET_REST_ACTIVATED,
+  GYM_EXERCISE_SET_REST_EXPANDED,
 } from '../../consts';
 import { ExerciseSetId, ExerciseId, TrainingId } from '../../../types';
 import { ExerciseSetState } from '../../reducers/gymTraining/types';
@@ -31,9 +32,9 @@ export const gymTrainingFinished = () => ({
   type: GYM_TRAINING_FINISHED
 });
 
-export const gymTrainingAdded = (training: Training) => ({
-  type: GYM_TRAINING_ADDED,
-  payload: training,
+export const gymTrainingsAdded = (trainings: Training[]) => ({
+  type: GYM_TRAININGS_ADDED,
+  payload: trainings,
 });
 
 export const gymTrainingUpdated = (
@@ -134,11 +135,20 @@ export const gymExerciseSetRestActivated = () => ({
   type: GYM_EXERCISE_SET_REST_ACTIVATED
 });
 
+export const gymExerciseSetRestExpanded = (
+  exerciseSetId: ExerciseSetId,
+  expandInSeconds = 10
+) => ({
+  type: GYM_EXERCISE_SET_REST_EXPANDED,
+  payload: expandInSeconds,
+  meta: { exerciseSetId }
+});
+
 export type GymTrainingAction = 
   | ReturnType<typeof gymTrainingStarted>
   | ReturnType<typeof gymTrainingDurationTick>
   | ReturnType<typeof gymTrainingFinished>
-  | ReturnType<typeof gymTrainingAdded>
+  | ReturnType<typeof gymTrainingsAdded>
   | ReturnType<typeof gymTrainingUpdated>
   | ReturnType<typeof gymTrainingDeleted>
   | ReturnType<typeof gymExerciseAdded>
@@ -149,3 +159,4 @@ export type GymTrainingAction =
   | ReturnType<typeof gymExerciseSetDeleted>
   | ReturnType<typeof gymExerciseSetActivated>
   | ReturnType<typeof gymExerciseSetRestActivated>
+  | ReturnType<typeof gymExerciseSetRestExpanded>

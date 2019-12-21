@@ -8,16 +8,51 @@ import {
   gymExerciseSetAdded,
   gymExerciseSetDeleted,
   gymExerciseDeleted,
+  gymTrainingsAdded,
 } from '../creators/gymTraining';
 import { batch } from 'react-redux';
-import { ExerciseSetId, ExerciseId, TrainingId } from '../../../types';
+import { ExerciseSetId, ExerciseId, TrainingId, UserId } from '../../../types';
 import {
   ExerciseSet,
   Exercise,
   IExerciseSetRequired,
+  Training,
 } from '../../../database/entities';
 
 let durationInterval: NodeJS.Timeout;
+
+export const gymTrainingsLoad: Thunk = () => async (dispatch) => {
+  const foundTrainings = await Training.find({
+    relations: ['exercises', 'exercises.sets']
+  });
+
+  dispatch(gymTrainingsAdded(foundTrainings));
+}
+
+export const gymTrainingCreate: Thunk = (
+  name: string,
+  userId: UserId
+) => async (dispatch) => {
+  // TODO - remove hardcoded part
+  const training: Training = await Training.save({
+    name,
+    userId,
+    exercises: [
+      {
+        name: 'Martwy ciąg',
+        sets: [
+          {
+            loadWeight: 10,
+            breakTime: 10,
+            repeats: 20,
+          }
+        ]
+      }
+    ]
+  });
+
+  dispatch(gymTrainingsAdded([training]));
+}
 
 export const gymTrainingStart: Thunk<void> = () => (dispatch) => {
   dispatch(gymTrainingStarted());
@@ -52,7 +87,7 @@ export const gymExerciseSetActivate: Thunk<void> = (
   }
 }
 
-export const gymExerciseSetAdd: Thunk = (
+export const gymExerciseSetCreate: Thunk = (
   exerciseId: ExerciseId,
   prevExerciseSet?: IExerciseSetRequired
 ) => async (dispatch) => {

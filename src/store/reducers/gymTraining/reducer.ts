@@ -8,11 +8,12 @@ import {
   GYM_EXERCISE_ADDED,
   GYM_EXERCISE_UPDATED,
   GYM_EXERCISE_DELETED,
-  GYM_TRAINING_ADDED,
+  GYM_TRAININGS_ADDED,
   GYM_TRAINING_UPDATED,
   GYM_TRAINING_DELETED,
   GYM_EXERCISE_SET_ACTIVATED,
   GYM_EXERCISE_SET_REST_ACTIVATED,
+  GYM_EXERCISE_SET_REST_EXPANDED,
 } from '../../consts';
 import { GymTrainingAction } from '../../actions/creators/gymTraining';
 import { ExerciseSetState } from './types';
@@ -165,8 +166,8 @@ export function gymTrainingReducer(
       }
 
       return state;
-    case GYM_TRAINING_ADDED: {
-      const { trainings, exerciseSets, exercises } = normalizeTrainings([action.payload]);
+    case GYM_TRAININGS_ADDED: {
+      const { trainings, exerciseSets, exercises } = normalizeTrainings(action.payload);
 
       return {
         ...state,
@@ -266,6 +267,17 @@ export function gymTrainingReducer(
         state.exerciseSets,
         action.meta.exerciseId
       ),
+    }
+    case GYM_EXERCISE_SET_REST_EXPANDED: return {
+      ...state,
+      exerciseSets: updateById(
+        state.exerciseSets,
+        action.meta.exerciseSetId,
+        exerciseSet => ({
+          ...exerciseSet,
+          restTime: exerciseSet.restTime + action.payload
+        })
+      )
     }
     default: return state;
   }
