@@ -238,7 +238,7 @@ export function gymTrainingReducer(
           action.meta.exerciseId,
           exercise => ({
             ...exercise,
-            setIds: [...exercise.setIds, action.payload.id]
+            setIds: [...exercise.setIds, exerciseSet.id]
           })
         ),
         exerciseSets: [...state.exerciseSets, exerciseSet]
