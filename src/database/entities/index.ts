@@ -5,3 +5,6 @@ export * from './User';
 export * from './ProductPortion';
 export * from './Profile';
 export * from './ProductImage';
+export * from './Training';
+export * from './Exercise';
+export * from './ExerciseSet';

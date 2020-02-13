@@ -16,6 +16,8 @@ const color = {
   gray30: '#BCBAC6',
   gray40: '#646464',
 
+  green10: '#7bed9f',
+
   dark: '#353344',
 
   /** @deprecated color names */
@@ -24,7 +26,7 @@ const color = {
   gray: '#BCBAC6',
   lightGray: '#f1f0f5',
   midGray: '#cdcbd6',
-}
+} as const;
 
 export const theme = {
   fontSize: {
@@ -52,7 +54,7 @@ export const theme = {
   zIndex: {
     inputSearcherLoupe: 2,
   },
-}
+} as const;
 
 export type Theme = typeof theme;
 export type ThemeColor = keyof Theme['color'];

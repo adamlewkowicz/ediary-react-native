@@ -7,6 +7,7 @@ import { ThemeProvider } from 'styled-components/native';
 import { theme } from './common/theme';
 import { AppContainer } from './navigation';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
+import { MobxStoreProvider } from './context/MobxStore';
 
 interface AppProps {}
 export class App extends React.Component<AppProps> {
@@ -31,16 +32,18 @@ export class App extends React.Component<AppProps> {
 
   render() {
     return (
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <ApplicationProvider
-            mapping={mapping}
-            theme={lightTheme}
-          >
-            <AppContainer />
-          </ApplicationProvider>
-        </ThemeProvider>
-      </Provider>
+      <MobxStoreProvider>
+        <Provider store={store}>
+          <ThemeProvider theme={theme}>
+            <ApplicationProvider
+              mapping={mapping}
+              theme={lightTheme}
+            >
+              <AppContainer />
+            </ApplicationProvider>
+          </ThemeProvider>
+        </Provider>
+      </MobxStoreProvider>
     );
   }
 }
