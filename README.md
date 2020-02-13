@@ -50,3 +50,4 @@ Play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://p
 - Śledzenie dziennego spożycia wody
 - Treningi siłowe oraz areobowe (podział na ćwiczenia, serie, obciążenie i powtórzenia)
 - Treningi wytrzymałowściowe z możliwością śledzenia przebytej trasy na mapie (bieganie, jazda na rowerze)
+- Szczegółowe wartości makroskładników i indeks pro/przeciwzapalny produktów
