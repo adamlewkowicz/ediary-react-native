@@ -17,7 +17,7 @@ export function NumericPicker <T extends number>(props: NumericPickerProps<T>) {
   return (
     <Picker
       selectedValue={props.value}
-      onValueChange={props.onChange}
+      onValueChange={value => props.onChange(value)}
       style={style}
       {...pickerProps}
     >
