@@ -5,7 +5,7 @@ import { Product } from '../../database/entities';
 
 describe('<ProductCreate />', () => {
 
-  it('should create new product', async () => {
+  it('creating new product should work', async () => {
     const productMock = {
       name: 'Orange Juice',
       producer: 'Gardens',
