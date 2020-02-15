@@ -33,7 +33,7 @@ Play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://p
 - React Navigation
 - Redux, Redux Thunk, Reselect, React Context (zarządzanie stanem globalnym)
 - Sqlite3 i TypeORM (baza danych)
-- Jest and React Testing Library (testy jednostkowe i integracyjne)
+- Jest i React Testing Library (testy jednostkowe i integracyjne)
 - Figma (design, prototypowanie UI)
 
 ## Podgląd
