@@ -10,6 +10,7 @@ interface MacroCardProps {
   goal: number
   percentages: number
 }
+
 export const MacroCard = (props: MacroCardProps) => {
   return (
     <Container>

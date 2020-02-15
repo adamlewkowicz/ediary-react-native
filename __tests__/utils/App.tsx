@@ -1,8 +1,8 @@
 import React, { ReactNode, useState } from 'react';
-import { createAppContainer, NavigationContainer } from 'react-navigation';
+import { createAppContainer, NavigationContainer, NavigationContext } from 'react-navigation';
 import { MainStackScreen, createMainStack } from '../../src/navigation';
 import { Provider } from 'react-redux';
-import { AppState, configureStore, Actions } from '../../src/store';
+import { configureStore, Actions, StoreState } from '../../src/store';
 import { Screen } from '../../src/types';
 import { ApplicationProvider } from 'react-native-ui-kitten';
 import { mapping, light as lightTheme } from '@eva-design/eva';
@@ -11,9 +11,19 @@ import { ThemeProvider } from 'styled-components/native';
 import { Store } from 'redux';
 import { User } from '../../src/database/entities';
 import { USER_ID_UNSYNCED } from '../../src/common/consts';
+import { render } from '@testing-library/react-native';
 
 let user: User;
 let isInitialized = false;
+
+export const createNavigationCtxMock = <P extends object>(params?: P) => ({
+  getParam: jest.fn(),
+  navigate: jest.fn(),
+  addListener: jest.fn(() => ({ remove: jest.fn() })),
+  setParams: jest.fn(),
+  isFocused: jest.fn(),
+  state: { params }
+});
 
 beforeEach(async () => {
   isInitialized = false;
@@ -26,12 +36,13 @@ beforeEach(async () => {
 });
 
 interface AppProps {
-  initialState?: Partial<AppState>
+  initialState?: Partial<StoreState>
   initialRouteName?: Screen
-  store?: Store<AppState>
+  store?: Store<StoreState>
   screen?: Screen
   stack?: MainStackScreen
   children?: ReactNode
+  navigationContext?: any
 }
 export function App({
   initialState,
@@ -39,6 +50,7 @@ export function App({
   stack,
   screen = 'Home',
   children,
+  navigationContext = createNavigationCtxMock()
 }: AppProps) {
   // preserve instance between re-renders
   const [AppContainer] = useState<NavigationContainer>(() => {
@@ -61,9 +73,42 @@ export function App({
           mapping={mapping}
           theme={lightTheme}
         >
-          {children ? children : <AppContainer />}
+          <NavigationContext.Provider value={navigationContext}>
+            {children ? children : <AppContainer />}
+          </NavigationContext.Provider>
         </ApplicationProvider>
       </ThemeProvider>
     </Provider>
   );
+}
+
+export function renderSetup<Params extends object>(
+  ui: React.ReactElement,
+  options?: RenderSetupOptions<Params>
+) {
+  const navigationCtxMock = createNavigationCtxMock(options?.params);
+  const mergedOptions = {
+    store: configureStore(options?.initialState),
+    ...options
+  };
+  return {
+    ...render(
+      <App
+        navigationContext={navigationCtxMock}
+        store={mergedOptions.store}
+      >
+        {ui}
+      </App>
+    ),
+    mocks: {
+      navigationContext: navigationCtxMock,
+      params: options?.params || {} as Params,
+    },
+  }
+}
+
+interface RenderSetupOptions<P extends object> {
+  initialState?: Partial<StoreState>
+  store?: Store<StoreState>
+  params?: P
 }

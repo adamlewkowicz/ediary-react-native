@@ -1,13 +1,14 @@
 {
   "name": "Ediary",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "scripts": {
     "postinstall": "npx jetify",
     "start": "react-native start",
-    "test": "jest",
+    "test": "jest --verbose --colors",
     "test:win": "set APP_ENV=test&& jest",
-    "test:watch": "jest --watch",
+    "test:watch": "npm test -- --watch",
+    "test:ci": "npm test -- --ci",
     "lint": "eslint --ext js,ts,tsx src",
     "type-check": "tsc --noEmit && echo \"No type errors found\"",
     "android:clean": "cd android && gradlew clean && cd .. && react-native run-android",
@@ -94,7 +95,7 @@
     "sqlite3": "^4.0.9",
     "ts-node": "^8.3.0",
     "ts-node-dev": "^1.0.0-pre.40",
-    "typescript": "^3.6.3",
+    "typescript": "^3.7.0-beta",
     "utility-types": "^3.7.0"
   },
   "rnpm": {

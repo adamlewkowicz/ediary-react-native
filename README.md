@@ -26,15 +26,15 @@ Play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://p
 - tygodniowe podsumowanie spożytych kalorii na wykresie
 - średnie tygodniowe spożycie makroskładników ze wskazaniem na braki/nadmiar zależne od zapotrzebowania
 
-## Stack
+## Technologie
 - TypeScript
 - React Native
-- Hooks API, Context
+- Hooks API
 - React Navigation
-- Redux, Redux Thunk, Reselect (global state management)
-- Sqlite3 and TypeORM (data persistence)
-- Jest and React Testing Library (unit and integration tests)
-- Figma (design, UI prototyping)
+- Redux, Redux Thunk, Reselect, React Context (zarządzanie stanem globalnym)
+- Sqlite3 i TypeORM (baza danych)
+- Jest i React Testing Library (testy jednostkowe i integracyjne)
+- Figma (design, prototypowanie UI)
 
 ## Podgląd
 ![Podgląd](https://i.imgur.com/7cH5o3z.png)
@@ -50,3 +50,4 @@ Play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://p
 - Śledzenie dziennego spożycia wody
 - Treningi siłowe oraz areobowe (podział na ćwiczenia, serie, obciążenie i powtórzenia)
 - Treningi wytrzymałowściowe z możliwością śledzenia przebytej trasy na mapie (bieganie, jazda na rowerze)
+- Szczegółowe wartości makroskładników i indeks pro/przeciwzapalny produktów

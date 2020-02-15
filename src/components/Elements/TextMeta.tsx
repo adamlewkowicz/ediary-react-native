@@ -12,6 +12,7 @@ interface TextMetaProps {
   marginBottom?: string
   color?: string
 }
+
 export const TextMeta = ({
   color = '#000',
   ...props

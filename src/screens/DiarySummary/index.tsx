@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { NavigationScreenProps } from 'react-navigation';
 import { H1, Text, Block, TitleSecondary } from '../../components/Elements';
 import { DiarySummaryChart } from '../../components/DiarySummaryChart';
@@ -11,13 +11,13 @@ import styled from 'styled-components/native';
 import { MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitlesLong, baseMacro } from '../../common/helpers';
 import { RatioInfo } from '../../components/RatioInfo';
-import { useFocusState } from 'react-navigation-hooks';
+import { useFocusedEffect } from '../../hooks';
 
 interface DiarySummaryProps extends MapStateProps, NavigationScreenProps {}
+
 const DiarySummary = (props: DiarySummaryProps) => {
   const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...baseMacro }));
   const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]);
-  const { isFocused } = useFocusState();
 
   async function handleMacroSummaryFetch() {
     const result = await Meal.getMacroSummary(props.todayDay);
@@ -28,9 +28,9 @@ const DiarySummary = (props: DiarySummaryProps) => {
     })));
   }
 
-  useEffect(() => {
+  useFocusedEffect(() => {
     handleMacroSummaryFetch();
-  }, [isFocused]);
+  });
 
   const macroNeeds = useMemo(() => 
     calcMacroNeedsLeft(macroSummary, props.macroNeeds),

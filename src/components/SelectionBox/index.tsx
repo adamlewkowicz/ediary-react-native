@@ -14,6 +14,7 @@ interface SelectionBoxProps {
   onPress?: TouchableOpacityProps['onPress']
   noFlex?: boolean
 }
+
 export const SelectionBox = (props: SelectionBoxProps) => {
   return (
     <TouchableWrapper

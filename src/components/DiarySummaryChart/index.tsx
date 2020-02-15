@@ -38,6 +38,7 @@ interface DiarySummaryChartProps {
     date: Date
   }[]
 }
+
 export const DiarySummaryChart = (props: DiarySummaryChartProps) => {
   return (
     <Container>

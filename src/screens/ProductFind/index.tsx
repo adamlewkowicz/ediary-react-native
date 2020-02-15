@@ -4,17 +4,17 @@ import { sortByMostAccurateName, debounce } from '../../common/utils';
 import { Product } from '../../database/entities';
 import { ProductListItem, Separator } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
-import { NavigationScreenProps, SectionList } from 'react-navigation';
+import { SectionList } from 'react-navigation';
 import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
-import { BarcodeScanParams } from '../BarcodeScan';
-import { Screen, BarcodeId } from '../../types';
+import { BarcodeId } from '../../types';
 import { Button } from 'react-native-ui-kitten';
-import { ProductCreateParams } from '../ProductCreate';
-import { useConnected, useIdleStatus } from '../../hooks';
+import { useConnected, useIdleStatus, useNavigate } from '../../hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
 import { ActivityIndicator } from 'react-native';
+import { ProductFindParams } from './params';
+import { useNavigationParams } from '../../hooks/useNavigationParams';
 
 const debounceA = debounce();
 const SECTION_TITLE = {
@@ -22,11 +22,10 @@ const SECTION_TITLE = {
   recentProducts: 'Ostatnie produkty:',
 }
 
-interface ProductFindProps extends NavigationScreenProps {}
+interface ProductFindProps {}
+
 export const ProductFind = (props: ProductFindProps) => {
-  const { current: params } = useRef<ProductFindParams>({
-    onItemPress: props.navigation.getParam('onItemPress')
-  });
+  const params = useNavigationParams<ProductFindParams>();
   const [name, setName] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setLoading] = useState(false);
@@ -36,6 +35,7 @@ export const ProductFind = (props: ProductFindProps) => {
   const recentProducts = useSelector((state: StoreState) => state.productHistory);
   const hasBeenPressed = useRef(false);
   const isIdle = useIdleStatus();
+  const navigate = useNavigate();
 
   function handleProductSearch(name: string) {
     setName(name);
@@ -54,10 +54,9 @@ export const ProductFind = (props: ProductFindProps) => {
   }
 
   function handleBarcodeScanNavigation() {
-    const screenParams: BarcodeScanParams = {
+    navigate('BarcodeScan', {
       async onBarcodeDetected(barcode) {
-        const finderScreen: Screen = 'ProductFind';
-        props.navigation.navigate(finderScreen);
+        navigate('ProductFind');
         setName('');
         setProducts([]);
         setLoading(true);
@@ -72,25 +71,20 @@ export const ProductFind = (props: ProductFindProps) => {
         }
         setLoading(false);
       }
-    }
-    
-    const barcodeScreen: Screen = 'BarcodeScan';
-    props.navigation.navigate(barcodeScreen, screenParams);
+    });
   }
 
   function handleProductCreateNavigation() {
-    const screen: Screen = 'ProductCreate';
-    const screenParams: ProductCreateParams = {
-      barcode: barcode ? barcode : undefined,
+    navigate('ProductCreate', {
+      barcode: barcode !== null ? barcode : undefined,
       name: name.trim(),
       onProductCreated(createdProduct) {
         setBarcode(null);
         setProducts([createdProduct]);
         setLoading(false);
-        props.navigation.navigate('ProductFind');
+        navigate('ProductFind');
       }
-    }
-    props.navigation.navigate(screen, screenParams);
+    });
   }
 
   function renderInfo() {
@@ -113,6 +107,7 @@ export const ProductFind = (props: ProductFindProps) => {
         <Button
           style={{ marginTop: 15 }}
           onPress={handleProductCreateNavigation}
+          accessibilityLabel="Dodaj własny produkt"
         >
           Dodaj własny
         </Button>
@@ -133,10 +128,12 @@ export const ProductFind = (props: ProductFindProps) => {
         <InputSearcher
           value={name}
           placeholder="Nazwa produktu"
+          accessibilityLabel="Nazwa szukanego produktu"
           onChangeText={handleProductSearch}
           isLoading={isLoading}
         />
         <BarcodeButton
+          accessibilityLabel="Zeskanuj kod kreskowy"
           onPress={handleBarcodeScanNavigation}
         />
       </Block>
@@ -186,9 +183,4 @@ const SectionTitleContainer = styled.View<{
 
 ProductFind.navigationOptions = {
   headerTitle: 'Znajdź produkt'
-}
-
-export type HandleItemPressHandler = ((product: Product) => void) | undefined;
-export type ProductFindParams = {
-  onItemPress?: HandleItemPressHandler
 }

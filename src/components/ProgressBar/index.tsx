@@ -13,6 +13,7 @@ interface ProgressBarProps {
   rounded?: boolean
   marginVertical?: number
 }
+
 export const ProgressBar = ({
   percentages,
   vertical = false,

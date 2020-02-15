@@ -1,18 +1,13 @@
 import React from 'react';
 import { ProfileCreate } from '.';
-import { render } from '@testing-library/react-native';
-import { App } from '../../../__tests__/utils';
+import { renderSetup } from '../../../__tests__/utils';
 
-test('renders without crashing', () => {
-  const navigationMock: any = {
-    navigate: jest.fn()
-  }
+describe('<ProfileCreate />', () => {
+  
+  it('should render without crashing 💥', () => {
+    renderSetup(<ProfileCreate />);
+  });
 
-  const { container } = render(
-    <App>
-      <ProfileCreate navigation={navigationMock} />
-    </App>
-  );
+  it.todo('should create new profile');
 
-  expect(container).toMatchSnapshot();
 });

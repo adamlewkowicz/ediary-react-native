@@ -5,10 +5,9 @@ import {
   productCreateReducer,
   ProductCreateState,
   PortionOption,
-  initProductCreateReducer
+  initProductCreateReducer,
 } from './reducer';
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import { MacroElement, BarcodeId } from '../../types';
 import { InputRow } from '../../components/InputRow';
 import { Options } from '../../components/Options';
 import { NavigationScreenProps } from 'react-navigation';
@@ -17,14 +16,16 @@ import { Product } from '../../database/entities';
 import { parseNumber } from '../../common/utils';
 import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
+import { ProductCreateParams } from './params';
+import { useNavigationParams } from '../../hooks/useNavigationParams';
+import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
+import { useNavigation } from 'react-navigation-hooks';
 
-interface ProductCreateProps extends NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
+interface ProductCreateProps extends
+  NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
+
 export const ProductCreate = (props: ProductCreateProps) => {
-  const { current: params } = useRef<ProductCreateParams>({
-    onProductCreated: props.navigation.getParam('onProductCreated'),
-    barcode: props.navigation.getParam('barcode'),
-    name: props.navigation.getParam('name'),
-  });
+  const params = useNavigationParams<ProductCreateParams>();
   const [state, dispatch] = useReducer(
     productCreateReducer,
     params,
@@ -41,6 +42,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
     kcal: createRef<TextInput>(),
     barcode: createRef<TextInput>(),
   });
+  const navigation = useNavigation();
 
   function handleUpdate(payload: Partial<ProductCreateState>) {
     dispatch({
@@ -66,7 +68,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
       return;
     }
 
-    const newProduct = await Product.save({
+    const createdProduct = await Product.save({
       ...data,
       name: data.name.trim(),
       barcode: barcode.length ? barcode : null,
@@ -80,16 +82,14 @@ export const ProductCreate = (props: ProductCreateProps) => {
     });
 
     storeDispatch(
-      Actions.productHistoryRecentAdded([newProduct])
+      Actions.productHistoryRecentAdded([createdProduct])
     );
 
-    if (params.onProductCreated) {
-      params.onProductCreated(newProduct);
-    }
+    params.onProductCreated?.(createdProduct);
   }
   
   useEffect(() => {
-    props.navigation.setParams({ handleProductCreate });
+    navigation.setParams({ _handleProductCreate: handleProductCreate });
   }, [state]);
 
   function handlePortionOptionChange(option: PortionOption) {
@@ -107,43 +107,42 @@ export const ProductCreate = (props: ProductCreateProps) => {
           accessibilityLabel="Nazwa produktu"
           value={state.name}
           onChangeText={name => handleUpdate({ name })}
-          onSubmitEditing={() => refsList.producer.current!.focus()}
+          onSubmitEditing={refsList.producer.current?.focus}
         />
         <BasicInputRef
           label="Producent"
           accessibilityLabel="Producent"
           value={state.producer}
           onChangeText={producer => handleUpdate({ producer })}
-          onSubmitEditing={() => refsList.portion.current!.focus()}
+          onSubmitEditing={refsList.portion.current?.focus}
           ref={refsList.producer}
         />
         <OptionsContainer>
           <InfoTitle>Wartości odżywcze na:</InfoTitle>
           <Options
             value={state.portionOptions}
-            /** Temporary */
-            onChange={(option: any) => handlePortionOptionChange(option)}
+            onChange={handlePortionOptionChange}
           />
         </OptionsContainer>
         <InputRow
-          title={portionTitle[state.portionOption]}
+          title={PORTION_TITLE[state.portionOption]}
           value={state.portion}
           onChangeText={portion => handleUpdate({ portion: parseNumber(portion, 10000, 6) })}
-          onSubmitEditing={() => refsList.carbs.current!.focus()}
+          onSubmitEditing={refsList.carbs.current?.focus}
           ref={refsList.portion}
           accessibilityLabel="Ilość produktu"
-          css={InputCss}
+          styles={InputCss}
         />
-        {nutritionInputs.map(data => (
+        {NUTRITION_INPUTS.map(data => (
           <InputRow
             key={data.title}
             title={data.title}
             value={state[data.property]}
             onChangeText={value => handleUpdate({ [data.property]: parseNumber(value, 10000, 6) })}
-            onSubmitEditing={() => refsList[data.nextRef].current!.focus()}
+            onSubmitEditing={refsList[data.nextRef].current?.focus}
             ref={refsList[data.property]}
             accessibilityLabel={data.title}
-            css={InputCss}
+            styles={InputCss}
           />
         ))}
         <InputRow
@@ -154,7 +153,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
           onChangeText={barcode => handleUpdate({ barcode })}
           onSubmitEditing={handleProductCreate}
           accessibilityLabel="Kod kreskowy"
-          css={InputCss}
+          styles={InputCss}
         />
       </Container>
     </ScrollView>
@@ -188,44 +187,11 @@ const InputCss = css`
   margin-bottom: 10px;
 `
 
-const portionTitle = {
-  '100g': 'Opakowanie zawiera',
-  'portion': 'Porcja zawiera',
-  'package': 'Opakowanie zawiera'
-}
-
-const nutritionInputs: {
-  title: string
-  property: MacroElement
-  nextRef: MacroElement | 'barcode'
-}[] = [
-  {
-    title: 'Węglowodany',
-    property: 'carbs',
-    nextRef: 'prots'
-  },
-  {
-    title: 'Białka',
-    property: 'prots',
-    nextRef: 'fats'
-  },
-  {
-    title: 'Tłuszcze',
-    property: 'fats',
-    nextRef: 'kcal'
-  },
-  {
-    title: 'Kalorie',
-    property: 'kcal',
-    nextRef: 'barcode'
-  }
-]
-
 const navigationOptions: ProductCreateProps['navigationOptions'] = ({ navigation }) => ({
   headerTitle: 'Stwórz produkt',
   headerRight: (
     <SaveButton
-      onPress={navigation.getParam('handleProductCreate')}
+      onPress={navigation.getParam('_handleProductCreate')}
       accessibilityLabel="Zapisz produkt"  
     >
       <SaveText>Zapisz</SaveText>
@@ -234,16 +200,6 @@ const navigationOptions: ProductCreateProps['navigationOptions'] = ({ navigation
 });
 
 ProductCreate.navigationOptions = navigationOptions;
-
-export interface ProductDataParams {
-  barcode?: BarcodeId
-  name?: string
-}
-export interface ProductCreateParams extends ProductDataParams {
-  onProductCreated?: (product: Product) => void
-  handleProductCreate?: () => void
-}
-
 interface ProductCreateOptions {
   headerTitle: string
   headerRight: JSX.Element

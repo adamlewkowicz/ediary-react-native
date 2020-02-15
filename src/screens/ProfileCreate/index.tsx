@@ -2,20 +2,28 @@ import React, { useState } from 'react';
 import styled, { css } from 'styled-components/native';
 import { SelectionBox } from '../../components/SelectionBox';
 import { Block } from '../../components/Elements';
-import { WomanIcon, ManIcon, MuscleIcon, MeasureIcon, FemaleBodyIcon } from '../../components/Icons';
+import {
+  WomanIcon,
+  ManIcon,
+  MuscleIcon,
+  MeasureIcon,
+  FemaleBodyIcon,
+} from '../../components/Icons';
 import { theme } from '../../common/theme';
 import { Button } from '../../components/Button';
 import { Heading } from '../../components/Elements/Heading';
 import Slider from '@react-native-community/slider';
-import { WeightGoal, Screen } from '../../types';
+import { WeightGoal } from '../../types';
 import { useDispatch } from 'react-redux';
-import * as Actions from '../../store/actions';
-import { NavigationScreenProps } from 'react-navigation';
-import { useUserId } from '../../hooks';
+import { useUserId, useNavigate } from '../../hooks';
+import { IProfileRequired } from '../../database/entities';
+import { STEP_TITLES, ICON_SIZE } from './consts';
+import { Actions } from '../../store';
 
-export interface ProfileCreateProps extends NavigationScreenProps {}
+export interface ProfileCreateProps {}
+
 export const ProfileCreate = (props: ProfileCreateProps) => {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState<0 | 1 | 2>(0);
   const [male, setMale] = useState(true);
   const [height, setHeight] = useState(170);
   const [weight, setWeight] = useState(60);
@@ -23,16 +31,26 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
   const [weightGoal, setWeightGoal] = useState<WeightGoal>('maintain');
   const dispatch = useDispatch();
   const userId = useUserId();
+  const navigate = useNavigate();
 
   async function handleProfileCreate() {
-    const payload = { male, height, weightGoal, weight, age, userId };
+    const profile: IProfileRequired = { male, height, weightGoal, weight, age, userId };
 
     await dispatch(
-      Actions.userProfileCreate(payload)
+      Actions.userProfileCreate(profile)
     );
 
-    const screen: Screen = 'Main';
-    props.navigation.navigate(screen);
+    navigate('Main');
+  }
+
+  const isLastStep = step === 2;
+
+  const handleNextStepButtonPress = () => {
+    if (isLastStep) {
+      handleProfileCreate();
+    } else {
+      setStep(step => step + 1 as 0 | 1);
+    }
   }
 
   const steps = [
@@ -46,8 +64,8 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
             icon={(
               <ManIcon
                 fill={male ? theme.color.focus : 'rgba(1,1,1,.7)'}
-                width={45}
-                height={45}
+                width={ICON_SIZE}
+                height={ICON_SIZE}
               />
             )}
           />
@@ -58,8 +76,8 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
             icon={(
               <WomanIcon
                 fill={!male ? theme.color.focus : 'rgba(1,1,1,.7)'}
-                width={45}
-                height={45}
+                width={ICON_SIZE}
+                height={ICON_SIZE}
               />
             )}
           />
@@ -72,9 +90,7 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           value="Wzrost"
           size={17}
           align="center"
-          css={css`
-            margin-bottom: 15px;
-          `}
+          styles={Heading1Style}
         />
         <SliderValue>{height} cm</SliderValue>
         <Slider
@@ -91,9 +107,7 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           value="Waga"
           size={17}
           align="center"
-          css={css`
-            margin: 40px 0 15px 0;
-          `}
+          styles={Heading2Style}
         />
         <SliderValue>{weight} kg</SliderValue>
         <Slider
@@ -110,9 +124,7 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           value="Wiek"
           size={17}
           align="center"
-          css={css`
-            margin: 40px 0 15px 0;
-          `}
+          styles={Heading2Style}
         />
         <SliderValue>{age} lat</SliderValue>
         <Slider
@@ -137,8 +149,8 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           icon={(
             <FemaleBodyIcon
               fill={weightGoal === 'decrease' ? theme.color.focus : 'rgba(1,1,1,.7)'}
-              width={45}
-              height={45}
+              width={ICON_SIZE}
+              height={ICON_SIZE}
             />
           )}
         />
@@ -150,8 +162,8 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           icon={(
             <MeasureIcon
               fill={weightGoal === 'maintain' ? theme.color.focus : 'rgba(1,1,1,.7)'}
-              width={45}
-              height={45}
+              width={ICON_SIZE}
+              height={ICON_SIZE}
             />
           )}
         />
@@ -163,24 +175,22 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           icon={(
             <MuscleIcon
               fill={weightGoal === 'increase' ? theme.color.focus : 'rgba(1,1,1,.7)'}
-              width={45}
-              height={45}
+              width={ICON_SIZE}
+              height={ICON_SIZE}
             />
           )}
         />
       </Block>
     )
-  ];
-
-  const isLastStep = steps.length - 1 === step;
+  ] as const;
 
   return (
     <Container>
       <Heading
-        value={(stepTitles as any)[step]}
+        value={STEP_TITLES[step]}
         size={20}
         align="center"
-        css={HeadingStyle}
+        styles={Heading3Style}
       />
       <Content>
         {steps[step]}
@@ -188,13 +198,7 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
       <InfoContainer>
         <Button
           title={isLastStep ? 'Zapisz' : 'Kontynuuj'}
-          onPress={() => {
-            if (isLastStep) {
-              handleProfileCreate();
-            } else {
-              setStep(step + 1);
-            }
-          }}
+          onPress={handleNextStepButtonPress}
         />
       </InfoContainer>
     </Container>
@@ -207,7 +211,15 @@ const Container = styled.View`
   flex: 1;
 `
 
-const HeadingStyle = css`
+const Heading1Style = css`
+  margin-bottom: 15px;
+`
+
+const Heading2Style = css`
+  margin: 40px 0 15px 0;
+`
+
+const Heading3Style = css`
   margin: 15px 0 25px 0;
 `
 
@@ -228,9 +240,3 @@ const SliderValue = styled.Text`
   font-size: 20px;
   margin-bottom: 10px;
 `
-
-const stepTitles = {
-  0: 'Wybierz płeć',
-  1: 'Twoje pomiary',
-  2: 'Wybierz cel',
-}
