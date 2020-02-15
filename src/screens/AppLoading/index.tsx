@@ -1,8 +1,7 @@
 import React from 'react';
 import { ActivityIndicator, Alert } from 'react-native';
 import { USER_ID_UNSYNCED, DEFAULT_CONNECTION } from '../../common/consts';
-import { store } from '../../store';
-import * as Actions from '../../store/actions';
+import { store, Actions } from '../../store';
 import { User } from '../../database/entities';
 import { NavigationScreenProps } from 'react-navigation';
 import { databaseConfig } from '../../database/config/config';
