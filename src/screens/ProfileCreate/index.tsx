@@ -19,6 +19,18 @@ import { useUserId, useNavigate } from '../../hooks';
 import { IProfileRequired } from '../../database/entities';
 import { STEP_TITLES, ICON_SIZE } from './consts';
 import { Actions } from '../../store';
+import { Picker } from 'react-native';
+import { NumericPicker } from '../../components/NumericPicker';
+import { createArrayOfLength } from '../../common/utils';
+
+createArrayOfLength(101, index => index + 10);
+
+// API POC
+// createNumericArrOfSize({ from: 101, to: 210 })
+
+const AGE_VALUES: number[] = Array.from({ length: 101 }, (_, index) => index + 10);
+const WEIGHT_VALUES: number[] = Array.from({ length: 180 }, (_, index) => index + 41);
+const HEIGHT_VALUES: number[] = Array.from({ length: 100 }, (_, index) => index + 121);
 
 export interface ProfileCreateProps {}
 
@@ -93,15 +105,11 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           styles={Heading1Style}
         />
         <SliderValue>{height} cm</SliderValue>
-        <Slider
-          step={1}
+        <NumericPicker
           value={height}
-          minimumValue={140}
-          maximumValue={210}
-          style={{ height: 19 }}
-          onSlidingComplete={height => setHeight(Math.floor(height))}
-          minimumTrackTintColor={theme.colors.secondary}
-          maximumTrackTintColor="rgba(157, 163, 180, 0.10)"
+          onChange={setHeight}
+          options={HEIGHT_VALUES}
+          renderOptionLabel={height => `${height} cm`}
         />
         <Heading
           value="Waga"
@@ -110,15 +118,11 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           styles={Heading2Style}
         />
         <SliderValue>{weight} kg</SliderValue>
-        <Slider
-          step={1}
+        <NumericPicker
           value={weight}
-          minimumValue={40}
-          maximumValue={150}
-          style={{ height: 19 }}
-          onSlidingComplete={weight => setWeight(Math.floor(weight))}
-          minimumTrackTintColor={theme.colors.secondary}
-          maximumTrackTintColor="rgba(157, 163, 180, 0.10)"
+          onChange={setWeight}
+          options={WEIGHT_VALUES}
+          renderOptionLabel={weight => `${weight} kg`}
         />
         <Heading
           value="Wiek"
@@ -127,15 +131,11 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
           styles={Heading2Style}
         />
         <SliderValue>{age} lat</SliderValue>
-        <Slider
-          step={1}
+        <NumericPicker
           value={age}
-          minimumValue={10}
-          maximumValue={100}
-          style={{ height: 19 }}
-          onSlidingComplete={age => setAge(Math.floor(age))}
-          minimumTrackTintColor={theme.colors.secondary}
-          maximumTrackTintColor="rgba(157, 163, 180, 0.10)"
+          onChange={age => setAge(age)}
+          options={AGE_VALUES}
+          renderOptionLabel={age => `${age} lat`}
         />
       </MetricsContainer>
     ),

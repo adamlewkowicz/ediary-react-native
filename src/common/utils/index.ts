@@ -195,3 +195,8 @@ export function calcMacroNeedsLeft(
     kcal: { ...macroNeedsElement }
   });
 }
+
+export const createArrayOfLength = <T>(
+  length: number,
+  callback: (index: number) => T
+): T[] => Array.from({ length }, (_, index) => callback(index));
