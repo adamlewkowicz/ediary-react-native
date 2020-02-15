@@ -16,6 +16,9 @@ Play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://p
 </br >
 </br >
 
+[![Node CI](https://github.com/alk831/ediary-react-native/workflows/Node%20CI/badge.svg?branch=dev)](https://github.com/alk831/ediary-react-native/actions?query=workflow%3A%22Node+CI%22)
+[![Android CI](https://github.com/alk831/ediary-react-native/workflows/Android%20CI/badge.svg?branch=dev)](https://github.com/alk831/ediary-react-native/actions?query=workflow%3A%22Android+CI%22)
+
 ## Funkcje
 - obliczanie dziennego zapotrzebowania kalorycznego na podstawie płci, wagi, wieku, wzrostu oraz celu
 - wyszukiwarka z listą gotowych produktów
@@ -36,7 +39,7 @@ Play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://p
 - Jest i React Testing Library (testy jednostkowe i integracyjne)
 - Figma (design, prototypowanie UI)
 
-## Podgląd
+## Podgląd(
 ![Podgląd](https://i.imgur.com/7cH5o3z.png)
 
 ## Zdjęcia
