@@ -25,7 +25,7 @@ const SECTION_TITLE = {
 interface ProductFindProps {}
 
 export const ProductFind = (props: ProductFindProps) => {
-  const params = useNavigationParams<ProductFindParams>(['onItemPress']);
+  const params = useNavigationParams<ProductFindParams>();
   const [name, setName] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setLoading] = useState(false);

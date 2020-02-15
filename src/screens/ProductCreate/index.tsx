@@ -25,11 +25,7 @@ interface ProductCreateProps extends
   NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
 
 export const ProductCreate = (props: ProductCreateProps) => {
-  const params = useNavigationParams<ProductCreateParams>([
-    'onProductCreated',
-    'barcode',
-    'name',
-  ]);
+  const params = useNavigationParams<ProductCreateParams>();
   const [state, dispatch] = useReducer(
     productCreateReducer,
     params,
