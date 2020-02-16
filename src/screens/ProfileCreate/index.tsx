@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components/native';
-import { SelectionBox } from '../../components/SelectionBox';
 import { Block } from '../../components/Elements';
 import {
   WomanIcon,
@@ -9,19 +8,17 @@ import {
   MeasureIcon,
   FemaleBodyIcon,
 } from '../../components/Icons';
-import { theme } from '../../common/theme';
 import { Button } from '../../components/Button';
 import { Heading } from '../../components/Elements/Heading';
-import Slider from '@react-native-community/slider';
 import { WeightGoal } from '../../types';
 import { useDispatch } from 'react-redux';
 import { useUserId, useNavigate } from '../../hooks';
 import { IProfileRequired } from '../../database/entities';
-import { STEP_TITLES, ICON_SIZE, ICON_SIZES } from './consts';
+import { STEP_TITLES, ICON_SIZE } from './consts';
 import { Actions } from '../../store';
-import { Picker } from 'react-native';
 import { NumericPicker } from '../../components/NumericPicker';
 import { createArrayOfLength } from '../../common/utils';
+import { SelectionOptions } from '../../components/SelectionOptions';
 
 createArrayOfLength(101, index => index + 10);
 
@@ -37,9 +34,9 @@ export interface ProfileCreateProps {}
 export const ProfileCreate = (props: ProfileCreateProps) => {
   const [step, setStep] = useState<0 | 1 | 2>(0);
   const [male, setMale] = useState(true);
-  const [height, setHeight] = useState(170);
-  const [weight, setWeight] = useState(60);
-  const [age, setAge] = useState(55);
+  const [height, setHeight] = useState(175);
+  const [weight, setWeight] = useState(65);
+  const [age, setAge] = useState(25);
   const [weightGoal, setWeightGoal] = useState<WeightGoal>('maintain');
   const dispatch = useDispatch();
   const userId = useUserId();
@@ -69,30 +66,31 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
     (
       <>
         <Block row space="space-around">
-          <SelectionBox 
+          <SelectionOptions
             value={male}
-            onChange={() => setMale(true)}
-            title="Mężczyzna"
-            icon={(
-              <ManIcon
-                fill={male ? theme.color.focus : 'rgba(1,1,1,.7)'}
-                width={ICON_SIZE}
-                height={ICON_SIZE}
-              />
-            )}
-          />
-          <SelectionBox
-            value={!male}
-            onChange={() => setMale(false)}
-            title="Kobieta"
-            icon={(
-              <WomanIcon
-                fill={!male ? theme.color.focus : 'rgba(1,1,1,.7)'}
-                {...ICON_SIZES}
-                width={ICON_SIZE}
-                height={ICON_SIZE}
-              />
-            )}
+            onChange={setMale}
+            options={[
+              {
+                value: true,
+                title: 'Mężczyzna',
+                renderIcon: (_, svgProps) => (
+                  <ManIcon
+                    {...svgProps}
+                    {...ICON_SIZE}
+                  />
+                )
+              },
+              {
+                value: false,
+                title: 'Kobieta',
+                renderIcon: (_, svgProps) => (
+                  <WomanIcon
+                    {...svgProps}
+                    {...ICON_SIZE}
+                  />
+                )
+              }
+            ]}
           />
         </Block>
       </>
@@ -124,44 +122,44 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
     ),
     (
       <Block space="space-evenly" row={false} align="center">
-        <SelectionBox
-          value={weightGoal === 'decrease'}
-          onChange={() => setWeightGoal('decrease')}
-          title="Redukcja"
-          description="Chcę zmniejszyć wagę"
-          icon={(
-            <FemaleBodyIcon
-              fill={weightGoal === 'decrease' ? theme.color.focus : 'rgba(1,1,1,.7)'}
-              width={ICON_SIZE}
-              height={ICON_SIZE}
-            />
-          )}
-        />
-        <SelectionBox
-          value={weightGoal === 'maintain'}
-          onChange={() => setWeightGoal('maintain')}
-          title="Utrzymanie"
-          description="Chcę utrzymać obecną wagę"
-          icon={(
-            <MeasureIcon
-              fill={weightGoal === 'maintain' ? theme.color.focus : 'rgba(1,1,1,.7)'}
-              width={ICON_SIZE}
-              height={ICON_SIZE}
-            />
-          )}
-        />
-        <SelectionBox
-          value={weightGoal === 'increase'}
-          onChange={() => setWeightGoal('increase')}
-          title="Zwiększenie"
-          description="Chcę zwiększyć wagę"
-          icon={(
-            <MuscleIcon
-              fill={weightGoal === 'increase' ? theme.color.focus : 'rgba(1,1,1,.7)'}
-              width={ICON_SIZE}
-              height={ICON_SIZE}
-            />
-          )}
+        <SelectionOptions
+          value={weightGoal}
+          onChange={setWeightGoal}
+          options={[
+            {
+              value: 'decrease',
+              title: 'Redukcja',
+              description: 'Chcę zmniejszyć wagę',
+              renderIcon: (_, svgProps) => (
+                <FemaleBodyIcon
+                  {...svgProps}
+                  {...ICON_SIZE}
+                />
+              )
+            },
+            {
+              value: 'maintain',
+              title: 'Utrzymanie',
+              description: 'Chcę utrzymać obecną wagę',
+              renderIcon: (_, svgProps) => (
+                <MeasureIcon
+                  {...svgProps}
+                  {...ICON_SIZE}
+                />
+              )
+            },
+            {
+              value: 'increase',
+              title: 'Zwiększenie',
+              description: 'Chcę zwiększyć wagę',
+              renderIcon: (_, svgProps) => (
+                <MuscleIcon
+                  {...svgProps}
+                  {...ICON_SIZE}
+                />
+              )
+            }
+          ]}
         />
       </Block>
     )
@@ -192,14 +190,6 @@ const Container = styled.View`
   padding: 10px;
   justify-content: space-between;
   flex: 1;
-`
-
-const Heading1Style = css`
-  margin-bottom: 15px;
-`
-
-const Heading2Style = css`
-  margin: 40px 0 15px 0;
 `
 
 const Heading3Style = css`

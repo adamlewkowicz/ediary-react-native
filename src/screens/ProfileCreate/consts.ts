@@ -5,9 +5,7 @@ export const STEP_TITLES = {
   '2': 'Wybierz cel',
 };
 
-export const ICON_SIZE = 45;
-
-export const ICON_SIZES = {
-  width: ICON_SIZE,
-  height: ICON_SIZE
+export const ICON_SIZE = {
+  width: 45,
+  height: 45
 } as const;
