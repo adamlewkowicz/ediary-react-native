@@ -12,16 +12,15 @@ export function SelectionOptions<T>(
   props: SelectionOptionsProps<T>
 ) {
   const renderOptions = props.options.map(option => {
-    const isActive = option.value === props.value;
+    const { value, ...optionProps } = option;
+    const isActive = value === props.value;
 
     return (
       <SelectionBox
         key={option.title}
         isActive={isActive}
         onChange={() => props.onChange(option.value)}
-        title={option.title}
-        description={option.description}
-        Icon={option.Icon}
+        {...optionProps}
       />
     );
   });
