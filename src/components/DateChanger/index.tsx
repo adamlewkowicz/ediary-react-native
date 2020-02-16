@@ -81,11 +81,11 @@ const CalendarButton = styled.TouchableOpacity`
 
 const Title = styled.Text`
   font-size: 25px;
-  font-family: 'DMSans-Regular';
+  font-family: ${props => props.theme.fontWeight.regular};
   font-weight: bold;
 `
 
 const DateInfo = styled.Text`
   margin-top: 8px;
-  font-family: 'DMSans-Regular';
+  font-family: ${props => props.theme.fontWeight.regular};
 `
