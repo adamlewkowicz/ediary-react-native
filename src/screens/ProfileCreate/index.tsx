@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled, { css } from 'styled-components/native';
+import styled from 'styled-components/native';
 import { Block } from '../../components/Elements';
 import {
   WomanIcon,
@@ -14,7 +14,7 @@ import { WeightGoal } from '../../types';
 import { useDispatch } from 'react-redux';
 import { useUserId, useNavigate } from '../../hooks';
 import { IProfileRequired } from '../../database/entities';
-import { STEP_TITLES, ICON_SIZE } from './consts';
+import { STEP_TITLES } from './consts';
 import { Actions } from '../../store';
 import { NumericPicker } from '../../components/NumericPicker';
 import { createArrayOfLength } from '../../common/utils';
@@ -73,22 +73,12 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
               {
                 value: true,
                 title: 'Mężczyzna',
-                renderIcon: (_, svgProps) => (
-                  <ManIcon
-                    {...svgProps}
-                    {...ICON_SIZE}
-                  />
-                )
+                Icon: ManIcon,
               },
               {
                 value: false,
                 title: 'Kobieta',
-                renderIcon: (_, svgProps) => (
-                  <WomanIcon
-                    {...svgProps}
-                    {...ICON_SIZE}
-                  />
-                )
+                Icon: WomanIcon,
               }
             ]}
           />
@@ -130,34 +120,19 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
               value: 'decrease',
               title: 'Redukcja',
               description: 'Chcę zmniejszyć wagę',
-              renderIcon: (_, svgProps) => (
-                <FemaleBodyIcon
-                  {...svgProps}
-                  {...ICON_SIZE}
-                />
-              )
+              Icon: FemaleBodyIcon
             },
             {
               value: 'maintain',
               title: 'Utrzymanie',
               description: 'Chcę utrzymać obecną wagę',
-              renderIcon: (_, svgProps) => (
-                <MeasureIcon
-                  {...svgProps}
-                  {...ICON_SIZE}
-                />
-              )
+              Icon: MeasureIcon
             },
             {
               value: 'increase',
               title: 'Zwiększenie',
               description: 'Chcę zwiększyć wagę',
-              renderIcon: (_, svgProps) => (
-                <MuscleIcon
-                  {...svgProps}
-                  {...ICON_SIZE}
-                />
-              )
+              Icon: MuscleIcon
             }
           ]}
         />
@@ -167,12 +142,9 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
 
   return (
     <Container>
-      <Heading
-        value={STEP_TITLES[step]}
-        size={20}
-        align="center"
-        styles={Heading3Style}
-      />
+      <MainHeading>
+        {STEP_TITLES[step]}
+      </MainHeading>
       <Content>
         {steps[step]}
       </Content>
@@ -192,8 +164,10 @@ const Container = styled.View`
   flex: 1;
 `
 
-const Heading3Style = css`
+const MainHeading = styled(Heading)`
+  text-align: center;
   margin: 15px 0 25px 0;
+  font-size: ${props => props.theme.fontSize.largeXL};
 `
 
 const Content = styled.ScrollView`
@@ -209,7 +183,6 @@ const InfoContainer = styled.View`
 `
 
 const MetricsHeading = styled.Text`
-  font-size: 17px;
-  text-align: center;
-  margin-bottom: 25px;
+  font-size: ${props => props.theme.fontSize.regular};
+  margin-bottom: 10px;
 `

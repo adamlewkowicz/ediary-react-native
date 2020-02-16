@@ -4,8 +4,3 @@ export const STEP_TITLES = {
   '1': 'Twoje pomiary',
   '2': 'Wybierz cel',
 };
-
-export const ICON_SIZE = {
-  width: 45,
-  height: 45
-} as const;

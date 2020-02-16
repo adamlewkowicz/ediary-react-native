@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import styled from 'styled-components/native';
 import { theme } from '../../common/theme';
 import { CheckedIcon } from '../Icons';
-import { TouchableOpacityProps } from 'react-native';
+import { SvgProps } from 'react-native-svg';
 
 interface SelectionBoxProps {
   children?: ReactNode
@@ -10,26 +10,35 @@ interface SelectionBoxProps {
   onChange: (status: boolean) => void
   title: string
   description?: string
-  icon?: JSX.Element
-  onPress?: TouchableOpacityProps['onPress']
+  Icon?: (props: SvgProps) => JSX.Element
   noFlex?: boolean
 }
 
 export const SelectionBox = (props: SelectionBoxProps) => {
+  const isActive = props.value;
+  const iconFill = isActive ? theme.color.focus : 'rgba(1,1,1,.7)';
+
   return (
     <TouchableWrapper
-      isActive={props.value}
-      onPress={() => props.onChange && props.onChange(!props.value)}
+      isActive={isActive}
+      onPress={() => props.onChange(!isActive)}
       noFlex={props.noFlex}
     >
-      <IconContainer>
-        {props.icon}
-      </IconContainer>
+      {props.Icon && (
+        <IconContainer>
+          <props.Icon
+            fill={iconFill}
+            {...CUSTOM_ICON_SIZE}
+          />
+        </IconContainer>
+      )}
       <Title>{props.title}</Title>
       {props.description && (
-        <Description>{props.description}</Description>
+        <Description>
+          {props.description}
+        </Description>
       )}
-      {props.value && (
+      {isActive && (
         <CheckedStyled
           fill={theme.color.focus}
           width={CHECKED_ICON_SIZE}
@@ -42,6 +51,11 @@ export const SelectionBox = (props: SelectionBoxProps) => {
 }
 
 const CHECKED_ICON_SIZE = 16;
+
+const CUSTOM_ICON_SIZE = {
+  width: 45,
+  height: 45
+}
 
 const TouchableWrapper = styled.TouchableOpacity<{
   isActive: boolean

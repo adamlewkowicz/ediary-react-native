@@ -1,21 +1,18 @@
 import React from 'react';
 import { SelectionBox } from '../SelectionBox';
-import { theme } from '../../common/theme';
 import { SvgProps } from 'react-native-svg';
 
-interface SelectionOptionsProps<V, T extends SelectionOption<V>> {
-  options: T[]
-  value: V
-  onChange: (value: V) => void
+interface SelectionOptionsProps<T> {
+  options: SelectionOption<T>[]
+  value: T
+  onChange: (value: T) => void
 }
 
-export function SelectionOptions<V, T extends SelectionOption<V>>(
-  props: SelectionOptionsProps<V, T>
+export function SelectionOptions<T>(
+  props: SelectionOptionsProps<T>
 ) {
   const renderOptions = props.options.map(option => {
     const isActive = option.value === props.value;
-    const iconFill = isActive ? theme.color.focus : 'rgba(1,1,1,.7)';
-    const svgProps: SvgProps = { fill: iconFill };
 
     return (
       <SelectionBox
@@ -24,7 +21,7 @@ export function SelectionOptions<V, T extends SelectionOption<V>>(
         onChange={() => props.onChange(option.value)}
         title={option.title}
         description={option.description}
-        icon={option.renderIcon(isActive, svgProps)}
+        Icon={option.Icon}
       />
     );
   });
@@ -40,5 +37,5 @@ interface SelectionOption<T> {
   value: T
   title: string
   description?: string
-  renderIcon: (isActive: boolean, svgProps: SvgProps) => JSX.Element
+  Icon?: (props: SvgProps) => JSX.Element
 }

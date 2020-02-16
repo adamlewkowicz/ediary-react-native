@@ -5,7 +5,7 @@ import { TextAlignProperty } from 'csstype';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
 interface HeadingProps extends TextProps {
-  value: string
+  value?: string
   children?: string
   size?: number
   align?: TextAlignProperty
