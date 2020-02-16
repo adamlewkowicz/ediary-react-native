@@ -17,7 +17,7 @@ export function SelectionOptions<T>(
     return (
       <SelectionBox
         key={option.title}
-        value={isActive}
+        isActive={isActive}
         onChange={() => props.onChange(option.value)}
         title={option.title}
         description={option.description}

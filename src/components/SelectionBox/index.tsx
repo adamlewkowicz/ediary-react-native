@@ -6,7 +6,7 @@ import { SvgProps } from 'react-native-svg';
 
 interface SelectionBoxProps {
   children?: ReactNode
-  value: boolean
+  isActive: boolean
   onChange: (status: boolean) => void
   title: string
   description?: string
@@ -15,13 +15,12 @@ interface SelectionBoxProps {
 }
 
 export const SelectionBox = (props: SelectionBoxProps) => {
-  const isActive = props.value;
-  const iconFill = isActive ? theme.color.focus : 'rgba(1,1,1,.7)';
+  const iconFill = props.isActive ? theme.color.focus : 'rgba(1,1,1,.7)';
 
   return (
     <TouchableWrapper
-      isActive={isActive}
-      onPress={() => props.onChange(!isActive)}
+      isActive={props.isActive}
+      onPress={() => props.onChange(!props.isActive)}
       noFlex={props.noFlex}
     >
       {props.Icon && (
@@ -38,7 +37,7 @@ export const SelectionBox = (props: SelectionBoxProps) => {
           {props.description}
         </Description>
       )}
-      {isActive && (
+      {props.isActive && (
         <CheckedStyled
           fill={theme.color.focus}
           width={CHECKED_ICON_SIZE}
@@ -74,7 +73,7 @@ const TouchableWrapper = styled.TouchableOpacity<{
 
 const Title = styled.Text`
   font-size: 16px;
-  font-family: DMSans-Medium;
+  font-family: ${props => props.theme.fontWeight.medium};
   margin: 10px 0;
 `
 
