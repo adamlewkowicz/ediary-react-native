@@ -1,5 +1,6 @@
 import React from 'react';
 import { Picker, PickerProps } from 'react-native'
+import styled from 'styled-components/native';
 
 interface NumericPickerProps<T> extends PickerProps {
   value: T
@@ -10,24 +11,30 @@ interface NumericPickerProps<T> extends PickerProps {
 
 export function NumericPicker <T extends number>(props: NumericPickerProps<T>) {
   const {
-    style = { height: 50, width: 100 },
+    onChange,
+    renderOptionLabel,
     ...pickerProps
   } = props;
 
   return (
-    <Picker
+    <StyledPicker
       selectedValue={props.value}
-      onValueChange={value => props.onChange(value)}
-      style={style}
+      onValueChange={value => onChange(value)}
       {...pickerProps}
     >
       {props.options.map(value => 
         <Picker.Item
-          label={props.renderOptionLabel(value)}
+          label={renderOptionLabel(value)}
           value={value}
           key={value}
         />
       )}
-    </Picker>
+    </StyledPicker>
   );
 }
+
+const StyledPicker = styled(Picker)`
+  background-color: rgba(1,1,1,.03);
+  /* height: 50px; */
+  /* width: 100px; */
+`

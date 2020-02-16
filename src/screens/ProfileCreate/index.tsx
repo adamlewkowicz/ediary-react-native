@@ -17,7 +17,7 @@ import { WeightGoal } from '../../types';
 import { useDispatch } from 'react-redux';
 import { useUserId, useNavigate } from '../../hooks';
 import { IProfileRequired } from '../../database/entities';
-import { STEP_TITLES, ICON_SIZE } from './consts';
+import { STEP_TITLES, ICON_SIZE, ICON_SIZES } from './consts';
 import { Actions } from '../../store';
 import { Picker } from 'react-native';
 import { NumericPicker } from '../../components/NumericPicker';
@@ -88,6 +88,7 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
             icon={(
               <WomanIcon
                 fill={!male ? theme.color.focus : 'rgba(1,1,1,.7)'}
+                {...ICON_SIZES}
                 width={ICON_SIZE}
                 height={ICON_SIZE}
               />
@@ -98,39 +99,21 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
     ),
     (
       <MetricsContainer>
-        <Heading
-          value="Wzrost"
-          size={17}
-          align="center"
-          styles={Heading1Style}
-        />
-        <SliderValue>{height} cm</SliderValue>
+        <MetricsHeading>Wzrost</MetricsHeading>
         <NumericPicker
           value={height}
           onChange={setHeight}
           options={HEIGHT_VALUES}
           renderOptionLabel={height => `${height} cm`}
         />
-        <Heading
-          value="Waga"
-          size={17}
-          align="center"
-          styles={Heading2Style}
-        />
-        <SliderValue>{weight} kg</SliderValue>
+        <MetricsHeading>Waga</MetricsHeading>
         <NumericPicker
           value={weight}
           onChange={setWeight}
           options={WEIGHT_VALUES}
           renderOptionLabel={weight => `${weight} kg`}
         />
-        <Heading
-          value="Wiek"
-          size={17}
-          align="center"
-          styles={Heading2Style}
-        />
-        <SliderValue>{age} lat</SliderValue>
+        <MetricsHeading>Wiek</MetricsHeading>
         <NumericPicker
           value={age}
           onChange={age => setAge(age)}
@@ -235,8 +218,8 @@ const InfoContainer = styled.View`
   padding: 25px 15px;
 `
 
-const SliderValue = styled.Text`
+const MetricsHeading = styled.Text`
+  font-size: 17px;
   text-align: center;
-  font-size: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 25px;
 `

@@ -6,3 +6,8 @@ export const STEP_TITLES = {
 };
 
 export const ICON_SIZE = 45;
+
+export const ICON_SIZES = {
+  width: ICON_SIZE,
+  height: ICON_SIZE
+} as const;

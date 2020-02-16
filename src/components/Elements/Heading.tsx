@@ -23,7 +23,7 @@ const Container = styled.Text<{
   align?: TextAlignProperty
   styles?: FlattenSimpleInterpolation
 }>`
-  font-family: DMSans-Medium;
+  font-family: ${props => props.theme.fontWeight.regular};
   font-size: ${props => props.size || props.theme.fontSize.regular};
   text-align: ${props => props.align || 'left'};
   ${props => props.styles};
