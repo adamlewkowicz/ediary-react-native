@@ -12,7 +12,6 @@ interface DateChangerProps {
 
 export const DateChanger = (props: DateChangerProps) => {
   const dayjsDate = dayjs(props.value);
-  const iconSize = 26;
 
   async function handleDateChange() {
     try {
@@ -29,36 +28,30 @@ export const DateChanger = (props: DateChangerProps) => {
     } catch {}
   }
 
+  const handleDayChange = (direction: 'prev' | 'next') => {
+    const numericDirection = direction === 'prev' ? -1 : 1;
+    const date = dayjsDate.add(numericDirection, 'day').toDate();
+
+    props.onChange(date);
+  }
+
   return (
     <Block marginVertical={8} align="center" space="space-between">
-
       <DayChangeButton
         accessibilityLabel="Poprzedni dzień"
-        onPress={() => props.onChange(
-          dayjsDate.add(-1, 'day').toDate()
-        )}
+        onPress={() => handleDayChange('prev')}
       >
-        <LeftIcon
-          fill="#17A7F2"
-          width={iconSize}
-          height={iconSize}
-        />
+        <ArrowIconLeft {...ARROW_ICON_STYLE} />
       </DayChangeButton>
       <CalendarButton onPress={handleDateChange}>
         <Title>{dayjsDate.format('dddd')}</Title>
-        <DateInfo>{dayjsDate.format('dddd DD MMMM')}</DateInfo>
+        <DateInfo>{dayjsDate.format('DD MMMM YYYY')}</DateInfo>
       </CalendarButton>
       <DayChangeButton
         accessibilityLabel="Następny dzień"
-        onPress={() => props.onChange(
-          dayjsDate.add(1, 'day').toDate()
-        )}
+        onPress={() => handleDayChange('next')}
       >
-        <RightIcon
-          fill="#17A7F2"
-          width={iconSize}
-          height={iconSize}
-        />
+        <ArrowIconRight {...ARROW_ICON_STYLE} />
       </DayChangeButton>
     </Block>
   );
@@ -68,8 +61,9 @@ const DayChangeButton = styled.TouchableOpacity`
   padding: 20px;
 `
 
-const RightIcon = styled(RightArrowIcon)``
-const LeftIcon = styled(RightIcon)`
+const ArrowIconRight = styled(RightArrowIcon)``
+
+const ArrowIconLeft = styled(ArrowIconRight)`
   transform: rotate(180deg);
 `
 
@@ -89,3 +83,9 @@ const DateInfo = styled.Text`
   margin-top: 8px;
   font-family: ${props => props.theme.fontWeight.regular};
 `
+
+const ARROW_ICON_STYLE = {
+  fill: '#17A7F2',
+  width: 26,
+  height: 26,
+}
