@@ -17,17 +17,8 @@ import { IProfileRequired } from '../../database/entities';
 import { STEP_TITLES } from './consts';
 import { Actions } from '../../store';
 import { NumericPicker } from '../../components/NumericPicker';
-import { createArrayOfLength } from '../../common/utils';
+import { fillArrayWithinRange } from '../../common/utils';
 import { SelectionOptions } from '../../components/SelectionOptions';
-
-createArrayOfLength(101, index => index + 10);
-
-// API POC
-// createNumericArrOfSize({ from: 101, to: 210 })
-
-const AGE_VALUES: number[] = Array.from({ length: 101 }, (_, index) => index + 10);
-const WEIGHT_VALUES: number[] = Array.from({ length: 180 }, (_, index) => index + 41);
-const HEIGHT_VALUES: number[] = Array.from({ length: 100 }, (_, index) => index + 121);
 
 export interface ProfileCreateProps {}
 
@@ -186,3 +177,7 @@ const MetricsHeading = styled.Text`
   font-size: ${props => props.theme.fontSize.regular};
   margin-bottom: 10px;
 `
+
+const AGE_VALUES = fillArrayWithinRange({ from: 10, to: 120 });
+const WEIGHT_VALUES = fillArrayWithinRange({ from: 40, to: 180 });
+const HEIGHT_VALUES = fillArrayWithinRange({ from: 100, to: 210 });

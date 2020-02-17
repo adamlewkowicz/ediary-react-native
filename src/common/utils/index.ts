@@ -196,7 +196,15 @@ export function calcMacroNeedsLeft(
   });
 }
 
-export const createArrayOfLength = <T>(
+const createArrayOfLength = <T>(
   length: number,
   callback: (index: number) => T
 ): T[] => Array.from({ length }, (_, index) => callback(index));
+
+export const fillArrayWithinRange = (
+  { from, to }: { from: number; to: number }
+): number[] => {
+  const zeroBasedCountFill = 1;
+  const length = to - from + zeroBasedCountFill;
+  return createArrayOfLength(length, index => index + from);
+}
