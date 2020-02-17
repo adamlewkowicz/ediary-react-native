@@ -1,19 +1,18 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components/native';
 import { sortByMostAccurateName, debounce } from '../../common/utils';
-import { Product } from '../../database/entities';
+import { Product, ProductOrNormalizedProduct } from '../../database/entities';
 import { ProductListItem, Separator } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
 import { SectionList } from 'react-navigation';
 import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { BarcodeId } from '../../types';
-import { Button } from 'react-native-ui-kitten';
+import { Button } from '../../components/Button';
 import { useConnected, useIdleStatus, useNavigate } from '../../hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
 import { ActivityIndicator } from 'react-native';
-import { NormalizedProduct } from '../../services/IlewazyApi/types';
 import { ProductFindParams } from './params';
 import { useNavigationParams } from '../../hooks/useNavigationParams';
 
@@ -28,7 +27,7 @@ interface ProductFindProps {}
 export const ProductFind = (props: ProductFindProps) => {
   const params = useNavigationParams<ProductFindParams>();
   const [name, setName] = useState('');
-  const [products, setProducts] = useState<ProductState[]>([]);
+  const [products, setProducts] = useState<ProductOrNormalizedProduct[]>([]);
   const [isLoading, setLoading] = useState(false);
   const [barcode, setBarcode] = useState<BarcodeId | null>(null);
   const isConnected = useConnected();
@@ -88,7 +87,7 @@ export const ProductFind = (props: ProductFindProps) => {
     });
   }
 
-  async function handleItemPress(product: ProductState) {
+  async function handleItemPress(product: ProductOrNormalizedProduct) {
     if (params.onItemPress && !hasBeenPressed.current) {
       hasBeenPressed.current = true;
 
@@ -120,13 +119,12 @@ export const ProductFind = (props: ProductFindProps) => {
             Aby wyszukiwać więcej produktów, przejdź do trybu online.
           </NotFoundInfo>
         )}
-        <Button
-          style={{ marginTop: 15 }}
+        <AddOwnProductButton
           onPress={handleProductCreateNavigation}
           accessibilityLabel="Dodaj własny produkt"
         >
           Dodaj własny
-        </Button>
+        </AddOwnProductButton>
       </>
     );
   }
@@ -162,7 +160,7 @@ export const ProductFind = (props: ProductFindProps) => {
           { title: SECTION_TITLE.foundProducts, data: products },
           { title: SECTION_TITLE.recentProducts, data: isIdle ? recentProducts : [] },
         ]}
-        renderItem={({ item: product }: { item: ProductState }) => (
+        renderItem={({ item: product }: { item: ProductOrNormalizedProduct }) => (
           <ProductListItem
             product={product}
             onPress={() => handleItemPress(product)}
@@ -190,9 +188,12 @@ const SectionTitleContainer = styled.View<{
   padding: ${props => props.isFirst ? '10px 0 5px 0' : '30px 0 5px 0'}
 `
 
+const AddOwnProductButton = styled(Button)`
+  margin-top: 15px;
+`
+
 ProductFind.navigationOptions = {
   headerTitle: 'Znajdź produkt'
 }
 
-type ProductState = NormalizedProduct | Product;
 export type ProductResolver = () => Promise<Product>;

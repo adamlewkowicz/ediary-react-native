@@ -143,8 +143,9 @@ export class Product extends GenericEntity {
 
   static async findAndFetchByNameLike(name: string): Promise<ProductOrNormalizedProduct[]> {
     const savedProducts = await Product.findByNameLike(name);
+    const minProductsFoundLimit = 3;
 
-    if (savedProducts.length <= 3) {
+    if (savedProducts.length <= minProductsFoundLimit) {
       const fetchedProducts = await ilewazyApi.findByName(name);
 
       if (fetchedProducts.length) {
@@ -159,7 +160,7 @@ export class Product extends GenericEntity {
           }
         );
 
-        return filteredProducts;
+        return [...savedProducts, ...fetchedProducts];
       }
     }
 
@@ -170,11 +171,12 @@ export class Product extends GenericEntity {
     return this.find({ barcode });
   }
 
-  static saveNormalizedProduct(payload: NormalizedProduct): Promise<Product> {
+  private static parseNormalizedProduct(payload: NormalizedProduct) {
     const {
       images = [],
       unit,
       portion,
+      _id,
       ...data
     } = payload;
 
@@ -183,10 +185,16 @@ export class Product extends GenericEntity {
       images: images.map(url => ({ url })),
       isVerified: true,
     }
+    
+    return parsedProduct;
+  }
 
+  static saveNormalizedProduct(payload: NormalizedProduct): Promise<Product> {
+    const parsedProduct = Product.parseNormalizedProduct(payload);
+    
     const query = {
       where: {
-        name: payload.name,
+        name: parsedProduct.name,
         isVerified: true,
       }
     }
