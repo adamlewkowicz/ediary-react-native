@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useReducer } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
 import { ProductListItem, Separator } from '../../components/ProductListItem';
@@ -8,15 +8,19 @@ import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { BarcodeId } from '../../types';
 import { Button } from '../../components/Button';
-import { useConnected, useIdleStatus, useNavigate } from '../../hooks';
+import { useConnected, useIdleStatus, useNavigate, useTypingValue } from '../../hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Text } from 'react-native';
 import { ProductFindParams } from './params';
 import { useNavigationParams } from '../../hooks/useNavigationParams';
 import { useDebouncedEffect } from '../../hooks/useDebouncedEffect';
+import { useMountedEffect } from '../../hooks/useMountedEffect';
+import { productFindReducer, initialState } from './reducer';
 
 interface ProductFindProps {}
+
+let timeout: NodeJS.Timeout;
 
 export const ProductFind = (props: ProductFindProps) => {
   const params = useNavigationParams<ProductFindParams>();
@@ -30,19 +34,31 @@ export const ProductFind = (props: ProductFindProps) => {
   const hasBeenPressed = useRef(false);
   const isIdle = useIdleStatus();
   const navigate = useNavigate();
+  const [state, dispatch] = useReducer(productFindReducer, initialState);
+
+  const isBusy = state.isLoading || state.isTyping;
 
   const handleProductNameUpdate = (productName: string): void => {
-    setName(productName);
-    if (!isLoading) setLoading(true);
+    clearTimeout(timeout);
+
+    dispatch({ type: 'product_name_updated', payload: productName });
+
+    timeout = setTimeout(
+      () => dispatch({ type: 'typing_finished' }),
+      700
+    );
   }
 
-  useDebouncedEffect(() => {
+  useMountedEffect(() => {
+    if (state.isTyping) return;
     const controller = new AbortController();
-    const trimmedName = name.trim();
+    const trimmedName = state.productName.trim();
     const methodName = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
 
     Product[methodName](trimmedName, controller)
-      .then(setProducts)
+      .then(foundProducts => {
+        dispatch({ type: 'products_updated', payload: foundProducts })
+      })
       .catch(error => {
         // TODO: Error handling
         if (error.name === 'AbortError') {
@@ -54,7 +70,7 @@ export const ProductFind = (props: ProductFindProps) => {
       .finally(() => setLoading(false));
 
     return () => controller.abort();
-  }, [name, isConnected], 150);
+  }, [state.isTyping, isConnected]);
 
   function handleBarcodeScanNavigation() {
     navigate('BarcodeScan', {
@@ -136,19 +152,21 @@ export const ProductFind = (props: ProductFindProps) => {
     <Container>
       <Block space="space-between" align="center">
         <InputSearcher
-          value={name}
+          value={state.productName}
           placeholder="Nazwa produktu"
           accessibilityLabel="Nazwa szukanego produktu"
           onChangeText={handleProductNameUpdate}
-          isLoading={isLoading}
+          isLoading={isBusy}
         />
         <BarcodeButton
           accessibilityLabel="Zeskanuj kod kreskowy"
           onPress={handleBarcodeScanNavigation}
         />
       </Block>
+      <Text>{state.isTyping ? 'Pisze' : 'Nie pisze'}</Text>
+      <Text>{state.productName}</Text>
       <SectionList
-        data={products}
+        data={state.products}
         keyExtractor={(product, index) => `${product.id}${index}`}
         keyboardShouldPersistTaps="handled"
         ItemSeparatorComponent={Separator}
@@ -160,7 +178,7 @@ export const ProductFind = (props: ProductFindProps) => {
           </SectionTitleContainer>
         )}
         sections={[
-          { title: SECTION_TITLE.foundProducts, data: products },
+          { title: SECTION_TITLE.foundProducts, data: state.products },
           { title: SECTION_TITLE.recentProducts, data: isIdle ? recentProducts : [] },
         ]}
         renderItem={({ item: product }: { item: ProductOrNormalizedProduct }) => (
