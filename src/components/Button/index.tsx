@@ -23,5 +23,5 @@ const Title = styled.Text`
   color: #fff;
   font-family: ${props => props.theme.fontWeight.medium};
   text-align: center;
-  font-size: ${props => props.theme.fontSize.large};
+  font-size: ${props => props.theme.fontSize.regular};
 `

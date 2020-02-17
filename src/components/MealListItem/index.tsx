@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { ProgressBar } from '../ProgressBar';
 import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { MealsWithRatio } from '../../store/selectors';
-import { Button } from 'react-native-ui-kitten';
+import { Button } from '../Button';
 import { BASE_MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitlesLong } from '../../common/helpers';
 import { DiaryMealId } from '../../store/reducers/diary';
@@ -62,13 +62,13 @@ export const MealListItem = (props: MealListItemProps) => (
           renderItem={({ item }) => props.renderProduct(item)}
         />
         {props.isBeingProcessed && <Spinner />}
-        <Button
+        <AddProductButton
           onPress={props.onProductAdd}
           accessibilityLabel="Wyszukaj produkt do posiłku"
           accessibilityRole="link"
         >
           Dodaj produkt
-        </Button>
+        </AddProductButton>
       </>
     )}
   </Container>
@@ -134,4 +134,8 @@ const NutritionTitle = styled.Text`
 
 const Spinner = styled.ActivityIndicator`
   margin-vertical: 10px;
+`
+
+const AddProductButton = styled(Button)`
+  margin: 10px;
 `
