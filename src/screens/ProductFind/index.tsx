@@ -4,7 +4,7 @@ import { sortByMostAccurateName, debounce } from '../../common/utils';
 import { Product } from '../../database/entities';
 import { ProductListItem, Separator } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
-import { NavigationScreenProps, SectionList } from 'react-navigation';
+import { SectionList } from 'react-navigation';
 import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { BarcodeId } from '../../types';
@@ -23,10 +23,10 @@ const SECTION_TITLE = {
   recentProducts: 'Ostatnie produkty:',
 }
 
-interface ProductFindProps extends NavigationScreenProps<ProductFindParams> {}
+interface ProductFindProps {}
 
 export const ProductFind = (props: ProductFindProps) => {
-  const params = useNavigationParams<ProductFindParams>(['onItemPress']);
+  const params = useNavigationParams<ProductFindParams>();
   const [name, setName] = useState('');
   const [products, setProducts] = useState<ProductState[]>([]);
   const [isLoading, setLoading] = useState(false);
@@ -123,6 +123,7 @@ export const ProductFind = (props: ProductFindProps) => {
         <Button
           style={{ marginTop: 15 }}
           onPress={handleProductCreateNavigation}
+          accessibilityLabel="Dodaj własny produkt"
         >
           Dodaj własny
         </Button>
@@ -136,10 +137,12 @@ export const ProductFind = (props: ProductFindProps) => {
         <InputSearcher
           value={name}
           placeholder="Nazwa produktu"
+          accessibilityLabel="Nazwa szukanego produktu"
           onChangeText={handleProductSearch}
           isLoading={isLoading}
         />
         <BarcodeButton
+          accessibilityLabel="Zeskanuj kod kreskowy"
           onPress={handleBarcodeScanNavigation}
         />
       </Block>

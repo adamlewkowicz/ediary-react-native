@@ -67,7 +67,7 @@ const Label = styled.Text`
 const Input = styled.TextInput<{
   textAlign?: TextAlignProperty
 }>`
-  font-family: DMSans-Regular;
+  font-family: ${props => props.theme.fontWeight.regular};
   font-weight: 600;
   font-size: 15px;
   padding: 8px 0;
