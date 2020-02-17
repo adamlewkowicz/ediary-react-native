@@ -30,6 +30,7 @@ export const theme = {
   fontSize: {
     huge: 25,
     big: 22,
+    largeXL: 19,
     large: 16,
     regular: 14,
     small: 12,

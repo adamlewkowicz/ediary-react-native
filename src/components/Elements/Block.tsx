@@ -4,7 +4,7 @@ import { FlexStyle, ViewProps } from 'react-native';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
 interface BlockProps extends BlockParams {
-  children: ReactNode
+  children: ReactNode | JSX.Element[]
 }
 
 export const Block = ({ children, row = true, ...props }: BlockProps) => (
