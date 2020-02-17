@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components/native';
-import { sortByMostAccurateName, debounce } from '../../common/utils';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
 import { ProductListItem, Separator } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
@@ -15,12 +14,7 @@ import { StoreState } from '../../store';
 import { ActivityIndicator } from 'react-native';
 import { ProductFindParams } from './params';
 import { useNavigationParams } from '../../hooks/useNavigationParams';
-
-const debounceA = debounce();
-const SECTION_TITLE = {
-  foundProducts: 'Znalezione produkty:',
-  recentProducts: 'Ostatnie produkty:',
-}
+import { useDebouncedEffect } from '../../hooks/useDebouncedEffect';
 
 interface ProductFindProps {}
 
@@ -37,21 +31,30 @@ export const ProductFind = (props: ProductFindProps) => {
   const isIdle = useIdleStatus();
   const navigate = useNavigate();
 
-  function handleProductSearch(name: string) {
-    setName(name);
+  const handleProductNameUpdate = (productName: string): void => {
+    setName(productName);
     if (!isLoading) setLoading(true);
+  }
+
+  useDebouncedEffect(() => {
+    const controller = new AbortController();
     const trimmedName = name.trim();
     const methodName = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
 
-    debounceA(async () => {
-      const foundProducts = await Product[methodName](trimmedName);
-      const sortedProducts = foundProducts
-        .sort(sortByMostAccurateName(name));
+    Product[methodName](trimmedName, controller)
+      .then(setProducts)
+      .catch(error => {
+        // TODO: Error handling
+        if (error.name === 'AbortError') {
+          // pass
+        } else {
+          
+        }
+      })
+      .finally(() => setLoading(false));
 
-      setProducts(sortedProducts);
-      setLoading(false);
-    }, 600);
-  }
+    return () => controller.abort();
+  }, [name, isConnected], 150);
 
   function handleBarcodeScanNavigation() {
     navigate('BarcodeScan', {
@@ -136,7 +139,7 @@ export const ProductFind = (props: ProductFindProps) => {
           value={name}
           placeholder="Nazwa produktu"
           accessibilityLabel="Nazwa szukanego produktu"
-          onChangeText={handleProductSearch}
+          onChangeText={handleProductNameUpdate}
           isLoading={isLoading}
         />
         <BarcodeButton
@@ -194,6 +197,11 @@ const AddOwnProductButton = styled(Button)`
 
 ProductFind.navigationOptions = {
   headerTitle: 'Znajdź produkt'
+}
+
+const SECTION_TITLE = {
+  foundProducts: 'Znalezione produkty:',
+  recentProducts: 'Ostatnie produkty:',
 }
 
 export type ProductResolver = () => Promise<Product>;

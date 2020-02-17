@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 import dayjs from 'dayjs';
 import { DateDay, UnitType, DateTime, MacroElements } from '../../types';
 import { UNIT_TYPES, DATE_TIME, DATE_DAY, MACRO_ELEMENTS } from '../consts';
@@ -236,4 +237,17 @@ export const fillArrayWithinRange = (
   const zeroBasedCountFill = 1;
   const length = to - from + zeroBasedCountFill;
   return createArrayOfLength(length, index => index + from);
+}
+
+export const fetchify = async <T>(
+  input: RequestInfo,
+  init: RequestInit = {},
+  controller = new AbortController()
+): Promise<T> => {
+  const { signal } = controller;
+
+  const response = await fetch(input, { signal, ...init });
+  const json: T = await response.json();
+
+  return json;
 }

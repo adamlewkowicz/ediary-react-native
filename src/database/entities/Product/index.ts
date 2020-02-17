@@ -9,7 +9,7 @@ import {
   Like,
 } from 'typeorm';
 import { MealProduct, IMealProduct } from '../MealProduct';
-import { BarcodeId, ProductId, UserId, ProductUnit } from '../../../types';
+import { BarcodeId, ProductId, UserId, ProductUnit, CancelablePromise } from '../../../types';
 import { User } from '../User';
 import { ProductPortion } from '../ProductPortion';
 import { friscoApi } from '../../../services/FriscoApi';
@@ -17,7 +17,7 @@ import { SqliteENUM } from '../../decorators';
 import { EntityType, EntityRequired } from '../../types';
 import { PRODUCT_UNITS } from '../../../common/consts';
 import { ilewazyApi } from '../../../services/IlewazyApi';
-import { mapAsyncSequence, reduceByCompare, filterByCompare } from '../../../common/utils';
+import { mapAsyncSequence, reduceByCompare, filterByCompare, sortByMostAccurateName } from '../../../common/utils';
 import { MinLength } from 'class-validator';
 import { GenericEntity } from '../../generics/GenericEntity';
 import { ProductImage } from '../ProductImage';
@@ -100,7 +100,9 @@ export class Product extends GenericEntity {
     return Product.defaultPortion;
   }
 
-  static findByNameLike(name: string, limit = 10): Promise<Product[]> {
+  static findByNameLike(name: string): Promise<Product[]> {
+    const limit = 10;
+    
     return this.find({
       where: { name: Like(`%${name}%`) },
       take: limit
@@ -140,31 +142,23 @@ export class Product extends GenericEntity {
 
     return Product.findByIds(productIds);
   }
+  
+  static async findAndFetchByNameLike(
+    name: string,
+    controller?: AbortController,
+  ): Promise<ProductOrNormalizedProduct[]> {
 
-  static async findAndFetchByNameLike(name: string): Promise<ProductOrNormalizedProduct[]> {
     const savedProducts = await Product.findByNameLike(name);
     const minProductsFoundLimit = 3;
 
     if (savedProducts.length <= minProductsFoundLimit) {
-      const fetchedProducts = await ilewazyApi.findByName(name);
+      const fetchedProducts = await ilewazyApi.findByName(name, controller);
+      const mergedProducts = [...savedProducts, ...fetchedProducts];
 
-      if (fetchedProducts.length) {
-        const filteredProducts = reduceByCompare(
-          [...savedProducts, ...fetchedProducts],
-          (a, b) => {
-            if ('isVerified' in a) {
-              const filterByNameIfVerified = a.isVerified === true && a.name === b.name;
-              return !filterByNameIfVerified;
-            }
-            return false;
-          }
-        );
-
-        return [...savedProducts, ...fetchedProducts];
-      }
+      return mergedProducts.sort(sortByMostAccurateName(name));
     }
 
-    return savedProducts;
+    return savedProducts.sort(sortByMostAccurateName(name));
   }
 
   static findByBarcode(barcode: BarcodeId): Promise<Product[]> {
