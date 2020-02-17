@@ -3,12 +3,13 @@ import styled from 'styled-components/native';
 import { TouchableOpacityProps } from 'react-native';
 
 interface ButtonProps extends TouchableOpacityProps {
-  title: string
+  title?: string
+  children?: string
 }
 
-export const Button = ({ title, ...props }: ButtonProps) => (
+export const Button = ({ title, children = title, ...props }: ButtonProps) => (
   <Container {...props}>
-    <Title>{title}</Title>
+    <Title>{children}</Title>
   </Container>
 );
 
@@ -22,6 +23,5 @@ const Title = styled.Text`
   color: #fff;
   font-family: ${props => props.theme.fontWeight.medium};
   text-align: center;
-  text-transform: capitalize;
   font-size: ${props => props.theme.fontSize.large};
 `
