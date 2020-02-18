@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import { BasicInput, BasicInputProps } from '../BasicInput';
 import { TextInput } from 'react-native';
 import styled from 'styled-components/native';
@@ -28,7 +28,7 @@ export const InputRow = React.forwardRef<TextInput, NutritionRowProps>((
       minWidth={minWidth}
       textAlign={textAlign}
       keyboardType={keyboardType}
-      forwardedRef={ref}
+      forwardedRef={ref as RefObject<TextInput>}
       {...inputProps}
     />
   </Container>

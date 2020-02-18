@@ -4,7 +4,7 @@ import { ProgressBar } from '../ProgressBar';
 import { Block } from '../Elements';
 
 interface MacroCardProps {
-  colors: string[],
+  colors: readonly string[],
   title: string
   reached: string | number
   goal: number
