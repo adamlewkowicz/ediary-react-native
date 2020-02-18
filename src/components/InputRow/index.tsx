@@ -22,7 +22,7 @@ export const InputRow = React.forwardRef<TextInput, NutritionRowProps>((
 ) => (
   <Container styles={styles}>
     <Title>
-      {title}
+      {title}:
     </Title>
     <BasicInput
       minWidth={minWidth}
