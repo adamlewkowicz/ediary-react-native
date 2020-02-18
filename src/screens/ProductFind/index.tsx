@@ -28,23 +28,33 @@ export const ProductFind = (props: ProductFindProps) => {
   const hasBeenPressed = useRef(false);
   const isIdle = useIdleStatus();
   const navigate = useNavigate();
+  const _isTyping = useRef(false);
 
   const isBusy = state.isLoading || state.isTyping;
   const productsAreEmpty = !state.products.length;
+  const isNameTouched = state.productName.length > 0;
+  const isSearchingTouched = !isNameTouched && state.barcode === null;
 
   const handleProductNameUpdate = (productName: string): void => {
     clearTimeout(timeout);
 
+    _isTyping.current = true;
     dispatch({ type: 'PRODUCT_NAME_UPDATED', payload: productName });
 
     timeout = setTimeout(
-      () => dispatch({ type: 'TYPING_FINISHED' }),
+      () => {
+        _isTyping.current = false;
+        dispatch({ type: 'TYPING_FINISHED' })
+      },
       700
     );
   }
 
   useMountedEffect(() => {
-    if (state.isTyping) return;
+    const { productName, isTyping } = state;
+    console.log({ productName, _isTyping, isTyping })
+    if (_isTyping.current || state.isTyping) return;
+
     const controller = new AbortController();
     const trimmedName = state.productName.trim();
     const methodName = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
@@ -64,7 +74,11 @@ export const ProductFind = (props: ProductFindProps) => {
       .finally(() => dispatch({ type: 'PRODUCTS_SEARCH_FINISHED' }));
 
     return () => controller.abort();
-  }, [state.isTyping, isConnected]);
+    // `state.productName` has not been put to dependencies
+    // because it would cause too many calls, since setState calls are asynchronous
+    // and "useMountedEffect" could run even if user is actually typing.
+    // `productName` doesn't become stale, since `isTyping` updates name at the same time.
+  }, [state.isTyping, state.productName, isConnected]);
 
   function handleBarcodeScanNavigation() {
     navigate('BarcodeScan', {
@@ -82,7 +96,7 @@ export const ProductFind = (props: ProductFindProps) => {
 
   function handleProductCreateNavigation() {
     navigate('ProductCreate', {
-      barcode: state.barcode !== null ? state.barcode : undefined,
+      barcode: state.barcode ?? undefined,
       name: state.productName.trim(),
       onProductCreated(createdProduct) {
         dispatch({ type: 'PRODUCT_CREATED', payload: createdProduct });

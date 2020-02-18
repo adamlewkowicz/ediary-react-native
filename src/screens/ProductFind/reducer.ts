@@ -55,10 +55,12 @@ export const productFindReducer = (
       productName: '',
       products: [],
       isLoading: true,
+      // Imitate typing to prevent searching products by user during barcode search
+      isTyping: true
     }
     case 'BARCODE_SEARCH_FINISHED': {
       const { foundProducts: products, barcode } = action.payload;
-      const genericReturn = { ...state, isLoading: false };
+      const genericReturn = { ...state, isLoading: false, isTyping: false };
 
       if (products.length) {
         return { ...genericReturn, products };

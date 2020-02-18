@@ -69,7 +69,6 @@ const StyledLoupeIcon = styled(LoupeIcon)`
 `
 
 const Input = styled.TextInput`
-  background-color: #E3E3E3;
   background-color: ${props => props.theme.colors.lightGray};
   border-radius: 30;
   font-family: ${props => props.theme.fontWeight.regular};
@@ -86,7 +85,6 @@ const Label = styled.Text<{
   font-size: ${props => props.theme.fontSize.regular};
   top: 50%;
   height: 20px;
-  color: #8F8F8F;
   color: ${props => props.isFocused ? props.theme.color.focus : '#8F8F8F'};
   transform: ${props => `translateY(${props.isFocused ? -50 : -10}px)`};
 `
