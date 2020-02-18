@@ -157,6 +157,8 @@ export const ProductFind = (props: ProductFindProps) => {
           <ProductListItem
             product={item}
             onPress={() => handleItemPress(item)}
+            accessibilityLabel="Dodaj produkt do posiłku"
+            accessibilityHint="Wraca na główną stronę i dodaje produkt do posiłku"
           />
         )}
       />

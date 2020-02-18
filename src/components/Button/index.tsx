@@ -15,8 +15,8 @@ export const Button = ({ title, children = title, ...props }: ButtonProps) => (
 
 const Container = styled.TouchableOpacity`
   background-color: ${props => props.theme.color.focus};
-  border-radius: 8px;
-  padding: 12px 15px;
+  border-radius: ${props => props.theme.radius.button};
+  padding: ${props => props.theme.padding.button};
 `
 
 const Title = styled.Text`

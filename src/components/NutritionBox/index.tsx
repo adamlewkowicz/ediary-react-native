@@ -6,13 +6,6 @@ import { theme } from '../../common/theme';
 import { toLocaleString } from '../../common/utils';
 import { ViewProps } from 'react-native';
 
-const nutritionIcon = {
-  carbs: WheatIcon,
-  prots: SteakIcon,
-  fats: DropIcon,
-  kcal: FireIcon
-}
-
 interface NutritionBoxProps extends ViewProps {
   value: number
   element: 'carbs' | 'prots' | 'fats' | 'kcal'
@@ -23,8 +16,7 @@ export const NutritionBox = ({
   element,
   ...props
 }: NutritionBoxProps) => {
-  const GenericIcon = nutritionIcon[element];
-  const ICON_SIZE = 20;
+  const GenericIcon = NutritionIcon[element];
   
   return (
     <Container {...props}>
@@ -37,12 +29,21 @@ export const NutritionBox = ({
         value={toLocaleString(value)}
         meta={element === 'kcal' ? 'kcal' : 'g'}
         valueFontSize={theme.fontSize.regular}
-        metaFontSize={11}
+        metaFontSize={theme.fontSize.tiny}
         marginTop="7px"
       />
     </Container>
   );
 }
+
+const NutritionIcon = {
+  carbs: WheatIcon,
+  prots: SteakIcon,
+  fats: DropIcon,
+  kcal: FireIcon
+}
+
+const ICON_SIZE = 20;
 
 const Container = styled.View`
   align-items: center;

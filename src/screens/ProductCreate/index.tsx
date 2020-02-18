@@ -101,7 +101,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
 
   return (
     <ScrollView>
-      <Container behavior="padding">
+      <Container>
         <BasicInput
           label="Nazwa"
           accessibilityLabel="Nazwa produktu"

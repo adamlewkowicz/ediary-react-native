@@ -9,14 +9,16 @@ const color = {
   kcal: '#E89292',
 
   blue10: '#f7fdff',
-  blue20: '#6BB4DD',
+  blue20: '#ebf8fe',
+  blue30: '#6BB4DD',
 
   gray10: '#f1f0f5',
   gray20: '#cdcbd6',
   gray30: '#BCBAC6',
   gray40: '#646464',
 
-  dark: '#353344',
+  dark10: '#353344',
+  dark20: '#313131',
 
   /** @deprecated color names */
   lightBlue: '#6BB4DD',
@@ -24,7 +26,7 @@ const color = {
   gray: '#BCBAC6',
   lightGray: '#f1f0f5',
   midGray: '#cdcbd6',
-}
+} as const;
 
 export const theme = {
   fontSize: {
@@ -53,7 +55,14 @@ export const theme = {
   zIndex: {
     inputSearcherLoupe: 2,
   },
-}
+  radius: {
+    rounded: 30,
+    button: 8,
+  },
+  padding: {
+    button: '12px 15px'
+  }
+} as const;
 
 export type Theme = typeof theme;
 export type ThemeColor = keyof Theme['color'];

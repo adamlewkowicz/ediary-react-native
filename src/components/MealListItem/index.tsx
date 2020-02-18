@@ -91,7 +91,7 @@ const Title = styled.Text`
 
 const Calories = styled.Text`
   font-family: ${props => props.theme.fontWeight.regular};
-  color: ${props => props.theme.color.blue20};
+  color: ${props => props.theme.color.blue30};
   font-size: ${props => props.theme.fontSize.regular};
 `
 
@@ -106,7 +106,7 @@ const NutritionStripe = styled.View`
 `
 
 const NutritionDetails = styled.View`
-  background: #313131;
+  background: ${props => props.theme.color.dark20};
   padding: 10px 0;
   display: flex;
   flex-direction: row;
