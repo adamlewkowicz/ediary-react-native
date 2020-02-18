@@ -7,6 +7,7 @@ import {
   TextInputFocusEventData,
 } from 'react-native';
 import { TextAlignProperty } from 'csstype';
+import { theme } from '../../common/theme';
 
 export interface BasicInputProps extends TextInputProps {
   label?: string
@@ -54,6 +55,7 @@ export const BasicInput = ({
         ref={genericRef}
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
+        placeholderTextColor={theme.color.gray10}
         {...inputProps}
       />
     </Container>
@@ -74,7 +76,7 @@ const Container = styled.TouchableOpacity<{
 const Label = styled.Text`
   font-family: ${props => props.theme.fontWeight.regular};
   font-size: ${props => props.theme.fontSize.regular};
-  color: ${props => props.theme.color.gray20};
+  color: ${props => props.theme.color.gray30};
 `
 
 const Input = styled.TextInput<{

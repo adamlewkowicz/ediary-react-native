@@ -21,7 +21,7 @@ describe('<Home />', () => {
     const mealName = 'Cucumber soup';
     const ctx = renderSetup(<Home />);
 
-    const createMealNameInput = ctx.getByPlaceholderText('Nazwa nowego posiłku');
+    const createMealNameInput = ctx.getByPlaceholderText('Kurczak z warzywami');
     fireEvent.changeText(createMealNameInput, mealName);
   
     const createMealConfirmButton = ctx.getByLabelText('Utwórz nowy posiłek');
