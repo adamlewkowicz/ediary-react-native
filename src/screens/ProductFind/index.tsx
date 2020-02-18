@@ -1,4 +1,4 @@
-import React, { useState, useRef, useReducer } from 'react';
+import React, { useRef, useReducer } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
 import { ProductListItem, Separator } from '../../components/ProductListItem';
@@ -6,7 +6,6 @@ import { InputSearcher } from '../../components/InputSearcher';
 import { SectionList } from 'react-navigation';
 import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
-import { BarcodeId } from '../../types';
 import { Button } from '../../components/Button';
 import { useConnected, useIdleStatus, useNavigate, useTypingValue } from '../../hooks';
 import { useSelector } from 'react-redux';
@@ -14,7 +13,6 @@ import { StoreState } from '../../store';
 import { ActivityIndicator, Text } from 'react-native';
 import { ProductFindParams } from './params';
 import { useNavigationParams } from '../../hooks/useNavigationParams';
-import { useDebouncedEffect } from '../../hooks/useDebouncedEffect';
 import { useMountedEffect } from '../../hooks/useMountedEffect';
 import { productFindReducer, initialState } from './reducer';
 
@@ -23,28 +21,24 @@ interface ProductFindProps {}
 let timeout: NodeJS.Timeout;
 
 export const ProductFind = (props: ProductFindProps) => {
+  const [state, dispatch] = useReducer(productFindReducer, initialState);
   const params = useNavigationParams<ProductFindParams>();
-  const [name, setName] = useState('');
-  const [products, setProducts] = useState<ProductOrNormalizedProduct[]>([]);
-  const [isLoading, setLoading] = useState(false);
-  const [barcode, setBarcode] = useState<BarcodeId | null>(null);
   const isConnected = useConnected();
-  const productsAreEmpty = !products.length;
   const recentProducts = useSelector((state: StoreState) => state.productHistory);
   const hasBeenPressed = useRef(false);
   const isIdle = useIdleStatus();
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(productFindReducer, initialState);
 
   const isBusy = state.isLoading || state.isTyping;
+  const productsAreEmpty = !state.products.length;
 
   const handleProductNameUpdate = (productName: string): void => {
     clearTimeout(timeout);
 
-    dispatch({ type: 'product_name_updated', payload: productName });
+    dispatch({ type: 'PRODUCT_NAME_UPDATED', payload: productName });
 
     timeout = setTimeout(
-      () => dispatch({ type: 'typing_finished' }),
+      () => dispatch({ type: 'TYPING_FINISHED' }),
       700
     );
   }
@@ -57,7 +51,7 @@ export const ProductFind = (props: ProductFindProps) => {
 
     Product[methodName](trimmedName, controller)
       .then(foundProducts => {
-        dispatch({ type: 'products_updated', payload: foundProducts })
+        dispatch({ type: 'PRODUCTS_UPDATED', payload: foundProducts })
       })
       .catch(error => {
         // TODO: Error handling
@@ -67,7 +61,7 @@ export const ProductFind = (props: ProductFindProps) => {
           
         }
       })
-      .finally(() => setLoading(false));
+      .finally(() => dispatch({ type: 'PRODUCTS_SEARCH_FINISHED' }));
 
     return () => controller.abort();
   }, [state.isTyping, isConnected]);
@@ -75,32 +69,23 @@ export const ProductFind = (props: ProductFindProps) => {
   function handleBarcodeScanNavigation() {
     navigate('BarcodeScan', {
       async onBarcodeDetected(barcode) {
+        dispatch({ type: 'BARCODE_SEARCH_STARTED' });
         navigate('ProductFind');
-        setName('');
-        setProducts([]);
-        setLoading(true);
 
         const methodName = isConnected ? 'findAndFetchByBarcode' : 'findByBarcode';
         const foundProducts = await Product[methodName](barcode);
 
-        if (foundProducts.length) {
-          setProducts(foundProducts);
-        } else {
-          setBarcode(barcode);
-        }
-        setLoading(false);
+        dispatch({ type: 'BARCODE_SEARCH_FINISHED', payload: { barcode, foundProducts }});
       }
     });
   }
 
   function handleProductCreateNavigation() {
     navigate('ProductCreate', {
-      barcode: barcode !== null ? barcode : undefined,
-      name: name.trim(),
+      barcode: state.barcode !== null ? state.barcode : undefined,
+      name: state.productName.trim(),
       onProductCreated(createdProduct) {
-        setBarcode(null);
-        setProducts([createdProduct]);
-        setLoading(false);
+        dispatch({ type: 'PRODUCT_CREATED', payload: createdProduct });
         navigate('ProductFind');
       }
     });
@@ -123,9 +108,9 @@ export const ProductFind = (props: ProductFindProps) => {
 
   function renderInfo() {
     if (
-      isLoading ||
+      isBusy ||
       !productsAreEmpty ||
-      (!name.length && barcode === null)
+      (!state.productName.length && state.barcode === null)
     ) return null;
 
     return (
