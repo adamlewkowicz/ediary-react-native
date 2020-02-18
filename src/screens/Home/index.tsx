@@ -144,7 +144,7 @@ const Home = (props: HomeProps) => {
         <CreateMealContainer>
           <BasicInput
             placeholder="Nazwa nowego posiłku"
-            label="Nazwa posiłku"
+            label="Nazwa nowego posiłku"
             value={newMealName}
             onChangeText={setNewMealName}
           />
@@ -178,8 +178,8 @@ const MacroCards = styled.View`
 `
 
 const CreateMealContainer = styled.View`
-  padding: 10px;
-  border: ${props => `1px dotted ${props.theme.color.gray30}`};
+  padding: 15px;
+  border: ${props => `1px dotted ${props.theme.color.gray20}`};
   border-radius: 5px;
   margin-bottom: 60px;
 `

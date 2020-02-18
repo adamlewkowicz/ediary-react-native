@@ -69,7 +69,6 @@ const StyledLoupeIcon = styled(LoupeIcon)`
 `
 
 const Input = styled.TextInput`
-  background-color: #E3E3E3;
   background-color: ${props => props.theme.colors.lightGray};
   border-radius: 30;
   font-family: ${props => props.theme.fontWeight.regular};
