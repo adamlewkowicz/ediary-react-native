@@ -1,5 +1,5 @@
 import { BarcodeId, MacroElement, MacroElements, PortionType } from '../../types';
-import { round, getNumAndUnitFromString } from '../../common/utils';
+import { round, getNumAndUnitFromString, fetchify } from '../../common/utils';
 import { baseMacro } from '../../common/helpers';
 import { NormalizedProduct } from '../IlewazyApi/types';
 import { FriscoResponse, FriscoNutritionBrandbank } from './types/response';
@@ -9,6 +9,8 @@ import { Product } from '../../database/entities';
 
 export class FriscoApi {
 
+  searchURL = 'https://commerce.frisco.pl/api/offer/products/query?search=';
+
   private async findAndParseByQuery(
     query: string | BarcodeId
   ): Promise<{
@@ -17,15 +19,13 @@ export class FriscoApi {
   }> {
     const parsedQuery = encodeURIComponent(query as string);
 
-    const response = await fetch(
-      `https://commerce.frisco.pl/api/offer/products/query?search=${parsedQuery}` +
+    const { products: raw } = await fetchify<FriscoQueryResponse>(
+      `${this.searchURL}${parsedQuery}` +
       '&includeCategories=true&pageIndex=1&deliveryMethod=Van&pageSize=60' +
       '&language=pl&facetCount=100&includeWineFacets=false',
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }}
     );
-    const data: FriscoQueryResponse = await response.json();
 
-    const raw = data.products;
     const normalized = this.normalizeQueryProducts(raw);
 
     return {
