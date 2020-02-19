@@ -6,13 +6,15 @@ interface ProductFindState {
   barcode: BarcodeId | null
   isSearching: boolean
   products: ProductOrNormalizedProduct[]
+  isTyping: boolean
 }
 
 export const initialState: ProductFindState = {
   productName: '',
   barcode: null,
   isSearching: false,
-  products: []
+  products: [],
+  isTyping: false
 }
 
 export const productFindReducer = (
@@ -23,11 +25,13 @@ export const productFindReducer = (
     case 'PRODUCT_NAME_UPDATED': return {
       ...state,
       productName: action.payload,
+      isTyping: true,
     }
     case 'PRODUCTS_UPDATED': return {
       ...state,
       isSearching: false,
-      products: action.payload
+      isTyping: false,
+      products: action.payload,
     }
     case 'PRODUCTS_SEARCH_STARTED': return {
       ...state,
@@ -51,13 +55,16 @@ export const productFindReducer = (
     }
     case 'BARCODE_SEARCH_FINISHED': {
       const { foundProducts: products, barcode } = action.payload;
-      const genericReturn = { ...state, isSearching: false };
-
-      if (products.length) {
-        return { ...genericReturn, products };
+      const nextState: ProductFindState = {
+        ...state,
+        isSearching: false,
       }
 
-      return { ...genericReturn, barcode };
+      if (products.length) {
+        return { ...nextState, products };
+      }
+
+      return { ...nextState, barcode };
     }
   }
 }

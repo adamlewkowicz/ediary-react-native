@@ -7,3 +7,4 @@ export * from './useFocusedEffect';
 export * from './useCurrentState';
 export * from './useNavigationParams';
 export * from './useProductsFind';
+export * from './useDebouncedValue';

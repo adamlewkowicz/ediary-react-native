@@ -26,7 +26,7 @@ export const ProductFind = (props: ProductFindProps) => {
   const hasBeenPressed = useRef(false);
   const isIdle = useIdleStatus();
   const navigate = useNavigate();
-  const { state, isConnected, isTyping, ...context } = useProductsFind();
+  const { state, isConnected, debouncedProductName, ...context } = useProductsFind();
 
   function handleBarcodeScanNavigation() {
     navigate('BarcodeScan', {
@@ -67,12 +67,12 @@ export const ProductFind = (props: ProductFindProps) => {
     const {
       isSearching,
       products,
-      productName,
-      barcode
+      barcode,
+      isTyping,
     } = state;
-    const isBusy = isSearching || isTyping.current;
+    const isBusy = isSearching || isTyping;
     const isProductsNotEmpty = products.length > 0;
-    const isProductNameNotTouched = productName.length === 0;
+    const isProductNameNotTouched = debouncedProductName.length === 0;
     const hasNotBeenSearching = isProductNameNotTouched && barcode === null;
 
     if (isBusy || isProductsNotEmpty || hasNotBeenSearching) {
