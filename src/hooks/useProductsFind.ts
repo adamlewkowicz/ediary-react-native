@@ -1,5 +1,5 @@
 import { productFindReducer, initialState } from '../screens/ProductFind/reducer';
-import { useReducer, useRef, useEffect } from 'react';
+import { useReducer, useEffect } from 'react';
 import { useCurrentState, useConnected } from '.';
 import { Product } from '../database/entities';
 import { ABORT_ERROR_NAME } from '../common/consts';
@@ -16,20 +16,19 @@ export const useProductsFind = () => {
     dispatch({ type: 'PRODUCT_NAME_UPDATED', payload: productName });
   }
 
+  const onProductCreated = (createdProduct: Product): void => {
+    dispatch({ type: 'PRODUCT_CREATED', payload: createdProduct });
+  }
+
   const onBarcodeUpdate = async (barcode: BarcodeId): Promise<void> => {
     // Imitate typing to prevent searching products by user during barcode search
     dispatch({ type: 'BARCODE_SEARCH_STARTED' });
 
     const methodName = isConnected ? 'findAndFetchByBarcode' : 'findByBarcode';
-    const foundProducts = await Product[methodName](barcode);
+    const products = await Product[methodName](barcode);
 
-    dispatch({ type: 'BARCODE_SEARCH_FINISHED', payload: { barcode, foundProducts }});
+    dispatch({ type: 'BARCODE_SEARCH_SUCCEEDED', payload: { barcode, products }});
   }
-
-  const onProductCreated = (createdProduct: Product): void => {
-    dispatch({ type: 'PRODUCT_CREATED', payload: createdProduct });
-  }
-
 
   useEffect(() => {
     if (!debouncedProductName.length) return;
@@ -44,7 +43,8 @@ export const useProductsFind = () => {
 
         const payload = await Product[methodName](trimmedName, controller);
     
-        dispatch({ type: 'PRODUCTS_UPDATED', payload });
+        // TODO: Prevent dispatching products if connection is lost and products are not empty
+        dispatch({ type: 'PRODUCTS_SEARCH_SUCCEEDED', payload });
 
       } catch(error) {
         if (error.name !== ABORT_ERROR_NAME) {

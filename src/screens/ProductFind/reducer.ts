@@ -27,15 +27,15 @@ export const productFindReducer = (
       productName: action.payload,
       isTyping: true,
     }
-    case 'PRODUCTS_UPDATED': return {
+    case 'PRODUCTS_SEARCH_STARTED': return {
+      ...state,
+      isSearching: true
+    }
+    case 'PRODUCTS_SEARCH_SUCCEEDED': return {
       ...state,
       isSearching: false,
       isTyping: false,
       products: action.payload,
-    }
-    case 'PRODUCTS_SEARCH_STARTED': return {
-      ...state,
-      isSearching: true
     }
     case 'PRODUCTS_SEARCH_FINISHED': return {
       ...state,
@@ -53,13 +53,15 @@ export const productFindReducer = (
       products: [],
       isSearching: true,
     }
-    case 'BARCODE_SEARCH_FINISHED': {
-      const { foundProducts: products, barcode } = action.payload;
+    case 'BARCODE_SEARCH_SUCCEEDED': {
+      const { products, barcode } = action.payload;
+
       const nextState: ProductFindState = {
         ...state,
         isSearching: false,
       }
 
+      // TODO: refactor to more comprehensive logic
       if (products.length) {
         return { ...nextState, products };
       }
@@ -71,9 +73,9 @@ export const productFindReducer = (
 
 type ProductFindAction =
   | { type: 'PRODUCT_NAME_UPDATED', payload: string }
-  | { type: 'PRODUCTS_UPDATED', payload: ProductOrNormalizedProduct[] }
   | { type: 'PRODUCTS_SEARCH_STARTED' }
+  | { type: 'PRODUCTS_SEARCH_SUCCEEDED', payload: ProductOrNormalizedProduct[] }
   | { type: 'PRODUCTS_SEARCH_FINISHED' }
   | { type: 'PRODUCT_CREATED', payload: Product }
   | { type: 'BARCODE_SEARCH_STARTED' }
-  | { type: 'BARCODE_SEARCH_FINISHED', payload: { barcode: BarcodeId, foundProducts: Product[] }}
+  | { type: 'BARCODE_SEARCH_SUCCEEDED', payload: { barcode: BarcodeId, products: Product[] }}
