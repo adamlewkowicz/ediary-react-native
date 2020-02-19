@@ -30,7 +30,7 @@ export const ProductFind = (props: ProductFindProps) => {
   const navigate = useNavigate();
   const _isTyping = useRef(false);
 
-  const isBusy = state.isLoading || state.isTyping;
+  const isBusy = state.isSearching || state.isTyping;
 
   const handleProductNameUpdate = (productName: string): void => {
     clearTimeout(timeout);

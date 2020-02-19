@@ -5,7 +5,7 @@ interface ProductFindState {
   productName: string
   barcode: BarcodeId | null
   isTyping: boolean
-  isLoading: boolean
+  isSearching: boolean
   products: ProductOrNormalizedProduct[]
 }
 
@@ -13,7 +13,7 @@ export const initialState: ProductFindState = {
   productName: '',
   barcode: null,
   isTyping: false,
-  isLoading: false,
+  isSearching: false,
   products: []
 }
 
@@ -30,37 +30,37 @@ export const productFindReducer = (
     case 'TYPING_FINISHED': return {
       ...state,
       isTyping: false,
-      isLoading: true,
+      isSearching: true,
     }
     case 'PRODUCTS_UPDATED': 
       if (state.isTyping) return state;
 
       return {
         ...state,
-        isLoading: false,
+        isSearching: false,
         products: action.payload
       }
     case 'PRODUCTS_SEARCH_FINISHED': 
-      if (state.isLoading === false) return state;
+      if (state.isSearching === false) return state;
 
-      return { ...state, isLoading: false };
+      return { ...state, isSearching: false };
     case 'PRODUCT_CREATED': return {
       ...state,
       barcode: null,
       products: [action.payload],
-      isLoading: false,
+      isSearching: false,
     }
     case 'BARCODE_SEARCH_STARTED': return {
       ...state,
       productName: '',
       products: [],
-      isLoading: true,
+      isSearching: true,
       // Imitate typing to prevent searching products by user during barcode search
       isTyping: true
     }
     case 'BARCODE_SEARCH_FINISHED': {
       const { foundProducts: products, barcode } = action.payload;
-      const genericReturn = { ...state, isLoading: false, isTyping: false };
+      const genericReturn = { ...state, isSearching: false, isTyping: false };
 
       if (products.length) {
         return { ...genericReturn, products };
