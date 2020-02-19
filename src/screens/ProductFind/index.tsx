@@ -1,4 +1,4 @@
-import React, { useRef, useReducer, useEffect } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
 import { ProductListItemMemo, Separator } from '../../components/ProductListItem';
@@ -8,88 +8,31 @@ import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { Button } from '../../components/Button';
 import {
-  useConnected,
   useIdleStatus,
   useNavigate,
-  useCurrentState,
   useNavigationParams,
+  useProductsFind,
 } from '../../hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
-import { ActivityIndicator, Text } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import { ProductFindParams } from './params';
-import { productFindReducer, initialState } from './reducer';
-import { ABORT_ERROR_NAME } from '../../common/consts';
-
-let isTypingTimeout: NodeJS.Timeout;
 
 interface ProductFindProps {}
 
 export const ProductFind = (props: ProductFindProps) => {
-  const [state, dispatch] = useReducer(productFindReducer, initialState);
-  const [isTyping, setIsTyping] = useCurrentState(false);
   const params = useNavigationParams<ProductFindParams>();
-  const isConnected = useConnected();
   const recentProducts = useSelector((state: StoreState) => state.productHistory);
   const hasBeenPressed = useRef(false);
   const isIdle = useIdleStatus();
   const navigate = useNavigate();
-
-  const handleProductNameUpdate = (productName: string): void => {
-    clearTimeout(isTypingTimeout);
-
-    setIsTyping(true);
-    dispatch({ type: 'PRODUCT_NAME_UPDATED', payload: productName });
-
-    isTypingTimeout = setTimeout(
-      () => setIsTyping(false),
-      800
-    );
-  }
-
-  useEffect(() => {
-    const { productName } = state;
-    console.log({ isTyping,  productName })
-    if (isTyping.current || !state.productName.length) return;
-
-    const controller = new AbortController();
-    const trimmedName = state.productName.trim();
-    const methodName = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
-
-    const findProducts = () => {
-      dispatch({ type: 'PRODUCTS_SEARCH_STARTED' });
-
-      Product[methodName](trimmedName, controller)
-        .then(payload => {
-          if (isTyping.current) return;
-          dispatch({ type: 'PRODUCTS_UPDATED', payload });
-        })
-        .catch(error => {
-          if (error.name !== ABORT_ERROR_NAME) {
-            throw error;
-          }
-        })
-        .finally(() => dispatch({ type: 'PRODUCTS_SEARCH_FINISHED' }));
-    }
-
-    findProducts();
-
-    return () => controller.abort();
-  }, [state.productName, isTyping.current, isConnected]);
+  const { state, isConnected, isTyping, ...context } = useProductsFind();
 
   function handleBarcodeScanNavigation() {
     navigate('BarcodeScan', {
-      async onBarcodeDetected(barcode) {
-        // Imitate typing to prevent searching products by user during barcode search
-        setIsTyping(true);
-        dispatch({ type: 'BARCODE_SEARCH_STARTED' });
+      onBarcodeDetected(barcode) {
         navigate('ProductFind');
-
-        const methodName = isConnected ? 'findAndFetchByBarcode' : 'findByBarcode';
-        const foundProducts = await Product[methodName](barcode);
-
-        dispatch({ type: 'BARCODE_SEARCH_FINISHED', payload: { barcode, foundProducts }});
-        setIsTyping(false);
+        context.onBarcodeUpdate(barcode);
       }
     });
   }
@@ -99,7 +42,7 @@ export const ProductFind = (props: ProductFindProps) => {
       barcode: state.barcode ?? undefined,
       name: state.productName.trim(),
       onProductCreated(createdProduct) {
-        dispatch({ type: 'PRODUCT_CREATED', payload: createdProduct });
+        context.onProductCreated(createdProduct);
         navigate('ProductFind');
       }
     });
@@ -163,7 +106,7 @@ export const ProductFind = (props: ProductFindProps) => {
           value={state.productName}
           placeholder="Nazwa produktu"
           accessibilityLabel="Nazwa szukanego produktu"
-          onChangeText={handleProductNameUpdate}
+          onChangeText={context.onProductNameUpdate}
           isLoading={state.isSearching}
         />
         <BarcodeButton
@@ -171,8 +114,6 @@ export const ProductFind = (props: ProductFindProps) => {
           onPress={handleBarcodeScanNavigation}
         />
       </Block>
-      <Text>{isTyping ? 'Pisze' : 'Nie pisze'}</Text>
-      <Text>{state.productName}</Text>
       <SectionList
         data={state.products}
         keyExtractor={(product, index) => `${product.id}${index}`}
