@@ -32,18 +32,22 @@ export const productFindReducer = (
       isTyping: false,
       isSearching: true,
     }
-    case 'PRODUCTS_UPDATED': 
+    case 'PRODUCTS_UPDATED':
       if (state.isTyping) return state;
-
+      
       return {
         ...state,
         isSearching: false,
         products: action.payload
       }
-    case 'PRODUCTS_SEARCH_FINISHED': 
-      if (state.isSearching === false) return state;
-
-      return { ...state, isSearching: false };
+    case 'PRODUCTS_SEARCH_STARTED': return {
+      ...state,
+      isSearching: true
+    }
+    case 'PRODUCTS_SEARCH_FINISHED': return {
+      ...state,
+      isSearching: false
+    }
     case 'PRODUCT_CREATED': return {
       ...state,
       barcode: null,
@@ -75,6 +79,7 @@ type ProductFindAction =
   | { type: 'PRODUCT_NAME_UPDATED', payload: string }
   | { type: 'TYPING_FINISHED' }
   | { type: 'PRODUCTS_UPDATED', payload: ProductOrNormalizedProduct[] }
+  | { type: 'PRODUCTS_SEARCH_STARTED' }
   | { type: 'PRODUCTS_SEARCH_FINISHED' }
   | { type: 'PRODUCT_CREATED', payload: Product }
   | { type: 'BARCODE_SEARCH_STARTED' }

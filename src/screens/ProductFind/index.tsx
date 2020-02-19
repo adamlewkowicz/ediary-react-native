@@ -28,9 +28,7 @@ export const ProductFind = (props: ProductFindProps) => {
   const hasBeenPressed = useRef(false);
   const isIdle = useIdleStatus();
   const navigate = useNavigate();
-  const _isTyping = useRef(false);
-
-  const isBusy = state.isSearching || state.isTyping;
+  const _isTyping = useRef(false); // Additional mutable helper
 
   const handleProductNameUpdate = (productName: string): void => {
     clearTimeout(timeout);
@@ -41,16 +39,18 @@ export const ProductFind = (props: ProductFindProps) => {
     timeout = setTimeout(
       () => {
         _isTyping.current = false;
-        dispatch({ type: 'TYPING_FINISHED' })
+        dispatch({ type: 'TYPING_FINISHED' });
       },
-      700
+      800
     );
   }
 
   useMountedEffect(() => {
     const { productName, isTyping } = state;
     console.log({ productName, _isTyping, isTyping })
-    if (_isTyping.current || state.isTyping) return;
+    if (_isTyping.current) return;
+
+    dispatch({ type: 'PRODUCTS_SEARCH_STARTED' });
 
     const controller = new AbortController();
     const trimmedName = state.productName.trim();
@@ -58,7 +58,8 @@ export const ProductFind = (props: ProductFindProps) => {
 
     Product[methodName](trimmedName, controller)
       .then(foundProducts => {
-        dispatch({ type: 'PRODUCTS_UPDATED', payload: foundProducts })
+        if (_isTyping.current) return;
+        dispatch({ type: 'PRODUCTS_UPDATED', payload: foundProducts });
       })
       .catch(error => {
         if (error.name === 'AbortError') {
@@ -70,10 +71,7 @@ export const ProductFind = (props: ProductFindProps) => {
       .finally(() => dispatch({ type: 'PRODUCTS_SEARCH_FINISHED' }));
 
     return () => controller.abort();
-    // `state.productName` has not been put to dependencies
-    // because it would cause too many calls, since setState calls are asynchronous
-    // and "useMountedEffect" could run even if user is actually typing.
-    // `productName` doesn't become stale, since `isTyping` updates name at the same time.
+    // https://github.com/alk831/ediary-react-native/pull/40#issuecomment-588157493
   }, [state.isTyping, state.productName, isConnected]);
 
   function handleBarcodeScanNavigation() {
@@ -117,9 +115,17 @@ export const ProductFind = (props: ProductFindProps) => {
   }
 
   function RenderInfo() {
-    const isProductsNotEmpty = state.products.length > 0;
-    const isProductNameNotTouched = state.productName.length === 0;
-    const hasNotBeenSearching = isProductNameNotTouched && state.barcode === null;
+    const {
+      isSearching,
+      isTyping,
+      products,
+      productName,
+      barcode
+    } = state;
+    const isBusy = isSearching || isTyping;
+    const isProductsNotEmpty = products.length > 0;
+    const isProductNameNotTouched = productName.length === 0;
+    const hasNotBeenSearching = isProductNameNotTouched && barcode === null;
 
     if (isBusy || isProductsNotEmpty || hasNotBeenSearching) {
       return null;
@@ -153,7 +159,7 @@ export const ProductFind = (props: ProductFindProps) => {
           placeholder="Nazwa produktu"
           accessibilityLabel="Nazwa szukanego produktu"
           onChangeText={handleProductNameUpdate}
-          isLoading={isBusy}
+          isLoading={state.isSearching}
         />
         <BarcodeButton
           accessibilityLabel="Zeskanuj kod kreskowy"
