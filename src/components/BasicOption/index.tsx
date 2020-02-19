@@ -35,7 +35,7 @@ const Container = styled.View<{
   isActive: boolean
 }>`
   border-radius: 50;
-  border-width: 2px; 
+  border-width: 1px; 
   border-color: ${props => props.isActive ? props.theme.color.focus : '#d6d6d6'};
   padding: 8px;
 `

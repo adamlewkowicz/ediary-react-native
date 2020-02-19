@@ -21,7 +21,7 @@ import { Button } from '../../components/Button';
 interface HomeProps extends NavigationScreenProps, MapStateProps, DispatchProp {}
 
 const Home = (props: HomeProps) => {
-  const [newMealName, setNewMealName] = useState('Posiłek');
+  const [newMealName, setNewMealName] = useState('');
   const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
   const { dispatch } = props;
   const navigate = useNavigate();
@@ -99,6 +99,11 @@ const Home = (props: HomeProps) => {
     );
   }
 
+  const handleNewMealCreate = () => {
+    dispatch(Actions.mealCreate(newMealName, props.appDate));
+    setNewMealName('');
+  }
+
   return (
     <ScrollView>
       <DateChanger
@@ -144,14 +149,14 @@ const Home = (props: HomeProps) => {
       <ContentContainer>
         <CreateMealContainer>
           <BasicInput
-            placeholder="Nazwa nowego posiłku"
-            label="Nazwa posiłku"
+            placeholder="Kurczak z warzywami"
+            label="Nazwa nowego posiłku"
             value={newMealName}
             onChangeText={setNewMealName}
           />
           <Button
             accessibilityLabel="Utwórz nowy posiłek"
-            onPress={() => dispatch(Actions.mealCreate(newMealName, props.appDate))}
+            onPress={handleNewMealCreate}
             title="Dodaj posiłek"
           >
             Dodaj posiłek
@@ -179,8 +184,8 @@ const MacroCards = styled.View`
 `
 
 const CreateMealContainer = styled.View`
-  padding: 10px;
-  border: ${props => `1px dotted ${props.theme.color.gray30}`};
+  padding: 15px;
+  border: ${props => `1px dotted ${props.theme.color.gray20}`};
   border-radius: 5px;
   margin-bottom: 60px;
 `

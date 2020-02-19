@@ -23,7 +23,7 @@ export const NUTRITION_INPUTS = [
 ] as const;
 
 export enum PORTION_TITLE {
-  '100g' = 'Opakowanie zawiera',
-  'portion' = 'Porcja zawiera',
-  'package' = 'Opakowanie zawiera'
+  '100g' = 'Opakowanie zawiera (g)',
+  'portion' = 'Porcja zawiera (g)',
+  'package' = 'Opakowanie zawiera (g)'
 };

@@ -22,11 +22,7 @@ const ProductListItem = ({
   ...props
 }: ProductListItemProps) => {
   return (
-    <Container
-      {...props}
-      accessibilityLabel="Dodaj produkt do posiłku"
-      accessibilityHint="Wraca na główną stronę i dodaje produkt do posiłku"
-    >
+    <Container {...props}>
       <Name>
         {product.name}
         {product.brand && ` (${product.brand})`}

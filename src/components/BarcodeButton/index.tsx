@@ -7,13 +7,15 @@ interface BarcodeButtonProps extends TouchableOpacityProps {}
 
 export const BarcodeButton = (props: BarcodeButtonProps) => (
   <Container {...props}>
-    <BarcodeIcon
-      width={24}
-      height={24}
-      fill="#1abc9c"
-    />
+    <BarcodeIcon {...BARCODE_ICON_STYLE} />
   </Container>
 );
+
+const BARCODE_ICON_STYLE = {
+  width: 24,
+  height: 24,
+  fill: "#1abc9c"
+}
 
 const Container = styled.TouchableOpacity`
   padding: 6px;
