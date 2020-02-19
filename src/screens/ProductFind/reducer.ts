@@ -4,7 +4,6 @@ import { BarcodeId } from '../../types';
 interface ProductFindState {
   productName: string
   barcode: BarcodeId | null
-  isTyping: boolean
   isSearching: boolean
   products: ProductOrNormalizedProduct[]
 }
@@ -12,7 +11,6 @@ interface ProductFindState {
 export const initialState: ProductFindState = {
   productName: '',
   barcode: null,
-  isTyping: false,
   isSearching: false,
   products: []
 }
@@ -25,21 +23,12 @@ export const productFindReducer = (
     case 'PRODUCT_NAME_UPDATED': return {
       ...state,
       productName: action.payload,
-      isTyping: true,
     }
-    case 'TYPING_FINISHED': return {
+    case 'PRODUCTS_UPDATED': return {
       ...state,
-      isTyping: false,
-      isSearching: true,
+      isSearching: false,
+      products: action.payload
     }
-    case 'PRODUCTS_UPDATED':
-      if (state.isTyping) return state;
-      
-      return {
-        ...state,
-        isSearching: false,
-        products: action.payload
-      }
     case 'PRODUCTS_SEARCH_STARTED': return {
       ...state,
       isSearching: true
@@ -59,12 +48,10 @@ export const productFindReducer = (
       productName: '',
       products: [],
       isSearching: true,
-      // Imitate typing to prevent searching products by user during barcode search
-      isTyping: true
     }
     case 'BARCODE_SEARCH_FINISHED': {
       const { foundProducts: products, barcode } = action.payload;
-      const genericReturn = { ...state, isSearching: false, isTyping: false };
+      const genericReturn = { ...state, isSearching: false };
 
       if (products.length) {
         return { ...genericReturn, products };
@@ -77,7 +64,6 @@ export const productFindReducer = (
 
 type ProductFindAction =
   | { type: 'PRODUCT_NAME_UPDATED', payload: string }
-  | { type: 'TYPING_FINISHED' }
   | { type: 'PRODUCTS_UPDATED', payload: ProductOrNormalizedProduct[] }
   | { type: 'PRODUCTS_SEARCH_STARTED' }
   | { type: 'PRODUCTS_SEARCH_FINISHED' }

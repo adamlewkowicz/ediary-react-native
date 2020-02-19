@@ -1,4 +1,4 @@
-import React, { useRef, useReducer } from 'react';
+import React, { useRef, useReducer, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
 import { ProductListItemMemo, Separator } from '../../components/ProductListItem';
@@ -7,76 +7,81 @@ import { SectionList } from 'react-navigation';
 import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { Button } from '../../components/Button';
-import { useConnected, useIdleStatus, useNavigate, useTypingValue } from '../../hooks';
+import {
+  useConnected,
+  useIdleStatus,
+  useNavigate,
+  useCurrentState,
+  useNavigationParams,
+} from '../../hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
 import { ActivityIndicator, Text } from 'react-native';
 import { ProductFindParams } from './params';
-import { useNavigationParams } from '../../hooks/useNavigationParams';
-import { useMountedEffect } from '../../hooks/useMountedEffect';
 import { productFindReducer, initialState } from './reducer';
+import { ABORT_ERROR_NAME } from '../../common/consts';
+
+let isTypingTimeout: NodeJS.Timeout;
 
 interface ProductFindProps {}
 
-let timeout: NodeJS.Timeout;
-
 export const ProductFind = (props: ProductFindProps) => {
   const [state, dispatch] = useReducer(productFindReducer, initialState);
+  const [isTyping, setIsTyping] = useCurrentState(false);
   const params = useNavigationParams<ProductFindParams>();
   const isConnected = useConnected();
   const recentProducts = useSelector((state: StoreState) => state.productHistory);
   const hasBeenPressed = useRef(false);
   const isIdle = useIdleStatus();
   const navigate = useNavigate();
-  const _isTyping = useRef(false); // Additional mutable helper
 
   const handleProductNameUpdate = (productName: string): void => {
-    clearTimeout(timeout);
+    clearTimeout(isTypingTimeout);
 
-    _isTyping.current = true;
+    setIsTyping(true);
     dispatch({ type: 'PRODUCT_NAME_UPDATED', payload: productName });
 
-    timeout = setTimeout(
-      () => {
-        _isTyping.current = false;
-        dispatch({ type: 'TYPING_FINISHED' });
-      },
+    isTypingTimeout = setTimeout(
+      () => setIsTyping(false),
       800
     );
   }
 
-  useMountedEffect(() => {
-    const { productName, isTyping } = state;
-    console.log({ productName, _isTyping, isTyping })
-    if (_isTyping.current) return;
-
-    dispatch({ type: 'PRODUCTS_SEARCH_STARTED' });
+  useEffect(() => {
+    const { productName } = state;
+    console.log({ isTyping,  productName })
+    if (isTyping.current || !state.productName.length) return;
 
     const controller = new AbortController();
     const trimmedName = state.productName.trim();
     const methodName = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
 
-    Product[methodName](trimmedName, controller)
-      .then(foundProducts => {
-        if (_isTyping.current) return;
-        dispatch({ type: 'PRODUCTS_UPDATED', payload: foundProducts });
-      })
-      .catch(error => {
-        if (error.name === 'AbortError') {
-          // pass
-        } else {
-          // TODO: Error handling
-        }
-      })
-      .finally(() => dispatch({ type: 'PRODUCTS_SEARCH_FINISHED' }));
+    const findProducts = () => {
+      dispatch({ type: 'PRODUCTS_SEARCH_STARTED' });
+
+      Product[methodName](trimmedName, controller)
+        .then(payload => {
+          if (isTyping.current) return;
+          dispatch({ type: 'PRODUCTS_UPDATED', payload });
+        })
+        .catch(error => {
+          if (error.name !== ABORT_ERROR_NAME) {
+            throw error;
+          }
+        })
+        .finally(() => dispatch({ type: 'PRODUCTS_SEARCH_FINISHED' }));
+    }
+
+    findProducts();
 
     return () => controller.abort();
-    // https://github.com/alk831/ediary-react-native/pull/40#issuecomment-588157493
-  }, [state.isTyping, state.productName, isConnected]);
+  }, [state.productName, isTyping.current, isConnected]);
 
   function handleBarcodeScanNavigation() {
     navigate('BarcodeScan', {
       async onBarcodeDetected(barcode) {
+        // Imitate typing to prevent searching products by user during barcode search
+        setIsTyping(true);
         dispatch({ type: 'BARCODE_SEARCH_STARTED' });
         navigate('ProductFind');
 
@@ -84,6 +89,7 @@ export const ProductFind = (props: ProductFindProps) => {
         const foundProducts = await Product[methodName](barcode);
 
         dispatch({ type: 'BARCODE_SEARCH_FINISHED', payload: { barcode, foundProducts }});
+        setIsTyping(false);
       }
     });
   }
@@ -117,12 +123,11 @@ export const ProductFind = (props: ProductFindProps) => {
   function RenderInfo() {
     const {
       isSearching,
-      isTyping,
       products,
       productName,
       barcode
     } = state;
-    const isBusy = isSearching || isTyping;
+    const isBusy = isSearching || isTyping.current;
     const isProductsNotEmpty = products.length > 0;
     const isProductNameNotTouched = productName.length === 0;
     const hasNotBeenSearching = isProductNameNotTouched && barcode === null;
@@ -166,7 +171,7 @@ export const ProductFind = (props: ProductFindProps) => {
           onPress={handleBarcodeScanNavigation}
         />
       </Block>
-      <Text>{state.isTyping ? 'Pisze' : 'Nie pisze'}</Text>
+      <Text>{isTyping ? 'Pisze' : 'Nie pisze'}</Text>
       <Text>{state.productName}</Text>
       <SectionList
         data={state.products}
