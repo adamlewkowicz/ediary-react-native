@@ -1,7 +1,7 @@
 import React, { useRef, useReducer } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
-import { ProductListItem, Separator } from '../../components/ProductListItem';
+import { ProductListItemMemo, Separator } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
 import { SectionList } from 'react-navigation';
 import { Block, Title } from '../../components/Elements';
@@ -185,7 +185,7 @@ export const ProductFind = (props: ProductFindProps) => {
           { title: SECTION_TITLE.recentProducts, data: isIdle ? recentProducts : [] },
         ]}
         renderItem={({ item: product }: { item: ProductOrNormalizedProduct }) => (
-          <ProductListItem
+          <ProductListItemMemo
             product={product}
             onPress={() => handleItemPress(product)}
           />
