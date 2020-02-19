@@ -31,9 +31,6 @@ export const ProductFind = (props: ProductFindProps) => {
   const _isTyping = useRef(false);
 
   const isBusy = state.isLoading || state.isTyping;
-  const productsAreEmpty = !state.products.length;
-  const isNameTouched = state.productName.length > 0;
-  const isSearchingTouched = !isNameTouched && state.barcode === null;
 
   const handleProductNameUpdate = (productName: string): void => {
     clearTimeout(timeout);
@@ -64,11 +61,10 @@ export const ProductFind = (props: ProductFindProps) => {
         dispatch({ type: 'PRODUCTS_UPDATED', payload: foundProducts })
       })
       .catch(error => {
-        // TODO: Error handling
         if (error.name === 'AbortError') {
           // pass
         } else {
-          
+          // TODO: Error handling
         }
       })
       .finally(() => dispatch({ type: 'PRODUCTS_SEARCH_FINISHED' }));
@@ -120,12 +116,14 @@ export const ProductFind = (props: ProductFindProps) => {
     }
   }
 
-  function renderInfo() {
-    if (
-      isBusy ||
-      !productsAreEmpty ||
-      (!state.productName.length && state.barcode === null)
-    ) return null;
+  function RenderInfo() {
+    const isProductsNotEmpty = state.products.length > 0;
+    const isProductNameNotTouched = state.productName.length === 0;
+    const hasNotBeenSearching = isProductNameNotTouched && state.barcode === null;
+
+    if (isBusy || isProductsNotEmpty || hasNotBeenSearching) {
+      return null;
+    }
 
     return (
       <>
@@ -172,7 +170,7 @@ export const ProductFind = (props: ProductFindProps) => {
         renderSectionHeader={({ section: { title }}) => (
           <SectionTitleContainer isFirst={title === SECTION_TITLE.foundProducts}>
             <Title>{title}</Title>
-            {title === SECTION_TITLE.foundProducts && renderInfo()}
+            {title === SECTION_TITLE.foundProducts && <RenderInfo />}
             {title === SECTION_TITLE.recentProducts && !isIdle && <ActivityIndicator />}
           </SectionTitleContainer>
         )}

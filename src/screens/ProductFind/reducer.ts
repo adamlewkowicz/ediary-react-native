@@ -40,10 +40,10 @@ export const productFindReducer = (
         isLoading: false,
         products: action.payload
       }
-    case 'PRODUCTS_SEARCH_FINISHED': return {
-      ...state,
-      isLoading: false
-    }
+    case 'PRODUCTS_SEARCH_FINISHED': 
+      if (state.isLoading === false) return state;
+
+      return { ...state, isLoading: false };
     case 'PRODUCT_CREATED': return {
       ...state,
       barcode: null,
