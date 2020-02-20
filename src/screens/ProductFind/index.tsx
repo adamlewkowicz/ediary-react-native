@@ -11,7 +11,7 @@ import {
   useIdleStatus,
   useNavigate,
   useNavigationParams,
-  useProductsFind,
+  useProductsSearch,
 } from '../../hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
@@ -26,7 +26,12 @@ export const ProductFind = (props: ProductFindProps) => {
   const hasBeenPressed = useRef(false);
   const isIdle = useIdleStatus();
   const navigate = useNavigate();
-  const { state, isConnected, debouncedProductName, ...context } = useProductsFind();
+  const {
+    state,
+    isConnected,
+    debouncedProductName,
+    ...context
+  } = useProductsSearch();
 
   function handleBarcodeScanNavigation() {
     navigate('BarcodeScan', {

@@ -6,5 +6,5 @@ export * from './useNavigate';
 export * from './useFocusedEffect';
 export * from './useCurrentState';
 export * from './useNavigationParams';
-export * from './useProductsFind';
+export * from './useProductsSearch';
 export * from './useDebouncedValue';
