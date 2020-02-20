@@ -72,8 +72,23 @@ export function productCreateReducer(
 
 export function initProductCreateReducer({
   barcode = '',
-  name = ''
+  name = '',
+  productToEdit
 }: ProductCreateParams): ProductCreateState {
+  if (productToEdit) {
+    const { barcode, portion, unit, macro, ...product } = productToEdit;
+
+    return {
+      ...initialState,
+      ...product,
+      carbs: String(macro.carbs),
+      prots: String(macro.prots),
+      fats: String(macro.fats),
+      kcal: String(macro.kcal),
+      barcode: barcode ?? '',
+    }
+  }
+
   return {
     ...initialState,
     name,

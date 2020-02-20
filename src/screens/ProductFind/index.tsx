@@ -11,8 +11,8 @@ import {
   useNavigationParams,
   useProductsSearch,
 } from '../../hooks';
-import { useSelector } from 'react-redux';
-import { StoreState } from '../../store';
+import { useSelector, useDispatch } from 'react-redux';
+import { StoreState, Actions } from '../../store';
 import { FlatList } from 'react-native';
 import { ProductFindParams } from './params';
 
@@ -21,6 +21,7 @@ interface ProductFindProps {}
 export const ProductFind = (props: ProductFindProps) => {
   const params = useNavigationParams<ProductFindParams>();
   const recentProducts = useSelector((state: StoreState) => state.productHistory);
+  const dispatch = useDispatch();
   const hasBeenPressed = useRef(false);
   const navigate = useNavigate();
   const {
@@ -48,6 +49,24 @@ export const ProductFind = (props: ProductFindProps) => {
       onProductCreated(createdProduct) {
         context.addProduct(createdProduct);
         navigate('ProductFind');
+
+        dispatch(
+          Actions.productHistoryRecentAdded([createdProduct])
+        );
+      }
+    });
+  }
+
+  function handleProductEditNavigation(
+    productToEdit: ProductOrNormalizedProduct,
+    index: number,
+  ) {
+    navigate('ProductCreate', {
+      productToEdit,
+      operationType: 'edit',
+      onProductEdited(editedProduct) {
+        navigate('ProductFind');
+        context.updateProduct(editedProduct, index);
       }
     });
   }
@@ -132,10 +151,11 @@ export const ProductFind = (props: ProductFindProps) => {
         keyExtractor={productKeyExtractor}
         keyboardShouldPersistTaps="handled"
         ItemSeparatorComponent={Separator}
-        renderItem={({ item: product }) => (
+        renderItem={({ item: product, index }) => (
           <ProductListItemMemo
             product={product}
             onPress={() => handleItemPress(product)}
+            onLongPress={() => handleProductEditNavigation(product, index)}
             accessibilityLabel="Dodaj produkt do posiłku"
             accessibilityHint="Wraca na główną stronę i dodaje produkt do posiłku"
           />

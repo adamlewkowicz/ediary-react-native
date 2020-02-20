@@ -12,10 +12,8 @@ import { InputRow } from '../../components/InputRow';
 import { Options } from '../../components/Options';
 import { NavigationScreenProps } from 'react-navigation';
 import { useUserId } from '../../hooks';
-import { Product } from '../../database/entities';
+import { Product, IProductRequired } from '../../database/entities';
 import { parseNumber } from '../../common/utils';
-import { useDispatch } from 'react-redux';
-import { Actions } from '../../store';
 import { ProductCreateParams } from './params';
 import { useNavigationParams } from '../../hooks/useNavigationParams';
 import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
@@ -31,7 +29,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
     params,
     initProductCreateReducer
   );
-  const storeDispatch = useDispatch();
+  
   const userId = useUserId();
   const { current: refsList } = useRef({
     producer: createRef<TextInput>(),
@@ -61,31 +59,52 @@ export const ProductCreate = (props: ProductCreateProps) => {
       prots,
       fats,
       kcal,
+      name,
+      producer,
       ...data
     } = state;
 
-    if (!data.name.length) {
+    if (!name.length) {
       return;
     }
 
-    const createdProduct = await Product.save({
+    const parsedProduct: IProductRequired = {
       ...data,
-      name: data.name.trim(),
+      name: name.trim(),
       barcode: barcode.length ? barcode : null,
-      userId,
       macro: {
         carbs: Number(carbs),
         prots: Number(prots),
         fats: Number(fats),
         kcal: Number(kcal),
+      },
+      userId,
+    }
+
+    // re-use Product.saveNormalizedProduct method
+
+    if (
+      params.operationType === 'edit' &&
+      params.productToEdit
+    ) {
+      if (params.productToEdit instanceof Product) {
+        const updatedProduct = await params.productToEdit.save(parsedProduct as any);
+        // const updatedProduct = await Product.updateAndReturn(
+        //   params.productToEdit.id,
+        //   parsedProduct
+        // );
+        params.onProductEdited?.(updatedProduct);
+
+      } else {
+        const createdProduct = await Product.save(parsedProduct);
+        params.onProductEdited?.(createdProduct);
       }
-    });
 
-    storeDispatch(
-      Actions.productHistoryRecentAdded([createdProduct])
-    );
+    } else if (params.operationType === 'create') {
+      const createdProduct = await Product.save(parsedProduct);
 
-    params.onProductCreated?.(createdProduct);
+      params.onProductCreated?.(createdProduct);
+    }
   }
   
   useEffect(() => {

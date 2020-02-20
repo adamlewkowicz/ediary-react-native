@@ -56,6 +56,15 @@ export const productsSearchReducer = (
       products: [action.payload],
       isSearching: false,
     }
+    case 'PRODUCT_UPDATED': return {
+      ...state,
+      products: state.products.map((product, index) => {
+        if (index === action.payload.index) {
+          return action.payload.product;
+        }
+        return product;
+      })
+    }
     case 'BARCODE_UPDATED': return {
       ...state,
       barcode: action.payload
@@ -81,6 +90,7 @@ type ProductsSearchAction =
   | { type: 'PRODUCTS_SEARCH_SUCCEEDED', payload: ProductOrNormalizedProduct[] }
   | { type: 'PRODUCTS_SEARCH_FINISHED' }
   | { type: 'PRODUCT_CREATED', payload: Product }
+  | { type: 'PRODUCT_UPDATED', payload: { product: ProductOrNormalizedProduct, index: number }}
   | { type: 'BARCODE_UPDATED', payload: BarcodeId }
   | { type: 'BARCODE_SEARCH_STARTED' }
   | { type: 'BARCODE_SEARCH_SUCCEEDED', payload: { barcode: BarcodeId, products: Product[] }}

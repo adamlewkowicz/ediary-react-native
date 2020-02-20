@@ -215,6 +215,20 @@ export class Product extends GenericEntity {
     return savedProducts;
   }
 
+  static async updateAndReturn(
+    productId: ProductId,
+    payload: IProductRequired
+  ): Promise<Product> {
+    await Product.update(
+      productId,
+      payload
+    );
+
+    const updatedProduct = await Product.findOneOrFail(productId);
+
+    return updatedProduct;
+  }
+
 }
 
 export type IProduct = EntityType<Product, 'portion'>;

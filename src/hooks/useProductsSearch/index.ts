@@ -1,5 +1,5 @@
 import { useReducer, useEffect } from 'react';
-import { Product } from '../../database/entities';
+import { Product, ProductOrNormalizedProduct } from '../../database/entities';
 import { ABORT_ERROR_NAME } from '../../common/consts';
 import { BarcodeId } from '../../types';
 import { productsSearchReducer, initialState } from './reducer';
@@ -20,6 +20,14 @@ export const useProductsSearch = () => {
 
   const updateBarcode = (barcode: BarcodeId): void => {
     dispatch({ type: 'BARCODE_UPDATED', payload: barcode });
+  }
+
+  const updateProduct = (
+    product: ProductOrNormalizedProduct,
+    index: number,
+  ): void => {
+    const payload = { product, index };
+    dispatch({ type: 'PRODUCT_UPDATED', payload });
   }
 
   useEffect(() => {
@@ -87,6 +95,7 @@ export const useProductsSearch = () => {
     updateProductName,
     updateBarcode,
     addProduct,
+    updateProduct,
     debouncedProductName,
   }
 }
