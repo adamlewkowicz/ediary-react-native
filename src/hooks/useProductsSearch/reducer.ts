@@ -1,7 +1,7 @@
 import { ProductOrNormalizedProduct, Product } from '../../database/entities';
 import { BarcodeId } from '../../types';
 
-interface ProductFindState {
+interface ProductsSearchState {
   productName: string
   barcode: BarcodeId | null
   isSearching: boolean
@@ -9,7 +9,7 @@ interface ProductFindState {
   isTyping: boolean
 }
 
-export const initialState: ProductFindState = {
+export const initialState: ProductsSearchState = {
   productName: '',
   barcode: null,
   isSearching: false,
@@ -17,10 +17,10 @@ export const initialState: ProductFindState = {
   isTyping: false
 }
 
-export const productFindReducer = (
-  state: ProductFindState,
-  action: ProductFindAction
-): ProductFindState => {
+export const productsSearchReducer = (
+  state: ProductsSearchState,
+  action: ProductsSearchAction
+): ProductsSearchState => {
   switch(action.type) {
     case 'PRODUCT_NAME_UPDATED': return {
       ...state,
@@ -66,7 +66,7 @@ export const productFindReducer = (
   }
 }
 
-type ProductFindAction =
+type ProductsSearchAction =
   | { type: 'PRODUCT_NAME_UPDATED', payload: string }
   | { type: 'PRODUCTS_SEARCH_STARTED' }
   | { type: 'PRODUCTS_SEARCH_SUCCEEDED', payload: ProductOrNormalizedProduct[] }

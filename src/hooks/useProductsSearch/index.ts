@@ -2,11 +2,11 @@ import { useReducer, useEffect } from 'react';
 import { Product } from '../../database/entities';
 import { ABORT_ERROR_NAME } from '../../common/consts';
 import { BarcodeId } from '../../types';
-import { productFindReducer, initialState } from './reducer';
+import { productsSearchReducer, initialState } from './reducer';
 import { useConnected, useDebouncedValue } from '../';
 
 export const useProductsSearch = () => {
-  const [state, dispatch] = useReducer(productFindReducer, initialState);
+  const [state, dispatch] = useReducer(productsSearchReducer, initialState);
   const debouncedProductName = useDebouncedValue(state.productName, 800);
   const isConnected = useConnected();
 
