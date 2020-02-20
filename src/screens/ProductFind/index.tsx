@@ -82,7 +82,8 @@ export const ProductFind = (props: ProductFindProps) => {
     return (
       <>
         <NotFoundInfo>
-          Nie znaleziono produktów.
+          Nie znaleziono produktów {'\n'}
+          {barcode !== null && `z podanym kodem kreskowym: ${barcode}`}
         </NotFoundInfo>
         {!isConnected && (
           <NotFoundInfo>

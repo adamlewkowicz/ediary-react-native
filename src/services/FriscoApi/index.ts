@@ -12,7 +12,8 @@ export class FriscoApi {
   searchURL = 'https://commerce.frisco.pl/api/offer/products/query?search=';
 
   private async findAndParseByQuery(
-    query: string | BarcodeId
+    query: string | BarcodeId,
+    controller?: AbortController
   ): Promise<{
     raw: FriscoQueryResponse['products']
     normalized: NormalizedProduct[]
@@ -23,7 +24,8 @@ export class FriscoApi {
       `${this.searchURL}${parsedQuery}` +
       '&includeCategories=true&pageIndex=1&deliveryMethod=Van&pageSize=60' +
       '&language=pl&facetCount=100&includeWineFacets=false',
-      { headers: { 'X-Requested-With': 'XMLHttpRequest' }}
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
+      controller
     );
 
     const normalized = this.normalizeQueryProducts(raw);
@@ -35,13 +37,19 @@ export class FriscoApi {
   }
 
   async findByQuery(
-    query: BarcodeId | string
+    query: BarcodeId | string,
+    controller?: AbortController
   ): Promise<NormalizedProduct[]> {
-    const { normalized, raw } = await this.findAndParseByQuery(query);
+    const { normalized, raw } = await this.findAndParseByQuery(query, controller);
 
     if (!normalized.length && raw.length) {
       const [firstRawProduct] = raw;
-      const foundProduct = await this.findOneByProductId(firstRawProduct.productId);
+
+      const foundProduct = await this.findOneByProductId(
+        firstRawProduct.productId,
+        controller,
+      );
+
       return foundProduct ? [foundProduct] : [];
     }
 
@@ -49,14 +57,15 @@ export class FriscoApi {
   }
 
   async findOneByProductId(
-    productId: FriscoProductId
+    productId: FriscoProductId,
+    controller?: AbortController
   ): Promise<NormalizedProduct | null> {
 
-    const response = await fetch(
+    const data = await fetchify<FriscoResponse>(
       `https://products.frisco.pl/api/products/get/${productId}`,
-      { headers: { 'X-Requested-With': 'XMLHttpRequest' }
-    });
-    const data: FriscoResponse = await response.json();
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
+      controller
+    );
 
     const macroSectionId = 2;
     const macroFieldId = 85;

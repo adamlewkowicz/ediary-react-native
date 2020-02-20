@@ -20,14 +20,8 @@ export const useProductsFind = () => {
     dispatch({ type: 'PRODUCT_CREATED', payload: createdProduct });
   }
 
-  const updateBarcode = async (barcode: BarcodeId): Promise<void> => {
-    // Imitate typing to prevent searching products by user during barcode search
-    dispatch({ type: 'BARCODE_SEARCH_STARTED' });
-
-    const methodName = isConnected ? 'findAndFetchByBarcode' : 'findByBarcode';
-    const products = await Product[methodName](barcode);
-
-    dispatch({ type: 'BARCODE_SEARCH_SUCCEEDED', payload: { barcode, products }});
+  const updateBarcode = (barcode: BarcodeId): void => {
+    dispatch({ type: 'BARCODE_UPDATED', payload: barcode });
   }
 
   useEffect(() => {
@@ -37,7 +31,7 @@ export const useProductsFind = () => {
     const trimmedName = debouncedProductName.trim();
     const methodName = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
 
-    const findProducts = async (): Promise<void> => {
+    const findProductsByName = async (): Promise<void> => {
       try {
         dispatch({ type: 'PRODUCTS_SEARCH_STARTED' });
 
@@ -50,16 +44,42 @@ export const useProductsFind = () => {
         if (error.name !== ABORT_ERROR_NAME) {
           throw error;
         }
-
       } finally {
         dispatch({ type: 'PRODUCTS_SEARCH_FINISHED' });
       }
     }
 
-    findProducts();
+    findProductsByName();
 
     return () => controller.abort();
   }, [debouncedProductName, isConnected]);
+
+  useEffect(() => {
+    const { barcode } = state;
+    if (barcode === null || !barcode.length) return;
+
+    const controller = new AbortController();
+    const methodName = isConnected ? 'findAndFetchByBarcode' : 'findByBarcode';
+
+    const findProductsByBarcode = async (): Promise<void> => {
+      try {
+        dispatch({ type: 'BARCODE_SEARCH_STARTED' });
+
+        const products = await Product[methodName](barcode, controller);
+
+        dispatch({ type: 'BARCODE_SEARCH_SUCCEEDED', payload: { barcode, products }});
+
+      } catch (error) {
+        if (error.name !== ABORT_ERROR_NAME) {
+          throw error;
+        }
+      }
+    }
+
+    findProductsByBarcode();
+
+    return () => controller.abort();
+  }, [state.barcode, isConnected]);
 
   return {
     state,

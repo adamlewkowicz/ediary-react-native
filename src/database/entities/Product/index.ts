@@ -193,17 +193,20 @@ export class Product extends GenericEntity {
       }
     }
 
-    return this.findOneOrSave(query, parsedProduct);
+    return Product.findOneOrSave(query, parsedProduct);
   }
 
-  static async findAndFetchByBarcode(barcode: BarcodeId): Promise<Product[]> {
+  static async findAndFetchByBarcode(
+    barcode: BarcodeId,
+    controller: AbortController
+  ): Promise<Product[]> {
     const savedProducts = await this.findByBarcode(barcode);
     const hasVerifiedProduct = savedProducts.some(product => product.isVerified);
     
     if (!savedProducts.length || !hasVerifiedProduct) {
-      const fetchedProducts = await friscoApi.findByQuery(barcode);
+      const fetchedProducts = await friscoApi.findByQuery(barcode, controller);
       const createdProducts = await mapAsyncSequence(
-        fetchedProducts, this.saveNormalizedProduct
+        fetchedProducts, Product.saveNormalizedProduct
       );
 
       return [...savedProducts, ...createdProducts];

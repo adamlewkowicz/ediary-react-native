@@ -47,26 +47,20 @@ export const productFindReducer = (
       products: [action.payload],
       isSearching: false,
     }
+    case 'BARCODE_UPDATED': return {
+      ...state,
+      barcode: action.payload
+    }
     case 'BARCODE_SEARCH_STARTED': return {
       ...state,
       productName: '',
       products: [],
       isSearching: true,
     }
-    case 'BARCODE_SEARCH_SUCCEEDED': {
-      const { products, barcode } = action.payload;
-
-      const nextState: ProductFindState = {
-        ...state,
-        isSearching: false,
-      }
-
-      // TODO: refactor to more comprehensive logic
-      if (products.length) {
-        return { ...nextState, products };
-      }
-
-      return { ...nextState, barcode };
+    case 'BARCODE_SEARCH_SUCCEEDED': return {
+      ...state,
+      ...action.payload,
+      isSearching: false,
     }
   }
 }
@@ -77,5 +71,6 @@ type ProductFindAction =
   | { type: 'PRODUCTS_SEARCH_SUCCEEDED', payload: ProductOrNormalizedProduct[] }
   | { type: 'PRODUCTS_SEARCH_FINISHED' }
   | { type: 'PRODUCT_CREATED', payload: Product }
+  | { type: 'BARCODE_UPDATED', payload: BarcodeId }
   | { type: 'BARCODE_SEARCH_STARTED' }
   | { type: 'BARCODE_SEARCH_SUCCEEDED', payload: { barcode: BarcodeId, products: Product[] }}
