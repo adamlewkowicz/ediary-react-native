@@ -37,7 +37,7 @@ export const useProductsFind = () => {
 
         const payload = await Product[methodName](trimmedName, controller);
     
-        // TODO: Prevent dispatching products if connection is lost and products are not empty
+        // TODO: Prevent dispatching products if connection is lost and payload is empty
         dispatch({ type: 'PRODUCTS_SEARCH_SUCCEEDED', payload });
 
       } catch(error) {
@@ -73,6 +73,8 @@ export const useProductsFind = () => {
         if (error.name !== ABORT_ERROR_NAME) {
           throw error;
         }
+      } finally {
+        dispatch({ type: 'BARCODE_SEARCH_FINISHED' });
       }
     }
 

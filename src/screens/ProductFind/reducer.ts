@@ -37,10 +37,11 @@ export const productFindReducer = (
       isTyping: false,
       products: action.payload,
     }
-    case 'PRODUCTS_SEARCH_FINISHED': return {
-      ...state,
-      isSearching: false
-    }
+    case 'PRODUCTS_SEARCH_FINISHED':
+    case 'BARCODE_SEARCH_FINISHED':
+      if (!state.isSearching) return state;
+
+      return { ...state, isSearching: false };
     case 'PRODUCT_CREATED': return {
       ...state,
       barcode: null,
@@ -74,3 +75,4 @@ type ProductFindAction =
   | { type: 'BARCODE_UPDATED', payload: BarcodeId }
   | { type: 'BARCODE_SEARCH_STARTED' }
   | { type: 'BARCODE_SEARCH_SUCCEEDED', payload: { barcode: BarcodeId, products: Product[] }}
+  | { type: 'BARCODE_SEARCH_FINISHED' }
