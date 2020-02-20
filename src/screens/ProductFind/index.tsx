@@ -147,6 +147,7 @@ export const ProductFind = (props: ProductFindProps) => {
 
 const Container = styled.View`
   padding: 20px 20px 60px 20px;
+  margin-bottom: 10px;
 `
 
 const NotFoundInfo = styled.Text`
