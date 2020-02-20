@@ -44,7 +44,7 @@ export const ProductFind = (props: ProductFindProps) => {
   function handleProductCreateNavigation() {
     navigate('ProductCreate', {
       barcode: state.barcode ?? undefined,
-      name: state.productName.trim(),
+      name: debouncedProductName.trim(),
       onProductCreated(createdProduct) {
         context.addProduct(createdProduct);
         navigate('ProductFind');
@@ -83,11 +83,15 @@ export const ProductFind = (props: ProductFindProps) => {
       return null;
     }
 
+    const notFoundMessage = barcode !== null
+      ? `z podanym kodem kreskowym: ${barcode}`
+      : debouncedProductName.length && `o podanej nazwie: ${debouncedProductName}`;
+
     return (
       <>
         <NotFoundInfo>
           Nie znaleziono produktów {'\n'}
-          {barcode !== null && `z podanym kodem kreskowym: ${barcode}`}
+          {notFoundMessage}
         </NotFoundInfo>
         {!isConnected && (
           <NotFoundInfo>
