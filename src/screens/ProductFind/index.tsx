@@ -32,7 +32,7 @@ export const ProductFind = (props: ProductFindProps) => {
     navigate('BarcodeScan', {
       onBarcodeDetected(barcode) {
         navigate('ProductFind');
-        context.onBarcodeUpdate(barcode);
+        context.updateBarcode(barcode);
       }
     });
   }
@@ -42,7 +42,7 @@ export const ProductFind = (props: ProductFindProps) => {
       barcode: state.barcode ?? undefined,
       name: state.productName.trim(),
       onProductCreated(createdProduct) {
-        context.onProductCreated(createdProduct);
+        context.addProduct(createdProduct);
         navigate('ProductFind');
       }
     });
@@ -106,7 +106,7 @@ export const ProductFind = (props: ProductFindProps) => {
           value={state.productName}
           placeholder="Nazwa produktu"
           accessibilityLabel="Nazwa szukanego produktu"
-          onChangeText={context.onProductNameUpdate}
+          onChangeText={context.updateProductName}
           isLoading={state.isSearching}
         />
         <BarcodeButton

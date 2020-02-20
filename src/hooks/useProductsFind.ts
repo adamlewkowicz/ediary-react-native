@@ -12,15 +12,15 @@ export const useProductsFind = () => {
   const debouncedProductName = useDebouncedValue(state.productName, 800);
   const isConnected = useConnected();
 
-  const onProductNameUpdate = (productName: string): void => {
+  const updateProductName = (productName: string): void => {
     dispatch({ type: 'PRODUCT_NAME_UPDATED', payload: productName });
   }
 
-  const onProductCreated = (createdProduct: Product): void => {
+  const addProduct = (createdProduct: Product): void => {
     dispatch({ type: 'PRODUCT_CREATED', payload: createdProduct });
   }
 
-  const onBarcodeUpdate = async (barcode: BarcodeId): Promise<void> => {
+  const updateBarcode = async (barcode: BarcodeId): Promise<void> => {
     // Imitate typing to prevent searching products by user during barcode search
     dispatch({ type: 'BARCODE_SEARCH_STARTED' });
 
@@ -64,9 +64,9 @@ export const useProductsFind = () => {
   return {
     state,
     isConnected,
-    onProductNameUpdate,
-    onBarcodeUpdate,
-    onProductCreated,
+    updateProductName,
+    updateBarcode,
+    addProduct,
     debouncedProductName,
   }
 }
