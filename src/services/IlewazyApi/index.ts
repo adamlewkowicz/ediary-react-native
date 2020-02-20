@@ -12,8 +12,8 @@ import { KNOWN_PORTION_TYPES, PORTION_MAP } from './consts';
 
 export class IlewazyApi {
 
-  searchURL = 'http://www.ilewazy.pl/ajax/load-products/ppage/14/keyword/';
-  imageURL = 'http://static.ilewazy.pl/dziennik/470/';
+  private static searchURL = 'http://www.ilewazy.pl/ajax/load-products/ppage/14/keyword/';
+  private static imageURL = 'http://static.ilewazy.pl/dziennik/470/';
 
   async findByName(
     name: string,
@@ -22,7 +22,7 @@ export class IlewazyApi {
     const parsedName = encodeURIComponent(name);
 
     const { data = [] } = await fetchify<IleWazyPayload>(
-      `${this.searchURL}${parsedName}`,
+      `${IlewazyApi.searchURL}${parsedName}`,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
       controller,
     );
@@ -72,7 +72,7 @@ export class IlewazyApi {
     const images = Object
       .values(payload.unitdata)
       .filter((unitdata): unitdata is IleWazyUnitData => typeof unitdata?.filename === 'string')
-      .map(unitdata => `${this.imageURL}${unitdata.filename}`);
+      .map(unitdata => `${IlewazyApi.imageURL}${unitdata.filename}`);
 
     const macro = { prots, carbs, fats, kcal };
 
