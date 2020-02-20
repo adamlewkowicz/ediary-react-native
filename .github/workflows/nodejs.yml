@@ -5,6 +5,7 @@ on: [push]
 jobs:
   test:
     runs-on: ubuntu-latest
+    if: "! contains(toJSON(github.event.commits.*.msg), '[skip-ci]')"
     strategy:
       matrix:
         node-version: [10.x]

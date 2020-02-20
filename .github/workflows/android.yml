@@ -5,6 +5,7 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: "! contains(toJSON(github.event.commits.*.msg), '[skip-ci]')"
     steps:
     - uses: actions/checkout@v1
 
