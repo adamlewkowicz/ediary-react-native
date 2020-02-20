@@ -13,7 +13,7 @@ describe('<Home />', () => {
 
   const mockMealWithProduct = async () => {
     const productMock = await Product.save({ name: 'Milk', macro: { kcal: 100 }});
-    const mealMock = await Meal.createWithProduct({ name: 'Milk soup' }, productMock.id);
+    const mealMock = await Meal.createWithProductId({ name: 'Milk soup' }, productMock.id);
     return { productMock, mealMock };
   }
 
@@ -77,7 +77,7 @@ describe('<Home />', () => {
     const arrange = async () => {
       const quantityMock = 180;
       const productMock = await Product.save({ name: 'Milk', macro: { kcal: 100 }});
-      const mealMock = await Meal.createWithProduct({ name: 'Milk soup' }, productMock.id);
+      const mealMock = await Meal.createWithProductId({ name: 'Milk soup' }, productMock.id);
       const ctx = renderSetup(<Home />);
   
       const toggleMealButton = await ctx.findByText(mealMock.name);
@@ -124,7 +124,7 @@ describe('<Home />', () => {
 
   it('removing meal should work 🗑️', async () => {
     const productMock = await Product.save({ name: 'Milk', macro: { kcal: 100 }});
-    const mealMock = await Meal.createWithProduct({ name: 'Milk soup' }, productMock.id);
+    const mealMock = await Meal.createWithProductId({ name: 'Milk soup' }, productMock.id);
     const mealDeleteSpy = jest.spyOn(Meal, 'delete');
     const alertSpy = jest.spyOn(Alert, 'alert')
       .mockImplementationOnce((title, msg, [onCancel, onSuccess]: any) => onSuccess.onPress());
