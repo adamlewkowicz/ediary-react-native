@@ -4,17 +4,19 @@ import { BarcodeId } from '../../types';
 interface ProductsSearchState {
   productName: string
   barcode: BarcodeId | null
-  isSearching: boolean
   products: ProductOrNormalizedProduct[]
+  isSearching: boolean
   isTyping: boolean
+  isDirty: boolean
 }
 
 export const initialState: ProductsSearchState = {
   productName: '',
   barcode: null,
-  isSearching: false,
   products: [],
-  isTyping: false
+  isSearching: false,
+  isTyping: false,
+  isDirty: false,
 }
 
 export const productsSearchReducer = (
@@ -22,11 +24,16 @@ export const productsSearchReducer = (
   action: ProductsSearchAction
 ): ProductsSearchState => {
   switch(action.type) {
-    case 'PRODUCT_NAME_UPDATED': return {
-      ...state,
-      productName: action.payload,
-      isTyping: true,
-    }
+    case 'PRODUCT_NAME_UPDATED':
+      const productName = action.payload;
+      const isDirty = productName.length === 0 ? false : state.isDirty;
+
+      return {
+        ...state,
+        isTyping: true,
+        isDirty,
+        productName,
+      }
     case 'PRODUCTS_SEARCH_STARTED': return {
       ...state,
       isSearching: true
@@ -35,6 +42,7 @@ export const productsSearchReducer = (
       ...state,
       isSearching: false,
       isTyping: false,
+      isDirty: true,
       products: action.payload,
     }
     case 'PRODUCTS_SEARCH_FINISHED':
@@ -62,6 +70,7 @@ export const productsSearchReducer = (
       ...state,
       ...action.payload,
       isSearching: false,
+      isDirty: true,
     }
   }
 }

@@ -3,19 +3,17 @@ import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
 import { ProductListItemMemo, Separator } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
-import { SectionList } from 'react-navigation';
 import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { Button } from '../../components/Button';
 import {
-  useIdleStatus,
   useNavigate,
   useNavigationParams,
   useProductsSearch,
 } from '../../hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
-import { ActivityIndicator } from 'react-native';
+import { FlatList } from 'react-native';
 import { ProductFindParams } from './params';
 
 interface ProductFindProps {}
@@ -24,7 +22,6 @@ export const ProductFind = (props: ProductFindProps) => {
   const params = useNavigationParams<ProductFindParams>();
   const recentProducts = useSelector((state: StoreState) => state.productHistory);
   const hasBeenPressed = useRef(false);
-  const isIdle = useIdleStatus();
   const navigate = useNavigate();
   const {
     state,
@@ -32,6 +29,8 @@ export const ProductFind = (props: ProductFindProps) => {
     debouncedProductName,
     ...context
   } = useProductsSearch();
+  const showRecentProducts = !state.isDirty;
+  const productsSource = showRecentProducts ? recentProducts : state.products;
 
   function handleBarcodeScanNavigation() {
     navigate('BarcodeScan', {
@@ -120,23 +119,16 @@ export const ProductFind = (props: ProductFindProps) => {
           onPress={handleBarcodeScanNavigation}
         />
       </Block>
-      <SectionList
-        data={state.products}
-        keyExtractor={(product, index) => `${product.id}${index}`}
+      <ProductsTitle>
+        {showRecentProducts ? 'Ostatnio używane produkty:' : 'Znalezione produkty:'}
+      </ProductsTitle>
+      <RenderInfo />
+      <FlatList
+        data={productsSource}
+        keyExtractor={productKeyExtractor}
         keyboardShouldPersistTaps="handled"
         ItemSeparatorComponent={Separator}
-        renderSectionHeader={({ section: { title }}) => (
-          <SectionTitleContainer isFirst={title === SECTION_TITLE.foundProducts}>
-            <Title>{title}</Title>
-            {title === SECTION_TITLE.foundProducts && <RenderInfo />}
-            {title === SECTION_TITLE.recentProducts && !isIdle && <ActivityIndicator />}
-          </SectionTitleContainer>
-        )}
-        sections={[
-          { title: SECTION_TITLE.foundProducts, data: state.products },
-          { title: SECTION_TITLE.recentProducts, data: isIdle ? recentProducts : [] },
-        ]}
-        renderItem={({ item: product }: { item: ProductOrNormalizedProduct }) => (
+        renderItem={({ item: product }) => (
           <ProductListItemMemo
             product={product}
             onPress={() => handleItemPress(product)}
@@ -160,23 +152,21 @@ const NotFoundInfo = styled.Text`
   padding: 0 50px;
 `
 
-const SectionTitleContainer = styled.View<{
-  isFirst: boolean
-}>`
-  padding: ${props => props.isFirst ? '10px 0 5px 0' : '30px 0 5px 0'}
+const ProductsTitle = styled(Title)`
+  margin: 10px 0;
 `
 
 const AddOwnProductButton = styled(Button)`
   margin-top: 15px;
 `
 
-ProductFind.navigationOptions = {
-  headerTitle: 'Znajdź produkt'
+const productKeyExtractor = (product: ProductOrNormalizedProduct): string => {
+  const productId = '_id' in product ? product._id : product.id;
+  return String(productId);
 }
 
-const SECTION_TITLE = {
-  foundProducts: 'Znalezione produkty:',
-  recentProducts: 'Ostatnie produkty:',
+ProductFind.navigationOptions = {
+  headerTitle: 'Znajdź produkt'
 }
 
 export type ProductResolver = () => Promise<Product>;
