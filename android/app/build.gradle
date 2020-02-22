@@ -137,6 +137,7 @@ android {
         versionCode 9
         versionName "0.4.0"
         missingDimensionStrategy 'react-native-camera', 'mlkit'
+        multiDexEnabled true
     }
     splits {
         abi {
