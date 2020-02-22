@@ -209,4 +209,4 @@ HomeConnected.navigationOptions = {
   header: null,
 }
 
-export { HomeConnected as Home };
+export { HomeConnected as NutritionHome };

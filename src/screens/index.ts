@@ -1,5 +1,5 @@
 export * from './AppLoading';
-export * from './Home';
+export * from './NutritionHome';
 export * from './ProductCreate';
 export * from './ProductFind';
 export * from './ProfileCreate';

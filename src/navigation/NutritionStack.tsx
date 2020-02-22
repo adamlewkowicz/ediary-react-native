@@ -4,12 +4,12 @@ import { APP_ROUTE } from './RootStack';
 import { BarcodeId } from '../types';
 import { Product } from '../database/entities';
 import { TakePictureResponse } from 'react-native-camera/types';
-import { ProductFind, ProductCreate, BarcodeScan, Home } from '../screens';
+import { ProductFind, ProductCreate, BarcodeScan, NutritionHome } from '../screens';
 
-const Stack = createStackNavigator<HomeStackParamList>();
+const Stack = createStackNavigator<NutritionStackParamList>();
 
-type HomeStackParamList = {
-  [APP_ROUTE.Home]: undefined;
+type NutritionStackParamList = {
+  [APP_ROUTE.NutritionHome]: undefined;
   [APP_ROUTE.ProductFind]: undefined;
   [APP_ROUTE.ProductCreate]: {
     barcode?: BarcodeId
@@ -24,14 +24,14 @@ type HomeStackParamList = {
   };
 }
 
-export const HomeStack = () => (
+export const NutritionStack = () => (
   <Stack.Navigator
-    initialRouteName={APP_ROUTE.Home}
+    initialRouteName={APP_ROUTE.NutritionHome}
     headerMode="screen"
   >
     <Stack.Screen
-      name={APP_ROUTE.Home}
-      component={Home}
+      name={APP_ROUTE.NutritionHome}
+      component={NutritionHome}
       options={{ headerShown: false }}
     />
     <Stack.Screen

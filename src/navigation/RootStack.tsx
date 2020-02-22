@@ -10,18 +10,16 @@ import { MainStack } from './MainStack';
 const Stack = createStackNavigator<RootStackParamList>();
 
 export enum APP_ROUTE {
-  HomeStack = 'HomeStack',
   AppLoading = 'AppLoading',
   ProfileCreate = 'ProfileCreate',
   MainStack = 'MainStack',
+  NutritionStack = 'NutritionStack',
 
-  Home = 'Home',
+  NutritionHome = 'NutritionHome',
   ProductCreate = 'ProductCreate',
   ProductFind = 'ProductFind',
   BarcodeScan = 'BarcodeScan',
 
-  // NutritionHome = 'NutritionHome',
-  // NutritionStack = 'NutritionStack',
   DiarySummary = 'DiarySummary',
 }
 
