@@ -28,6 +28,7 @@ export type Screen = keyof typeof Screens | 'Main' | 'AppLoading';
 
 export type Environment = 'development' | 'test' | 'production';
 
-export interface NavigationScreenProps<T> {
-  navigation: T
+export interface NavigationScreenProps<N, R = unknown> {
+  navigation: N
+  route: R
 }

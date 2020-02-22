@@ -9,12 +9,11 @@ import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { BarcodeId } from '../../types';
 import { Button } from 'react-native-ui-kitten';
-import { useConnected, useIdleStatus, useNavigate } from '../../hooks';
+import { useConnected, useIdleStatus } from '../../hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
 import { ActivityIndicator } from 'react-native';
-import { ProductFindParams } from './params';
-import { useNavigationParams } from '../../hooks/useNavigationParams';
+import { ProductFindScreenNavigationProps } from '../../navigation';
 
 const debounceA = debounce();
 const SECTION_TITLE = {
@@ -22,10 +21,9 @@ const SECTION_TITLE = {
   recentProducts: 'Ostatnie produkty:',
 }
 
-interface ProductFindProps {}
+interface ProductFindProps extends ProductFindScreenNavigationProps {}
 
 export const ProductFind = (props: ProductFindProps) => {
-  const params = useNavigationParams<ProductFindParams>();
   const [name, setName] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setLoading] = useState(false);
@@ -35,7 +33,8 @@ export const ProductFind = (props: ProductFindProps) => {
   const recentProducts = useSelector((state: StoreState) => state.productHistory);
   const hasBeenPressed = useRef(false);
   const isIdle = useIdleStatus();
-  const navigate = useNavigate();
+  const { navigate } = props.navigation;
+  const { params } = props.route;
 
   function handleProductSearch(name: string) {
     setName(name);
