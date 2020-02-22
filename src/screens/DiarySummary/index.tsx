@@ -1,26 +1,30 @@
 import React, { useState, useMemo } from 'react';
-import { NavigationScreenProps } from 'react-navigation';
 import { H1, Text, Block, TitleSecondary } from '../../components/Elements';
 import { DiarySummaryChart } from '../../components/DiarySummaryChart';
 import { Meal } from '../../database/entities';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { StoreState, Selectors } from '../../store';
 import { calcMacroNeedsLeft } from '../../common/utils';
-import { DateDay, MacroElements } from '../../types';
+import { MacroElements, NavigationScreenProps } from '../../types';
 import styled from 'styled-components/native';
 import { MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitlesLong, baseMacro } from '../../common/helpers';
 import { RatioInfo } from '../../components/RatioInfo';
-import { useFocusedEffect } from '../../hooks';
+import { DiarySummaryNavigationProp } from '../../navigation/MainStack';
+import { useFocusEffect } from '@react-navigation/native';
 
-interface DiarySummaryProps extends MapStateProps, NavigationScreenProps {}
+interface DiarySummaryProps extends NavigationScreenProps<DiarySummaryNavigationProp> {}
 
-const DiarySummary = (props: DiarySummaryProps) => {
+export const DiarySummary = (props: DiarySummaryProps) => {
   const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...baseMacro }));
   const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]);
+  const macroNeeds = useSelector<StoreState, Selectors.MacroNeeds>(
+    Selectors.macroNeeds
+  );
+  const todayDay = useSelector((state: StoreState) => state.application.todayDay);
 
   async function handleMacroSummaryFetch() {
-    const result = await Meal.getMacroSummary(props.todayDay);
+    const result = await Meal.getMacroSummary(todayDay);
     setMacroSummary(result.average);
     setHistoryRecords(result.data.map(record => ({
       value: record.kcal,
@@ -28,13 +32,13 @@ const DiarySummary = (props: DiarySummaryProps) => {
     })));
   }
 
-  useFocusedEffect(() => {
+  useFocusEffect(() => {
     handleMacroSummaryFetch();
   });
 
-  const macroNeeds = useMemo(() => 
-    calcMacroNeedsLeft(macroSummary, props.macroNeeds),
-    [macroSummary, props.macroNeeds] 
+  const macroNeedsLeft = useMemo(() => 
+    calcMacroNeedsLeft(macroSummary, macroNeeds),
+    [macroSummary, macroNeeds] 
   );
 
   return (
@@ -66,8 +70,8 @@ const DiarySummary = (props: DiarySummaryProps) => {
           <Block align="flex-end">
             <RatioInfo
               allowedDiff={15}
-              ratio={macroNeeds[element].ratio}
-              value={macroNeeds[element].diff}
+              ratio={macroNeedsLeft[element].ratio}
+              value={macroNeedsLeft[element].diff}
               margin="0 8px 0 0"
               size="tiny"
             />
@@ -75,7 +79,7 @@ const DiarySummary = (props: DiarySummaryProps) => {
               {Math.round(macroSummary[element])}
             </Text>
             <Text size="regular" priority={3}>
-              / {props.macroNeeds[element]}
+              / {macroNeeds[element]}
             </Text>
           </Block>
         </Block>
@@ -89,19 +93,6 @@ const Container = styled.ScrollView`
   background: #fff;
   min-height: 100%;
 `
-
-interface MapStateProps {
-  macroNeeds: Selectors.MacroNeeds
-  todayDay: DateDay
-}
-
-const mapStateToProps = (state: StoreState): MapStateProps => ({
-  macroNeeds: Selectors.macroNeeds(state),
-  todayDay: state.application.todayDay,
-});
-const DiarySummaryConnected = connect(mapStateToProps)(DiarySummary);
-
-export { DiarySummaryConnected as DiarySummary };
 
 type HistoryRecord = {
   value: number

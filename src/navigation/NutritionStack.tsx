@@ -8,9 +8,11 @@ import { ProductFind, ProductCreate, BarcodeScan, NutritionHome } from '../scree
 
 const Stack = createStackNavigator<NutritionStackParamList>();
 
-type NutritionStackParamList = {
+export type NutritionStackParamList = {
   [APP_ROUTE.NutritionHome]: undefined;
-  [APP_ROUTE.ProductFind]: undefined;
+  [APP_ROUTE.ProductFind]: {
+    onItemPress?: (product: Product) => void
+  };
   [APP_ROUTE.ProductCreate]: {
     barcode?: BarcodeId
     name?: string

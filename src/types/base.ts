@@ -27,3 +27,7 @@ export type WeightGoal = 'decrease' | 'maintain' | 'increase';
 export type Screen = keyof typeof Screens | 'Main' | 'AppLoading';
 
 export type Environment = 'development' | 'test' | 'production';
+
+export interface NavigationScreenProps<T> {
+  navigation: T
+}

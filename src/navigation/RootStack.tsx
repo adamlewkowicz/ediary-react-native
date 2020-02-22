@@ -4,35 +4,39 @@ import {
   AppLoading,
   ProfileCreate,
 } from '../screens';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { MainStack } from './MainStack';
+import { Theme as NavigationTheme } from '@react-navigation/native/lib/typescript/src/types';
+import { theme } from '../common/theme';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export enum APP_ROUTE {
-  AppLoading = 'AppLoading',
-  ProfileCreate = 'ProfileCreate',
-  MainStack = 'MainStack',
-  NutritionStack = 'NutritionStack',
+export const APP_ROUTE = {
+  AppLoading: 'AppLoading',
+  ProfileCreate: 'ProfileCreate',
+  MainStack: 'MainStack',
+    NutritionStack: 'NutritionStack',
+      NutritionHome: 'NutritionHome',
+      ProductCreate: 'ProductCreate',
+      ProductFind: 'ProductFind',
+      BarcodeScan: 'BarcodeScan',
+    DiarySummary: 'DiarySummary',
+} as const;
 
-  NutritionHome = 'NutritionHome',
-  ProductCreate = 'ProductCreate',
-  ProductFind = 'ProductFind',
-  BarcodeScan = 'BarcodeScan',
-
-  DiarySummary = 'DiarySummary',
-}
-
-type RootStackParamList = {
+export type RootStackParamList = {
   [APP_ROUTE.AppLoading]: undefined;
   [APP_ROUTE.MainStack]: undefined;
   [APP_ROUTE.ProfileCreate]: undefined;
 }
 
+// TODO replace stack with conditional rendering
 export const RootStack = () => (
-  <NavigationContainer>
+  <NavigationContainer
+    theme={NAVIGATION_THEME}
+  >
     <Stack.Navigator
       initialRouteName={APP_ROUTE.AppLoading}
+      headerMode="none"
     >
       <Stack.Screen
         name={APP_ROUTE.AppLoading}
@@ -49,3 +53,12 @@ export const RootStack = () => (
     </Stack.Navigator>
   </NavigationContainer>
 );
+
+const NAVIGATION_THEME: NavigationTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: '#fff',
+    primary: theme.color.focus,
+  },
+};

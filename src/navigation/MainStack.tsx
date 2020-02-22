@@ -1,61 +1,73 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator, BottomTabNavigationProp, BottomTabBarOptions } from '@react-navigation/bottom-tabs';
 import { APP_ROUTE } from './RootStack';
-import { DiarySummary, Home as NutritionHome } from '../screens';
+import { DiarySummary } from '../screens';
 import { theme } from '../common/theme';
 import { ReportIcon, DishIcon } from '../components/Icons';
+import { NutritionStack } from './NutritionStack';
 
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
-type TabStackParamList = {
+export type TabStackParamList = {
+  [APP_ROUTE.NutritionStack]: undefined;
   [APP_ROUTE.DiarySummary]: undefined;
-  [APP_ROUTE.Home]: undefined;
 }
 
 export const MainStack = () => (
   <Tab.Navigator
-    initialRouteName={APP_ROUTE.Home}
+    initialRouteName={APP_ROUTE.NutritionStack}
     tabBarOptions={TAB_BAR_OPTIONS}
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ color }) => {
+        const Icon = TAB_BAR_ICON[route.name];
+        return <Icon fill={color} {...TAB_ICON_SIZE} />;
+      },
+    })}
   >
     <Tab.Screen
-      name={APP_ROUTE.Home}
-      component={NutritionHome}
-      options={{
-        tabBarLabel: 'Dziennik',
-        tabBarIcon: ({ color }) => (
-          <DishIcon
-            {...TAB_ICON_SIZE}
-            fill={color}
-          />
-        ),
-      }}
+      name={APP_ROUTE.NutritionStack}
+      component={NutritionStack}
+      options={{ tabBarLabel: 'Dziennik' }}
     />
     <Tab.Screen
       name={APP_ROUTE.DiarySummary}
       component={DiarySummary}
-      options={{
-        tabBarLabel: 'Podsumowanie',
-        tabBarIcon: ({ color }) => (
-          <ReportIcon
-            {...TAB_ICON_SIZE}
-            fill={color}
-          />
-        ),
-      }}
+      options={{ tabBarLabel: 'Podsumowanie' }}
     />
   </Tab.Navigator>
 );
 
-const TAB_BAR_OPTIONS = {
+const TAB_BAR_OPTIONS: BottomTabBarOptions = {
   showIcon: true,
   activeTintColor: theme.color.blue30,
   labelStyle: {
     fontSize: theme.fontSize.tiny,
     fontFamily: theme.fontWeight.regular,
-  }
+  },
+  activeBackgroundColor:'red',
+  style: {
+    backgroundColor: 'blue',
+  },
 };
 
 const TAB_ICON_SIZE = {
   width: 22,
   height: 22,
 };
+
+const TAB_BAR_ICON = {
+  'NutritionStack': ReportIcon,
+  'DiarySummary': DishIcon,
+  // [APP_ROUTE.NutritionStack]: ReportIcon,
+  // [APP_ROUTE.DiarySummary]: DishIcon,
+};
+
+export type NutritionStackNavigationProp = BottomTabNavigationProp<
+  TabStackParamList,
+  'NutritionStack'
+>;
+
+export type DiarySummaryNavigationProp = BottomTabNavigationProp<
+  TabStackParamList,
+  'DiarySummary'
+>;

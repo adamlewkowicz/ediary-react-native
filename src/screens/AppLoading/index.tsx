@@ -3,12 +3,21 @@ import { ActivityIndicator, Alert } from 'react-native';
 import { USER_ID_UNSYNCED, DEFAULT_CONNECTION } from '../../common/consts';
 import { store, Actions } from '../../store';
 import { User } from '../../database/entities';
-import { NavigationScreenProps } from 'react-navigation';
 import { databaseConfig } from '../../database/config/config';
 import { getOrCreateConnection } from '../../database/utils/getOrCreateConnection';
 import styled from 'styled-components/native';
+import { NavigationScreenProps } from '../../types';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../navigation/RootStack';
 
-interface AppLoadingProps extends NavigationScreenProps {}
+interface AppLoadingProps extends NavigationScreenProps<
+  StackNavigationProp<
+    RootStackParamList,
+    'AppLoading'
+  >
+> {
+
+}
 
 export class AppLoading extends React.Component<AppLoadingProps> {
 
@@ -52,7 +61,7 @@ export class AppLoading extends React.Component<AppLoadingProps> {
     if (user.profile == null) {
       this.props.navigation.navigate('ProfileCreate');
     } else {
-      this.props.navigation.navigate('Main');
+      this.props.navigation.navigate('MainStack');
     }
   }
 
