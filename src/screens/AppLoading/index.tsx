@@ -55,13 +55,17 @@ export class AppLoading extends React.Component<AppLoadingProps> {
     });
 
     store.dispatch(
-      Actions.appInitialized(user)
+      Actions.userInitialized(user)
     );
 
     if (user.profile == null) {
-      this.props.navigation.navigate('ProfileCreate');
+      store.dispatch(
+        Actions.appStatusUpdated('CREATING PROFILE')
+      );
     } else {
-      this.props.navigation.navigate('MainStack');
+      store.dispatch(
+        Actions.appStatusUpdated('INITIALIZED')
+      );
     }
   }
 

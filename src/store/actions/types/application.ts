@@ -1,5 +1,9 @@
-import { APP_DATE_UPDATED, APP_CONNECTION_STATUS_UPDATED, APP_INITIALIZED } from '../../consts';
-import { User } from '../../../database/entities';
+import {
+  APP_DATE_UPDATED,
+  APP_CONNECTION_STATUS_UPDATED,
+  APP_STATUS_UPDATED,
+} from '../../consts';
+import { ApplicationStatus } from '../../../types';
 
 export type AppDateUpdated = {
   type: typeof APP_DATE_UPDATED
@@ -11,14 +15,12 @@ export type AppConnectionStatusUpdated = {
   payload: boolean
 }
 
-export type AppInitialized = {
-  type: typeof APP_INITIALIZED
-  payload: {
-    user: User
-  }
+export type AppStatusUpdated = {
+  type: typeof APP_STATUS_UPDATED
+  payload: ApplicationStatus
 }
 
 export type AppActions =
   | AppDateUpdated
   | AppConnectionStatusUpdated
-  | AppInitialized
+  | AppStatusUpdated

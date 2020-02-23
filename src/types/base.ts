@@ -32,3 +32,5 @@ export interface NavigationScreenProps<N, R = unknown> {
   navigation: N
   route: R
 }
+
+export type ApplicationStatus = 'INITIALIZING' | 'CREATING PROFILE' | 'INITIALIZED';

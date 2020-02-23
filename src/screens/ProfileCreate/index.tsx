@@ -46,7 +46,9 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
       Actions.userProfileCreate(profile)
     );
 
-    props.navigation.navigate('MainStack');
+    dispatch(
+      Actions.appStatusUpdated('INITIALIZED')
+    );
   }
 
   const isLastStep = step === 2;
