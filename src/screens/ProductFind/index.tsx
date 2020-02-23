@@ -85,7 +85,7 @@ export const ProductFind = (props: ProductFindProps) => {
 
     const notFoundMessage = barcode !== null
       ? `z podanym kodem kreskowym: ${barcode}`
-      : debouncedProductName.length && `o podanej nazwie: ${debouncedProductName}`;
+      : `o podanej nazwie: ${debouncedProductName}`;
 
     return (
       <>
