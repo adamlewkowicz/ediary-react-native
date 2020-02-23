@@ -45,10 +45,6 @@ const TAB_BAR_OPTIONS: BottomTabBarOptions = {
     fontSize: theme.fontSize.tiny,
     fontFamily: theme.fontWeight.regular,
   },
-  activeBackgroundColor:'red',
-  style: {
-    backgroundColor: 'blue',
-  },
 };
 
 const TAB_ICON_SIZE = {
