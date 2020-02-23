@@ -4,7 +4,6 @@ import { sortByMostAccurateName, debounce } from '../../common/utils';
 import { Product } from '../../database/entities';
 import { ProductListItem, Separator } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
-import { SectionList } from 'react-navigation';
 import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { BarcodeId } from '../../types';
@@ -12,7 +11,7 @@ import { Button } from 'react-native-ui-kitten';
 import { useConnected, useIdleStatus } from '../../hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, SectionList } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 
 const debounceA = debounce();
@@ -181,7 +180,3 @@ const SectionTitleContainer = styled.View<{
 }>`
   padding: ${props => props.isFirst ? '10px 0 5px 0' : '30px 0 5px 0'}
 `
-
-ProductFind.navigationOptions = {
-  headerTitle: 'Znajdź produkt'
-}

@@ -1,11 +1,12 @@
 import React from 'react';
-import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
+import { createStackNavigator, StackNavigationProp, StackNavigationOptions } from '@react-navigation/stack';
 import { APP_ROUTE } from './RootStack';
 import { BarcodeId } from '../types';
 import { Product } from '../database/entities';
 import { TakePictureResponse } from 'react-native-camera/types';
 import { ProductFind, ProductCreate, BarcodeScan, NutritionHome } from '../screens';
 import { RouteProp } from '@react-navigation/native';
+import { theme } from '../common/theme';
 
 const Stack = createStackNavigator<NutritionStackParamList>();
 
@@ -28,6 +29,7 @@ export type NutritionStackParamList = {
 export const NutritionStack = () => (
   <Stack.Navigator
     initialRouteName={APP_ROUTE.NutritionHome}
+    screenOptions={SCREEN_OPTIONS}
     headerMode="screen"
   >
     <Stack.Screen
@@ -37,7 +39,8 @@ export const NutritionStack = () => (
     />
     <Stack.Screen
       name={APP_ROUTE.ProductFind}
-      component={ProductFind}    
+      component={ProductFind}
+      options={{ title: 'Znajdź produkt' }}
     />
     <Stack.Screen
       name={APP_ROUTE.ProductCreate}
@@ -46,25 +49,27 @@ export const NutritionStack = () => (
     />
     <Stack.Screen
       name={APP_ROUTE.BarcodeScan}
-      component={BarcodeScan}    
+      component={BarcodeScan}
+      options={{ title: 'Zeskanuj kod kreskowy' }}
     />
   </Stack.Navigator>
 );
 
-export type ProductFindScreenNavigationProps = Combine<
-  NutritionStackParamList,
-  'ProductFind'
->;
+const SCREEN_OPTIONS: StackNavigationOptions = {
+  headerTitleStyle: {
+    fontFamily: theme.fontWeight.regular
+  }
+}
 
-export type ProductCreateScreenNavigationProps = Combine<
-  NutritionStackParamList,
-  'ProductCreate'
->;
+export type ProductFindScreenNavigationProps = NutritionStackScreenNavigationProps<'ProductFind'>;
 
-type Combine<
-  L extends NutritionStackParamList,
-  K extends keyof L
+export type ProductCreateScreenNavigationProps = NutritionStackScreenNavigationProps<'ProductCreate'>;
+
+export type BarcodeScanScreenNavigationProps = NutritionStackScreenNavigationProps<'BarcodeScan'>;
+
+type NutritionStackScreenNavigationProps<
+  K extends keyof NutritionStackParamList
 > = {
-  navigation: StackNavigationProp<L, K>,
-  route: RouteProp<L, K>
+  navigation: StackNavigationProp<NutritionStackParamList, K>,
+  route: RouteProp<NutritionStackParamList, K>
 };
