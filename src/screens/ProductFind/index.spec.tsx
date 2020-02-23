@@ -3,7 +3,7 @@ import { fireEvent } from '@testing-library/react-native';
 import { renderSetup } from '../../../__tests__/utils';
 import { Product } from '../../database/entities';
 import { configureStore } from '../../store';
-import { ProductFind } from '.';
+import { ProductFindScreen } from '.';
 import { ProductFindParams } from './params';
 
 describe('<ProductFind />', () => {
@@ -12,7 +12,7 @@ describe('<ProductFind />', () => {
 
     it('should display found products', async () => {
       const productMock = await Product.save({ name: 'tomatoe' });
-      const ctx = renderSetup(<ProductFind />);
+      const ctx = renderSetup(<ProductFindScreen />);
   
       const productFindInput = ctx.getByLabelText('Nazwa szukanego produktu');
       fireEvent.changeText(productFindInput, productMock.name);
@@ -27,7 +27,7 @@ describe('<ProductFind />', () => {
           onItemPress: jest.fn()
         }
         const productMock = await Product.save({ name: 'tomatoe' });
-        const ctx = renderSetup(<ProductFind />, { params });
+        const ctx = renderSetup(<ProductFindScreen />, { params });
     
         const productFindInput = ctx.getByLabelText('Nazwa szukanego produktu');
         fireEvent.changeText(productFindInput, productMock.name);
@@ -44,7 +44,7 @@ describe('<ProductFind />', () => {
     describe('when no products were found 🚫', () => {
 
       it('should display product create button', async () => {
-        const ctx = renderSetup(<ProductFind />);
+        const ctx = renderSetup(<ProductFindScreen />);
   
         const productFindInput = ctx.getByLabelText('Nazwa szukanego produktu');
         fireEvent.changeText(productFindInput, 'abc');
@@ -70,7 +70,7 @@ describe('<ProductFind />', () => {
       productHistory: [productMock]
     });
   
-    const ctx = renderSetup(<ProductFind />, { store });
+    const ctx = renderSetup(<ProductFindScreen />, { store });
   
     await ctx.findByText(productMock.name);
   });
@@ -78,7 +78,7 @@ describe('<ProductFind />', () => {
   describe('when presses on barcode button', () => {
 
     it('should navigate to barcode scan screen 🧭', async () => {
-      const ctx = renderSetup(<ProductFind />);
+      const ctx = renderSetup(<ProductFindScreen />);
 
       const barcodeScanNavButton = await ctx.findByLabelText('Zeskanuj kod kreskowy');
       fireEvent.press(barcodeScanNavButton);

@@ -4,9 +4,9 @@ import styled from 'styled-components/native';
 import { BarcodeId } from '../../types';
 import { BarcodeScanScreenNavigationProps } from '../../navigation';
 
-interface BarcodeScanProps extends BarcodeScanScreenNavigationProps {}
+interface BarcodeScanScreenProps extends BarcodeScanScreenNavigationProps {}
 
-export class BarcodeScan extends React.Component<BarcodeScanProps> {
+export class BarcodeScanScreen extends React.Component<BarcodeScanScreenProps> {
 
   camera = createRef<RNCamera>();
   prevBarcodeId: BarcodeId | null = null;

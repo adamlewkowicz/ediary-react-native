@@ -18,9 +18,9 @@ import { Actions } from '../../store';
 import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
 
-interface ProductCreateProps extends ProductCreateScreenNavigationProps {}
+interface ProductCreateScreenProps extends ProductCreateScreenNavigationProps {}
 
-export const ProductCreate = (props: ProductCreateProps) => {
+export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
   const { navigation, route: { params }} = props;
   const [state, dispatch] = useReducer(
     productCreateReducer,

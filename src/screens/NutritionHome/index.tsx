@@ -18,9 +18,9 @@ import { ProductItem } from '../../components/ProductItem';
 import { Button } from '../../components/Button';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
 
-interface HomeProps extends NutritionHomeScreenNavigationProps {}
+interface NutritionHomeScreenProps extends NutritionHomeScreenNavigationProps {}
 
-const Home = (props: HomeProps) => {
+export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const [newMealName, setNewMealName] = useState('');
   const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
   const dispatch = useDispatch();
@@ -198,5 +198,3 @@ const CreateMealContainer = styled.View`
   border-radius: 5px;
   margin-bottom: 60px;
 `
-
-export { Home as NutritionHome };

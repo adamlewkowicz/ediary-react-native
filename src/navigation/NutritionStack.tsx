@@ -4,7 +4,12 @@ import { APP_ROUTE } from './RootStack';
 import { BarcodeId } from '../types';
 import { Product } from '../database/entities';
 import { TakePictureResponse } from 'react-native-camera/types';
-import { ProductFind, ProductCreate, BarcodeScan, NutritionHome } from '../screens';
+import {
+  ProductFindScreen,
+  ProductCreateScreen,
+  BarcodeScanScreen,
+  NutritionHomeScreen,
+} from '../screens';
 import { RouteProp } from '@react-navigation/native';
 import { theme } from '../common/theme';
 
@@ -34,22 +39,22 @@ export const NutritionStack = () => (
   >
     <Stack.Screen
       name={APP_ROUTE.NutritionHome}
-      component={NutritionHome}
+      component={NutritionHomeScreen}
       options={{ headerShown: false }}
     />
     <Stack.Screen
       name={APP_ROUTE.ProductFind}
-      component={ProductFind}
+      component={ProductFindScreen}
       options={{ title: 'Znajdź produkt' }}
     />
     <Stack.Screen
       name={APP_ROUTE.ProductCreate}
-      component={ProductCreate}
+      component={ProductCreateScreen}
       options={{ title: 'Stwórz produkt' }}
     />
     <Stack.Screen
       name={APP_ROUTE.BarcodeScan}
-      component={BarcodeScan}
+      component={BarcodeScanScreen}
       options={{ title: 'Zeskanuj kod kreskowy' }}
     />
   </Stack.Navigator>

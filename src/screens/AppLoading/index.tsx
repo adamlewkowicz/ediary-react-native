@@ -8,13 +8,9 @@ import { getOrCreateConnection } from '../../database/utils/getOrCreateConnectio
 import styled from 'styled-components/native';
 import { AppLoadingScreenNavigationProps } from '../../navigation';
 
-interface AppLoadingProps extends AppLoadingScreenNavigationProps {}
+interface AppLoadingScreenProps extends AppLoadingScreenNavigationProps {}
 
-export class AppLoading extends React.Component<AppLoadingProps> {
-
-  constructor(props: AppLoadingProps) {
-    super(props);
-  }
+export class AppLoadingScreen extends React.Component<AppLoadingScreenProps> {
 
   async componentDidMount() {
     try {

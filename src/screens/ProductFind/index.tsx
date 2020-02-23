@@ -20,9 +20,9 @@ const SECTION_TITLE = {
   recentProducts: 'Ostatnie produkty:',
 }
 
-interface ProductFindProps extends ProductFindScreenNavigationProps {}
+interface ProductFindScreenProps extends ProductFindScreenNavigationProps {}
 
-export const ProductFind = (props: ProductFindProps) => {
+export const ProductFindScreen = (props: ProductFindScreenProps) => {
   const [name, setName] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setLoading] = useState(false);

@@ -1,8 +1,8 @@
 import React from 'react';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import {
-  AppLoading,
-  ProfileCreate,
+  AppLoadingScreen,
+  ProfileCreateScreen,
 } from '../screens';
 import { NavigationContainer, DefaultTheme, RouteProp } from '@react-navigation/native';
 import { MainStack } from './MainStack';
@@ -40,12 +40,12 @@ export const RootStack = () => {
         {appStatus === 'INITIALIZING' ? (
           <Stack.Screen
             name={APP_ROUTE.AppLoading}
-            component={AppLoading}
+            component={AppLoadingScreen}
           />
         ) : appStatus === 'CREATING PROFILE' ? (
           <Stack.Screen
             name={APP_ROUTE.ProfileCreate}
-            component={ProfileCreate}
+            component={ProfileCreateScreen}
           />
         ) : (
           <Stack.Screen

@@ -13,9 +13,9 @@ import { RatioInfo } from '../../components/RatioInfo';
 import { DiarySummaryScreenNavigationProps } from '../../navigation';
 import { useFocusEffect } from '@react-navigation/native';
 
-interface DiarySummaryProps extends DiarySummaryScreenNavigationProps {}
+interface DiarySummaryScreenProps extends DiarySummaryScreenNavigationProps {}
 
-export const DiarySummary = (props: DiarySummaryProps) => {
+export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
   const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...baseMacro }));
   const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]);
   const macroNeeds = useSelector<StoreState, Selectors.MacroNeeds>(

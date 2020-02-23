@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator, BottomTabNavigationProp, BottomTabBarOptions } from '@react-navigation/bottom-tabs';
 import { APP_ROUTE } from './RootStack';
-import { DiarySummary } from '../screens';
+import { DiarySummaryScreen } from '../screens';
 import { theme } from '../common/theme';
 import { ReportIcon, DishIcon } from '../components/Icons';
 import { NutritionStack } from './NutritionStack';
@@ -32,7 +32,7 @@ export const MainStack = () => (
     />
     <Tab.Screen
       name={APP_ROUTE.DiarySummary}
-      component={DiarySummary}
+      component={DiarySummaryScreen}
       options={{ tabBarLabel: 'Podsumowanie' }}
     />
   </Tab.Navigator>

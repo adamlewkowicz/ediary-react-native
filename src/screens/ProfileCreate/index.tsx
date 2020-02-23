@@ -21,9 +21,9 @@ import { fillArrayWithinRange } from '../../common/utils';
 import { SelectionOptions } from '../../components/SelectionOptions';
 import { ProfileCreateScreenNavigationProps } from '../../navigation';
 
-interface ProfileCreateProps extends ProfileCreateScreenNavigationProps {}
+interface ProfileCreateScreenProps extends ProfileCreateScreenNavigationProps {}
 
-export const ProfileCreate = (props: ProfileCreateProps) => {
+export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
   const [step, setStep] = useState<0 | 1 | 2>(0);
   const [male, setMale] = useState(true);
   const [height, setHeight] = useState(175);
