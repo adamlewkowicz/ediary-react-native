@@ -1,6 +1,10 @@
 import React from 'react';
-import { createBottomTabNavigator, BottomTabNavigationProp, BottomTabBarOptions } from '@react-navigation/bottom-tabs';
-import { APP_ROUTE } from './RootStack';
+import {
+  createBottomTabNavigator,
+  BottomTabNavigationProp,
+  BottomTabBarOptions,
+} from '@react-navigation/bottom-tabs';
+import { APP_ROUTE } from './consts';
 import { DiarySummaryScreen } from '../screens';
 import { theme } from '../common/theme';
 import { ReportIcon, DishIcon } from '../components/Icons';
@@ -53,16 +57,11 @@ const TAB_ICON_SIZE = {
 };
 
 const TAB_BAR_ICON = {
-  'NutritionStack': ReportIcon,
-  'DiarySummary': DishIcon,
-  // [APP_ROUTE.NutritionStack]: ReportIcon,
-  // [APP_ROUTE.DiarySummary]: DishIcon,
+  [APP_ROUTE.NutritionStack]: ReportIcon,
+  [APP_ROUTE.DiarySummary]: DishIcon,
 };
 
-export type NutritionStackNavigationProp = BottomTabNavigationProp<
-  TabStackParamList,
-  'NutritionStack'
->;
+export type NutritionStackNavigationProp = ScreenProps<'NutritionStack'>;
 
 export type DiarySummaryScreenNavigationProps = ScreenProps<'DiarySummary'>;
 

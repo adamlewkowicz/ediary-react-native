@@ -10,20 +10,9 @@ import { Theme as NavigationTheme } from '@react-navigation/native/lib/typescrip
 import { theme } from '../common/theme';
 import { useSelector } from 'react-redux';
 import { getAppStatus } from '../store/selectors';
+import { APP_ROUTE } from './consts';
 
 const Stack = createStackNavigator<RootStackParamList>();
-
-export const APP_ROUTE = {
-  AppLoading: 'AppLoading',
-  ProfileCreate: 'ProfileCreate',
-  MainStack: 'MainStack',
-    NutritionStack: 'NutritionStack',
-      NutritionHome: 'NutritionHome',
-      ProductCreate: 'ProductCreate',
-      ProductFind: 'ProductFind',
-      BarcodeScan: 'BarcodeScan',
-    DiarySummary: 'DiarySummary',
-} as const;
 
 export type RootStackParamList = {
   [APP_ROUTE.AppLoading]: undefined;

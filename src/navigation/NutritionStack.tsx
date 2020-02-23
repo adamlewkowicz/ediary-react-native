@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator, StackNavigationProp, StackNavigationOptions } from '@react-navigation/stack';
-import { APP_ROUTE } from './RootStack';
+import { APP_ROUTE } from './consts';
 import { BarcodeId } from '../types';
 import { Product } from '../database/entities';
 import { TakePictureResponse } from 'react-native-camera/types';
