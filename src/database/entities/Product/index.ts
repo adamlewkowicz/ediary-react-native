@@ -9,7 +9,7 @@ import {
   Like,
 } from 'typeorm';
 import { MealProduct, IMealProduct } from '../MealProduct';
-import { BarcodeId, ProductId, UserId, ProductUnit, CancelablePromise } from '../../../types';
+import { BarcodeId, ProductId, UserId, ProductUnit, CancelablePromise, FilterHOF } from '../../../types';
 import { User } from '../User';
 import { ProductPortion } from '../ProductPortion';
 import { friscoApi } from '../../../services/FriscoApi';
@@ -142,6 +142,27 @@ export class Product extends GenericEntity {
 
     return Product.findByIds(productIds);
   }
+
+  private static filterProductsByNameAndInstance: FilterHOF<ProductOrNormalizedProduct> = (
+    currentProduct, currentIndex, products
+  ) => {
+    const REMOVE = false;
+    const PRESERVE = true;
+
+    const hasProductWithExactName = products.some((anyProduct, index) => {
+      const isNotCurrentProductIndex = index !== currentIndex;
+      const hasExactName = anyProduct.name === currentProduct.name;
+      return isNotCurrentProductIndex && hasExactName;
+    });
+
+    const isNotInstanceOfProduct = !(currentProduct instanceof Product);
+
+    if (hasProductWithExactName && isNotInstanceOfProduct) {
+      return REMOVE;
+    }
+
+    return PRESERVE;
+  }
   
   static async findAndFetchByNameLike(
     name: string,
@@ -150,15 +171,19 @@ export class Product extends GenericEntity {
 
     const savedProducts = await Product.findByNameLike(name);
     const minProductsFoundLimit = 3;
+    const sortByMostAccurateProductName = sortByMostAccurateName(name);
 
     if (savedProducts.length <= minProductsFoundLimit) {
       const fetchedProducts = await ilewazyApi.findByName(name, controller);
-      const mergedProducts = [...savedProducts, ...fetchedProducts];
 
-      return mergedProducts.sort(sortByMostAccurateName(name));
+      const mergedProducts = [...savedProducts, ...fetchedProducts]
+        .filter(Product.filterProductsByNameAndInstance)
+        .sort(sortByMostAccurateProductName);
+
+      return mergedProducts;
     }
 
-    return savedProducts.sort(sortByMostAccurateName(name));
+    return savedProducts.sort(sortByMostAccurateProductName);
   }
 
   static findByBarcode(barcode: BarcodeId): Promise<Product[]> {
@@ -209,7 +234,7 @@ export class Product extends GenericEntity {
         fetchedProducts, Product.saveNormalizedProduct
       );
 
-      return [...savedProducts, ...createdProducts];
+      return [ ...createdProducts, ...savedProducts];
     }
 
     return savedProducts;
