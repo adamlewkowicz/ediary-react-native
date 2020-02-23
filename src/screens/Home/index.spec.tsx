@@ -50,10 +50,11 @@ describe('<Home />', () => {
 
     it('should add selected product to meal', async () => {
       const productMock = await Product.save({ name: 'Tomatoes' });
+      const productResolverMock = async () => productMock;
       const ctx = renderSetup(<Home />);
 
       ctx.mocks.navigationContext.navigate
-        .mockImplementationOnce((screenName, params) => params.onItemPress(productMock))
+        .mockImplementationOnce((screenName, params) => params.onItemPress(productResolverMock))
         .mockImplementationOnce(() => {});
 
       const [toggleMealButton] = await ctx.findAllByLabelText('Pokaż szczegóły posiłku');
