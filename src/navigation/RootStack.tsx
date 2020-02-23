@@ -9,7 +9,7 @@ import { MainStack } from './MainStack';
 import { Theme as NavigationTheme } from '@react-navigation/native/lib/typescript/src/types';
 import { theme } from '../common/theme';
 import { useSelector } from 'react-redux';
-import { StoreState } from '../store';
+import { getAppStatus } from '../store/selectors';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -32,7 +32,7 @@ export type RootStackParamList = {
 }
 
 export const RootStack = () => {
-  const appStatus = useSelector((state: StoreState) => state.application.status);
+  const appStatus = useSelector(getAppStatus);
   
   return (
     <NavigationContainer theme={NAVIGATION_THEME}>
