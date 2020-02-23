@@ -19,15 +19,9 @@ import { Actions } from '../../store';
 import { NumericPicker } from '../../components/NumericPicker';
 import { fillArrayWithinRange } from '../../common/utils';
 import { SelectionOptions } from '../../components/SelectionOptions';
-import { RootStackParamList } from '../../navigation/RootStack'
-import { StackNavigationProp } from '@react-navigation/stack';
+import { ProfileCreateScreenNavigationProps } from '../../navigation';
 
-interface ProfileCreateProps {
-  navigation: StackNavigationProp<
-    RootStackParamList,
-    'ProfileCreate'
-  >
-}
+interface ProfileCreateProps extends ProfileCreateScreenNavigationProps {}
 
 export const ProfileCreate = (props: ProfileCreateProps) => {
   const [step, setStep] = useState<0 | 1 | 2>(0);

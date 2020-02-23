@@ -61,13 +61,15 @@ const SCREEN_OPTIONS: StackNavigationOptions = {
   }
 }
 
-export type ProductFindScreenNavigationProps = NutritionStackScreenNavigationProps<'ProductFind'>;
+export type NutritionHomeScreenNavigationProps = ScreenProps<'NutritionHome'>;
 
-export type ProductCreateScreenNavigationProps = NutritionStackScreenNavigationProps<'ProductCreate'>;
+export type ProductFindScreenNavigationProps = ScreenProps<'ProductFind'>;
 
-export type BarcodeScanScreenNavigationProps = NutritionStackScreenNavigationProps<'BarcodeScan'>;
+export type ProductCreateScreenNavigationProps = ScreenProps<'ProductCreate'>;
 
-type NutritionStackScreenNavigationProps<
+export type BarcodeScanScreenNavigationProps = ScreenProps<'BarcodeScan'>;
+
+type ScreenProps<
   K extends keyof NutritionStackParamList
 > = {
   navigation: StackNavigationProp<NutritionStackParamList, K>,

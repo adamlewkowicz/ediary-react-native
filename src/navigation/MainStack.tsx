@@ -5,6 +5,7 @@ import { DiarySummary } from '../screens';
 import { theme } from '../common/theme';
 import { ReportIcon, DishIcon } from '../components/Icons';
 import { NutritionStack } from './NutritionStack';
+import { RouteProp } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
@@ -67,7 +68,11 @@ export type NutritionStackNavigationProp = BottomTabNavigationProp<
   'NutritionStack'
 >;
 
-export type DiarySummaryNavigationProp = BottomTabNavigationProp<
-  TabStackParamList,
-  'DiarySummary'
->;
+export type DiarySummaryScreenNavigationProps = ScreenProps<'DiarySummary'>;
+
+type ScreenProps<
+  K extends keyof TabStackParamList
+> = {
+  navigation: BottomTabNavigationProp<TabStackParamList, K>,
+  route: RouteProp<TabStackParamList, K>
+};

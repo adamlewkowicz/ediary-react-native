@@ -5,15 +5,15 @@ import { Meal } from '../../database/entities';
 import { useSelector } from 'react-redux';
 import { StoreState, Selectors } from '../../store';
 import { calcMacroNeedsLeft } from '../../common/utils';
-import { MacroElements, NavigationScreenProps } from '../../types';
+import { MacroElements } from '../../types';
 import styled from 'styled-components/native';
 import { MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitlesLong, baseMacro } from '../../common/helpers';
 import { RatioInfo } from '../../components/RatioInfo';
-import { DiarySummaryNavigationProp } from '../../navigation/MainStack';
+import { DiarySummaryScreenNavigationProps } from '../../navigation';
 import { useFocusEffect } from '@react-navigation/native';
 
-interface DiarySummaryProps extends NavigationScreenProps<DiarySummaryNavigationProp> {}
+interface DiarySummaryProps extends DiarySummaryScreenNavigationProps {}
 
 export const DiarySummary = (props: DiarySummaryProps) => {
   const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...baseMacro }));

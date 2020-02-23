@@ -1,10 +1,10 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import {
   AppLoading,
   ProfileCreate,
 } from '../screens';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, RouteProp } from '@react-navigation/native';
 import { MainStack } from './MainStack';
 import { Theme as NavigationTheme } from '@react-navigation/native/lib/typescript/src/types';
 import { theme } from '../common/theme';
@@ -65,4 +65,17 @@ const NAVIGATION_THEME: NavigationTheme = {
     background: '#fff',
     primary: theme.color.focus,
   },
+};
+
+export type AppLoadingScreenNavigationProps = ScreenProps<'AppLoading'>;
+
+export type ProfileCreateScreenNavigationProps = ScreenProps<'ProfileCreate'>;
+
+export type MainStackNavigationProps = ScreenProps<'MainStack'>;
+
+type ScreenProps<
+  K extends keyof RootStackParamList
+> = {
+  navigation: StackNavigationProp<RootStackParamList, K>,
+  route: RouteProp<RootStackParamList, K>
 };

@@ -16,21 +16,9 @@ import { CaloriesChart } from '../../components/CaloriesChart';
 import { useAfterInteractions } from '../../hooks';
 import { ProductItem } from '../../components/ProductItem';
 import { Button } from '../../components/Button';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { NutritionStackParamList } from '../../navigation/NutritionStack';
-import { CompositeNavigationProp } from '@react-navigation/native';
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { TabStackParamList } from '../../navigation/MainStack';
+import { NutritionHomeScreenNavigationProps } from '../../navigation';
 
-interface HomeProps {
-  navigation: CompositeNavigationProp<
-    BottomTabNavigationProp<TabStackParamList, 'NutritionStack'>,
-    StackNavigationProp<
-      NutritionStackParamList,
-      'NutritionHome'
-    >
-  >
-}
+interface HomeProps extends NutritionHomeScreenNavigationProps {}
 
 const Home = (props: HomeProps) => {
   const [newMealName, setNewMealName] = useState('');

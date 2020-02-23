@@ -6,18 +6,9 @@ import { User } from '../../database/entities';
 import { databaseConfig } from '../../database/config/config';
 import { getOrCreateConnection } from '../../database/utils/getOrCreateConnection';
 import styled from 'styled-components/native';
-import { NavigationScreenProps } from '../../types';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../navigation/RootStack';
+import { AppLoadingScreenNavigationProps } from '../../navigation';
 
-interface AppLoadingProps extends NavigationScreenProps<
-  StackNavigationProp<
-    RootStackParamList,
-    'AppLoading'
-  >
-> {
-
-}
+interface AppLoadingProps extends AppLoadingScreenNavigationProps {}
 
 export class AppLoading extends React.Component<AppLoadingProps> {
 
