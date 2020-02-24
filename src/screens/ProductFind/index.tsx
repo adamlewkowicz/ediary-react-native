@@ -8,14 +8,14 @@ import { BarcodeButton } from '../../components/BarcodeButton';
 import { Button } from '../../components/Button';
 import { useProductsSearch } from '../../hooks';
 import { useSelector } from 'react-redux';
-import { StoreState } from '../../store';
+import { Selectors } from '../../store';
 import { FlatList } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 
 interface ProductFindScreenProps extends ProductFindScreenNavigationProps {}
 
 export const ProductFindScreen = (props: ProductFindScreenProps) => {
-  const recentProducts = useSelector((state: StoreState) => state.productHistory);
+  const recentProducts = useSelector(Selectors.getProductHistory);
   const hasBeenPressed = useRef(false);
   const { route: { params }, navigation: { navigate }} = props;
   const {

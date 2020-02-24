@@ -1,9 +1,7 @@
 import { useSelector } from 'react-redux';
-import { StoreState } from '../store';
+import { Selectors } from '../store';
 
 export function useConnected(): boolean {
-  const isConnected = useSelector((state: StoreState) => 
-    state.application.isConnected
-  );
+  const isConnected = useSelector(Selectors.getIsConnected);
   return isConnected;
 }

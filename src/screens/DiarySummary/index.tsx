@@ -21,7 +21,7 @@ export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
   const macroNeeds = useSelector<StoreState, Selectors.GetMacroNeeds>(
     Selectors.getMacroNeeds
   );
-  const todayDay = useSelector((state: StoreState) => state.application.todayDay);
+  const todayDay = useSelector(Selectors.getAppDay);
 
   async function handleMacroSummaryFetch() {
     const result = await Meal.getMacroSummary(todayDay);

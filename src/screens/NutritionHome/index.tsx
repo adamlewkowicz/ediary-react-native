@@ -24,8 +24,8 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const [newMealName, setNewMealName] = useState('');
   const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
   const dispatch = useDispatch();
-  const appDate = useSelector((state: StoreState) => state.application.date);
-  const appDateDay = useSelector((state: StoreState) => state.application.date);
+  const appDate = useSelector(Selectors.getAppDate);
+  const appDateDay = useSelector(Selectors.getAppDay);
   const macroNeedsLeft = useSelector<StoreState, Selectors.GetMacroNeedsLeft>(
     Selectors.getMacroNeedsLeft
   );
