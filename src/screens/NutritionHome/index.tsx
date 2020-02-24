@@ -26,11 +26,11 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const dispatch = useDispatch();
   const appDate = useSelector((state: StoreState) => state.application.date);
   const appDateDay = useSelector((state: StoreState) => state.application.date);
-  const macroNeedsLeft = useSelector<StoreState, Selectors.MacroNeedsLeft>(
-    Selectors.macroNeedsLeft
+  const macroNeedsLeft = useSelector<StoreState, Selectors.GetMacroNeedsLeft>(
+    Selectors.getMacroNeedsLeft
   );
-  const mealsWithRatio = useSelector<StoreState, Selectors.MealsWithRatio>(
-    Selectors.mealsWithRatio
+  const mealsWithRatio = useSelector<StoreState, Selectors.GetMealsWithRatio>(
+    Selectors.getMealsWithRatio
   );
   const { navigation } = props;
 

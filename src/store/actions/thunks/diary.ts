@@ -28,7 +28,7 @@ import {
 const debounceA = debounce();
 
 async function _updateMealMacro(mealId: MealId, store: StoreState) {
-  const meals = Selectors.calcedMeals(store);
+  const meals = Selectors.getCalcedMeals(store);
   const foundMeal = meals.find(meal => meal.id === mealId);
   if (foundMeal) {
     const { carbs, prots, fats, kcal } = foundMeal;

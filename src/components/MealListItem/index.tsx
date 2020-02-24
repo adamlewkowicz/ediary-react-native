@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { ProgressBar } from '../ProgressBar';
 import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native';
-import { MealsWithRatio } from '../../store/selectors';
+import { GetMealsWithRatio } from '../../store/selectors';
 import { Button } from '../Button';
 import { BASE_MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitlesLong } from '../../common/helpers';
@@ -10,13 +10,13 @@ import { DiaryMealId } from '../../store/reducers/diary';
 import { theme } from '../../common/theme';
 
 interface MealListItemProps {
-  meal: MealsWithRatio[number]
+  meal: GetMealsWithRatio[number]
   onToggle: (mealId: DiaryMealId) => void
   onLongPress: TouchableOpacityProps['onLongPress']
   isBeingProcessed: boolean
   onProductAdd: () => void
   renderProduct: (
-    product: MealsWithRatio[number]['products'][number]
+    product: GetMealsWithRatio[number]['products'][number]
   ) => JSX.Element | null
 }
 

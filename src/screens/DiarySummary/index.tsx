@@ -18,8 +18,8 @@ interface DiarySummaryScreenProps extends DiarySummaryScreenNavigationProps {}
 export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
   const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...baseMacro }));
   const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]);
-  const macroNeeds = useSelector<StoreState, Selectors.MacroNeeds>(
-    Selectors.macroNeeds
+  const macroNeeds = useSelector<StoreState, Selectors.GetMacroNeeds>(
+    Selectors.getMacroNeeds
   );
   const todayDay = useSelector((state: StoreState) => state.application.todayDay);
 

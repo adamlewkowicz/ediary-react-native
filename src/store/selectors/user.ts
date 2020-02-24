@@ -1,3 +1,5 @@
 import { StoreState } from '..';
 
-export const macroNeeds = (state: StoreState) => state.user.macroNeeds;
+export const getMacroNeeds = (state: StoreState) => state.user.macroNeeds;
+
+export type GetMacroNeeds = ReturnType<typeof getMacroNeeds>;
