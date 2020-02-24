@@ -21,3 +21,5 @@ export const APP_ENV = (process.env.APP_ENV || 'development') as Environment;
 export const DATE_DAY = 'YYYY-MM-DD';
 export const DATE_TIME = 'HH:mm:ss';
 export const DATE_FORMAT = `${DATE_DAY} ${DATE_TIME}`;
+
+export const ABORT_ERROR_NAME = 'AbortError' as const;

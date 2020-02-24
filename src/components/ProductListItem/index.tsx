@@ -17,7 +17,7 @@ interface ProductListItemProps extends TouchableOpacityProps {
   }
 }
 
-export const ProductListItem = ({
+const ProductListItem = ({
   product,
   ...props
 }: ProductListItemProps) => {
@@ -76,6 +76,7 @@ const Info = styled.View`
 const Quantity = styled.Text`
   border-right-width: 1px;
   width: 55px;
+  font-family: ${props => props.theme.fontWeight.regular};
   font-size: ${props => props.theme.fontSize.regular};
   color: ${props => props.theme.color.gray30};
   border-right-color: ${props => props.theme.color.gray10};
@@ -84,6 +85,7 @@ const Quantity = styled.Text`
 
 const Kcal = styled.Text`
   width: 65px;
+  font-family: ${props => props.theme.fontWeight.regular};
   font-size: ${props => props.theme.fontSize.regular};
   color: ${props => props.theme.color.gray30};
 `
@@ -98,3 +100,5 @@ export const Separator = styled.View`
   width: 100%;
   background: ${props => props.theme.color.gray10};
 `
+
+export const ProductListItemMemo = React.memo(ProductListItem);

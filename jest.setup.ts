@@ -10,6 +10,7 @@ import { NativeModules } from 'react-native';
 
 global.requestIdleCallback = jest.fn((callback: any) => callback());
 global.cancelIdleCallback = jest.fn();
+(global as any).AbortController = jest.fn(() => ({ signal: {}, abort() {} }));
 
 beforeEach(async () => {
   const connection = await createConnection(config.test);

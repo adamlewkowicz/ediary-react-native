@@ -1,30 +1,33 @@
 import { BarcodeId, MacroElement, MacroElements, PortionType } from '../../types';
-import { round, getNumAndUnitFromString } from '../../common/utils';
+import { round, getNumAndUnitFromString, fetchify } from '../../common/utils';
 import { baseMacro } from '../../common/helpers';
 import { NormalizedProduct } from '../IlewazyApi/types';
 import { FriscoResponse, FriscoNutritionBrandbank } from './types/response';
 import { FriscoProductId } from './types/common';
 import { FriscoQueryResponse } from './types';
+import { Product } from '../../database/entities';
 
 export class FriscoApi {
 
+  private static searchURL = 'https://commerce.frisco.pl/api/offer/products/query?search=';
+
   private async findAndParseByQuery(
-    query: string | BarcodeId
+    query: string | BarcodeId,
+    controller?: AbortController
   ): Promise<{
     raw: FriscoQueryResponse['products']
     normalized: NormalizedProduct[]
   }> {
     const parsedQuery = encodeURIComponent(query as string);
 
-    const response = await fetch(
-      `https://commerce.frisco.pl/api/offer/products/query?search=${parsedQuery}` +
+    const { products: raw } = await fetchify<FriscoQueryResponse>(
+      `${FriscoApi.searchURL}${parsedQuery}` +
       '&includeCategories=true&pageIndex=1&deliveryMethod=Van&pageSize=60' +
       '&language=pl&facetCount=100&includeWineFacets=false',
-      { headers: { 'X-Requested-With': 'XMLHttpRequest' }}
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
+      controller
     );
-    const data: FriscoQueryResponse = await response.json();
 
-    const raw = data.products;
     const normalized = this.normalizeQueryProducts(raw);
 
     return {
@@ -34,13 +37,19 @@ export class FriscoApi {
   }
 
   async findByQuery(
-    query: BarcodeId | string
+    query: BarcodeId | string,
+    controller?: AbortController
   ): Promise<NormalizedProduct[]> {
-    const { normalized, raw } = await this.findAndParseByQuery(query);
+    const { normalized, raw } = await this.findAndParseByQuery(query, controller);
 
     if (!normalized.length && raw.length) {
       const [firstRawProduct] = raw;
-      const foundProduct = await this.findOneByProductId(firstRawProduct.productId);
+
+      const foundProduct = await this.findOneByProductId(
+        firstRawProduct.productId,
+        controller,
+      );
+
       return foundProduct ? [foundProduct] : [];
     }
 
@@ -48,14 +57,15 @@ export class FriscoApi {
   }
 
   async findOneByProductId(
-    productId: FriscoProductId
+    productId: FriscoProductId,
+    controller?: AbortController
   ): Promise<NormalizedProduct | null> {
 
-    const response = await fetch(
+    const data = await fetchify<FriscoResponse>(
       `https://products.frisco.pl/api/products/get/${productId}`,
-      { headers: { 'X-Requested-With': 'XMLHttpRequest' }
-    });
-    const data: FriscoResponse = await response.json();
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
+      controller
+    );
 
     const macroSectionId = 2;
     const macroFieldId = 85;
@@ -81,7 +91,12 @@ export class FriscoApi {
       return null;
     }
 
-    const { value: portion, unit } = getNumAndUnitFromString(portionHeading);
+    const {
+      value: nullablePortion,
+      unit
+    } = getNumAndUnitFromString(portionHeading);
+
+    const portion = nullablePortion ?? Product.defaultPortion;
 
     if (unit !== 'g' && unit !== 'ml') {
       return null;
@@ -144,7 +159,7 @@ export class FriscoApi {
       portion,
       portions,
       unit,
-      ...macro
+      macro,
     }
   }
 
@@ -204,7 +219,7 @@ export class FriscoApi {
         brand,
         producer,
         portions,
-        ...macro
+        macro,
       }
   
       return [normalizedProduct];

@@ -36,9 +36,10 @@ const Home = (props: HomeProps) => {
     meal: DiaryMeal | DiaryMealTemplate
   ) => {
     navigate('ProductFind', {
-      async onItemPress(foundProduct) {
+      async onItemPress(productResolver) {
         navigate('Home');
         setProcessedMealId(meal.id);
+        const foundProduct = await productResolver();
 
         await dispatch(
           Actions.mealOrTemplateProductAdd(

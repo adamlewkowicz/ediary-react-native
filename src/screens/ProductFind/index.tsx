@@ -1,162 +1,141 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components/native';
-import { sortByMostAccurateName, debounce } from '../../common/utils';
-import { Product } from '../../database/entities';
-import { ProductListItem, Separator } from '../../components/ProductListItem';
+import { Product, ProductOrNormalizedProduct } from '../../database/entities';
+import { ProductListItemMemo, Separator } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
-import { SectionList } from 'react-navigation';
 import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
-import { BarcodeId } from '../../types';
-import { Button } from 'react-native-ui-kitten';
-import { useConnected, useIdleStatus, useNavigate } from '../../hooks';
+import { Button } from '../../components/Button';
+import {
+  useNavigate,
+  useNavigationParams,
+  useProductsSearch,
+} from '../../hooks';
 import { useSelector } from 'react-redux';
 import { StoreState } from '../../store';
-import { ActivityIndicator } from 'react-native';
+import { FlatList } from 'react-native';
 import { ProductFindParams } from './params';
-import { useNavigationParams } from '../../hooks/useNavigationParams';
-
-const debounceA = debounce();
-const SECTION_TITLE = {
-  foundProducts: 'Znalezione produkty:',
-  recentProducts: 'Ostatnie produkty:',
-}
 
 interface ProductFindProps {}
 
 export const ProductFind = (props: ProductFindProps) => {
   const params = useNavigationParams<ProductFindParams>();
-  const [name, setName] = useState('');
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setLoading] = useState(false);
-  const [barcode, setBarcode] = useState<BarcodeId | null>(null);
-  const isConnected = useConnected();
-  const productsAreEmpty = !products.length;
   const recentProducts = useSelector((state: StoreState) => state.productHistory);
   const hasBeenPressed = useRef(false);
-  const isIdle = useIdleStatus();
   const navigate = useNavigate();
-
-  function handleProductSearch(name: string) {
-    setName(name);
-    if (!isLoading) setLoading(true);
-    const trimmedName = name.trim();
-    const methodName = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
-
-    debounceA(async () => {
-      const foundProducts = await Product[methodName](trimmedName);
-      const sortedProducts = foundProducts
-        .sort(sortByMostAccurateName(name));
-
-      setProducts(sortedProducts);
-      setLoading(false);
-    }, 600);
-  }
+  const {
+    state,
+    isConnected,
+    debouncedProductName,
+    ...context
+  } = useProductsSearch();
+  const showRecentProducts = !state.isDirty;
+  const productsSource = showRecentProducts ? recentProducts : state.products;
 
   function handleBarcodeScanNavigation() {
     navigate('BarcodeScan', {
-      async onBarcodeDetected(barcode) {
+      onBarcodeDetected(barcode) {
         navigate('ProductFind');
-        setName('');
-        setProducts([]);
-        setLoading(true);
-
-        const methodName = isConnected ? 'findAndFetchByBarcode' : 'findByBarcode';
-        const foundProducts = await Product[methodName](barcode);
-
-        if (foundProducts.length) {
-          setProducts(foundProducts);
-        } else {
-          setBarcode(barcode);
-        }
-        setLoading(false);
+        context.updateBarcode(barcode);
       }
     });
   }
 
   function handleProductCreateNavigation() {
     navigate('ProductCreate', {
-      barcode: barcode !== null ? barcode : undefined,
-      name: name.trim(),
+      barcode: state.barcode ?? undefined,
+      name: debouncedProductName.trim(),
       onProductCreated(createdProduct) {
-        setBarcode(null);
-        setProducts([createdProduct]);
-        setLoading(false);
+        context.addProduct(createdProduct);
         navigate('ProductFind');
       }
     });
   }
 
-  function renderInfo() {
-    if (
-      isLoading ||
-      !productsAreEmpty ||
-      (!name.length && barcode === null)
-    ) return null;
+  async function handleItemPress(product: ProductOrNormalizedProduct) {
+    if (params.onItemPress && !hasBeenPressed.current) {
+      hasBeenPressed.current = true;
+
+      const productResolver: ProductResolver = async () => {
+        if (product instanceof Product) {
+          return product;
+        }
+        return Product.saveNormalizedProduct(product);
+      }
+
+      params.onItemPress(productResolver);
+    }
+  }
+
+  function RenderInfo() {
+    const {
+      isSearching,
+      products,
+      barcode,
+      isTyping,
+    } = state;
+    const isBusy = isSearching || isTyping;
+    const isProductsNotEmpty = products.length > 0;
+    const isProductNameNotTouched = debouncedProductName.length === 0;
+    const hasNotBeenSearching = isProductNameNotTouched && barcode === null;
+
+    if (isBusy || isProductsNotEmpty || hasNotBeenSearching) {
+      return null;
+    }
+
+    const notFoundMessage = barcode !== null
+      ? `z podanym kodem kreskowym: ${barcode}`
+      : `o podanej nazwie: ${debouncedProductName}`;
 
     return (
       <>
         <NotFoundInfo>
-          Nie znaleziono produktów.
+          Nie znaleziono produktów {'\n'}
+          {notFoundMessage}
         </NotFoundInfo>
         {!isConnected && (
           <NotFoundInfo>
             Aby wyszukiwać więcej produktów, przejdź do trybu online.
           </NotFoundInfo>
         )}
-        <Button
-          style={{ marginTop: 15 }}
+        <AddOwnProductButton
           onPress={handleProductCreateNavigation}
           accessibilityLabel="Dodaj własny produkt"
         >
           Dodaj własny
-        </Button>
+        </AddOwnProductButton>
       </>
     );
-  }
-
-  function handleItemPress(item: Product) {
-    if (params.onItemPress && !hasBeenPressed.current) {
-      hasBeenPressed.current = true;
-      params.onItemPress(item);
-    }
   }
 
   return (
     <Container>
       <Block space="space-between" align="center">
         <InputSearcher
-          value={name}
+          value={state.productName}
           placeholder="Nazwa produktu"
           accessibilityLabel="Nazwa szukanego produktu"
-          onChangeText={handleProductSearch}
-          isLoading={isLoading}
+          onChangeText={context.updateProductName}
+          isLoading={state.isSearching}
         />
         <BarcodeButton
           accessibilityLabel="Zeskanuj kod kreskowy"
           onPress={handleBarcodeScanNavigation}
         />
       </Block>
-      <SectionList
-        data={products}
-        keyExtractor={(product, index) => `${product.id}${index}`}
+      <ProductsTitle>
+        {showRecentProducts ? 'Ostatnio używane produkty:' : 'Znalezione produkty:'}
+      </ProductsTitle>
+      <RenderInfo />
+      <FlatList
+        data={productsSource}
+        keyExtractor={productKeyExtractor}
         keyboardShouldPersistTaps="handled"
         ItemSeparatorComponent={Separator}
-        renderSectionHeader={({ section: { title }}) => (
-          <SectionTitleContainer isFirst={title === SECTION_TITLE.foundProducts}>
-            <Title>{title}</Title>
-            {title === SECTION_TITLE.foundProducts && renderInfo()}
-            {title === SECTION_TITLE.recentProducts && !isIdle && <ActivityIndicator />}
-          </SectionTitleContainer>
-        )}
-        sections={[
-          { title: SECTION_TITLE.foundProducts, data: products },
-          { title: SECTION_TITLE.recentProducts, data: isIdle ? recentProducts : [] },
-        ]}
-        renderItem={({ item }) => (
-          <ProductListItem
-            product={item}
-            onPress={() => handleItemPress(item)}
+        renderItem={({ item: product }) => (
+          <ProductListItemMemo
+            product={product}
+            onPress={() => handleItemPress(product)}
             accessibilityLabel="Dodaj produkt do posiłku"
             accessibilityHint="Wraca na główną stronę i dodaje produkt do posiłku"
           />
@@ -168,6 +147,7 @@ export const ProductFind = (props: ProductFindProps) => {
 
 const Container = styled.View`
   padding: 20px 20px 60px 20px;
+  margin-bottom: 10px;
 `
 
 const NotFoundInfo = styled.Text`
@@ -177,12 +157,21 @@ const NotFoundInfo = styled.Text`
   padding: 0 50px;
 `
 
-const SectionTitleContainer = styled.View<{
-  isFirst: boolean
-}>`
-  padding: ${props => props.isFirst ? '10px 0 5px 0' : '30px 0 5px 0'}
+const ProductsTitle = styled(Title)`
+  margin: 10px 0;
 `
+
+const AddOwnProductButton = styled(Button)`
+  margin-top: 15px;
+`
+
+const productKeyExtractor = (product: ProductOrNormalizedProduct): string => {
+  const productId = '_id' in product ? product._id : product.id;
+  return String(productId);
+}
 
 ProductFind.navigationOptions = {
   headerTitle: 'Znajdź produkt'
 }
+
+export type ProductResolver = () => Promise<Product>;
