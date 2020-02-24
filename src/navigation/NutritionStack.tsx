@@ -9,6 +9,7 @@ import {
   ProductCreateScreen,
   BarcodeScanScreen,
   NutritionHomeScreen,
+  ProductResolver,
 } from '../screens';
 import { RouteProp } from '@react-navigation/native';
 import { theme } from '../common/theme';
@@ -18,7 +19,7 @@ const Stack = createStackNavigator<NutritionStackParamList>();
 export type NutritionStackParamList = {
   [APP_ROUTE.NutritionHome]: undefined;
   [APP_ROUTE.ProductFind]: {
-    onItemPress?: (product: Product) => void
+    onItemPress?: (productResolver: ProductResolver) => void
   };
   [APP_ROUTE.ProductCreate]: {
     barcode?: BarcodeId
