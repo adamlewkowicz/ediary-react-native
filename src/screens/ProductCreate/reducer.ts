@@ -1,5 +1,5 @@
 import { ProductUnit, BarcodeId } from '../../types';
-import { ProductCreateParams } from './params';
+import { ProductCreateScreenNavigationProps } from '../../navigation';
 
 export interface ProductCreateState {
   name: string
@@ -70,16 +70,13 @@ export function productCreateReducer(
   }
 }
 
-export function initProductCreateReducer({
-  barcode = '',
-  name = ''
-}: ProductCreateParams): ProductCreateState {
-  return {
-    ...initialState,
-    name,
-    barcode,
-  }
-}
+export const initProductCreateReducer = (
+  { barcode = '', name = '' }: Params
+): ProductCreateState => ({
+  ...initialState,
+  name,
+  barcode,
+});
 
 export type PortionOption = '100g' | 'portion' | 'package';
 
@@ -96,3 +93,5 @@ type SelectPortionOption = {
 type ProductCreateAction =
   | Update
   | SelectPortionOption
+
+type Params = ProductCreateScreenNavigationProps['route']['params'];
