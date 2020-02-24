@@ -1,33 +1,18 @@
-import React, { ReactNode, useState } from 'react';
-import { createAppContainer, NavigationContainer, NavigationContext } from 'react-navigation';
-import { MainStackScreen, createMainStack } from '../../src/navigation';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { configureStore, Actions, StoreState } from '../../src/store';
-import { Screen } from '../../src/types';
-import { ApplicationProvider } from 'react-native-ui-kitten';
-import { mapping, light as lightTheme } from '@eva-design/eva';
 import { theme } from '../../src/common/theme';
 import { ThemeProvider } from 'styled-components/native';
 import { Store } from 'redux';
 import { User } from '../../src/database/entities';
 import { USER_ID_UNSYNCED } from '../../src/common/consts';
 import { render } from '@testing-library/react-native';
+import { NavigationContainer, NavigationContext } from '@react-navigation/native';
 
-let user: User;
-let isInitialized = false;
-
-export const createNavigationCtxMock = <P extends object>(params?: P) => ({
-  getParam: jest.fn(),
-  navigate: jest.fn(),
-  addListener: jest.fn(() => ({ remove: jest.fn() })),
-  setParams: jest.fn(),
-  isFocused: jest.fn(),
-  state: { params }
-});
+let userMock: User;
 
 beforeEach(async () => {
-  isInitialized = false;
-  user = await User.getOrCreate({
+  userMock = await User.getOrCreate({
     id: USER_ID_UNSYNCED,
     email: null,
     login: 'login',
@@ -35,77 +20,55 @@ beforeEach(async () => {
   });
 });
 
-interface AppProps {
-  initialState?: Partial<StoreState>
-  initialRouteName?: Screen
-  store?: Store<StoreState>
-  screen?: Screen
-  stack?: MainStackScreen
-  children?: ReactNode
-  navigationContext?: any
-}
-export function App({
-  initialState,
-  store = configureStore(initialState),
-  stack,
-  screen = 'Home',
-  children,
-  navigationContext = createNavigationCtxMock()
-}: AppProps) {
-  // preserve instance between re-renders
-  const [AppContainer] = useState<NavigationContainer>(() => {
-    const MainStack = createMainStack(screen, stack);
-    const AppContainer = createAppContainer(MainStack);
-    return AppContainer;
-  });
-
-  if (!isInitialized) {
-    store.dispatch(
-      Actions.appInitialized(user)
-    );
-    isInitialized = true;
-  }
-
-  return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <ApplicationProvider
-          mapping={mapping}
-          theme={lightTheme}
-        >
-          <NavigationContext.Provider value={navigationContext}>
-            {children ? children : <AppContainer />}
-          </NavigationContext.Provider>
-        </ApplicationProvider>
-      </ThemeProvider>
-    </Provider>
-  );
-}
-
 export function renderSetup<Params extends object>(
   ui: React.ReactElement,
   options?: RenderSetupOptions<Params>
 ) {
   const navigationCtxMock = createNavigationCtxMock(options?.params);
   const mergedOptions = {
-    store: configureStore(options?.initialState),
+    store: createInitializedStoreMock(options?.initialState),
     ...options
   };
+  
   return {
     ...render(
-      <App
-        navigationContext={navigationCtxMock}
-        store={mergedOptions.store}
-      >
-        {ui}
-      </App>
+      <Provider store={mergedOptions.store}>
+        <ThemeProvider theme={theme}>
+          <NavigationContainer>
+            <NavigationContext.Provider
+              value={createNavigationCtxMock as any}
+            >
+              {ui}
+            </NavigationContext.Provider>
+          </NavigationContainer>
+        </ThemeProvider>
+      </Provider>
     ),
     mocks: {
       navigationContext: navigationCtxMock,
-      params: options?.params || {} as Params,
+      params: options?.params ?? {} as Params,
     },
   }
 }
+
+const createInitializedStoreMock = (initialState?: Partial<StoreState>): Store<StoreState> => {
+  const store = configureStore(initialState);
+
+  store.dispatch(
+    Actions.userInitialized(userMock)
+  );
+  
+  return store;
+}
+
+export const createNavigationCtxMock = <P extends object>(params?: P) => ({
+  getParam: jest.fn(),
+  navigate: jest.fn(),
+  addListener: jest.fn(() => ({ remove: jest.fn() })),
+  setParams: jest.fn(),
+  isFocused: jest.fn(),
+  state: { params },
+});
 
 interface RenderSetupOptions<P extends object> {
   initialState?: Partial<StoreState>

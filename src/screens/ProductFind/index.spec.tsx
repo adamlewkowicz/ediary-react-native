@@ -4,15 +4,19 @@ import { renderSetup } from '../../../__tests__/utils';
 import { Product } from '../../database/entities';
 import { configureStore } from '../../store';
 import { ProductFindScreen } from '.';
-import { ProductFindParams } from './params';
+import { NutritionStack } from '../../navigation';
 
 describe('<ProductFind />', () => {
 
   describe('when searches for product 🔎', () => {
 
+    const renderProductFindScreen = () => renderSetup(
+      <NutritionStack initialRouteName="ProductFind" />
+    );
+
     it('should display found products', async () => {
       const productMock = await Product.save({ name: 'tomatoe' });
-      const ctx = renderSetup(<ProductFindScreen />);
+      const ctx = renderProductFindScreen();
   
       const productFindInput = ctx.getByLabelText('Nazwa szukanego produktu');
       fireEvent.changeText(productFindInput, productMock.name);
@@ -23,7 +27,7 @@ describe('<ProductFind />', () => {
     describe('when presses on found product', () => {
 
       it('should return choosen product as product resolver', async () => {
-        const paramsMock: ProductFindParams = {
+        const paramsMock = {
           onItemPress: jest.fn()
         }
         const productMock = await Product.save({ name: 'tomatoe' });

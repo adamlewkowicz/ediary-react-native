@@ -32,34 +32,42 @@ export type NutritionStackParamList = {
   };
 }
 
-export const NutritionStack = () => (
-  <Stack.Navigator
-    initialRouteName={APP_ROUTE.NutritionHome}
-    screenOptions={SCREEN_OPTIONS}
-    headerMode="screen"
-  >
-    <Stack.Screen
-      name={APP_ROUTE.NutritionHome}
-      component={NutritionHomeScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name={APP_ROUTE.ProductFind}
-      component={ProductFindScreen}
-      options={{ title: 'Znajdź produkt' }}
-    />
-    <Stack.Screen
-      name={APP_ROUTE.ProductCreate}
-      component={ProductCreateScreen}
-      options={{ title: 'Stwórz produkt' }}
-    />
-    <Stack.Screen
-      name={APP_ROUTE.BarcodeScan}
-      component={BarcodeScanScreen}
-      options={{ title: 'Zeskanuj kod kreskowy' }}
-    />
-  </Stack.Navigator>
-);
+interface NutritionStackProps {
+  initialRouteName?: keyof NutritionStackParamList 
+}
+
+export const NutritionStack = (props: NutritionStackProps) => {
+  const { initialRouteName = APP_ROUTE.NutritionHome } = props;
+
+  return (
+    <Stack.Navigator
+      initialRouteName={initialRouteName}
+      screenOptions={SCREEN_OPTIONS}
+      headerMode="screen"
+    >
+      <Stack.Screen
+        name={APP_ROUTE.NutritionHome}
+        component={NutritionHomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={APP_ROUTE.ProductFind}
+        component={ProductFindScreen}
+        options={{ title: 'Znajdź produkt' }}
+      />
+      <Stack.Screen
+        name={APP_ROUTE.ProductCreate}
+        component={ProductCreateScreen}
+        options={{ title: 'Stwórz produkt' }}
+      />
+      <Stack.Screen
+        name={APP_ROUTE.BarcodeScan}
+        component={BarcodeScanScreen}
+        options={{ title: 'Zeskanuj kod kreskowy' }}
+      />
+    </Stack.Navigator>
+  );
+}
 
 const SCREEN_OPTIONS: StackNavigationOptions = {
   headerTitleStyle: {
