@@ -15,7 +15,7 @@ import {
   normalizeMeals,
   normalizeMeal,
 } from './helpers';
-import { DiaryActions } from '../../actions';
+import { DiaryAction } from '../../actions';
 import { DiaryState } from './types';
 import { defaultTemplates } from '../../../common/helpers';
 
@@ -27,7 +27,7 @@ const initialState: DiaryState = {
 
 export function diaryReducer(
   state = initialState,
-  action: DiaryActions
+  action: DiaryAction
 ): DiaryState {
   switch(action.type) {
     case MEALS_LOADED:

@@ -1,4 +1,3 @@
-import { AppActions } from '../../actions/types/application';
 import {
   APP_DATE_UPDATED,
   APP_CONNECTION_STATUS_UPDATED,
@@ -8,6 +7,7 @@ import { DateDay } from '../../../types';
 import { getDayFromDate } from '../../../common/utils';
 import dayjs from 'dayjs';
 import { ApplicationState } from './types';
+import { ApplicationAction } from '../../actions';
 
 const date = new Date;
 const todayDateDay = getDayFromDate(date);
@@ -23,7 +23,7 @@ const initialState: ApplicationState = {
 
 export function applicationReducer(
   state = initialState,
-  action: AppActions
+  action: ApplicationAction
 ): ApplicationState {
   switch(action.type) {
     case APP_STATUS_UPDATED: return {

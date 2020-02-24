@@ -1,5 +1,5 @@
 import { UserState } from './types';
-import { UserActions } from '../../actions';
+import { UserAction } from '../../actions';
 import {
   USER_PROFILE_CREATED,
   USER_INITIALIZED,
@@ -18,7 +18,7 @@ const initialState: UserState = {
 
 export function userReducer(
   state = initialState,
-  action: UserActions
+  action: UserAction
 ): UserState {
   switch(action.type) {
     case USER_INITIALIZED:

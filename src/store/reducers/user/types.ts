@@ -1,6 +1,7 @@
 import { UserId, ProfileId, WeightGoal } from '../../../types';
 
 interface UserPayload {}
+
 export interface UserState extends UserPayload {
   data: null | {
     id: UserId
