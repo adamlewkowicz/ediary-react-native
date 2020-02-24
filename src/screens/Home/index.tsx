@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
 import { StoreState, Selectors, Actions, DispatchProp } from '../../store';
 import { FlatList, Alert } from 'react-native';
@@ -17,11 +16,12 @@ import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/
 import { CaloriesChart } from '../../components/CaloriesChart';
 import { useAfterInteractions, useNavigate } from '../../hooks';
 import { ProductItem } from '../../components/ProductItem';
+import { Button } from '../../components/Button';
 
 interface HomeProps extends NavigationScreenProps, MapStateProps, DispatchProp {}
 
 const Home = (props: HomeProps) => {
-  const [name, setName] = useState('Trening');
+  const [newMealName, setNewMealName] = useState('');
   const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
   const { dispatch } = props;
   const navigate = useNavigate();
@@ -36,9 +36,10 @@ const Home = (props: HomeProps) => {
     meal: DiaryMeal | DiaryMealTemplate
   ) => {
     navigate('ProductFind', {
-      async onItemPress(foundProduct) {
+      async onItemPress(productResolver) {
         navigate('Home');
         setProcessedMealId(meal.id);
+        const foundProduct = await productResolver();
 
         await dispatch(
           Actions.mealOrTemplateProductAdd(
@@ -98,6 +99,11 @@ const Home = (props: HomeProps) => {
     );
   }
 
+  const handleNewMealCreate = () => {
+    dispatch(Actions.mealCreate(newMealName, props.appDate));
+    setNewMealName('');
+  }
+
   return (
     <ScrollView>
       <DateChanger
@@ -140,29 +146,33 @@ const Home = (props: HomeProps) => {
           />
         )}
       />
-      <CreateProductButton onPress={handleProductCreateNavigation}>
-        Dodaj własny produkt
-      </CreateProductButton>
-      <CreateMealContainer>
-        <BasicInput
-          placeholder="Nazwa nowego posiłku"
-          label="Nazwa posiłku"
-          value={name}
-          onChangeText={name => setName(name)}
-        />
-        <Button
-          accessibilityLabel="Utwórz nowy posiłek"
-          onPress={() => dispatch(Actions.mealCreate(name, props.appDate))}
-        >
-          Dodaj posiłek
+      <ContentContainer>
+        <CreateMealContainer>
+          <BasicInput
+            placeholder="Kurczak z warzywami"
+            label="Nazwa nowego posiłku"
+            value={newMealName}
+            onChangeText={setNewMealName}
+          />
+          <Button
+            accessibilityLabel="Utwórz nowy posiłek"
+            onPress={handleNewMealCreate}
+            title="Dodaj posiłek"
+          >
+            Dodaj posiłek
+          </Button>
+        </CreateMealContainer>
+        <Button onPress={handleProductCreateNavigation}>
+          Dodaj własny produkt
         </Button>
-      </CreateMealContainer>
+      </ContentContainer>
     </ScrollView>
   );
 }
 
-const CreateProductButton = styled(Button)`
-  margin: 40px 5px;
+const ContentContainer = styled.View`
+  padding: 10px;
+  margin: 40px 0 15px 0;
 `
 
 const MacroCards = styled.View`
@@ -174,7 +184,10 @@ const MacroCards = styled.View`
 `
 
 const CreateMealContainer = styled.View`
-  padding: 10px 5px;
+  padding: 15px;
+  border: ${props => `1px dotted ${props.theme.color.gray20}`};
+  border-radius: 5px;
+  margin-bottom: 60px;
 `
 
 interface MapStateProps {

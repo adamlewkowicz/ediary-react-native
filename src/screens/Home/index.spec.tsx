@@ -13,7 +13,7 @@ describe('<Home />', () => {
 
   const mockMealWithProduct = async () => {
     const productMock = await Product.save({ name: 'Milk', macro: { kcal: 100 }});
-    const mealMock = await Meal.createWithProduct({ name: 'Milk soup' }, productMock.id);
+    const mealMock = await Meal.createWithProductId({ name: 'Milk soup' }, productMock.id);
     return { productMock, mealMock };
   }
 
@@ -21,7 +21,7 @@ describe('<Home />', () => {
     const mealName = 'Cucumber soup';
     const ctx = renderSetup(<Home />);
 
-    const createMealNameInput = ctx.getByPlaceholderText('Nazwa nowego posiłku');
+    const createMealNameInput = ctx.getByPlaceholderText('Kurczak z warzywami');
     fireEvent.changeText(createMealNameInput, mealName);
   
     const createMealConfirmButton = ctx.getByLabelText('Utwórz nowy posiłek');
@@ -50,10 +50,12 @@ describe('<Home />', () => {
 
     it('should add selected product to meal', async () => {
       const productMock = await Product.save({ name: 'Tomatoes' });
+      const productResolverMock = async () => productMock;
+      const navigationItemPressMock = (_: any, params: any) => params.onItemPress(productResolverMock);
       const ctx = renderSetup(<Home />);
 
       ctx.mocks.navigationContext.navigate
-        .mockImplementationOnce((screenName, params) => params.onItemPress(productMock))
+        .mockImplementationOnce(navigationItemPressMock)
         .mockImplementationOnce(() => {});
 
       const [toggleMealButton] = await ctx.findAllByLabelText('Pokaż szczegóły posiłku');
@@ -77,7 +79,7 @@ describe('<Home />', () => {
     const arrange = async () => {
       const quantityMock = 180;
       const productMock = await Product.save({ name: 'Milk', macro: { kcal: 100 }});
-      const mealMock = await Meal.createWithProduct({ name: 'Milk soup' }, productMock.id);
+      const mealMock = await Meal.createWithProductId({ name: 'Milk soup' }, productMock.id);
       const ctx = renderSetup(<Home />);
   
       const toggleMealButton = await ctx.findByText(mealMock.name);
@@ -124,7 +126,7 @@ describe('<Home />', () => {
 
   it('removing meal should work 🗑️', async () => {
     const productMock = await Product.save({ name: 'Milk', macro: { kcal: 100 }});
-    const mealMock = await Meal.createWithProduct({ name: 'Milk soup' }, productMock.id);
+    const mealMock = await Meal.createWithProductId({ name: 'Milk soup' }, productMock.id);
     const mealDeleteSpy = jest.spyOn(Meal, 'delete');
     const alertSpy = jest.spyOn(Alert, 'alert')
       .mockImplementationOnce((title, msg, [onCancel, onSuccess]: any) => onSuccess.onPress());

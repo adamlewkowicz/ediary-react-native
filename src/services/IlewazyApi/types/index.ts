@@ -1,7 +1,7 @@
 import { PortionType, BarcodeId, ProductUnit } from '../../../types';
 import { FriscoProductId } from '../../FriscoApi/types';
 
-type IleWazyUnitData = {
+export type IleWazyUnitData = {
   filename: "koncentrat-grzybowy-krakus-1.jpg"
   id: string
   id_iu: string
@@ -15,11 +15,7 @@ type IleWazyUnitData = {
 
 export type IleWazyPortionType = 'szklanka' | 'porcja' | 'sztuka' | 'kromka' | 'lyzka' | 'garsc';
 
-export interface IleWazyPayload {
-  page: null
-  records: string
-  total: number
-  data?: {
+export interface IleWazyItem {
     /** Product name */
     ingredient_name: string
     weglowodany: string
@@ -42,7 +38,13 @@ export interface IleWazyPayload {
     unitdata: {
       [key in IleWazyPortionType | string]?: IleWazyUnitData
     }
-  }[]
+}
+
+export interface IleWazyPayload {
+  page: null
+  records: string
+  total: number
+  data?: IleWazyItem[]
 }
 
 export type PortionMap = {
@@ -52,11 +54,13 @@ export type PortionMap = {
 export interface NormalizedProduct {
   _id: string | number | FriscoProductId
   name: string
-  portion?: number | null
-  prots: number
-  carbs: number
-  fats: number
-  kcal: number
+  portion: number
+  macro: {
+    carbs: number
+    prots: number
+    fats: number
+    kcal: number
+  }
   portions: {
     type: PortionType
     unit: ProductUnit

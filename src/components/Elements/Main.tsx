@@ -14,7 +14,7 @@ export const Title = styled.Text`
   font-family: ${props => props.theme.fontWeight.medium};
   text-transform: uppercase;
   color: ${props => props.theme.color.gray};
-  font-size: 12px;
+  font-size: ${props => props.theme.fontSize.small};
   letter-spacing: 0.5px;
 `;
 
@@ -51,7 +51,7 @@ export const Text = styled.Text<TextProps>`
 
 export const H1 = styled(Text)`
   font-family: ${props => props.theme.fontWeight.medium};
-  color: ${props => props.theme.color.dark};
+  color: ${props => props.theme.color.dark10};
   font-size: ${props => props.theme.fontSize.big};
 `;
 

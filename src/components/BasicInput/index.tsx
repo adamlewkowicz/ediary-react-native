@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, createRef } from 'react';
 import styled from 'styled-components/native';
-import { TextInputProps, TextInput } from 'react-native';
+import {
+  TextInputProps,
+  TextInput,
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
+} from 'react-native';
 import { TextAlignProperty } from 'csstype';
+import { theme } from '../../common/theme';
 
 export interface BasicInputProps extends TextInputProps {
   label?: string
   minWidth?: number
   textAlign?: TextAlignProperty
-  forwardedRef?: React.Ref<TextInput>
+  forwardedRef?: React.RefObject<TextInput>
 }
 
 export const BasicInput = ({
@@ -17,66 +23,76 @@ export const BasicInput = ({
   forwardedRef,
   textAlign,
   minWidth,
-  ...props
+  ...inputProps
 }: BasicInputProps) => {
   const [isFocused, setFocused] = useState(false);
+  const [defaultInputRef] = useState(createRef<TextInput>());
+  const genericRef = forwardedRef || defaultInputRef;
+
+  const handleOnFocus = (event?: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    setFocused(true);
+    genericRef.current?.focus();
+
+    if (onFocus && event) {
+      onFocus(event);
+    }
+  }
+
+  const handleOnBlur = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    setFocused(false);
+    onBlur && onBlur(event);
+  }
+
   return (
     <Container
       isFocused={isFocused}
       minWidth={minWidth}
+      onPress={() => handleOnFocus()}
     >
       {label && <Label>{label}:</Label>}
       <Input
         textAlign={textAlign}
-        ref={forwardedRef}
-        onFocus={(event) => {
-          setFocused(true);
-          onFocus && onFocus(event);
-        }}
-        onBlur={(event) => {
-          setFocused(false);
-          onBlur && onBlur(event);
-        }}
-        {...props}
+        ref={genericRef}
+        onFocus={handleOnFocus}
+        onBlur={handleOnBlur}
+        placeholderTextColor={theme.color.gray10}
+        {...inputProps}
       />
     </Container>
   );
 }
 
-const Container = styled.View<{
+const Container = styled.TouchableOpacity<{
   isFocused: boolean
   minWidth?: number
 }>`
   font-family: ${props => props.theme.fontWeight.regular};
   border-bottom-width: 1px;
   border-bottom-color: ${props => props.isFocused ? props.theme.color.focus : '#D7D7D7'};
-  font-size: 15px;
-  font-weight: 900;
-  margin-bottom: 20px;
   min-width: ${props => props.minWidth || '100%'};
   margin-bottom: 10px;
 `
 
 const Label = styled.Text`
   font-family: ${props => props.theme.fontWeight.regular};
-  color: #D0CFD2;
-  font-size: 15px;
-  color: #BCBCBC;
+  font-size: ${props => props.theme.fontSize.regular};
+  color: ${props => props.theme.color.gray30};
 `
 
 const Input = styled.TextInput<{
   textAlign?: TextAlignProperty
 }>`
-  font-family: DMSans-Regular;
-  font-weight: 600;
-  font-size: 15px;
-  padding: 8px 0;
+  font-family: ${props => props.theme.fontWeight.regular};
+  font-size: ${props => props.theme.fontSize.regular};
+  padding: 10px 0;
   text-align: ${props => props.textAlign || 'left'};
 `
 
-export const BasicInputRef = React.forwardRef<
-  TextInput,
-  BasicInputProps
->((props, ref) => (
-  <BasicInput {...props} forwardedRef={ref} />
-));
+export const BasicInputRef = React.forwardRef<TextInput, BasicInputProps>(
+  (props, ref) => (
+    <BasicInput
+      {...props}
+      forwardedRef={ref as React.RefObject<TextInput>}
+    />
+  )
+);

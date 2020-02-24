@@ -1,6 +1,5 @@
-import { Product } from '../../database/entities';
+import { ProductResolver } from '.';
 
-export type ProductFindOnItemPress = ((product: Product) => void) | undefined;
 export type ProductFindParams = {
-  onItemPress?: ProductFindOnItemPress
+  onItemPress?: (productResolver: ProductResolver) => void;
 }
