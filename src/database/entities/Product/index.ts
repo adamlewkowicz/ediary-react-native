@@ -9,7 +9,13 @@ import {
   Like,
 } from 'typeorm';
 import { MealProduct, IMealProduct } from '../MealProduct';
-import { BarcodeId, ProductId, UserId, ProductUnit, CancelablePromise, FilterHOF } from '../../../types';
+import {
+  BarcodeId,
+  ProductId,
+  UserId,
+  ProductUnit,
+  FilterHOF,
+} from '../../../types';
 import { User } from '../User';
 import { ProductPortion } from '../ProductPortion';
 import { friscoApi } from '../../../services/FriscoApi';
@@ -17,7 +23,7 @@ import { SqliteENUM } from '../../decorators';
 import { EntityType, EntityRequired } from '../../types';
 import { PRODUCT_UNITS } from '../../../common/consts';
 import { ilewazyApi } from '../../../services/IlewazyApi';
-import { mapAsyncSequence, reduceByCompare, filterByCompare, sortByMostAccurateName } from '../../../common/utils';
+import { mapAsyncSequence, sortByMostAccurateName } from '../../../common/utils';
 import { MinLength } from 'class-validator';
 import { GenericEntity } from '../../generics/GenericEntity';
 import { ProductImage } from '../ProductImage';
