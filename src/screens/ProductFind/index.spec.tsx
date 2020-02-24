@@ -22,8 +22,8 @@ describe('<ProductFind />', () => {
 
     describe('when presses on found product', () => {
 
-      it('should return choosen product', async () => {
-        const params: ProductFindParams = {
+      it('should return choosen product as product resolver', async () => {
+        const paramsMock: ProductFindParams = {
           onItemPress: jest.fn()
         }
         const productMock = await Product.save({ name: 'tomatoe' });
@@ -35,8 +35,8 @@ describe('<ProductFind />', () => {
         const addProductToMealButton = await ctx.findByLabelText('Dodaj produkt do posiłku');
         fireEvent.press(addProductToMealButton);
   
-        expect(params.onItemPress).toHaveBeenCalledTimes(1);
-        expect(params.onItemPress).toHaveBeenCalledWith({ ...productMock, portions: [] });
+        expect(paramsMock.onItemPress).toHaveBeenCalledTimes(1);
+        expect(paramsMock.onItemPress).toHaveBeenCalledWith(expect.any(Function));
       });
 
     });

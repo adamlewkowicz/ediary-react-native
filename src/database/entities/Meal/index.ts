@@ -109,7 +109,7 @@ export class Meal extends GenericEntity {
     }
   }
 
-  static async createWithProduct(
+  static async createWithProductId(
     payload: DeepPartial<Meal>,
     productId: ProductId,
     quantity?: number
@@ -139,7 +139,7 @@ export class Meal extends GenericEntity {
       name: template.name,
       date: dayjs(date).format(`${DATE_DAY} ${template.time}`)
     }
-    return Meal.createWithProduct(
+    return Meal.createWithProductId(
       newMeal,
       productId,
       quantity
@@ -147,7 +147,7 @@ export class Meal extends GenericEntity {
   }
 
   static async getMacroHistory(
-    endDay: DateDay,
+    endDay: DateDay = getDayFromDate(dayjs()),
     daysToSubtract = 7,
   ): Promise<GetMacroHistoryResult[]> {
     const date = dayjs(endDay as any);
@@ -168,7 +168,7 @@ export class Meal extends GenericEntity {
 
     const filledRecords: GetMacroHistoryResult[] = Array
       .from({ length: daysToSubtract })
-      .map((_, index) => {
+      .map<GetMacroHistoryResult>((_, index) => {
         const day = getDayFromDate(endDate.add(index + 1, 'day'));
         const existingRecord = result.find(record => record.day === day);
         if (existingRecord) {
@@ -181,7 +181,7 @@ export class Meal extends GenericEntity {
   }
 
   static async getMacroSummary(
-    startDay: DateDay,
+    startDay: DateDay = getDayFromDate(dayjs()),
     daysToSubtract = 7,
   ): Promise<GetMacroSummaryResult> {
     const macroHistory = await this.getMacroHistory(startDay, daysToSubtract);

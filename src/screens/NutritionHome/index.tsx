@@ -45,9 +45,10 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     meal: DiaryMeal | DiaryMealTemplate
   ) => {
     navigation.navigate('ProductFind', {
-      async onItemPress(foundProduct) {
+      async onItemPress(productResolver) {
         navigation.navigate('NutritionHome');
         setProcessedMealId(meal.id);
+        const foundProduct = await productResolver();
 
         await dispatch(
           Actions.mealOrTemplateProductAdd(

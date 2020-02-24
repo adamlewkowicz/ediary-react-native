@@ -34,3 +34,5 @@ export interface NavigationScreenProps<N, R = unknown> {
 }
 
 export type ApplicationStatus = 'INITIALIZING' | 'CREATING PROFILE' | 'INITIALIZED';
+/** Higher order function type for `Array.prototype.filter` method callback. */
+export type FilterHOF<T> = (value: T, index: number, values: T[]) => boolean;

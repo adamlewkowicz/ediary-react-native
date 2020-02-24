@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 import dayjs from 'dayjs';
 import { DateDay, UnitType, DateTime, MacroElements } from '../../types';
 import { UNIT_TYPES, DATE_TIME, DATE_DAY, MACRO_ELEMENTS } from '../consts';
@@ -130,14 +131,17 @@ export function getNumAndUnitFromString(value: string): {
   }
 }
 
-export function filterByUniqueId<T extends { id: number | string }>(
-  item: T,
-  index: number,
-  self: T[]
-): boolean {
-  const foundIndex = self.findIndex(anyItem => anyItem.id === item.id);
+export const filterByUniqueProperty = <
+  E extends object,
+  A extends E[]
+>(property: keyof E) => (element: E, index: number, self: A): boolean => {
+  const foundIndex = self.findIndex(anyElement =>
+    anyElement[property] === element[property]
+  );
   return foundIndex === index;
 }
+
+export const filterByUniqueId = filterByUniqueProperty('id');
 
 export function parseNumber(
   value: string,
@@ -196,6 +200,32 @@ export function calcMacroNeedsLeft(
   });
 }
 
+export const filterByCompare = <
+  E,
+  A extends readonly E[] = E[]
+>(
+  predicate: (a: E, b: E) => boolean,
+) => (element: E, index: number, self: A): boolean => {
+  const foundIndex = self.findIndex(anyElement =>
+    predicate(element, anyElement)
+  );
+  return foundIndex === index;
+}
+
+export const reduceByCompare = <E>(
+  array: E[],
+  predicate: (a: E, b: E) => boolean,
+): E[] => {
+  return array.reduce((acc, current) => {
+    return acc.filter(element => {
+      if (element !== current) {
+        return predicate(current, element);
+      }
+      return true;
+    });
+  }, array);
+}
+
 const createArrayOfLength = <T>(
   length: number,
   callback: (index: number) => T
@@ -207,4 +237,17 @@ export const fillArrayWithinRange = (
   const zeroBasedCountFill = 1;
   const length = to - from + zeroBasedCountFill;
   return createArrayOfLength(length, index => index + from);
+}
+
+export const fetchify = async <T>(
+  input: RequestInfo,
+  init: RequestInit = {},
+  controller = new AbortController()
+): Promise<T> => {
+  const { signal } = controller;
+
+  const response = await fetch(input, { signal, ...init });
+  const json: T = await response.json();
+
+  return json;
 }
