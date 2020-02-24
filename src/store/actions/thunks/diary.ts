@@ -36,44 +36,44 @@ async function _updateMealMacro(mealId: MealId, store: StoreState) {
   }
 }
 
-export const mealCreate: Thunk = (
+export const mealCreate = (
   name: Meal['name'],
   date: Date,
-) => async (dispatch) => {
+): Thunk => async (dispatch) => {
   const meal = await Meal.createWithDate({ name }, date);
   dispatch(mealToggled(null));
   dispatch(mealAdded(meal));
 }
 
-export const mealDelete: Thunk = (
+export const mealDelete = (
   mealId: MealId
-) => async (dispatch) => {
+): Thunk => async (dispatch) => {
   dispatch(mealDeleted(mealId));
   await Meal.delete(mealId);
 }
 
-export const mealUpdate: Thunk = (
+export const mealUpdate = (
   mealId: MealId,
   meal: Partial<DiaryMeal & IMeal>
-) => async (dispatch, getState) => {
+): Thunk => async (dispatch, getState) => {
   dispatch(mealUpdated(mealId, meal));
   await Meal.update(mealId, meal);
   await _updateMealMacro(mealId, getState());
 }
 
-export const mealProductCreate: Thunk = (
+export const mealProductCreate = (
   mealId: MealId,
   payload: IProductRequired
-) => async (dispatch, getState) => {
+): Thunk => async (dispatch, getState) => {
   const newProduct = await Meal.addAndCreateProduct(mealId, payload);
   dispatch(mealProductAdded(mealId, { mealId, ...newProduct }));
   await _updateMealMacro(mealId, getState());
 }
 
-export const mealProductDelete: Thunk = (
+export const mealProductDelete = (
   mealId: MealId,
   productId: ProductId
-) => async (dispatch, getState) => {
+): Thunk => async (dispatch, getState) => {
   const { meals, templates } = getState().diary;
   const meal = findOrFail(meals, meal => meal.id === mealId);
   const template = templates.find(template => template.name === meal.name);
@@ -90,11 +90,11 @@ export const mealProductDelete: Thunk = (
   }
 }
 
-export const mealProductQuantityUpdate: Thunk = (
+export const mealProductQuantityUpdate = (
   mealId: MealId,
   productId: ProductId,
   quantity: number
-) => async (dispatch, getState) => {
+): Thunk => async (dispatch, getState) => {
   dispatch(productUpdated(productId, { quantity }));
   debounceA(async () => {
     await MealProduct.update({ mealId, productId }, { quantity });
@@ -102,27 +102,27 @@ export const mealProductQuantityUpdate: Thunk = (
   }, 300);
 }
 
-export const productUpdate: Thunk = (
+export const productUpdate = (
   productId: ProductId,
   product: Partial<DiaryProduct>
-) => async (dispatch) => {
+): Thunk => async (dispatch) => {
   dispatch(productUpdated(productId, product));
   await Product.update(productId, product);
 }
 
-export const mealsFindByDay: Thunk = (
+export const mealsFindByDay = (
   dateDay: DateDay
-) => async (dispatch) => {
+): Thunk => async (dispatch) => {
   const foundMeals = await Meal.findByDay(dateDay);
   dispatch(mealsLoaded(foundMeals));
 }
 
-export const mealCreateFromTemplate: Thunk = (
+export const mealCreateFromTemplate = (
   template: DiaryTemplate,
   date: Date,
   productId: ProductId,
   quantity?: number,
-) => async (dispatch, getState) => {
+): Thunk<Promise<void>> => async (dispatch, getState) => {
   const createdMeal = await Meal.createFromTemplate(
     template, date, productId, quantity
   );
@@ -132,11 +132,11 @@ export const mealCreateFromTemplate: Thunk = (
   await _updateMealMacro(createdMeal.id, getState());
 }
 
-export const mealProductAdd: Thunk = (
+export const mealProductAdd = (
   mealId: MealId,
   productId: ProductId,
   quantity?: number
-) => async (dispatch, getState) => {
+): Thunk<Promise<void>> => async (dispatch, getState) => {
   const { product, action, rawProduct } = await Meal.addProduct(
     mealId,
     productId,
@@ -154,11 +154,11 @@ export const mealProductAdd: Thunk = (
   await _updateMealMacro(mealId, getState());
 }
 
-export const mealOrTemplateProductAdd: Thunk = (
+export const mealOrTemplateProductAdd = (
   meal: DiaryMeal | DiaryMealTemplate,
   productId: ProductId,
   date: Date,
-) => async (dispatch) => {
+): Thunk<Promise<void>> => async (dispatch) => {
   if (meal.type === 'template') {
     const { name, templateId, time } = meal;
     const template: DiaryTemplate = { id: templateId, name, time };
