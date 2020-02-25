@@ -1,66 +1,63 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ActivityIndicator, Alert } from 'react-native';
 import { USER_ID_UNSYNCED, DEFAULT_CONNECTION } from '../../common/consts';
-import { store, Actions } from '../../store';
+import { Actions } from '../../store';
 import { User } from '../../database/entities';
 import { databaseConfig } from '../../database/config/config';
 import { getOrCreateConnection } from '../../database/utils/getOrCreateConnection';
 import styled from 'styled-components/native';
-import { AppLoadingScreenNavigationProps } from '../../navigation';
+import { useDispatch } from 'react-redux';
 
-interface AppLoadingScreenProps extends AppLoadingScreenNavigationProps {}
+interface AppLoadingScreenProps {}
 
-export class AppLoadingScreen extends React.Component<AppLoadingScreenProps> {
+export const AppLoadingScreen = (props: AppLoadingScreenProps) => {
+  const dispatch = useDispatch();
 
-  async componentDidMount() {
-    try {
-      await this.setup();
-    } catch(error) {
-      Alert.alert(
-        error.name,
-        error.message
-      );
+  useEffect(() => {
+    async function setup() {
+      try {
+        const defaultConnection = await getOrCreateConnection(
+          DEFAULT_CONNECTION, { name: DEFAULT_CONNECTION, ...databaseConfig }
+        );
+    
+        const hasMigrationsToRun = await defaultConnection.showMigrations();
+    
+        if (hasMigrationsToRun) {
+          await defaultConnection.runMigrations();
+        }
+    
+        const user = await User.getOrCreate({
+          id: USER_ID_UNSYNCED,
+          email: null,
+          login: 'login',
+          password: 'password',
+        });
+    
+        dispatch(
+          Actions.userInitialized(user)
+        );
+    
+        if (user.profile == null) {
+          dispatch(
+            Actions.appStatusUpdated('CREATING PROFILE')
+          );
+        } else {
+          dispatch(
+            Actions.appStatusUpdated('INITIALIZED')
+          );
+        }
+      } catch(error) {
+        Alert.alert(
+          error.name,
+          error.message
+        );
+      }
     }
-  }
 
-  async setup() {
-    const defaultConnection = await getOrCreateConnection(
-      DEFAULT_CONNECTION, { name: DEFAULT_CONNECTION, ...databaseConfig }
-    );
+    setup();
+  }, [dispatch]);
 
-    const hasMigrationsToRun = await defaultConnection.showMigrations();
-
-    if (hasMigrationsToRun) {
-      await defaultConnection.runMigrations();
-    }
-
-    const user = await User.getOrCreate({
-      id: USER_ID_UNSYNCED,
-      email: null,
-      login: 'login',
-      password: 'password',
-    });
-
-    store.dispatch(
-      Actions.userInitialized(user)
-    );
-
-    if (user.profile == null) {
-      store.dispatch(
-        Actions.appStatusUpdated('CREATING PROFILE')
-      );
-    } else {
-      store.dispatch(
-        Actions.appStatusUpdated('INITIALIZED')
-      );
-    }
-  }
-
-  render() {
-    return (
-      <Spinner size="large" />
-    );
-  }
+  return <Spinner size="large" />;
 }
 
 const Spinner = styled(ActivityIndicator)`

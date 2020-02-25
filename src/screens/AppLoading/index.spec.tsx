@@ -6,15 +6,14 @@ import { wait } from '@testing-library/react-native';
 describe('<AppLoading />', () => {
 
   it('should render without crashing 💥', () => {
-    const navigationStub = createNavigationCtxMock();
-    renderSetup(<AppLoadingScreen navigation={navigationStub as any} />);
+    renderSetup(<AppLoadingScreen />);
   });
 
   describe('when user has no profile', () => {
 
     it('should navigate to profile create screen 🧭', async () => {
       const navigationMock = createNavigationCtxMock();
-      renderSetup(<AppLoadingScreen navigation={navigationMock as any} />);
+      renderSetup(<AppLoadingScreen />);
 
       await wait(() => {
         expect(navigationMock.navigate).toHaveBeenCalledTimes(1);
