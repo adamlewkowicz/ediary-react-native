@@ -7,7 +7,7 @@ import { Store } from 'redux';
 import { User } from '../../src/database/entities';
 import { USER_ID_UNSYNCED } from '../../src/common/consts';
 import { render } from '@testing-library/react-native';
-import { NavigationContainer, NavigationContext } from '@react-navigation/native';
+import { NavigationContainer, NavigationContext, NavigationRouteContext } from '@react-navigation/native';
 import { BaseScreenProps } from '../../src/types';
 
 let userMock: User;
@@ -26,23 +26,21 @@ export function renderSetup<
   Params extends T['route']['params'] = T['route']['params']
 >(
   ui: React.ReactElement,
-  options?: RenderSetupOptions<Params>
+  options: RenderSetupOptions<Params> = {}
 ) {
-  const navigationCtxMock = createNavigationCtxMock(options?.params);
-  const mergedOptions = {
-    store: createInitializedStoreMock(options?.initialState),
-    ...options
-  };
+  const { initialState, params = {}, store } = options;
+  const storeMock = createInitializedStoreMock(initialState, store);
+  const navigationCtxMock = createNavigationCtxMock(params);
   
   return {
     ...render(
-      <Provider store={mergedOptions.store}>
+      <Provider store={storeMock}>
         <ThemeProvider theme={theme}>
           <NavigationContainer>
-            <NavigationContext.Provider
-              value={createNavigationCtxMock as any}
-            >
-              {ui}
+            <NavigationContext.Provider value={navigationCtxMock as any}>
+              <NavigationRouteContext.Provider value={{ params } as any}>
+                {ui}
+              </NavigationRouteContext.Provider>
             </NavigationContext.Provider>
           </NavigationContainer>
         </ThemeProvider>
@@ -50,19 +48,22 @@ export function renderSetup<
     ),
     mocks: {
       navigationContext: navigationCtxMock,
-      params: options?.params ?? {} as Params,
+      params,
     },
   }
 }
 
-const createInitializedStoreMock = (initialState?: Partial<StoreState>): Store<StoreState> => {
-  const store = configureStore(initialState);
+const createInitializedStoreMock = (
+  initialState?: Partial<StoreState>,
+  store?: Store<StoreState>
+): Store<StoreState> => {
+  const storeMock = store ?? configureStore(initialState);
 
-  store.dispatch(
+  storeMock.dispatch(
     Actions.userInitialized(userMock)
   );
   
-  return store;
+  return storeMock;
 }
 
 export const createNavigationCtxMock = <P extends object>(params?: P) => ({

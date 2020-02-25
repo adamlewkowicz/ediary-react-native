@@ -4,19 +4,15 @@ import { renderSetup } from '../../../__tests__/utils';
 import { Product } from '../../database/entities';
 import { configureStore } from '../../store';
 import { ProductFindScreen } from '.';
-import { NutritionStack, ProductFindScreenNavigationProps } from '../../navigation';
+import { ProductFindScreenNavigationProps } from '../../navigation';
 
 describe('<ProductFind />', () => {
 
   describe('when searches for product 🔎', () => {
 
-    const renderProductFindScreen = () => renderSetup(
-      <NutritionStack initialRouteName="ProductFind" />
-    );
-
     it('should display found products', async () => {
       const productMock = await Product.save({ name: 'tomatoe' });
-      const ctx = renderProductFindScreen();
+      const ctx = renderSetup(<ProductFindScreen />);
   
       const productFindInput = ctx.getByLabelText('Nazwa szukanego produktu');
       fireEvent.changeText(productFindInput, productMock.name);
