@@ -43,24 +43,17 @@ export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
 
   return (
     <Container>
-      <H1 margin="5px 0">Podsumowanie</H1>
-      <TitleSecondary margin="0 0 10px 0">
-        Dzienne spożycie kalorii
-      </TitleSecondary>
+      <Header>Podsumowanie</Header>
+      <Description>Dzienne spożycie kalorii</Description>
       <DiarySummaryChart
-        dateFormat="ddd D/M"
+        dateFormat={CHART_DATE_FORMAT}
         data={historyRecords}
       />
-      <H1 margin="5px 0">Makroskładniki</H1>
-      <TitleSecondary margin="0 0 10px 0">
-        Średnie dzienne spożycie
-      </TitleSecondary>
+      <Header>Makroskładniki</Header>
+      <Description>Średnie dzienne spożycie</Description>
       {MACRO_ELEMENTS.map(element => (
-        <Block
+        <MacroElementContainer
           key={element}
-          space="space-between"
-          align="flex-end"
-          marginVertical={12}
           accessibilityLabel="Średnia wartość makroskładniku"
         >
           <Text priority={0}>
@@ -68,12 +61,10 @@ export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
             ({element === 'kcal' ? 'kcal' : 'g'})
           </Text>
           <Block align="flex-end">
-            <RatioInfo
+            <StyledRatioInfo
               allowedDiff={15}
               ratio={macroNeedsLeft[element].ratio}
               value={macroNeedsLeft[element].diff}
-              margin="0 8px 0 0"
-              size="tiny"
             />
             <Text size="big" margin="0 5px 0 0">
               {Math.round(macroSummary[element])}
@@ -82,17 +73,38 @@ export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
               / {macroNeeds[element]}
             </Text>
           </Block>
-        </Block>
+        </MacroElementContainer>
       ))}
     </Container>
   );
 }
+
+const Header = styled(H1)`
+  margin: 5px 0;
+`
+
+const Description = styled(TitleSecondary)`
+  margin: 0 0 10px 0;
+`
 
 const Container = styled.ScrollView`
   padding: 15px;
   background: #fff;
   min-height: 100%;
 `
+
+const MacroElementContainer = styled.View`
+  justify-content: space-between;
+  align-items: center;
+  margin: 12px 0;
+`
+
+const StyledRatioInfo = styled(RatioInfo)`
+  margin: 0 8px 0 0;
+  font-size: ${props => props.theme.fontSize.tiny};
+`
+
+const CHART_DATE_FORMAT = 'ddd D/M';
 
 type HistoryRecord = {
   value: number
