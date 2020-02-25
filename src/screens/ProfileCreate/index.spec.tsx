@@ -2,7 +2,7 @@ import React from 'react';
 import { ProfileCreateScreen } from '.';
 import { renderSetup } from '../../../__tests__/utils';
 
-describe('<ProfileCreate />', () => {
+describe('<ProfileCreateScreen />', () => {
   
   it('should render without crashing 💥', () => {
     renderSetup(<ProfileCreateScreen />);

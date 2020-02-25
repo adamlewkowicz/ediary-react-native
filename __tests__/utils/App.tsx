@@ -70,6 +70,7 @@ export const createNavigationCtxMock = <P extends object>(params?: P) => ({
   setParams: jest.fn(),
   isFocused: jest.fn(),
   state: { params },
+  setOptions: jest.fn(),
 });
 
 interface RenderSetupOptions<P extends object> {

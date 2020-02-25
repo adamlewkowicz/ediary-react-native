@@ -6,10 +6,10 @@ import {
 } from '@testing-library/react-native';
 import { renderSetup } from '../../../__tests__/utils';
 import { Meal, Product, MealProduct } from '../../database/entities';
-import { Home } from '.';
+import { NutritionHomeScreen } from '.';
 import { Alert } from 'react-native';
 
-describe('<Home />', () => {
+describe('<NutritionHomeScreen />', () => {
 
   const mockMealWithProduct = async () => {
     const productMock = await Product.save({ name: 'Milk', macro: { kcal: 100 }});
@@ -19,7 +19,7 @@ describe('<Home />', () => {
 
   it('should create new meal and display it', async () => {
     const mealName = 'Cucumber soup';
-    const ctx = renderSetup(<Home />);
+    const ctx = renderSetup(<NutritionHomeScreen />);
 
     const createMealNameInput = ctx.getByPlaceholderText('Kurczak z warzywami');
     fireEvent.changeText(createMealNameInput, mealName);
@@ -36,7 +36,7 @@ describe('<Home />', () => {
   describe('when adds new product to meal 🥗', () => {
 
     it('should navigate to product find screen 🧭', async () => {
-      const ctx = renderSetup(<Home />);
+      const ctx = renderSetup(<NutritionHomeScreen />);
     
       const [toggleMealButton] = await ctx.findAllByLabelText('Pokaż szczegóły posiłku');
       fireEvent.press(toggleMealButton);
@@ -52,7 +52,7 @@ describe('<Home />', () => {
       const productMock = await Product.save({ name: 'Tomatoes' });
       const productResolverMock = async () => productMock;
       const navigationItemPressMock = (_: any, params: any) => params.onItemPress(productResolverMock);
-      const ctx = renderSetup(<Home />);
+      const ctx = renderSetup(<NutritionHomeScreen />);
 
       ctx.mocks.navigationContext.navigate
         .mockImplementationOnce(navigationItemPressMock)
@@ -68,7 +68,7 @@ describe('<Home />', () => {
 
       expect(addedProduct).toBeTruthy();
       expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledTimes(2);
-      expect(ctx.mocks.navigationContext.navigate).toHaveBeenNthCalledWith(2, 'Home', undefined);
+      expect(ctx.mocks.navigationContext.navigate).toHaveBeenNthCalledWith(2, 'NutritionHomeScreen', undefined);
       expect(await MealProduct.findOneOrFail({ productId: productMock.id })).toBeInstanceOf(MealProduct);
     });
     
@@ -80,7 +80,7 @@ describe('<Home />', () => {
       const quantityMock = 180;
       const productMock = await Product.save({ name: 'Milk', macro: { kcal: 100 }});
       const mealMock = await Meal.createWithProductId({ name: 'Milk soup' }, productMock.id);
-      const ctx = renderSetup(<Home />);
+      const ctx = renderSetup(<NutritionHomeScreen />);
   
       const toggleMealButton = await ctx.findByText(mealMock.name);
       fireEvent.press(toggleMealButton);
@@ -130,7 +130,7 @@ describe('<Home />', () => {
     const mealDeleteSpy = jest.spyOn(Meal, 'delete');
     const alertSpy = jest.spyOn(Alert, 'alert')
       .mockImplementationOnce((title, msg, [onCancel, onSuccess]: any) => onSuccess.onPress());
-    const ctx = renderSetup(<Home />);
+    const ctx = renderSetup(<NutritionHomeScreen />);
 
     const removeMealButton = await ctx.findByText(mealMock.name);
     fireEvent.longPress(removeMealButton);
@@ -142,7 +142,7 @@ describe('<Home />', () => {
 
   it('removing product from meal should work 🗑️', async () => {
     const { productMock, mealMock } = await mockMealWithProduct(); 
-    const ctx = renderSetup(<Home />);
+    const ctx = renderSetup(<NutritionHomeScreen />);
     const mealProductDeleteSpy = jest.spyOn(MealProduct, 'delete');
     const alertSpy = jest.spyOn(Alert, 'alert')
       .mockImplementationOnce((title, msg, [onCancel, onSuccess]: any) => onSuccess.onPress());
@@ -162,7 +162,7 @@ describe('<Home />', () => {
 
     it('should display accurate meals', async () => {
       const { mealMock } = await mockMealWithProduct();
-      const ctx = renderSetup(<Home />);
+      const ctx = renderSetup(<NutritionHomeScreen />);
 
       const nextDayButton = await ctx.findByLabelText('Następny dzień');
       fireEvent.press(nextDayButton);

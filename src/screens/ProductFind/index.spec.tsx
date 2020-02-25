@@ -5,7 +5,7 @@ import { Product } from '../../database/entities';
 import { ProductFindScreen } from '.';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 
-describe('<ProductFind />', () => {
+describe('<ProductFindScreen />', () => {
 
   describe('when searches for product 🔎', () => {
 
