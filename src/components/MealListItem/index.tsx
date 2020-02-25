@@ -1,11 +1,9 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { ProductId } from '../../types';
 import { ProgressBar } from '../ProgressBar';
-import { ProductItem } from '../ProductItem';
 import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { MealsWithRatio } from '../../store/selectors';
-import { Button } from 'react-native-ui-kitten';
+import { Button } from '../Button';
 import { BASE_MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitlesLong } from '../../common/helpers';
 import { DiaryMealId } from '../../store/reducers/diary';
@@ -14,19 +12,15 @@ import { theme } from '../../common/theme';
 interface MealListItemProps {
   meal: MealsWithRatio[number]
   onToggle: (mealId: DiaryMealId) => void
-  onLongPress?: TouchableOpacityProps['onLongPress']
-  onProductAdd: () => void
-  onProductDelete?: (productId: ProductId) => void
-  onProductToggle?: (productId: ProductId) => void
-  onProductQuantityUpdate?: (productId: ProductId, quantity: number) => void
+  onLongPress: TouchableOpacityProps['onLongPress']
   isBeingProcessed: boolean
+  onProductAdd: () => void
+  renderProduct: (
+    product: MealsWithRatio[number]['products'][number]
+  ) => JSX.Element | null
 }
-export const MealListItem = ({
-  onProductDelete = () => {},
-  onProductToggle = () => {},
-  onProductQuantityUpdate = () => {},
-  ...props
-}: MealListItemProps) => (
+
+export const MealListItem = (props: MealListItemProps) => (
   <Container>
     <TouchableOpacity
       onPress={() => props.onToggle(props.meal.id)}
@@ -65,25 +59,16 @@ export const MealListItem = ({
         <FlatList
           data={props.meal.products}
           keyExtractor={item => item.id.toString()}
-          renderItem={({ item: product }) => (
-            <ProductItem
-              key={product.id}
-              product={product}
-              onDelete={onProductDelete}
-              onToggle={onProductToggle}
-              onQuantityUpdate={onProductQuantityUpdate}
-              isToggled={product.isToggled}
-            />
-          )}
+          renderItem={({ item }) => props.renderProduct(item)}
         />
         {props.isBeingProcessed && <Spinner />}
-        <Button
+        <AddProductButton
           onPress={props.onProductAdd}
           accessibilityLabel="Wyszukaj produkt do posiłku"
           accessibilityRole="link"
         >
           Dodaj produkt
-        </Button>
+        </AddProductButton>
       </>
     )}
   </Container>
@@ -106,7 +91,7 @@ const Title = styled.Text`
 
 const Calories = styled.Text`
   font-family: ${props => props.theme.fontWeight.regular};
-  color: ${props => props.theme.color.blue20};
+  color: ${props => props.theme.color.blue30};
   font-size: ${props => props.theme.fontSize.regular};
 `
 
@@ -121,7 +106,7 @@ const NutritionStripe = styled.View`
 `
 
 const NutritionDetails = styled.View`
-  background: #313131;
+  background: ${props => props.theme.color.dark20};
   padding: 10px 0;
   display: flex;
   flex-direction: row;
@@ -149,4 +134,8 @@ const NutritionTitle = styled.Text`
 
 const Spinner = styled.ActivityIndicator`
   margin-vertical: 10px;
+`
+
+const AddProductButton = styled(Button)`
+  margin: 10px;
 `

@@ -27,3 +27,6 @@ export type WeightGoal = 'decrease' | 'maintain' | 'increase';
 export type Screen = keyof typeof Screens | 'Main' | 'AppLoading';
 
 export type Environment = 'development' | 'test' | 'production';
+
+/** Higher order function type for `Array.prototype.filter` method callback. */
+export type FilterHOF<T> = (value: T, index: number, values: T[]) => boolean;

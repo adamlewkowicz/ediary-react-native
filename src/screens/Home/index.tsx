@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from 'react-native-ui-kitten';
 import { connect } from 'react-redux';
-import * as Actions from '../../store/actions';
-import { StoreState, Dispatch, Selectors } from '../../store';
+import { StoreState, Selectors, Actions, DispatchProp } from '../../store';
 import { FlatList, Alert } from 'react-native';
 import { DateChanger } from '../../components/DateChanger';
 import { MacroCard } from '../../components/MacroCard';
@@ -11,23 +9,22 @@ import styled from 'styled-components/native';
 import { MealListItem } from '../../components/MealListItem';
 import { BasicInput } from '../../components/BasicInput';
 import { NavigationScreenProps, ScrollView } from 'react-navigation';
-import { ProductFindParams } from '../ProductFind';
-import { mealProductAdd } from '../../store/actions';
-import { ProductCreateParams } from '../ProductCreate';
-import { BASE_MACRO_ELEMENTS, IS_DEV } from '../../common/consts';
+import { BASE_MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitles } from '../../common/helpers';
-import { MealId } from '../../types';
+import { MealId, ProductId } from '../../types';
 import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
 import { CaloriesChart } from '../../components/CaloriesChart';
-import { useAfterInteractions } from '../../hooks';
+import { useAfterInteractions, useNavigate } from '../../hooks';
+import { ProductItem } from '../../components/ProductItem';
+import { Button } from '../../components/Button';
 
-interface HomeProps extends NavigationScreenProps, MapStateProps {
-  dispatch: Dispatch
-}
+interface HomeProps extends NavigationScreenProps, MapStateProps, DispatchProp {}
+
 const Home = (props: HomeProps) => {
-  const [name, setName] = useState('Trening');
+  const [newMealName, setNewMealName] = useState('');
   const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
   const { dispatch } = props;
+  const navigate = useNavigate();
 
   useAfterInteractions(() => dispatch(Actions.productHistoryRecentLoad()));
 
@@ -38,39 +35,34 @@ const Home = (props: HomeProps) => {
   const handleProductFindNavigation = (
     meal: DiaryMeal | DiaryMealTemplate
   ) => {
-    const screenParams: ProductFindParams = {
-      async onItemPress(foundProduct) {
-        props.navigation.navigate('Home');
+    navigate('ProductFind', {
+      async onItemPress(productResolver) {
+        navigate('Home');
         setProcessedMealId(meal.id);
+        const foundProduct = await productResolver();
 
-        if (meal.type === 'template') {
-          const { name, templateId, time } = meal;
-          const template = { id: templateId, name, templateId, time };
-          await dispatch(
-            Actions.mealCreateFromTemplate(
-              template, props.appDate, foundProduct.id
-            )
-          );
-        } else {
-          await dispatch(mealProductAdd(meal.id, foundProduct.id));
-        }
+        await dispatch(
+          Actions.mealOrTemplateProductAdd(
+            meal,
+            foundProduct.id,
+            props.appDate
+          )
+        );
 
         setProcessedMealId(null);
       }
-    }
-    props.navigation.navigate('ProductFind', screenParams);
+    });
   }
   
   const handleProductCreateNavigation = () => {
-    const screenParams: ProductCreateParams = {
-      onProductCreated() {
-        props.navigation.navigate('Home');
-      }
-    }
-    props.navigation.navigate('ProductCreate', screenParams);
+    navigate('ProductCreate', {
+      onProductCreated: () => navigate('Home')
+    });
   }
 
-  const handleMealDelete = <T extends { name: string, id: MealId }>(meal: T) => {
+  const handleMealDelete = <T extends { id: MealId, name: string }>(
+    meal: T
+  ) => {
     Alert.alert(
       'Usuń posiłek',
       `Czy jesteś pewnien że chcesz usunąć "${meal.name}"?`,
@@ -86,7 +78,32 @@ const Home = (props: HomeProps) => {
       ]
     );
   }
-  
+
+  const handleProductDelete = <T extends { id: ProductId; name: string }>(
+    mealId: MealId,
+    product: T
+  ) => {
+    Alert.alert(
+      'Usuń produkt',
+      `Czy jesteś pewnien że chcesz usunąć "${product.name}"?`,
+      [
+        {
+          text: 'Anuluj',
+          style: 'cancel'
+        },
+        {
+          text: 'OK',
+          onPress: () => dispatch(Actions.mealProductDelete(mealId, product.id))
+        }
+      ]
+    );
+  }
+
+  const handleNewMealCreate = () => {
+    dispatch(Actions.mealCreate(newMealName, props.appDate));
+    setNewMealName('');
+  }
+
   return (
     <ScrollView>
       <DateChanger
@@ -112,43 +129,50 @@ const Home = (props: HomeProps) => {
         renderItem={({ item: meal }) => (
           <MealListItem
             meal={meal}
+            isBeingProcessed={processedMealId === meal.id}
             onProductAdd={() => handleProductFindNavigation(meal)}
             onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
-            onLongPress={IS_DEV || meal.type === 'template' ? undefined : () => handleMealDelete(meal)}
-            isBeingProcessed={processedMealId === meal.id}
-            {...meal.type === 'meal' && {
-              onProductDelete: (productId) => dispatch(Actions.mealProductDelete(meal.id, productId)),
-              onProductToggle: (productId) => dispatch(Actions.productToggled(productId)),
-              onProductQuantityUpdate: (productId, quantity) => dispatch(
-                Actions.mealProductQuantityUpdate(meal.id, productId, quantity)
-              )
-            }}
+            onLongPress={__DEV__ || meal.type === 'template' ? undefined : () => handleMealDelete(meal)}
+            renderProduct={(product) => meal.type === 'template' ? null : (
+              <ProductItem
+                product={product}
+                onDelete={() => handleProductDelete(meal.id, product)}
+                onToggle={() => dispatch(Actions.productToggled(product.id))}
+                onQuantityUpdate={(quantity) => dispatch(
+                  Actions.mealProductQuantityUpdate(meal.id, product.id, quantity)
+                )}
+              />
+            )}
           />
         )}
       />
-      <CreateProductButton onPress={handleProductCreateNavigation}>
-        Dodaj własny produkt
-      </CreateProductButton>
-      <CreateMealContainer>
-        <BasicInput
-          placeholder="Nazwa nowego posiłku"
-          label="Nazwa posiłku"
-          value={name}
-          onChangeText={name => setName(name)}
-        />
-        <Button
-          accessibilityLabel="Utwórz nowy posiłek"
-          onPress={() => dispatch(Actions.mealCreate(name, props.appDate))}
-        >
-          Dodaj posiłek
+      <ContentContainer>
+        <CreateMealContainer>
+          <BasicInput
+            placeholder="Kurczak z warzywami"
+            label="Nazwa nowego posiłku"
+            value={newMealName}
+            onChangeText={setNewMealName}
+          />
+          <Button
+            accessibilityLabel="Utwórz nowy posiłek"
+            onPress={handleNewMealCreate}
+            title="Dodaj posiłek"
+          >
+            Dodaj posiłek
+          </Button>
+        </CreateMealContainer>
+        <Button onPress={handleProductCreateNavigation}>
+          Dodaj własny produkt
         </Button>
-      </CreateMealContainer>
+      </ContentContainer>
     </ScrollView>
   );
 }
 
-const CreateProductButton = styled(Button)`
-  margin: 40px 5px;
+const ContentContainer = styled.View`
+  padding: 10px;
+  margin: 40px 0 15px 0;
 `
 
 const MacroCards = styled.View`
@@ -160,7 +184,10 @@ const MacroCards = styled.View`
 `
 
 const CreateMealContainer = styled.View`
-  padding: 10px 5px;
+  padding: 15px;
+  border: ${props => `1px dotted ${props.theme.color.gray20}`};
+  border-radius: 5px;
+  margin-bottom: 60px;
 `
 
 interface MapStateProps {
@@ -179,7 +206,7 @@ const mapStateToProps = (state: StoreState): MapStateProps => ({
 
 const HomeConnected = connect(mapStateToProps)(Home);
 
-(HomeConnected as any).navigationOptions = {
+HomeConnected.navigationOptions = {
   header: null,
 }
 

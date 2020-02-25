@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import { BasicInput, BasicInputProps } from '../BasicInput';
 import { TextInput } from 'react-native';
 import styled from 'styled-components/native';
@@ -6,40 +6,41 @@ import { FlattenSimpleInterpolation } from 'styled-components';
 
 interface NutritionRowProps extends BasicInputProps {
   title: string
-  css?: FlattenSimpleInterpolation
+  styles?: FlattenSimpleInterpolation
 }
+
 export const InputRow = React.forwardRef<TextInput, NutritionRowProps>((
   {
     title,
     minWidth = 100,
     textAlign = 'center',
     keyboardType = 'numeric',
-    css,
+    styles,
     ...inputProps
   },
   ref
 ) => (
-  <Container css={css}>
+  <Container styles={styles}>
     <Title>
-      {title}
+      {title}:
     </Title>
     <BasicInput
       minWidth={minWidth}
       textAlign={textAlign}
       keyboardType={keyboardType}
-      forwardedRef={ref}
+      forwardedRef={ref as RefObject<TextInput>}
       {...inputProps}
     />
   </Container>
 ));
 
 const Container = styled.View<{
-  css?: FlattenSimpleInterpolation
+  styles?: FlattenSimpleInterpolation
 }>`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  ${props => props.css};
+  ${props => props.styles};
 `
 
 const Title = styled.Text`

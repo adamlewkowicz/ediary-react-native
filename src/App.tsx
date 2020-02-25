@@ -9,6 +9,7 @@ import { AppContainer } from './navigation';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
 
 interface AppProps {}
+
 export class App extends React.Component<AppProps> {
 
   unsubscribe: NetInfoSubscription

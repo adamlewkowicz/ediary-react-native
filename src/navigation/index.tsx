@@ -78,7 +78,7 @@ export function createMainStack(
     initialRouteName: initialStack,
     tabBarOptions: {
       showIcon: true,
-      activeTintColor: theme.color.blue20,
+      activeTintColor: theme.color.blue30,
       labelStyle: {
         fontSize: theme.fontSize.tiny,
         fontFamily: theme.fontWeight.regular,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactText } from 'react';
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useSpring, config, animated } from 'react-spring';
@@ -9,10 +9,11 @@ interface ProgressBarProps {
   vertical?: boolean
   length?: string
   width?: string
-  colors: string[]
+  colors: readonly string[]
   rounded?: boolean
   marginVertical?: number
 }
+
 export const ProgressBar = ({
   percentages,
   vertical = false,
@@ -43,7 +44,7 @@ export const ProgressBar = ({
         width={width}
       />
       <AnimatedGradientLine
-        colors={colors}
+        colors={colors as ReactText[]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         percentages={(percentages > 100 ? 100 : percentages) + '%'}
@@ -72,7 +73,7 @@ const BackgroundStripe = styled.View<{
   vertical: boolean
   width: string
 }>`
-  background-color: #EBF8FE;
+  background-color: ${props => props.theme.color.blue20};
   height: ${props => props.vertical ? '100%' : props.width};
   width: ${props => props.vertical ? props.width : '100%'};
 `

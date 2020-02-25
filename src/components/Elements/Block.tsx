@@ -4,8 +4,9 @@ import { FlexStyle, ViewProps } from 'react-native';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
 interface BlockProps extends BlockParams {
-  children: ReactNode
+  children: ReactNode | JSX.Element[]
 }
+
 export const Block = ({ children, row = true, ...props }: BlockProps) => (
   <Container row={row} {...props}>
     {children}
@@ -18,7 +19,7 @@ interface BlockParams extends ViewProps {
   alignCtn?: FlexStyle['alignContent']
   space?: FlexStyle['justifyContent']
   marginVertical?: number
-  css?: FlattenSimpleInterpolation;
+  styles?: FlattenSimpleInterpolation;
 }
 
 const Container = styled.View<BlockParams>`
@@ -26,5 +27,5 @@ const Container = styled.View<BlockParams>`
   justify-content: ${props => props.space ? props.space : 'flex-start'};
   align-items: ${props => props.align ? props.align : 'flex-start'};
   ${props => props.marginVertical && `${props.marginVertical}px 0`};
-  ${props => props.css};
+  ${props => props.styles};
 `

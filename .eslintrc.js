@@ -17,6 +17,7 @@ module.exports = {
     'react/prop-types': 0,
     '@typescript-eslint/member-delimiter-style': 0,
     '@typescript-eslint/no-empty-interface': 0,
-    'no-param-reassign': 2
+    'no-param-reassign': 2,
+    '@typescript-eslint/no-use-before-define': 0,
   }
 };

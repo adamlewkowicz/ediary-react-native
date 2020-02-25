@@ -9,21 +9,21 @@ import {
   Like,
 } from 'typeorm';
 import { MealProduct, IMealProduct } from '../MealProduct';
-import { BarcodeId, ProductId, UserId, ProductUnit } from '../../../types';
+import { BarcodeId, ProductId, UserId, ProductUnit, CancelablePromise, FilterHOF } from '../../../types';
 import { User } from '../User';
 import { ProductPortion } from '../ProductPortion';
 import { friscoApi } from '../../../services/FriscoApi';
 import { SqliteENUM } from '../../decorators';
 import { EntityType, EntityRequired } from '../../types';
-import { Optional } from 'utility-types';
 import { PRODUCT_UNITS } from '../../../common/consts';
 import { ilewazyApi } from '../../../services/IlewazyApi';
-import { mapAsyncSequence, filterByUniqueId } from '../../../common/utils';
+import { mapAsyncSequence, reduceByCompare, filterByCompare, sortByMostAccurateName } from '../../../common/utils';
 import { MinLength } from 'class-validator';
 import { GenericEntity } from '../../generics/GenericEntity';
 import { ProductImage } from '../ProductImage';
 import { Macro } from '../../embeds/Macro';
 import { FindMostUsedResult, FindMostProductIdsResult } from './types';
+import { NormalizedProduct } from '../../../services/IlewazyApi/types';
 
 @Entity('product')
 @Unique<Product>(['name', 'isVerified'])
@@ -90,18 +90,19 @@ export class Product extends GenericEntity {
   )
   images?: ProductImage[];
 
-  get portion(): number {
-    const defaultPortion = 100;
+  static defaultPortion = 100;
 
-    if (this.portions && this.portions.length) {
+  get portion(): number {
+    if (this.portions?.length) {
       const [firstPortion] = this.portions;
       return firstPortion.value;
     }
-
-    return defaultPortion;
+    return Product.defaultPortion;
   }
 
-  static findByNameLike(name: string, limit = 10): Promise<Product[]> {
+  static findByNameLike(name: string): Promise<Product[]> {
+    const limit = 10;
+    
     return this.find({
       where: { name: Like(`%${name}%`) },
       take: limit
@@ -142,83 +143,98 @@ export class Product extends GenericEntity {
     return Product.findByIds(productIds);
   }
 
-  static async findAndFetchByNameLike(name: string): Promise<Product[]> {
-    const savedProducts = await Product.findByNameLike(name);
+  private static filterProductsByNameAndInstance: FilterHOF<ProductOrNormalizedProduct> = (
+    currentProduct, currentIndex, products
+  ) => {
+    const REMOVE = false;
+    const PRESERVE = true;
 
-    if (savedProducts.length <= 3) {
-      const fetchedProducts = await ilewazyApi.findByName(name);
-      console.log('fetchedProducts', { fetchedProducts })
+    const hasProductWithExactName = products.some((anyProduct, index) => {
+      const isNotCurrentProductIndex = index !== currentIndex;
+      const hasExactName = anyProduct.name === currentProduct.name;
+      return isNotCurrentProductIndex && hasExactName;
+    });
 
-      if (fetchedProducts.length) {
-        const foundOrCreatedProducts = await mapAsyncSequence(fetchedProducts, async (product) => {
-          const {
-            images = [],
-            carbs,
-            prots,
-            fats,
-            kcal,
-            unit,
-            portion,
-            ...data
-          } = product;
-          const parsedProduct = {
-            ...data,
-            images: images.map(url => ({ url })),
-            isVerified: true,
-            macro: { carbs, prots, fats, kcal },
-          }
-          const query = {
-            where: {
-              name: product.name,
-              isVerified: true
-            }
-          }
-          return this.findOneOrSave(query, parsedProduct);
-        });
+    const isNotInstanceOfProduct = !(currentProduct instanceof Product);
 
-        const mergedProducts = [...savedProducts, ...foundOrCreatedProducts]
-          .filter(filterByUniqueId);
-        
-        return mergedProducts;
-      }
+    if (hasProductWithExactName && isNotInstanceOfProduct) {
+      return REMOVE;
     }
 
-    return savedProducts;
+    return PRESERVE;
+  }
+  
+  static async findAndFetchByNameLike(
+    name: string,
+    controller?: AbortController,
+  ): Promise<ProductOrNormalizedProduct[]> {
+
+    const savedProducts = await Product.findByNameLike(name);
+    const minProductsFoundLimit = 3;
+    const sortByMostAccurateProductName = sortByMostAccurateName(name);
+
+    if (savedProducts.length <= minProductsFoundLimit) {
+      const fetchedProducts = await ilewazyApi.findByName(name, controller);
+
+      const mergedProducts = [...savedProducts, ...fetchedProducts]
+        .filter(Product.filterProductsByNameAndInstance)
+        .sort(sortByMostAccurateProductName);
+
+      return mergedProducts;
+    }
+
+    return savedProducts.sort(sortByMostAccurateProductName);
   }
 
   static findByBarcode(barcode: BarcodeId): Promise<Product[]> {
     return this.find({ barcode });
   }
 
-  static async findAndFetchByBarcode(barcode: BarcodeId): Promise<Product[]> {
+  private static parseNormalizedProduct(payload: NormalizedProduct) {
+    const {
+      images = [],
+      unit,
+      portion,
+      _id,
+      ...data
+    } = payload;
+
+    const parsedProduct = {
+      ...data,
+      images: images.map(url => ({ url })),
+      isVerified: true,
+    }
+    
+    return parsedProduct;
+  }
+
+  static saveNormalizedProduct(payload: NormalizedProduct): Promise<Product> {
+    const parsedProduct = Product.parseNormalizedProduct(payload);
+    
+    const query = {
+      where: {
+        name: parsedProduct.name,
+        isVerified: true,
+      }
+    }
+
+    return Product.findOneOrSave(query, parsedProduct);
+  }
+
+  static async findAndFetchByBarcode(
+    barcode: BarcodeId,
+    controller: AbortController
+  ): Promise<Product[]> {
     const savedProducts = await this.findByBarcode(barcode);
     const hasVerifiedProduct = savedProducts.some(product => product.isVerified);
     
     if (!savedProducts.length || !hasVerifiedProduct) {
-      const fetchedProducts = await friscoApi.findByQuery(barcode);
-      const createdProducts = await mapAsyncSequence(fetchedProducts, product => {
-        const {
-          unit,
-          portion,
-          portions,
-          images = [],
-          carbs,
-          prots,
-          fats,
-          kcal,
-          ...data
-        } = product;
-        const macro = { carbs, prots, fats, kcal };
-        const parsedProduct = {
-          ...data,
-          images: images.map(url => ({ url })),
-          isVerified: true,
-          macro
-        }
-        return this.save(parsedProduct);
-      });
+      const fetchedProducts = await friscoApi.findByQuery(barcode, controller);
+      const createdProducts = await mapAsyncSequence(
+        fetchedProducts, Product.saveNormalizedProduct
+      );
 
-      return [...savedProducts, ...createdProducts];
+      return [ ...createdProducts, ...savedProducts];
     }
 
     return savedProducts;
@@ -227,9 +243,9 @@ export class Product extends GenericEntity {
 }
 
 export type IProduct = EntityType<Product, 'portion'>;
-export type IProductOptional = Optional<IProduct, 'id' | 'updatedAt' | 'createdAt' | 'mealProducts' | 'portions' | 'user' | 'isVerified' | 'images'>;
 export type IProductRequired = EntityRequired<IProduct,
   | 'name'
   | 'macro'
 >;
 export type IProductMerged = IProduct & IMealProduct;
+export type ProductOrNormalizedProduct = Product | NormalizedProduct;

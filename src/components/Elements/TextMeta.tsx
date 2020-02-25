@@ -12,6 +12,7 @@ interface TextMetaProps {
   marginBottom?: string
   color?: string
 }
+
 export const TextMeta = ({
   color = '#000',
   ...props
@@ -53,7 +54,7 @@ const Value = styled.Text<{
   fontWeight?: FontWeightProperty
   color: string
 }>`
-  font-family: 'DMSans-Regular';
+  font-family: ${props => props.theme.fontWeight.regular};
   font-size: ${({ fontSize = 14 }) => fontSize + 'px'};
   font-weight: ${({ fontWeight = 'normal' }) => fontWeight};
   color: ${props => props.color};
@@ -63,7 +64,7 @@ const Meta = styled.Text<{
   fontSize?: number
   color: string
 }>`
-  font-family: 'DMSans-Regular';
+  font-family: ${props => props.theme.fontWeight.regular};
   font-size: ${({ fontSize = 10 }) => fontSize + 'px'};
   margin-left: 1px;
   color: ${props => props.color};

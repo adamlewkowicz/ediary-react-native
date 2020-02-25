@@ -1,200 +1,148 @@
 import React, { useState } from 'react';
-import styled, { css } from 'styled-components/native';
-import { SelectionBox } from '../../components/SelectionBox';
+import styled from 'styled-components/native';
 import { Block } from '../../components/Elements';
-import { WomanIcon, ManIcon, MuscleIcon, MeasureIcon, FemaleBodyIcon } from '../../components/Icons';
-import { theme } from '../../common/theme';
+import {
+  WomanIcon,
+  ManIcon,
+  MuscleIcon,
+  MeasureIcon,
+  FemaleBodyIcon,
+} from '../../components/Icons';
 import { Button } from '../../components/Button';
 import { Heading } from '../../components/Elements/Heading';
-import Slider from '@react-native-community/slider';
-import { WeightGoal, Screen } from '../../types';
+import { WeightGoal } from '../../types';
 import { useDispatch } from 'react-redux';
-import * as Actions from '../../store/actions';
-import { NavigationScreenProps } from 'react-navigation';
-import { useUserId } from '../../hooks';
+import { useUserId, useNavigate } from '../../hooks';
+import { IProfileRequired } from '../../database/entities';
+import { STEP_TITLES } from './consts';
+import { Actions } from '../../store';
+import { NumericPicker } from '../../components/NumericPicker';
+import { fillArrayWithinRange } from '../../common/utils';
+import { SelectionOptions } from '../../components/SelectionOptions';
 
-export interface ProfileCreateProps extends NavigationScreenProps {}
+export interface ProfileCreateProps {}
+
 export const ProfileCreate = (props: ProfileCreateProps) => {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState<0 | 1 | 2>(0);
   const [male, setMale] = useState(true);
-  const [height, setHeight] = useState(170);
-  const [weight, setWeight] = useState(60);
-  const [age, setAge] = useState(55);
+  const [height, setHeight] = useState(175);
+  const [weight, setWeight] = useState(65);
+  const [age, setAge] = useState(25);
   const [weightGoal, setWeightGoal] = useState<WeightGoal>('maintain');
   const dispatch = useDispatch();
   const userId = useUserId();
+  const navigate = useNavigate();
 
   async function handleProfileCreate() {
-    const payload = { male, height, weightGoal, weight, age, userId };
+    const profile: IProfileRequired = { male, height, weightGoal, weight, age, userId };
 
     await dispatch(
-      Actions.userProfileCreate(payload)
+      Actions.userProfileCreate(profile)
     );
 
-    const screen: Screen = 'Main';
-    props.navigation.navigate(screen);
+    navigate('Main');
+  }
+
+  const isLastStep = step === 2;
+
+  const handleNextStepButtonPress = () => {
+    if (isLastStep) {
+      handleProfileCreate();
+    } else {
+      setStep(step => step + 1 as 0 | 1);
+    }
   }
 
   const steps = [
     (
       <>
         <Block row space="space-around">
-          <SelectionBox 
+          <SelectionOptions
             value={male}
-            onChange={() => setMale(true)}
-            title="Mężczyzna"
-            icon={(
-              <ManIcon
-                fill={male ? theme.color.focus : 'rgba(1,1,1,.7)'}
-                width={45}
-                height={45}
-              />
-            )}
-          />
-          <SelectionBox
-            value={!male}
-            onChange={() => setMale(false)}
-            title="Kobieta"
-            icon={(
-              <WomanIcon
-                fill={!male ? theme.color.focus : 'rgba(1,1,1,.7)'}
-                width={45}
-                height={45}
-              />
-            )}
+            onChange={setMale}
+            options={[
+              {
+                value: true,
+                title: 'Mężczyzna',
+                Icon: ManIcon,
+              },
+              {
+                value: false,
+                title: 'Kobieta',
+                Icon: WomanIcon,
+              }
+            ]}
           />
         </Block>
       </>
     ),
     (
       <MetricsContainer>
-        <Heading
-          value="Wzrost"
-          size={17}
-          align="center"
-          css={css`
-            margin-bottom: 15px;
-          `}
-        />
-        <SliderValue>{height} cm</SliderValue>
-        <Slider
-          step={1}
+        <MetricsHeading>Wzrost</MetricsHeading>
+        <NumericPicker
           value={height}
-          minimumValue={140}
-          maximumValue={210}
-          style={{ height: 19 }}
-          onSlidingComplete={height => setHeight(Math.floor(height))}
-          minimumTrackTintColor={theme.colors.secondary}
-          maximumTrackTintColor="rgba(157, 163, 180, 0.10)"
+          onChange={setHeight}
+          options={HEIGHT_VALUES}
+          renderOptionLabel={height => `${height} cm`}
         />
-        <Heading
-          value="Waga"
-          size={17}
-          align="center"
-          css={css`
-            margin: 40px 0 15px 0;
-          `}
-        />
-        <SliderValue>{weight} kg</SliderValue>
-        <Slider
-          step={1}
+        <MetricsHeading>Waga</MetricsHeading>
+        <NumericPicker
           value={weight}
-          minimumValue={40}
-          maximumValue={150}
-          style={{ height: 19 }}
-          onSlidingComplete={weight => setWeight(Math.floor(weight))}
-          minimumTrackTintColor={theme.colors.secondary}
-          maximumTrackTintColor="rgba(157, 163, 180, 0.10)"
+          onChange={setWeight}
+          options={WEIGHT_VALUES}
+          renderOptionLabel={weight => `${weight} kg`}
         />
-        <Heading
-          value="Wiek"
-          size={17}
-          align="center"
-          css={css`
-            margin: 40px 0 15px 0;
-          `}
-        />
-        <SliderValue>{age} lat</SliderValue>
-        <Slider
-          step={1}
+        <MetricsHeading>Wiek</MetricsHeading>
+        <NumericPicker
           value={age}
-          minimumValue={10}
-          maximumValue={100}
-          style={{ height: 19 }}
-          onSlidingComplete={age => setAge(Math.floor(age))}
-          minimumTrackTintColor={theme.colors.secondary}
-          maximumTrackTintColor="rgba(157, 163, 180, 0.10)"
+          onChange={age => setAge(age)}
+          options={AGE_VALUES}
+          renderOptionLabel={age => `${age} lat`}
         />
       </MetricsContainer>
     ),
     (
       <Block space="space-evenly" row={false} align="center">
-        <SelectionBox
-          value={weightGoal === 'decrease'}
-          onChange={() => setWeightGoal('decrease')}
-          title="Redukcja"
-          description="Chcę zmniejszyć wagę"
-          icon={(
-            <FemaleBodyIcon
-              fill={weightGoal === 'decrease' ? theme.color.focus : 'rgba(1,1,1,.7)'}
-              width={45}
-              height={45}
-            />
-          )}
-        />
-        <SelectionBox
-          value={weightGoal === 'maintain'}
-          onChange={() => setWeightGoal('maintain')}
-          title="Utrzymanie"
-          description="Chcę utrzymać obecną wagę"
-          icon={(
-            <MeasureIcon
-              fill={weightGoal === 'maintain' ? theme.color.focus : 'rgba(1,1,1,.7)'}
-              width={45}
-              height={45}
-            />
-          )}
-        />
-        <SelectionBox
-          value={weightGoal === 'increase'}
-          onChange={() => setWeightGoal('increase')}
-          title="Zwiększenie"
-          description="Chcę zwiększyć wagę"
-          icon={(
-            <MuscleIcon
-              fill={weightGoal === 'increase' ? theme.color.focus : 'rgba(1,1,1,.7)'}
-              width={45}
-              height={45}
-            />
-          )}
+        <SelectionOptions
+          value={weightGoal}
+          onChange={setWeightGoal}
+          options={[
+            {
+              value: 'decrease',
+              title: 'Redukcja',
+              description: 'Chcę zmniejszyć wagę',
+              Icon: FemaleBodyIcon
+            },
+            {
+              value: 'maintain',
+              title: 'Utrzymanie',
+              description: 'Chcę utrzymać obecną wagę',
+              Icon: MeasureIcon
+            },
+            {
+              value: 'increase',
+              title: 'Zwiększenie',
+              description: 'Chcę zwiększyć wagę',
+              Icon: MuscleIcon
+            }
+          ]}
         />
       </Block>
     )
-  ];
-
-  const isLastStep = steps.length - 1 === step;
+  ] as const;
 
   return (
     <Container>
-      <Heading
-        value={(stepTitles as any)[step]}
-        size={20}
-        align="center"
-        css={HeadingStyle}
-      />
+      <MainHeading>
+        {STEP_TITLES[step]}
+      </MainHeading>
       <Content>
         {steps[step]}
       </Content>
       <InfoContainer>
         <Button
           title={isLastStep ? 'Zapisz' : 'Kontynuuj'}
-          onPress={() => {
-            if (isLastStep) {
-              handleProfileCreate();
-            } else {
-              setStep(step + 1);
-            }
-          }}
+          onPress={handleNextStepButtonPress}
         />
       </InfoContainer>
     </Container>
@@ -207,8 +155,10 @@ const Container = styled.View`
   flex: 1;
 `
 
-const HeadingStyle = css`
+const MainHeading = styled(Heading)`
+  text-align: center;
   margin: 15px 0 25px 0;
+  font-size: ${props => props.theme.fontSize.largeXL};
 `
 
 const Content = styled.ScrollView`
@@ -223,14 +173,11 @@ const InfoContainer = styled.View`
   padding: 25px 15px;
 `
 
-const SliderValue = styled.Text`
-  text-align: center;
-  font-size: 20px;
+const MetricsHeading = styled.Text`
+  font-size: ${props => props.theme.fontSize.regular};
   margin-bottom: 10px;
 `
 
-const stepTitles = {
-  0: 'Wybierz płeć',
-  1: 'Twoje pomiary',
-  2: 'Wybierz cel',
-}
+const AGE_VALUES = fillArrayWithinRange({ from: 10, to: 120 });
+const WEIGHT_VALUES = fillArrayWithinRange({ from: 40, to: 180 });
+const HEIGHT_VALUES = fillArrayWithinRange({ from: 100, to: 210 });

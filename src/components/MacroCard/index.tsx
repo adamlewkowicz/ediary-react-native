@@ -4,12 +4,13 @@ import { ProgressBar } from '../ProgressBar';
 import { Block } from '../Elements';
 
 interface MacroCardProps {
-  colors: string[],
+  colors: readonly string[],
   title: string
   reached: string | number
   goal: number
   percentages: number
 }
+
 export const MacroCard = (props: MacroCardProps) => {
   return (
     <Container>
@@ -36,23 +37,23 @@ const Container = styled.View`
 
 const Eaten = styled.Text`
   font-family: ${props => props.theme.fontWeight.regular};
-  font-size: 20px;
+  font-size: ${props => props.theme.fontSize.largeXL};
 `
 
 const Needed = styled.Text`
-  font-size: 13px;
+  font-size: ${props => props.theme.fontSize.regular};
   font-family: ${props => props.theme.fontWeight.regular};
-  color: ${props => props.theme.colors.midGray};
+  color: ${props => props.theme.color.gray20};
 `
 
 const Slash = styled.Text`
-  color: ${props => props.theme.colors.midGray};
+  color: ${props => props.theme.color.gray20};
   margin: 0 4px;
 `
 
 const Title = styled.Text`
   font-family: ${props => props.theme.fontWeight.regular};
-  color: ${props => props.theme.colors.midGray};
+  color: ${props => props.theme.color.gray20};
   text-align: center;
   font-size: ${props => props.theme.fontSize.tiny};
   text-transform: uppercase;

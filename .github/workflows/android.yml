@@ -5,6 +5,7 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
     - uses: actions/checkout@v1
 
@@ -21,11 +22,11 @@ jobs:
     - name: Build with Gradle
       run: |
         cd android
-        echo $RELEASE_KEYSTORE_BASE64 | base64 -d > ./app/release-key.keystore
+        echo ${{ secrets.RELEASE_KEYSTORE_BASE64 }} | base64 -d > ./app/release-key.keystore
         chmod +x ./gradlew
-        ./gradlew assembleStaging
+        ./gradlew assembleRelease
 
     - uses: actions/upload-artifact@master
       with:
         name: ediary-release
-        path: ./android/app/build/outputs/apk/staging/app-staging.apk
+        path: ./android/app/build/outputs/apk/release/app-release.apk

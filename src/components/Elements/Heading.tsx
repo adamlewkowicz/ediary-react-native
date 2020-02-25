@@ -5,12 +5,13 @@ import { TextAlignProperty } from 'csstype';
 import { FlattenSimpleInterpolation } from 'styled-components';
 
 interface HeadingProps extends TextProps {
-  value: string
+  value?: string
   children?: string
   size?: number
   align?: TextAlignProperty
-  css?: FlattenSimpleInterpolation
+  styles?: FlattenSimpleInterpolation
 }
+
 export const Heading = ({ value, children = value, ...props }: HeadingProps) => (
   <Container {...props}>
     {children}
@@ -20,10 +21,10 @@ export const Heading = ({ value, children = value, ...props }: HeadingProps) => 
 const Container = styled.Text<{
   size?: number
   align?: TextAlignProperty
-  css?: FlattenSimpleInterpolation
+  styles?: FlattenSimpleInterpolation
 }>`
-  font-family: DMSans-Medium;
+  font-family: ${props => props.theme.fontWeight.regular};
   font-size: ${props => props.size || props.theme.fontSize.regular};
   text-align: ${props => props.align || 'left'};
-  ${props => props.css};
+  ${props => props.styles};
 `
