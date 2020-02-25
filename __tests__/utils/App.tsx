@@ -8,6 +8,7 @@ import { User } from '../../src/database/entities';
 import { USER_ID_UNSYNCED } from '../../src/common/consts';
 import { render } from '@testing-library/react-native';
 import { NavigationContainer, NavigationContext } from '@react-navigation/native';
+import { BaseScreenProps } from '../../src/types';
 
 let userMock: User;
 
@@ -20,7 +21,10 @@ beforeEach(async () => {
   });
 });
 
-export function renderSetup<Params extends object>(
+export function renderSetup<
+  T extends BaseScreenProps,
+  Params extends T['route']['params'] = T['route']['params']
+>(
   ui: React.ReactElement,
   options?: RenderSetupOptions<Params>
 ) {
