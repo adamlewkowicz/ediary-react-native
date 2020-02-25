@@ -8,10 +8,10 @@ import { useNavigationData } from '../../hooks';
 interface BarcodeScanScreenProps {}
 
 export const BarcodeScanScreen = (props: BarcodeScanScreenProps) => {
-  const { route: { params }} = useNavigationData<BarcodeScanScreenNavigationProps>();
+  const { params } = useNavigationData<BarcodeScanScreenNavigationProps>();
   const cameraRef = useRef<RNCamera>(null);
   const prevBarcodeId = useRef<BarcodeId | null>(null);
-
+  
   const takePicture = async () => {
     if (cameraRef.current && params.onPhotoTaken) {
       const options = { quality: 0.5, base64: true };

@@ -15,9 +15,9 @@ import { ProductFindScreenNavigationProps } from '../../navigation';
 interface ProductFindScreenProps {}
 
 export const ProductFindScreen = (props: ProductFindScreenProps) => {
+  const { params, navigate } = useNavigationData<ProductFindScreenNavigationProps>();
   const recentProducts = useSelector(Selectors.getProductHistory);
   const hasBeenPressed = useRef(false);
-  const { route: { params }, navigation: { navigate }} = useNavigationData<ProductFindScreenNavigationProps>();
   const {
     state,
     isConnected,
