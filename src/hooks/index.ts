@@ -4,3 +4,4 @@ export * from './useAfterInteractions';
 export * from './useIdleStatus';
 export * from './useDebouncedValue';
 export * from './useProductsSearch';
+export * from './useNavigationData';

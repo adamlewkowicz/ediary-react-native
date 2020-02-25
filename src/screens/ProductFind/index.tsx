@@ -6,18 +6,18 @@ import { InputSearcher } from '../../components/InputSearcher';
 import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { Button } from '../../components/Button';
-import { useProductsSearch } from '../../hooks';
+import { useProductsSearch, useNavigationData } from '../../hooks';
 import { useSelector } from 'react-redux';
 import { Selectors } from '../../store';
 import { FlatList } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 
-interface ProductFindScreenProps extends ProductFindScreenNavigationProps {}
+interface ProductFindScreenProps {}
 
 export const ProductFindScreen = (props: ProductFindScreenProps) => {
   const recentProducts = useSelector(Selectors.getProductHistory);
   const hasBeenPressed = useRef(false);
-  const { route: { params }, navigation: { navigate }} = props;
+  const { route: { params }, navigation: { navigate }} = useNavigationData<ProductFindScreenNavigationProps>();
   const {
     state,
     isConnected,
