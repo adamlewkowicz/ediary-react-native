@@ -66,7 +66,7 @@ const createInitializedStoreMock = (initialState?: Partial<StoreState>): Store<S
 export const createNavigationCtxMock = <P extends object>(params?: P) => ({
   getParam: jest.fn(),
   navigate: jest.fn(),
-  addListener: jest.fn(() => ({ remove: jest.fn() })),
+  addListener: jest.fn(() => jest.fn()),
   setParams: jest.fn(),
   isFocused: jest.fn(),
   state: { params },
