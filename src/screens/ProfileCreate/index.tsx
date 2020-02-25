@@ -19,9 +19,8 @@ import { Actions } from '../../store';
 import { NumericPicker } from '../../components/NumericPicker';
 import { fillArrayWithinRange } from '../../common/utils';
 import { SelectionOptions } from '../../components/SelectionOptions';
-import { ProfileCreateScreenNavigationProps } from '../../navigation';
 
-interface ProfileCreateScreenProps extends ProfileCreateScreenNavigationProps {}
+interface ProfileCreateScreenProps {}
 
 export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
   const [step, setStep] = useState<0 | 1 | 2>(0);

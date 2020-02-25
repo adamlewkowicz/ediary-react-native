@@ -13,14 +13,15 @@ import { elementTitles } from '../../common/helpers';
 import { MealId, ProductId } from '../../types';
 import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
 import { CaloriesChart } from '../../components/CaloriesChart';
-import { useAfterInteractions } from '../../hooks';
+import { useAfterInteractions, useNavigationData } from '../../hooks';
 import { ProductItem } from '../../components/ProductItem';
 import { Button } from '../../components/Button';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
 
-interface NutritionHomeScreenProps extends NutritionHomeScreenNavigationProps {}
+interface NutritionHomeScreenProps {}
 
 export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
+  const { navigate } = useNavigationData<NutritionHomeScreenNavigationProps>();
   const [newMealName, setNewMealName] = useState('');
   const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
   const dispatch = useDispatch();
@@ -32,7 +33,6 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const mealsWithRatio = useSelector<StoreState, Selectors.GetMealsWithRatio>(
     Selectors.getMealsWithRatio
   );
-  const { navigation } = props;
 
   useAfterInteractions(() => dispatch(Actions.productHistoryRecentLoad()));
 
@@ -44,9 +44,9 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const handleProductFindNavigation = (
     meal: DiaryMeal | DiaryMealTemplate
   ) => {
-    navigation.navigate('ProductFind', {
+    navigate('ProductFind', {
       async onItemPress(productResolver) {
-        navigation.navigate('NutritionHome');
+        navigate('NutritionHome');
         setProcessedMealId(meal.id);
         const foundProduct = await productResolver();
 
@@ -65,8 +65,8 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
 
   
   const handleProductCreateNavigation = () => {
-    navigation.navigate('ProductCreate', {
-      onProductCreated: () => navigation.navigate('NutritionHome')
+    navigate('ProductCreate', {
+      onProductCreated: () => navigate('NutritionHome')
     });
   }
 

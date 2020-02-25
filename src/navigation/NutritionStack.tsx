@@ -17,7 +17,7 @@ import { theme } from '../common/theme';
 const Stack = createStackNavigator<NutritionStackParamList>();
 
 export type NutritionStackParamList = {
-  [APP_ROUTE.NutritionHome]: undefined;
+  [APP_ROUTE.NutritionHome]: {};
   [APP_ROUTE.ProductFind]: {
     onItemPress?: (productResolver: ProductResolver) => void
   };

@@ -10,7 +10,7 @@ import {
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { InputRow } from '../../components/InputRow';
 import { Options } from '../../components/Options';
-import { useUserId } from '../../hooks';
+import { useUserId, useNavigationData } from '../../hooks';
 import { Product } from '../../database/entities';
 import { parseNumber } from '../../common/utils';
 import { useDispatch } from 'react-redux';
@@ -18,10 +18,10 @@ import { Actions } from '../../store';
 import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
 
-interface ProductCreateScreenProps extends ProductCreateScreenNavigationProps {}
+interface ProductCreateScreenProps {}
 
 export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
-  const { navigation, route: { params }} = props;
+  const { params, navigation } = useNavigationData<ProductCreateScreenNavigationProps>();
   const [state, dispatch] = useReducer(
     productCreateReducer,
     params,
