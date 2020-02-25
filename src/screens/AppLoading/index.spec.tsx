@@ -1,31 +1,26 @@
 import React from 'react';
-import { renderSetup, createNavigationCtxMock } from '../../../__tests__/utils';
+import { renderSetup } from '../../../__tests__/utils';
 import { AppLoadingScreen } from '.';
-import { wait } from '@testing-library/react-native';
+import { configureStore } from '../../store';
 
-describe('<AppLoading />', () => {
+describe('<AppLoadingScreen />', () => {
 
   it('should render without crashing 💥', () => {
-    renderSetup(<AppLoadingScreen />);
+    const store = configureStore();
+    renderSetup(<AppLoadingScreen />, { store });
   });
 
+  // TODO: Move below specs to RootStack test
+  
   describe('when user has no profile', () => {
 
-    it('should navigate to profile create screen 🧭', async () => {
-      const navigationMock = createNavigationCtxMock();
-      renderSetup(<AppLoadingScreen />);
-
-      await wait(() => {
-        expect(navigationMock.navigate).toHaveBeenCalledTimes(1);
-        expect(navigationMock.navigate).toHaveBeenCalledWith('ProfileCreate');
-      });
-    });
+    it.todo('should change app status to creating profile');
 
   });
 
-  describe('when has profile created', () => {
+  describe('when user has profile', () => {
 
-    it.todo('should navigate to main screen 🧭');
+    it.todo('should change app status to creating initialized');
 
   });
 
