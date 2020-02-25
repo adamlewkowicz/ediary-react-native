@@ -2,7 +2,6 @@ import React from 'react';
 import { fireEvent } from '@testing-library/react-native';
 import { renderSetup } from '../../../__tests__/utils';
 import { Product } from '../../database/entities';
-import { configureStore } from '../../store';
 import { ProductFindScreen } from '.';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 
@@ -68,11 +67,9 @@ describe('<ProductFind />', () => {
     const productMock = await Product.save({ name: 'Fish' });
     // store has to be mocked, since recent products are fetched on home screen and
     // after interactions has been finished
-    const store = configureStore({
-      productHistory: [productMock]
-    });
+    const initialState = { productHistory: [productMock] };
   
-    const ctx = renderSetup(<ProductFindScreen />, { store });
+    const ctx = renderSetup(<ProductFindScreen />, { initialState });
   
     await ctx.findByText(productMock.name);
   });

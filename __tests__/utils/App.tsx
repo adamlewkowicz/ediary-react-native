@@ -29,7 +29,7 @@ export function renderSetup<
   options: RenderSetupOptions<Params> = {}
 ) {
   const { initialState, params = {}, store } = options;
-  const storeMock = createInitializedStoreMock(initialState, store);
+  const storeMock = store ?? createInitializedStoreMock(initialState);
   const navigationCtxMock = createNavigationCtxMock(params);
   
   return {
@@ -53,17 +53,14 @@ export function renderSetup<
   }
 }
 
-const createInitializedStoreMock = (
-  initialState?: Partial<StoreState>,
-  store?: Store<StoreState>
-): Store<StoreState> => {
-  const storeMock = store ?? configureStore(initialState);
+const createInitializedStoreMock = (initialState?: Partial<StoreState>): Store<StoreState> => {
+  const store = configureStore(initialState);
 
-  storeMock.dispatch(
+  store.dispatch(
     Actions.userInitialized(userMock)
   );
   
-  return storeMock;
+  return store;
 }
 
 export const createNavigationCtxMock = <P extends object>(params?: P) => ({
