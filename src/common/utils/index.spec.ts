@@ -5,7 +5,6 @@ import {
   filterByUniqueId,
   findOrFail,
   sortByMostAccurateName,
-  filterByCompare,
 } from '.';
 
 test('debounce - debounced function gets called only once', () => {
@@ -78,19 +77,4 @@ test('sortByMostAccurateName - sorts items by most matching name', () => {
   const result = dataMock.sort(sortByMostAccurateName(name));
 
   expect(result).toMatchSnapshot();
-});
-
-test('filterByCompare() - should filter items by comparing both', () => {
-  const subject = [
-    { name: 'abc', isVerified: true },
-    { name: 'abc', isVerified: false },
-  ] as const;
-
-  const filteredByNameIfVerified = subject.filter(
-    filterByCompare((a, b) =>
-      a.isVerified && a.name === b.name
-    )
-  );
-
-  expect(filteredByNameIfVerified.length).toBeLessThan(subject.length);
 });
