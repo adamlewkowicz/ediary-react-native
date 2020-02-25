@@ -10,18 +10,4 @@ describe('<AppLoadingScreen />', () => {
     renderSetup(<AppLoadingScreen />, { store });
   });
 
-  // TODO: Move below specs to RootStack test
-  
-  describe('when user has no profile', () => {
-
-    it.todo('should change app status to creating profile');
-
-  });
-
-  describe('when user has profile', () => {
-
-    it.todo('should change app status to creating initialized');
-
-  });
-
 });
