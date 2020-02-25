@@ -1,87 +1,61 @@
-import React, { createRef } from 'react';
+import React, { useRef } from 'react';
 import { RNCamera, RNCameraProps } from 'react-native-camera';
 import styled from 'styled-components/native';
 import { BarcodeId } from '../../types';
 import { BarcodeScanScreenNavigationProps } from '../../navigation';
+import { useNavigationData } from '../../hooks';
 
-interface BarcodeScanScreenProps extends BarcodeScanScreenNavigationProps {}
+interface BarcodeScanScreenProps {}
 
-export class BarcodeScanScreen extends React.Component<BarcodeScanScreenProps> {
+export const BarcodeScanScreen = (props: BarcodeScanScreenProps) => {
+  const { route: { params }} = useNavigationData<BarcodeScanScreenNavigationProps>();
+  const cameraRef = useRef<RNCamera>(null);
+  const prevBarcodeId = useRef<BarcodeId | null>(null);
 
-  camera = createRef<RNCamera>();
-  prevBarcodeId: BarcodeId | null = null;
-  androidCameraPermissions = {
-    title: 'Uprawnienia kamery',
-    message: 'Potrzebuję uprawnień kamery do zeskanowania kodu kreskowego',
-    buttonPositive: 'Ok',
-    buttonNegative: 'Anuluj',
-  }
-
-  takePicture = async () => {
-    const { onPhotoTaken } = this.props.route.params;
-
-    if (this.camera.current && onPhotoTaken) {
+  const takePicture = async () => {
+    if (cameraRef.current && params.onPhotoTaken) {
       const options = { quality: 0.5, base64: true };
-      const data = await this.camera.current.takePictureAsync(options);
-      onPhotoTaken(data);
+      const data = await cameraRef.current.takePictureAsync(options);
+      params.onPhotoTaken(data);
     }
   }
 
-  handleGoogleBarcodeDetection: RNCameraProps['onGoogleVisionBarcodesDetected'] = ({ barcodes }) => {
-    const [barcode] = barcodes.filter(barcode => barcode.type === 'ISBN');
-    const { onBarcodeDetected } = this.props.route.params;
+  const handleBarcodeDetection = <B extends { data: string }>(barcodeData?: B) => {
+    const barcodeId = barcodeData?.data;
 
-    if (!barcode || !onBarcodeDetected) {
-      return;
-    }
+    if (!barcodeId?.length || !params.onBarcodeDetected) return;
 
-    const barcodeId = barcode.data;
-
-    if (barcodeId !== this.prevBarcodeId) {
-      onBarcodeDetected(barcodeId);
-      this.prevBarcodeId = barcodeId;
+    if (barcodeId !== prevBarcodeId.current) {
+      prevBarcodeId.current = barcodeId;
+      params.onBarcodeDetected(barcodeId);
     }
   }
 
-  handleBarcodeDetection: RNCameraProps['onBarCodeRead'] = (barcode) => {
-    const { onBarcodeDetected } = this.props.route.params;
-
-    if (!barcode || !onBarcodeDetected) {
-      return;
-    }
-
-    const barcodeId = barcode.data;
-
-    if (barcodeId !== this.prevBarcodeId) {
-      onBarcodeDetected(barcode.data);
-      this.prevBarcodeId = barcodeId;
-    }
+  const handleGoogleBarcodeDetection: RNCameraProps['onGoogleVisionBarcodesDetected'] = ({ barcodes }) => {
+    const barcodeData = barcodes.find(barcode => barcode.type === 'ISBN');
+    handleBarcodeDetection(barcodeData);
   }
 
-  render() {
-    const { onPhotoTaken } = this.props.route.params;
-
-    return (
-      <Container>
-        <StyledCamera
-          ref={this.camera}
-          type="back"
-          flashMode="auto"
-          androidCameraPermissionOptions={this.androidCameraPermissions}
-          onBarCodeRead={this.handleBarcodeDetection}
-          onGoogleVisionBarcodesDetected={this.handleGoogleBarcodeDetection}
-          onTextRecognized={null as any}
-          onFacesDetected={null as any}
-          captureAudio={false}
-        />
-        {onPhotoTaken && (
-          <PhotoButton onPress={this.takePicture}>
-            <PhotoTitle>Zrób zdjęcie</PhotoTitle>
-          </PhotoButton>
-        )}
-      </Container>
-    );
-  }
+  return (
+    <Container>
+      <StyledCamera
+        ref={cameraRef}
+        type="back"
+        flashMode="auto"
+        androidCameraPermissionOptions={ANDROID_CAMERA_PERMISSIONS}
+        onBarCodeRead={handleBarcodeDetection}
+        onGoogleVisionBarcodesDetected={handleGoogleBarcodeDetection}
+        onTextRecognized={null as any}
+        onFacesDetected={null as any}
+        captureAudio={false}
+      />
+      {params.onPhotoTaken && (
+        <PhotoButton onPress={takePicture}>
+          <PhotoTitle>Zrób zdjęcie</PhotoTitle>
+        </PhotoButton>
+      )}
+    </Container>
+  );
 }
 
 const Container = styled.View`
@@ -104,3 +78,10 @@ const PhotoTitle = styled.Text`
   border-radius: 5px;
   text-align: center;
 `
+
+const ANDROID_CAMERA_PERMISSIONS = {
+  title: 'Uprawnienia kamery',
+  message: 'Potrzebuję uprawnień kamery do zeskanowania kodu kreskowego',
+  buttonPositive: 'Ok',
+  buttonNegative: 'Anuluj',
+}
