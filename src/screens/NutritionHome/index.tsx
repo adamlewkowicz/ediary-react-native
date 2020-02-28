@@ -110,6 +110,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   }
 
   const handleNewMealCreate = () => {
+    if (!newMealName.length) return;
     dispatch(Actions.mealCreate(newMealName, appDate));
     setNewMealName('');
   }
