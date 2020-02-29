@@ -24,6 +24,7 @@ import {
   DiaryTemplate,
   DiaryMealTemplate,
 } from '../../reducers/diary';
+import { batch } from 'react-redux';
 
 const debounceA = debounce();
 
@@ -41,8 +42,11 @@ export const mealCreate = (
   date: Date,
 ): Thunk => async (dispatch) => {
   const meal = await Meal.createWithDate({ name }, date);
-  dispatch(mealToggled(null));
-  dispatch(mealAdded(meal));
+  
+  batch(() => {
+    dispatch(mealToggled(null));
+    dispatch(mealAdded(meal));
+  });
 }
 
 export const mealDelete = (
