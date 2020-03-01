@@ -22,6 +22,8 @@ import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
 import { useNavigation } from 'react-navigation-hooks';
 import { H2, TextInput as Input, Button } from '../../elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
+import { RightArrowIcon } from '../../components/Icons';
+import { theme } from '../../common/theme';
 
 interface ProductCreateProps extends
   NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
@@ -139,7 +141,7 @@ export const ProductCreate = (props: ProductCreateProps) => {
             label="Kalorie"
             placeholder="Zawartość kalorii"
             rightContent={(
-              <Button isReverted>Oblicz</Button>
+              <InputActionButton isReverted>Oblicz</InputActionButton>
             )}
           />
         </Section>
@@ -152,14 +154,13 @@ export const ProductCreate = (props: ProductCreateProps) => {
             label="Kod kreskowy"
             placeholder="Kod kreskowy produktu"
             rightContent={(
-              <>
-                <Button
-                  // rightContent={<BarcodeButton />}
-                  isReverted
-                >
-                  Zeskanuj
-                </Button>
-              </>
+              <InputActionButton
+                // rightContent={<BarcodeButton />}
+                rightContent={RightArrowI}
+                isReverted
+              >
+                Zeskanuj
+              </InputActionButton>
             )}
           />
         </Section>
@@ -229,17 +230,21 @@ const Section = styled.View<{
 `
 
 const StyledInput = styled(Input)`
-  /* margin: 5px 0 10px 0; */
-  /* background: blue; */
 `
 
-const CalculateCaloriesButton = styled(Button)`
-  /* padding: 12px 16px;  */
+const InputActionButton = styled(Button)`
+  margin-left: 15px;
 `
 
-const SectionTitle = styled(H2)`
-  /* margin: 0 0 15px 0; */
+const StyledRightArrow = styled(RightArrowIcon)`
+  margin-left: 5px;
 `
+
+const RightArrowI = (
+  <StyledRightArrow width={14} height={14} fill={theme.color.textDark} />
+)
+
+const SectionTitle = styled(H2)``
 
 const Container = styled.KeyboardAvoidingView`
   padding: 20px;

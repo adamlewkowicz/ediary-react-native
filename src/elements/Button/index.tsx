@@ -46,5 +46,5 @@ const Title = styled(Text)<{
   isReverted?: boolean
 }>`
   text-align: center;
-  color: ${props => !props.isReverted ? '#fff' : '#000'};
+  color: ${props => props.theme.color[props.isReverted ? 'textDark' : 'textLight']};
 `

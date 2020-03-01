@@ -22,6 +22,8 @@ const color = {
 
   // @v2
   success: '#2DD266',
+  textDark: '#000',
+  textLight: '#fff',
 
   /** @deprecated color names */
   lightBlue: '#6BB4DD',
