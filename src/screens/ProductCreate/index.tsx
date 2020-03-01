@@ -20,6 +20,8 @@ import { ProductCreateParams } from './params';
 import { useNavigationParams } from '../../hooks/useNavigationParams';
 import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
 import { useNavigation } from 'react-navigation-hooks';
+import { H2, TextInput as Input, Button } from '../../elements';
+import { BarcodeButton } from '../../components/BarcodeButton';
 
 interface ProductCreateProps extends
   NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
@@ -102,7 +104,67 @@ export const ProductCreate = (props: ProductCreateProps) => {
   return (
     <ScrollView>
       <Container>
-        <BasicInput
+        <Section>
+          <SectionTitle>Podstawowe dane</SectionTitle>
+          <StyledInput
+            label="Nazwa"
+            placeholder="Nazwa produktu"
+            value={'Ketchup'}
+            isValid={true}
+          />
+          <StyledInput
+            label="Producent"
+            placeholder="Nazwa producenta"
+          />
+          <StyledInput
+            label="Marka"
+            placeholder="Nazwa marki"
+          />
+        </Section>
+        <Section>
+          <SectionTitle>Makroskładniki</SectionTitle>
+          <StyledInput
+            label="Węglowodany"
+            placeholder="Zawartość węglowodanów"
+          />
+          <StyledInput
+            label="Białko"
+            placeholder="Zawartość białka"
+          />
+          <StyledInput
+            label="Tłuszcze"
+            placeholder="Zawartość tłuszczy"
+          />
+          <StyledInput
+            label="Kalorie"
+            placeholder="Zawartość kalorii"
+            rightContent={(
+              <Button isReverted>Oblicz</Button>
+            )}
+          />
+        </Section>
+        <Section>
+          <SectionTitle>Porcje produktu</SectionTitle>
+        </Section>
+        <Section isLast>
+          <SectionTitle>Inne</SectionTitle>
+          <StyledInput
+            label="Kod kreskowy"
+            placeholder="Kod kreskowy produktu"
+            rightContent={(
+              <>
+                <Button
+                  // rightContent={<BarcodeButton />}
+                  isReverted
+                >
+                  Zeskanuj
+                </Button>
+              </>
+            )}
+          />
+        </Section>
+        <Button>Zapisz produkt</Button>
+        {/* <BasicInput
           label="Nazwa"
           accessibilityLabel="Nazwa produktu"
           value={state.name}
@@ -154,11 +216,30 @@ export const ProductCreate = (props: ProductCreateProps) => {
           onSubmitEditing={handleProductCreate}
           accessibilityLabel="Kod kreskowy"
           styles={InputCss}
-        />
+        /> */}
       </Container>
     </ScrollView>
   );
 }
+
+const Section = styled.View<{
+  isLast?: boolean
+}>`
+  margin-bottom: ${props => props.isLast ? 0 : '30px'};
+`
+
+const StyledInput = styled(Input)`
+  /* margin: 5px 0 10px 0; */
+  /* background: blue; */
+`
+
+const CalculateCaloriesButton = styled(Button)`
+  /* padding: 12px 16px;  */
+`
+
+const SectionTitle = styled(H2)`
+  /* margin: 0 0 15px 0; */
+`
 
 const Container = styled.KeyboardAvoidingView`
   padding: 20px;
@@ -190,14 +271,19 @@ const InputCss = css`
 const navigationOptions: ProductCreateProps['navigationOptions'] = ({ navigation }) => ({
   headerTitle: 'Stwórz produkt',
   headerRight: (
-    <SaveButton
-      onPress={navigation.getParam('_handleProductCreate')}
-      accessibilityLabel="Zapisz produkt"  
-    >
-      <SaveText>Zapisz</SaveText>
-    </SaveButton>
+    <_SaveButton>Zapisz</_SaveButton>
+    // <SaveButton
+    //   onPress={navigation.getParam('_handleProductCreate')}
+    //   accessibilityLabel="Zapisz produkt"  
+    // >
+    //   <SaveText>Zapisz</SaveText>
+    // </SaveButton>
   )
 });
+
+const _SaveButton = styled(Button)`
+  margin-right: 10px;
+`
 
 ProductCreate.navigationOptions = navigationOptions;
 interface ProductCreateOptions {

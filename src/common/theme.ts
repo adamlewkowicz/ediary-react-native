@@ -20,6 +20,9 @@ const color = {
   dark10: '#353344',
   dark20: '#313131',
 
+  // @v2
+  success: '#2DD266',
+
   /** @deprecated color names */
   lightBlue: '#6BB4DD',
   lighterBlue: '#f7fdff',
