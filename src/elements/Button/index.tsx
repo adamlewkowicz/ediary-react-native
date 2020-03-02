@@ -33,8 +33,8 @@ export const Button = (props: ButtonProps) => {
 const Container = styled.TouchableOpacity<{
   isReverted?: boolean
 }>`
-  background-color: ${props => !props.isReverted ? '#455EEA' : '#fff'};
-  border: ${props => `1px solid ${props.isReverted ? '#455EEA' : '#fff'}`};
+  background-color: ${props => !props.isReverted ? props.theme.color.primary : '#fff'};
+  border: ${props => `1px solid ${props.isReverted ? props.theme.color.primary : '#fff'}`};
   min-width: 90px;
   padding: 12px;
   flex-direction: row;

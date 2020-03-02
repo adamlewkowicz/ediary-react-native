@@ -1,6 +1,6 @@
 import React, { ReactNode, useRef } from 'react';
 import styled from 'styled-components/native';
-import { Text } from '../../components/Elements';
+import { Text } from '../../elements';
 import {
   TextInputProps as NativeTextInputProps,
   TextInput as NativeTextInput,
@@ -38,6 +38,7 @@ export const TextInput = (props: TextInputProps) => {
             ref={inputRef}
             accessibilityLabel={accessibilityLabel}
             placeholderTextColor={'#e3e3e3'}
+            placeholderTextColor={theme.color.textTernary}
             {...inputProps}
           />
           {isValid && ValidationIcon}
@@ -60,7 +61,7 @@ const InputContainer = styled.View<{
 
 const Container = styled.TouchableOpacity<{
   isValid?: boolean
-}>`
+}>` 
   margin: 10px 0 25px 0;
 `
 
@@ -72,6 +73,7 @@ const Content = styled.View`
 
 const Input = styled.TextInput`
   font-family: ${props => props.theme.fontWeight.regular};
+  color: ${props => props.theme.color.textDark};
   padding: 15px 0;
   width: auto;
   font-size: 14px;
@@ -83,9 +85,9 @@ const Label = styled(Text)`
   /* text-transform: uppercase;
   font-size: ${props => 12};
   letter-spacing: 2px; */
-  text-transform: uppercase;
-  font-size: 11px;
-  
+  font-size: 12px;
+  /* color: ${props => props.theme.color.textDark}; */
+  /* color: #D6D6D6; */
 `
 
 const ValidationIcon = (

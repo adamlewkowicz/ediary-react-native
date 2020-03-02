@@ -20,7 +20,7 @@ import { ProductCreateParams } from './params';
 import { useNavigationParams } from '../../hooks/useNavigationParams';
 import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
 import { useNavigation } from 'react-navigation-hooks';
-import { H2, TextInput as Input, Button } from '../../elements';
+import { H2, TextInput as Input, Button, H2Dot } from '../../elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { RightArrowIcon } from '../../components/Icons';
 import { theme } from '../../common/theme';
@@ -110,49 +110,61 @@ export const ProductCreate = (props: ProductCreateProps) => {
           <SectionTitle>Podstawowe dane</SectionTitle>
           <StyledInput
             label="Nazwa"
-            placeholder="Nazwa produktu"
-            value={'Ketchup'}
+            placeholder="Mleko UHT 3.2%"
+            value={'Mleko UHT 3.2%'}
             isValid={true}
           />
           <StyledInput
-            label="Producent"
-            placeholder="Nazwa producenta"
+            label="Marka"
+            placeholder="Łaciate"
           />
           <StyledInput
-            label="Marka"
-            placeholder="Nazwa marki"
+            label="Producent"
+            placeholder="Mlekpol"
           />
         </Section>
         <Section>
           <SectionTitle>Makroskładniki</SectionTitle>
-          <StyledInput
-            label="Węglowodany"
-            placeholder="Zawartość węglowodanów"
-          />
+          <MultipleInputsContainer>
+            <StyledInput
+              label="Węglowodany"
+              placeholder="0"
+            />
+            <StyledInput
+              label="w tym cukry"
+              placeholder="0"
+            />
+          </MultipleInputsContainer>
           <StyledInput
             label="Białko"
-            placeholder="Zawartość białka"
+            placeholder="0"
           />
-          <StyledInput
-            label="Tłuszcze"
-            placeholder="Zawartość tłuszczy"
-          />
+          <MultipleInputsContainer>
+            <StyledInput
+              label="Tłuszcze"
+              placeholder="0"
+            />
+            <StyledInput
+              label="w tym kwasy tłuszczowe"
+              placeholder="0"
+            />
+          </MultipleInputsContainer>
           <StyledInput
             label="Kalorie"
-            placeholder="Zawartość kalorii"
+            placeholder="0"
             rightContent={(
               <InputActionButton isReverted>Oblicz</InputActionButton>
             )}
           />
         </Section>
         <Section>
-          <SectionTitle>Porcje produktu</SectionTitle>
+          <SectionTitle>Porcje</SectionTitle>
         </Section>
         <Section isLast>
           <SectionTitle>Inne</SectionTitle>
           <StyledInput
             label="Kod kreskowy"
-            placeholder="Kod kreskowy produktu"
+            placeholder="5900820000011"
             rightContent={(
               <InputActionButton
                 // rightContent={<BarcodeButton />}
@@ -223,17 +235,22 @@ export const ProductCreate = (props: ProductCreateProps) => {
   );
 }
 
+const MultipleInputsContainer = styled.View`
+  flex-direction: row;s
+`
+
 const Section = styled.View<{
   isLast?: boolean
 }>`
-  margin-bottom: ${props => props.isLast ? 0 : '30px'};
+  margin-bottom: ${props => props.isLast ? 0 : '35px'};
 `
 
 const StyledInput = styled(Input)`
+  flex: 1;
 `
 
 const InputActionButton = styled(Button)`
-  margin-left: 15px;
+  margin-left: 20px;
 `
 
 const StyledRightArrow = styled(RightArrowIcon)`
@@ -241,13 +258,14 @@ const StyledRightArrow = styled(RightArrowIcon)`
 `
 
 const RightArrowI = (
-  <StyledRightArrow width={14} height={14} fill={theme.color.textDark} />
+  <StyledRightArrow width={14} height={14} fill={theme.color.primary} />
 )
 
-const SectionTitle = styled(H2)``
+const SectionTitle = styled(H2Dot)``
 
 const Container = styled.KeyboardAvoidingView`
-  padding: 20px;
+  padding: ${props => props.theme.padding.screen};
+  background: ${props => props.theme.color.background};
 `
 
 const InfoTitle = styled.Text`

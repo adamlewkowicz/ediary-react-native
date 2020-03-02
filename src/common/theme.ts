@@ -1,6 +1,6 @@
 
 const color = {
-  focus: '#5361E0',
+  focus: '#455EEA',
   secondary: '#C7C6CB',
   
   carbs: '#8AE4A5',
@@ -22,8 +22,24 @@ const color = {
 
   // @v2
   success: '#2DD266',
-  textDark: '#000',
+  textDark: '#3C495B',
+
+  
+  textDark: '#263579',
+
+  
+
+
   textLight: '#fff',
+  textSecondary: '#57616E',
+  textTernary: '#C7C7CF',
+
+  // primary: '#455EEA',
+  primary: '#407CFF',
+
+
+
+  background: '#fff',
 
   /** @deprecated color names */
   lightBlue: '#6BB4DD',
@@ -65,7 +81,8 @@ export const theme = {
     button: 8,
   },
   padding: {
-    button: '12px 15px'
+    button: '12px 15px',
+    screen: '20px',
   }
 } as const;
 
