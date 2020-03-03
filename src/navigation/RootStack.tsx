@@ -11,6 +11,7 @@ import { theme } from '../common/theme';
 import { useSelector } from 'react-redux';
 import { APP_ROUTE } from './consts';
 import { Selectors } from '../store';
+import { useNetworkSubscription } from '../hooks';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -21,6 +22,7 @@ export type RootStackParamList = {
 }
 
 export const RootStack = () => {
+  useNetworkSubscription();
   const appStatus = useSelector(Selectors.getAppStatus);
   
   return (
