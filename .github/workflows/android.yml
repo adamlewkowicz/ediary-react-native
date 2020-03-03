@@ -27,6 +27,7 @@ jobs:
         ./gradlew assembleRelease
 
     - uses: actions/upload-artifact@master
+      if: {{ github.ref == 'ref/head/master' }}
       with:
         name: ediary-release
         path: ./android/app/build/outputs/apk/release/app-release.apk
