@@ -7,6 +7,7 @@ import { NavigationScreenProps } from 'react-navigation';
 import { databaseConfig } from '../../database/config/config';
 import { getOrCreateConnection } from '../../database/utils/getOrCreateConnection';
 import styled from 'styled-components/native';
+import SplashScreen from 'react-native-splash-screen';
 
 interface AppLoadingProps extends NavigationScreenProps {}
 
@@ -54,6 +55,8 @@ export class AppLoading extends React.Component<AppLoadingProps> {
     } else {
       this.props.navigation.navigate('Main');
     }
+
+    SplashScreen.hide();
   }
 
   render() {
