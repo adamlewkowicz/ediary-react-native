@@ -2,8 +2,6 @@ import { createStore, applyMiddleware, Store, Action } from 'redux';
 import { rootReducer } from './reducers';
 import thunk, { ThunkAction } from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension';
-import * as Actions from './actions';
-import * as Selectors from './selectors';
 
 export function configureStore(
   initialState?: Partial<StoreState>
@@ -39,6 +37,3 @@ export type Thunk<
   R = void,
   A extends Action = Action<string>
 > = ThunkAction<R, StoreState, void, A>;
-
-export { Actions };
-export { Selectors };
