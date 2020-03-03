@@ -2,16 +2,16 @@ import { BASE_MACRO_ELEMENTS } from '../../common/consts';
 import { MacroElements } from '../../types';
 import { StoreState } from '..';
 import { createSelector } from 'reselect';
-import { macroNeeds } from './user';
+import { getMacroNeeds } from './user';
 import { calcMacroNeedsLeft } from '../../common/utils';
 
 const baseMacro: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 
-const meals = (state: StoreState) => state.diary.meals;
-const products = (state: StoreState) => state.diary.products;
+const getMeals = (state: StoreState) => state.diary.meals;
+const getProducts = (state: StoreState) => state.diary.products;
 
-const calcedProducts = createSelector(
-  products,
+const getCalcedProducts = createSelector(
+  getProducts,
   products => products.map(product => ({
     ...product,
     carbs: Math.round(product.macro.carbs * product.quantity / 100),
@@ -21,9 +21,9 @@ const calcedProducts = createSelector(
   })
 ));
 
-const mealsWithProducts = createSelector(
-  meals,
-  calcedProducts,
+const getMealsWithProducts = createSelector(
+  getMeals,
+  getCalcedProducts,
   (meals, products) => meals.map(meal => ({
     ...meal,
     products: meal.productIds.flatMap(productId => {
@@ -33,8 +33,8 @@ const mealsWithProducts = createSelector(
   }))
 );
 
-export const calcedMeals = createSelector(
-  mealsWithProducts,
+export const getCalcedMeals = createSelector(
+  getMealsWithProducts,
   meals => meals.map(meal => {
     const summedMacro = meal.products.reduce((macro, product) => ({
       ...macro,
@@ -48,8 +48,8 @@ export const calcedMeals = createSelector(
   })
 );
 
-export const mealsWithRatio = createSelector(
-  calcedMeals,
+export const getMealsWithRatio = createSelector(
+  getCalcedMeals,
   meals => meals
     .map(meal => {
       const macroSum = meal.carbs + meal.prots + meal.fats;
@@ -66,8 +66,8 @@ export const mealsWithRatio = createSelector(
     })
 );
 
-const mealsMacroSum = createSelector(
-  calcedMeals,
+const getMealsMacroSum = createSelector(
+  getCalcedMeals,
   meals => meals.reduce((sum, meal) => ({
     ...sum,
     carbs: Math.round(sum.carbs + meal.carbs),
@@ -77,12 +77,8 @@ const mealsMacroSum = createSelector(
   }), { ...baseMacro })
 );
 
-export const macroNeedsLeft = createSelector(
-  mealsMacroSum,
-  macroNeeds,
+export const getMacroNeedsLeft = createSelector(
+  getMealsMacroSum,
+  getMacroNeeds,
   (macroSum, macroNeeds) => calcMacroNeedsLeft(macroSum, macroNeeds)
 );
-
-export type MacroNeedsLeft = ReturnType<typeof macroNeedsLeft>;
-export type MealsWithRatio = ReturnType<typeof mealsWithRatio>;
-export type MacroNeeds = ReturnType<typeof macroNeeds>;

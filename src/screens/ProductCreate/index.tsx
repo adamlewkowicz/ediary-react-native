@@ -1,4 +1,4 @@
-import React, { useReducer, useRef, createRef, useEffect } from 'react';
+import React, { useReducer, useRef, createRef } from 'react';
 import styled, { css } from 'styled-components/native';
 import { BasicInput, BasicInputRef } from '../../components/BasicInput';
 import {
@@ -10,22 +10,19 @@ import {
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { InputRow } from '../../components/InputRow';
 import { Options } from '../../components/Options';
-import { NavigationScreenProps } from 'react-navigation';
-import { useUserId } from '../../hooks';
+import { useUserId, useNavigationData } from '../../hooks';
 import { Product } from '../../database/entities';
 import { parseNumber } from '../../common/utils';
 import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
-import { ProductCreateParams } from './params';
-import { useNavigationParams } from '../../hooks/useNavigationParams';
 import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
-import { useNavigation } from 'react-navigation-hooks';
+import { ProductCreateScreenNavigationProps } from '../../navigation';
+import { Button } from '../../components/Button';
 
-interface ProductCreateProps extends
-  NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
+interface ProductCreateScreenProps {}
 
-export const ProductCreate = (props: ProductCreateProps) => {
-  const params = useNavigationParams<ProductCreateParams>();
+export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
+  const { params, navigation } = useNavigationData<ProductCreateScreenNavigationProps>();
   const [state, dispatch] = useReducer(
     productCreateReducer,
     params,
@@ -42,7 +39,6 @@ export const ProductCreate = (props: ProductCreateProps) => {
     kcal: createRef<TextInput>(),
     barcode: createRef<TextInput>(),
   });
-  const navigation = useNavigation();
 
   function handleUpdate(payload: Partial<ProductCreateState>) {
     dispatch({
@@ -87,10 +83,6 @@ export const ProductCreate = (props: ProductCreateProps) => {
 
     params.onProductCreated?.(createdProduct);
   }
-  
-  useEffect(() => {
-    navigation.setParams({ _handleProductCreate: handleProductCreate });
-  }, [state]);
 
   function handlePortionOptionChange(option: PortionOption) {
     dispatch({
@@ -98,6 +90,17 @@ export const ProductCreate = (props: ProductCreateProps) => {
       payload: option
     });
   }
+
+  navigation.setOptions({
+    headerRight: () => (
+      <SaveButton
+        onPress={handleProductCreate}
+        accessibilityLabel="Zapisz produkt"  
+      >
+        <SaveText>Zapisz</SaveText>
+      </SaveButton>
+    )
+  });
 
   return (
     <ScrollView>
@@ -155,6 +158,12 @@ export const ProductCreate = (props: ProductCreateProps) => {
           accessibilityLabel="Kod kreskowy"
           styles={InputCss}
         />
+        <SaveProductButton
+          accessibilityLabel="Zapisz produkt"
+          onPress={handleProductCreate}
+        >
+          Zapisz produkt
+        </SaveProductButton>
       </Container>
     </ScrollView>
   );
@@ -187,20 +196,6 @@ const InputCss = css`
   margin-bottom: 10px;
 `
 
-const navigationOptions: ProductCreateProps['navigationOptions'] = ({ navigation }) => ({
-  headerTitle: 'Stwórz produkt',
-  headerRight: (
-    <SaveButton
-      onPress={navigation.getParam('_handleProductCreate')}
-      accessibilityLabel="Zapisz produkt"  
-    >
-      <SaveText>Zapisz</SaveText>
-    </SaveButton>
-  )
-});
-
-ProductCreate.navigationOptions = navigationOptions;
-interface ProductCreateOptions {
-  headerTitle: string
-  headerRight: JSX.Element
-}
+const SaveProductButton = styled(Button)`
+  margin-top: 20px;
+`

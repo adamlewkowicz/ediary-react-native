@@ -12,7 +12,7 @@ import { Button } from '../../components/Button';
 import { Heading } from '../../components/Elements/Heading';
 import { WeightGoal } from '../../types';
 import { useDispatch } from 'react-redux';
-import { useUserId, useNavigate } from '../../hooks';
+import { useUserId } from '../../hooks';
 import { IProfileRequired } from '../../database/entities';
 import { STEP_TITLES } from './consts';
 import { Actions } from '../../store';
@@ -20,9 +20,9 @@ import { NumericPicker } from '../../components/NumericPicker';
 import { fillArrayWithinRange } from '../../common/utils';
 import { SelectionOptions } from '../../components/SelectionOptions';
 
-export interface ProfileCreateProps {}
+interface ProfileCreateScreenProps {}
 
-export const ProfileCreate = (props: ProfileCreateProps) => {
+export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
   const [step, setStep] = useState<0 | 1 | 2>(0);
   const [male, setMale] = useState(true);
   const [height, setHeight] = useState(175);
@@ -31,7 +31,6 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
   const [weightGoal, setWeightGoal] = useState<WeightGoal>('maintain');
   const dispatch = useDispatch();
   const userId = useUserId();
-  const navigate = useNavigate();
 
   async function handleProfileCreate() {
     const profile: IProfileRequired = { male, height, weightGoal, weight, age, userId };
@@ -40,7 +39,9 @@ export const ProfileCreate = (props: ProfileCreateProps) => {
       Actions.userProfileCreate(profile)
     );
 
-    navigate('Main');
+    dispatch(
+      Actions.appStatusUpdated('INITIALIZED')
+    );
   }
 
   const isLastStep = step === 2;

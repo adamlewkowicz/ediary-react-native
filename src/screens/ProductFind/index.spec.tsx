@@ -2,17 +2,16 @@ import React from 'react';
 import { fireEvent } from '@testing-library/react-native';
 import { renderSetup } from '../../../__tests__/utils';
 import { Product } from '../../database/entities';
-import { configureStore } from '../../store';
-import { ProductFind } from '.';
-import { ProductFindParams } from './params';
+import { ProductFindScreen } from '.';
+import { ProductFindScreenNavigationProps } from '../../navigation';
 
-describe('<ProductFind />', () => {
+describe('<ProductFindScreen />', () => {
 
   describe('when searches for product 🔎', () => {
 
     it('should display found products', async () => {
       const productMock = await Product.save({ name: 'tomatoe' });
-      const ctx = renderSetup(<ProductFind />);
+      const ctx = renderSetup(<ProductFindScreen />);
   
       const productFindInput = ctx.getByLabelText('Nazwa szukanego produktu');
       fireEvent.changeText(productFindInput, productMock.name);
@@ -23,11 +22,13 @@ describe('<ProductFind />', () => {
     describe('when presses on found product', () => {
 
       it('should return choosen product as product resolver', async () => {
-        const paramsMock: ProductFindParams = {
+        const paramsMock = {
           onItemPress: jest.fn()
         }
         const productMock = await Product.save({ name: 'tomatoe' });
-        const ctx = renderSetup(<ProductFind />, { params: paramsMock });
+        const ctx = renderSetup<ProductFindScreenNavigationProps>(
+          <ProductFindScreen />, { params: paramsMock }
+        );
     
         const productFindInput = ctx.getByLabelText('Nazwa szukanego produktu');
         fireEvent.changeText(productFindInput, productMock.name);
@@ -44,7 +45,7 @@ describe('<ProductFind />', () => {
     describe('when no products were found 🚫', () => {
 
       it('should display product create button', async () => {
-        const ctx = renderSetup(<ProductFind />);
+        const ctx = renderSetup(<ProductFindScreen />);
   
         const productFindInput = ctx.getByLabelText('Nazwa szukanego produktu');
         fireEvent.changeText(productFindInput, 'abc');
@@ -66,11 +67,9 @@ describe('<ProductFind />', () => {
     const productMock = await Product.save({ name: 'Fish' });
     // store has to be mocked, since recent products are fetched on home screen and
     // after interactions has been finished
-    const store = configureStore({
-      productHistory: [productMock]
-    });
+    const initialState = { productHistory: [productMock] };
   
-    const ctx = renderSetup(<ProductFind />, { store });
+    const ctx = renderSetup(<ProductFindScreen />, { initialState });
   
     await ctx.findByText(productMock.name);
   });
@@ -78,7 +77,7 @@ describe('<ProductFind />', () => {
   describe('when presses on barcode button', () => {
 
     it('should navigate to barcode scan screen 🧭', async () => {
-      const ctx = renderSetup(<ProductFind />);
+      const ctx = renderSetup(<ProductFindScreen />);
 
       const barcodeScanNavButton = await ctx.findByLabelText('Zeskanuj kod kreskowy');
       fireEvent.press(barcodeScanNavButton);

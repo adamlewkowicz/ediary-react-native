@@ -1,26 +1,27 @@
 import React, { useState, useMemo } from 'react';
-import { NavigationScreenProps } from 'react-navigation';
 import { H1, Text, Block, TitleSecondary } from '../../components/Elements';
 import { DiarySummaryChart } from '../../components/DiarySummaryChart';
 import { Meal } from '../../database/entities';
-import { connect } from 'react-redux';
-import { StoreState, Selectors } from '../../store';
+import { useSelector } from 'react-redux';
+import { Selectors } from '../../store';
 import { calcMacroNeedsLeft } from '../../common/utils';
-import { DateDay, MacroElements } from '../../types';
+import { MacroElements } from '../../types';
 import styled from 'styled-components/native';
 import { MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitlesLong, baseMacro } from '../../common/helpers';
 import { RatioInfo } from '../../components/RatioInfo';
-import { useFocusedEffect } from '../../hooks';
+import { useFocusEffect } from '@react-navigation/native';
 
-interface DiarySummaryProps extends MapStateProps, NavigationScreenProps {}
+interface DiarySummaryScreenProps {}
 
-const DiarySummary = (props: DiarySummaryProps) => {
+export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
   const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...baseMacro }));
   const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]);
+  const macroNeeds = useSelector(Selectors.getMacroNeeds);
+  const todayDay = useSelector(Selectors.getAppDay);
 
   async function handleMacroSummaryFetch() {
-    const result = await Meal.getMacroSummary(props.todayDay);
+    const result = await Meal.getMacroSummary(todayDay);
     setMacroSummary(result.average);
     setHistoryRecords(result.data.map(record => ({
       value: record.kcal,
@@ -28,35 +29,28 @@ const DiarySummary = (props: DiarySummaryProps) => {
     })));
   }
 
-  useFocusedEffect(() => {
+  useFocusEffect(() => {
     handleMacroSummaryFetch();
   });
 
-  const macroNeeds = useMemo(() => 
-    calcMacroNeedsLeft(macroSummary, props.macroNeeds),
-    [macroSummary, props.macroNeeds] 
+  const macroNeedsLeft = useMemo(() => 
+    calcMacroNeedsLeft(macroSummary, macroNeeds),
+    [macroSummary, macroNeeds] 
   );
 
   return (
     <Container>
-      <H1 margin="5px 0">Podsumowanie</H1>
-      <TitleSecondary margin="0 0 10px 0">
-        Dzienne spożycie kalorii
-      </TitleSecondary>
+      <Header>Podsumowanie</Header>
+      <Description>Dzienne spożycie kalorii</Description>
       <DiarySummaryChart
-        dateFormat="ddd D/M"
+        dateFormat={CHART_DATE_FORMAT}
         data={historyRecords}
       />
-      <H1 margin="5px 0">Makroskładniki</H1>
-      <TitleSecondary margin="0 0 10px 0">
-        Średnie dzienne spożycie
-      </TitleSecondary>
+      <Header>Makroskładniki</Header>
+      <Description>Średnie dzienne spożycie</Description>
       {MACRO_ELEMENTS.map(element => (
-        <Block
+        <MacroElementContainer
           key={element}
-          space="space-between"
-          align="flex-end"
-          marginVertical={12}
           accessibilityLabel="Średnia wartość makroskładniku"
         >
           <Text priority={0}>
@@ -64,25 +58,31 @@ const DiarySummary = (props: DiarySummaryProps) => {
             ({element === 'kcal' ? 'kcal' : 'g'})
           </Text>
           <Block align="flex-end">
-            <RatioInfo
+            <StyledRatioInfo
               allowedDiff={15}
-              ratio={macroNeeds[element].ratio}
-              value={macroNeeds[element].diff}
-              margin="0 8px 0 0"
-              size="tiny"
+              ratio={macroNeedsLeft[element].ratio}
+              value={macroNeedsLeft[element].diff}
             />
             <Text size="big" margin="0 5px 0 0">
               {Math.round(macroSummary[element])}
             </Text>
             <Text size="regular" priority={3}>
-              / {props.macroNeeds[element]}
+              / {macroNeeds[element]}
             </Text>
           </Block>
-        </Block>
+        </MacroElementContainer>
       ))}
     </Container>
   );
 }
+
+const Header = styled(H1)`
+  margin: 5px 0;
+`
+
+const Description = styled(TitleSecondary)`
+  margin: 0 0 10px 0;
+`
 
 const Container = styled.ScrollView`
   padding: 15px;
@@ -90,18 +90,18 @@ const Container = styled.ScrollView`
   min-height: 100%;
 `
 
-interface MapStateProps {
-  macroNeeds: Selectors.MacroNeeds
-  todayDay: DateDay
-}
+const MacroElementContainer = styled.View`
+  justify-content: space-between;
+  align-items: center;
+  margin: 12px 0;
+`
 
-const mapStateToProps = (state: StoreState): MapStateProps => ({
-  macroNeeds: Selectors.macroNeeds(state),
-  todayDay: state.application.todayDay,
-});
-const DiarySummaryConnected = connect(mapStateToProps)(DiarySummary);
+const StyledRatioInfo = styled(RatioInfo)`
+  margin: 0 8px 0 0;
+  font-size: ${props => props.theme.fontSize.tiny};
+`
 
-export { DiarySummaryConnected as DiarySummary };
+const CHART_DATE_FORMAT = 'ddd D/M';
 
 type HistoryRecord = {
   value: number

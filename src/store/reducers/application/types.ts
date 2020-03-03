@@ -1,4 +1,4 @@
-import { DateDay } from '../../../types';
+import { DateDay, ApplicationStatus } from '../../../types';
 
 export interface ApplicationState {
   date: Date
@@ -6,6 +6,5 @@ export interface ApplicationState {
   todayDate: Date
   todayDay: DateDay
   isConnected: boolean
-  initialized: boolean
-  status: 'INITIALIZING' | 'CREATING PROFILE'
+  status: ApplicationStatus
 }

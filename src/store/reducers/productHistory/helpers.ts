@@ -4,7 +4,7 @@ import {
   MEAL_ADDED,
 } from '../../consts';
 import { Product } from '../../../database/entities';
-import { ProductHistoryAction } from '../../actions/types/productHistory';
+import { ProductHistoryAction } from '../../actions';
 
 export const getProductsFromAction = (action: ProductHistoryAction): Product[] => {
   switch(action.type) {

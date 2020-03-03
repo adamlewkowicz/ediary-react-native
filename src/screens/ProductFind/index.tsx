@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
 import { ProductListItemMemo, Separator } from '../../components/ProductListItem';
@@ -6,23 +6,18 @@ import { InputSearcher } from '../../components/InputSearcher';
 import { Block, Title } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { Button } from '../../components/Button';
-import {
-  useNavigate,
-  useNavigationParams,
-  useProductsSearch,
-} from '../../hooks';
+import { useProductsSearch, useNavigationData } from '../../hooks';
 import { useSelector } from 'react-redux';
-import { StoreState } from '../../store';
+import { Selectors } from '../../store';
 import { FlatList } from 'react-native';
-import { ProductFindParams } from './params';
+import { ProductFindScreenNavigationProps } from '../../navigation';
 
-interface ProductFindProps {}
+interface ProductFindScreenProps {}
 
-export const ProductFind = (props: ProductFindProps) => {
-  const params = useNavigationParams<ProductFindParams>();
-  const recentProducts = useSelector((state: StoreState) => state.productHistory);
+export const ProductFindScreen = (props: ProductFindScreenProps) => {
+  const { params, navigate } = useNavigationData<ProductFindScreenNavigationProps>();
+  const recentProducts = useSelector(Selectors.getProductHistory);
   const hasBeenPressed = useRef(false);
-  const navigate = useNavigate();
   const {
     state,
     isConnected,
@@ -52,7 +47,7 @@ export const ProductFind = (props: ProductFindProps) => {
     });
   }
 
-  async function handleItemPress(product: ProductOrNormalizedProduct) {
+  const handleItemPress = useCallback((product: ProductOrNormalizedProduct) => {
     if (params.onItemPress && !hasBeenPressed.current) {
       hasBeenPressed.current = true;
 
@@ -65,7 +60,7 @@ export const ProductFind = (props: ProductFindProps) => {
 
       params.onItemPress(productResolver);
     }
-  }
+  }, [params]);
 
   function RenderInfo() {
     const {
@@ -135,7 +130,7 @@ export const ProductFind = (props: ProductFindProps) => {
         renderItem={({ item: product }) => (
           <ProductListItemMemo
             product={product}
-            onPress={() => handleItemPress(product)}
+            onPress={handleItemPress}
             accessibilityLabel="Dodaj produkt do posiłku"
             accessibilityHint="Wraca na główną stronę i dodaje produkt do posiłku"
           />
@@ -168,10 +163,6 @@ const AddOwnProductButton = styled(Button)`
 const productKeyExtractor = (product: ProductOrNormalizedProduct): string => {
   const productId = '_id' in product ? product._id : product.id;
   return String(productId);
-}
-
-ProductFind.navigationOptions = {
-  headerTitle: 'Znajdź produkt'
 }
 
 export type ProductResolver = () => Promise<Product>;
