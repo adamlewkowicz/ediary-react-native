@@ -68,7 +68,8 @@ describe('<NutritionHomeScreen />', () => {
 
       expect(addedProduct).toBeTruthy();
       expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledTimes(2);
-      expect(ctx.mocks.navigationContext.navigate).toHaveBeenNthCalledWith(2, 'NutritionHomeScreen', undefined);
+      expect(ctx.mocks.navigationContext.navigate).toHaveBeenNthCalledWith(1, 'ProductFind', expect.any(Object));
+      expect(ctx.mocks.navigationContext.navigate).toHaveBeenNthCalledWith(2, 'NutritionHome');
       expect(await MealProduct.findOneOrFail({ productId: productMock.id })).toBeInstanceOf(MealProduct);
     });
     

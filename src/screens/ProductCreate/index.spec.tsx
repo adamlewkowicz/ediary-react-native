@@ -1,9 +1,10 @@
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react-native';
-import { App } from '../../../__tests__/utils';
+import { fireEvent } from '@testing-library/react-native';
 import { Product } from '../../database/entities';
+import { ProductCreateScreen } from '.';
+import { renderSetup } from '../../../__tests__/utils';
 
-describe('<ProductCreate />', () => {
+describe('<ProductCreateScreen />', () => {
 
   it('creating new product should work', async () => {
     const productMock = {
@@ -20,7 +21,7 @@ describe('<ProductCreate />', () => {
     }
     const productSaveSpy = jest.spyOn(Product, 'save');
     // need to render whole app with navigation top bar button
-    const ctx = render(<App screen="ProductCreate" />);
+    const ctx = renderSetup(<ProductCreateScreen />);
 
     const nameInput = ctx.getByLabelText('Nazwa produktu');
     const producerInput = ctx.getByLabelText('Producent');

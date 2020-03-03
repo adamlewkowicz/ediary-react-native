@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
 import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
+import { Button } from '../../components/Button';
 
 interface ProductCreateScreenProps {}
 
@@ -157,6 +158,12 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           accessibilityLabel="Kod kreskowy"
           styles={InputCss}
         />
+        <SaveProductButton
+          accessibilityLabel="Zapisz produkt"
+          onPress={handleProductCreate}
+        >
+          Zapisz produkt
+        </SaveProductButton>
       </Container>
     </ScrollView>
   );
@@ -187,4 +194,8 @@ const OptionsContainer = styled.View`
 
 const InputCss = css`
   margin-bottom: 10px;
+`
+
+const SaveProductButton = styled(Button)`
+  margin-top: 20px;
 `
