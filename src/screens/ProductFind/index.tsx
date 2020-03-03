@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
 import { ProductListItemMemo, Separator } from '../../components/ProductListItem';
@@ -47,7 +47,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
     });
   }
 
-  async function handleItemPress(product: ProductOrNormalizedProduct) {
+  const handleItemPress = useCallback((product: ProductOrNormalizedProduct) => {
     if (params.onItemPress && !hasBeenPressed.current) {
       hasBeenPressed.current = true;
 
@@ -60,7 +60,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
 
       params.onItemPress(productResolver);
     }
-  }
+  }, [params]);
 
   function RenderInfo() {
     const {
@@ -130,7 +130,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
         renderItem={({ item: product }) => (
           <ProductListItemMemo
             product={product}
-            onPress={() => handleItemPress(product)}
+            onPress={handleItemPress}
             accessibilityLabel="Dodaj produkt do posiłku"
             accessibilityHint="Wraca na główną stronę i dodaje produkt do posiłku"
           />

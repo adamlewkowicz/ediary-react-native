@@ -1,28 +1,27 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { TouchableOpacityProps } from 'react-native';
 import { NutritionBox } from '../NutritionBox';
+import { TouchableOpacityProps } from 'react-native';
 
-interface ProductListItemProps extends TouchableOpacityProps {
-  product: {
-    name: string
-    portion: number
-    macro: {
-      carbs: number
-      prots: number
-      fats: number
-      kcal: number
-    }
-    brand?: string
-  }
+interface ProductListItemProps<T extends ProductLike>
+  extends Omit<TouchableOpacityProps, 'onPress'>
+{
+  product: T
+  onPress: (product: T) => void
 }
 
-const ProductListItem = ({
-  product,
-  ...props
-}: ProductListItemProps) => {
+const ProductListItem = <T extends ProductLike>(props: ProductListItemProps<T>) => {
+  const {
+    product,
+    onPress,
+    ...touchableProps
+  } = props;
+
   return (
-    <Container {...props}>
+    <Container
+    {...touchableProps}
+      onPress={() => onPress(product)}
+    >
       <Name>
         {product.name}
         {product.brand && ` (${product.brand})`}
@@ -101,4 +100,16 @@ export const Separator = styled.View`
   background: ${props => props.theme.color.gray10};
 `
 
-export const ProductListItemMemo = React.memo(ProductListItem);
+export const ProductListItemMemo = React.memo(ProductListItem) as typeof ProductListItem;
+
+interface ProductLike {
+  name: string
+  portion: number
+  macro: {
+    carbs: number
+    prots: number
+    fats: number
+    kcal: number
+  }
+  brand?: string
+}
