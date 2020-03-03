@@ -1,6 +1,4 @@
 import React from 'react';
-import { mapping, light as lightTheme } from '@eva-design/eva';
-import { ApplicationProvider } from 'react-native-ui-kitten';
 import { Provider } from 'react-redux';
 import { store, Actions } from './store';
 import { ThemeProvider } from 'styled-components/native';
@@ -34,12 +32,7 @@ export class App extends React.Component<AppProps> {
     return (
       <Provider store={store}>
         <ThemeProvider theme={theme}>
-          <ApplicationProvider
-            mapping={mapping}
-            theme={lightTheme}
-          >
-            <RootStack />
-          </ApplicationProvider>
+          <RootStack />
         </ThemeProvider>
       </Provider>
     );
