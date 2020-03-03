@@ -4,7 +4,6 @@ import {
   PORTION_TYPES,
   UNIT_TYPES,
 } from '../common/consts';
-import * as Screens from '../screens';
 import { NavigationProp, ParamListBase, RouteProp } from '@react-navigation/native';
 
 export type UnitType = typeof UNIT_TYPES[number];
@@ -25,14 +24,7 @@ export type PortionType = typeof PORTION_TYPES[number];
 
 export type WeightGoal = 'decrease' | 'maintain' | 'increase';
 
-export type Screen = keyof typeof Screens | 'Main' | 'AppLoading';
-
 export type Environment = 'development' | 'test' | 'production';
-
-export interface NavigationScreenProps<N, R = unknown> {
-  navigation: N
-  route: R
-}
 
 export type ApplicationStatus = 'INITIALIZING' | 'CREATING PROFILE' | 'INITIALIZED';
 

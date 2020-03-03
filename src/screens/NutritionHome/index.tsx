@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { StoreState, Selectors, Actions } from '../../store';
+import { Selectors, Actions } from '../../store';
 import { FlatList, Alert, ScrollView } from 'react-native';
 import { DateChanger } from '../../components/DateChanger';
 import { MacroCard } from '../../components/MacroCard';
@@ -27,12 +27,8 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const dispatch = useDispatch();
   const appDate = useSelector(Selectors.getAppDate);
   const appDateDay = useSelector(Selectors.getAppDay);
-  const macroNeedsLeft = useSelector<StoreState, Selectors.GetMacroNeedsLeft>(
-    Selectors.getMacroNeedsLeft
-  );
-  const mealsWithRatio = useSelector<StoreState, Selectors.GetMealsWithRatio>(
-    Selectors.getMealsWithRatio
-  );
+  const macroNeedsLeft = useSelector(Selectors.getMacroNeedsLeft);
+  const mealsWithRatio = useSelector(Selectors.getMealsWithRatio);
 
   useAfterInteractions(() => dispatch(Actions.productHistoryRecentLoad()));
 

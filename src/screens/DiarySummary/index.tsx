@@ -3,7 +3,7 @@ import { H1, Text, Block, TitleSecondary } from '../../components/Elements';
 import { DiarySummaryChart } from '../../components/DiarySummaryChart';
 import { Meal } from '../../database/entities';
 import { useSelector } from 'react-redux';
-import { StoreState, Selectors } from '../../store';
+import { Selectors } from '../../store';
 import { calcMacroNeedsLeft } from '../../common/utils';
 import { MacroElements } from '../../types';
 import styled from 'styled-components/native';
@@ -17,9 +17,7 @@ interface DiarySummaryScreenProps {}
 export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
   const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...baseMacro }));
   const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]);
-  const macroNeeds = useSelector<StoreState, Selectors.GetMacroNeeds>(
-    Selectors.getMacroNeeds
-  );
+  const macroNeeds = useSelector(Selectors.getMacroNeeds);
   const todayDay = useSelector(Selectors.getAppDay);
 
   async function handleMacroSummaryFetch() {

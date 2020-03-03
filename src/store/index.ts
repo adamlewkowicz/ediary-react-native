@@ -35,12 +35,10 @@ export const store = configureStore();
 export type StoreState = ReturnType<typeof rootReducer>;
 export { StoreState as AppState };
 
-export type Thunk<R = void, A extends Action = Action<string>> = ThunkAction<R, StoreState, void, A>;
-
-export interface Dispatch {
-  <R>(action: Thunk<R>): R
-  <A extends Action>(action: A): A
-}
+export type Thunk<
+  R = void,
+  A extends Action = Action<string>
+> = ThunkAction<R, StoreState, void, A>;
 
 export { Actions };
 export { Selectors };
