@@ -82,3 +82,5 @@ export const getMacroNeedsLeft = createSelector(
   getMacroNeeds,
   (macroSum, macroNeeds) => calcMacroNeedsLeft(macroSum, macroNeeds)
 );
+
+export type MealsWithRatio = ReturnType<typeof getMealsWithRatio>;

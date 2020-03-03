@@ -1,10 +1,10 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import { ProductListItem } from '.';
+import { ProductListItemMemo } from '.';
 
 storiesOf('ProductListItem', module)
   .add('default', () => (
-    <ProductListItem
+    <ProductListItemMemo
       product={{
         name: 'Pad Thai',
         macro: {
@@ -15,5 +15,6 @@ storiesOf('ProductListItem', module)
         },
         portion: 150
       }}
+      onPress={() => {}}
     />
   ))
