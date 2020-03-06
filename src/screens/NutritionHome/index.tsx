@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../../store';
-import { FlatList, Alert, ScrollView } from 'react-native';
+import { FlatList, Alert, ScrollView, ToastAndroid } from 'react-native';
 import { DateChanger } from '../../components/DateChanger';
 import { MacroCard } from '../../components/MacroCard';
 import { theme } from '../../common/theme';
@@ -62,7 +62,14 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   
   const handleProductCreateNavigation = () => {
     navigate('ProductCreate', {
-      onProductCreated: () => navigate('NutritionHome')
+      onProductCreated(createdProduct) {
+        navigate('NutritionHome');
+
+        ToastAndroid.show(
+          `Utworzono produkt: "${createdProduct.name}"`,
+          500
+        );
+      }
     });
   }
 
