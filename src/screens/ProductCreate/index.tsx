@@ -18,6 +18,8 @@ import { Actions } from '../../store';
 import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
 import { Button } from '../../components/Button';
+import { Input } from '../../elements/Input';
+import { H2, H3 } from '../../elements/Text';
 
 interface ProductCreateScreenProps {}
 
@@ -105,6 +107,56 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
   return (
     <ScrollView>
       <Container>
+        <Section>
+          <H2>Podstawowe dane:</H2>
+          <Input 
+            label="Nazwa:"
+            placeholder="Mleko UHT 3.2 %"
+          />
+          <Input 
+            label="Marka:"
+            placeholder="Łaciate"
+          />
+          <Input 
+            label="Producent:"
+            placeholder="Mlekovita"
+            value={'Mlekovita'}
+          />
+        </Section>
+        <Section>
+          <H2>Makroskładniki:</H2>
+          <H3>Na 100g produktu</H3>
+          <InputGroup>
+            <Input
+              label="Węglowodany"
+              placeholder="0"
+            />
+            <Input
+              label="w tym cukry"
+              placeholder="0"
+            />
+          </InputGroup>
+          <Input
+            label="Białko"
+            placeholder="0"
+          />
+          <InputGroup>
+            <Input
+              label="Tłuszcze"
+              placeholder="0"
+            />
+            <Input
+              label="w tym kwasy tłuszczowe"
+              placeholder="0"
+            />
+          </InputGroup>
+          <Input
+            label="Kalorie"
+            placeholder="0"
+          />
+        </Section>
+        
+
         <BasicInput
           label="Nazwa"
           accessibilityLabel="Nazwa produktu"
@@ -198,4 +250,12 @@ const InputCss = css`
 
 const SaveProductButton = styled(Button)`
   margin-top: 20px;
+`
+
+const Section = styled.View`
+  padding: 10px 0;
+`
+
+const InputGroup = styled.View`
+  flex-direction: row;
 `

@@ -1,4 +1,16 @@
 
+const color_V2 = {
+  primary: '#26367A',
+  secondary: '#B5BACC',
+  tertiary: '#E1E5F5',
+  quaternary: '#F3F5FC',
+
+  highlight: '#3F71FF',
+
+  success: '#2DD266',
+  error: '#FF7979',
+} as const;
+
 const color = {
   focus: '#5361E0',
   secondary: '#C7C6CB',
@@ -26,6 +38,8 @@ const color = {
   gray: '#BCBAC6',
   lightGray: '#f1f0f5',
   midGray: '#cdcbd6',
+
+  ...color_V2,
 } as const;
 
 export const theme = {
@@ -38,10 +52,14 @@ export const theme = {
     small: 12,
     tiny: 11,
   },
+  margin: {
+    heading: 15,
+  },
   fontWeight: {
-    regular: 'DMSans-Regular',
-    medium: 'DMSans-Medium',
-    bold: 'DMSans-Bold',
+    light: 'Hind-Light',
+    regular: 'Hind-Regular',
+    medium: 'Hind-Medium',
+    bold: 'Hind-Bold',
   },
   color,
   /** alias */
