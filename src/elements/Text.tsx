@@ -31,3 +31,16 @@ export const InputLabel = styled.Text`
   color: ${props => props.theme.color.secondary};
   font-size: 11px;
 `
+
+export const TextSecondary = styled(Text)`
+  color: ${props => props.theme.color.secondary};
+`
+
+export const TableHeading = styled.Text`
+  font-size: 12px;
+  font-family: ${props => props.theme.fontWeight.medium};
+  color: ${props => props.theme.color.primary};
+  text-transform: uppercase; 
+`
+
+export { Text as TextPrimary };

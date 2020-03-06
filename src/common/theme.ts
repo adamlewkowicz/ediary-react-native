@@ -56,6 +56,9 @@ export const theme = {
     heading: 15,
     inputSpace: 15,
   },
+  spacing: {
+    tablePadding: 15,
+  },
   fontWeight: {
     light: 'Hind-Light',
     regular: 'Hind-Regular',

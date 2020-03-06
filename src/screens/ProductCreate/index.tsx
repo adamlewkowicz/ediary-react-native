@@ -19,8 +19,9 @@ import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
 import { Button } from '../../components/Button';
 import { Input, InputButton } from '../../elements/Input';
-import { H2, H3 } from '../../elements/Text';
+import { H2, H3, TextSecondary, TextPrimary } from '../../elements/Text';
 import { ButtonPrimary, ButtonSecondary } from '../../elements/ButtonPrimary';
+import * as Table from '../../elements/Table';
 
 interface ProductCreateScreenProps {}
 
@@ -160,6 +161,19 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           />
         </Section>
         <Section>
+          <H2>Porcje</H2>
+          <Table.HeadRow>
+            <Table.TH>Nazwa</Table.TH>
+            <Table.TH>Ilość</Table.TH>
+          </Table.HeadRow>
+          {PRODUCTS.map(productName => (
+            <Table.Row key={productName}>
+              <TextSecondary>{productName}</TextSecondary>
+              <TextPrimary>150g</TextPrimary>
+            </Table.Row>
+          ))}
+        </Section>
+        <Section>
           <H2>Inne</H2>
           <InputButton
             label="Kod kreskowy"
@@ -174,6 +188,12 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
     </ScrollView>
   );
 }
+
+const PRODUCTS = [
+  'Porcja',
+  'Opakowanie',
+  'Szklanka'
+] as const;
 
 const Container = styled.KeyboardAvoidingView`
   padding: 20px;
