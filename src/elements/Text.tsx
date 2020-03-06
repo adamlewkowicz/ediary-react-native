@@ -8,7 +8,7 @@ export const H1 = styled.Text`
 
 export const H2 = styled.Text`
   font-family: ${props => props.theme.fontWeight.light};
-  font-size: 16px;
+  font-size: 18px;
   color: ${props => props.theme.color.primary};
   /* margin-bottom: 10px; */
 `

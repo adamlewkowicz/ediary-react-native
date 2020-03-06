@@ -4,8 +4,15 @@ import { H2, H4, TextHighlight } from '../elements/Text';
 import { ProgressBar } from '../components/ProgressBar';
 import { theme } from '../common/theme';
 import { ButtonReveal } from '../molecules/ButtonReveal';
+import { MacroCharts } from '../molecules/MacroCharts';
+import { MealProductItem } from './MealProductItem';
+import { ButtonSecondary } from '../elements/ButtonPrimary';
 
-export const MealItem = () => {
+interface MealItemProps {
+  isOpened?: boolean
+}
+
+export const MealItem = (props: MealItemProps) => {
   return (
     <Container>
       <Heading>
@@ -19,14 +26,30 @@ export const MealItem = () => {
         percentages={1500}
         colors={theme.gradient.kcal}
       />
-      <ButtonReveal />
+      <RevealMealButton />
+      {props.isOpened && (
+        <>
+          <ChartsContainer>
+            <MacroCharts values={[14, 68, 47]} />
+          </ChartsContainer>
+          <ProductsContainer>
+            <MealProductItem />
+            <MealProductItem />
+            <MealProductItem />
+            <AddProductButton>
+              Dodaj produkt
+            </AddProductButton>
+          </ProductsContainer>
+        </>
+      )}
     </Container>
   );
 }
 
 const Container = styled.View`
-  padding: 15px;
-  margin-bottom: 30px;
+  /* padding: 15px; */
+  margin-bottom: 40px;
+  position: relative;
 `
 
 const Heading = styled.View`
@@ -34,6 +57,31 @@ const Heading = styled.View`
   justify-content: space-between;
   margin-bottom: 10px;
   align-items: center;
+  /* padding: 0 10px; */
 `
 
 const BaseInfo = styled.View``
+
+const ChartsContainer = styled.View`
+  margin-top: 40px;
+  padding: 40px 10px 20px 10px;
+  border: ${props => `1px solid ${props.theme.color.tertiary}`}; 
+`
+
+// TODO: HARDOCDED COLOR
+const ProductsContainer = styled.View`
+  background-color: #FAFBFF;
+  padding: 5px 15px;
+  border-bottom-width: 1px;
+  border-bottom-color: ${props => props.theme.color.tertiary};
+`
+
+const RevealMealButton = styled(ButtonReveal)`
+  position: absolute;
+  top: 66px;
+  z-index: 200;
+`
+
+const AddProductButton = styled(ButtonSecondary)`
+  margin: 20px 0;
+`

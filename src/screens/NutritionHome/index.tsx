@@ -138,7 +138,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
           />
         ))}
       </MacroCards>
-      <MealItem />
+      <MealItem isOpened />
       <MealItem />
       <FlatList
         data={mealsWithRatio}
@@ -188,7 +188,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
 }
 
 const ContentContainer = styled.View`
-  padding: 10px;
+  /* padding: 10px; */
   margin: 40px 0 15px 0;
 `
 

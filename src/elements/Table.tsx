@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components/native';
 import { TableHeading as TH } from './Text';
 
@@ -6,6 +5,7 @@ export const HeadRow = styled.View`
   padding: ${props => props.theme.spacing.tablePadding}px;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 `
 
 export const Row = styled(HeadRow)`

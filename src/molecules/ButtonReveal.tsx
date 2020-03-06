@@ -36,7 +36,7 @@ const InnerCircle = styled.View`
 `
 
 const ArrowIcon = styled(RightArrowIcon)`
-  transform: rotate(90deg);
+  transform: rotate(-90deg);
 `
 
 const ICON_STYLE = {
