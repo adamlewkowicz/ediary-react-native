@@ -21,6 +21,7 @@ import { MacroChart } from '../../molecules/MacroChart';
 import { MacroCharts } from '../../molecules/MacroCharts';
 import { H2 } from '../../elements/Text';
 import { H1 } from '../../components/Elements';
+import { MealItem } from '../../compounds/MealItem';
 
 interface NutritionHomeScreenProps {}
 
@@ -137,6 +138,8 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
           />
         ))}
       </MacroCards>
+      <MealItem />
+      <MealItem />
       <FlatList
         data={mealsWithRatio}
         keyExtractor={item => item.id.toString()}

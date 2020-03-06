@@ -18,7 +18,7 @@ export const ProgressBar = ({
   percentages,
   vertical = false,
   length = '50px',
-  width = '20px',
+  width = '5px',
   colors,
   rounded = true,
   marginVertical = 0
@@ -66,7 +66,6 @@ const Container = styled.View<{
   height: ${props => props.vertical ? props.length : 'auto'};
   margin: ${props => `${props.marginVertical}px 0`};
   overflow: hidden;
-  border-radius: ${props => props.rounded ? '50px' : '0px'};
 `
 
 const BackgroundStripe = styled.View<{

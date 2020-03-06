@@ -48,4 +48,8 @@ export const H4 = styled(Text)`
   font-size: 12px;
 `
 
+export const TextHighlight = styled(Text)`
+  color: ${props => props.theme.color.highlight};
+`
+
 export { Text as TextPrimary };
