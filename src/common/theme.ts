@@ -54,6 +54,7 @@ export const theme = {
   },
   margin: {
     heading: 15,
+    inputSpace: 15,
   },
   fontWeight: {
     light: 'Hind-Light',

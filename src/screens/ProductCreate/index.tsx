@@ -18,8 +18,9 @@ import { Actions } from '../../store';
 import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
 import { Button } from '../../components/Button';
-import { Input } from '../../elements/Input';
+import { Input, InputButton } from '../../elements/Input';
 import { H2, H3 } from '../../elements/Text';
+import { ButtonPrimary, ButtonSecondary } from '../../elements/ButtonPrimary';
 
 interface ProductCreateScreenProps {}
 
@@ -131,6 +132,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
               label="Węglowodany"
               placeholder="0"
             />
+            <GroupSeparator />
             <Input
               label="w tym cukry"
               placeholder="0"
@@ -145,77 +147,29 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
               label="Tłuszcze"
               placeholder="0"
             />
+            <GroupSeparator />
             <Input
               label="w tym kwasy tłuszczowe"
               placeholder="0"
             />
           </InputGroup>
-          <Input
+          <InputButton
             label="Kalorie"
             placeholder="0"
+            buttonText="Oblicz"
           />
         </Section>
-        
-
-        <BasicInput
-          label="Nazwa"
-          accessibilityLabel="Nazwa produktu"
-          value={state.name}
-          onChangeText={name => handleUpdate({ name })}
-          onSubmitEditing={refsList.producer.current?.focus}
-        />
-        <BasicInputRef
-          label="Producent"
-          accessibilityLabel="Producent"
-          value={state.producer}
-          onChangeText={producer => handleUpdate({ producer })}
-          onSubmitEditing={refsList.portion.current?.focus}
-          ref={refsList.producer}
-        />
-        <OptionsContainer>
-          <InfoTitle>Wartości odżywcze na:</InfoTitle>
-          <Options
-            value={state.portionOptions}
-            onChange={handlePortionOptionChange}
+        <Section>
+          <H2>Inne</H2>
+          <InputButton
+            label="Kod kreskowy"
+            placeholder="5900512300108"
+            buttonText="Zeskanuj"
           />
-        </OptionsContainer>
-        <InputRow
-          title={PORTION_TITLE[state.portionOption]}
-          value={state.portion}
-          onChangeText={portion => handleUpdate({ portion: parseNumber(portion, 10000, 6) })}
-          onSubmitEditing={refsList.carbs.current?.focus}
-          ref={refsList.portion}
-          accessibilityLabel="Ilość produktu"
-          styles={InputCss}
-        />
-        {NUTRITION_INPUTS.map(data => (
-          <InputRow
-            key={data.title}
-            title={data.title}
-            value={state[data.property]}
-            onChangeText={value => handleUpdate({ [data.property]: parseNumber(value, 10000, 6) })}
-            onSubmitEditing={refsList[data.nextRef].current?.focus}
-            ref={refsList[data.property]}
-            accessibilityLabel={data.title}
-            styles={InputCss}
-          />
-        ))}
-        <InputRow
-          title="Kod kreskowy"
-          keyboardType="default"
-          ref={refsList.barcode}
-          value={state.barcode as string}
-          onChangeText={barcode => handleUpdate({ barcode })}
-          onSubmitEditing={handleProductCreate}
-          accessibilityLabel="Kod kreskowy"
-          styles={InputCss}
-        />
-        <SaveProductButton
-          accessibilityLabel="Zapisz produkt"
-          onPress={handleProductCreate}
-        >
+        </Section>
+        <ButtonPrimary>
           Zapisz produkt
-        </SaveProductButton>
+        </ButtonPrimary>
       </Container>
     </ScrollView>
   );
@@ -223,12 +177,6 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
 
 const Container = styled.KeyboardAvoidingView`
   padding: 20px;
-`
-
-const InfoTitle = styled.Text`
-  text-align: center;
-  font-size: ${props => props.theme.fontSize.regular};
-  font-family: ${props => props.theme.fontWeight.regular};
 `
 
 const SaveButton = styled(TouchableOpacity)`
@@ -240,22 +188,14 @@ const SaveText = styled.Text`
   color: ${props => props.theme.color.focus};
 `
 
-const OptionsContainer = styled.View`
-  margin: 10px 0;
-`
-
-const InputCss = css`
-  margin-bottom: 10px;
-`
-
-const SaveProductButton = styled(Button)`
-  margin-top: 20px;
-`
-
 const Section = styled.View`
   padding: 10px 0;
 `
 
 const InputGroup = styled.View`
   flex-direction: row;
+`
+
+const GroupSeparator = styled.View`
+  width: 20px;
 `
