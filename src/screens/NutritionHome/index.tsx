@@ -18,6 +18,9 @@ import { ProductItem } from '../../components/ProductItem';
 import { Button } from '../../components/Button';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
 import { MacroChart } from '../../molecules/MacroChart';
+import { MacroCharts } from '../../molecules/MacroCharts';
+import { H2 } from '../../elements/Text';
+import { H1 } from '../../components/Elements';
 
 interface NutritionHomeScreenProps {}
 
@@ -118,12 +121,10 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         value={appDate}
         onChange={date => dispatch(Actions.appDateUpdated(date))}
       />
-      <MacroChart
-        title="Węglowodany"
-        value={204}
-        percentages={25}
-      />
       <CaloriesChart data={macroNeedsLeft.kcal} />
+      <MacroCharts
+        values={[204, 57, 41]}
+      />
       <MacroCards>
         {BASE_MACRO_ELEMENTS.map(element => (
           <MacroCard

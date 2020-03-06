@@ -1,13 +1,11 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { CircleChart } from './CircleChart';
+import { CircleChart, CircleChartProps } from './CircleChart';
 import { H4, TextPrimary } from '../elements/Text';
-import { theme } from '../common/theme';
 
-interface MacroChartProps {
-  value: number
-  percentages: number
+interface MacroChartProps extends CircleChartProps {
   title: string
+  value: number
 }
 
 export const MacroChart = (props: MacroChartProps) => {
@@ -15,7 +13,7 @@ export const MacroChart = (props: MacroChartProps) => {
     <Container>
       <CircleChart
         percentages={props.percentages}
-        gradientColors={theme.gradient.kcal}
+        gradientColors={props.gradientColors}
       >
         <H4>{props.percentages}%</H4>
       </CircleChart>

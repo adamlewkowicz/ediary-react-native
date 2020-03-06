@@ -9,7 +9,7 @@ import { useSpring, animated } from 'react-spring';
 import styled from 'styled-components/native';
 import { theme } from '../common/theme';
 
-export interface CaloriesChartProps {
+export interface CircleChartProps {
   percentages: number
   width?: number
   height?: number
@@ -17,7 +17,7 @@ export interface CaloriesChartProps {
   gradientColors: readonly [string, string]
 }
 
-export const CircleChart = (props: CaloriesChartProps) => {
+export const CircleChart = (props: CircleChartProps) => {
   const {
     width = SETTINGS.size,
     height = SETTINGS.size,
