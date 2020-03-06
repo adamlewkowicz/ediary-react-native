@@ -43,4 +43,9 @@ export const TableHeading = styled.Text`
   text-transform: uppercase; 
 `
 
+export const H4 = styled(Text)`
+  color: ${props => props.theme.color.tertiary};
+  font-size: 12px;
+`
+
 export { Text as TextPrimary };

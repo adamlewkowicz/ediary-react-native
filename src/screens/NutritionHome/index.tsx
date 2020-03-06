@@ -17,6 +17,7 @@ import { useAfterInteractions, useNavigationData } from '../../hooks';
 import { ProductItem } from '../../components/ProductItem';
 import { Button } from '../../components/Button';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
+import { MacroChart } from '../../molecules/MacroChart';
 
 interface NutritionHomeScreenProps {}
 
@@ -116,6 +117,11 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
       <DateChanger
         value={appDate}
         onChange={date => dispatch(Actions.appDateUpdated(date))}
+      />
+      <MacroChart
+        title="Węglowodany"
+        value={204}
+        percentages={25}
       />
       <CaloriesChart data={macroNeedsLeft.kcal} />
       <MacroCards>
