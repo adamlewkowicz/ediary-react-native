@@ -1,6 +1,5 @@
 import React, { useReducer, useRef, createRef } from 'react';
-import styled, { css } from 'styled-components/native';
-import { BasicInput, BasicInputRef } from '../../components/BasicInput';
+import styled from 'styled-components/native';
 import {
   productCreateReducer,
   ProductCreateState,
@@ -8,20 +7,17 @@ import {
   initProductCreateReducer,
 } from './reducer';
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import { InputRow } from '../../components/InputRow';
-import { Options } from '../../components/Options';
 import { useUserId, useNavigationData } from '../../hooks';
 import { Product } from '../../database/entities';
-import { parseNumber } from '../../common/utils';
 import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
-import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
-import { Button } from '../../components/Button';
 import { Input, InputButton } from '../../elements/Input';
-import { H2, H3, TextSecondary, TextPrimary } from '../../elements/Text';
-import { ButtonPrimary, ButtonSecondary } from '../../elements/ButtonPrimary';
+import { TextSecondary, TextPrimary } from '../../elements/Text';
+import { ButtonPrimary } from '../../elements/ButtonPrimary';
 import * as Table from '../../elements/Table';
+import * as InputGroup from '../../elements/InputGroup';
+import { Section } from '../../elements/Section';
 
 interface ProductCreateScreenProps {}
 
@@ -109,59 +105,58 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
   return (
     <ScrollView>
       <Container>
-        <Section>
-          <H2>Podstawowe dane:</H2>
+        <Section title="Podstawowe dane">
           <Input 
-            label="Nazwa:"
+            label="Nazwa"
             placeholder="Mleko UHT 3.2 %"
           />
           <Input 
-            label="Marka:"
+            label="Marka"
             placeholder="Łaciate"
           />
           <Input 
-            label="Producent:"
+            label="Producent"
             placeholder="Mlekovita"
             value={'Mlekovita'}
           />
         </Section>
-        <Section>
-          <H2>Makroskładniki:</H2>
-          <H3>Na 100g produktu</H3>
-          <InputGroup>
+        <Section
+          title="Makroskładniki"
+          description="Na 100g produtku"
+        >
+          <InputGroup.Container>
             <Input
               label="Węglowodany"
               placeholder="0"
             />
-            <GroupSeparator />
+            <InputGroup.Separator />
             <Input
               label="w tym cukry"
               placeholder="0"
             />
-          </InputGroup>
+          </InputGroup.Container>
           <Input
             label="Białko"
             placeholder="0"
           />
-          <InputGroup>
+          <InputGroup.Container>
             <Input
               label="Tłuszcze"
               placeholder="0"
             />
-            <GroupSeparator />
+            <InputGroup.Separator />
             <Input
               label="w tym kwasy tłuszczowe"
               placeholder="0"
             />
-          </InputGroup>
+          </InputGroup.Container>
           <InputButton
             label="Kalorie"
             placeholder="0"
             buttonText="Oblicz"
           />
         </Section>
-        <Section>
-          <H2>Porcje</H2>
+        <Section title="Porcje">
           <Table.HeadRow>
             <Table.TH>Nazwa</Table.TH>
             <Table.TH>Ilość</Table.TH>
@@ -173,8 +168,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             </Table.Row>
           ))}
         </Section>
-        <Section>
-          <H2>Inne</H2>
+        <Section title="Inne">
           <InputButton
             label="Kod kreskowy"
             placeholder="5900512300108"
@@ -206,16 +200,4 @@ const SaveButton = styled(TouchableOpacity)`
 const SaveText = styled.Text`
   font-family: ${props => props.theme.fontWeight.regular};
   color: ${props => props.theme.color.focus};
-`
-
-const Section = styled.View`
-  padding: 10px 0;
-`
-
-const InputGroup = styled.View`
-  flex-direction: row;
-`
-
-const GroupSeparator = styled.View`
-  width: 20px;
 `
