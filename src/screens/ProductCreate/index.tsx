@@ -18,6 +18,7 @@ import { ButtonPrimary } from '../../elements/ButtonPrimary';
 import * as Table from '../../elements/Table';
 import * as InputGroup from '../../elements/InputGroup';
 import { Section } from '../../elements/Section';
+import { InputMetaText } from '../../molecules/InputMetaText';
 
 interface ProductCreateScreenProps {}
 
@@ -135,9 +136,10 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
               placeholder="0"
             />
           </InputGroup.Container>
-          <Input
+          <InputMetaText
             label="Białko"
             placeholder="0"
+            metaText="g"
           />
           <InputGroup.Container>
             <Input

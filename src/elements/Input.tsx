@@ -5,7 +5,7 @@ import { TextInputProps } from 'react-native';
 import { theme } from '../common/theme';
 import { ButtonSecondary } from './ButtonPrimary';
 
-interface InputProps extends TextInputProps {
+export interface InputProps extends TextInputProps {
   label: string
   rightContent?: ReactNode
 }
@@ -71,4 +71,6 @@ const TextInput = styled.TextInput`
 
 const Content = styled.View`
   flex-direction: row;
+  align-items: center;
+  position: relative;
 `

@@ -124,7 +124,16 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
       />
       <CaloriesChart data={macroNeedsLeft.kcal} />
       <MacroCharts
-        values={[204, 57, 41]}
+        values={[
+          macroNeedsLeft.carbs.eaten,
+          macroNeedsLeft.prots.eaten,
+          macroNeedsLeft.carbs.eaten,
+        ]}
+        percentages={[
+          macroNeedsLeft.carbs.ratio,
+          macroNeedsLeft.prots.ratio,
+          macroNeedsLeft.fats.ratio,
+        ]}
       />
       <MacroCards>
         {BASE_MACRO_ELEMENTS.map(element => (
