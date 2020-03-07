@@ -4,9 +4,9 @@ import { theme } from '../common/theme';
 import { MacroChart } from './MacroChart';
 
 interface MacroChartsProps {
-  /** [carbs, prots, fats] */
+  /** `[carbs, prots, fats]` */
   values: readonly [number, number, number]
-  /** [carbs, prots, fats] */
+  /** `[carbs, prots, fats]` */
   percentages: readonly [number, number, number]
 }
 

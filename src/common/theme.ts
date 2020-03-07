@@ -58,6 +58,7 @@ export const theme = {
   },
   spacing: {
     tablePadding: 15,
+    screenPadding: 20,
   },
   fontWeight: {
     light: 'Hind-Light',
