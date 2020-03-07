@@ -1,13 +1,15 @@
 import React from 'react';
-import { ScreenContainer } from '../../components/atoms/ScreenContainer';
-import { Section } from '../../elements/Section';
-import { H1 } from '../../components/atoms/Text';
-import { MacroCharts } from '../../components';
 import styled from 'styled-components/native';
-import { RadioInputsRow } from '../../components';
-import { ProductMacroTable } from '../../components/compounds/ProductMacroTable';
-import { ChartMacroBars } from '../../components';
-import { InputMetaText } from '../../components';
+import {
+  ChartMacroBars,
+  Section,
+  MacroCharts,
+  H1,
+  ScreenContainer,
+  ProductMacroTable,
+  RadioInputsRow,
+  InputMetaText,
+} from '../../components';
 
 export const ProductPreviewScreen = () => {
   return (

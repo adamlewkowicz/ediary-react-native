@@ -12,13 +12,17 @@ import { Product } from '../../database/entities';
 import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
-import { Input, InputButton } from '../../components/molecules/Input';
-import { TextSecondary, TextPrimary } from '../../components/atoms/Text';
-import { ButtonPrimary } from '../../components/molecules/ButtonPrimary';
-import * as Table from '../../components/atoms/Table';
-import * as InputGroup from '../../components/molecules/InputGroup';
-import { Section } from '../../elements/Section';
-import { InputMetaText } from '../../components';
+import {
+  InputMetaText,
+  Section,
+  Table,
+  Group,
+  TextSecondary,
+  TextPrimary,
+  ButtonPrimary,
+  Input,
+  InputButton,
+} from '../../components';
 
 interface ProductCreateScreenProps {}
 
@@ -125,33 +129,33 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           title="Makroskładniki"
           description="Na 100g produtku"
         >
-          <InputGroup.Container>
+          <Group.Container>
             <Input
               label="Węglowodany"
               placeholder="0"
             />
-            <InputGroup.Separator />
+            <Group.Separator />
             <Input
               label="w tym cukry"
               placeholder="0"
             />
-          </InputGroup.Container>
+          </Group.Container>
           <InputMetaText
             label="Białko"
             placeholder="0"
             metaText="g"
           />
-          <InputGroup.Container>
+          <Group.Container>
             <Input
               label="Tłuszcze"
               placeholder="0"
             />
-            <InputGroup.Separator />
+            <Group.Separator />
             <Input
               label="w tym kwasy tłuszczowe"
               placeholder="0"
             />
-          </InputGroup.Container>
+          </Group.Container>
           <InputButton
             label="Kalorie"
             placeholder="0"

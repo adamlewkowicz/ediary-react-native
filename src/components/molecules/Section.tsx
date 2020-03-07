@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
-import { H2, H3 } from './Text';
 import React, { ReactNode } from 'react';
+import { H2, H3 } from '../atoms';
 
 interface SectionProps {
   title: string

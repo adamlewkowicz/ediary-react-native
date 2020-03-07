@@ -29,7 +29,10 @@ export const MealItem = (props: MealItemProps) => {
       {props.isOpened && (
         <>
           <ChartsContainer>
-            <MacroCharts values={[14, 68, 47]} />
+            <MacroCharts
+              values={[14, 68, 47]}
+              percentages={[14, 68, 47]}
+            />
           </ChartsContainer>
           <ProductsContainer>
             <MealProductItem />

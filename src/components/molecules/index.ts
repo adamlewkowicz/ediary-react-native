@@ -10,4 +10,4 @@ export * from './RadioInputsRow';
 export * from './ButtonPrimary';
 export * from './Input';
 export * from './Section';
-export * from './InputGroup';
+export * as Group from './InputGroup';
