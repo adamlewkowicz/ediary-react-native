@@ -1,3 +1,3 @@
-export * from './atoms';
-export * from './molecules';
-export * from './compounds';
+export * from './atoms/_index';
+export * from './molecules/_index';
+export * from './compounds/_index';

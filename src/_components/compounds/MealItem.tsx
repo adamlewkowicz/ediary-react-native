@@ -5,7 +5,7 @@ import { ProgressBar } from '../../components/ProgressBar';
 import { theme } from '../../common/theme';
 import { ButtonReveal, ChartMacroCircles } from '../../_components';
 import { MealProductItem } from './MealProductItem';
-import { ButtonSecondary } from '../molecules';
+import { ButtonSecondary } from '../molecules/_index';
 
 interface MealItemProps {
   isOpened?: boolean
