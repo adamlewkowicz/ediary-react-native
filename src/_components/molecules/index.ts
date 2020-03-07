@@ -1,13 +1,14 @@
 export * from './ButtonReveal';
 export * from './ChartMacroBar';
 export * from './ChartMacroBars';
-export * from './CircleChart';
+export * from './ChartCircle';
 export * from './InputMetaText';
-export * from './MacroChart';
-export * from './MacroCharts';
+export * from './ChartMacroCircle';
+export * from './ChartMacroCircles';
 export * from './RadioInput';
 export * from './RadioInputsRow';
 export * from './ButtonPrimary';
+export * from './ButtonSecondary';
 export * from './Input';
 export * from './Section';
 export * as Group from './InputGroup';

@@ -17,7 +17,7 @@ import { useAfterInteractions, useNavigationData } from '../../hooks';
 import { ProductItem } from '../../components/ProductItem';
 import { Button } from '../../components/Button';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
-import { MacroCharts, MealItem } from '../../_components';
+import { ChartMacroCircles, MealItem } from '../../_components';
 
 interface NutritionHomeScreenProps {}
 
@@ -119,7 +119,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         onChange={date => dispatch(Actions.appDateUpdated(date))}
       />
       <CaloriesChart data={macroNeedsLeft.kcal} />
-      <MacroCharts
+      <ChartMacroCircles
         values={[
           macroNeedsLeft.carbs.eaten,
           macroNeedsLeft.prots.eaten,

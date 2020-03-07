@@ -3,9 +3,9 @@ import styled from 'styled-components/native';
 import { H2, H4, TextHighlight } from '../atoms/Text';
 import { ProgressBar } from '../../components/ProgressBar';
 import { theme } from '../../common/theme';
-import { ButtonReveal, MacroCharts } from '../../_components';
+import { ButtonReveal, ChartMacroCircles } from '../../_components';
 import { MealProductItem } from './MealProductItem';
-import { ButtonSecondary } from '../molecules/ButtonPrimary';
+import { ButtonSecondary } from '../molecules';
 
 interface MealItemProps {
   isOpened?: boolean
@@ -29,7 +29,7 @@ export const MealItem = (props: MealItemProps) => {
       {props.isOpened && (
         <>
           <ChartsContainer>
-            <MacroCharts
+            <ChartMacroCircles
               values={[14, 68, 47]}
               percentages={[14, 68, 47]}
             />

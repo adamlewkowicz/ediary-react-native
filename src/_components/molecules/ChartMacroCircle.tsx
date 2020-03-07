@@ -1,22 +1,22 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { CircleChart, CircleChartProps } from './CircleChart';
+import { ChartCircle, ChartCircleProps } from './ChartCircle';
 import { H4, TextPrimary } from '../atoms/Text';
 
-interface MacroChartProps extends CircleChartProps {
+interface ChartMacroCircleProps extends ChartCircleProps {
   title: string
   value: number
 }
 
-export const MacroChart = (props: MacroChartProps) => {
+export const ChartMacroCircle = (props: ChartMacroCircleProps) => {
   return (
     <Container>
-      <CircleChart
+      <ChartCircle
         percentages={props.percentages}
         gradientColors={props.gradientColors}
       >
         <H4>{props.percentages}%</H4>
-      </CircleChart>
+      </ChartCircle>
       <TextPrimary>{props.value}g</TextPrimary>
       <H4>{props.title}</H4>
     </Container>

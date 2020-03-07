@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import {
   ChartMacroBars,
   Section,
-  MacroCharts,
+  ChartMacroCircles,
   H1,
   ScreenContainer,
   ProductMacroTable,
@@ -37,7 +37,7 @@ export const ProductPreviewScreen = () => {
       </Section>
       <Section title="Makroskładniki">
         <Kcal>421 kcal</Kcal>
-        <MacroCharts
+        <ChartMacroCircles
           values={[45, 18, 23]}
           percentages={[45, 67, 12]}
         />

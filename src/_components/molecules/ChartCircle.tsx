@@ -9,7 +9,7 @@ import { useSpring, animated } from 'react-spring';
 import styled from 'styled-components/native';
 import { theme } from '../../common/theme';
 
-export interface CircleChartProps {
+export interface ChartCircleProps {
   percentages: number
   width?: number
   height?: number
@@ -17,7 +17,7 @@ export interface CircleChartProps {
   gradientColors: readonly [string, string]
 }
 
-export const CircleChart = (props: CircleChartProps) => {
+export const ChartCircle = (props: ChartCircleProps) => {
   const {
     width = SETTINGS.size,
     height = SETTINGS.size,
