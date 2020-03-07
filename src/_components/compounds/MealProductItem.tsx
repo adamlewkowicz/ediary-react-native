@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { H4, TextHighlight, TextPrimary } from '../atoms/Text';
-import * as Table from '../atoms/Table';
+import { Table, H4, TextHighlight, TextPrimary } from '..';
 
 export const MealProductItem = () => {
   return (
@@ -15,6 +14,4 @@ export const MealProductItem = () => {
   );
 }
 
-const Details = styled.View`
-
-`
+const Details = styled.View``
