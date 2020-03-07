@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { H2, H4, TextHighlight } from '../elements/Text';
-import { ProgressBar } from '../components/ProgressBar';
-import { theme } from '../common/theme';
-import { ButtonReveal, MacroCharts } from '../components';
+import { H2, H4, TextHighlight } from '../../elements/Text';
+import { ProgressBar } from '../ProgressBar';
+import { theme } from '../../common/theme';
+import { ButtonReveal, MacroCharts } from '..';
 import { MealProductItem } from './MealProductItem';
-import { ButtonSecondary } from '../elements/ButtonPrimary';
+import { ButtonSecondary } from '../../elements/ButtonPrimary';
 
 interface MealItemProps {
   isOpened?: boolean

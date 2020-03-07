@@ -17,8 +17,7 @@ import { useAfterInteractions, useNavigationData } from '../../hooks';
 import { ProductItem } from '../../components/ProductItem';
 import { Button } from '../../components/Button';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
-import { MacroCharts } from '../../components/molecules/MacroCharts';
-import { MealItem } from '../../compounds/MealItem';
+import { MacroCharts, MealItem } from '../../components';
 
 interface NutritionHomeScreenProps {}
 

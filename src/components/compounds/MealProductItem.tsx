@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { H4, TextHighlight, TextPrimary } from '../elements/Text';
-import * as Table from '../elements/Table';
+import { H4, TextHighlight, TextPrimary } from '../../elements/Text';
+import * as Table from '../../elements/Table';
 
 export const MealProductItem = () => {
   return (
