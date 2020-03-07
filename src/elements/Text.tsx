@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 
 export const H1 = styled.Text`
   font-family: ${props => props.theme.fontWeight.light};
-  font-size: 20px;
+  font-size: 22px;
   color: ${props => props.theme.color.primary};
 `
 

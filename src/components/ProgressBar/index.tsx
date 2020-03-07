@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useSpring, config, animated } from 'react-spring';
 
-interface ProgressBarProps {
+export interface ProgressBarProps {
   percentages: number
   showPercentages?: boolean
   vertical?: boolean

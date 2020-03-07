@@ -58,7 +58,14 @@ export const theme = {
   },
   spacing: {
     tablePadding: 15,
-    screenPadding: 20,
+    screenPadding: '20px',
+    sectionSecondary: 20,
+
+    primary: 40,
+    secondary: 20,
+    tertiary: 15,
+    quaternary: 10,
+    quinary: 5,
   },
   fontWeight: {
     light: 'Hind-Light',
