@@ -7,6 +7,7 @@ import styled from 'styled-components/native';
 import { RadioInputsRow } from '../../molecules/RadioInputsRow';
 import { ProductMacroTable } from '../../elements/ProductMacroTable';
 import { ChartMacroBars } from '../../molecules/ChartMacroBars';
+import { InputMetaText } from '../../molecules/InputMetaText';
 
 export const ProductPreviewScreen = () => {
   return (
@@ -24,6 +25,12 @@ export const ProductPreviewScreen = () => {
           values={[1, 2, 3, 4]}
           activeValue={2}
           onChange={() => {}}
+        />
+        <InputMetaText
+          metaText="g"
+          label="Ilość"
+          placeholder="0"
+          value={"417"}
         />
       </Section>
       <Section title="Makroskładniki">
