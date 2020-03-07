@@ -22,7 +22,7 @@ import {
   ButtonPrimary,
   Input,
   InputButton,
-} from '../../components';
+} from '../../_components';
 
 interface ProductCreateScreenProps {}
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { TextSecondary, TextPrimary } from '../atoms/Text';
-import { ProgressBar, ProgressBarProps } from '../ProgressBar';
+import { ProgressBar, ProgressBarProps } from '../../components/ProgressBar';
 
 interface ChartMacroBarProps extends ProgressBarProps {
   title: string

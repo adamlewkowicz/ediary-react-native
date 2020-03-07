@@ -3,7 +3,7 @@ import styled from 'styled-components/native'
 import { InputLabel } from '../atoms/Text'
 import { TextInputProps } from 'react-native';
 import { theme } from '../../common/theme';
-import { ButtonSecondary } from '..';
+import { ButtonSecondary } from '../../_components';
 
 export interface InputProps extends TextInputProps {
   label: string

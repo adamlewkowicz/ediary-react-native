@@ -9,7 +9,7 @@ import {
   ProductMacroTable,
   RadioInputsRow,
   InputMetaText,
-} from '../../components';
+} from '../../_components';
 
 export const ProductPreviewScreen = () => {
   return (

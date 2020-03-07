@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { H2, H4, TextHighlight } from '../atoms/Text';
-import { ProgressBar } from '../ProgressBar';
+import { ProgressBar } from '../../components/ProgressBar';
 import { theme } from '../../common/theme';
-import { ButtonReveal, MacroCharts } from '..';
+import { ButtonReveal, MacroCharts } from '../../_components';
 import { MealProductItem } from './MealProductItem';
 import { ButtonSecondary } from '../molecules/ButtonPrimary';
 

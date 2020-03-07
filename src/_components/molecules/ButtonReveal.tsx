@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { RightArrowIcon } from '../Icons';
+import { RightArrowIcon } from '../../components/Icons';
 import { theme } from '../../common/theme';
 import { TouchableOpacityProps } from 'react-native';
 
