@@ -7,3 +7,7 @@ export * from './MacroChart';
 export * from './MacroCharts';
 export * from './RadioInput';
 export * from './RadioInputsRow';
+export * from './ButtonPrimary';
+export * from './Input';
+export * from './Section';
+export * from './InputGroup';

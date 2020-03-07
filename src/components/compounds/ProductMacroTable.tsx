@@ -1,7 +1,7 @@
 import React from 'react';
-import * as Table from './Table';
+import * as Table from '../atoms/Table';
 import styled from 'styled-components/native';
-import { TextSecondary, TextPrimary } from './Text';
+import { TextSecondary, TextPrimary } from '../atoms/Text';
 
 interface ProductMacroTableProps {
   macro: { [key: string]: number }

@@ -12,11 +12,11 @@ import { Product } from '../../database/entities';
 import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
-import { Input, InputButton } from '../../elements/Input';
-import { TextSecondary, TextPrimary } from '../../elements/Text';
-import { ButtonPrimary } from '../../elements/ButtonPrimary';
-import * as Table from '../../elements/Table';
-import * as InputGroup from '../../elements/InputGroup';
+import { Input, InputButton } from '../../components/molecules/Input';
+import { TextSecondary, TextPrimary } from '../../components/atoms/Text';
+import { ButtonPrimary } from '../../components/molecules/ButtonPrimary';
+import * as Table from '../../components/atoms/Table';
+import * as InputGroup from '../../components/molecules/InputGroup';
 import { Section } from '../../elements/Section';
 import { InputMetaText } from '../../components';
 

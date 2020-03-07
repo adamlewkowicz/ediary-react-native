@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, InputProps } from '../../elements/Input';
+import { Input, InputProps } from './Input';
 import styled from 'styled-components/native';
 
 interface InputMetaTextProps extends InputProps {

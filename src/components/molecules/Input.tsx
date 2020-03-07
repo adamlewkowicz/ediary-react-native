@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components/native'
-import { InputLabel } from './Text'
+import { InputLabel } from '../atoms/Text'
 import { TextInputProps } from 'react-native';
-import { theme } from '../common/theme';
-import { ButtonSecondary } from './ButtonPrimary';
+import { theme } from '../../common/theme';
+import { ButtonSecondary } from '..';
 
 export interface InputProps extends TextInputProps {
   label: string

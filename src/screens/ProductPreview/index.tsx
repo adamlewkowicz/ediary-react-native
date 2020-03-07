@@ -1,11 +1,11 @@
 import React from 'react';
-import { ScreenContainer } from '../../elements/ScreenContainer';
+import { ScreenContainer } from '../../components/atoms/ScreenContainer';
 import { Section } from '../../elements/Section';
-import { H1 } from '../../elements/Text';
+import { H1 } from '../../components/atoms/Text';
 import { MacroCharts } from '../../components';
 import styled from 'styled-components/native';
 import { RadioInputsRow } from '../../components';
-import { ProductMacroTable } from '../../elements/ProductMacroTable';
+import { ProductMacroTable } from '../../components/compounds/ProductMacroTable';
 import { ChartMacroBars } from '../../components';
 import { InputMetaText } from '../../components';
 
