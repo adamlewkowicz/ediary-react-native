@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { theme } from '../../common/theme';
-import { ChartMacroCircle } from './ChartMacroCircle';
+import { ChartMacroCircle } from '../molecules/ChartMacroCircle';
 
 interface ChartMacroCirclesProps {
   /** `[carbs, prots, fats]` */
