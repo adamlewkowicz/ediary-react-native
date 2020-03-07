@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChartMacroBar } from './ChartMacroBar';
-import { theme } from '../common/theme';
+import { theme } from '../../common/theme';
 import styled from 'styled-components/native';
 
 interface ChartMacroBarsProps {

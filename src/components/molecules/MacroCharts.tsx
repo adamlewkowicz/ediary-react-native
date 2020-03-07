@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { theme } from '../common/theme';
+import { theme } from '../../common/theme';
 import { MacroChart } from './MacroChart';
 
 interface MacroChartsProps {

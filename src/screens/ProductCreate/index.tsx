@@ -18,7 +18,7 @@ import { ButtonPrimary } from '../../elements/ButtonPrimary';
 import * as Table from '../../elements/Table';
 import * as InputGroup from '../../elements/InputGroup';
 import { Section } from '../../elements/Section';
-import { InputMetaText } from '../../molecules/InputMetaText';
+import { InputMetaText } from '../../components';
 
 interface ProductCreateScreenProps {}
 

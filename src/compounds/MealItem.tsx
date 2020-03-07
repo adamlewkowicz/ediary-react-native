@@ -3,8 +3,7 @@ import styled from 'styled-components/native';
 import { H2, H4, TextHighlight } from '../elements/Text';
 import { ProgressBar } from '../components/ProgressBar';
 import { theme } from '../common/theme';
-import { ButtonReveal } from '../molecules/ButtonReveal';
-import { MacroCharts } from '../molecules/MacroCharts';
+import { ButtonReveal, MacroCharts } from '../components';
 import { MealProductItem } from './MealProductItem';
 import { ButtonSecondary } from '../elements/ButtonPrimary';
 

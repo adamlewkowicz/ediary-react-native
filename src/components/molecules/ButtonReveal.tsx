@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { RightArrowIcon } from '../components/Icons';
-import { theme } from '../common/theme';
+import { RightArrowIcon } from '../Icons';
+import { theme } from '../../common/theme';
 import { TouchableOpacityProps } from 'react-native';
 
 interface ButtonRevealProps extends TouchableOpacityProps {}

@@ -17,10 +17,7 @@ import { useAfterInteractions, useNavigationData } from '../../hooks';
 import { ProductItem } from '../../components/ProductItem';
 import { Button } from '../../components/Button';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
-import { MacroChart } from '../../molecules/MacroChart';
-import { MacroCharts } from '../../molecules/MacroCharts';
-import { H2 } from '../../elements/Text';
-import { H1 } from '../../components/Elements';
+import { MacroCharts } from '../../components/molecules/MacroCharts';
 import { MealItem } from '../../compounds/MealItem';
 
 interface NutritionHomeScreenProps {}

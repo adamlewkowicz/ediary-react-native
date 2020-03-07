@@ -2,12 +2,12 @@ import React from 'react';
 import { ScreenContainer } from '../../elements/ScreenContainer';
 import { Section } from '../../elements/Section';
 import { H1 } from '../../elements/Text';
-import { MacroCharts } from '../../molecules/MacroCharts';
+import { MacroCharts } from '../../components';
 import styled from 'styled-components/native';
-import { RadioInputsRow } from '../../molecules/RadioInputsRow';
+import { RadioInputsRow } from '../../components';
 import { ProductMacroTable } from '../../elements/ProductMacroTable';
-import { ChartMacroBars } from '../../molecules/ChartMacroBars';
-import { InputMetaText } from '../../molecules/InputMetaText';
+import { ChartMacroBars } from '../../components';
+import { InputMetaText } from '../../components';
 
 export const ProductPreviewScreen = () => {
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { CircleChart, CircleChartProps } from './CircleChart';
-import { H4, TextPrimary } from '../elements/Text';
+import { H4, TextPrimary } from '../../elements/Text';
 
 interface MacroChartProps extends CircleChartProps {
   title: string
