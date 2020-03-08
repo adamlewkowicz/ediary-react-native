@@ -1,18 +1,21 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, RefObject } from 'react';
 import styled from 'styled-components/native'
-import { TextInputProps, TouchableOpacityProps } from 'react-native';
+import { TextInputProps, TouchableOpacityProps, TextInput as NativeTextInput } from 'react-native';
 import { theme } from '../../common/theme';
 import { ButtonSecondary, InputLabel } from '../index';
 
-export interface InputProps extends TextInputProps {
+export interface InputProps extends TextInputProps  {
   label: string
   rightContent?: ReactNode
+  type?: 'text' | 'numeric'
+  forwardedRef?: RefObject<NativeTextInput>
 }
 
 export const Input = (props: InputProps) => {
   const {
     rightContent,
     label,
+    forwardedRef,
     ...inputProps
   } = props;
 
@@ -22,13 +25,18 @@ export const Input = (props: InputProps) => {
       <Content>
         <TextInput
           placeholderTextColor={theme.color.tertiary}
+          ref={forwardedRef}
           {...inputProps}
         />
         {rightContent}
       </Content>
     </Container>
   );
-}
+};
+
+export const InputRef = React.forwardRef<NativeTextInput, InputProps>(
+  (props, ref) => <Input {...props} forwardedRef={ref as RefObject<NativeTextInput>} />
+);
 
 interface InputButtonProps extends InputProps {
   buttonText: string

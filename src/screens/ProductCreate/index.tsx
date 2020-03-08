@@ -19,8 +19,8 @@ import {
   TextSecondary,
   TextPrimary,
   ButtonPrimary,
-  Input,
   InputButton,
+  InputRef,
 } from '../../_components';
 
 interface ProductCreateScreenProps {}
@@ -86,26 +86,28 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
     <ScrollView>
       <Container>
         <Section title="Podstawowe dane">
-          <Input 
+          <InputRef 
             label="Nazwa"
             placeholder="Mleko UHT 3.2 %"
             value={state.productData.name}
             onChangeText={name => handleProductDataUpdate({ name })}
-            onEndEditing={brandInputRef.current?.focus}
+            onSubmitEditing={brandInputRef.current?.focus}
           />
-          <Input 
+          <InputRef
+            ref={brandInputRef}
             label="Marka"
             placeholder="Łaciate"
             value={state.productData.brand}
             onChangeText={brand => handleProductDataUpdate({ brand })}
-            onEndEditing={producerInputRef.current?.focus}
+            onSubmitEditing={producerInputRef.current?.focus}
           />
-          <Input 
+          <InputRef 
             label="Producent"
             placeholder="Mlekovita"
             value={state.productData.producer}
             onChangeText={producer => handleProductDataUpdate({ producer })}
-            onEndEditing={carbsInputRef.current?.focus}
+            ref={producerInputRef}
+            onSubmitEditing={carbsInputRef.current?.focus}
           />
         </Section>
         <Section
@@ -113,18 +115,20 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           description="Na 100g produtku"
         >
           <Group.Container>
-            <Input
+            <InputRef
               value={state.productData.carbs}
               onChangeText={carbs => handleProductDataUpdate({ carbs })}
               label="Węglowodany"
               placeholder="0"
-              onEndEditing={sugarsInputRef.current?.focus}
+              ref={carbsInputRef}
+              onSubmitEditing={sugarsInputRef.current?.focus}
             />
             <Group.Separator />
-            <Input
+            <InputRef
               label="w tym cukry"
               placeholder="0"
-              onEndEditing={protsInputRef.current?.focus}
+              ref={sugarsInputRef}
+              onSubmitEditing={protsInputRef.current?.focus}
             />
           </Group.Container>
           <InputMetaText
@@ -133,21 +137,23 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             label="Białko"
             placeholder="0"
             metaText="g"
-            onEndEditing={fatsInputRef.current?.focus}
+            onSubmitEditing={fatsInputRef.current?.focus}
           />
           <Group.Container>
-            <Input
+            <InputRef
               value={state.productData.fats}
               onChangeText={fats => handleProductDataUpdate({ fats })}
               label="Tłuszcze"
               placeholder="0"
-              onEndEditing={fattyAcidsInputRef.current?.focus}
+              ref={fatsInputRef}
+              onSubmitEditing={fattyAcidsInputRef.current?.focus}
             />
             <Group.Separator />
-            <Input
+            <InputRef
               label="w tym kwasy tłuszczowe"
               placeholder="0"
-              onEndEditing={kcalInputRef.current?.focus}
+              ref={fattyAcidsInputRef}
+              onSubmitEditing={kcalInputRef.current?.focus}
             />
           </Group.Container>
           <InputButton
@@ -157,7 +163,8 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             placeholder="0"
             buttonText="Oblicz"
             onPress={handleCaloriesEvaluation}
-            onEndEditing={barcodeInputRef.current?.focus}
+            // ref={kcalInputRef}
+            onSubmitEditing={barcodeInputRef.current?.focus}
           />
         </Section>
         <Section title="Porcje">
@@ -177,6 +184,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             label="Kod kreskowy"
             placeholder="5900512300108"
             buttonText="Zeskanuj"
+            // ref={barcodeInputRef}
             onPress={handleBarcodeScanNavigation}
           />
         </Section>
