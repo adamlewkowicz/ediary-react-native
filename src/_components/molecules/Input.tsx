@@ -1,9 +1,8 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components/native'
-import { InputLabel } from '../atoms/Text'
-import { TextInputProps } from 'react-native';
+import { TextInputProps, TouchableOpacityProps } from 'react-native';
 import { theme } from '../../common/theme';
-import { ButtonSecondary } from '../../_components';
+import { ButtonSecondary, InputLabel } from '../index';
 
 export interface InputProps extends TextInputProps {
   label: string
@@ -33,16 +32,17 @@ export const Input = (props: InputProps) => {
 
 interface InputButtonProps extends InputProps {
   buttonText: string
+  onPress: TouchableOpacityProps['onPress']
 }
 
 export const InputButton = (props: InputButtonProps) => {
-  const { buttonText, ...inputProps } = props;
+  const { buttonText, onPress, ...inputProps } = props;
 
   return (
     <Input
       {...inputProps}
       rightContent={(
-        <ButtonSecondaryStyled>
+        <ButtonSecondaryStyled onPress={onPress}>
           {buttonText}
         </ButtonSecondaryStyled>
       )}
@@ -55,7 +55,7 @@ const Container = styled.View`
   flex: 1;
 `
 
-const ButtonSecondaryStyled = styled(ButtonSecondary)`
+const ButtonSecondaryStyled = styled(props => <ButtonSecondary {...props} />)`
   margin-left: ${props => props.theme.margin.inputSpace};
   min-width: 100px;
 `
@@ -67,6 +67,7 @@ const TextInput = styled.TextInput`
   color: ${props => props.theme.color.primary};
   padding: 11px 0;
   flex: 1;
+  font-size: 16px;
 `
 
 const Content = styled.View`

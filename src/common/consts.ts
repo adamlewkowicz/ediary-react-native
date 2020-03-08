@@ -23,3 +23,9 @@ export const DATE_TIME = 'HH:mm:ss';
 export const DATE_FORMAT = `${DATE_DAY} ${DATE_TIME}`;
 
 export const ABORT_ERROR_NAME = 'AbortError' as const;
+
+export enum KCAL_IN_ONE_MACRO_GRAM {
+  carbs = 4,
+  prots = 4,
+  fats = 9
+}

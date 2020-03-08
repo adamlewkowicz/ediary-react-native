@@ -1,7 +1,7 @@
 /// <reference lib="dom" />
 import dayjs from 'dayjs';
-import { DateDay, UnitType, DateTime, MacroElements } from '../../types';
-import { UNIT_TYPES, DATE_TIME, DATE_DAY, MACRO_ELEMENTS } from '../consts';
+import { DateDay, UnitType, DateTime, MacroElements, BaseMacroElements } from '../../types';
+import { UNIT_TYPES, DATE_TIME, DATE_DAY, MACRO_ELEMENTS, KCAL_IN_ONE_MACRO_GRAM } from '../consts';
 
 export const debounce = () => {
   let timeout: NodeJS.Timeout;
@@ -224,4 +224,37 @@ export const fetchify = async <T>(
   const json: T = await response.json();
 
   return json;
+}
+
+const mapObject = <
+  T extends object,
+  Property extends keyof T = keyof T,
+  Value = T[Property]
+>(
+  obj: T,
+  callback: (property: Property, value: Value) => Value
+): T => {
+  return Object.fromEntries(
+    Object
+      .entries(obj)
+      .map(([property, value]) => [property, callback(property as Property, value)])
+  ) as T;
+}
+
+const superEntries = <
+  T extends object,
+  Property extends keyof T = keyof T,
+  Value = T[Property]
+>(
+  obj: T
+) => Object.entries(obj) as [Property, Value][];
+
+export const calculateCaloriesByMacro = (
+  macro: BaseMacroElements
+): number => {
+  return superEntries(macro)
+    .reduce(
+      (kcal, [macroName, macroQuantity]) => kcal += macroQuantity * KCAL_IN_ONE_MACRO_GRAM[macroName],
+      0
+    );
 }

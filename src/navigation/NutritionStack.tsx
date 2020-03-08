@@ -39,7 +39,7 @@ interface NutritionStackProps {
 }
 
 export const NutritionStack = (props: NutritionStackProps) => {
-  const { initialRouteName = APP_ROUTE.ProductPreview } = props;
+  const { initialRouteName = APP_ROUTE.NutritionHome } = props;
 
   return (
     <Stack.Navigator

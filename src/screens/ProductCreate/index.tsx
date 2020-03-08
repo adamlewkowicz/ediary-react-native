@@ -1,10 +1,9 @@
-import React, { useReducer, useRef, createRef } from 'react';
+import React, { useReducer, useRef } from 'react';
 import styled from 'styled-components/native';
 import {
   productCreateReducer,
-  ProductCreateState,
-  PortionOption,
   initProductCreateReducer,
+  ProductDataPayload,
 } from './reducer';
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { useUserId, useNavigationData } from '../../hooks';
@@ -27,7 +26,7 @@ import {
 interface ProductCreateScreenProps {}
 
 export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
-  const { params, navigation } = useNavigationData<ProductCreateScreenNavigationProps>();
+  const { params, navigation, navigate } = useNavigationData<ProductCreateScreenNavigationProps>();
   const [state, dispatch] = useReducer(
     productCreateReducer,
     params,
@@ -35,52 +34,19 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
   );
   const storeDispatch = useDispatch();
   const userId = useUserId();
-  const { current: refsList } = useRef({
-    producer: createRef<TextInput>(),
-    portion: createRef<TextInput>(),
-    carbs: createRef<TextInput>(),
-    prots: createRef<TextInput>(),
-    fats: createRef<TextInput>(),
-    kcal: createRef<TextInput>(),
-    barcode: createRef<TextInput>(),
-  });
-
-  function handleUpdate(payload: Partial<ProductCreateState>) {
-    dispatch({
-      type: 'UPDATE',
-      payload
-    });
-  }
+  
+  const brandInputRef = useRef<TextInput>(null);
+  const producerInputRef = useRef<TextInput>(null);
+  const carbsInputRef = useRef<TextInput>(null);
+  const sugarsInputRef = useRef<TextInput>(null);
+  const protsInputRef = useRef<TextInput>(null);
+  const fatsInputRef = useRef<TextInput>(null);
+  const fattyAcidsInputRef = useRef<TextInput>(null);
+  const kcalInputRef = useRef<TextInput>(null);
+  const barcodeInputRef = useRef<TextInput>(null);
 
   async function handleProductCreate() {
-    const {
-      portionOption,
-      portionOptions,
-      portion,
-      barcode,
-      carbs,
-      prots,
-      fats,
-      kcal,
-      ...data
-    } = state;
-
-    if (!data.name.length) {
-      return;
-    }
-
-    const createdProduct = await Product.save({
-      ...data,
-      name: data.name.trim(),
-      barcode: barcode.length ? barcode : null,
-      userId,
-      macro: {
-        carbs: Number(carbs),
-        prots: Number(prots),
-        fats: Number(fats),
-        kcal: Number(kcal),
-      }
-    });
+    const createdProduct = await Product.save({});
 
     storeDispatch(
       Actions.productHistoryRecentAdded([createdProduct])
@@ -89,10 +55,19 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
     params.onProductCreated?.(createdProduct);
   }
 
-  function handlePortionOptionChange(option: PortionOption) {
-    dispatch({
-      type: 'SELECT_PORTION_OPTION',
-      payload: option
+  const handleProductDataUpdate = (payload: ProductDataPayload): void => {
+    dispatch({ type: 'PRODUCT_DATA_UPDATED', payload });
+  }
+
+  const handleCaloriesEvaluation = (): void => {
+    dispatch({ type: 'CALORIES_EVALUATED' });
+  }
+  
+  const handleBarcodeScanNavigation = (): void => {
+    navigate('BarcodeScan', {
+      onBarcodeDetected(barcode) {
+        handleProductDataUpdate({ barcode });
+      }
     });
   }
 
@@ -114,15 +89,23 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           <Input 
             label="Nazwa"
             placeholder="Mleko UHT 3.2 %"
+            value={state.productData.name}
+            onChangeText={name => handleProductDataUpdate({ name })}
+            onEndEditing={brandInputRef.current?.focus}
           />
           <Input 
             label="Marka"
             placeholder="Łaciate"
+            value={state.productData.brand}
+            onChangeText={brand => handleProductDataUpdate({ brand })}
+            onEndEditing={producerInputRef.current?.focus}
           />
           <Input 
             label="Producent"
             placeholder="Mlekovita"
-            value={'Mlekovita'}
+            value={state.productData.producer}
+            onChangeText={producer => handleProductDataUpdate({ producer })}
+            onEndEditing={carbsInputRef.current?.focus}
           />
         </Section>
         <Section
@@ -131,35 +114,50 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
         >
           <Group.Container>
             <Input
+              value={state.productData.carbs}
+              onChangeText={carbs => handleProductDataUpdate({ carbs })}
               label="Węglowodany"
               placeholder="0"
+              onEndEditing={sugarsInputRef.current?.focus}
             />
             <Group.Separator />
             <Input
               label="w tym cukry"
               placeholder="0"
+              onEndEditing={protsInputRef.current?.focus}
             />
           </Group.Container>
           <InputMetaText
+            value={state.productData.prots}
+            onChangeText={prots => handleProductDataUpdate({ prots })}
             label="Białko"
             placeholder="0"
             metaText="g"
+            onEndEditing={fatsInputRef.current?.focus}
           />
           <Group.Container>
             <Input
+              value={state.productData.fats}
+              onChangeText={fats => handleProductDataUpdate({ fats })}
               label="Tłuszcze"
               placeholder="0"
+              onEndEditing={fattyAcidsInputRef.current?.focus}
             />
             <Group.Separator />
             <Input
               label="w tym kwasy tłuszczowe"
               placeholder="0"
+              onEndEditing={kcalInputRef.current?.focus}
             />
           </Group.Container>
           <InputButton
+            value={state.productData.kcal}
+            onChangeText={kcal => handleProductDataUpdate({ kcal })}
             label="Kalorie"
             placeholder="0"
             buttonText="Oblicz"
+            onPress={handleCaloriesEvaluation}
+            onEndEditing={barcodeInputRef.current?.focus}
           />
         </Section>
         <Section title="Porcje">
@@ -179,6 +177,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             label="Kod kreskowy"
             placeholder="5900512300108"
             buttonText="Zeskanuj"
+            onPress={handleBarcodeScanNavigation}
           />
         </Section>
         <ButtonPrimary>

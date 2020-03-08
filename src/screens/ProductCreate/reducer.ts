@@ -1,9 +1,8 @@
 import { ProductUnit, BarcodeId } from '../../types';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
+import { calculateCaloriesByMacro } from '../../common/utils';
 
 export interface ProductCreateState {
-  name: string
-  producer: string
   portion: string
   unit: ProductUnit
   portionOptions: {
@@ -12,16 +11,33 @@ export interface ProductCreateState {
     selected: boolean
   }[]
   portionOption: PortionOption
-  carbs: string
-  prots: string
-  fats: string
-  kcal: string
-  barcode: BarcodeId | string
+  productData: {
+    name: string
+    producer: string
+    brand: string
+    carbs: string
+    sugars: string
+    prots: string
+    fats: string
+    fattyAcids: string
+    kcal: string
+    barcode: BarcodeId | string
+  }
 }
 
 export const initialState: ProductCreateState = {
-  name: '',
-  producer: '',
+  productData: {
+    name: '',
+    producer: '',
+    brand: '',
+    carbs: '',
+    sugars: '',
+    prots: '',
+    fats: '',
+    fattyAcids: '',
+    kcal: '',
+    barcode: '',    
+  },
   portionOptions: [
     {
       title: '100g',
@@ -42,11 +58,6 @@ export const initialState: ProductCreateState = {
   portionOption: '100g',
   unit: 'g',
   portion: '100',
-  carbs: '',
-  prots: '',
-  fats: '',
-  kcal: '',
-  barcode: '',
 }
 
 export function productCreateReducer(
@@ -66,6 +77,30 @@ export function productCreateReducer(
       })),
       portionOption: action.payload
     }
+    case 'PRODUCT_DATA_UPDATED': return {
+      ...state,
+      productData: {
+        ...state.productData,
+        ...action.payload,
+      }
+    }
+    case 'CALORIES_EVALUATED': 
+      const { carbs, prots, fats } = state.productData;
+      const calcedKcal = calculateCaloriesByMacro({
+        carbs: Number(carbs),
+        prots: Number(prots),
+        fats: Number(fats)
+      });
+
+      console.log({ calcedKcal, state })
+      
+      return {
+        ...state,
+        productData: {
+          ...state.productData,
+          kcal: String(calcedKcal)
+        }
+      }
     default: return state;
   }
 }
@@ -74,8 +109,11 @@ export const initProductCreateReducer = (
   { barcode = '', name = '' }: Params
 ): ProductCreateState => ({
   ...initialState,
-  name,
-  barcode,
+  productData: {
+    name,
+    barcode,
+    ...initialState.productData,
+  }
 });
 
 export type PortionOption = '100g' | 'portion' | 'package';
@@ -93,5 +131,9 @@ type SelectPortionOption = {
 type ProductCreateAction =
   | Update
   | SelectPortionOption
+  | { type: 'PRODUCT_DATA_UPDATED', payload: ProductDataPayload }
+  | { type: 'CALORIES_EVALUATED' }
 
 type Params = ProductCreateScreenNavigationProps['route']['params'];
+
+export type ProductDataPayload = Partial<ProductCreateState['productData']>;
