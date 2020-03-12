@@ -11,7 +11,7 @@ import { CaloriesChart } from '../../components/CaloriesChart';
 import { useAfterInteractions, useNavigationData } from '../../hooks';
 import { ProductItem } from '../../components/ProductItem';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
-import { ChartMacroCircles, MealItem, MealItemSeparator, ButtonSecondary } from '../../_components';
+import { ChartMacroCircles, MealItem, MealItemSeparator, ButtonSecondary, H1, ButtonSecondaryArrow } from '../../_components';
 
 interface NutritionHomeScreenProps {}
 
@@ -136,7 +136,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
           />
         )}
       />
-      <FlatList
+      {/* <FlatList
         data={mealsWithRatio}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item: meal }) => (
@@ -158,11 +158,11 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
             )}
           />
         )}
-      />
+      /> */}
       <ContentContainer>
-        <ButtonSecondary onPress={handleProductCreateNavigation}>
+        <ButtonAddOwnProduct onPress={handleProductCreateNavigation}>
           Dodaj własny produkt
-        </ButtonSecondary>
+        </ButtonAddOwnProduct>
       </ContentContainer>
     </ScrollView>
   );
@@ -170,4 +170,8 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
 
 const ContentContainer = styled.View`
   margin: 40px 0 15px 0;
+`
+
+const ButtonAddOwnProduct = styled(ButtonSecondaryArrow)`
+  margin: ${props => `0 ${props.theme.spacing.screenPadding}`};
 `

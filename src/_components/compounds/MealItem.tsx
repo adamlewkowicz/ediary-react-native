@@ -9,14 +9,14 @@ import { ButtonSecondary } from '../molecules/_index';
 import { Selectors } from '../../store';
 
 interface MealItemProps<
-  T extends Selectors.MealWithRatio,
-  P extends T['products'][number] = T['products'][number]
+  Meal extends Selectors.MealWithRatio,
+  Product extends Meal['products'][number] = Meal['products'][number]
 > {
   isOpened?: boolean
-  meal: T
-  onMealPressed?: (mealId: T['id']) => void
-  onProductAdd?: (meal: T) => void
-  onProductPressed?: (productId: P['id']) => void
+  meal: Meal
+  onMealPressed?: (mealId: Meal['id']) => void
+  onProductAdd?: (meal: Meal) => void
+  onProductPressed?: (productId: Product['id']) => void
 }
 
 export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps<T>) => {
@@ -72,7 +72,7 @@ export const MealItemSeparator = styled.View`
 `
 
 const InfoContainer = styled.TouchableOpacity`
-  padding: 10px;
+  padding: ${props => props.theme.spacing.screenPadding};
 `
 
 const Time = styled(H4)`
@@ -81,7 +81,7 @@ const Time = styled(H4)`
 
 const Container = styled.View`
   /* padding: 15px; */
-  margin: 20px 0;
+  /* margin: 20px 0; */
 
   /* background: blue; */
   position: relative;
@@ -120,5 +120,3 @@ const RevealMealButton = styled(ButtonReveal)`
 const AddProductButton = styled(ButtonSecondary)`
   margin: 20px 0;
 `
-
-type MealId = Selectors.MealWithRatio['id'];

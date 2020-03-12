@@ -43,4 +43,5 @@ export const ChartMacroCircles = (props: ChartMacroCirclesProps) => {
 const Container = styled.View`
   flex-direction: row;
   justify-content: space-around;
+  margin: ${props => props.theme.spacing.secondary}px;
 `
