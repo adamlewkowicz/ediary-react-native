@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components/native';
 import dayjs from 'dayjs';
 import { DatePickerAndroid, DatePickerAndroidDateSetAction } from 'react-native';
-import { Block } from '../Elements';
 import { RightArrowIcon } from '../Icons';
+import { TextPrimary, H1 } from '../../_components';
+import { theme } from '../../common/theme';
 
 interface DateChangerProps {
   value: Date
@@ -36,7 +37,7 @@ export const DateChanger = (props: DateChangerProps) => {
   }
 
   return (
-    <Block marginVertical={8} align="center" space="space-between">
+    <Container>
       <DayChangeButton
         accessibilityLabel="Poprzedni dzień"
         onPress={() => handleDayChange('prev')}
@@ -53,9 +54,16 @@ export const DateChanger = (props: DateChangerProps) => {
       >
         <ArrowIconRight {...ARROW_ICON_STYLE} />
       </DayChangeButton>
-    </Block>
+    </Container>
   );
 }
+
+const Container = styled.View`
+  flex-direction: row;
+  margin: 8px 0;
+  align-items: center;
+  justify-content: space-between;
+`
 
 const DayChangeButton = styled.TouchableOpacity`
   padding: 20px;
@@ -73,19 +81,17 @@ const CalendarButton = styled.TouchableOpacity`
   margin: 30px 0;
 `
 
-const Title = styled.Text`
-  font-size: 25px;
-  font-family: ${props => props.theme.fontWeight.regular};
-  font-weight: bold;
+const Title = styled(H1)`
+  font-size: 27px;
+
 `
 
-const DateInfo = styled.Text`
-  margin-top: 8px;
-  font-family: ${props => props.theme.fontWeight.regular};
+const DateInfo = styled(TextPrimary)`
+  font-family: ${props => props.theme.fontWeight.light};
 `
 
 const ARROW_ICON_STYLE = {
-  fill: '#17A7F2',
+  fill: theme.color.highlight,
   width: 26,
   height: 26,
 }
