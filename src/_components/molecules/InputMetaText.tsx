@@ -1,6 +1,7 @@
 import React from 'react';
-import { Input, InputProps } from '../';
+import { InputRef, InputProps } from '../';
 import styled from 'styled-components/native';
+import { TextInput } from 'react-native';
 
 interface InputMetaTextProps extends InputProps {
   metaText: string
@@ -9,16 +10,22 @@ interface InputMetaTextProps extends InputProps {
 export const InputMetaText = (props: InputMetaTextProps) => {
   const {
     metaText,
+    forwardedRef,
     ...inputProps
   } = props;
 
   return (
-    <Input
+    <InputRef
       {...inputProps}
+      ref={forwardedRef}
       rightContent={<MetaText>{metaText}</MetaText>}
     />
   );
 }
+
+export const InputMetaTextRef = React.forwardRef<TextInput, InputMetaTextProps>(
+  (props, ref) => <InputMetaText {...props} forwardedRef={ref as any} />
+);
 
 const MetaText = styled.Text`
   position: absolute;

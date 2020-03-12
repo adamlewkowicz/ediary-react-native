@@ -2,6 +2,7 @@ export * from './ButtonReveal';
 export * from './ChartMacroBar';
 export * from './ChartCircle';
 export * from './InputMetaText';
+export * from './InputButton';
 export * from './ChartMacroCircle';
 export * from './RadioInput';
 export * from './RadioInputsRow';

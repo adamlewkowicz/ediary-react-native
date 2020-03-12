@@ -1,8 +1,8 @@
 import React, { ReactNode, RefObject } from 'react';
 import styled from 'styled-components/native'
-import { TextInputProps, TouchableOpacityProps, TextInput as NativeTextInput } from 'react-native';
+import { TextInputProps, TextInput as NativeTextInput } from 'react-native';
 import { theme } from '../../common/theme';
-import { ButtonSecondary, InputLabel } from '../index';
+import { InputLabel } from '../index';
 
 export interface InputProps extends TextInputProps  {
   label: string
@@ -15,6 +15,7 @@ export const Input = (props: InputProps) => {
   const {
     rightContent,
     label,
+    accessibilityLabel = label,
     forwardedRef,
     ...inputProps
   } = props;
@@ -24,6 +25,7 @@ export const Input = (props: InputProps) => {
       <InputLabel>{label}</InputLabel>
       <Content>
         <TextInput
+          accessibilityLabel={accessibilityLabel}
           placeholderTextColor={theme.color.tertiary}
           ref={forwardedRef}
           {...inputProps}
@@ -38,34 +40,9 @@ export const InputRef = React.forwardRef<NativeTextInput, InputProps>(
   (props, ref) => <Input {...props} forwardedRef={ref as RefObject<NativeTextInput>} />
 );
 
-interface InputButtonProps extends InputProps {
-  buttonText: string
-  onPress: TouchableOpacityProps['onPress']
-}
-
-export const InputButton = (props: InputButtonProps) => {
-  const { buttonText, onPress, ...inputProps } = props;
-
-  return (
-    <Input
-      {...inputProps}
-      rightContent={(
-        <ButtonSecondaryStyled onPress={onPress}>
-          {buttonText}
-        </ButtonSecondaryStyled>
-      )}
-    />
-  );
-}
-
 const Container = styled.View`
   margin-bottom: 20px;
   flex: 1;
-`
-
-const ButtonSecondaryStyled = styled(props => <ButtonSecondary {...props} />)`
-  margin-left: ${props => props.theme.margin.inputSpace};
-  min-width: 100px;
 `
 
 const TextInput = styled.TextInput`

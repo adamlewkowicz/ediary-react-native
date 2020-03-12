@@ -12,15 +12,15 @@ import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
 import {
-  InputMetaText,
   Section,
   Table,
   Group,
   TextSecondary,
   TextPrimary,
   ButtonPrimary,
-  InputButton,
   InputRef,
+  InputButtonRef,
+  InputMetaTextRef,
 } from '../../_components';
 
 interface ProductCreateScreenProps {}
@@ -66,6 +66,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
   const handleBarcodeScanNavigation = (): void => {
     navigate('BarcodeScan', {
       onBarcodeDetected(barcode) {
+        navigation.goBack();
         handleProductDataUpdate({ barcode });
       }
     });
@@ -81,6 +82,8 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
       </SaveButton>
     )
   });
+
+  console.log({ kcalInputRef })
 
   return (
     <ScrollView>
@@ -131,7 +134,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
               onSubmitEditing={protsInputRef.current?.focus}
             />
           </Group.Container>
-          <InputMetaText
+          <InputMetaTextRef
             value={state.productData.prots}
             onChangeText={prots => handleProductDataUpdate({ prots })}
             label="Białko"
@@ -156,14 +159,14 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
               onSubmitEditing={kcalInputRef.current?.focus}
             />
           </Group.Container>
-          <InputButton
+          <InputButtonRef
             value={state.productData.kcal}
             onChangeText={kcal => handleProductDataUpdate({ kcal })}
             label="Kalorie"
             placeholder="0"
             buttonText="Oblicz"
-            onPress={handleCaloriesEvaluation}
-            // ref={kcalInputRef}
+            onButtonPress={handleCaloriesEvaluation}
+            ref={kcalInputRef}
             onSubmitEditing={barcodeInputRef.current?.focus}
           />
         </Section>
@@ -180,12 +183,12 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           ))}
         </Section>
         <Section title="Inne">
-          <InputButton
+          <InputButtonRef
             label="Kod kreskowy"
             placeholder="5900512300108"
             buttonText="Zeskanuj"
-            // ref={barcodeInputRef}
-            onPress={handleBarcodeScanNavigation}
+            onButtonPress={handleBarcodeScanNavigation}
+            ref={barcodeInputRef}
           />
         </Section>
         <ButtonPrimary>
