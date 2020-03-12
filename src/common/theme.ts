@@ -4,8 +4,10 @@ const color_V2 = {
   secondary: '#B5BACC',
   tertiary: '#E1E5F5',
   quaternary: '#F3F5FC',
+  quinary: '#f7f9ff',
 
   highlight: '#3F71FF',
+  highlightSecondary: '#6BB4DD',
 
   success: '#2DD266',
   error: '#FF7979',

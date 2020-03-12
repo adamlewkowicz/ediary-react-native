@@ -11,18 +11,18 @@ import { theme } from '../../common/theme';
 
 export interface ChartCircleProps {
   percentages: number
+  size?: number
   width?: number
-  height?: number
   children?: ReactNode
   gradientColors: readonly [string, string]
 }
 
 export const ChartCircle = (props: ChartCircleProps) => {
   const {
-    width = SETTINGS.size,
-    height = SETTINGS.size,
-    gradientColors,
+    size: SIZE = 80,
+    width: WIDTH = 5,
   } = props;
+  const [firstColor, secondColor] = props.gradientColors;
 
   const percentages = props.percentages > 100 ? 100 : props.percentages;
 
@@ -36,22 +36,23 @@ export const ChartCircle = (props: ChartCircleProps) => {
     }
   });
 
-  const CX = width / 2;
-  const CY = height / 2;
-
+  const CX = SIZE / 2;
+  const CY = CX;
+  const RADIUS = SIZE / 2.5;
+  
   return (
     <Container>
-      <SvgContainer height={height} width={width}>
+      <SvgContainer height={SIZE} width={SIZE}>
         <Defs>
           <LinearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
             <Stop
               offset="0%"
-              stopColor={gradientColors[0]}
+              stopColor={firstColor}
               stopOpacity="1"
             />
             <Stop
               offset="100%"
-              stopColor={gradientColors[1]}
+              stopColor={secondColor}
               stopOpacity="1"
             />
           </LinearGradient>
@@ -59,18 +60,18 @@ export const ChartCircle = (props: ChartCircleProps) => {
         <AnimatedCircle
           cx={CX}
           cy={CY}
-          r={SETTINGS.radius}
+          r={RADIUS}
           fill="none"
-          stroke={theme.colors.quaternary}
-          strokeWidth={SETTINGS.thickness}
+          stroke={theme.colors.quinary}
+          strokeWidth={WIDTH}
         />
         <AnimatedCircle
           cx={CX}
           cy={CY}
-          r={SETTINGS.radius}
+          r={RADIUS}
           fill="none"
           stroke="url(#grad1)"
-          strokeWidth={SETTINGS.thickness}
+          strokeWidth={WIDTH}
           strokeDasharray="1000"
           strokeDashoffset={ratioSpring.value.interpolate(...SETTINGS.interpolation)}
           strokeLinecap="round"

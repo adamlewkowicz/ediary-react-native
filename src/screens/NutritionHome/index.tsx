@@ -11,7 +11,7 @@ import { CaloriesChart } from '../../components/CaloriesChart';
 import { useAfterInteractions, useNavigationData } from '../../hooks';
 import { ProductItem } from '../../components/ProductItem';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
-import { ChartMacroCircles, MealItem, MealItemSeparator, ButtonSecondary, H1, ButtonSecondaryArrow } from '../../_components';
+import { ChartMacroCircles, MealItem, MealItemSeparator, ButtonSecondary, H1, ButtonSecondaryArrow, ChartCircle, ChartCalories } from '../../_components';
 
 interface NutritionHomeScreenProps {}
 
@@ -105,7 +105,11 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         value={appDate}
         onChange={date => dispatch(Actions.appDateUpdated(date))}
       />
-      <CaloriesChart data={macroNeedsLeft.kcal} />
+      <ChartCalories
+        percentages={macroNeedsLeft.kcal.ratio}
+        value={macroNeedsLeft.kcal.eaten}
+        valueLeft={macroNeedsLeft.kcal.needed}
+      />
       <ChartMacroCircles
         values={[
           macroNeedsLeft.carbs.eaten,
@@ -161,7 +165,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
       /> */}
       <ContentContainer>
         <ButtonAddOwnProduct onPress={handleProductCreateNavigation}>
-          Dodaj własny produkt
+          Utwórz własny produkt
         </ButtonAddOwnProduct>
       </ContentContainer>
     </ScrollView>

@@ -25,13 +25,11 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
   return (
     <Container>
       <InfoContainer onPress={handleMealPress}>
-        <Heading>
-          <BaseInfo>
-            <Time>14:00</Time>
-            <H2>{props.meal.name}</H2>
-          </BaseInfo>
-          <TextHighlight>{props.meal.macro.kcal} kcal</TextHighlight>
-        </Heading>
+        <Time>14:00</Time>
+        <BaseInfo>
+          <H2>{props.meal.name}</H2>
+          <Calories>{props.meal.macro.kcal} kcal</Calories>
+        </BaseInfo>
         <ProgressBar
           percentages={41}
           colors={theme.gradient.kcal}
@@ -75,27 +73,25 @@ const InfoContainer = styled.TouchableOpacity`
   padding: ${props => props.theme.spacing.screenPadding};
 `
 
+const Calories = styled(TextHighlight)`
+  color: ${props => props.theme.color.highlightSecondary};
+`
+
 const Time = styled(H4)`
-  margin-bottom: 2px;
 `
 
 const Container = styled.View`
-  /* padding: 15px; */
-  /* margin: 20px 0; */
-
-  /* background: blue; */
   position: relative;
 `
 
-const Heading = styled.View`
+const BaseInfo = styled.View`
+  /* padding: 10px 0; */
+  /* background: red; */
   flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 5px;
   align-items: center;
-  /* padding: 0 10px; */
+  justify-content: space-between;
+  margin: 7px 0;
 `
-
-const BaseInfo = styled.View``
 
 const ChartsContainer = styled.View`
   margin-top: 40px;

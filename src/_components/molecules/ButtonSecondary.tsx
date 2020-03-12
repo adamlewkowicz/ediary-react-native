@@ -41,6 +41,6 @@ const ButtonText = styled(TextPrimary)`
 const ICON_STYLE = {
   width: 16,
   height: 16,
-  fill: theme.color.highlight,
+  fill: theme.color.primary,
   style: { marginLeft: 5 }
 } as const;

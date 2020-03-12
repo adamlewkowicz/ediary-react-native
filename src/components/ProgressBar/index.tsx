@@ -72,7 +72,7 @@ const BackgroundStripe = styled.View<{
   vertical: boolean
   width: string
 }>`
-  background-color: ${props => props.theme.color.blue20};
+  background-color: ${props => props.theme.color.quinary};
   height: ${props => props.vertical ? '100%' : props.width};
   width: ${props => props.vertical ? props.width : '100%'};
 `
