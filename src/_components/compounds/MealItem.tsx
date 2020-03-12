@@ -6,28 +6,40 @@ import { theme } from '../../common/theme';
 import { ButtonReveal, ChartMacroCircles } from '../../_components';
 import { MealProductItem } from './MealProductItem';
 import { ButtonSecondary } from '../molecules/_index';
+import { Selectors } from '../../store';
 
-interface MealItemProps {
+interface MealItemProps<
+  T extends Selectors.MealWithRatio,
+  P extends T['products'][number] = T['products'][number]
+> {
   isOpened?: boolean
+  meal: T
+  onMealPressed?: (mealId: T['id']) => void
+  onProductAdd?: (meal: T) => void
+  onProductPressed?: (productId: P['id']) => void
 }
 
-export const MealItem = (props: MealItemProps) => {
+export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps<T>) => {
+  const handleMealPress = () => props.onMealPressed?.(props.meal.id);
+
   return (
     <Container>
-      <Heading>
-        <BaseInfo>
-          <H4>14:00</H4>
-          <H2>Zupa pomidorowa</H2>
-        </BaseInfo>
-        <TextHighlight>418 kcal</TextHighlight>
-      </Heading>
-      <ProgressBar
-        percentages={1500}
-        colors={theme.gradient.kcal}
-      />
-      <RevealMealButton />
-      {props.isOpened && (
+      <InfoContainer onPress={handleMealPress}>
+        <Heading>
+          <BaseInfo>
+            <Time>14:00</Time>
+            <H2>{props.meal.name}</H2>
+          </BaseInfo>
+          <TextHighlight>{props.meal.macro.kcal} kcal</TextHighlight>
+        </Heading>
+        <ProgressBar
+          percentages={41}
+          colors={theme.gradient.kcal}
+        />
+      </InfoContainer>
+      {props.meal.isToggled && (
         <>
+          <RevealMealButton onPress={handleMealPress} />
           <ChartsContainer>
             <ChartMacroCircles
               values={[14, 68, 47]}
@@ -35,10 +47,16 @@ export const MealItem = (props: MealItemProps) => {
             />
           </ChartsContainer>
           <ProductsContainer>
+            {props.meal.products.map(product => (
+              <MealProductItem
+                onPress={() => props.onProductPressed?.(product.id)}
+              />
+            ))}
             <MealProductItem />
             <MealProductItem />
-            <MealProductItem />
-            <AddProductButton>
+            <AddProductButton
+              onPress={() => props.onProductAdd?.(props.meal)}
+            >
               Dodaj produkt
             </AddProductButton>
           </ProductsContainer>
@@ -48,16 +66,31 @@ export const MealItem = (props: MealItemProps) => {
   );
 }
 
+export const MealItemSeparator = styled.View`
+  height: 1px;
+  background-color: ${props => props.theme.color.quaternary};
+`
+
+const InfoContainer = styled.TouchableOpacity`
+  padding: 10px;
+`
+
+const Time = styled(H4)`
+  margin-bottom: 2px;
+`
+
 const Container = styled.View`
   /* padding: 15px; */
-  margin-bottom: 40px;
+  margin: 15px 0;
+
+  /* background: blue; */
   position: relative;
 `
 
 const Heading = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   align-items: center;
   /* padding: 0 10px; */
 `
@@ -80,10 +113,12 @@ const ProductsContainer = styled.View`
 
 const RevealMealButton = styled(ButtonReveal)`
   position: absolute;
-  top: 66px;
+  top: 60px;
   z-index: 200;
 `
 
 const AddProductButton = styled(ButtonSecondary)`
   margin: 20px 0;
 `
+
+type MealId = Selectors.MealWithRatio['id'];

@@ -84,3 +84,4 @@ export const getMacroNeedsLeft = createSelector(
 );
 
 export type MealsWithRatio = ReturnType<typeof getMealsWithRatio>;
+export type MealWithRatio = MealsWithRatio[number];

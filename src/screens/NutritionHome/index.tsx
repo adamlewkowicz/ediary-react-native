@@ -17,7 +17,7 @@ import { useAfterInteractions, useNavigationData } from '../../hooks';
 import { ProductItem } from '../../components/ProductItem';
 import { Button } from '../../components/Button';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
-import { ChartMacroCircles, MealItem } from '../../_components';
+import { ChartMacroCircles, MealItem, MealItemSeparator } from '../../_components';
 
 interface NutritionHomeScreenProps {}
 
@@ -143,8 +143,19 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
           />
         ))}
       </MacroCards>
-      <MealItem isOpened />
-      <MealItem />
+      <FlatList 
+        data={mealsWithRatio}
+        keyExtractor={item => item.id.toString()}
+        ItemSeparatorComponent={MealItemSeparator}
+        renderItem={({ item: meal }) => (
+          <MealItem 
+            meal={meal}
+            onMealPressed={(mealId) => dispatch(Actions.mealToggled(mealId))}
+            onProductAdd={handleProductFindNavigation}
+            onProductPressed={(productId) => dispatch(Actions.productToggled(productId))}
+          />
+        )}
+      />
       <FlatList
         data={mealsWithRatio}
         keyExtractor={item => item.id.toString()}
