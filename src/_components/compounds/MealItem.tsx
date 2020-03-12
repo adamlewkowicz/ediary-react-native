@@ -81,7 +81,7 @@ const Time = styled(H4)`
 
 const Container = styled.View`
   /* padding: 15px; */
-  margin: 15px 0;
+  margin: 20px 0;
 
   /* background: blue; */
   position: relative;

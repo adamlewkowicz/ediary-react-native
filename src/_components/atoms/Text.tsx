@@ -36,6 +36,10 @@ export const TextSecondary = styled(Text)`
   color: ${props => props.theme.color.secondary};
 `
 
+export const TextTertiary = styled(Text)`
+  color: ${props => props.theme.color.tertiary};
+`
+
 export const TableHeading = styled.Text`
   font-size: 12px;
   font-family: ${props => props.theme.fontWeight.medium};

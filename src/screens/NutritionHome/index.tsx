@@ -130,19 +130,12 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
           macroNeedsLeft.prots.ratio,
           macroNeedsLeft.fats.ratio,
         ]}
+        // valuesLeft={[
+        //   macroNeedsLeft.carbs.needed,
+        //   macroNeedsLeft.prots.needed,
+        //   macroNeedsLeft.fats.needed,
+        // ]}
       />
-      <MacroCards>
-        {BASE_MACRO_ELEMENTS.map(element => (
-          <MacroCard
-            key={element}
-            colors={theme.gradient[element]}
-            percentages={macroNeedsLeft[element].ratio}
-            title={elementTitles[element]}
-            reached={macroNeedsLeft[element].eaten}
-            goal={macroNeedsLeft[element].needed}
-          />
-        ))}
-      </MacroCards>
       <FlatList 
         data={mealsWithRatio}
         keyExtractor={item => item.id.toString()}

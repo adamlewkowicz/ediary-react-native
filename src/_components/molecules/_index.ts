@@ -11,3 +11,4 @@ export * from './ButtonSecondary';
 export * from './Input';
 export * from './Section';
 export * as Group from './InputGroup';
+export * from './TextSplit';
