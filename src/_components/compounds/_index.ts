@@ -4,3 +4,4 @@ export * from './ProductMacroTable';
 export * from './ChartMacroBars';
 export * from './ChartMacroCircles';
 export * from './ChartCalories';
+export * from './ChartMacroBarsBase';

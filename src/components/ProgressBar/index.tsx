@@ -66,6 +66,7 @@ const Container = styled.View<{
   height: ${props => props.vertical ? props.length : 'auto'};
   margin: ${props => `${props.marginVertical}px 0`};
   overflow: hidden;
+  flex: 1;
 `
 
 const BackgroundStripe = styled.View<{

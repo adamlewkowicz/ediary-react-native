@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { H2, H4, TextHighlight } from '../atoms/Text';
-import { ProgressBar } from '../../components/ProgressBar';
-import { theme } from '../../common/theme';
 import { ButtonReveal, ChartMacroCircles } from '../../_components';
 import { MealProductItem } from './MealProductItem';
 import { ButtonSecondary } from '../molecules/_index';
 import { Selectors } from '../../store';
+import { ChartMacroBarsBase } from './ChartMacroBarsBase';
 
 interface MealItemProps<
   Meal extends Selectors.MealWithRatio,
@@ -30,9 +29,12 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
           <H2>{props.meal.name}</H2>
           <Calories>{props.meal.macro.kcal} kcal</Calories>
         </BaseInfo>
-        <ProgressBar
-          percentages={41}
-          colors={theme.gradient.kcal}
+        <ChartMacroBarsBase
+          percentages={[
+            12,
+            33,
+            84,
+          ]}
         />
       </InfoContainer>
       {props.meal.isToggled && (
@@ -90,7 +92,7 @@ const BaseInfo = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: 7px 0;
+  margin: 5px 0 10px 0;
 `
 
 const ChartsContainer = styled.View`
