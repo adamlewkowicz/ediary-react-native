@@ -6,6 +6,7 @@ import { MealProductItem } from './MealProductItem';
 import { ButtonSecondary } from '../molecules/_index';
 import { Selectors } from '../../store';
 import { ChartMacroBarsBase } from './ChartMacroBarsBase';
+import { layoutAnimateEase } from '../../common/utils';
 
 interface MealItemProps<
   Meal extends Selectors.MealWithRatio,
@@ -19,14 +20,19 @@ interface MealItemProps<
 }
 
 export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps<T>) => {
-  const handleMealPress = () => props.onMealPressed?.(props.meal.id);
+  const handleMealPress = () => {
+    props.onMealPressed?.(props.meal.id);
+  }
 
   return (
     <Container>
-      <InfoContainer onPress={handleMealPress}>
+      <InfoContainer
+        onPress={handleMealPress}
+        isOpened={props.meal.isToggled}
+      >
         <Time>14:00</Time>
         <BaseInfo>
-          <H2>{props.meal.name}</H2>
+          <MealName isOpened={props.meal.isToggled}>{props.meal.name}</MealName>
           <Calories>{props.meal.macro.kcal} kcal</Calories>
         </BaseInfo>
         <ChartMacroBarsBase
@@ -71,12 +77,21 @@ export const MealItemSeparator = styled.View`
   background-color: ${props => props.theme.color.quaternary};
 `
 
-const InfoContainer = styled.TouchableOpacity`
+interface IsOpenedProp {
+  isOpened?: boolean
+}
+
+const InfoContainer = styled.TouchableOpacity<IsOpenedProp>`
   padding: ${props => props.theme.spacing.screenPadding};
+  background-color: ${props => props.isOpened ? props.theme.color.primary : '#fff'}
 `
 
 const Calories = styled(TextHighlight)`
   color: ${props => props.theme.color.highlightSecondary};
+`
+
+const MealName = styled<IsOpenedProp>(H2)`
+  color: ${props => props.isOpened ? '#fff' : props.theme.color.primary}
 `
 
 const Time = styled(H4)`
@@ -96,9 +111,9 @@ const BaseInfo = styled.View`
 `
 
 const ChartsContainer = styled.View`
-  margin-top: 40px;
   padding: 40px 10px 20px 10px;
   border: ${props => `1px solid ${props.theme.color.tertiary}`}; 
+  background-color: ${props => props.theme.color.primary};
 `
 
 // TODO: HARDOCDED COLOR

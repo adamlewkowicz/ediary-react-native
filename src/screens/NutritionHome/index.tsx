@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../../store';
-import { FlatList, Alert, ScrollView } from 'react-native';
+import { FlatList, Alert, SafeAreaView as View, InteractionManager } from 'react-native';
 import { DateChanger } from '../../components/DateChanger';
 import styled from 'styled-components/native';
 import { MealListItem } from '../../components/MealListItem';
@@ -12,6 +12,8 @@ import { useAfterInteractions, useNavigationData } from '../../hooks';
 import { ProductItem } from '../../components/ProductItem';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
 import { ChartMacroCircles, MealItem, MealItemSeparator, ButtonSecondary, H1, ButtonSecondaryArrow, ChartCircle, ChartCalories } from '../../_components';
+import { layoutAnimateEase } from '../../common/utils';
+import { MealWithRatio } from '../../store/selectors';
 
 interface NutritionHomeScreenProps {}
 
@@ -23,11 +25,13 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const appDateDay = useSelector(Selectors.getAppDay);
   const macroNeedsLeft = useSelector(Selectors.getMacroNeedsLeft);
   const mealsWithRatio = useSelector(Selectors.getMealsWithRatio);
+  const mealListRef = useRef<FlatList<Selectors.MealWithRatio>>(null);
 
   useAfterInteractions(() => dispatch(Actions.productHistoryRecentLoad()));
 
   useEffect(() => {
     dispatch(Actions.mealsFindByDay(appDateDay));
+    layoutAnimateEase();
   }, [appDateDay]);
 
 
@@ -99,8 +103,34 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     );
   }
 
-  return (
-    <ScrollView>
+  const handleMealPress = (
+    mealId: DiaryMealId,
+    meal: Selectors.MealWithRatio,
+    index: number
+  ): void => {
+    const scroll = () => {
+      mealListRef.current?.scrollToIndex({
+        index,
+        // viewPosition: 0.2,
+        // animated: true,
+        viewOffset: 50,
+      });
+    }
+
+    layoutAnimateEase(() => {
+      if (!meal.isToggled) scroll();
+    });
+
+    dispatch(Actions.mealToggled(mealId));
+  }
+
+  const handleProductPress = useCallback((productId: ProductId) =>
+    dispatch(Actions.productToggled(productId)),
+    [dispatch]
+  );
+
+  const Header = (
+    <>
       <DateChanger
         value={appDate}
         onChange={date => dispatch(Actions.appDateUpdated(date))}
@@ -127,16 +157,32 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         //   macroNeedsLeft.fats.needed,
         // ]}
       />
-      <FlatList 
+    </>
+  );
+
+  const Footer = (
+    <ContentContainer>
+      <ButtonAddOwnProduct onPress={handleProductCreateNavigation}>
+        Utwórz własny produkt
+      </ButtonAddOwnProduct>
+    </ContentContainer>
+  );
+
+  return (
+    <Container>
+      <FlatList
+        ref={mealListRef}
         data={mealsWithRatio}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={mealKeyExtractor}
         ItemSeparatorComponent={MealItemSeparator}
-        renderItem={({ item: meal }) => (
-          <MealItem 
+        ListFooterComponent={Footer}
+        ListHeaderComponent={Header}
+        renderItem={({ item: meal, index }) => (
+          <MealItem
             meal={meal}
-            onMealPressed={(mealId) => dispatch(Actions.mealToggled(mealId))}
+            onMealPressed={(mealId) => handleMealPress(mealId, meal, index)}
             onProductAdd={handleProductFindNavigation}
-            onProductPressed={(productId) => dispatch(Actions.productToggled(productId))}
+            onProductPressed={handleProductPress}
           />
         )}
       />
@@ -163,14 +209,13 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
           />
         )}
       /> */}
-      <ContentContainer>
-        <ButtonAddOwnProduct onPress={handleProductCreateNavigation}>
-          Utwórz własny produkt
-        </ButtonAddOwnProduct>
-      </ContentContainer>
-    </ScrollView>
+    </Container>
   );
 }
+
+const Container = styled.View`
+  flex: 1;
+`
 
 const ContentContainer = styled.View`
   margin: 40px 0 15px 0;
@@ -179,3 +224,5 @@ const ContentContainer = styled.View`
 const ButtonAddOwnProduct = styled(ButtonSecondaryArrow)`
   margin: ${props => `0 ${props.theme.spacing.screenPadding}`};
 `
+
+const mealKeyExtractor = (meal: MealWithRatio): string => meal.id.toString();
