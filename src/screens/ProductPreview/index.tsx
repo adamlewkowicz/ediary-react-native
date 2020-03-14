@@ -13,6 +13,7 @@ import {
 } from '../../_components';
 import { useNavigationData } from '../../hooks';
 import { ProductPreviewScreenNavigationProps } from '../../navigation';
+import { fillArrayWithinRange } from '../../common/utils';
 
 export const ProductPreviewScreen = () => {
   const { params, navigation } = useNavigationData<ProductPreviewScreenNavigationProps>();
@@ -48,11 +49,11 @@ export const ProductPreviewScreen = () => {
 
   return (
     <ScreenContainer>
-      <H1>{params.product.name}</H1>
+      <ProductName>{params.product.name}</ProductName>
       <Section title="Ilość produktu">
         <RadioInputsRow
           title="Porcje"
-          values={[1, 2, 3, 4, 5]}
+          values={PORTIONS}
           activeValue={dynamicPortion}
           onChange={handlePortionUpdate}
         />
@@ -65,7 +66,7 @@ export const ProductPreviewScreen = () => {
         />
       </Section>
       <Section title="Makroskładniki">
-        <Kcal>{params.product.macro.kcal} kcal</Kcal>
+        <Calories>{params.product.macro.kcal} kcal</Calories>
         <ChartMacroCircles
           values={[
             params.product.macro.carbs,
@@ -94,7 +95,13 @@ export const ProductPreviewScreen = () => {
   );
 }
 
-const Kcal = styled(H1)`
+const ProductName = styled(H1)`
+  margin-bottom: 20px;
+`
+
+const Calories = styled(H1)`
   text-align: center;
   margin-bottom: 10px;
 `
+
+const PORTIONS = fillArrayWithinRange({ from: 1, to: 6 });

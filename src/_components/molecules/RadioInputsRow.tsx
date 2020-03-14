@@ -34,6 +34,7 @@ const Container = styled.View`
 
 const RadioInputsContainer = styled.View`
   flex-direction: row;
+  overflow: visible;
 `
 
 const StyledRadioInput = styled(RadioInput)`
