@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator, StackNavigationProp, StackNavigationOptions } from '@react-navigation/stack';
 import { APP_ROUTE } from './consts';
-import { BarcodeId } from '../types';
+import { BarcodeId, ProductId } from '../types';
 import { Product } from '../database/entities';
 import { TakePictureResponse } from 'react-native-camera/types';
 import {
@@ -31,7 +31,10 @@ export type NutritionStackParamList = {
     onBarcodeDetected?: (barcode: BarcodeId) => void
     onPhotoTaken?: (data: TakePictureResponse) => void
   };
-  [APP_ROUTE.ProductPreview]: {};
+  [APP_ROUTE.ProductPreview]: {
+    product: Product
+    onProductQuantityUpdated?: (quantity: number) => void
+  };
 }
 
 interface NutritionStackProps {
@@ -89,6 +92,8 @@ export type ProductFindScreenNavigationProps = ScreenProps<'ProductFind'>;
 export type ProductCreateScreenNavigationProps = ScreenProps<'ProductCreate'>;
 
 export type BarcodeScanScreenNavigationProps = ScreenProps<'BarcodeScan'>;
+
+export type ProductPreviewScreenNavigationProps = ScreenProps<'ProductPreview'>;
 
 type ScreenProps<
   K extends keyof NutritionStackParamList

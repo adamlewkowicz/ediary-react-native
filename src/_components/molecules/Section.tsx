@@ -11,13 +11,17 @@ interface SectionProps {
 export const Section = (props: SectionProps) => {
   return (
     <Container>
-      <H2>{props.title}</H2>
+      <Title>{props.title}</Title>
       {props.description && <H3>{props.description}</H3>}
       {props.children}
     </Container>
   );
 }
 
+const Title = styled(H2)`
+  margin-bottom: 10px;
+`
+
 const Container = styled.View`
-  padding: 10px 0;
+  margin: 20px 0;
 `

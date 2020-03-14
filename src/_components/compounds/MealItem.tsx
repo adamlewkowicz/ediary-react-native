@@ -13,14 +13,14 @@ interface MealItemProps<
 > {
   isOpened?: boolean
   meal: Meal
-  onMealPressed?: (mealId: Meal['id']) => void
+  onMealPress?: (mealId: Meal['id']) => void
   onProductAdd?: (meal: Meal) => void
-  onProductPressed?: (productId: Product['id']) => void
+  onProductPress?: (mealId: Meal['id'], product: Product) => void
 }
 
 export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps<T>) => {
   const handleMealPress = () => {
-    props.onMealPressed?.(props.meal.id);
+    props.onMealPress?.(props.meal.id);
   }
 
   return (
@@ -32,7 +32,7 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
         <Time>14:00</Time>
         <BaseInfo>
           <MealName isOpened={props.meal.isToggled}>{props.meal.name}</MealName>
-          <Calories>{props.meal.macro.kcal} kcal</Calories>
+          <Calories>{props.meal.kcal} kcal</Calories>
         </BaseInfo>
         <ChartMacroBarsBase
           percentages={[
@@ -54,11 +54,11 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
           <ProductsContainer>
             {props.meal.products.map(product => (
               <MealProductItem
-                onPress={() => props.onProductPressed?.(product.id)}
+                key={product.id}
+                product={product}
+                onPress={() => props.onProductPress?.(props.meal.id, product)}
               />
             ))}
-            <MealProductItem />
-            <MealProductItem />
             <AddProductButton
               onPress={() => props.onProductAdd?.(props.meal)}
             >
@@ -127,6 +127,7 @@ const InfoContainer = styled.TouchableOpacity<IsOpenedProp>`
   background-color: ${props => props.isOpened ? props.theme.color.primary : '#fff'};
 `
 
+// @ts-ignore
 const MealName = styled<IsOpenedProp>(H2)`
   color: ${props => props.isOpened ? '#fff' : props.theme.color.primary};
 `

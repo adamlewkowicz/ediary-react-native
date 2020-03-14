@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import {
   ChartMacroBars,
@@ -9,36 +9,69 @@ import {
   ProductMacroTable,
   RadioInputsRow,
   InputMetaText,
+  ButtonPrimary,
 } from '../../_components';
+import { useNavigationData } from '../../hooks';
+import { ProductPreviewScreenNavigationProps } from '../../navigation';
 
 export const ProductPreviewScreen = () => {
+  const { params, navigation } = useNavigationData<ProductPreviewScreenNavigationProps>();
+  const [{ value: productPortion = 100 } = {}] = params.product.portions ?? [];
+  const [quantity, setQuantity] = useState<number>(params.product.quantity ?? 0);
+
+  const isEditMode = params.onProductQuantityUpdated != null;
+
+  const handleQuantityUpdate = (): void => {
+    params.onProductQuantityUpdated?.(quantity);
+  }
+
+  const handlePortionUpdate = (portion: number): void => {
+    setQuantity(productPortion * portion);
+  }
+
+  const dynamicPortion = Math.round(quantity / productPortion);
+
+  if (isEditMode) {
+    navigation.setOptions({
+      headerTitle: 'Edytuj ilość produktu',
+      headerRight: () => (
+        <ButtonPrimary onPress={handleQuantityUpdate}>
+          Zapisz
+        </ButtonPrimary>
+      )
+    });
+  } else {
+    navigation.setOptions({
+      headerTitle: params.product.name,
+    });
+  }
+
   return (
     <ScreenContainer>
-      <H1>Pomidory w puszce</H1>
+      <H1>{params.product.name}</H1>
       <Section title="Ilość produktu">
         <RadioInputsRow
           title="Porcje"
-          values={[1, 2, 3]}
-          activeValue={1}
-          onChange={() => {}}
-        />
-        <RadioInputsRow
-          title="Szklanki"
-          values={[1, 2, 3, 4]}
-          activeValue={2}
-          onChange={() => {}}
+          values={[1, 2, 3, 4, 5]}
+          activeValue={dynamicPortion}
+          onChange={handlePortionUpdate}
         />
         <InputMetaText
           metaText="g"
           label="Ilość"
           placeholder="0"
-          value={"417"}
+          value={quantity.toString()}
+          onChangeText={quantity => setQuantity(Number(quantity))}
         />
       </Section>
       <Section title="Makroskładniki">
-        <Kcal>421 kcal</Kcal>
+        <Kcal>{params.product.macro.kcal} kcal</Kcal>
         <ChartMacroCircles
-          values={[45, 18, 23]}
+          values={[
+            params.product.macro.carbs,
+            params.product.macro.prots,
+            params.product.macro.fats,
+          ]}
           percentages={[45, 67, 12]}
         />
         <ProductMacroTable

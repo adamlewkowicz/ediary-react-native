@@ -14,11 +14,12 @@ import { NutritionHomeScreenNavigationProps } from '../../navigation';
 import { ChartMacroCircles, MealItem, MealItemSeparator, ButtonSecondary, H1, ButtonSecondaryArrow, ChartCircle, ChartCalories } from '../../_components';
 import { layoutAnimateEase } from '../../common/utils';
 import { MealWithRatio } from '../../store/selectors';
+import { Product } from '../../database/entities';
 
 interface NutritionHomeScreenProps {}
 
 export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
-  const { navigate } = useNavigationData<NutritionHomeScreenNavigationProps>();
+  const { navigate, navigation } = useNavigationData<NutritionHomeScreenNavigationProps>();
   const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
   const dispatch = useDispatch();
   const appDate = useSelector(Selectors.getAppDate);
@@ -122,10 +123,15 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     if (!meal.isToggled) scroll();
   }
 
-  const handleProductPress = useCallback((productId: ProductId) =>
-    dispatch(Actions.productToggled(productId)),
-    [dispatch]
-  );
+  const handleProductPress = (mealId: MealId, product: Product) => {
+    navigate('ProductPreview', {
+      product,
+      onProductQuantityUpdated(quantity) {
+        navigation.goBack();
+        dispatch(Actions.mealProductQuantityUpdate(mealId, product.id, quantity));
+      }
+    });
+  }
 
   const Header = (
     <>
@@ -178,9 +184,9 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         renderItem={({ item: meal, index }) => (
           <MealItem
             meal={meal}
-            onMealPressed={(mealId) => handleMealPress(mealId, meal, index)}
+            onMealPress={(mealId) => handleMealPress(mealId, meal, index)}
             onProductAdd={handleProductFindNavigation}
-            onProductPressed={handleProductPress}
+            onProductPress={handleProductPress}
           />
         )}
       />
