@@ -31,9 +31,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
 
   useEffect(() => {
     dispatch(Actions.mealsFindByDay(appDateDay));
-    layoutAnimateEase();
   }, [appDateDay]);
-
 
   const handleProductFindNavigation = (
     meal: DiaryMeal | DiaryMealTemplate
@@ -117,11 +115,11 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
       });
     }
 
-    layoutAnimateEase(() => {
-      if (!meal.isToggled) scroll();
-    });
+    layoutAnimateEase();
 
     dispatch(Actions.mealToggled(mealId));
+
+    if (!meal.isToggled) scroll();
   }
 
   const handleProductPress = useCallback((productId: ProductId) =>
