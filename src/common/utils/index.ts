@@ -242,7 +242,7 @@ const mapObject = <
   ) as T;
 }
 
-const superEntries = <
+const objectEntries = <
   T extends object,
   Property extends keyof T = keyof T,
   Value = T[Property]
@@ -253,7 +253,7 @@ const superEntries = <
 export const calculateCaloriesByMacro = (
   macro: BaseMacroElements
 ): number => {
-  return superEntries(macro)
+  return objectEntries(macro)
     .reduce(
       (kcal, [macroName, macroQuantity]) => kcal += macroQuantity * KCAL_IN_ONE_MACRO_GRAM[macroName],
       0
