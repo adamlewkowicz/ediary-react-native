@@ -6,7 +6,6 @@ import { MealProductItem } from './MealProductItem';
 import { ButtonSecondary } from '../molecules/_index';
 import { Selectors } from '../../store';
 import { ChartMacroBarsBase } from './ChartMacroBarsBase';
-import { layoutAnimateEase } from '../../common/utils';
 
 interface MealItemProps<
   Meal extends Selectors.MealWithRatio,
@@ -25,7 +24,7 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
   }
 
   return (
-    <Container>
+    <Container isOpened={props.meal.isToggled}>
       <InfoContainer
         onPress={handleMealPress}
         isOpened={props.meal.isToggled}
@@ -45,7 +44,7 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
       </InfoContainer>
       {props.meal.isToggled && (
         <>
-          <RevealMealButton onPress={handleMealPress} />
+          {/* <RevealMealButton onPress={handleMealPress} /> */}
           <ChartsContainer>
             <ChartMacroCircles
               values={[14, 68, 47]}
@@ -77,33 +76,13 @@ export const MealItemSeparator = styled.View`
   background-color: ${props => props.theme.color.quaternary};
 `
 
-interface IsOpenedProp {
-  isOpened?: boolean
-}
-
-const InfoContainer = styled.TouchableOpacity<IsOpenedProp>`
-  padding: ${props => props.theme.spacing.screenPadding};
-  background-color: ${props => props.isOpened ? props.theme.color.primary : '#fff'}
-`
-
 const Calories = styled(TextHighlight)`
   color: ${props => props.theme.color.highlightSecondary};
 `
 
-const MealName = styled<IsOpenedProp>(H2)`
-  color: ${props => props.isOpened ? '#fff' : props.theme.color.primary}
-`
-
-const Time = styled(H4)`
-`
-
-const Container = styled.View`
-  position: relative;
-`
+const Time = styled(H4)``
 
 const BaseInfo = styled.View`
-  /* padding: 10px 0; */
-  /* background: red; */
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -111,14 +90,14 @@ const BaseInfo = styled.View`
 `
 
 const ChartsContainer = styled.View`
-  padding: 40px 10px 20px 10px;
-  border: ${props => `1px solid ${props.theme.color.tertiary}`}; 
+  padding: 0 20px;
+  border: ${props => `1px solid ${props.theme.color.quinary}`}; 
   background-color: ${props => props.theme.color.primary};
 `
 
 // TODO: HARDOCDED COLOR
 const ProductsContainer = styled.View`
-  background-color: #FAFBFF;
+  background-color: ${props => props.theme.color.primary};
   padding: 5px 15px;
   border-bottom-width: 1px;
   border-bottom-color: ${props => props.theme.color.tertiary};
@@ -126,10 +105,28 @@ const ProductsContainer = styled.View`
 
 const RevealMealButton = styled(ButtonReveal)`
   position: absolute;
-  top: 60px;
+  top: 70px;
   z-index: 200;
 `
 
 const AddProductButton = styled(ButtonSecondary)`
   margin: 20px 0;
+`
+
+interface IsOpenedProp {
+  isOpened?: boolean
+}
+
+const Container = styled.View<IsOpenedProp>`
+  position: relative;
+  background-color: ${props => props.isOpened ? props.theme.color.primary : '#fff'};
+`
+
+const InfoContainer = styled.TouchableOpacity<IsOpenedProp>`
+  padding: ${props => props.theme.spacing.screenPadding};
+  background-color: ${props => props.isOpened ? props.theme.color.primary : '#fff'};
+`
+
+const MealName = styled<IsOpenedProp>(H2)`
+  color: ${props => props.isOpened ? '#fff' : props.theme.color.primary};
 `
