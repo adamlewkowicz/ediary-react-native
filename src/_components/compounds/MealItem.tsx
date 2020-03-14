@@ -32,7 +32,7 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
         <Time>14:00</Time>
         <BaseInfo>
           <MealName isOpened={props.meal.isToggled}>{props.meal.name}</MealName>
-          <Calories>{props.meal.kcal} kcal</Calories>
+          <Calories>{props.meal.macro.kcal} kcal</Calories>
         </BaseInfo>
         <ChartMacroBarsBase
           percentages={props.meal.macroPercentages}

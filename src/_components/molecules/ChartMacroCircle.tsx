@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { ChartCircle, ChartCircleProps } from './ChartCircle';
-import { H4, TextPrimary } from '../atoms/Text';
+import { H4, TextSecondary } from '../atoms/Text';
 import { TextSplit } from './TextSplit';
 
 interface ChartMacroCircleProps extends ChartCircleProps {
@@ -17,7 +17,7 @@ export const ChartMacroCircle = (props: ChartMacroCircleProps) => {
       secondary={props.valueLeft}
     />
   ) : (
-    <TextPrimary>{props.value}g</TextPrimary>
+    <TextSecondary>{props.value}g</TextSecondary>
   );
 
   return (

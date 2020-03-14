@@ -8,7 +8,7 @@ interface MealProductItemProps {
   product: {
     name: string
     quantity: number
-    macro: { kcal: number }
+    kcal: number
   }
 }
 
@@ -20,7 +20,7 @@ export const MealProductItem = (props: MealProductItemProps) => {
           <ProductName>{props.product.name}</ProductName>
           <Quantity>{props.product.quantity}g - 1 porcja</Quantity>
         </Details>
-        <Calories>{props.product.macro.kcal} kcal</Calories>
+        <Calories>{props.product.kcal} kcal</Calories>
       </Table.Row>
     </TouchableOpacity>
   );

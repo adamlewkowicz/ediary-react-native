@@ -19,21 +19,21 @@ export const ChartMacroCircles = (props: ChartMacroCirclesProps) => {
         title="Węglowodany (g)"
         value={props.values[0]}
         valueLeft={props.valuesLeft?.[0]}
-        percentages={props.values[0]}
+        percentages={props.percentages[0]}
         gradientColors={theme.gradient.carbs}
       />
       <ChartMacroCircle
         title="Białko (g)"
         value={props.values[1]}
         valueLeft={props.valuesLeft?.[1]}
-        percentages={props.values[1]}
+        percentages={props.percentages[1]}
         gradientColors={theme.gradient.prots}
       />
       <ChartMacroCircle
         title="Tłuszcze (g)"
         value={props.values[2]}
         valueLeft={props.valuesLeft?.[2]}
-        percentages={props.values[2]}
+        percentages={props.percentages[2]}
         gradientColors={theme.gradient.fats}
       />
     </Container>
