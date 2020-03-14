@@ -71,7 +71,7 @@ export const getMealsWithRatio = createSelector(
 
 const getMealsMacroSum = createSelector(
   getCalcedMeals,
-  meals => meals.reduce((sum, meal) => ({
+  (meals): MacroElements => meals.reduce((sum, meal) => ({
     ...sum,
     carbs: Math.round(sum.carbs + meal.carbs),
     prots: Math.round(sum.prots + meal.prots),
