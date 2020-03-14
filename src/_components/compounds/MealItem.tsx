@@ -29,7 +29,7 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
         onPress={handleMealPress}
         isOpened={props.meal.isToggled}
       >
-        <Time>14:00</Time>
+        <Time>{props.meal.dateTimeBase}</Time>
         <BaseInfo>
           <MealName isOpened={props.meal.isToggled}>{props.meal.name}</MealName>
           <Calories>{props.meal.macro.kcal} kcal</Calories>

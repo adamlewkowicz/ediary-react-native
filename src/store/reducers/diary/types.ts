@@ -37,6 +37,7 @@ export interface DiaryMealBase {
   isToggled: boolean
   productIds: ProductId[]
   day: DateDay | null
+  dateTimeBase: string
 }
 
 export interface DiaryMealTemplate extends DiaryMealBase {

@@ -1,5 +1,5 @@
 import { TemplateId, TemplateIdReverted } from '../../../types';
-import { MACRO_ELEMENTS } from '../../../common/consts';
+import { MACRO_ELEMENTS, DAYJS_DATETIME_BASE } from '../../../common/consts';
 import { Meal } from '../../../database/entities';
 import { getDayFromDate, getTimeFromDate } from '../../../common/utils';
 import {
@@ -10,6 +10,7 @@ import {
   DiaryProduct,
   CalcMacroByQuantityData,
 } from './types';
+import dayjs from 'dayjs';
 
 export const calcMacroByQuantity = <T extends CalcMacroByQuantityData>(
   macroData: T,
@@ -44,6 +45,7 @@ export const getMealFromTemplate = (
     isToggled: false,
     templateId: template.id,
     productIds: [],
+    dateTimeBase: dayjs(template.time as any).format(DAYJS_DATETIME_BASE),
   }
 }
 
@@ -58,6 +60,7 @@ export const normalizeMeal = (
     isToggled: false,
     day: getDayFromDate(meal.date),
     time: getTimeFromDate(meal.date),
+    dateTimeBase: dayjs(meal.date).format(DAYJS_DATETIME_BASE),
     productIds: mealProducts.map(mealProduct => mealProduct.productId),
   }
 
