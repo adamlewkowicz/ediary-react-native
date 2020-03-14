@@ -2,27 +2,25 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { ProgressBar } from '../../components/ProgressBar';
 import { theme } from '../../common/theme';
+import { BaseMacroElements } from '../../types';
 
 interface ChartMacroBarsBaseProps {
-  /** `[carbs, prots, fats]` */
-  percentages: readonly [number, number, number]
+  percentages: BaseMacroElements
 }
 
 export const ChartMacroBarsBase = (props: ChartMacroBarsBaseProps) => {
-  const [carbs, prots, fats] = props.percentages;
-
   return (
     <Container>
       <ProgressBar
-        percentages={carbs}
+        percentages={props.percentages.carbs}
         colors={theme.gradient.carbs}
       />
       <ProgressBar
-        percentages={prots}
+        percentages={props.percentages.prots}
         colors={theme.gradient.prots}
       />
       <ProgressBar
-        percentages={fats}
+        percentages={props.percentages.fats}
         colors={theme.gradient.fats}
       />
     </Container>

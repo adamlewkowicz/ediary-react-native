@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, H4, TextHighlight, TextPrimary } from '..';
-import { View, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 
 interface MealProductItemProps {
@@ -28,6 +28,7 @@ export const MealProductItem = (props: MealProductItemProps) => {
 
 const ProductName = styled(TextPrimary)`
   color: #fff;
+  margin-bottom: 1px;
 `
 
 const Quantity = styled(H4)`
@@ -38,4 +39,6 @@ const Calories = styled(TextHighlight)`
   color: ${props => props.theme.color.highlightSecondary};
 `
 
-const Details = View;
+const Details = styled.View`
+  flex: 1;
+`

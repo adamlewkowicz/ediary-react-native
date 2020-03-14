@@ -35,11 +35,7 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
           <Calories>{props.meal.kcal} kcal</Calories>
         </BaseInfo>
         <ChartMacroBarsBase
-          percentages={[
-            12,
-            33,
-            84,
-          ]}
+          percentages={props.meal.macroPercentages}
         />
       </InfoContainer>
       {props.meal.isToggled && (
@@ -47,8 +43,16 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
           {/* <RevealMealButton onPress={handleMealPress} /> */}
           <ChartsContainer>
             <ChartMacroCircles
-              values={[14, 68, 47]}
-              percentages={[14, 68, 47]}
+              values={[
+                props.meal.macro.carbs,
+                props.meal.macro.prots,
+                props.meal.macro.fats,
+              ]}
+              percentages={[
+                props.meal.macroPercentages.carbs,
+                props.meal.macroPercentages.prots,
+                props.meal.macroPercentages.fats,
+              ]}
             />
           </ChartsContainer>
           <ProductsContainer>

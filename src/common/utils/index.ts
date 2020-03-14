@@ -266,3 +266,7 @@ export const layoutAnimateEase = (onAnimationDidEnd?: () => void) => {
     onAnimationDidEnd
   );
 }
+
+export const calculatePercentage = (value: number, maxValue: number): number => {
+  return Math.floor(value / maxValue * 100);
+}
