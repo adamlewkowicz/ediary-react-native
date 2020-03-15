@@ -2,7 +2,7 @@ import { MacroElements } from '../../types';
 import { StoreState } from '..';
 import { createSelector } from 'reselect';
 import { getMacroNeeds } from './user';
-import { calcMacroNeedsLeft, calculatePercentage } from '../../common/utils';
+import { calcMacroNeedsLeft, calculatePercentage, calculateMacroPerQuantity } from '../../common/utils';
 
 const BASE_MACRO: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 
@@ -14,10 +14,7 @@ const getCalcedProducts = createSelector(
   getProducts,
   products => products.map(product => ({
     ...product,
-    carbs: calculatePercentage(product.macro.carbs, product.quantity),
-    prots: calculatePercentage(product.macro.prots, product.quantity),
-    fats: calculatePercentage(product.macro.fats, product.quantity),
-    kcal: calculatePercentage(product.macro.kcal, product.quantity)
+    calcedMacro: calculateMacroPerQuantity(product.data.macro, product.quantity)
   })
 ));
 
@@ -36,32 +33,34 @@ const getMealsWithProducts = createSelector(
 export const getCalcedMeals = createSelector(
   getMealsWithProducts,
   meals => meals.map(meal => {
-    const summedMacro = meal.products.reduce((macro, product) => ({
+    const calcedMacro = meal.products.reduce((macro, product) => ({
       ...macro,
-      carbs: macro.carbs += product.carbs,
-      prots: macro.prots += product.prots,
-      fats: macro.fats += product.fats,
-      kcal: macro.kcal += product.kcal,
+      carbs: macro.carbs += product.calcedMacro.carbs,
+      prots: macro.prots += product.calcedMacro.prots,
+      fats: macro.fats += product.calcedMacro.fats,
+      kcal: macro.kcal += product.calcedMacro.kcal,
     }), { ...BASE_MACRO });
 
-    return { ...meal, ...summedMacro, macro: summedMacro };
+    const macroSum = calcedMacro.carbs + calcedMacro.prots + calcedMacro.fats;
+
+    const macroPercentages = {
+      carbs: calculatePercentage(calcedMacro.carbs, macroSum),
+      prots: calculatePercentage(calcedMacro.prots, macroSum),
+      fats: calculatePercentage(calcedMacro.fats, macroSum),
+    }
+
+    return {
+      ...meal,
+      ...calcedMacro,
+      calcedMacro,
+      macroPercentages
+    };
   })
 );
 
 export const getMealsWithRatio = createSelector(
   getCalcedMeals,
   meals => meals
-    .map(meal => {
-      const macroSum = meal.macro.carbs + meal.macro.prots + meal.macro.fats;
-      return {
-        ...meal,
-        macroPercentages: {
-          carbs: calculatePercentage(meal.macro.carbs, macroSum),
-          prots: calculatePercentage(meal.macro.prots, macroSum),
-          fats: calculatePercentage(meal.macro.fats, macroSum),
-        }
-      }
-    })
     .sort((a, b) => {
       const timeA = Number(a.time.replace(/:/g, ''));
       const timeB = Number(b.time.replace(/:/g, ''));

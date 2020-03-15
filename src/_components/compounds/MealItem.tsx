@@ -32,7 +32,7 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
         <Time>{props.meal.dateTimeBase}</Time>
         <BaseInfo>
           <MealName isOpened={props.meal.isToggled}>{props.meal.name}</MealName>
-          <Calories>{props.meal.macro.kcal} kcal</Calories>
+          <Calories>{props.meal.calcedMacro.kcal} kcal</Calories>
         </BaseInfo>
         <ChartMacroBarsBase
           percentages={props.meal.macroPercentages}
@@ -44,9 +44,9 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
           <ChartsContainer>
             <ChartMacroCircles
               values={[
-                props.meal.macro.carbs,
-                props.meal.macro.prots,
-                props.meal.macro.fats,
+                props.meal.calcedMacro.carbs,
+                props.meal.calcedMacro.prots,
+                props.meal.calcedMacro.fats,
               ]}
               percentages={[
                 props.meal.macroPercentages.carbs,
@@ -59,7 +59,9 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
             {props.meal.products.map(product => (
               <MealProductItem
                 key={product.id}
-                product={product}
+                name={product.name}
+                quantity={product.quantity}
+                kcal={product.calcedMacro.kcal}
                 onPress={() => props.onProductPress?.(props.meal.id, product)}
               />
             ))}

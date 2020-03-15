@@ -5,11 +5,9 @@ import styled from 'styled-components/native';
 
 interface MealProductItemProps {
   onPress?: () => void
-  product: {
-    name: string
-    quantity: number
-    kcal: number
-  }
+  name: string
+  quantity: number
+  kcal: number
 }
 
 export const MealProductItem = (props: MealProductItemProps) => {
@@ -17,10 +15,10 @@ export const MealProductItem = (props: MealProductItemProps) => {
     <TouchableOpacity onPress={props.onPress}>
       <Table.Row>
         <Details>
-          <ProductName>{props.product.name}</ProductName>
-          <Quantity>{props.product.quantity}g - 1 porcja</Quantity>
+          <ProductName>{props.name}</ProductName>
+          <Quantity>{props.quantity}g - 1 porcja</Quantity>
         </Details>
-        <Calories>{props.product.kcal} kcal</Calories>
+        <Calories>{props.kcal} kcal</Calories>
       </Table.Row>
     </TouchableOpacity>
   );

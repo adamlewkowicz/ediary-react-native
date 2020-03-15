@@ -227,7 +227,7 @@ export const fetchify = async <T>(
   return json;
 }
 
-const mapObject = <
+export const objectMap = <
   T extends object,
   Property extends keyof T = keyof T,
   Value = T[Property]
@@ -242,7 +242,7 @@ const mapObject = <
   ) as T;
 }
 
-const objectEntries = <
+export const objectEntries = <
   T extends object,
   Property extends keyof T = keyof T,
   Value = T[Property]
@@ -267,6 +267,31 @@ export const layoutAnimateEase = (onAnimationDidEnd?: () => void) => {
   );
 }
 
-export const calculatePercentage = (value: number, maxValue: number): number => {
-  return Math.floor(value / maxValue * 100);
+export const calculatePercentage = (portion: number, total: number): number => {
+  if (total === 0) return 0;
+  return Math.floor(portion / total * 100);
+}
+
+export const calculateMacroPerQuantity = <T extends MacroElements>(
+  macroValuesPerHundredQuantity: T,
+  quantity: number
+): T => objectMap(
+  macroValuesPerHundredQuantity,
+  (_, macroValue: number) => round(macroValue * quantity / 100, 100)
+);
+
+const calculateObjectsValueSum = <T extends { [key: string]: number }>(
+  objects: T[],
+  initialObj: T = objects[0],
+): T => {
+  return objects.reduce<T>((acc, current) => {
+    const next = { ...acc };
+
+    for (const key in next) {
+      // @ts-ignore
+      next[key] += current[key];
+    }
+
+    return next;
+  }, { ...initialObj });
 }
