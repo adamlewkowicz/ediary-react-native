@@ -18,7 +18,7 @@ export const MealProductItem = (props: MealProductItemProps) => {
           <ProductName>{props.name}</ProductName>
           <Quantity>{props.quantity}g - 1 porcja</Quantity>
         </Details>
-        <Calories>{props.kcal} kcal</Calories>
+        <Calories>{props.kcal.toFixed(0)} kcal</Calories>
       </Table.Row>
     </TouchableOpacity>
   );

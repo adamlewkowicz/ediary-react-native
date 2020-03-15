@@ -6,8 +6,8 @@ import { TextSplit } from './TextSplit';
 
 interface ChartMacroCircleProps extends ChartCircleProps {
   title: string
-  value: number
-  valueLeft?: number
+  value: number | string
+  valueLeft?: number | string
 }
 
 export const ChartMacroCircle = (props: ChartMacroCircleProps) => {

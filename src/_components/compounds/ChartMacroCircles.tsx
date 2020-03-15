@@ -17,21 +17,21 @@ export const ChartMacroCircles = (props: ChartMacroCirclesProps) => {
     <Container>
       <ChartMacroCircle
         title="Węglowodany (g)"
-        value={props.values[0]}
+        value={props.values[0].toFixed(0)}
         valueLeft={props.valuesLeft?.[0]}
         percentages={props.percentages[0]}
         gradientColors={theme.gradient.carbs}
       />
       <ChartMacroCircle
         title="Białko (g)"
-        value={props.values[1]}
+        value={props.values[1].toFixed(0)}
         valueLeft={props.valuesLeft?.[1]}
         percentages={props.percentages[1]}
         gradientColors={theme.gradient.prots}
       />
       <ChartMacroCircle
         title="Tłuszcze (g)"
-        value={props.values[2]}
+        value={props.values[2].toFixed(0)}
         valueLeft={props.valuesLeft?.[2]}
         percentages={props.percentages[2]}
         gradientColors={theme.gradient.fats}
@@ -43,5 +43,6 @@ export const ChartMacroCircles = (props: ChartMacroCirclesProps) => {
 const Container = styled.View`
   flex-direction: row;
   justify-content: space-around;
-  margin: ${props => props.theme.spacing.secondary}px;
+  padding: 0 20px;
+  margin: ${props => `${props.theme.spacing.secondary}px 0`};
 `

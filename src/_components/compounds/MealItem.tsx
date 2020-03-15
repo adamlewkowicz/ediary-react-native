@@ -6,16 +6,18 @@ import { MealProductItem } from './MealProductItem';
 import { ButtonSecondary } from '../molecules/_index';
 import { Selectors } from '../../store';
 import { ChartMacroBarsBase } from './ChartMacroBarsBase';
+import { ActivityIndicator } from 'react-native';
 
 interface MealItemProps<
   Meal extends Selectors.MealWithRatio,
   Product extends Meal['products'][number] = Meal['products'][number]
 > {
   isOpened?: boolean
+  isAddingProduct: boolean
   meal: Meal
-  onMealPress?: (mealId: Meal['id']) => void
-  onProductAdd?: (meal: Meal) => void
-  onProductPress?: (mealId: Meal['id'], product: Product) => void
+  onMealPress: (mealId: Meal['id']) => void
+  onProductAdd: (meal: Meal) => void
+  onProductPress: (mealId: Meal['id'], product: Product) => void
 }
 
 export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps<T>) => {
@@ -32,7 +34,7 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
         <Time>{props.meal.dateTimeBase}</Time>
         <BaseInfo>
           <MealName isOpened={props.meal.isToggled}>{props.meal.name}</MealName>
-          <Calories>{props.meal.calcedMacro.kcal} kcal</Calories>
+          <Calories>{props.meal.calcedMacro.kcal.toFixed(0)} kcal</Calories>
         </BaseInfo>
         <ChartMacroBarsBase
           percentages={props.meal.macroPercentages}
@@ -65,6 +67,7 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
                 onPress={() => props.onProductPress?.(props.meal.id, product)}
               />
             ))}
+            {props.isAddingProduct && <Spinner size={25} />}
             <AddProductButton
               onPress={() => props.onProductAdd?.(props.meal)}
             >
@@ -107,6 +110,10 @@ const ProductsContainer = styled.View`
   padding: 5px 15px;
   border-bottom-width: 1px;
   border-bottom-color: ${props => props.theme.color.tertiary};
+`
+
+const Spinner = styled(ActivityIndicator)`
+  margin: 10px 0;
 `
 
 const RevealMealButton = styled(ButtonReveal)`

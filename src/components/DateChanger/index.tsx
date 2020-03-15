@@ -60,7 +60,6 @@ export const DateChanger = (props: DateChangerProps) => {
 
 const Container = styled.View`
   flex-direction: row;
-  margin: 8px 0;
   align-items: center;
   justify-content: space-between;
 `
