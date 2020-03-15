@@ -69,8 +69,9 @@ export const normalizeMeal = (
     const normalizedProduct: DiaryProduct = {
       ...data,
       ...product,
+      data: product,
       isToggled: false,
-      calcedMacro: calcMacroByQuantity(product.macro, data.quantity)
+      calcedMacro: calcMacroByQuantity(product.macro, data.quantity),
     }
     return normalizedProduct;
   });

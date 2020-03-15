@@ -10,6 +10,7 @@ import {
   MacroElement,
   MacroElements,
 } from '../../../types';
+import { Product, IProductMerged } from '../../../database/entities';
 
 export interface DiaryState {
   meals: (DiaryMeal | DiaryMealTemplate)[]
@@ -56,14 +57,23 @@ export interface DiaryMeal extends DiaryMealBase {
 }
 
 export interface DiaryProduct {
+  data: Product | IProductMerged
+  isToggled: boolean
+  quantity: number
+  mealId: MealId | null
+  _calcedMacro?: {
+    carbs: number
+    prots: number
+    fats: number
+    kcal: number
+  }
+
   id: ProductId
   name: string
   producer?: string | null
   img?: string
   barcode: BarcodeId | null
-  quantity: number
   unit: ProductUnit
-  mealId: MealId | null
   userId?: number | null
   isVerified: boolean | null
   updatedAt: Date
@@ -78,7 +88,6 @@ export interface DiaryProduct {
     element: MacroElement
     value: number
   }[]
-  isToggled: boolean
 }
 
 export interface DiaryTemplate {

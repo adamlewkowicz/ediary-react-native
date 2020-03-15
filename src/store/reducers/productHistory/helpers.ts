@@ -11,7 +11,7 @@ export const getProductsFromAction = (action: ProductHistoryAction): Product[] =
     case PRODUCT_HISTORY_RECENT_ADDED:
       return action.payload;
     case MEAL_PRODUCT_ADDED:
-      if (action.meta.rawProduct) {
+      if (action.meta.rawProduct instanceof Product) {
         return [action.meta.rawProduct];
       }
     case MEAL_ADDED: 

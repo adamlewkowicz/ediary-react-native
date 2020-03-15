@@ -70,7 +70,7 @@ export const mealProductCreate = (
   payload: IProductRequired
 ): Thunk => async (dispatch, getState) => {
   const newProduct = await Meal.addAndCreateProduct(mealId, payload);
-  dispatch(mealProductAdded(mealId, { mealId, ...newProduct }));
+  dispatch(mealProductAdded(mealId, { mealId, ...newProduct }, newProduct));
   await _updateMealMacro(mealId, getState());
 }
 

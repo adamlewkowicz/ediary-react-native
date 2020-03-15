@@ -118,6 +118,7 @@ export function diaryReducer(
         ...state.products,
         {
           ...action.payload,
+          data: action.meta.rawProduct,
           isToggled: false,
           calcedMacro: calcMacroByQuantity(action.payload.macro, action.payload.quantity),
         }

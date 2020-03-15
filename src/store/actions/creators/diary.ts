@@ -44,7 +44,7 @@ export const mealDeleted = (mealId: MealId) => ({
 export const mealProductAdded = (
   mealId: MealId,
   product: IProductMerged,
-  rawProduct?: Product,
+  rawProduct: Product | IProductMerged,
 ) => ({
   type: MEAL_PRODUCT_ADDED,
   payload: product,
