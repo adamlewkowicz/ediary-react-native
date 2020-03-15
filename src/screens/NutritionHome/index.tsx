@@ -128,7 +128,9 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
       product,
       onProductQuantityUpdated(quantity) {
         navigation.goBack();
-        dispatch(Actions.mealProductQuantityUpdate(mealId, product.id, quantity));
+        InteractionManager.runAfterInteractions(() => {
+          dispatch(Actions.mealProductQuantityUpdate(mealId, product.id, quantity));
+        });
       }
     });
   }
