@@ -35,3 +35,9 @@ export type BaseScreenProps = {
   navigation: NavigationProp<ParamListBase>
   route: RouteProp<Record<string, object>, string>
 }
+
+export type ObjectEntries = <
+  T extends object,
+  Property extends keyof T = keyof T,
+  Value = T[Property]
+>(object: T) => [Property, Value][];
