@@ -50,10 +50,10 @@ export const mealCreate = (
 }
 
 export const mealDelete = (
-  mealId: MealId
+  meal: DiaryMeal
 ): Thunk => async (dispatch) => {
-  dispatch(mealDeleted(mealId));
-  await Meal.delete(mealId);
+  dispatch(mealDeleted(meal.id, meal.templateId));
+  await Meal.delete(meal.id);
 }
 
 export const mealUpdate = (
@@ -130,8 +130,10 @@ export const mealCreateFromTemplate = (
   const createdMeal = await Meal.createFromTemplate(
     template, date, productId, quantity
   );
+  const isCreatedFromTemplate = true;
+
   dispatch(
-    mealAdded(createdMeal)
+    mealAdded(createdMeal, isCreatedFromTemplate)
   );
   await _updateMealMacro(createdMeal.id, getState());
 }

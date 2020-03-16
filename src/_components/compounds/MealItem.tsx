@@ -18,17 +18,26 @@ interface MealItemProps<
   onMealPress: (mealId: Meal['id']) => void
   onProductAdd: (meal: Meal) => void
   onProductPress: (mealId: Meal['id'], product: Product) => void
+  onMealDelete: (meal: Meal) => void
 }
 
 export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps<T>) => {
+  
   const handleMealPress = () => {
     props.onMealPress?.(props.meal.id);
+  }
+
+  const handleMealDelete = () => {
+    if (props.meal.type !== 'template') {
+      props.onMealDelete(props.meal);
+    }
   }
 
   return (
     <Container isOpened={props.meal.isToggled}>
       <InfoContainer
         onPress={handleMealPress}
+        onLongPress={handleMealDelete} 
         isOpened={props.meal.isToggled}
       >
         <Time>{props.meal.dateTimeBase}</Time>

@@ -5,7 +5,7 @@ import { FlatList, Alert, SafeAreaView as View, InteractionManager } from 'react
 import { DateChanger } from '../../components/DateChanger';
 import styled from 'styled-components/native';
 import { MealListItem } from '../../components/MealListItem';
-import { MealId, ProductId } from '../../types';
+import { MealId, ProductId, TemplateId } from '../../types';
 import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
 import { CaloriesChart } from '../../components/CaloriesChart';
 import { useAfterInteractions, useNavigationData } from '../../hooks';
@@ -63,7 +63,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     });
   }
 
-  const handleMealDelete = <T extends { id: MealId, name: string }>(
+  const handleMealDelete = <T extends { id: MealId, name: string, templateId: TemplateId }>(
     meal: T
   ) => {
     Alert.alert(
@@ -76,7 +76,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         },
         {
           text: 'OK',
-          onPress: () => dispatch(Actions.mealDelete(meal.id))
+          onPress: () => dispatch(Actions.mealDelete(meal))
         }
       ]
     );
@@ -187,6 +187,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
           <MealItem
             meal={meal}
             onMealPress={(mealId) => handleMealPress(mealId, meal, index)}
+            onMealDelete={handleMealDelete}
             onProductAdd={handleProductFindNavigation}
             onProductPress={handleProductPress}
             isAddingProduct={processedMealId === meal.id}
