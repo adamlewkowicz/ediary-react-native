@@ -16,7 +16,8 @@
     "typeorm": "ts-node ./node_modules/typeorm/cli -f ./src/database/config/config.migration.ts",
     "test:db": "ts-node-dev --respawn ./scripts/test-db",
     "postversion": "react-native-version",
-    "beta": "npm version prerelease --preid=beta"
+    "beta": "npm version prerelease --preid=beta",
+    "figma": "cd design-system && npm run webpack:watch"
   },
   "husky": {
     "hooks": {}
@@ -47,7 +48,7 @@
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "styled-components": "^4.3.2",
+    "styled-components": "^4.4.1",
     "typeorm": "^0.2.18"
   },
   "devDependencies": {

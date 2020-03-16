@@ -70,6 +70,7 @@ export const theme = {
     quinary: 5,
   },
   fontWeight: {
+    base: 'Hind',
     light: 'Hind-Light',
     regular: 'Hind-Regular',
     medium: 'Hind-Medium',
