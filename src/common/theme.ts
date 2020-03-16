@@ -13,6 +13,14 @@ export const color_V2 = {
   error: '#FF7979',
 } as const;
 
+export const spacing_V2 = {
+  tiny: 8,
+  small: 16,
+  base: 24,
+  large: 48,
+  xLarge: 64,
+} as const;
+
 const color = {
   focus: '#5361E0',
   secondary: '#C7C6CB',
@@ -68,6 +76,8 @@ export const theme = {
     tertiary: 15,
     quaternary: 10,
     quinary: 5,
+
+    ...spacing_V2,
   },
   fontWeight: {
     base: 'Hind',
