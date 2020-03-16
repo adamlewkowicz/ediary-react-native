@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { Selectors } from '../../store';
 import { FlatList } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
+import { H3, ProductSearchItem } from '../../_components';
 
 interface ProductFindScreenProps {}
 
@@ -122,6 +123,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
         {showRecentProducts ? 'Ostatnio używane produkty:' : 'Znalezione produkty:'}
       </ProductsTitle>
       <RenderInfo />
+      <ProductSearchItem />
       <FlatList
         data={productsSource}
         keyExtractor={productKeyExtractor}
@@ -152,7 +154,7 @@ const NotFoundInfo = styled.Text`
   padding: 0 50px;
 `
 
-const ProductsTitle = styled(Title)`
+const ProductsTitle = styled(H3)`
   margin: 10px 0;
 `
 
