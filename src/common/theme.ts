@@ -1,5 +1,5 @@
 
-const color_V2 = {
+export const color_V2 = {
   primary: '#26367A',
   secondary: '#B5BACC',
   tertiary: '#E1E5F5',

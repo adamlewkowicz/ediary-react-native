@@ -242,7 +242,7 @@ export const objectMap = <
   ) as T;
 }
 
-const objectEntries: ObjectEntries = Object.entries;
+export const objectEntries: ObjectEntries = Object.entries;
 
 export const calculateCaloriesByMacro = (
   macro: BaseMacroElements

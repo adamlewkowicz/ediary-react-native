@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Frame, Page, View, Text, Component, StyleSheet } from 'react-figma';
-import { css } from 'styled-components';
-import { theme } from '../../src/common/theme';
+import { ColorFrame } from '../frames/ColorFrame';
+import { TypeFrame } from '../frames/TypeFrame';
 
 const styles = StyleSheet.create({
     frame: {
@@ -74,81 +74,6 @@ const SpaceFrame = () => {
     );
 };
 
-const TextBase = css`
-  font-size: 64px;
-  font-family: ${theme.fontWeight.regular};
-`
-interface TypeComponentProps {
-  name: string
-  fontSize: number
-}
-
-const TypeComponent = (props: TypeComponentProps) => {
-  const fontSizeText = `${props.fontSize}px`;
-  const formattedName = props.name.split(/(?=[A-Z])/).join(' ');
-
-  return (
-    <>
-      <Component
-        name={props.name}
-        style={styles.component}
-      >
-        <Text
-          name={props.name}
-          style={{
-            fontSize: props.fontSize,
-            fontFamily: theme.fontWeight.base,
-            color: theme.color.primary,
-          }}
-        >
-          {formattedName}
-        </Text>
-      </Component>
-      <Text style={styles.hint}>
-        {fontSizeText}
-      </Text>
-    </>
-  );
-}
-
-const TypeFrame = props => {
-  return (
-    <Frame name="Type" style={[styles.frame, props.style]}>
-      <Text style={styles.heading}>Type</Text>
-
-      <TypeComponent
-        name="HeaderH1"
-        fontSize={64}
-      />
-      <TypeComponent
-        name="HeaderH2"
-        fontSize={44}
-      />
-      <TypeComponent
-        name="HeaderH3"
-        fontSize={24}
-      />
-      <TypeComponent
-        name="HeaderH4"
-        fontSize={16}
-      />
-
-      <TypeComponent
-        name="TextRegular"
-        fontSize={16}
-      />
-      <TypeComponent
-        name="TextSmall"
-        fontSize={14}
-      />
-      <TypeComponent
-        name="TextXSmall"
-        fontSize={11}
-      />
-    </Frame>
-  );
-};
-
 export const App = () => {
   React.useEffect(() => {
     setTimeout(figma.closePlugin, 2 * 1000);
@@ -157,7 +82,8 @@ export const App = () => {
   return (
     <Page name="Design system" style={{ flexDirection: 'row' }}>
       <SpaceFrame />
-      <TypeFrame style={{ marginLeft: 50 }} />
+      <TypeFrame />
+      <ColorFrame />
     </Page>
   );
 }
