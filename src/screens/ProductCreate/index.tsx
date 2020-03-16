@@ -37,6 +37,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
   
   const brandInputRef = useRef<TextInput>(null);
   const producerInputRef = useRef<TextInput>(null);
+  const portionQuantityInputRef = useRef<TextInput>(null);
   const carbsInputRef = useRef<TextInput>(null);
   const sugarsInputRef = useRef<TextInput>(null);
   const protsInputRef = useRef<TextInput>(null);
@@ -83,8 +84,6 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
     )
   });
 
-  console.log({ kcalInputRef })
-
   return (
     <ScrollView>
       <Container>
@@ -110,6 +109,15 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             value={state.productData.producer}
             onChangeText={producer => handleProductDataUpdate({ producer })}
             ref={producerInputRef}
+            onSubmitEditing={portionQuantityInputRef.current?.focus}
+          />
+          <InputMetaTextRef
+            label="Ilość w jednej porcji (g)"
+            placeholder="100"
+            value={state.productData.portionQuantity}
+            onChangeText={portionQuantity => handleProductDataUpdate({ portionQuantity })}
+            metaText="g"
+            ref={portionQuantityInputRef}
             onSubmitEditing={carbsInputRef.current?.focus}
           />
         </Section>
