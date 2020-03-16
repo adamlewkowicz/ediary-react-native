@@ -6,7 +6,7 @@ import {
   IleWazyUnitData,
 } from './types';
 import { round, fetchify } from '../../common/utils';
-import { ProductUnit, PortionType } from '../../types';
+import { PortionUnit, PortionType } from '../../types';
 import { Product } from '../../database/entities';
 import { KNOWN_PORTION_TYPES, PORTION_MAP } from './consts';
 
@@ -37,7 +37,7 @@ export class IlewazyApi {
     const kcal = Number(payload.energia);
     let carbs = Number(payload.weglowodany);
     let fats = Number(payload.tluszcz);
-    const unit: ProductUnit = 'g';
+    const unit: PortionUnit = 'g';
     const defaultPortionType: PortionType = 'portion';
 
     if (name.charAt(name.length - 1) === '.') {

@@ -7,7 +7,7 @@ import {
 import { NavigationProp, ParamListBase, RouteProp } from '@react-navigation/native';
 
 export type UnitType = typeof UNIT_TYPES[number];
-export type ProductUnit = 'g' | 'ml';
+export type PortionUnit = 'g' | 'ml';
 
 export type BaseMacroElement = typeof BASE_MACRO_ELEMENTS[number];
 export type MacroElement = typeof MACRO_ELEMENTS[number];

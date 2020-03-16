@@ -13,7 +13,7 @@ import {
   BarcodeId,
   ProductId,
   UserId,
-  ProductUnit,
+  PortionUnit,
   FilterHOF,
 } from '../../../types';
 import { User } from '../User';
@@ -58,7 +58,7 @@ export class Product extends GenericEntity {
   */
   @Column('text', { default: 'g' })
   @SqliteENUM(PRODUCT_UNITS)
-  unit!: ProductUnit;
+  unit!: PortionUnit;
 
   @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;

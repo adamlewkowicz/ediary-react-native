@@ -1,4 +1,4 @@
-import { PortionType, BarcodeId, ProductUnit } from '../../../types';
+import { PortionType, BarcodeId, PortionUnit } from '../../../types';
 import { FriscoProductId } from '../../FriscoApi/types';
 
 export type IleWazyUnitData = {
@@ -63,10 +63,10 @@ export interface NormalizedProduct {
   }
   portions: {
     type: PortionType
-    unit: ProductUnit
+    unit: PortionUnit
     value: number
   }[]
-  unit?: ProductUnit | null
+  unit?: PortionUnit | null
   images?: string[]
   barcode?: BarcodeId
   producer?: string

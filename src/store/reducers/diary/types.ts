@@ -6,7 +6,7 @@ import {
   TemplateId,
   DateDay,
   BarcodeId,
-  ProductUnit,
+  PortionUnit,
   MacroElement,
   MacroElements,
 } from '../../../types';
@@ -73,7 +73,7 @@ export interface DiaryProduct {
   producer?: string | null
   img?: string
   barcode: BarcodeId | null
-  unit: ProductUnit
+  unit: PortionUnit
   userId?: number | null
   isVerified: boolean | null
   updatedAt: Date

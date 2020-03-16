@@ -1,9 +1,9 @@
-import { ProductUnit, BarcodeId } from '../../types';
+import { PortionUnit, BarcodeId } from '../../types';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
 import { calculateCaloriesByMacro } from '../../common/utils';
 
 export interface ProductCreateState {
-  portionUnit: ProductUnit,
+  portionUnit: PortionUnit,
   productData: {
     name: string
     producer: string
