@@ -90,14 +90,7 @@ export const ProductPreviewScreen = () => {
           ]}
         />
         <ProductMacroTable
-          macro={{
-            'Tłuszcze': 41,
-            'w tym nasycone kwasy tłuszczowe': 41,
-            'Węglowodany': 41,
-            'w tym cukry': 41,
-            'Białko': 41,
-            'Witamina A': 41,
-          }}
+          macro={productMacro}
         />
       </Section>
       <Section title="Dzienne cele">
