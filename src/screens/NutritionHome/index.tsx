@@ -52,14 +52,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
       }
     });
   }
-
   
-  const handleProductCreateNavigation = () => {
-    navigate('ProductCreate', {
-      onProductCreated: () => navigate('NutritionHome')
-    });
-  }
-
   const handleMealDelete = <T extends { id: MealId, name: string }>(
     meal: T
   ) => {
@@ -107,8 +100,6 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     const scroll = () => {
       mealListRef.current?.scrollToIndex({
         index,
-        // viewPosition: 0.2,
-        // animated: true,
         viewOffset: 50,
       });
     }
@@ -154,11 +145,6 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
           macroNeedsLeft.prots.ratio,
           macroNeedsLeft.fats.ratio,
         ]}
-        // valuesLeft={[
-        //   macroNeedsLeft.carbs.needed,
-        //   macroNeedsLeft.prots.needed,
-        //   macroNeedsLeft.fats.needed,
-        // ]}
       />
     </>
   );
@@ -183,39 +169,12 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
           />
         )}
       />
-      {/* <FlatList
-        data={mealsWithRatio}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({ item: meal }) => (
-          <MealListItem
-            meal={meal}
-            isBeingProcessed={processedMealId === meal.id}
-            onProductAdd={() => handleProductFindNavigation(meal)}
-            onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
-            onLongPress={__DEV__ || meal.type === 'template' ? undefined : () => handleMealDelete(meal)}
-            renderProduct={(product) => meal.type === 'template' ? null : (
-              <ProductItem
-                product={product}
-                onDelete={() => handleProductDelete(meal.id, product)}
-                onToggle={() => dispatch(Actions.productToggled(product.id))}
-                onQuantityUpdate={(quantity) => dispatch(
-                  Actions.mealProductQuantityUpdate(meal.id, product.id, quantity)
-                )}
-              />
-            )}
-          />
-        )}
-      /> */}
     </Container>
   );
 }
 
 const Container = styled.View`
   flex: 1;
-`
-
-const ContentContainer = styled.View`
-  margin: 40px 0 15px 0;
 `
 
 const mealKeyExtractor = (meal: MealWithRatio): string => meal.id.toString();
