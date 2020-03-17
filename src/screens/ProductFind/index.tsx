@@ -3,15 +3,14 @@ import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
 import { ProductListItemMemo, Separator } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
-import { Block, Title } from '../../components/Elements';
+import { Block } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
-import { Button } from '../../components/Button';
 import { useProductsSearch, useNavigationData } from '../../hooks';
 import { useSelector } from 'react-redux';
 import { Selectors } from '../../store';
-import { FlatList } from 'react-native';
+import { FlatList, ToastAndroid } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
-import { H3, ProductSearchItem } from '../../_components';
+import { H3, ProductSearchItem, ButtonSecondaryArrow } from '../../_components';
 
 interface ProductFindScreenProps {}
 
@@ -43,7 +42,14 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
       name: debouncedProductName.trim(),
       onProductCreated(createdProduct) {
         context.addProduct(createdProduct);
+
         navigate('ProductFind');
+        
+        ToastAndroid.showWithGravity(
+          `Utworzono produkt "${createdProduct.name}"`,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+        );
       }
     });
   }
@@ -94,12 +100,6 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
             Aby wyszukiwać więcej produktów, przejdź do trybu online.
           </NotFoundInfo>
         )}
-        <AddOwnProductButton
-          onPress={handleProductCreateNavigation}
-          accessibilityLabel="Dodaj własny produkt"
-        >
-          Dodaj własny
-        </AddOwnProductButton>
       </>
     );
   }
@@ -138,6 +138,12 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
           />
         )}
       />
+      <AddOwnProductButton
+        onPress={handleProductCreateNavigation}
+        accessibilityLabel="Dodaj własny produkt"  
+      >
+        Dodaj własny produkt
+      </AddOwnProductButton>
     </Container>
   );
 }
@@ -158,8 +164,8 @@ const ProductsTitle = styled(H3)`
   margin: 10px 0;
 `
 
-const AddOwnProductButton = styled(Button)`
-  margin-top: 15px;
+const AddOwnProductButton = styled(ButtonSecondaryArrow)`
+  margin-top: 5px;
 `
 
 const productKeyExtractor = (product: ProductOrNormalizedProduct): string => {
