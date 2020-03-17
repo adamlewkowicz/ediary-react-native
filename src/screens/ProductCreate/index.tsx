@@ -9,8 +9,6 @@ import {
 import { TextInput, ScrollView } from 'react-native';
 import { useUserId, useNavigationData } from '../../hooks';
 import { Product } from '../../database/entities';
-import { useDispatch } from 'react-redux';
-import { Actions } from '../../store';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
 import {
   Section,
@@ -33,7 +31,6 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
     params,
     initProductCreateReducer
   );
-  const storeDispatch = useDispatch();
   const userId = useUserId();
   
   const brandInputRef = useRef<TextInput>(null);
@@ -54,10 +51,6 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
       ...normalizedProductData,
       userId,
     });
-
-    storeDispatch(
-      Actions.productHistoryRecentAdded([createdProduct])
-    );
 
     params.onProductCreated?.(createdProduct);
   }

@@ -6,8 +6,8 @@ import { InputSearcher } from '../../components/InputSearcher';
 import { Block } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { useProductsSearch, useNavigationData } from '../../hooks';
-import { useSelector } from 'react-redux';
-import { Selectors } from '../../store';
+import { useSelector, useDispatch } from 'react-redux';
+import { Selectors, Actions } from '../../store';
 import { FlatList, ToastAndroid } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import { H3, ProductSearchItem, ButtonSecondaryArrow } from '../../_components';
@@ -16,6 +16,7 @@ interface ProductFindScreenProps {}
 
 export const ProductFindScreen = (props: ProductFindScreenProps) => {
   const { params, navigate } = useNavigationData<ProductFindScreenNavigationProps>();
+  const dispatch = useDispatch();
   const recentProducts = useSelector(Selectors.getProductHistory);
   const hasBeenPressed = useRef(false);
   const {
@@ -49,6 +50,10 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
           `Utworzono produkt "${createdProduct.name}"`,
           ToastAndroid.SHORT,
           ToastAndroid.CENTER
+        );
+
+        dispatch(
+          Actions.productHistoryRecentAdded([createdProduct])
         );
       }
     });
