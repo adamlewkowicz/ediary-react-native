@@ -286,6 +286,41 @@ export const calculateMacroPercentages = <T extends BaseMacroElements>(
   return { carbs, prots, fats };
 }
 
+const calculateMacroValueNeed = (
+  eaten: number,
+  needed: number
+): MacroNeed => ({
+  eaten,
+  needed,
+  left: needed - eaten,
+  percentage: calculatePercentage(eaten, needed),
+});
+
+export const calculateMacroNeeds = <T extends object>(
+  macroValuesEaten: T,
+  macroValuesNeeded: T
+): { [key: string]: MacroNeed } => objectMap(
+  macroValuesEaten,
+  (macroName, macroValueEaten) => {
+    // TODO: refactor types
+    const macroValueNeeded = macroValuesNeeded[macroName] as any as number;
+
+    const macroValueNeed = calculateMacroValueNeed(
+      macroValueEaten,
+      macroValueNeeded
+    );
+
+    return macroValueNeed;
+  }
+);
+
+type MacroNeed = {
+  eaten: number
+  needed: number
+  left: number,
+  percentage: number
+}
+
 const calculateObjectsValueSum = <T extends { [key: string]: number }>(
   objects: T[],
   initialObj: T = objects[0],

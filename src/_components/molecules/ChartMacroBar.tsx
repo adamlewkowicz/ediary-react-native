@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { TextSecondary, TextPrimary, TextTertiary } from '../atoms/Text';
+import { TextPrimary, TextTertiary } from '../atoms/Text';
 import { ProgressBar, ProgressBarProps } from '../../components/ProgressBar';
 
 interface ChartMacroBarProps extends ProgressBarProps {
@@ -16,7 +16,7 @@ export const ChartMacroBar = (props: ChartMacroBarProps) => {
         <TextTertiary>{title}</TextTertiary>
         <TextPrimary>{progressBarProps.percentages}%</TextPrimary>
       </DetailsContainer>
-      <ProgressBar {...progressBarProps}/>
+      <ProgressBar {...progressBarProps}  />
     </Container>
   );
 }
@@ -28,4 +28,5 @@ const Container = styled.View`
 const DetailsContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  margin-bottom: 8px;
 `

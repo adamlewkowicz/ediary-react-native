@@ -21,7 +21,8 @@ export const ProductPreviewScreen = () => {
   const [quantity, setQuantity] = useState<number>(params.product.quantity ?? 0);
   const {
     macro: productMacro,
-    macroPercentages: productMacroPercentages
+    macroPercentages: productMacroPercentages,
+    macroNeeds: productMacroNeeds,
   } = useCalculatedMacro(params.product.macro, quantity);
 
   const isEditMode = params.onProductQuantityUpdated != null;
@@ -95,7 +96,12 @@ export const ProductPreviewScreen = () => {
       </Section>
       <Section title="Dzienne cele">
         <ChartMacroBars
-          percentages={[41, 84, 16, 48]}
+          percentages={[
+            productMacroNeeds.carbs.percentage,
+            productMacroNeeds.prots.percentage,
+            productMacroNeeds.fats.percentage,
+            productMacroNeeds.kcal.percentage
+          ]}
         />
       </Section>
     </ScreenContainer>
