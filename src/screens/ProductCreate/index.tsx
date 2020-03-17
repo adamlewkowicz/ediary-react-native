@@ -6,7 +6,7 @@ import {
   ProductDataPayload,
   normalizeProductData,
 } from './reducer';
-import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { TextInput, ScrollView } from 'react-native';
 import { useUserId, useNavigationData } from '../../hooks';
 import { Product } from '../../database/entities';
 import { useDispatch } from 'react-redux';
@@ -78,17 +78,6 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
       }
     });
   }
-
-  navigation.setOptions({
-    headerRight: () => (
-      <SaveButton
-        onPress={handleProductCreate}
-        accessibilityLabel="Zapisz produkt"  
-      >
-        <SaveText>Zapisz</SaveText>
-      </SaveButton>
-    )
-  });
 
   return (
     <ScrollView>
@@ -231,13 +220,4 @@ const KEYBOARD_NUMERIC = 'numeric';
 
 const Container = styled.KeyboardAvoidingView`
   padding: 20px;
-`
-
-const SaveButton = styled(TouchableOpacity)`
-  margin-right: 10px;
-`
-
-const SaveText = styled.Text`
-  font-family: ${props => props.theme.fontWeight.regular};
-  color: ${props => props.theme.color.focus};
 `
