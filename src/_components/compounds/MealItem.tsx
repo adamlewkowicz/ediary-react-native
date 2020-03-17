@@ -7,6 +7,7 @@ import { ButtonSecondary } from '../molecules/_index';
 import { Selectors } from '../../store';
 import { ChartMacroBarsBase } from './ChartMacroBarsBase';
 import { ActivityIndicator } from 'react-native';
+import { DiaryMeal } from '../../store/reducers/diary';
 
 interface MealItemProps<
   Meal extends Selectors.MealWithRatio,
@@ -16,19 +17,29 @@ interface MealItemProps<
   isAddingProduct: boolean
   meal: Meal
   onMealPress: (mealId: Meal['id']) => void
+  onMealDelete: (meal: DiaryMeal) => void
   onProductAdd: (meal: Meal) => void
   onProductPress: (mealId: Meal['id'], product: Product) => void
 }
 
 export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps<T>) => {
+
   const handleMealPress = () => {
     props.onMealPress?.(props.meal.id);
+  }
+
+  const handleMealDelete = () => {
+    if (props.meal.type === 'meal') {
+      // TODO: normalize type
+      props.onMealDelete(props.meal as DiaryMeal);
+    }
   }
 
   return (
     <Container isOpened={props.meal.isToggled}>
       <InfoContainer
         onPress={handleMealPress}
+        onLongPress={handleMealDelete}
         isOpened={props.meal.isToggled}
       >
         <Time>{props.meal.dateTimeBase}</Time>

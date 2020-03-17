@@ -175,6 +175,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
           <MealItem
             meal={meal}
             onMealPress={(mealId) => handleMealPress(mealId, meal, index)}
+            onMealDelete={handleMealDelete}
             onProductAdd={handleProductFindNavigation}
             onProductPress={handleProductPress}
             isAddingProduct={processedMealId === meal.id}
