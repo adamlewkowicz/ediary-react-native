@@ -1,22 +1,25 @@
 import { PortionUnit, BarcodeId } from '../../types';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
 import { calculateCaloriesByMacro } from '../../common/utils';
+import { Product, IProductRequired } from '../../database/entities';
+
+interface ProductData {
+  name: string
+  producer: string
+  brand: string
+  portionQuantity: string
+  carbs: string
+  sugars: string
+  prots: string
+  fats: string
+  fattyAcids: string
+  kcal: string
+  barcode: BarcodeId | string
+}
 
 export interface ProductCreateState {
   portionUnitType: PortionUnit,
-  productData: {
-    name: string
-    producer: string
-    brand: string
-    portionQuantity: string
-    carbs: string
-    sugars: string
-    prots: string
-    fats: string
-    fattyAcids: string
-    kcal: string
-    barcode: BarcodeId | string
-  }
+  productData: ProductData
 }
 
 export const initialState: ProductCreateState = {
@@ -77,6 +80,47 @@ export const initProductCreateReducer = (
     ...initialState.productData,
   }
 });
+
+export const normalizeProductData = (productData: ProductData): IProductRequired => {
+  const {
+    carbs, prots, fats, kcal,
+    portionQuantity,
+    fattyAcids, sugars,
+    barcode,
+    ...restData
+  } = productData;
+
+  const macro = {
+    carbs: Number(carbs),
+    prots: Number(prots),
+    fats: Number(fats), 
+    kcal: Number(kcal)
+  }
+
+  const normalizedBarcode = barcode.length ? barcode : null;
+
+  const normalizedPortion = Number(portionQuantity);
+
+  if (
+    !Number.isNaN(normalizedPortion) &&
+    normalizedPortion > 0 &&
+    normalizedPortion !== Product.defaultPortion
+  ) {
+    return {
+      macro,
+      barcode: normalizedBarcode,
+      portions: [
+        {
+          type: 'portion',
+          value: normalizedPortion
+        }
+      ],
+      ...restData,
+    }
+  } 
+
+  return { macro, barcode: normalizedBarcode, ...restData };
+}
 
 type ProductCreateAction =
   | { type: 'PRODUCT_DATA_UPDATED', payload: ProductDataPayload }

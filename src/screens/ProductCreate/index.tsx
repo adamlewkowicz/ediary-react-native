@@ -4,6 +4,7 @@ import {
   productCreateReducer,
   initProductCreateReducer,
   ProductDataPayload,
+  normalizeProductData,
 } from './reducer';
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { useUserId, useNavigationData } from '../../hooks';
@@ -47,7 +48,12 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
   const barcodeInputRef = useRef<TextInput>(null);
 
   async function handleProductCreate() {
-    const createdProduct = await Product.save({});
+    const normalizedProductData = normalizeProductData(state.productData);
+
+    const createdProduct = await Product.save({
+      ...normalizedProductData,
+      userId,
+    });
 
     storeDispatch(
       Actions.productHistoryRecentAdded([createdProduct])
@@ -207,7 +213,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             ref={barcodeInputRef}
           />
         </Section>
-        <ButtonPrimary>
+        <ButtonPrimary onPress={handleProductCreate}>
           Zapisz produkt
         </ButtonPrimary>
       </Container>
