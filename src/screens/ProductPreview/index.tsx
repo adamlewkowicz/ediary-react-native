@@ -6,7 +6,7 @@ import {
   ChartMacroCircles,
   H1,
   ScreenContainer,
-  ProductMacroTable,
+  TableMacro,
   RadioInputsRow,
   InputMetaText,
   ButtonPrimary,
@@ -89,7 +89,7 @@ export const ProductPreviewScreen = () => {
             productMacroPercentages.fats
           ]}
         />
-        <ProductMacroTable
+        <TableMacro
           macro={productMacro}
         />
       </Section>

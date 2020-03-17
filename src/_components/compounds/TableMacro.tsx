@@ -4,12 +4,12 @@ import { TextSecondary, TextPrimary } from '../atoms/Text';
 import { Table } from '../atoms/_index';
 import { MacroElements } from '../../types';
 
-interface ProductMacroTableProps<T extends MacroElements> {
+interface TableMacro<T extends MacroElements> {
   macro: T
 }
 
-export const ProductMacroTable = <T extends MacroElements>(
-  props: ProductMacroTableProps<T>
+export const TableMacro = <T extends MacroElements>(
+  props: TableMacro<T>
 ) => {
   return (
     <Container>
