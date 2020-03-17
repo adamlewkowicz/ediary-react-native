@@ -12,10 +12,7 @@ import { Product } from '../../database/entities';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
 import {
   Section,
-  Table,
   Group,
-  TextSecondary,
-  TextPrimary,
   ButtonPrimary,
   InputRef,
   InputButtonRef,
@@ -173,18 +170,6 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           onSubmitEditing={barcodeInputRef.current?.focus}
         />
       </Section>
-      <Section title="Porcje">
-        <Table.HeadRow>
-          <Table.TH>Nazwa</Table.TH>
-          <Table.TH>Ilość</Table.TH>
-        </Table.HeadRow>
-        {PRODUCTS.map(productName => (
-          <Table.Row key={productName}>
-            <TextSecondary>{productName}</TextSecondary>
-            <TextPrimary>150g</TextPrimary>
-          </Table.Row>
-        ))}
-      </Section>
       <Section title="Inne">
         <InputButtonRef
           label="Kod kreskowy"
@@ -200,12 +185,6 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
     </Container>
   );
 }
-
-const PRODUCTS = [
-  'Porcja',
-  'Opakowanie',
-  'Szklanka'
-] as const;
 
 const KEYBOARD_NUMERIC = 'numeric';
 
