@@ -178,6 +178,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
             onMealDelete={handleMealDelete}
             onProductAdd={handleProductFindNavigation}
             onProductPress={handleProductPress}
+            onProductDelete={handleProductDelete}
             isAddingProduct={processedMealId === meal.id}
           />
         )}

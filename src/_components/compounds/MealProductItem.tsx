@@ -5,6 +5,7 @@ import styled from 'styled-components/native';
 
 interface MealProductItemProps {
   onPress?: () => void
+  onDelete?: () => void
   name: string
   quantity: number
   kcal: number
@@ -12,7 +13,7 @@ interface MealProductItemProps {
 
 export const MealProductItem = (props: MealProductItemProps) => {
   return (
-    <TouchableOpacity onPress={props.onPress}>
+    <TouchableOpacity onPress={props.onPress} onLongPress={props.onDelete}>
       <Table.Row>
         <Details>
           <ProductName>{props.name}</ProductName>

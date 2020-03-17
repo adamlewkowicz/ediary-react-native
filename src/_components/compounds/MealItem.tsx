@@ -20,6 +20,7 @@ interface MealItemProps<
   onMealDelete: (meal: DiaryMeal) => void
   onProductAdd: (meal: Meal) => void
   onProductPress: (mealId: Meal['id'], product: Product) => void
+  onProductDelete: (mealId: DiaryMeal['id'], product: Product) => void
 }
 
 export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps<T>) => {
@@ -76,6 +77,10 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
                 quantity={product.quantity}
                 kcal={product.calcedMacro.kcal}
                 onPress={() => props.onProductPress?.(props.meal.id, product)}
+                onDelete={() => props.onProductDelete(
+                  props.meal.id as DiaryMeal,
+                  product
+                )}
               />
             ))}
             {props.isAddingProduct && <Spinner size={25} />}
