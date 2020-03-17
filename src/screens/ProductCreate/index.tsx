@@ -73,133 +73,131 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
   }
 
   return (
-    <ScrollView>
-      <Container>
-        <Section title="Podstawowe dane">
-          <InputRef 
-            label="Nazwa"
-            placeholder="Mleko UHT 3.2 %"
-            value={state.productData.name}
-            onChangeText={name => handleProductDataUpdate({ name })}
-            onSubmitEditing={brandInputRef.current?.focus}
-          />
+    <Container keyboardShouldPersistTaps="handled">
+      <Section title="Podstawowe dane">
+        <InputRef 
+          label="Nazwa"
+          placeholder="Mleko UHT 3.2 %"
+          value={state.productData.name}
+          onChangeText={name => handleProductDataUpdate({ name })}
+          onSubmitEditing={brandInputRef.current?.focus}
+        />
+        <InputRef
+          ref={brandInputRef}
+          label="Marka"
+          placeholder="Łaciate"
+          value={state.productData.brand}
+          onChangeText={brand => handleProductDataUpdate({ brand })}
+          onSubmitEditing={producerInputRef.current?.focus}
+        />
+        <InputRef 
+          label="Producent"
+          placeholder="Mlekovita"
+          value={state.productData.producer}
+          onChangeText={producer => handleProductDataUpdate({ producer })}
+          ref={producerInputRef}
+          onSubmitEditing={portionQuantityInputRef.current?.focus}
+        />
+        <InputMetaTextRef
+          label="Ilość w jednej porcji"
+          placeholder="100"
+          value={state.productData.portionQuantity}
+          onChangeText={portionQuantity => handleProductDataUpdate({ portionQuantity })}
+          metaText={state.portionUnitType}
+          keyboardType={KEYBOARD_NUMERIC}
+          ref={portionQuantityInputRef}
+          onSubmitEditing={carbsInputRef.current?.focus}
+        />
+      </Section>
+      <Section
+        title="Makroskładniki"
+        description={`Na 100${state.portionUnitType} produtku`}
+      >
+        <Group.Container>
           <InputRef
-            ref={brandInputRef}
-            label="Marka"
-            placeholder="Łaciate"
-            value={state.productData.brand}
-            onChangeText={brand => handleProductDataUpdate({ brand })}
-            onSubmitEditing={producerInputRef.current?.focus}
-          />
-          <InputRef 
-            label="Producent"
-            placeholder="Mlekovita"
-            value={state.productData.producer}
-            onChangeText={producer => handleProductDataUpdate({ producer })}
-            ref={producerInputRef}
-            onSubmitEditing={portionQuantityInputRef.current?.focus}
-          />
-          <InputMetaTextRef
-            label="Ilość w jednej porcji"
-            placeholder="100"
-            value={state.productData.portionQuantity}
-            onChangeText={portionQuantity => handleProductDataUpdate({ portionQuantity })}
-            metaText={state.portionUnitType}
-            keyboardType={KEYBOARD_NUMERIC}
-            ref={portionQuantityInputRef}
-            onSubmitEditing={carbsInputRef.current?.focus}
-          />
-        </Section>
-        <Section
-          title="Makroskładniki"
-          description={`Na 100${state.portionUnitType} produtku`}
-        >
-          <Group.Container>
-            <InputRef
-              value={state.productData.carbs}
-              onChangeText={carbs => handleProductDataUpdate({ carbs })}
-              label="Węglowodany"
-              placeholder="0"
-              keyboardType={KEYBOARD_NUMERIC}
-              ref={carbsInputRef}
-              onSubmitEditing={sugarsInputRef.current?.focus}
-            />
-            <Group.Separator />
-            <InputRef
-              label="w tym cukry"
-              placeholder="0"
-              keyboardType={KEYBOARD_NUMERIC}
-              ref={sugarsInputRef}
-              onSubmitEditing={protsInputRef.current?.focus}
-            />
-          </Group.Container>
-          <InputMetaTextRef
-            value={state.productData.prots}
-            onChangeText={prots => handleProductDataUpdate({ prots })}
-            label="Białko"
+            value={state.productData.carbs}
+            onChangeText={carbs => handleProductDataUpdate({ carbs })}
+            label="Węglowodany"
             placeholder="0"
-            metaText="g"
             keyboardType={KEYBOARD_NUMERIC}
-            ref={protsInputRef}
-            onSubmitEditing={fatsInputRef.current?.focus}
+            ref={carbsInputRef}
+            onSubmitEditing={sugarsInputRef.current?.focus}
           />
-          <Group.Container>
-            <InputRef
-              value={state.productData.fats}
-              onChangeText={fats => handleProductDataUpdate({ fats })}
-              label="Tłuszcze"
-              placeholder="0"
-              keyboardType={KEYBOARD_NUMERIC}
-              ref={fatsInputRef}
-              onSubmitEditing={fattyAcidsInputRef.current?.focus}
-            />
-            <Group.Separator />
-            <InputRef
-              label="w tym kwasy tłuszczowe"
-              placeholder="0"
-              keyboardType={KEYBOARD_NUMERIC}
-              ref={fattyAcidsInputRef}
-              onSubmitEditing={kcalInputRef.current?.focus}
-            />
-          </Group.Container>
-          <InputButtonRef
-            value={state.productData.kcal}
-            onChangeText={kcal => handleProductDataUpdate({ kcal })}
-            label="Kalorie"
+          <Group.Separator />
+          <InputRef
+            label="w tym cukry"
             placeholder="0"
-            buttonText="Oblicz"
             keyboardType={KEYBOARD_NUMERIC}
-            onButtonPress={handleCaloriesEvaluation}
-            ref={kcalInputRef}
-            onSubmitEditing={barcodeInputRef.current?.focus}
+            ref={sugarsInputRef}
+            onSubmitEditing={protsInputRef.current?.focus}
           />
-        </Section>
-        <Section title="Porcje">
-          <Table.HeadRow>
-            <Table.TH>Nazwa</Table.TH>
-            <Table.TH>Ilość</Table.TH>
-          </Table.HeadRow>
-          {PRODUCTS.map(productName => (
-            <Table.Row key={productName}>
-              <TextSecondary>{productName}</TextSecondary>
-              <TextPrimary>150g</TextPrimary>
-            </Table.Row>
-          ))}
-        </Section>
-        <Section title="Inne">
-          <InputButtonRef
-            label="Kod kreskowy"
-            placeholder="5900512300108"
-            buttonText="Zeskanuj"
-            onButtonPress={handleBarcodeScanNavigation}
-            ref={barcodeInputRef}
+        </Group.Container>
+        <InputMetaTextRef
+          value={state.productData.prots}
+          onChangeText={prots => handleProductDataUpdate({ prots })}
+          label="Białko"
+          placeholder="0"
+          metaText="g"
+          keyboardType={KEYBOARD_NUMERIC}
+          ref={protsInputRef}
+          onSubmitEditing={fatsInputRef.current?.focus}
+        />
+        <Group.Container>
+          <InputRef
+            value={state.productData.fats}
+            onChangeText={fats => handleProductDataUpdate({ fats })}
+            label="Tłuszcze"
+            placeholder="0"
+            keyboardType={KEYBOARD_NUMERIC}
+            ref={fatsInputRef}
+            onSubmitEditing={fattyAcidsInputRef.current?.focus}
           />
-        </Section>
-        <ButtonPrimary onPress={handleProductCreate}>
-          Zapisz produkt
-        </ButtonPrimary>
-      </Container>
-    </ScrollView>
+          <Group.Separator />
+          <InputRef
+            label="w tym kwasy tłuszczowe"
+            placeholder="0"
+            keyboardType={KEYBOARD_NUMERIC}
+            ref={fattyAcidsInputRef}
+            onSubmitEditing={kcalInputRef.current?.focus}
+          />
+        </Group.Container>
+        <InputButtonRef
+          value={state.productData.kcal}
+          onChangeText={kcal => handleProductDataUpdate({ kcal })}
+          label="Kalorie"
+          placeholder="0"
+          buttonText="Oblicz"
+          keyboardType={KEYBOARD_NUMERIC}
+          onButtonPress={handleCaloriesEvaluation}
+          ref={kcalInputRef}
+          onSubmitEditing={barcodeInputRef.current?.focus}
+        />
+      </Section>
+      <Section title="Porcje">
+        <Table.HeadRow>
+          <Table.TH>Nazwa</Table.TH>
+          <Table.TH>Ilość</Table.TH>
+        </Table.HeadRow>
+        {PRODUCTS.map(productName => (
+          <Table.Row key={productName}>
+            <TextSecondary>{productName}</TextSecondary>
+            <TextPrimary>150g</TextPrimary>
+          </Table.Row>
+        ))}
+      </Section>
+      <Section title="Inne">
+        <InputButtonRef
+          label="Kod kreskowy"
+          placeholder="5900512300108"
+          buttonText="Zeskanuj"
+          onButtonPress={handleBarcodeScanNavigation}
+          ref={barcodeInputRef}
+        />
+      </Section>
+      <ButtonPrimary onPress={handleProductCreate}>
+        Zapisz produkt
+      </ButtonPrimary>
+    </Container>
   );
 }
 
@@ -211,6 +209,6 @@ const PRODUCTS = [
 
 const KEYBOARD_NUMERIC = 'numeric';
 
-const Container = styled.KeyboardAvoidingView`
+const Container = styled(ScrollView)`
   padding: 20px;
 `
