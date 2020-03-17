@@ -16,17 +16,17 @@ interface MealItemProps<
   isOpened?: boolean
   isAddingProduct: boolean
   meal: Meal
-  onMealPress: (mealId: Meal['id']) => void
+  onMealOpen: (mealId: Meal['id']) => void
   onMealDelete: (meal: DiaryMeal) => void
   onProductAdd: (meal: Meal) => void
-  onProductPress: (mealId: Meal['id'], product: Product) => void
+  onProductUpdate: (mealId: Meal['id'], product: Product) => void
   onProductDelete: (mealId: DiaryMeal['id'], product: Product) => void
 }
 
 export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps<T>) => {
 
   const handleMealPress = () => {
-    props.onMealPress?.(props.meal.id);
+    props.onMealOpen?.(props.meal.id);
   }
 
   const handleMealDelete = () => {
@@ -76,7 +76,7 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
                 name={product.name}
                 quantity={product.quantity}
                 kcal={product.calcedMacro.kcal}
-                onPress={() => props.onProductPress?.(props.meal.id, product)}
+                onPress={() => props.onProductUpdate?.(props.meal.id, product)}
                 onDelete={() => props.onProductDelete(
                   props.meal.id as DiaryMeal,
                   product

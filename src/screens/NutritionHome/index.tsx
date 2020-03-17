@@ -174,10 +174,10 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         renderItem={({ item: meal, index }) => (
           <MealItem
             meal={meal}
-            onMealPress={(mealId) => handleMealPress(mealId, meal, index)}
+            onMealOpen={(mealId) => handleMealPress(mealId, meal, index)}
             onMealDelete={handleMealDelete}
             onProductAdd={handleProductFindNavigation}
-            onProductPress={handleProductPress}
+            onProductUpdate={handleProductPress}
             onProductDelete={handleProductDelete}
             isAddingProduct={processedMealId === meal.id}
           />
