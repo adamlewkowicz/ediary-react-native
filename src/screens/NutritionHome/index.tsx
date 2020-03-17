@@ -1,17 +1,14 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../../store';
-import { FlatList, Alert, SafeAreaView as View, InteractionManager } from 'react-native';
+import { FlatList, Alert, InteractionManager } from 'react-native';
 import { DateChanger } from '../../components/DateChanger';
 import styled from 'styled-components/native';
-import { MealListItem } from '../../components/MealListItem';
 import { MealId, ProductId } from '../../types';
 import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
-import { CaloriesChart } from '../../components/CaloriesChart';
 import { useAfterInteractions, useNavigationData } from '../../hooks';
-import { ProductItem } from '../../components/ProductItem';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
-import { ChartMacroCircles, MealItem, MealItemSeparator, ButtonSecondary, H1, ButtonSecondaryArrow, ChartCircle, ChartCalories } from '../../_components';
+import { ChartMacroCircles, MealItem, MealItemSeparator, ChartCalories } from '../../_components';
 import { layoutAnimateEase } from '../../common/utils';
 import { MealWithRatio } from '../../store/selectors';
 import { Product } from '../../database/entities';
@@ -166,14 +163,6 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     </>
   );
 
-  const Footer = (
-    <ContentContainer>
-      <ButtonAddOwnProduct onPress={handleProductCreateNavigation}>
-        Utwórz własny produkt
-      </ButtonAddOwnProduct>
-    </ContentContainer>
-  );
-
   return (
     <Container>
       <FlatList
@@ -181,7 +170,6 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         data={mealsWithRatio}
         keyExtractor={mealKeyExtractor}
         ItemSeparatorComponent={MealItemSeparator}
-        ListFooterComponent={Footer}
         ListHeaderComponent={Header}
         renderItem={({ item: meal, index }) => (
           <MealItem
@@ -226,10 +214,6 @@ const Container = styled.View`
 
 const ContentContainer = styled.View`
   margin: 40px 0 15px 0;
-`
-
-const ButtonAddOwnProduct = styled(ButtonSecondaryArrow)`
-  margin: ${props => `0 ${props.theme.spacing.screenPadding}`};
 `
 
 const mealKeyExtractor = (meal: MealWithRatio): string => meal.id.toString();
