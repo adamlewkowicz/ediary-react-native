@@ -33,7 +33,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
 
   const handleProductFindNavigation = (
     meal: DiaryMeal | DiaryMealTemplate
-  ) => {
+  ): void => {
     navigate('ProductFind', {
       async onItemPress(productResolver) {
         navigate('NutritionHome');
@@ -55,7 +55,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   
   const handleMealDelete = <T extends { id: MealId, name: string }>(
     meal: T
-  ) => {
+  ): void => {
     Alert.alert(
       'Usuń posiłek',
       `Czy jesteś pewnien że chcesz usunąć "${meal.name}"?`,
@@ -75,7 +75,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const handleProductDelete = <T extends { id: ProductId; name: string }>(
     mealId: MealId,
     product: T
-  ) => {
+  ): void => {
     Alert.alert(
       'Usuń produkt',
       `Czy jesteś pewnien że chcesz usunąć "${product.name}"?`,
@@ -111,7 +111,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     if (!meal.isToggled) scroll();
   }
 
-  const handleProductPress = (mealId: MealId, product: Product) => {
+  const handleProductPress = (mealId: MealId, product: Product): void => {
     navigate('ProductPreview', {
       product,
       onProductQuantityUpdated(quantity) {
