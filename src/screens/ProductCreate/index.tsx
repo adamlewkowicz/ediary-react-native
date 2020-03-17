@@ -148,6 +148,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             label="Białko"
             placeholder="0"
             metaText="g"
+            ref={protsInputRef}
             onSubmitEditing={fatsInputRef.current?.focus}
           />
           <Group.Container>
