@@ -117,6 +117,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             value={state.productData.portionQuantity}
             onChangeText={portionQuantity => handleProductDataUpdate({ portionQuantity })}
             metaText={state.portionUnitType}
+            keyboardType={KEYBOARD_NUMERIC}
             ref={portionQuantityInputRef}
             onSubmitEditing={carbsInputRef.current?.focus}
           />
@@ -131,6 +132,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
               onChangeText={carbs => handleProductDataUpdate({ carbs })}
               label="Węglowodany"
               placeholder="0"
+              keyboardType={KEYBOARD_NUMERIC}
               ref={carbsInputRef}
               onSubmitEditing={sugarsInputRef.current?.focus}
             />
@@ -138,6 +140,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             <InputRef
               label="w tym cukry"
               placeholder="0"
+              keyboardType={KEYBOARD_NUMERIC}
               ref={sugarsInputRef}
               onSubmitEditing={protsInputRef.current?.focus}
             />
@@ -148,6 +151,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             label="Białko"
             placeholder="0"
             metaText="g"
+            keyboardType={KEYBOARD_NUMERIC}
             ref={protsInputRef}
             onSubmitEditing={fatsInputRef.current?.focus}
           />
@@ -157,6 +161,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
               onChangeText={fats => handleProductDataUpdate({ fats })}
               label="Tłuszcze"
               placeholder="0"
+              keyboardType={KEYBOARD_NUMERIC}
               ref={fatsInputRef}
               onSubmitEditing={fattyAcidsInputRef.current?.focus}
             />
@@ -164,6 +169,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             <InputRef
               label="w tym kwasy tłuszczowe"
               placeholder="0"
+              keyboardType={KEYBOARD_NUMERIC}
               ref={fattyAcidsInputRef}
               onSubmitEditing={kcalInputRef.current?.focus}
             />
@@ -174,6 +180,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             label="Kalorie"
             placeholder="0"
             buttonText="Oblicz"
+            keyboardType={KEYBOARD_NUMERIC}
             onButtonPress={handleCaloriesEvaluation}
             ref={kcalInputRef}
             onSubmitEditing={barcodeInputRef.current?.focus}
@@ -213,6 +220,8 @@ const PRODUCTS = [
   'Opakowanie',
   'Szklanka'
 ] as const;
+
+const KEYBOARD_NUMERIC = 'numeric';
 
 const Container = styled.KeyboardAvoidingView`
   padding: 20px;
