@@ -3,7 +3,7 @@ import { ProductCreateScreenNavigationProps } from '../../navigation';
 import { calculateCaloriesByMacro } from '../../common/utils';
 
 export interface ProductCreateState {
-  portionUnit: PortionUnit,
+  portionUnitType: PortionUnit,
   productData: {
     name: string
     producer: string
@@ -20,7 +20,7 @@ export interface ProductCreateState {
 }
 
 export const initialState: ProductCreateState = {
-  portionUnit: 'g',
+  portionUnitType: 'g',
   productData: {
     name: '',
     producer: '',

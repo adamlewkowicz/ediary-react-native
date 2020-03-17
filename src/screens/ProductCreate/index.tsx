@@ -112,18 +112,18 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             onSubmitEditing={portionQuantityInputRef.current?.focus}
           />
           <InputMetaTextRef
-            label="Ilość w jednej porcji (g)"
+            label="Ilość w jednej porcji"
             placeholder="100"
             value={state.productData.portionQuantity}
             onChangeText={portionQuantity => handleProductDataUpdate({ portionQuantity })}
-            metaText="g"
+            metaText={state.portionUnitType}
             ref={portionQuantityInputRef}
             onSubmitEditing={carbsInputRef.current?.focus}
           />
         </Section>
         <Section
           title="Makroskładniki"
-          description="Na 100g produtku"
+          description={`Na 100${state.portionUnitType} produtku`}
         >
           <Group.Container>
             <InputRef
