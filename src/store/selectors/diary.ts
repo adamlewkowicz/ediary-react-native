@@ -2,7 +2,7 @@ import { MacroElements } from '../../types';
 import { StoreState } from '..';
 import { createSelector } from 'reselect';
 import { getMacroNeeds } from './user';
-import { calcMacroNeedsLeft, calculatePercentage, calculateMacroPerQuantity } from '../../common/utils';
+import { calcMacroNeedsLeft, calculateMacroPerQuantity, calculateMacroPercentages } from '../../common/utils';
 
 const BASE_MACRO: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 
@@ -41,13 +41,7 @@ export const getCalcedMeals = createSelector(
       kcal: macro.kcal += product.calcedMacro.kcal,
     }), { ...BASE_MACRO });
 
-    const macroSum = calcedMacro.carbs + calcedMacro.prots + calcedMacro.fats;
-
-    const macroPercentages = {
-      carbs: calculatePercentage(calcedMacro.carbs, macroSum),
-      prots: calculatePercentage(calcedMacro.prots, macroSum),
-      fats: calculatePercentage(calcedMacro.fats, macroSum),
-    }
+    const macroPercentages = calculateMacroPercentages(calcedMacro);
 
     return {
       ...meal,

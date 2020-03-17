@@ -274,6 +274,18 @@ export const calculateMacroPerQuantity = <T extends MacroElements>(
   (_, macroValue: number) => round(macroValue * quantity / 100, 100)
 );
 
+export const calculateMacroPercentages = <T extends BaseMacroElements>(
+  macroValues: T
+): BaseMacroElements => {
+  const macroSum = macroValues.carbs + macroValues.prots + macroValues.fats;
+
+  const carbs = calculatePercentage(macroValues.carbs, macroSum);
+  const prots = calculatePercentage(macroValues.prots, macroSum);
+  const fats = calculatePercentage(macroValues.fats, macroSum);
+
+  return { carbs, prots, fats };
+}
+
 const calculateObjectsValueSum = <T extends { [key: string]: number }>(
   objects: T[],
   initialObj: T = objects[0],

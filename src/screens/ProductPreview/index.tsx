@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import styled from 'styled-components/native';
 import {
   ChartMacroBars,
@@ -11,7 +11,7 @@ import {
   InputMetaText,
   ButtonPrimary,
 } from '../../_components';
-import { useNavigationData } from '../../hooks';
+import { useNavigationData, useCalculatedMacro } from '../../hooks';
 import { ProductPreviewScreenNavigationProps } from '../../navigation';
 import { fillArrayWithinRange } from '../../common/utils';
 
@@ -19,6 +19,10 @@ export const ProductPreviewScreen = () => {
   const { params, navigation } = useNavigationData<ProductPreviewScreenNavigationProps>();
   const [{ value: productPortion = 100 } = {}] = params.product.portions ?? [];
   const [quantity, setQuantity] = useState<number>(params.product.quantity ?? 0);
+  const {
+    macro: productMacro,
+    macroPercentages: productMacroPercentages
+  } = useCalculatedMacro(params.product.macro, quantity);
 
   const isEditMode = params.onProductQuantityUpdated != null;
 
@@ -30,7 +34,10 @@ export const ProductPreviewScreen = () => {
     setQuantity(productPortion * portion);
   }
 
-  const dynamicPortion = Math.round(quantity / productPortion);
+  const dynamicPortionValue = useMemo(
+    () => Math.round(quantity / productPortion),
+    [quantity, productPortion]
+  );
 
   if (isEditMode) {
     navigation.setOptions({
@@ -54,7 +61,7 @@ export const ProductPreviewScreen = () => {
         <RadioInputsRow
           title="Porcje"
           values={PORTIONS}
-          activeValue={dynamicPortion}
+          activeValue={dynamicPortionValue}
           onChange={handlePortionUpdate}
         />
         <InputMetaText
@@ -63,17 +70,24 @@ export const ProductPreviewScreen = () => {
           placeholder="0"
           value={quantity.toString()}
           onChangeText={quantity => setQuantity(Number(quantity))}
+          keyboardType="numeric"
         />
       </Section>
       <Section title="Makroskładniki">
-        <Calories>{params.product.macro.kcal} kcal</Calories>
+        <Calories>
+          {productMacro.kcal.toFixed(0)} kcal
+        </Calories>
         <ChartMacroCircles
           values={[
-            params.product.macro.carbs,
-            params.product.macro.prots,
-            params.product.macro.fats,
+            productMacro.carbs,
+            productMacro.prots,
+            productMacro.fats
           ]}
-          percentages={[45, 67, 12]}
+          percentages={[
+            productMacroPercentages.carbs,
+            productMacroPercentages.prots,
+            productMacroPercentages.fats
+          ]}
         />
         <ProductMacroTable
           macro={{

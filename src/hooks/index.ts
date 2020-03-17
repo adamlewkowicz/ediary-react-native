@@ -6,3 +6,4 @@ export * from './useDebouncedValue';
 export * from './useProductsSearch';
 export * from './useNavigationData';
 export * from './useNetworkSubscription';
+export * from './useCalculatedMacro';
