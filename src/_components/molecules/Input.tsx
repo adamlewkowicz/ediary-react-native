@@ -3,12 +3,14 @@ import styled from 'styled-components/native'
 import { TextInputProps, TextInput as NativeTextInput } from 'react-native';
 import { theme } from '../../common/theme';
 import { InputLabel } from '../index';
+import { TextPrimary } from '../atoms/Text';
 
 export interface InputProps extends TextInputProps  {
   label: string
   rightContent?: ReactNode
-  type?: 'text' | 'numeric'
   forwardedRef?: RefObject<NativeTextInput>
+  error?: string
+  isDirty?: boolean
 }
 
 export const Input = (props: InputProps) => {
@@ -20,11 +22,20 @@ export const Input = (props: InputProps) => {
     ...inputProps
   } = props;
 
+  const validationStatus: ValidationStatus = props.isDirty ? props.error?.length ? (
+    'error'
+  ) : (
+    'success'
+  ) : (
+    'neutral'
+  );
+
   return (
     <Container>
       <InputLabel>{label}</InputLabel>
       <Content>
         <TextInput
+          status={validationStatus}
           accessibilityLabel={accessibilityLabel}
           placeholderTextColor={theme.color.tertiary}
           ref={forwardedRef}
@@ -32,6 +43,11 @@ export const Input = (props: InputProps) => {
         />
         {rightContent}
       </Content>
+      {props.error?.length && (
+        <ErrorMessage>
+          {props.error}
+        </ErrorMessage>
+      )}
     </Container>
   );
 };
@@ -45,8 +61,13 @@ const Container = styled.View`
   flex: 1;
 `
 
-const TextInput = styled.TextInput`
-  border-bottom-color: ${props => props.theme.color.tertiary};
+const TextInput = styled.TextInput<{
+  status: ValidationStatus
+}>`
+  border-bottom-color: ${props => {
+    const colorName = props.status === 'neutral' ? 'tertiary' : props.status;
+    return props.theme.color[colorName];
+  }};
   border-bottom-width: 1px;
   font-family: ${props => props.theme.fontWeight.regular};
   color: ${props => props.theme.color.primary};
@@ -60,3 +81,10 @@ const Content = styled.View`
   align-items: center;
   position: relative;
 `
+
+const ErrorMessage = styled(TextPrimary)`
+  margin-top: 5px;
+  color: ${props => props.theme.color.error};
+`
+
+type ValidationStatus = 'error' | 'success' | 'neutral';
