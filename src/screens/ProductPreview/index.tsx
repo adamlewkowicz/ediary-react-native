@@ -44,9 +44,9 @@ export const ProductPreviewScreen = () => {
     navigation.setOptions({
       headerTitle: 'Edytuj ilość produktu',
       headerRight: () => (
-        <ButtonPrimary onPress={handleQuantityUpdate}>
+        <SaveProductButton onPress={handleQuantityUpdate}>
           Zapisz
-        </ButtonPrimary>
+        </SaveProductButton>
       )
     });
   } else {
@@ -107,6 +107,11 @@ export const ProductPreviewScreen = () => {
     </ScreenContainer>
   );
 }
+
+const SaveProductButton = styled(ButtonPrimary)`
+  margin-right: 5px;
+  min-width: 80px;
+`
 
 const ProductName = styled(H1)`
   margin-bottom: 20px;
