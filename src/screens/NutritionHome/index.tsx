@@ -5,13 +5,12 @@ import { FlatList, Alert, InteractionManager } from 'react-native';
 import { DateChanger } from '../../components/DateChanger';
 import styled from 'styled-components/native';
 import { MealId, ProductId } from '../../types';
-import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
+import { DiaryMealTemplate, DiaryMeal, DiaryMealId, DiaryProduct } from '../../store/reducers/diary';
 import { useAfterInteractions, useNavigationData } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
 import { ChartMacroCircles, MealItem, MealItemSeparator, ChartCalories } from '../../_components';
 import { layoutAnimateEase } from '../../common/utils';
 import { MealWithRatio } from '../../store/selectors';
-import { Product } from '../../database/entities';
 
 interface NutritionHomeScreenProps {}
 
@@ -111,14 +110,16 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     if (!meal.isToggled) scroll();
   }
 
-  const handleProductQuantityUpdate = (mealId: MealId, product: Product): void => {
+  const handleProductQuantityUpdate = (mealId: MealId, product: DiaryProduct): void => {
     navigate('ProductPreview', {
-      product,
-      onProductQuantityUpdated(quantity) {
+      product: product.data,
+      quantity: product.quantity,
+      async onProductQuantityUpdated(quantity) {
         navigation.goBack();
-        InteractionManager.runAfterInteractions(() => {
-          dispatch(Actions.mealProductQuantityUpdate(mealId, product.id, quantity));
-        });
+
+        await InteractionManager.runAfterInteractions();
+
+        dispatch(Actions.mealProductQuantityUpdate(mealId, product.id, quantity));
       }
     });
   }

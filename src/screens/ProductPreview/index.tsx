@@ -18,11 +18,11 @@ import { fillArrayWithinRange } from '../../common/utils';
 export const ProductPreviewScreen = () => {
   const { params, navigation } = useNavigationData<ProductPreviewScreenNavigationProps>();
   const [{ value: productPortion = 100 } = {}] = params.product.portions ?? [];
-  const [quantity, setQuantity] = useState<number>(params.product.quantity ?? 0);
+  const [quantity, setQuantity] = useState<number>(params.quantity ?? 0);
   const {
-    macro: productMacro,
-    macroPercentages: productMacroPercentages,
-    macroNeeds: productMacroNeeds,
+    macro,
+    macroPercentages,
+    macroNeeds,
   } = useCalculatedMacro(params.product.macro, quantity);
 
   const isEditMode = params.onProductQuantityUpdated != null;
@@ -76,31 +76,31 @@ export const ProductPreviewScreen = () => {
       </Section>
       <Section title="Makroskładniki">
         <Calories>
-          {productMacro.kcal.toFixed(0)} kcal
+          {macro.kcal.toFixed(0)} kcal
         </Calories>
         <ChartMacroCircles
           values={[
-            productMacro.carbs,
-            productMacro.prots,
-            productMacro.fats
+            macro.carbs,
+            macro.prots,
+            macro.fats
           ]}
           percentages={[
-            productMacroPercentages.carbs,
-            productMacroPercentages.prots,
-            productMacroPercentages.fats
+            macroPercentages.carbs,
+            macroPercentages.prots,
+            macroPercentages.fats
           ]}
         />
         <TableMacro
-          macro={productMacro}
+          macro={macro}
         />
       </Section>
       <Section title="Dzienne cele">
         <ChartMacroBars
           percentages={[
-            productMacroNeeds.carbs.percentage,
-            productMacroNeeds.prots.percentage,
-            productMacroNeeds.fats.percentage,
-            productMacroNeeds.kcal.percentage
+            macroNeeds.carbs.percentage,
+            macroNeeds.prots.percentage,
+            macroNeeds.fats.percentage,
+            macroNeeds.kcal.percentage
           ]}
         />
       </Section>

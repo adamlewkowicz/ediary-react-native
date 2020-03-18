@@ -16,7 +16,7 @@ export const ChartMacroBar = (props: ChartMacroBarProps) => {
         <TextTertiary>{title}</TextTertiary>
         <TextPrimary>{progressBarProps.percentages}%</TextPrimary>
       </DetailsContainer>
-      <ProgressBar {...progressBarProps}  />
+      <ProgressBar {...progressBarProps} />
     </Container>
   );
 }

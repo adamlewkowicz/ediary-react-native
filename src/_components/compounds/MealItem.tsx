@@ -7,7 +7,7 @@ import { ButtonSecondary } from '../molecules/_index';
 import { Selectors } from '../../store';
 import { ChartMacroBarsBase } from './ChartMacroBarsBase';
 import { ActivityIndicator } from 'react-native';
-import { DiaryMeal } from '../../store/reducers/diary';
+import { DiaryMeal, DiaryProduct } from '../../store/reducers/diary';
 
 interface MealItemProps<
   Meal extends Selectors.MealWithRatio,
@@ -19,7 +19,7 @@ interface MealItemProps<
   onMealOpen: (mealId: Meal['id']) => void
   onMealDelete: (meal: DiaryMeal) => void
   onProductAdd: (meal: Meal) => void
-  onProductQuantityUpdate: (mealId: DiaryMeal['id'], product: Product) => void
+  onProductQuantityUpdate: (mealId: DiaryMeal['id'], product: DiaryProduct) => void
   onProductDelete: (mealId: DiaryMeal['id'], product: Product) => void
 }
 

@@ -14,6 +14,7 @@ import {
 import { RouteProp } from '@react-navigation/native';
 import { theme } from '../common/theme';
 import { ProductPreviewScreen } from '../screens/ProductPreview';
+import { DiaryProduct } from '../store/reducers/diary';
 
 const Stack = createStackNavigator<NutritionStackParamList>();
 
@@ -32,7 +33,8 @@ export type NutritionStackParamList = {
     onPhotoTaken?: (data: TakePictureResponse) => void
   };
   [APP_ROUTE.ProductPreview]: {
-    product: Product
+    product: DiaryProduct['data']
+    quantity?: number
     onProductQuantityUpdated?: (quantity: number) => void
   };
 }
