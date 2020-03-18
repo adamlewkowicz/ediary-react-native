@@ -7,3 +7,4 @@ export * from './useProductsSearch';
 export * from './useNavigationData';
 export * from './useNetworkSubscription';
 export * from './useCalculatedMacro';
+export * from './useProductHistory';

@@ -5,9 +5,7 @@ import { ProductListItemMemo, Separator } from '../../components/ProductListItem
 import { InputSearcher } from '../../components/InputSearcher';
 import { Block } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
-import { useProductsSearch, useNavigationData } from '../../hooks';
-import { useSelector, useDispatch } from 'react-redux';
-import { Selectors, Actions } from '../../store';
+import { useProductsSearch, useNavigationData, useProductHistory } from '../../hooks';
 import { FlatList, ToastAndroid } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import { H3, ProductSearchItem, ButtonSecondaryArrow } from '../../_components';
@@ -16,23 +14,22 @@ interface ProductFindScreenProps {}
 
 export const ProductFindScreen = (props: ProductFindScreenProps) => {
   const { params, navigate, navigation } = useNavigationData<ProductFindScreenNavigationProps>();
-  const dispatch = useDispatch();
-  const recentProducts = useSelector(Selectors.getProductHistory);
+  const productHistory = useProductHistory();
   const hasBeenPressed = useRef(false);
   const {
     state,
     isConnected,
     debouncedProductName,
-    ...context
+    ...productSearch
   } = useProductsSearch();
-  const showRecentProducts = !state.isDirty;
-  const productsSource = showRecentProducts ? recentProducts : state.products;
+  const showProductHistory = !state.isDirty;
+  const productSource: ProductOrNormalizedProduct[] = showProductHistory ? productHistory.data : state.products;
 
   function handleBarcodeScan() {
     navigate('BarcodeScan', {
       onBarcodeDetected(barcode) {
         navigate('ProductFind');
-        context.updateBarcode(barcode);
+        productSearch.updateBarcode(barcode);
       }
     });
   }
@@ -42,7 +39,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
       barcode: state.barcode ?? undefined,
       name: debouncedProductName.trim(),
       onProductCreated(createdProduct) {
-        context.addProduct(createdProduct);
+        productSearch.addProduct(createdProduct);
 
         navigate('ProductFind');
         
@@ -52,9 +49,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
           ToastAndroid.CENTER
         );
 
-        dispatch(
-          Actions.productHistoryRecentAdded([createdProduct])
-        );
+        productHistory.addProduct(createdProduct);
       }
     });
   }
@@ -127,7 +122,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
           value={state.productName}
           placeholder="Nazwa produktu"
           accessibilityLabel="Nazwa szukanego produktu"
-          onChangeText={context.updateProductName}
+          onChangeText={productSearch.updateProductName}
           isLoading={state.isSearching}
         />
         <BarcodeButton
@@ -136,12 +131,12 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
         />
       </Block>
       <ProductsTitle>
-        {showRecentProducts ? 'Ostatnio używane produkty:' : 'Znalezione produkty:'}
+        {showProductHistory ? 'Ostatnio używane produkty:' : 'Znalezione produkty:'}
       </ProductsTitle>
       <RenderInfo />
       <ProductSearchItem />
       <FlatList
-        data={productsSource}
+        data={productSource}
         keyExtractor={productKeyExtractor}
         keyboardShouldPersistTaps="handled"
         ItemSeparatorComponent={Separator}
