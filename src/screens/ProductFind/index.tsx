@@ -15,7 +15,7 @@ import { H3, ProductSearchItem, ButtonSecondaryArrow } from '../../_components';
 interface ProductFindScreenProps {}
 
 export const ProductFindScreen = (props: ProductFindScreenProps) => {
-  const { params, navigate } = useNavigationData<ProductFindScreenNavigationProps>();
+  const { params, navigate, navigation } = useNavigationData<ProductFindScreenNavigationProps>();
   const dispatch = useDispatch();
   const recentProducts = useSelector(Selectors.getProductHistory);
   const hasBeenPressed = useRef(false);
@@ -28,7 +28,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
   const showRecentProducts = !state.isDirty;
   const productsSource = showRecentProducts ? recentProducts : state.products;
 
-  function handleBarcodeScanNavigation() {
+  function handleBarcodeScan() {
     navigate('BarcodeScan', {
       onBarcodeDetected(barcode) {
         navigate('ProductFind');
@@ -37,7 +37,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
     });
   }
 
-  function handleProductCreateNavigation() {
+  function handleProductCreate() {
     navigate('ProductCreate', {
       barcode: state.barcode ?? undefined,
       name: debouncedProductName.trim(),
@@ -109,6 +109,17 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
     );
   }
 
+  navigation.setOptions({
+    headerRight: () => (
+      <AddOwnProductButton
+        onPress={handleProductCreate}
+        accessibilityLabel="Stwórz własny produkt"  
+      >
+        Stwórz
+      </AddOwnProductButton>
+    )
+  });
+
   return (
     <Container>
       <Block space="space-between" align="center">
@@ -121,7 +132,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
         />
         <BarcodeButton
           accessibilityLabel="Zeskanuj kod kreskowy"
-          onPress={handleBarcodeScanNavigation}
+          onPress={handleBarcodeScan}
         />
       </Block>
       <ProductsTitle>
@@ -143,12 +154,6 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
           />
         )}
       />
-      <AddOwnProductButton
-        onPress={handleProductCreateNavigation}
-        accessibilityLabel="Dodaj własny produkt"  
-      >
-        Dodaj własny produkt
-      </AddOwnProductButton>
     </Container>
   );
 }
@@ -170,7 +175,7 @@ const ProductsTitle = styled(H3)`
 `
 
 const AddOwnProductButton = styled(ButtonSecondaryArrow)`
-  margin-top: 5px;
+  margin-right: 5px;
 `
 
 const productKeyExtractor = (product: ProductOrNormalizedProduct): string => {
