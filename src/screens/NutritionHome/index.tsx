@@ -31,7 +31,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     dispatch(Actions.mealsFindByDay(appDateDay));
   }, [appDateDay]);
 
-  const handleProductFindNavigation = (
+  const handleProductAdd = (
     meal: DiaryMeal | DiaryMealTemplate
   ): void => {
     navigate('ProductFind', {
@@ -92,7 +92,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     );
   }
 
-  const handleMealPress = (
+  const handleMealOpen = (
     mealId: DiaryMealId,
     meal: Selectors.MealWithRatio,
     index: number
@@ -111,7 +111,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     if (!meal.isToggled) scroll();
   }
 
-  const handleProductPress = (mealId: MealId, product: Product): void => {
+  const handleProductQuantityUpdate = (mealId: MealId, product: Product): void => {
     navigate('ProductPreview', {
       product,
       onProductQuantityUpdated(quantity) {
@@ -160,10 +160,10 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         renderItem={({ item: meal, index }) => (
           <MealItem
             meal={meal}
-            onMealOpen={(mealId) => handleMealPress(mealId, meal, index)}
+            onMealOpen={(mealId) => handleMealOpen(mealId, meal, index)}
             onMealDelete={handleMealDelete}
-            onProductAdd={handleProductFindNavigation}
-            onProductUpdate={handleProductPress}
+            onProductAdd={handleProductAdd}
+            onProductQuantityUpdate={handleProductQuantityUpdate}
             onProductDelete={handleProductDelete}
             isAddingProduct={processedMealId === meal.id}
           />
