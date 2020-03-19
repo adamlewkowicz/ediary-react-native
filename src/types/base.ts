@@ -31,6 +31,8 @@ export type ApplicationStatus = 'INITIALIZING' | 'CREATING PROFILE' | 'INITIALIZ
 /** Higher order function type for `Array.prototype.filter` method callback. */
 export type FilterHOF<T> = (value: T, index: number, values: T[]) => boolean;
 
+export type SortHOF<T> = (itemA: T, itemB: T) => -1 | 0 | 1;
+
 export type BaseScreenProps = {
   navigation: NavigationProp<ParamListBase>
   route: RouteProp<Record<string, object>, string>

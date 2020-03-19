@@ -2,7 +2,7 @@ import { MacroElements } from '../../types';
 import { StoreState } from '..';
 import { createSelector } from 'reselect';
 import { getMacroNeeds } from './user';
-import { calculateMacroPercentages, calculateMacroNeeds, reduceObjectsSum } from '../../common/utils';
+import { calculateMacroPercentages, calculateMacroNeeds, reduceObjectsSum, sortByDateTime } from '../../common/utils';
 
 const BASE_MACRO: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 
@@ -42,12 +42,7 @@ export const getCalcedMeals = createSelector(
 
 export const getMealsWithRatio = createSelector(
   getCalcedMeals,
-  meals => meals
-    .sort((a, b) => {
-      const timeA = Number(a.dateTime.replace(/:/g, ''));
-      const timeB = Number(b.dateTime.replace(/:/g, ''));
-      return timeA > timeB ? 1 : -1;
-    })
+  meals => meals.sort(sortByDateTime)
 );
 
 const getMealsMacroSum = createSelector(

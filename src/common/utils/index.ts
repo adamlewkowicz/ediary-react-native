@@ -1,6 +1,15 @@
 /// <reference lib="dom" />
 import dayjs from 'dayjs';
-import { DateDay, UnitType, DateTime, MacroElements, BaseMacroElements, ObjectEntries, ObjectNumeric } from '../../types';
+import {
+  DateDay,
+  SortHOF,
+  UnitType,
+  DateTime,
+  MacroElements,
+  BaseMacroElements,
+  ObjectEntries,
+  ObjectNumeric,
+} from '../../types';
 import { UNIT_TYPES, DATE_TIME, DATE_DAY, KCAL_IN_ONE_MACRO_GRAM } from '../consts';
 import { LayoutAnimation } from 'react-native';
 
@@ -307,6 +316,12 @@ export const reduceObjectsSum = <
   }
 
   return nextSum;
+}
+
+export const sortByDateTime: SortHOF<{ dateTime: DateTime }> = (a, b) => {
+  const timeA = Number(a.dateTime.replace(/:/g, ''));
+  const timeB = Number(b.dateTime.replace(/:/g, ''));
+  return timeA > timeB ? 1 : -1;
 }
 
 const calculateObjectsValueSum = <T extends { [key: string]: number }>(
