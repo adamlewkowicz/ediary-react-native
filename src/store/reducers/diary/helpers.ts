@@ -16,8 +16,8 @@ export const getMealFromTemplate = (
   data: template,
   productIds: [],
   isOpened: false,
-  dateTime: template.time,
-  dateTimeBase: dayjs(template.time as any).format(DAYJS_DATETIME_BASE),
+  dateTime: template.dateTime,
+  dateTimeBase: template.dateTimeBase as any,
 });
 
 export const normalizeMeal = (

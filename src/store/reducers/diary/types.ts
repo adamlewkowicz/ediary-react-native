@@ -3,6 +3,7 @@ import {
   DateTime,
   ProductId,
   TemplateId,
+  DateTimeBase,
 } from '../../../types';
 import { IProduct, IMeal } from '../../../database/entities';
 
@@ -52,5 +53,6 @@ type DiaryMealOrTemplate = DiaryMeal | DiaryMealTemplate;
 export interface MealTemplate {
   id: TemplateId
   name: string
-  time: DateTime
+  dateTime: DateTime
+  dateTimeBase: DateTimeBase
 }

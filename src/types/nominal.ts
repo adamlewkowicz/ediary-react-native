@@ -6,6 +6,10 @@ export interface DateTime extends String {
   _dateTimeBrand: 'HH:mm:ss'
 }
 
+export interface DateTimeBase extends String {
+  _dateTimeBrand: 'HH:mm'
+}
+
 export interface TemplateId extends Number {
   _templateIdBrand: number;
 }
