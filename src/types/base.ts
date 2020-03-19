@@ -36,6 +36,10 @@ export type BaseScreenProps = {
   route: RouteProp<Record<string, object>, string>
 }
 
+export type ObjectNumeric = {
+  [key: string]: number
+}
+
 export type ObjectEntries = <
   T extends object,
   Property extends keyof T = keyof T,

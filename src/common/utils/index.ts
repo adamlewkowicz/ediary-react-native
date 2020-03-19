@@ -1,6 +1,6 @@
 /// <reference lib="dom" />
 import dayjs from 'dayjs';
-import { DateDay, UnitType, DateTime, MacroElements, BaseMacroElements, ObjectEntries } from '../../types';
+import { DateDay, UnitType, DateTime, MacroElements, BaseMacroElements, ObjectEntries, ObjectNumeric } from '../../types';
 import { UNIT_TYPES, DATE_TIME, DATE_DAY, KCAL_IN_ONE_MACRO_GRAM } from '../consts';
 import { LayoutAnimation } from 'react-native';
 
@@ -291,6 +291,22 @@ type MacroNeed = {
   needed: number
   left: number,
   percentage: number
+}
+
+export const reduceObjectsSum = <
+  A extends ObjectNumeric,
+>(sum: A | {} = {}, currentObject: A): A => {
+  const nextSum = { ...sum } as A;
+
+  for (const key in currentObject) {
+    if (nextSum[key] == null) {
+      (nextSum as any)[key] = 0;
+    }
+    
+    (nextSum as any)[key] += currentObject[key];
+  }
+
+  return nextSum;
 }
 
 const calculateObjectsValueSum = <T extends { [key: string]: number }>(
