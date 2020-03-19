@@ -87,10 +87,14 @@ export class Meal extends GenericEntity {
     mealId: MealId,
     productId: ProductId,
     quantity?: number
-  ): Promise<{ product: IProductMerged, rawProduct: Product, action: 'create' | 'update' }> {
+  ): Promise<{
+    product: IProductMerged
+    rawProduct: Product
+    action: 'create' | 'update'
+  }> {
     const product = await Product.findOneOrFail(productId);
     const mealProduct = await MealProduct.findOne({ mealId, productId });
-    const portionValue = quantity ? quantity : product.portion;
+    const portionValue = quantity ?? product.portion;
     const rawProduct = product;
 
     if (mealProduct) {
@@ -117,15 +121,17 @@ export class Meal extends GenericEntity {
     const product = await Product.findOneOrFail(productId);
 
     const createdMeal = await Meal.save(payload);
+
     await MealProduct.save({
       mealId: createdMeal.id,
       productId: product.id,
-      quantity: quantity || product.portion
+      quantity: quantity ?? product.portion
     });
     
     const mealWithRelations = await Meal.findOneOrFail(createdMeal.id, {
       relations: ['mealProducts', 'mealProducts.product']
     });
+
     return mealWithRelations; 
   }
 
