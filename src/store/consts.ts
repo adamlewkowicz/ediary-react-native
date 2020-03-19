@@ -5,7 +5,7 @@ export const MEAL_OPEN_TOGGLED = 'MEAL_OPEN_TOGGLED' as const;
 export const MEALS_LOADED = 'MEALS_LOADED' as const;
 export const MEAL_PRODUCT_ADDED = 'MEAL_PRODUCT_ADDED' as const;
 export const MEAL_PRODUCT_DELETED = 'MEAL_PRODUCT_DELETED' as const;
-export const PRODUCT_QUANTITY_UPDATED = 'PRODUCT_UPDATED' as const;
+export const PRODUCT_QUANTITY_UPDATED = 'PRODUCT_QUANTITY_UPDATED' as const;
 
 // Application
 export const APP_DATE_UPDATED = 'APP_DATE_UPDATED' as const;
