@@ -83,10 +83,6 @@ export interface DiaryProduct {
     fats: number
     kcal: number
   }
-  calcedMacro: {
-    element: MacroElement
-    value: number
-  }[]
 }
 
 export interface DiaryTemplate {

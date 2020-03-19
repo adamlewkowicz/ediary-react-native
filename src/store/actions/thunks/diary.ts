@@ -1,6 +1,5 @@
 import { 
   Meal,
-  Product,
   MealProduct,
   IMeal,
   IProductRequired,
@@ -9,7 +8,7 @@ import {
   mealDeleted,
   mealUpdated,
   mealProductDeleted,
-  productUpdated,
+  productQuantityUpdated,
   mealToggled,
   mealProductAdded,
   mealAdded,
@@ -20,7 +19,6 @@ import { debounce, findOrFail } from '../../../common/utils';
 import { Thunk, StoreState, Selectors } from '../..';
 import {
   DiaryMeal,
-  DiaryProduct,
   DiaryTemplate,
   DiaryMealTemplate,
 } from '../../reducers/diary';
@@ -99,19 +97,11 @@ export const mealProductQuantityUpdate = (
   productId: ProductId,
   quantity: number
 ): Thunk => async (dispatch, getState) => {
-  dispatch(productUpdated(productId, { quantity }));
+  dispatch(productQuantityUpdated(productId, quantity));
   debounceA(async () => {
     await MealProduct.update({ mealId, productId }, { quantity });
     await _updateMealMacro(mealId, getState());
   }, 300);
-}
-
-export const productUpdate = (
-  productId: ProductId,
-  product: Partial<DiaryProduct>
-): Thunk => async (dispatch) => {
-  dispatch(productUpdated(productId, product));
-  await Product.update(productId, product);
 }
 
 export const mealsFindByDay = (
@@ -148,7 +138,7 @@ export const mealProductAdd = (
   );
   if (action === 'update') {
     dispatch(
-      productUpdated(productId, { quantity: product.quantity })
+      productQuantityUpdated(productId, product.quantity)
     );
   } else {
     dispatch(

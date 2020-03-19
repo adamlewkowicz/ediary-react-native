@@ -1,7 +1,7 @@
 import { TemplateId, TemplateIdReverted } from '../../../types';
 import { MACRO_ELEMENTS, DAYJS_DATETIME_BASE } from '../../../common/consts';
 import { Meal } from '../../../database/entities';
-import { getDayFromDate, getTimeFromDate } from '../../../common/utils';
+import { getDayFromDate, getTimeFromDate, calculateMacroPerQuantity } from '../../../common/utils';
 import {
   DiaryMealTemplate,
   DiaryTemplate,
@@ -11,14 +11,6 @@ import {
   CalcMacroByQuantityData,
 } from './types';
 import dayjs from 'dayjs';
-
-export const calcMacroByQuantity = <T extends CalcMacroByQuantityData>(
-  macroData: T,
-  quantity: number
-) => MACRO_ELEMENTS.map(element => ({
-  value: Math.round(macroData[element] * quantity / 100),
-  element
-}));
 
 export const getRevertedTemplateId = (
   templateId: TemplateId
@@ -70,8 +62,7 @@ export const normalizeMeal = (
       ...data,
       ...product,
       data: product,
-      isToggled: false,
-      calcedMacro: calcMacroByQuantity(product.macro, data.quantity),
+      _calcedMacro: calculateMacroPerQuantity(product.macro, product.portion)
     }
     return normalizedProduct;
   });

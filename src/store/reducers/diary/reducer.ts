@@ -2,14 +2,13 @@ import {
   MEAL_UPDATED,
   MEAL_DELETED,
   MEAL_PRODUCT_DELETED,
-  PRODUCT_UPDATED,
+  PRODUCT_QUANTITY_UPDATED,
   MEAL_TOGGLED,
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
   MEALS_LOADED,
 } from '../../consts';
 import {
-  calcMacroByQuantity,
   getMealFromTemplate,
   normalizeMeals,
   normalizeMeal,
@@ -17,6 +16,7 @@ import {
 import { DiaryAction } from '../../actions';
 import { DiaryState } from './types';
 import { defaultTemplates } from '../../../common/helpers';
+import { calculateMacroPerQuantity } from '../../../common/utils';
 
 const initialState: DiaryState = {
   meals: [],
@@ -118,7 +118,7 @@ export function diaryReducer(
         {
           ...action.payload,
           data: action.meta.rawProduct,
-          calcedMacro: calcMacroByQuantity(action.payload.macro, action.payload.quantity),
+          _calcedMacro: calculateMacroPerQuantity(action.payload.macro, action.payload.quantity),
         }
       ]
     }
@@ -135,21 +135,16 @@ export function diaryReducer(
       }),
       products: state.products.filter(product => product.id !== action.meta.productId)
     }
-    case PRODUCT_UPDATED: return {
+    case PRODUCT_QUANTITY_UPDATED: return {
       ...state,
       products: state.products.map(product => {
         if (product.id === action.meta.productId) {
-          const merged = { ...product, ...action.payload };
-          if (
-            'quantity' in action.payload &&
-            action.payload.quantity !== product.quantity
-          ) {
-            return {
-              ...merged,
-              calcedMacro: calcMacroByQuantity(merged.macro, merged.quantity)
-            }
+          const quantity = action.payload;
+          return {
+            ...product,
+            quantity,
+            _calcedMacro: calculateMacroPerQuantity(product.data.macro, quantity)
           }
-          return merged;
         }
         return product;
       })
