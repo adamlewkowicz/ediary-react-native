@@ -1,44 +1,24 @@
-import { TemplateId, TemplateIdReverted } from '../../../types';
 import { DAYJS_DATETIME_BASE } from '../../../common/consts';
 import { Meal } from '../../../database/entities';
-import { getDayFromDate, getTimeFromDate, calculateMacroPerQuantity } from '../../../common/utils';
+import { getTimeFromDate, calculateMacroPerQuantity } from '../../../common/utils';
 import {
   DiaryMealTemplate,
   DiaryTemplate,
-  NormalizeMealsResult,
   DiaryMeal,
   DiaryProduct,
 } from './types';
 import dayjs from 'dayjs';
 
-export const getRevertedTemplateId = (
-  templateId: TemplateId
-): TemplateIdReverted => {
-  return ((templateId as any) * -1) as any;
-}
-
 export const getMealFromTemplate = (
   template: DiaryTemplate
-): DiaryMealTemplate => {
-  return {
-    id: getRevertedTemplateId(template.id),
-    name: template.name,
-    type: 'template',
-    macro: {
-      carbs: 0,
-      prots: 0,
-      fats: 0,
-      kcal: 0,
-    },
-    day: null,
-    date: null,
-    dateTime: template.time,
-    isOpened: false,
-    templateId: template.id,
-    productIds: [],
-    dateTimeBase: dayjs(template.time as any).format(DAYJS_DATETIME_BASE),
-  }
-}
+): DiaryMealTemplate => ({
+  type: 'template',
+  data: template,
+  productIds: [],
+  isOpened: false,
+  dateTime: template.time,
+  dateTimeBase: dayjs(template.time as any).format(DAYJS_DATETIME_BASE),
+});
 
 export const normalizeMeal = (
   mealEntity: Meal
@@ -46,10 +26,9 @@ export const normalizeMeal = (
   const { mealProducts = [], ...meal } = mealEntity;
 
   const normalizedMeal: DiaryMeal = {
-    ...meal,
+    data: meal,
     type: 'meal',
     isOpened: false,
-    day: getDayFromDate(meal.date),
     dateTime: getTimeFromDate(meal.date),
     dateTimeBase: dayjs(meal.date).format(DAYJS_DATETIME_BASE),
     productIds: mealProducts.map(mealProduct => mealProduct.productId),
@@ -83,4 +62,13 @@ export const normalizeMeals = (
       products: [...normalized.products, ...products]
     }
   }, { meals: [], products: [] });
+}
+
+export const isDiaryMeal = (
+  meal: DiaryMeal | DiaryMealTemplate
+): meal is DiaryMeal => meal.type === 'meal';
+
+type NormalizeMealsResult = {
+  meals: DiaryMeal[]
+  products: DiaryProduct[]
 }

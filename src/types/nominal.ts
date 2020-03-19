@@ -10,10 +10,6 @@ export interface TemplateId extends Number {
   _templateIdBrand: number;
 }
 
-export interface TemplateIdReverted extends Number {
-  _TemplateIdRevertedBrand: number;
-}
-
 export interface ProfileId extends Number {
   _profileIdBrand: number;
 }

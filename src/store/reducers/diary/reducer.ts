@@ -36,7 +36,7 @@ export function diaryReducer(
         products,
         meals: [
           ...state.templates.flatMap(template => {
-            if (meals.some(meal => meal.name === template.name)) {
+            if (meals.some(meal => meal.data.name === template.name)) {
               return [];
             }
             const mealTemplate = getMealFromTemplate(template);
@@ -48,7 +48,7 @@ export function diaryReducer(
     case MEAL_ADDED: {
       const { meal: normalizedMeal, products: normalizedProducts } = normalizeMeal(action.payload);
       const foundTemplate = state.templates.find(template =>
-        template.name === normalizedMeal.name
+        template.name === normalizedMeal.data.name
       );
       const isMealCreatedFromTemplate = foundTemplate !== undefined;
       
@@ -57,7 +57,8 @@ export function diaryReducer(
           ...state,
           products: [...state.products, ...normalizedProducts],
           meals: state.meals.map(meal => {
-            if (meal.type === 'template' && meal.templateId === foundTemplate?.id) {
+            // TODO: refactor
+            if (meal.type === 'template') {
               return { ...normalizedMeal, isOpened: true };
             }
             return meal;
@@ -76,9 +77,9 @@ export function diaryReducer(
         product.mealId !== action.meta.mealId
       ),
       meals: state.meals.flatMap(meal => {
-        if (meal.id === action.meta.mealId) {
+        if (meal.data.id === action.meta.mealId) {
           const foundTemplate = state.templates.find(template => 
-            template.name === meal.name  
+            template.name === meal.data.name  
           );
           if (foundTemplate) {
             const mealFromTemplate = getMealFromTemplate(foundTemplate);
@@ -93,7 +94,7 @@ export function diaryReducer(
       ...state,
       meals: state.meals.map(meal => ({
         ...meal,
-        isToggled: action.meta.mealId === meal.id
+        isOpened: action.meta.mealId === meal.data.id
           ? !meal.isOpened
           : false
       }))
@@ -101,7 +102,7 @@ export function diaryReducer(
     case MEAL_UPDATED: return {
       ...state,
       meals: state.meals.map(meal =>
-        meal.type === 'meal' && meal.id === action.meta.mealId
+        meal.type === 'meal' && meal.data.id === action.meta.mealId
           ? { ...meal, ...action.payload }
           : meal
       )
@@ -109,7 +110,7 @@ export function diaryReducer(
     case MEAL_PRODUCT_ADDED: return {
       ...state,
       meals: state.meals.map(meal => 
-        meal.id === action.meta.mealId 
+        meal.data.id === action.meta.mealId 
           ? { ...meal, productIds: [...meal.productIds, action.payload.id] }
           : meal
       ),
@@ -126,7 +127,7 @@ export function diaryReducer(
     case MEAL_PRODUCT_DELETED: return {
       ...state,
       meals: state.meals.map(meal => {
-        if (meal.type === 'meal' && meal.id === action.meta.mealId) {
+        if (meal.type === 'meal' && meal.data.id === action.meta.mealId) {
           const productIds = meal.productIds.filter(productId =>
             productId !== action.meta.productId
           );

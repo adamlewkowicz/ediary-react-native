@@ -7,7 +7,9 @@ import { ButtonSecondary } from '../molecules/_index';
 import { Selectors } from '../../store';
 import { ChartMacroBarsBase } from './ChartMacroBarsBase';
 import { ActivityIndicator } from 'react-native';
-import { DiaryMeal } from '../../store/reducers/diary';
+import { DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
+import { MealId } from '../../types';
+import { isDiaryMeal } from '../../store/reducers/diary/helpers';
 
 interface MealItemProps<
   Meal extends Selectors.MealCalced,
@@ -15,23 +17,22 @@ interface MealItemProps<
 > {
   isAddingProduct: boolean
   meal: Meal
-  onMealOpen: (mealId: Meal['id']) => void
+  onMealOpen: (mealId: DiaryMealId) => void
   onMealDelete: (meal: DiaryMeal) => void
   onProductAdd: (meal: Meal) => void
-  onProductQuantityUpdate: (mealId: DiaryMeal['id'], product: Product) => void
-  onProductDelete: (mealId: DiaryMeal['id'], product: Product) => void
+  onProductQuantityUpdate: (mealId: MealId, product: Product) => void
+  onProductDelete: (mealId: MealId, product: Product) => void
 }
 
 export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>) => {
 
-  const handleMealPress = () => {
-    props.onMealOpen?.(props.meal.id);
+  const handleMealPress = (): void => {
+    props.onMealOpen(props.meal.data.id);
   }
 
-  const handleMealDelete = () => {
-    if (props.meal.type === 'meal') {
-      // TODO: normalize type
-      props.onMealDelete(props.meal as DiaryMeal);
+  const handleMealDelete = (): void => {
+    if (isDiaryMeal(props.meal)) {
+      props.onMealDelete(props.meal);
     }
   }
 
@@ -39,12 +40,14 @@ export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>
     <Container isOpened={props.meal.isOpened}>
       <InfoContainer
         onPress={handleMealPress}
-        onLongPress={handleMealDelete}
+        onLongPress={__DEV__ ? undefined : handleMealDelete}
         isOpened={props.meal.isOpened}
       >
         <Time>{props.meal.dateTimeBase}</Time>
         <BaseInfo>
-          <MealName isOpened={props.meal.isOpened}>{props.meal.name}</MealName>
+          <MealName isOpened={props.meal.isOpened}>
+            {props.meal.data.name}
+          </MealName>
           <Calories>{props.meal.calcedMacro.kcal.toFixed(0)} kcal</Calories>
         </BaseInfo>
         <ChartMacroBarsBase
@@ -76,11 +79,11 @@ export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>
                 quantity={product.quantity}
                 kcal={product.calcedMacro.kcal}
                 onPress={() => props.onProductQuantityUpdate(
-                  props.meal.id as DiaryMeal['id'],
+                  props.meal.data.id as MealId,
                   product
                 )}
                 onDelete={() => props.onProductDelete(
-                  props.meal.id as DiaryMeal['id'],
+                  props.meal.data.id as MealId,
                   product
                 )}
               />

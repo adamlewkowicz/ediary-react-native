@@ -1,12 +1,10 @@
 import {
   MealId,
-  TemplateIdReverted,
   DateTime,
   ProductId,
   TemplateId,
-  DateDay,
 } from '../../../types';
-import { IProduct } from '../../../database/entities';
+import { IProduct, IMeal } from '../../../database/entities';
 
 export interface DiaryState {
   meals: (DiaryMeal | DiaryMealTemplate)[]
@@ -14,42 +12,26 @@ export interface DiaryState {
   templates: DiaryTemplate[]
 }
 
-export type DiaryMealId = MealId | TemplateIdReverted;
-export type DiaryMealType = 'meal' | 'template';
+export type DiaryMealId = MealId | TemplateId;
+type DiaryMealType = 'meal' | 'template';
 
 export interface DiaryMealBase {
-  id: DiaryMealId
-  name: string
-  macro: {
-    carbs: number
-    prots: number
-    fats: number
-    kcal: number
-  }
-  date: string | null
-  dateTime: DateTime
-  updatedAt?: number
-  createdAt?: number
+  data: IMeal | DiaryTemplate
   type: DiaryMealType
-  isOpened: boolean
   productIds: ProductId[]
-  day: DateDay | null
+  isOpened: boolean
+  dateTime: DateTime
   dateTimeBase: string
 }
 
 export interface DiaryMealTemplate extends DiaryMealBase {
-  id: TemplateIdReverted
-  date: null
-  day: null
-  templateId: TemplateId
   type: 'template'
+  data: DiaryTemplate
 }
 
 export interface DiaryMeal extends DiaryMealBase {
-  id: MealId
-  date: string
-  day: DateDay
   type: 'meal'
+  data: IMeal
 }
 
 export interface DiaryProduct {
@@ -68,14 +50,4 @@ export interface DiaryTemplate {
   id: TemplateId
   name: string
   time: DateTime
-}
-
-export type NormalizeMealsResult = {
-  meals: DiaryMeal[]
-  products: DiaryProduct[]
-}
-
-export type NormalizeMealResult = {
-  meal: DiaryMeal
-  products: DiaryProduct[]
 }

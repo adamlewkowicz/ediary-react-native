@@ -35,7 +35,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     navigate('ProductFind', {
       async onItemPress(productResolver) {
         navigate('NutritionHome');
-        setProcessedMealId(meal.id);
+        setProcessedMealId(meal.data.id);
         const foundProduct = await productResolver();
 
         await dispatch(
@@ -54,7 +54,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const handleMealDelete = (meal: DiaryMeal): void => {
     Alert.alert(
       'Usuń posiłek',
-      `Czy jesteś pewnien że chcesz usunąć "${meal.name}"?`,
+      `Czy jesteś pewnien że chcesz usunąć "${meal.data.name}"?`,
       [
         {
           text: 'Anuluj',
@@ -62,7 +62,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         },
         {
           text: 'Usuń',
-          onPress: () => dispatch(Actions.mealDelete(meal.id))
+          onPress: () => dispatch(Actions.mealDelete(meal.data.id))
         }
       ]
     );
@@ -144,7 +144,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
             onProductAdd={handleProductAdd}
             onProductQuantityUpdate={handleProductQuantityUpdate}
             onProductDelete={handleProductDelete}
-            isAddingProduct={processedMealId === meal.id}
+            isAddingProduct={processedMealId === meal.data.id}
           />
         )}
       />
@@ -156,4 +156,4 @@ const Container = styled.View`
   flex: 1;
 `
 
-const mealKeyExtractor = (meal: Selectors.MealCalced): string => meal.id.toString();
+const mealKeyExtractor = (meal: Selectors.MealCalced): string => meal.data.id.toString();

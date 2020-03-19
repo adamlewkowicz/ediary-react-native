@@ -4,6 +4,8 @@ import { createSelector } from 'reselect';
 import { getUserMacroNeeds } from './user';
 import { calculateMacroPercentages, calculateMacroNeeds, reduceObjectsSum, sortByDateTime } from '../../common/utils';
 
+const BASE_MACRO: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
+
 const getMeals = (state: StoreState) => state.diary.meals;
 
 const getProducts = (state: StoreState) => state.diary.products;
@@ -23,9 +25,11 @@ export const getMealsCalced = createSelector(
   getMealsWithProducts,
   meals => meals
     .map(meal => {
-      const calcedMacro = meal.products
-        .map(product => product.calcedMacro)
-        .reduce(reduceObjectsSum);
+      const calcedMacro = meal.type === 'template'
+        ? BASE_MACRO
+        : meal.products
+          .map(product => product.calcedMacro)
+          .reduce(reduceObjectsSum, BASE_MACRO);
 
       const macroPercentages = calculateMacroPercentages(calcedMacro);
 
@@ -43,7 +47,7 @@ const getMealsMacroSum = createSelector(
   getMealsCalced,
   (meals): MacroElements => meals
     .map(meal => meal.calcedMacro)
-    .reduce(reduceObjectsSum)
+    .reduce(reduceObjectsSum, BASE_MACRO)
 );
 
 export const getCalcedMacroNeeds = createSelector(

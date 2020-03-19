@@ -27,8 +27,8 @@ import { batch } from 'react-redux';
 const debounceA = debounce();
 
 async function _updateMealMacro(mealId: MealId, store: StoreState) {
-  const meals = Selectors.getCalcedMeals(store);
-  const foundMeal = meals.find(meal => meal.id === mealId);
+  const meals = Selectors.getMealsCalced(store);
+  const foundMeal = meals.find(meal => meal.data.id === mealId);
   if (foundMeal) {
     const { carbs, prots, fats, kcal } = foundMeal;
     await Meal.update(mealId, { macro: { carbs, prots, fats, kcal }});
@@ -54,6 +54,7 @@ export const mealDelete = (
   await Meal.delete(mealId);
 }
 
+// TODO: remove redundant action
 export const mealUpdate = (
   mealId: MealId,
   meal: Partial<DiaryMeal & IMeal>
@@ -77,8 +78,8 @@ export const mealProductDelete = (
   productId: ProductId
 ): Thunk => async (dispatch, getState) => {
   const { meals, templates } = getState().diary;
-  const meal = findOrFail(meals, meal => meal.id === mealId);
-  const template = templates.find(template => template.name === meal.name);
+  const meal = findOrFail(meals, meal => meal.data.id === mealId);
+  const template = templates.find(template => template.name === meal.data.name);
   const isLatestProductOfMeal = meal.productIds.length === 1;
   const isCreatedFromTemplate = template !== undefined;
   
@@ -154,14 +155,15 @@ export const mealOrTemplateProductAdd = (
   date: Date,
 ): Thunk<Promise<void>> => async (dispatch) => {
   if (meal.type === 'template') {
-    const { name, templateId, dateTime: time } = meal;
-    const template: DiaryTemplate = { id: templateId, name, time };
+    const { dateTime: time, data: { name }} = meal;
+    const template: DiaryTemplate = { name, time };
+
     await dispatch(
       mealCreateFromTemplate(
         template, date, productId
       )
     );
   } else {
-    await dispatch(mealProductAdd(meal.id, productId));
+    await dispatch(mealProductAdd(meal.data.id, productId));
   }
 }
