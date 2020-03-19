@@ -6,8 +6,8 @@ import { TextSplit } from './TextSplit';
 
 interface ChartMacroCircleLeftProps extends ChartCircleProps {
   title: string
-  value: number | string
-  valueLeft: number | string
+  value: number
+  valueLeft: number
 }
 
 export const ChartMacroCircleLeft = (props: ChartMacroCircleLeftProps) => {
@@ -20,8 +20,8 @@ export const ChartMacroCircleLeft = (props: ChartMacroCircleLeftProps) => {
         <H4>{props.percentages}%</H4>
       </ChartCircle>
       <TextSplit
-        primary={props.value}
-        secondary={props.valueLeft}
+        primary={props.value.toFixed(0)}
+        secondary={props.valueLeft.toFixed(0)}
       />
       <H4>{props.title}</H4>
     </Container>

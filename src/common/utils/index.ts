@@ -312,7 +312,7 @@ export const reduceObjectsSum = <
       (nextSum as any)[key] = 0;
     }
     
-    (nextSum as any)[key] += currentObject[key];
+    (nextSum as any)[key] = round((nextSum as any)[key] + currentObject[key], 100);
   }
 
   return nextSum;

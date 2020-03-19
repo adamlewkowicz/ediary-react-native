@@ -20,9 +20,9 @@ export const ChartCalories = (props: ChartCaloriesProps) => {
       gradientColors={theme.gradient.kcal}
     >
       <Content>
-        <CaloriesEaten>{props.value}</CaloriesEaten>
+        <CaloriesEaten>{props.value.toFixed(0)}</CaloriesEaten>
         <TextTertiary>
-          z {props.valueLeft} kalorii
+          z {props.valueLeft.toFixed(0)} kalorii
         </TextTertiary>
       </Content>
     </ChartCircle>
