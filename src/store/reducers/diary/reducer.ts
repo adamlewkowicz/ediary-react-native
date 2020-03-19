@@ -9,8 +9,9 @@ import {
 } from '../../consts';
 import {
   getDiaryMealTemplate,
-  normalizeMeals,
-  normalizeMeal,
+  normalizeProductEntity,
+  normalizeMealEntities,
+  normalizeMealEntity,
 } from './helpers';
 import { DiaryAction } from '../../actions';
 import { DiaryState } from './types';
@@ -29,7 +30,7 @@ export function diaryReducer(
 ): DiaryState {
   switch(action.type) {
     case MEALS_LOADED:
-      const { meals, products } = normalizeMeals(action.payload);
+      const { meals, products } = normalizeMealEntities(action.payload);
       return {
         ...state,
         products,
@@ -45,7 +46,7 @@ export function diaryReducer(
         ]
       }
     case MEAL_ADDED: {
-      const { meal: normalizedMeal, products: normalizedProducts } = normalizeMeal(action.payload);
+      const { meal: normalizedMeal, products: normalizedProducts } = normalizeMealEntity(action.payload);
       const foundTemplate = state.templates.find(template =>
         template.name === normalizedMeal.data.name
       );
@@ -98,23 +99,22 @@ export function diaryReducer(
           : false
       }))
     }
-    case MEAL_PRODUCT_ADDED: return {
-      ...state,
-      meals: state.meals.map(meal => 
-        meal.data.id === action.meta.mealId 
-          ? { ...meal, productIds: [...meal.productIds, action.payload.id] }
-          : meal
-      ),
-      products: [
-        ...state.products,
-        {
-          ...action.payload,
-          quantity: action.payload.quantity,
-          data: action.meta.rawProduct,
-          calcedMacro: calculateMacroPerQuantity(action.payload.macro, action.payload.quantity),
-        }
-      ]
-    }
+    case MEAL_PRODUCT_ADDED:
+      const normalizedProduct = normalizeProductEntity(action.payload);
+      
+      return {
+        ...state,
+        meals: state.meals.map(meal => {
+          if (meal.data.id === action.meta.mealId) {
+            return {
+              ...meal,
+              productIds: [...meal.productIds, normalizedProduct.data.id]
+            }
+          }
+          return meal;
+        }),
+        products: [...state.products, normalizedProduct]
+      }
     case MEAL_PRODUCT_DELETED: return {
       ...state,
       meals: state.meals.map(meal => {

@@ -1,5 +1,5 @@
 import { DAYJS_DATETIME_BASE } from '../../../common/consts';
-import { Meal } from '../../../database/entities';
+import { Meal, MealProduct, IProductMerged } from '../../../database/entities';
 import { getTimeFromDate, calculateMacroPerQuantity } from '../../../common/utils';
 import {
   DiaryMealTemplate,
@@ -21,7 +21,19 @@ export const getDiaryMealTemplate = (
   dateTimeBase: template.dateTimeBase as any,
 });
 
-export const normalizeMeal = (
+export const normalizeProductEntity = (mealProductEntity: MealProduct | IProductMerged): DiaryProduct => {
+  const { meal, product, ...data } = mealProductEntity;
+
+  const normalizedProduct: DiaryProduct = {
+    ...data,
+    data: product,
+    calcedMacro: calculateMacroPerQuantity(product.macro, product.portion)
+  }
+  
+  return normalizedProduct;
+}
+
+export const normalizeMealEntity = (
   mealEntity: Meal
 ) => {
   const { mealProducts = [], ...meal } = mealEntity;
@@ -35,17 +47,7 @@ export const normalizeMeal = (
     productIds: mealProducts.map(mealProduct => mealProduct.productId),
   }
 
-  const normalizedProducts = mealProducts.map<DiaryProduct>(mealProductEntity => {
-    const { meal, product, ...data } = mealProductEntity;
-
-    const normalizedProduct: DiaryProduct = {
-      ...data,
-      data: product,
-      calcedMacro: calculateMacroPerQuantity(product.macro, product.portion)
-    }
-    
-    return normalizedProduct;
-  });
+  const normalizedProducts = mealProducts.map<DiaryProduct>(normalizeProductEntity);
 
   return {
     meal: normalizedMeal,
@@ -53,11 +55,12 @@ export const normalizeMeal = (
   }
 }
 
-export const normalizeMeals = (
+export const normalizeMealEntities = (
   payload: Meal[]
 ): NormalizeMealsResult => {
   return payload.reduce<NormalizeMealsResult>((normalized, mealEntity) => {
-    const { meal, products } = normalizeMeal(mealEntity);
+    const { meal, products } = normalizeMealEntity(mealEntity);
+    
     return {
       meals: [...normalized.meals, meal],
       products: [...normalized.products, ...products]
