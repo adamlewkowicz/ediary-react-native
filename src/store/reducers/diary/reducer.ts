@@ -1,5 +1,4 @@
 import {
-  MEAL_UPDATED,
   MEAL_DELETED,
   MEAL_PRODUCT_DELETED,
   PRODUCT_QUANTITY_UPDATED,
@@ -98,14 +97,6 @@ export function diaryReducer(
           ? !meal.isOpened
           : false
       }))
-    }
-    case MEAL_UPDATED: return {
-      ...state,
-      meals: state.meals.map(meal =>
-        meal.type === 'meal' && meal.data.id === action.meta.mealId
-          ? { ...meal, ...action.payload }
-          : meal
-      )
     }
     case MEAL_PRODUCT_ADDED: return {
       ...state,
