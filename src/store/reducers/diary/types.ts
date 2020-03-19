@@ -5,8 +5,6 @@ import {
   ProductId,
   TemplateId,
   DateDay,
-  BarcodeId,
-  PortionUnit,
 } from '../../../types';
 import { Product, IProductMerged } from '../../../database/entities';
 
@@ -59,23 +57,6 @@ export interface DiaryProduct {
   quantity: number
   mealId: MealId | null
   calcedMacro?: {
-    carbs: number
-    prots: number
-    fats: number
-    kcal: number
-  }
-
-  id: ProductId
-  name: string
-  producer?: string | null
-  img?: string
-  barcode: BarcodeId | null
-  unit: PortionUnit
-  userId?: number | null
-  isVerified: boolean | null
-  updatedAt: Date
-  createdAt: Date
-  macro: {
     carbs: number
     prots: number
     fats: number

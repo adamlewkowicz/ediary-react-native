@@ -7,7 +7,7 @@ import { ButtonSecondary } from '../molecules/_index';
 import { Selectors } from '../../store';
 import { ChartMacroBarsBase } from './ChartMacroBarsBase';
 import { ActivityIndicator } from 'react-native';
-import { DiaryMeal, DiaryProduct } from '../../store/reducers/diary';
+import { DiaryMeal } from '../../store/reducers/diary';
 
 interface MealItemProps<
   Meal extends Selectors.MealWithRatio,
@@ -19,8 +19,8 @@ interface MealItemProps<
   onMealOpen: (mealId: Meal['id']) => void
   onMealDelete: (meal: DiaryMeal) => void
   onProductAdd: (meal: Meal) => void
-  onProductQuantityUpdate: (mealId: DiaryMeal['id'], product: DiaryProduct) => void
-  onProductDelete: (mealId: DiaryMeal['id'], product: Product) => void
+  onProductQuantityUpdate: (mealId: DiaryMeal['id'], productData: Product) => void
+  onProductDelete: (mealId: DiaryMeal['id'], productData: Product['data']) => void
 }
 
 export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps<T>) => {
@@ -72,8 +72,8 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
           <ProductsContainer>
             {props.meal.products.map(product => (
               <MealProductItem
-                key={product.id}
-                name={product.name}
+                key={product.data.id}
+                name={product.data.name}
                 quantity={product.quantity}
                 kcal={product.calcedMacro.kcal}
                 onPress={() => props.onProductQuantityUpdate(
@@ -82,7 +82,7 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
                 )}
                 onDelete={() => props.onProductDelete(
                   props.meal.id as DiaryMeal['id'],
-                  product
+                  product.data
                 )}
               />
             ))}

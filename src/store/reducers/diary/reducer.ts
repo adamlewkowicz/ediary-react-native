@@ -133,12 +133,12 @@ export function diaryReducer(
         }
         return meal;
       }),
-      products: state.products.filter(product => product.id !== action.meta.productId)
+      products: state.products.filter(product => product.data.id !== action.meta.productId)
     }
     case PRODUCT_QUANTITY_UPDATED: return {
       ...state,
       products: state.products.map(product => {
-        if (product.id === action.meta.productId) {
+        if (product.data.id === action.meta.productId) {
           const quantity = action.payload;
           return {
             ...product,

@@ -119,7 +119,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
 
         await InteractionManager.runAfterInteractions();
 
-        dispatch(Actions.mealProductQuantityUpdate(mealId, product.id, quantity));
+        dispatch(Actions.mealProductQuantityUpdate(mealId, product.data.id, quantity));
       }
     });
   }

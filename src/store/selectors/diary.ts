@@ -24,8 +24,8 @@ const getMealsWithProducts = createSelector(
   (meals, products) => meals.map(meal => ({
     ...meal,
     products: meal.productIds.flatMap(productId => {
-      const foundProduct = products.find(product => product.id === productId);
-      return foundProduct ? [foundProduct] : []
+      const foundProduct = products.find(product => product.data.id === productId);
+      return foundProduct ?? [];
     })
   }))
 );

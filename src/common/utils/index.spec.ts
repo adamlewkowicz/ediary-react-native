@@ -1,5 +1,4 @@
 import {
-  calcMacroNeedsLeft,
   debounce,
   mapAsyncSequence,
   filterByUniqueId,
@@ -43,27 +42,6 @@ test('findOrFail - throws error if no item was found', () => {
   const items = [{ name: 'A' }];
   const subject = () => findOrFail(items, item => item.name === 'B');
   expect(subject).toThrowError();
-});
-
-test('calcMacroNeedsLeft', () => {
-  const macroEaten = {
-    carbs: 400,
-    prots: 0,
-    fats: 0,
-    kcal: 0
-  };
-  const macroNeeded = {
-    carbs: 1000,
-    prots: 0,
-    fats: 0,
-    kcal: 0
-  };
-
-  const result = calcMacroNeedsLeft(macroEaten, macroNeeded);
-
-  expect(result.carbs.diff).toBeGreaterThan(0);
-  expect(result.carbs.ratio).toBeGreaterThan(0);
-  expect(result.carbs).toMatchSnapshot();
 });
 
 test('sortByMostAccurateName - sorts items by most matching name', () => {

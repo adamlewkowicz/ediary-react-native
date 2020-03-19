@@ -60,7 +60,6 @@ export const normalizeMeal = (
 
     const normalizedProduct: DiaryProduct = {
       ...data,
-      ...product,
       data: product,
       calcedMacro: calculateMacroPerQuantity(product.macro, product.portion)
     }

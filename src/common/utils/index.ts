@@ -1,7 +1,7 @@
 /// <reference lib="dom" />
 import dayjs from 'dayjs';
 import { DateDay, UnitType, DateTime, MacroElements, BaseMacroElements, ObjectEntries } from '../../types';
-import { UNIT_TYPES, DATE_TIME, DATE_DAY, MACRO_ELEMENTS, KCAL_IN_ONE_MACRO_GRAM } from '../consts';
+import { UNIT_TYPES, DATE_TIME, DATE_DAY, KCAL_IN_ONE_MACRO_GRAM } from '../consts';
 import { LayoutAnimation } from 'react-native';
 
 export const debounce = () => {
