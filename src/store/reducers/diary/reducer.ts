@@ -8,7 +8,7 @@ import {
   MEALS_LOADED,
 } from '../../consts';
 import {
-  getMealFromTemplate,
+  getDiaryMealTemplate,
   normalizeMeals,
   normalizeMeal,
 } from './helpers';
@@ -34,12 +34,12 @@ export function diaryReducer(
         ...state,
         products,
         meals: [
-          ...state.templates.flatMap(template => {
-            if (meals.some(meal => meal.data.name === template.name)) {
+          ...state.templates.flatMap(mealTemplate => {
+            if (meals.some(meal => meal.data.name === mealTemplate.name)) {
               return [];
             }
-            const mealTemplate = getMealFromTemplate(template);
-            return [mealTemplate];
+            const diaryMealTemplate = getDiaryMealTemplate(mealTemplate);
+            return diaryMealTemplate;
           }),
           ...meals
         ]
@@ -67,7 +67,7 @@ export function diaryReducer(
       return {
         ...state,
         products: [...state.products, ...normalizedProducts],
-        meals: [...state.meals, { ...normalizedMeal, type: 'meal' }]
+        meals: [...state.meals, { ...normalizedMeal, isOpened: true }]
       }
     }
     case MEAL_DELETED: return {
@@ -81,12 +81,12 @@ export function diaryReducer(
             template.name === meal.data.name  
           );
           if (foundTemplate) {
-            const mealFromTemplate = getMealFromTemplate(foundTemplate);
-            return [mealFromTemplate];
+            const diaryMealTemplate = getDiaryMealTemplate(foundTemplate);
+            return diaryMealTemplate;
           }
           return [];
         }
-        return [meal];
+        return meal;
       })
     }
     case MEAL_OPEN_TOGGLED: return {

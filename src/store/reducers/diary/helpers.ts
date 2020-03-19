@@ -6,10 +6,11 @@ import {
   MealTemplate,
   DiaryMeal,
   DiaryProduct,
+  DiaryMealOrTemplate,
 } from './types';
 import dayjs from 'dayjs';
 
-export const getMealFromTemplate = (
+export const getDiaryMealTemplate = (
   template: MealTemplate
 ): DiaryMealTemplate => ({
   type: 'template',
@@ -64,9 +65,7 @@ export const normalizeMeals = (
   }, { meals: [], products: [] });
 }
 
-export const isDiaryMeal = (
-  meal: DiaryMeal | DiaryMealTemplate
-): meal is DiaryMeal => meal.type === 'meal';
+export const isDiaryMeal = (meal: DiaryMealOrTemplate): meal is DiaryMeal => meal.type === 'meal';
 
 type NormalizeMealsResult = {
   meals: DiaryMeal[]

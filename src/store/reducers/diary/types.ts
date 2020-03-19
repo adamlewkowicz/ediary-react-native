@@ -48,7 +48,7 @@ export interface DiaryProduct {
 
 export type DiaryMealOrTemplateId = MealId | TemplateId;
 
-type DiaryMealOrTemplate = DiaryMeal | DiaryMealTemplate;
+export type DiaryMealOrTemplate = DiaryMeal | DiaryMealTemplate;
 
 export interface MealTemplate {
   id: TemplateId
