@@ -58,7 +58,6 @@ export interface DiaryMeal extends DiaryMealBase {
 
 export interface DiaryProduct {
   data: Product | IProductMerged
-  isToggled: boolean
   quantity: number
   mealId: MealId | null
   _calcedMacro?: {

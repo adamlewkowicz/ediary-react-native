@@ -4,7 +4,6 @@ import {
   MEAL_PRODUCT_DELETED,
   PRODUCT_UPDATED,
   MEAL_TOGGLED,
-  PRODUCT_TOGGLED,
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
   MEALS_LOADED,
@@ -119,7 +118,6 @@ export function diaryReducer(
         {
           ...action.payload,
           data: action.meta.rawProduct,
-          isToggled: false,
           calcedMacro: calcMacroByQuantity(action.payload.macro, action.payload.quantity),
         }
       ]
@@ -155,15 +153,6 @@ export function diaryReducer(
         }
         return product;
       })
-    }
-    case PRODUCT_TOGGLED: return {
-      ...state,
-      products: state.products.map(product => ({
-        ...product,
-        isToggled: action.payload === product.id
-          ? !product.isToggled
-          : false
-      }))
     }
     default: return state;
   }

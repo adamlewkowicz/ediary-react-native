@@ -75,13 +75,6 @@ export const mealToggled = (
   meta: { mealId }
 });
 
-export const productToggled = (
-  productId: ProductId | null
-) => ({
-  type: PRODUCT_TOGGLED,
-  payload: productId
-});
-
 export type MealAdded = ReturnType<typeof mealAdded>;
 export type MealProductAdded = ReturnType<typeof mealProductAdded>;
 
@@ -94,4 +87,3 @@ export type DiaryAction =
   | ReturnType<typeof mealProductDeleted>
   | ReturnType<typeof productUpdated>
   | ReturnType<typeof mealToggled>
-  | ReturnType<typeof productToggled>
