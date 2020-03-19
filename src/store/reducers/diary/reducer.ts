@@ -58,7 +58,7 @@ export function diaryReducer(
           products: [...state.products, ...normalizedProducts],
           meals: state.meals.map(meal => {
             // TODO: refactor
-            if (meal.type === 'template') {
+            if (meal.type === 'template' && meal.data.name === foundTemplate?.name) {
               return { ...normalizedMeal, isOpened: true };
             }
             return meal;

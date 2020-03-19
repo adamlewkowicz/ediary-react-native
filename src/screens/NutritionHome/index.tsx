@@ -156,4 +156,4 @@ const Container = styled.View`
   flex: 1;
 `
 
-const mealKeyExtractor = (meal: Selectors.MealCalced): string => meal.data.id.toString();
+const mealKeyExtractor = (meal: Selectors.MealCalced): string => `${meal.type}${meal.data.id}`;
