@@ -4,8 +4,6 @@ import { createSelector } from 'reselect';
 import { getMacroNeeds } from './user';
 import { calculateMacroPercentages, calculateMacroNeeds, reduceObjectsSum, sortByDateTime } from '../../common/utils';
 
-const BASE_MACRO: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
-
 const getMeals = (state: StoreState) => state.diary.meals;
 
 const getProducts = (state: StoreState) => state.diary.products;
@@ -21,39 +19,31 @@ const getMealsWithProducts = createSelector(
   }))
 );
 
-export const getCalcedMeals = createSelector(
+export const getMealsCalced = createSelector(
   getMealsWithProducts,
-  meals => meals.map(meal => {
-    
-    const calcedMacro = meal.products
-      .map(product => product.calcedMacro)
-      .reduce(reduceObjectsSum);
+  meals => meals
+    .map(meal => {
+      const calcedMacro = meal.products
+        .map(product => product.calcedMacro)
+        .reduce(reduceObjectsSum);
 
-    const macroPercentages = calculateMacroPercentages(calcedMacro);
+      const macroPercentages = calculateMacroPercentages(calcedMacro);
 
-    return {
-      ...meal,
-      ...calcedMacro,
-      calcedMacro,
-      macroPercentages
-    };
-  })
-);
-
-export const getMealsWithRatio = createSelector(
-  getCalcedMeals,
-  meals => meals.sort(sortByDateTime)
+      return {
+        ...meal,
+        ...calcedMacro,
+        calcedMacro,
+        macroPercentages
+      }
+    })
+    .sort(sortByDateTime)
 );
 
 const getMealsMacroSum = createSelector(
-  getCalcedMeals,
-  (meals): MacroElements => meals.reduce((sum, meal) => ({
-    ...sum,
-    carbs: Math.round(sum.carbs + meal.carbs),
-    prots: Math.round(sum.prots + meal.prots),
-    fats: Math.round(sum.fats + meal.fats),
-    kcal: Math.round(sum.kcal + meal.kcal)
-  }), { ...BASE_MACRO })
+  getMealsCalced,
+  (meals): MacroElements => meals
+    .map(meal => meal.calcedMacro)
+    .reduce(reduceObjectsSum)
 );
 
 export const getCalcedMacroNeeds = createSelector(
@@ -62,6 +52,6 @@ export const getCalcedMacroNeeds = createSelector(
   calculateMacroNeeds
 );
 
-export type MealsWithRatio = ReturnType<typeof getMealsWithRatio>;
-export type MealWithRatio = MealsWithRatio[number];
+export type MealsCalced = ReturnType<typeof getMealsCalced>;
+export type MealCalced = MealsCalced[number];
 export type MacroNeeds = ReturnType<typeof getCalcedMacroNeeds>;

@@ -10,7 +10,6 @@ import { useAfterInteractions, useNavigationData } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
 import { MealItem, MealItemSeparator, ChartsMacroNeeds } from '../../_components';
 import { layoutAnimateEase } from '../../common/utils';
-import { MealWithRatio } from '../../store/selectors';
 
 interface NutritionHomeScreenProps {}
 
@@ -21,8 +20,8 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const appDate = useSelector(Selectors.getAppDate);
   const appDateDay = useSelector(Selectors.getAppDay);
   const macroNeeds = useSelector(Selectors.getCalcedMacroNeeds);
-  const mealsWithRatio = useSelector(Selectors.getMealsWithRatio);
-  const mealListRef = useRef<FlatList<Selectors.MealWithRatio>>(null);
+  const meals = useSelector(Selectors.getMealsCalced);
+  const mealListRef = useRef<FlatList<Selectors.MealCalced>>(null);
 
   useAfterInteractions(() => dispatch(Actions.productHistoryRecentLoad()));
 
@@ -88,7 +87,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
 
   const handleMealOpen = (
     mealId: DiaryMealId,
-    meal: Selectors.MealWithRatio,
+    meal: Selectors.MealCalced,
     index: number
   ): void => {
     const scroll = () => {
@@ -133,7 +132,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     <Container>
       <FlatList
         ref={mealListRef}
-        data={mealsWithRatio}
+        data={meals}
         keyExtractor={mealKeyExtractor}
         ItemSeparatorComponent={MealItemSeparator}
         ListHeaderComponent={Header}
@@ -157,4 +156,4 @@ const Container = styled.View`
   flex: 1;
 `
 
-const mealKeyExtractor = (meal: MealWithRatio): string => meal.id.toString();
+const mealKeyExtractor = (meal: Selectors.MealCalced): string => meal.id.toString();

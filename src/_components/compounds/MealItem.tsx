@@ -10,7 +10,7 @@ import { ActivityIndicator } from 'react-native';
 import { DiaryMeal } from '../../store/reducers/diary';
 
 interface MealItemProps<
-  Meal extends Selectors.MealWithRatio,
+  Meal extends Selectors.MealCalced,
   Product extends Meal['products'][number] = Meal['products'][number]
 > {
   isAddingProduct: boolean
@@ -22,7 +22,7 @@ interface MealItemProps<
   onProductDelete: (mealId: DiaryMeal['id'], product: Product) => void
 }
 
-export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps<T>) => {
+export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>) => {
 
   const handleMealPress = () => {
     props.onMealOpen?.(props.meal.id);
