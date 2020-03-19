@@ -1,12 +1,10 @@
 import { 
   Meal,
   MealProduct,
-  IMeal,
   IProductRequired,
 } from '../../../database/entities';
 import {
   mealDeleted,
-  mealUpdated,
   mealProductDeleted,
   productQuantityUpdated,
   mealOpenToggled,
@@ -52,16 +50,6 @@ export const mealDelete = (
 ): Thunk => async (dispatch) => {
   dispatch(mealDeleted(mealId));
   await Meal.delete(mealId);
-}
-
-// TODO: remove redundant action
-export const mealUpdate = (
-  mealId: MealId,
-  meal: Partial<DiaryMeal & IMeal>
-): Thunk => async (dispatch, getState) => {
-  dispatch(mealUpdated(mealId, meal));
-  await Meal.update(mealId, meal);
-  await _updateMealMacro(mealId, getState());
 }
 
 export const mealProductCreate = (
