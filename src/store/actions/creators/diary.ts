@@ -9,7 +9,7 @@ import {
   MEALS_LOADED,
 } from '../../consts';
 import { MealId, ProductId } from '../../../types';
-import { Meal, IProductMerged, Product } from '../../../database/entities';
+import { Meal, IProductMerged, IProduct } from '../../../database/entities';
 import { DiaryMeal, DiaryMealId } from '../../reducers/diary';
 
 export const mealsLoaded = (
@@ -43,7 +43,7 @@ export const mealDeleted = (mealId: MealId) => ({
 export const mealProductAdded = (
   mealId: MealId,
   product: IProductMerged,
-  rawProduct: Product | IProductMerged,
+  rawProduct: IProduct,
 ) => ({
   type: MEAL_PRODUCT_ADDED,
   payload: product,

@@ -6,7 +6,7 @@ import {
   TemplateId,
   DateDay,
 } from '../../../types';
-import { Product, IProductMerged } from '../../../database/entities';
+import { IProduct } from '../../../database/entities';
 
 export interface DiaryState {
   meals: (DiaryMeal | DiaryMealTemplate)[]
@@ -53,7 +53,7 @@ export interface DiaryMeal extends DiaryMealBase {
 }
 
 export interface DiaryProduct {
-  data: Product | IProductMerged
+  data: IProduct
   quantity: number
   mealId: MealId | null
   calcedMacro: {

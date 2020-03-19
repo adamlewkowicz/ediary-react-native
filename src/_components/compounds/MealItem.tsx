@@ -19,8 +19,8 @@ interface MealItemProps<
   onMealOpen: (mealId: Meal['id']) => void
   onMealDelete: (meal: DiaryMeal) => void
   onProductAdd: (meal: Meal) => void
-  onProductQuantityUpdate: (mealId: DiaryMeal['id'], productData: Product) => void
-  onProductDelete: (mealId: DiaryMeal['id'], productData: Product['data']) => void
+  onProductQuantityUpdate: (mealId: DiaryMeal['id'], product: Product) => void
+  onProductDelete: (mealId: DiaryMeal['id'], product: Product) => void
 }
 
 export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps<T>) => {
@@ -82,7 +82,7 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
                 )}
                 onDelete={() => props.onProductDelete(
                   props.meal.id as DiaryMeal['id'],
-                  product.data
+                  product
                 )}
               />
             ))}
