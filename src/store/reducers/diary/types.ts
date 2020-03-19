@@ -56,7 +56,7 @@ export interface DiaryProduct {
   data: Product | IProductMerged
   quantity: number
   mealId: MealId | null
-  calcedMacro?: {
+  calcedMacro: {
     carbs: number
     prots: number
     fats: number

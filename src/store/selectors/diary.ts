@@ -2,7 +2,7 @@ import { MacroElements } from '../../types';
 import { StoreState } from '..';
 import { createSelector } from 'reselect';
 import { getMacroNeeds } from './user';
-import { calculateMacroPerQuantity, calculateMacroPercentages, calculateMacroNeeds } from '../../common/utils';
+import { calculateMacroPercentages, calculateMacroNeeds } from '../../common/utils';
 
 const BASE_MACRO: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 
@@ -10,17 +10,9 @@ const getMeals = (state: StoreState) => state.diary.meals;
 
 const getProducts = (state: StoreState) => state.diary.products;
 
-const getCalcedProducts = createSelector(
-  getProducts,
-  products => products.map(product => ({
-    ...product,
-    calcedMacro: calculateMacroPerQuantity(product.data.macro, product.quantity)
-  })
-));
-
 const getMealsWithProducts = createSelector(
   getMeals,
-  getCalcedProducts,
+  getProducts,
   (meals, products) => meals.map(meal => ({
     ...meal,
     products: meal.productIds.flatMap(productId => {
