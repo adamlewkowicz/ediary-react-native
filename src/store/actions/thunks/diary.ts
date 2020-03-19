@@ -154,7 +154,7 @@ export const mealOrTemplateProductAdd = (
   date: Date,
 ): Thunk<Promise<void>> => async (dispatch) => {
   if (meal.type === 'template') {
-    const { name, templateId, time } = meal;
+    const { name, templateId, dateTime: time } = meal;
     const template: DiaryTemplate = { id: templateId, name, time };
     await dispatch(
       mealCreateFromTemplate(

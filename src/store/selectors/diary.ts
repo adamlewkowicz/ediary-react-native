@@ -44,8 +44,8 @@ export const getMealsWithRatio = createSelector(
   getCalcedMeals,
   meals => meals
     .sort((a, b) => {
-      const timeA = Number(a.time.replace(/:/g, ''));
-      const timeB = Number(b.time.replace(/:/g, ''));
+      const timeA = Number(a.dateTime.replace(/:/g, ''));
+      const timeB = Number(b.dateTime.replace(/:/g, ''));
       return timeA > timeB ? 1 : -1;
     })
 );

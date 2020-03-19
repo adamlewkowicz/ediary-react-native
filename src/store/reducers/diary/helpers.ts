@@ -32,7 +32,7 @@ export const getMealFromTemplate = (
     },
     day: null,
     date: null,
-    time: template.time,
+    dateTime: template.time,
     isOpened: false,
     templateId: template.id,
     productIds: [],
@@ -50,7 +50,7 @@ export const normalizeMeal = (
     type: 'meal',
     isOpened: false,
     day: getDayFromDate(meal.date),
-    time: getTimeFromDate(meal.date),
+    dateTime: getTimeFromDate(meal.date),
     dateTimeBase: dayjs(meal.date).format(DAYJS_DATETIME_BASE),
     productIds: mealProducts.map(mealProduct => mealProduct.productId),
   }

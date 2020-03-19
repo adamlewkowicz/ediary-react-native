@@ -27,7 +27,7 @@ export interface DiaryMealBase {
     kcal: number
   }
   date: string | null
-  time: DateTime
+  dateTime: DateTime
   updatedAt?: number
   createdAt?: number
   type: DiaryMealType
