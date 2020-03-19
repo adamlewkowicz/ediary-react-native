@@ -5,7 +5,7 @@ import { FlatList, Alert, InteractionManager } from 'react-native';
 import { DateChanger } from '../../components/DateChanger';
 import styled from 'styled-components/native';
 import { MealId } from '../../types';
-import { DiaryMealTemplate, DiaryMeal, DiaryMealId, DiaryProduct } from '../../store/reducers/diary';
+import { DiaryMealTemplate, DiaryMeal, DiaryMealOrTemplateId, DiaryProduct } from '../../store/reducers/diary';
 import { useAfterInteractions, useNavigationData } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
 import { MealItem, MealItemSeparator, ChartsMacroNeeds } from '../../_components';
@@ -15,7 +15,7 @@ interface NutritionHomeScreenProps {}
 
 export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const { navigate, navigation } = useNavigationData<NutritionHomeScreenNavigationProps>();
-  const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
+  const [processedMealId, setProcessedMealId] = useState<DiaryMealOrTemplateId | null>(null);
   const dispatch = useDispatch();
   const appDate = useSelector(Selectors.getAppDate);
   const appDateDay = useSelector(Selectors.getAppDay);
@@ -86,7 +86,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   }
 
   const handleMealOpen = (
-    mealId: DiaryMealId,
+    mealId: DiaryMealOrTemplateId,
     meal: Selectors.MealCalced,
     index: number
   ): void => {

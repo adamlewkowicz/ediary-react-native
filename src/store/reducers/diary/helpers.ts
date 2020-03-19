@@ -3,14 +3,14 @@ import { Meal } from '../../../database/entities';
 import { getTimeFromDate, calculateMacroPerQuantity } from '../../../common/utils';
 import {
   DiaryMealTemplate,
-  DiaryTemplate,
+  MealTemplate,
   DiaryMeal,
   DiaryProduct,
 } from './types';
 import dayjs from 'dayjs';
 
 export const getMealFromTemplate = (
-  template: DiaryTemplate
+  template: MealTemplate
 ): DiaryMealTemplate => ({
   type: 'template',
   data: template,

@@ -7,7 +7,7 @@ import { ButtonSecondary } from '../molecules/_index';
 import { Selectors } from '../../store';
 import { ChartMacroBarsBase } from './ChartMacroBarsBase';
 import { ActivityIndicator } from 'react-native';
-import { DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
+import { DiaryMeal, DiaryMealOrTemplateId } from '../../store/reducers/diary';
 import { MealId } from '../../types';
 import { isDiaryMeal } from '../../store/reducers/diary/helpers';
 
@@ -17,7 +17,7 @@ interface MealItemProps<
 > {
   isAddingProduct: boolean
   meal: Meal
-  onMealOpen: (mealId: DiaryMealId) => void
+  onMealOpen: (mealId: DiaryMealOrTemplateId) => void
   onMealDelete: (meal: DiaryMeal) => void
   onProductAdd: (meal: Meal) => void
   onProductQuantityUpdate: (mealId: MealId, product: Product) => void

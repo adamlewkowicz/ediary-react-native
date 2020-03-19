@@ -6,12 +6,12 @@ import { MealsWithRatio } from '../../store/selectors';
 import { Button } from '../Button';
 import { BASE_MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitlesLong } from '../../common/helpers';
-import { DiaryMealId } from '../../store/reducers/diary';
+import { DiaryMealOrTemplateId } from '../../store/reducers/diary';
 import { theme } from '../../common/theme';
 
 interface MealListItemProps {
   meal: MealsWithRatio[number]
-  onToggle: (mealId: DiaryMealId) => void
+  onToggle: (mealId: DiaryMealOrTemplateId) => void
   onLongPress: TouchableOpacityProps['onLongPress']
   isBeingProcessed: boolean
   onProductAdd: () => void

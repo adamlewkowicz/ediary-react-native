@@ -19,7 +19,7 @@ import { debounce, findOrFail } from '../../../common/utils';
 import { Thunk, StoreState, Selectors } from '../..';
 import {
   DiaryMeal,
-  DiaryTemplate,
+  MealTemplate,
   DiaryMealTemplate,
 } from '../../reducers/diary';
 import { batch } from 'react-redux';
@@ -113,7 +113,7 @@ export const mealsFindByDay = (
 }
 
 export const mealCreateFromTemplate = (
-  template: DiaryTemplate,
+  template: MealTemplate,
   date: Date,
   productId: ProductId,
   quantity?: number,
@@ -156,7 +156,7 @@ export const mealOrTemplateProductAdd = (
 ): Thunk<Promise<void>> => async (dispatch) => {
   if (meal.type === 'template') {
     const { dateTime: time, data: { name }} = meal;
-    const template: DiaryTemplate = { name, time };
+    const template: MealTemplate = { name, time };
 
     await dispatch(
       mealCreateFromTemplate(

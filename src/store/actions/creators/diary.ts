@@ -10,7 +10,7 @@ import {
 } from '../../consts';
 import { MealId, ProductId } from '../../../types';
 import { Meal, IProductMerged, IProduct } from '../../../database/entities';
-import { DiaryMeal, DiaryMealId } from '../../reducers/diary';
+import { DiaryMeal, DiaryMealOrTemplateId } from '../../reducers/diary';
 
 export const mealsLoaded = (
   meals: Meal[]
@@ -68,7 +68,7 @@ export const productQuantityUpdated = (
 });
 
 export const mealOpenToggled = (
-  mealId: DiaryMealId | null
+  mealId: DiaryMealOrTemplateId | null
 ) => ({
   type: MEAL_OPEN_TOGGLED,
   meta: { mealId }

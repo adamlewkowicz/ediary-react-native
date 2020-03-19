@@ -1,5 +1,5 @@
 import { MacroElements } from '../../types';
-import { DiaryTemplate } from '../../store/reducers/diary';
+import { MealTemplate } from '../../store/reducers/diary';
 
 export const baseMacro: MacroElements = {
   carbs: 0,
@@ -34,4 +34,4 @@ export const defaultTemplates = [
     name: 'Kolacja',
     time: '19:00:00',
   },
-] as any as DiaryTemplate[];
+] as any as MealTemplate[];

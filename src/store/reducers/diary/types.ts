@@ -7,16 +7,15 @@ import {
 import { IProduct, IMeal } from '../../../database/entities';
 
 export interface DiaryState {
-  meals: (DiaryMeal | DiaryMealTemplate)[]
+  meals: DiaryMealOrTemplate[]
   products: DiaryProduct[]
-  templates: DiaryTemplate[]
+  templates: MealTemplate[]
 }
 
-export type DiaryMealId = MealId | TemplateId;
 type DiaryMealType = 'meal' | 'template';
 
-export interface DiaryMealBase {
-  data: IMeal | DiaryTemplate
+interface DiaryMealBase {
+  data: IMeal | MealTemplate
   type: DiaryMealType
   productIds: ProductId[]
   isOpened: boolean
@@ -26,7 +25,7 @@ export interface DiaryMealBase {
 
 export interface DiaryMealTemplate extends DiaryMealBase {
   type: 'template'
-  data: DiaryTemplate
+  data: MealTemplate
 }
 
 export interface DiaryMeal extends DiaryMealBase {
@@ -46,7 +45,11 @@ export interface DiaryProduct {
   }
 }
 
-export interface DiaryTemplate {
+export type DiaryMealOrTemplateId = MealId | TemplateId;
+
+type DiaryMealOrTemplate = DiaryMeal | DiaryMealTemplate;
+
+export interface MealTemplate {
   id: TemplateId
   name: string
   time: DateTime

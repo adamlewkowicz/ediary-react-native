@@ -17,7 +17,7 @@ import { GenericEntity } from '../../generics/GenericEntity';
 import dayjs from 'dayjs';
 import { DATE_FORMAT, DATE_DAY } from '../../../common/consts';
 import { Macro } from '../../embeds/Macro';
-import { DiaryTemplate } from '../../../store/reducers/diary';
+import { MealTemplate } from '../../../store/reducers/diary';
 import { getDayFromDate } from '../../../common/utils';
 import { GetMacroSummaryResult, GetMacroHistoryResult } from './types';
 import { baseMacro } from '../../../common/helpers';
@@ -136,7 +136,7 @@ export class Meal extends GenericEntity {
   }
 
   static createFromTemplate(
-    template: DiaryTemplate,
+    template: MealTemplate,
     date: Date,
     productId: ProductId,
     quantity?: number,
