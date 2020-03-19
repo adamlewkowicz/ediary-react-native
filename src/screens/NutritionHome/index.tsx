@@ -102,7 +102,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
 
     dispatch(Actions.mealOpenToggled(mealId));
 
-    if (!meal.isToggled) scroll();
+    if (!meal.isOpened) scroll();
   }
 
   const handleProductQuantityUpdate = (mealId: MealId, product: DiaryProduct): void => {

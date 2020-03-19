@@ -13,7 +13,6 @@ interface MealItemProps<
   Meal extends Selectors.MealWithRatio,
   Product extends Meal['products'][number] = Meal['products'][number]
 > {
-  isOpened?: boolean
   isAddingProduct: boolean
   meal: Meal
   onMealOpen: (mealId: Meal['id']) => void
@@ -37,22 +36,22 @@ export const MealItem = <T extends Selectors.MealWithRatio>(props: MealItemProps
   }
 
   return (
-    <Container isOpened={props.meal.isToggled}>
+    <Container isOpened={props.meal.isOpened}>
       <InfoContainer
         onPress={handleMealPress}
         onLongPress={handleMealDelete}
-        isOpened={props.meal.isToggled}
+        isOpened={props.meal.isOpened}
       >
         <Time>{props.meal.dateTimeBase}</Time>
         <BaseInfo>
-          <MealName isOpened={props.meal.isToggled}>{props.meal.name}</MealName>
+          <MealName isOpened={props.meal.isOpened}>{props.meal.name}</MealName>
           <Calories>{props.meal.calcedMacro.kcal.toFixed(0)} kcal</Calories>
         </BaseInfo>
         <ChartMacroBarsBase
           percentages={props.meal.macroPercentages}
         />
       </InfoContainer>
-      {props.meal.isToggled && (
+      {props.meal.isOpened && (
         <>
           {/* <RevealMealButton onPress={handleMealPress} /> */}
           <ChartsContainer>

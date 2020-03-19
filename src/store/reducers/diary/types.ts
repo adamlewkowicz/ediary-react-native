@@ -31,7 +31,7 @@ export interface DiaryMealBase {
   updatedAt?: number
   createdAt?: number
   type: DiaryMealType
-  isToggled: boolean
+  isOpened: boolean
   productIds: ProductId[]
   day: DateDay | null
   dateTimeBase: string

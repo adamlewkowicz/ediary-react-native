@@ -33,7 +33,7 @@ export const getMealFromTemplate = (
     day: null,
     date: null,
     time: template.time,
-    isToggled: false,
+    isOpened: false,
     templateId: template.id,
     productIds: [],
     dateTimeBase: dayjs(template.time as any).format(DAYJS_DATETIME_BASE),
@@ -48,7 +48,7 @@ export const normalizeMeal = (
   const normalizedMeal: DiaryMeal = {
     ...meal,
     type: 'meal',
-    isToggled: false,
+    isOpened: false,
     day: getDayFromDate(meal.date),
     time: getTimeFromDate(meal.date),
     dateTimeBase: dayjs(meal.date).format(DAYJS_DATETIME_BASE),

@@ -46,7 +46,7 @@ export const MealListItem = (props: MealListItemProps) => (
         ))}
       </NutritionBar>
     </TouchableOpacity>
-    {props.meal.isToggled && (
+    {props.meal.isOpened && (
       <>
         <NutritionDetails>
           {BASE_MACRO_ELEMENTS.map(element => (
