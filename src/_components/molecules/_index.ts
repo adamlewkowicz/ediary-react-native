@@ -13,3 +13,4 @@ export * from './Section';
 export * as Group from './InputGroup';
 export * from './TextSplit';
 export * from './MacroDetails';
+export * from './ChartMacroCircleLeft';

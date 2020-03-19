@@ -6,3 +6,4 @@ export * from './ChartMacroCircles';
 export * from './ChartCalories';
 export * from './ChartMacroBarsBase';
 export * from './ProductSearchItem';
+export * from './ChartsMacroNeeds';

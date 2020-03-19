@@ -1,14 +1,16 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { ChartCircle, ChartCircleProps } from './ChartCircle';
-import { H4, TextSecondary } from '../atoms/Text';
+import { H4 } from '../atoms/Text';
+import { TextSplit } from './TextSplit';
 
-interface ChartMacroCircleProps extends ChartCircleProps {
+interface ChartMacroCircleLeftProps extends ChartCircleProps {
   title: string
   value: number | string
+  valueLeft: number | string
 }
 
-export const ChartMacroCircle = (props: ChartMacroCircleProps) => {
+export const ChartMacroCircleLeft = (props: ChartMacroCircleLeftProps) => {
   return (
     <Container>
       <ChartCircle
@@ -17,7 +19,10 @@ export const ChartMacroCircle = (props: ChartMacroCircleProps) => {
       >
         <H4>{props.percentages}%</H4>
       </ChartCircle>
-      <TextSecondary>{props.value}g</TextSecondary>
+      <TextSplit
+        primary={props.value}
+        secondary={props.valueLeft}
+      />
       <H4>{props.title}</H4>
     </Container>
   );

@@ -173,34 +173,6 @@ export function findOrFail<T>(
   return foundItem;
 }
 
-export function calcMacroNeedsLeft(
-  macroEaten: MacroElements,
-  macroNeeds: MacroElements
-) {
-  const macroNeedsElement = { diff: 0, ratio: 0, eaten: 0, needed: 0 };
-
-  return MACRO_ELEMENTS.reduce((result, element) => {
-    const diff = Math.round(macroNeeds[element] - macroEaten[element]);
-    const ratio = Math.floor(
-      macroEaten[element] / macroNeeds[element] * 100
-    );
-    return {
-      ...result,
-      [element]: {
-        diff,
-        ratio,
-        eaten: macroEaten[element],
-        needed: macroNeeds[element]
-      }
-    }
-  }, {
-    carbs: { ...macroNeedsElement },
-    prots: { ...macroNeedsElement },
-    fats: { ...macroNeedsElement },
-    kcal: { ...macroNeedsElement }
-  });
-}
-
 const createArrayOfLength = <T>(
   length: number,
   callback: (index: number) => T

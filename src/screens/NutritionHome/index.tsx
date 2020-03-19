@@ -8,7 +8,7 @@ import { MealId, ProductId } from '../../types';
 import { DiaryMealTemplate, DiaryMeal, DiaryMealId, DiaryProduct } from '../../store/reducers/diary';
 import { useAfterInteractions, useNavigationData } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
-import { ChartMacroCircles, MealItem, MealItemSeparator, ChartCalories } from '../../_components';
+import { MealItem, MealItemSeparator, ChartsMacroNeeds } from '../../_components';
 import { layoutAnimateEase } from '../../common/utils';
 import { MealWithRatio } from '../../store/selectors';
 
@@ -20,7 +20,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const dispatch = useDispatch();
   const appDate = useSelector(Selectors.getAppDate);
   const appDateDay = useSelector(Selectors.getAppDay);
-  const macroNeedsLeft = useSelector(Selectors.getMacroNeedsLeft);
+  const macroNeeds = useSelector(Selectors.getCalcedMacroNeeds);
   const mealsWithRatio = useSelector(Selectors.getMealsWithRatio);
   const mealListRef = useRef<FlatList<Selectors.MealWithRatio>>(null);
 
@@ -130,23 +130,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         value={appDate}
         onChange={date => dispatch(Actions.appDateUpdated(date))}
       />
-      <ChartCalories
-        percentages={macroNeedsLeft.kcal.ratio}
-        value={macroNeedsLeft.kcal.eaten}
-        valueLeft={macroNeedsLeft.kcal.needed}
-      />
-      <ChartMacroCircles
-        values={[
-          macroNeedsLeft.carbs.eaten,
-          macroNeedsLeft.prots.eaten,
-          macroNeedsLeft.carbs.eaten,
-        ]}
-        percentages={[
-          macroNeedsLeft.carbs.ratio,
-          macroNeedsLeft.prots.ratio,
-          macroNeedsLeft.fats.ratio,
-        ]}
-      />
+      <ChartsMacroNeeds macroNeeds={macroNeeds} />
     </>
   );
 

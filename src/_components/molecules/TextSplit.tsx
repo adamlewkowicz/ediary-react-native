@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { TextTertiary, H2, TextPrimary } from '../atoms/Text';
+import { TextTertiary, H2 } from '../atoms/Text';
 
 interface TextSplitProps {
   primary: string | number
@@ -19,6 +19,7 @@ export const TextSplit = (props: TextSplitProps) => {
 const Container = styled.View`
   flex-direction: row;
   align-items: flex-end;
+  margin: 2px 0;
 `
 
 const Primary = styled(H2)`

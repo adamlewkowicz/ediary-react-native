@@ -2,7 +2,7 @@ import { MacroElements } from '../../types';
 import { StoreState } from '..';
 import { createSelector } from 'reselect';
 import { getMacroNeeds } from './user';
-import { calcMacroNeedsLeft, calculateMacroPerQuantity, calculateMacroPercentages } from '../../common/utils';
+import { calculateMacroPerQuantity, calculateMacroPercentages, calculateMacroNeeds } from '../../common/utils';
 
 const BASE_MACRO: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 
@@ -73,11 +73,12 @@ const getMealsMacroSum = createSelector(
   }), { ...BASE_MACRO })
 );
 
-export const getMacroNeedsLeft = createSelector(
+export const getCalcedMacroNeeds = createSelector(
   getMealsMacroSum,
   getMacroNeeds,
-  (macroSum, macroNeeds) => calcMacroNeedsLeft(macroSum, macroNeeds)
+  calculateMacroNeeds
 );
 
 export type MealsWithRatio = ReturnType<typeof getMealsWithRatio>;
 export type MealWithRatio = MealsWithRatio[number];
+export type MacroNeeds = ReturnType<typeof getCalcedMacroNeeds>;
