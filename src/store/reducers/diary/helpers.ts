@@ -1,5 +1,5 @@
 import { TemplateId, TemplateIdReverted } from '../../../types';
-import { MACRO_ELEMENTS, DAYJS_DATETIME_BASE } from '../../../common/consts';
+import { DAYJS_DATETIME_BASE } from '../../../common/consts';
 import { Meal } from '../../../database/entities';
 import { getDayFromDate, getTimeFromDate, calculateMacroPerQuantity } from '../../../common/utils';
 import {
@@ -8,7 +8,6 @@ import {
   NormalizeMealsResult,
   DiaryMeal,
   DiaryProduct,
-  CalcMacroByQuantityData,
 } from './types';
 import dayjs from 'dayjs';
 
@@ -58,12 +57,14 @@ export const normalizeMeal = (
 
   const normalizedProducts = mealProducts.map<DiaryProduct>(mealProductEntity => {
     const { meal, product, ...data } = mealProductEntity;
+
     const normalizedProduct: DiaryProduct = {
       ...data,
       ...product,
       data: product,
-      _calcedMacro: calculateMacroPerQuantity(product.macro, product.portion)
+      calcedMacro: calculateMacroPerQuantity(product.macro, product.portion)
     }
+    
     return normalizedProduct;
   });
 

@@ -118,7 +118,7 @@ export function diaryReducer(
         {
           ...action.payload,
           data: action.meta.rawProduct,
-          _calcedMacro: calculateMacroPerQuantity(action.payload.macro, action.payload.quantity),
+          calcedMacro: calculateMacroPerQuantity(action.payload.macro, action.payload.quantity),
         }
       ]
     }
@@ -143,7 +143,7 @@ export function diaryReducer(
           return {
             ...product,
             quantity,
-            _calcedMacro: calculateMacroPerQuantity(product.data.macro, quantity)
+            calcedMacro: calculateMacroPerQuantity(product.data.macro, quantity)
           }
         }
         return product;

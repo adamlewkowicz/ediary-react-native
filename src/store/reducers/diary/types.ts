@@ -7,8 +7,6 @@ import {
   DateDay,
   BarcodeId,
   PortionUnit,
-  MacroElement,
-  MacroElements,
 } from '../../../types';
 import { Product, IProductMerged } from '../../../database/entities';
 
@@ -60,7 +58,7 @@ export interface DiaryProduct {
   data: Product | IProductMerged
   quantity: number
   mealId: MealId | null
-  _calcedMacro?: {
+  calcedMacro?: {
     carbs: number
     prots: number
     fats: number
@@ -100,5 +98,3 @@ export type NormalizeMealResult = {
   meal: DiaryMeal
   products: DiaryProduct[]
 }
-
-export interface CalcMacroByQuantityData extends MacroElements {}
