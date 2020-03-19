@@ -1,7 +1,7 @@
 import { MacroElements } from '../../types';
 import { StoreState } from '..';
 import { createSelector } from 'reselect';
-import { getMacroNeeds } from './user';
+import { getUserMacroNeeds } from './user';
 import { calculateMacroPercentages, calculateMacroNeeds, reduceObjectsSum, sortByDateTime } from '../../common/utils';
 
 const getMeals = (state: StoreState) => state.diary.meals;
@@ -48,7 +48,7 @@ const getMealsMacroSum = createSelector(
 
 export const getCalcedMacroNeeds = createSelector(
   getMealsMacroSum,
-  getMacroNeeds,
+  getUserMacroNeeds,
   calculateMacroNeeds
 );
 
