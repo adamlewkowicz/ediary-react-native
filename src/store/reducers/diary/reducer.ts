@@ -3,7 +3,7 @@ import {
   MEAL_DELETED,
   MEAL_PRODUCT_DELETED,
   PRODUCT_QUANTITY_UPDATED,
-  MEAL_TOGGLED,
+  MEAL_OPEN_TOGGLED,
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
   MEALS_LOADED,
@@ -89,7 +89,7 @@ export function diaryReducer(
         return [meal];
       })
     }
-    case MEAL_TOGGLED: return {
+    case MEAL_OPEN_TOGGLED: return {
       ...state,
       meals: state.meals.map(meal => ({
         ...meal,

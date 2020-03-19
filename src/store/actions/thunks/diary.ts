@@ -9,7 +9,7 @@ import {
   mealUpdated,
   mealProductDeleted,
   productQuantityUpdated,
-  mealToggled,
+  mealOpenToggled,
   mealProductAdded,
   mealAdded,
   mealsLoaded,
@@ -42,7 +42,7 @@ export const mealCreate = (
   const meal = await Meal.createWithDate({ name }, date);
   
   batch(() => {
-    dispatch(mealToggled(null));
+    dispatch(mealOpenToggled(null));
     dispatch(mealAdded(meal));
   });
 }

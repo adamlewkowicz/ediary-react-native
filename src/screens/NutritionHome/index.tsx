@@ -100,7 +100,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
 
     layoutAnimateEase();
 
-    dispatch(Actions.mealToggled(mealId));
+    dispatch(Actions.mealOpenToggled(mealId));
 
     if (!meal.isToggled) scroll();
   }

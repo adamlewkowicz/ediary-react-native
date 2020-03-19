@@ -3,7 +3,7 @@ import {
   MEAL_DELETED,
   MEAL_PRODUCT_DELETED,
   PRODUCT_QUANTITY_UPDATED,
-  MEAL_TOGGLED,
+  MEAL_OPEN_TOGGLED,
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
   MEALS_LOADED,
@@ -67,10 +67,10 @@ export const productQuantityUpdated = (
   meta: { productId }
 });
 
-export const mealToggled = (
+export const mealOpenToggled = (
   mealId: DiaryMealId | null
 ) => ({
-  type: MEAL_TOGGLED,
+  type: MEAL_OPEN_TOGGLED,
   meta: { mealId }
 });
 
@@ -85,4 +85,4 @@ export type DiaryAction =
   | ReturnType<typeof mealDeleted>
   | ReturnType<typeof mealProductDeleted>
   | ReturnType<typeof productQuantityUpdated>
-  | ReturnType<typeof mealToggled>
+  | ReturnType<typeof mealOpenToggled>

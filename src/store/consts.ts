@@ -2,7 +2,7 @@
 export const MEAL_UPDATED = 'MEAL_UPDATED' as const;
 export const MEAL_DELETED = 'MEAL_DELETED' as const;
 export const MEAL_ADDED = 'MEAL_ADDED' as const;
-export const MEAL_TOGGLED = 'MEAL_TOGGLED' as const;
+export const MEAL_OPEN_TOGGLED = 'MEAL_OPEN_TOGGLED' as const;
 export const MEALS_LOADED = 'MEALS_LOADED' as const;
 export const MEAL_PRODUCT_ADDED = 'MEAL_PRODUCT_ADDED' as const;
 export const MEAL_PRODUCT_UPDATED = 'MEAL_PRODUCT_UPDATED' as const;
