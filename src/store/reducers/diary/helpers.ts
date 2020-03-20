@@ -33,7 +33,7 @@ export const normalizeProductEntity = (
     mealId,
     quantity,
     data: productEntity,
-    calcedMacro: calculateMacroPerQuantity(productEntity.macro, productEntity.portion)
+    calcedMacro: calculateMacroPerQuantity(productEntity.macro, quantity)
   }
   
   return normalizedProduct;
