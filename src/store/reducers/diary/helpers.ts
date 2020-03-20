@@ -7,8 +7,10 @@ import {
   DiaryMeal,
   DiaryProduct,
   DiaryMealOrTemplate,
+  DiaryMealOrTemplateId,
 } from './types';
 import dayjs from 'dayjs';
+import { MealId, TemplateId } from '../../../types';
 
 export const getDiaryMealTemplate = (
   template: MealTemplate
@@ -69,6 +71,18 @@ export const normalizeMealEntities = (
 }
 
 export const isDiaryMeal = (meal: DiaryMealOrTemplate): meal is DiaryMeal => meal.type === 'meal';
+
+export const isEqualMealId = <ID extends DiaryMealOrTemplateId>(
+  diaryMealOrTemplate: DiaryMealOrTemplate,
+  targetId: ID
+): diaryMealOrTemplate is PredictDiaryMealType<ID> => {
+  return diaryMealOrTemplate.data.id === targetId;
+}
+
+type PredictDiaryMealType<ID extends DiaryMealOrTemplateId> =
+  ID extends MealId ? DiaryMeal :
+  ID extends TemplateId ? DiaryMealTemplate :
+  DiaryMealOrTemplate;
 
 type NormalizeMealsResult = {
   meals: DiaryMeal[]

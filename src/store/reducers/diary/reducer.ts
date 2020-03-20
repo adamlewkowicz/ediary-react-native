@@ -12,6 +12,7 @@ import {
   normalizeProductEntity,
   normalizeMealEntities,
   normalizeMealEntity,
+  isEqualMealId,
 } from './helpers';
 import { DiaryAction } from '../../actions';
 import { DiaryState } from './types';
@@ -105,7 +106,7 @@ export function diaryReducer(
       return {
         ...state,
         meals: state.meals.map(meal => {
-          if (meal.data.id === action.meta.mealId) {
+          if (isEqualMealId(meal, action.meta.mealId)) {
             return {
               ...meal,
               productIds: [...meal.productIds, normalizedProduct.data.id]
@@ -118,7 +119,7 @@ export function diaryReducer(
     case MEAL_PRODUCT_DELETED: return {
       ...state,
       meals: state.meals.map(meal => {
-        if (meal.type === 'meal' && meal.data.id === action.meta.mealId) {
+        if (isEqualMealId(meal, action.meta.mealId)) {
           const productIds = meal.productIds.filter(productId =>
             productId !== action.meta.productId
           );
