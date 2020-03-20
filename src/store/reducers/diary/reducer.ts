@@ -31,7 +31,11 @@ export function diaryReducer(
 ): DiaryState {
   switch(action.type) {
     case MEALS_LOADED:
-      const { meals, products } = normalizeMealEntities(action.payload);
+      const { meals, products } = normalizeMealEntities(
+        action.payload,
+        action.meta.shouldOpenMealsByDefault
+      );
+
       return {
         ...state,
         products,
@@ -101,7 +105,11 @@ export function diaryReducer(
       }))
     }
     case MEAL_PRODUCT_ADDED:
-      const normalizedProduct = normalizeProductEntity(action.payload);
+      const normalizedProduct = normalizeProductEntity(
+        action.payload, 
+        action.payload.mealId,
+        action.payload.quantity
+      );
       
       return {
         ...state,

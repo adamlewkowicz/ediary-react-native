@@ -1,5 +1,5 @@
 import { DAYJS_DATETIME_BASE } from '../../../common/consts';
-import { Meal, MealProduct, IProductMerged } from '../../../database/entities';
+import { Meal, IProductMerged, Product } from '../../../database/entities';
 import { getTimeFromDate, calculateMacroPerQuantity } from '../../../common/utils';
 import {
   DiaryMealTemplate,
@@ -23,33 +23,41 @@ export const getDiaryMealTemplate = (
   dateTimeBase: template.dateTimeBase as any,
 });
 
-export const normalizeProductEntity = (mealProductEntity: MealProduct | IProductMerged): DiaryProduct => {
-  const { meal, product, ...data } = mealProductEntity;
+export const normalizeProductEntity = (
+  productEntity: Product | IProductMerged,
+  mealId: MealId,
+  quantity: number,
+): DiaryProduct => {
 
   const normalizedProduct: DiaryProduct = {
-    ...data,
-    data: product,
-    calcedMacro: calculateMacroPerQuantity(product.macro, product.portion)
+    mealId,
+    quantity,
+    data: productEntity,
+    calcedMacro: calculateMacroPerQuantity(productEntity.macro, productEntity.portion)
   }
   
   return normalizedProduct;
 }
 
 export const normalizeMealEntity = (
-  mealEntity: Meal
+  mealEntity: Meal,
+  openMealByDefault = false
 ) => {
   const { mealProducts = [], ...meal } = mealEntity;
 
   const normalizedMeal: DiaryMeal = {
     data: meal,
     type: 'meal',
-    isOpened: false,
+    isOpened: openMealByDefault,
     dateTime: getTimeFromDate(meal.date),
     dateTimeBase: dayjs(meal.date).format(DAYJS_DATETIME_BASE),
     productIds: mealProducts.map(mealProduct => mealProduct.productId),
   }
 
-  const normalizedProducts = mealProducts.map<DiaryProduct>(normalizeProductEntity);
+  const normalizedProducts = mealProducts
+    .map<DiaryProduct>(({ product, mealId, quantity }) =>
+      normalizeProductEntity(product, mealId, quantity)
+    );
 
   return {
     meal: normalizedMeal,
@@ -58,10 +66,11 @@ export const normalizeMealEntity = (
 }
 
 export const normalizeMealEntities = (
-  payload: Meal[]
+  payload: Meal[],
+  openMealsByDefault = false
 ): NormalizeMealsResult => {
   return payload.reduce<NormalizeMealsResult>((normalized, mealEntity) => {
-    const { meal, products } = normalizeMealEntity(mealEntity);
+    const { meal, products } = normalizeMealEntity(mealEntity, openMealsByDefault);
     
     return {
       meals: [...normalized.meals, meal],

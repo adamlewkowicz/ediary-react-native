@@ -12,10 +12,12 @@ import { Meal, IProductMerged, IProduct } from '../../../database/entities';
 import { DiaryMealOrTemplateId } from '../../reducers/diary';
 
 export const mealsLoaded = (
-  meals: Meal[]
+  meals: Meal[],
+  shouldOpenMealsByDefault = false,
 ) => ({
   type: MEALS_LOADED,
-  payload: meals
+  payload: meals,
+  meta: { shouldOpenMealsByDefault }
 });
 
 export const mealAdded = (
