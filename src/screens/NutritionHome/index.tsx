@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../../store';
-import { FlatList, Alert, InteractionManager } from 'react-native';
+import { FlatList, InteractionManager } from 'react-native';
 import { DateChanger } from '../../components/DateChanger';
 import styled from 'styled-components/native';
 import { MealId } from '../../types';
@@ -9,7 +9,7 @@ import { DiaryMeal, DiaryMealOrTemplateId, DiaryProduct, DiaryMealOrTemplate } f
 import { useAfterInteractions, useNavigationData } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
 import { MealItem, MealItemSeparator, ChartsMacroNeeds } from '../../_components';
-import { layoutAnimateEase } from '../../common/utils';
+import { layoutAnimateEase, alertDelete } from '../../common/utils';
 
 interface NutritionHomeScreenProps {}
 
@@ -46,36 +46,18 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   }
   
   const handleMealDelete = (meal: DiaryMeal): void => {
-    Alert.alert(
+    alertDelete(
       'Usuń posiłek',
       `Czy jesteś pewnien że chcesz usunąć "${meal.data.name}"?`,
-      [
-        {
-          text: 'Anuluj',
-          style: 'cancel'
-        },
-        {
-          text: 'Usuń',
-          onPress: () => dispatch(Actions.mealDelete(meal.data.id))
-        }
-      ]
+      () => dispatch(Actions.mealDelete(meal.data.id))
     );
   }
 
   const handleProductDelete = (mealId: MealId, product: DiaryProduct): void => {
-    Alert.alert(
+    alertDelete(
       'Usuń produkt',
       `Czy jesteś pewnien że chcesz usunąć "${product.data.name}"?`,
-      [
-        {
-          text: 'Anuluj',
-          style: 'cancel'
-        },
-        {
-          text: 'Usuń',
-          onPress: () => dispatch(Actions.mealProductDelete(mealId, product.data.id))
-        }
-      ]
+      () => dispatch(Actions.mealProductDelete(mealId, product.data.id))
     );
   }
 

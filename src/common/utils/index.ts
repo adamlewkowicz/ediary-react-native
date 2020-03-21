@@ -11,7 +11,7 @@ import {
   ObjectNumeric,
 } from '../../types';
 import { UNIT_TYPES, DATE_TIME, DATE_DAY, KCAL_IN_ONE_MACRO_GRAM } from '../consts';
-import { LayoutAnimation } from 'react-native';
+import { LayoutAnimation, Alert } from 'react-native';
 
 export const debounce = () => {
   let timeout: NodeJS.Timeout;
@@ -322,6 +322,27 @@ export const sortByDateTime: SortHOF<{ dateTime: DateTime }> = (a, b) => {
   const timeA = Number(a.dateTime.replace(/:/g, ''));
   const timeB = Number(b.dateTime.replace(/:/g, ''));
   return timeA > timeB ? 1 : -1;
+}
+
+export const alertDelete = (
+  title: string,
+  message: string,
+  onDeleteConfirmed: () => void  
+): void => {
+  Alert.alert(
+    title,
+    message,
+    [
+      {
+        text: 'Anuluj',
+        style: 'cancel'
+      },
+      {
+        text: 'Usuń',
+        onPress: onDeleteConfirmed
+      }
+    ]
+  );
 }
 
 const calculateObjectsValueSum = <T extends { [key: string]: number }>(
