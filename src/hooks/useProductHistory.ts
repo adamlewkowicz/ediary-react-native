@@ -4,7 +4,7 @@ import { Product } from '../database/entities';
 
 export const useProductHistory = () => {
   const dispatch = useDispatch();
-  const data = useSelector(Selectors.getProductHistory);
+  const { products: data } = useSelector(Selectors.getProductHistory);
 
   const addProduct = (product: Product): void => {
     dispatch(
