@@ -6,7 +6,7 @@ import { DateChanger } from '../../components/DateChanger';
 import styled from 'styled-components/native';
 import { MealId } from '../../types';
 import { DiaryMeal, DiaryMealOrTemplateId, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
-import { useNavigationData } from '../../hooks';
+import { useNavigationData, useAppDate } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
 import { MealItem, MealItemSeparator, ChartsMacroNeeds } from '../../_components';
 import { layoutAnimateEase, alertDelete } from '../../common/utils';
@@ -15,9 +15,8 @@ interface NutritionHomeScreenProps {}
 
 export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const { navigate, navigation } = useNavigationData<NutritionHomeScreenNavigationProps>();
+  const { appDate, appDateDay, ...appDateContext } = useAppDate();
   const dispatch = useDispatch();
-  const appDate = useSelector(Selectors.getAppDate);
-  const appDateDay = useSelector(Selectors.getAppDay);
   const macroNeeds = useSelector(Selectors.getCalcedMacroNeeds);
   const meals = useSelector(Selectors.getMealsCalced);
   const mealListRef = useRef<FlatList<Selectors.MealCalced>>(null);
@@ -96,7 +95,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     <>
       <DateChanger
         value={appDate}
-        onChange={date => dispatch(Actions.appDateUpdated(date))}
+        onChange={appDateContext.update}
       />
       <ChartsMacroNeeds macroNeeds={macroNeeds} />
     </>
