@@ -21,7 +21,10 @@ const Stack = createStackNavigator<NutritionStackParamList>();
 export type NutritionStackParamList = {
   [APP_ROUTE.NutritionHome]: {};
   [APP_ROUTE.ProductFind]: {
-    onItemPress?: (productResolver: ProductResolver) => void
+    onProductSelected?: (
+      productResolver: ProductResolver,
+      productQuantity: number
+    ) => void
   };
   [APP_ROUTE.ProductCreate]: {
     barcode?: BarcodeId

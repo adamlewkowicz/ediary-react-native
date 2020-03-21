@@ -104,9 +104,9 @@ export const mealsFindByDay = (
 
 export const mealCreateFromTemplate = (
   template: MealTemplate,
-  date: Date,
   productId: ProductId,
-  quantity?: number,
+  quantity: number,
+  date: Date,
 ): Thunk<Promise<void>> => async (dispatch, getState) => {
   const createdMeal = await Meal.createFromTemplate(
     template, date, productId, quantity
@@ -120,7 +120,7 @@ export const mealCreateFromTemplate = (
 export const mealProductAdd = (
   mealId: MealId,
   productId: ProductId,
-  quantity?: number
+  quantity: number
 ): Thunk<Promise<void>> => async (dispatch, getState) => {
   const { product, action, rawProduct } = await Meal.addProduct(
     mealId,
@@ -131,7 +131,7 @@ export const mealProductAdd = (
     dispatch(
       productQuantityUpdated(productId, product.quantity)
     );
-  } else {
+  } else if (action === 'create') {
     dispatch(
       mealProductAdded(mealId, product, rawProduct)
     );
@@ -142,23 +142,36 @@ export const mealProductAdd = (
 export const mealOrTemplateProductAdd = (
   meal: DiaryMealOrTemplate,
   productResolver: ProductResolver,
+  quantity: number,
   date: Date,
 ): Thunk<Promise<void>> => async (dispatch) => {
-  dispatch(mealProductAddStarted(meal.data.id));
+  const mealId = meal.data.id;
+
+  dispatch(mealProductAddStarted(mealId));
 
   const product = await productResolver();
+  const productId = product.id;
 
   if (meal.type === 'template') {
     const template: MealTemplate = meal.data;
 
     await dispatch(
       mealCreateFromTemplate(
-        template, date, product.id
+        template,
+        productId,
+        quantity,
+        date,
       )
     );
-  } else {
-    await dispatch(mealProductAdd(meal.data.id, product.id));
+  } else if (meal.type === 'meal') {
+    await dispatch(
+      mealProductAdd(
+        mealId as MealId,
+        productId,
+        quantity
+      )
+    );
   }
 
-  dispatch(mealProductAddFinished(meal.data.id));
+  dispatch(mealProductAddFinished(mealId));
 }

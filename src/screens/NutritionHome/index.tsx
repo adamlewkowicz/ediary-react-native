@@ -30,13 +30,14 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
 
   const handleProductAdd = (meal: DiaryMealOrTemplate): void => {
     navigate('ProductFind', {
-      async onItemPress(productResolver) {
+      async onProductSelected(productResolver, productQuantity) {
         navigate('NutritionHome');
 
         await dispatch(
           Actions.mealOrTemplateProductAdd(
             meal,
             productResolver,
+            productQuantity,
             appDate
           )
         );

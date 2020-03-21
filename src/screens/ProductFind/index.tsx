@@ -55,7 +55,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
   }
 
   const handleItemPress = useCallback((product: ProductOrNormalizedProduct) => {
-    if (params.onItemPress && !hasBeenPressed.current) {
+    if (params.onProductSelected && !hasBeenPressed.current) {
       hasBeenPressed.current = true;
 
       const productResolver: ProductResolver = async () => {
@@ -65,7 +65,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
         return Product.saveNormalizedProduct(product);
       }
 
-      params.onItemPress(productResolver);
+      params.onProductSelected(productResolver, product.portion);
     }
   }, [params]);
 
