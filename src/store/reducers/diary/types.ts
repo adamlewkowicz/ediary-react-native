@@ -20,6 +20,7 @@ interface DiaryMealBase {
   type: DiaryMealType
   productIds: ProductId[]
   isOpened: boolean
+  isAddingProduct: boolean
   dateTime: DateTime
   dateTimeBase: string
 }

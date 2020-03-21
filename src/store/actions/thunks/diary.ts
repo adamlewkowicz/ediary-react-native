@@ -11,16 +11,18 @@ import {
   mealProductAdded,
   mealAdded,
   mealsLoaded,
+  mealProductAddStarted,
+  mealProductAddFinished,
 } from '../creators';
 import { DateDay, ProductId, MealId } from '../../../types';
 import { debounce, findOrFail } from '../../../common/utils';
 import { Thunk, StoreState, Selectors } from '../..';
 import {
-  DiaryMeal,
   MealTemplate,
-  DiaryMealTemplate,
+  DiaryMealOrTemplate,
 } from '../../reducers/diary';
 import { batch } from 'react-redux';
+import { ProductResolver } from '../../../screens';
 
 const debounceA = debounce();
 
@@ -138,20 +140,25 @@ export const mealProductAdd = (
 }
 
 export const mealOrTemplateProductAdd = (
-  meal: DiaryMeal | DiaryMealTemplate,
-  productId: ProductId,
+  meal: DiaryMealOrTemplate,
+  productResolver: ProductResolver,
   date: Date,
 ): Thunk<Promise<void>> => async (dispatch) => {
+  dispatch(mealProductAddStarted(meal.data.id));
+
+  const product = await productResolver();
+
   if (meal.type === 'template') {
-    const { dateTime: time, data: { name }} = meal;
-    const template: MealTemplate = { name, dateTime: time };
+    const template: MealTemplate = meal.data;
 
     await dispatch(
       mealCreateFromTemplate(
-        template, date, productId
+        template, date, product.id
       )
     );
   } else {
-    await dispatch(mealProductAdd(meal.data.id, productId));
+    await dispatch(mealProductAdd(meal.data.id, product.id));
   }
+
+  dispatch(mealProductAddFinished(meal.data.id));
 }

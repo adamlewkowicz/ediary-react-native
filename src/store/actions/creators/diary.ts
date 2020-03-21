@@ -6,6 +6,8 @@ import {
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
   MEALS_LOADED,
+  MEAL_PRODUCT_ADD_STARTED,
+  MEAL_PRODUCT_ADD_FINISHED,
 } from '../../consts';
 import { MealId, ProductId } from '../../../types';
 import { Meal, IProductMerged, IProduct } from '../../../database/entities';
@@ -14,6 +16,16 @@ import { DiaryMealOrTemplateId } from '../../reducers/diary';
 export const mealsLoaded = (meals: Meal[]) => ({
   type: MEALS_LOADED,
   payload: meals
+});
+
+export const mealProductAddStarted = (mealId: DiaryMealOrTemplateId) => ({
+  type: MEAL_PRODUCT_ADD_STARTED,
+  meta: { mealId }
+});
+
+export const mealProductAddFinished = (mealId: DiaryMealOrTemplateId) => ({
+  type: MEAL_PRODUCT_ADD_FINISHED,
+  meta: { mealId }
 });
 
 export const mealAdded = (
@@ -73,3 +85,5 @@ export type DiaryAction =
   | ReturnType<typeof mealProductDeleted>
   | ReturnType<typeof productQuantityUpdated>
   | ReturnType<typeof mealOpenToggled>
+  | ReturnType<typeof mealProductAddStarted>
+  | ReturnType<typeof mealProductAddFinished>

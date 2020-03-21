@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../../store';
 import { FlatList, Alert, InteractionManager } from 'react-native';
@@ -15,7 +15,6 @@ interface NutritionHomeScreenProps {}
 
 export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const { navigate, navigation } = useNavigationData<NutritionHomeScreenNavigationProps>();
-  const [processedMealId, setProcessedMealId] = useState<DiaryMealOrTemplateId | null>(null);
   const dispatch = useDispatch();
   const appDate = useSelector(Selectors.getAppDate);
   const appDateDay = useSelector(Selectors.getAppDay);
@@ -33,18 +32,14 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     navigate('ProductFind', {
       async onItemPress(productResolver) {
         navigate('NutritionHome');
-        setProcessedMealId(meal.data.id);
-        const foundProduct = await productResolver();
 
         await dispatch(
           Actions.mealOrTemplateProductAdd(
             meal,
-            foundProduct.id,
+            productResolver,
             appDate
           )
         );
-
-        setProcessedMealId(null);
       }
     });
   }
@@ -142,7 +137,6 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
             onProductAdd={handleProductAdd}
             onProductQuantityUpdate={handleProductQuantityUpdate}
             onProductDelete={handleProductDelete}
-            isAddingProduct={processedMealId === meal.data.id}
           />
         )}
       />

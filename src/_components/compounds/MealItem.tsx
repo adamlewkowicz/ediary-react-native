@@ -15,7 +15,6 @@ interface MealItemProps<
   Meal extends Selectors.MealCalced,
   Product extends Meal['products'][number] = Meal['products'][number]
 > {
-  isAddingProduct: boolean
   meal: Meal
   onMealOpen: (mealId: DiaryMealOrTemplateId) => void
   onMealDelete: (meal: DiaryMeal) => void
@@ -88,7 +87,7 @@ export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>
                 )}
               />
             ))}
-            {props.isAddingProduct && <Spinner size={25} />}
+            {props.meal.isAddingProduct && <Spinner size={25} />}
             <AddProductButton
               onPress={() => props.onProductAdd?.(props.meal)}
             >

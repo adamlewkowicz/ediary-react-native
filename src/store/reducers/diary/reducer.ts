@@ -6,6 +6,8 @@ import {
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
   MEALS_LOADED,
+  MEAL_PRODUCT_ADD_STARTED,
+  MEAL_PRODUCT_ADD_FINISHED,
 } from '../../consts';
 import {
   getDiaryMealTemplate,
@@ -101,6 +103,20 @@ export function diaryReducer(
           : false
       }))
     }
+    case MEAL_PRODUCT_ADD_STARTED: return {
+      ...state,
+      meals: state.meals.map(meal => isEqualMealId(meal, action.meta.mealId)
+        ? { ...meal, isAddingProduct: true }
+        : meal
+      )
+    }
+    case MEAL_PRODUCT_ADD_FINISHED: return {
+      ...state,
+      meals: state.meals.map(meal => isEqualMealId(meal, action.meta.mealId) && meal.isAddingProduct
+        ? { ...meal, isAddingProduct: false }
+        : meal
+      )
+    }
     case MEAL_PRODUCT_ADDED:
       const normalizedProduct = normalizeProductEntity(
         action.payload, 
@@ -114,7 +130,8 @@ export function diaryReducer(
           if (isEqualMealId(meal, action.meta.mealId)) {
             return {
               ...meal,
-              productIds: [...meal.productIds, normalizedProduct.data.id]
+              productIds: [...meal.productIds, normalizedProduct.data.id],
+              isAddingProduct: false,
             }
           }
           return meal;
