@@ -11,7 +11,7 @@ import {
   ObjectNumeric,
 } from '../../types';
 import { UNIT_TYPES, DATE_TIME, DATE_DAY, KCAL_IN_ONE_MACRO_GRAM } from '../consts';
-import { LayoutAnimation, Alert } from 'react-native';
+import { LayoutAnimation, Alert, ToastAndroid } from 'react-native';
 
 export const debounce = () => {
   let timeout: NodeJS.Timeout;
@@ -342,6 +342,14 @@ export const alertDelete = (
         onPress: onDeleteConfirmed
       }
     ]
+  );
+}
+
+export const toastCenter = (message: string): void => {
+  ToastAndroid.showWithGravity(
+    message,
+    ToastAndroid.SHORT,
+    ToastAndroid.CENTER
   );
 }
 

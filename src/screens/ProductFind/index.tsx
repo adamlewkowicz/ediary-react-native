@@ -6,9 +6,10 @@ import { InputSearcher } from '../../components/InputSearcher';
 import { Block } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { useProductsSearch, useNavigationData, useProductHistory } from '../../hooks';
-import { FlatList, ToastAndroid } from 'react-native';
+import { FlatList } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import { H3, ProductSearchItem, ButtonSecondaryArrow } from '../../_components';
+import { toastCenter } from '../../common/utils';
 
 interface ProductFindScreenProps {}
 
@@ -22,8 +23,12 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
     debouncedProductName,
     ...productSearch
   } = useProductsSearch();
+
   const showProductHistory = !state.isDirty;
-  const productSource: ProductOrNormalizedProduct[] = showProductHistory ? productHistory.data : state.products;
+
+  const productSource: ProductOrNormalizedProduct[] = showProductHistory
+    ? productHistory.data
+    : state.products;
 
   function handleBarcodeScan() {
     navigate('BarcodeScan', {
@@ -42,13 +47,8 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
         productSearch.addProduct(createdProduct);
 
         navigate('ProductFind');
-        
-        ToastAndroid.showWithGravity(
-          `Utworzono produkt "${createdProduct.name}"`,
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER
-        );
 
+        toastCenter(`Utworzono produkt "${createdProduct.name}"`);
         productHistory.addProduct(createdProduct);
       }
     });
