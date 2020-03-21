@@ -5,7 +5,7 @@ import { FlatList, Alert, InteractionManager } from 'react-native';
 import { DateChanger } from '../../components/DateChanger';
 import styled from 'styled-components/native';
 import { MealId } from '../../types';
-import { DiaryMealTemplate, DiaryMeal, DiaryMealOrTemplateId, DiaryProduct } from '../../store/reducers/diary';
+import { DiaryMeal, DiaryMealOrTemplateId, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
 import { useAfterInteractions, useNavigationData } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
 import { MealItem, MealItemSeparator, ChartsMacroNeeds } from '../../_components';
@@ -29,9 +29,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     dispatch(Actions.mealsFindByDay(appDateDay));
   }, [appDateDay]);
 
-  const handleProductAdd = (
-    meal: DiaryMeal | DiaryMealTemplate
-  ): void => {
+  const handleProductAdd = (meal: DiaryMealOrTemplate): void => {
     navigate('ProductFind', {
       async onItemPress(productResolver) {
         navigate('NutritionHome');
