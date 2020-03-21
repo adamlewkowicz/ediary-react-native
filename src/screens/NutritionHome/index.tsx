@@ -6,7 +6,7 @@ import { DateChanger } from '../../components/DateChanger';
 import styled from 'styled-components/native';
 import { MealId } from '../../types';
 import { DiaryMeal, DiaryMealOrTemplateId, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
-import { useAfterInteractions, useNavigationData } from '../../hooks';
+import { useNavigationData } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
 import { MealItem, MealItemSeparator, ChartsMacroNeeds } from '../../_components';
 import { layoutAnimateEase, alertDelete } from '../../common/utils';
@@ -21,8 +21,6 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const macroNeeds = useSelector(Selectors.getCalcedMacroNeeds);
   const meals = useSelector(Selectors.getMealsCalced);
   const mealListRef = useRef<FlatList<Selectors.MealCalced>>(null);
-
-  useAfterInteractions(() => dispatch(Actions.productHistoryRecentLoad()));
 
   useEffect(() => {
     dispatch(Actions.mealsFindByDay(appDateDay));

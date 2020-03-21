@@ -1,11 +1,11 @@
 import { filterByUniqueId } from '../../../common/utils';
-import { IProduct } from '../../../database/entities';
+import { Product } from '../../../database/entities';
 import { ProductHistoryAction } from '../../actions';
 import { getProductsFromAction } from './helpers';
-import { PRODUCT_HISTORY_RECENT_ADDED } from '../../consts';
+import { PRODUCT_HISTORY_ADDED } from '../../consts';
 
 interface ProductHistoryState {
-  products: IProduct[]
+  products: Product[]
   isAfterFirstFetch: boolean
 }
 
@@ -22,7 +22,7 @@ export function productHistoryReducer(
 
   if (extractedProducts.length) {
     const maxNumberOfProducts = 8;
-    const isAfterFirstFetch = !state.isAfterFirstFetch && action.type === PRODUCT_HISTORY_RECENT_ADDED;
+    const isAfterFirstFetch = !state.isAfterFirstFetch && action.type === PRODUCT_HISTORY_ADDED;
     
     const products = [...extractedProducts, ...state.products]
       .filter(filterByUniqueId)

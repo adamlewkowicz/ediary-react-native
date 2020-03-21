@@ -19,4 +19,4 @@ export const USER_PROFILE_CREATED = 'USER_PROFILE_CREATED' as const;
 export const USER_INITIALIZED = 'USER_INITIALIZED' as const;
 
 // Product history
-export const PRODUCT_HISTORY_RECENT_ADDED = 'PRODUCT_HISTORY_RECENT_ADDED' as const;
+export const PRODUCT_HISTORY_ADDED = 'PRODUCT_HISTORY_ADDED' as const;
