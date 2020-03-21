@@ -11,13 +11,9 @@ import { MealId, ProductId } from '../../../types';
 import { Meal, IProductMerged, IProduct } from '../../../database/entities';
 import { DiaryMealOrTemplateId } from '../../reducers/diary';
 
-export const mealsLoaded = (
-  meals: Meal[],
-  shouldOpenMealsByDefault = false,
-) => ({
+export const mealsLoaded = (meals: Meal[]) => ({
   type: MEALS_LOADED,
-  payload: meals,
-  meta: { shouldOpenMealsByDefault }
+  payload: meals
 });
 
 export const mealAdded = (
