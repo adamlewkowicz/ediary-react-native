@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../../store';
 import { FlatList, InteractionManager } from 'react-native';
@@ -8,7 +8,7 @@ import { MealId } from '../../types';
 import { DiaryMeal, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
 import { useNavigationData, useAppDate } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
-import { MealItem, MealItemSeparator, ChartsMacroNeeds } from '../../_components';
+import { MealItemSeparator, ChartsMacroNeeds, MealItemMemo } from '../../_components';
 import { layoutAnimateEase, alertDelete } from '../../common/utils';
 
 interface NutritionHomeScreenProps {}
@@ -25,7 +25,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     dispatch(Actions.mealsFindByDay(appDateDay));
   }, [appDateDay]);
 
-  const handleProductAdd = (meal: DiaryMealOrTemplate): void => {
+  const handleProductAdd = useCallback((meal: DiaryMealOrTemplate): void => {
     navigate('ProductFind', {
       async onProductSelected(productResolver, productQuantity) {
         navigate('NutritionHome');
@@ -40,25 +40,25 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         );
       }
     });
-  }
+  }, [dispatch, navigate]);
   
-  const handleMealDelete = (meal: DiaryMeal): void => {
+  const handleMealDelete = useCallback((meal: DiaryMeal): void => {
     alertDelete(
       'Usuń posiłek',
       `Czy jesteś pewnien że chcesz usunąć "${meal.data.name}"?`,
       () => dispatch(Actions.mealDelete(meal.data.id))
     );
-  }
+  }, [dispatch]);
 
-  const handleProductDelete = (mealId: MealId, product: DiaryProduct): void => {
+  const handleProductDelete = useCallback((mealId: MealId, product: DiaryProduct): void => {
     alertDelete(
       'Usuń produkt',
       `Czy jesteś pewnien że chcesz usunąć "${product.data.name}"?`,
       () => dispatch(Actions.mealProductDelete(mealId, product.data.id))
     );
-  }
+  }, [dispatch]);
 
-  const handleMealOpen = (meal: DiaryMealOrTemplate, index: number): void => {
+  const handleMealOpen = useCallback((meal: DiaryMealOrTemplate, index: number): void => {
     const scroll = () => {
       mealListRef.current?.scrollToIndex({
         index,
@@ -71,10 +71,10 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     dispatch(Actions.mealOpenToggled(meal.data.id));
 
     if (!meal.isOpened) scroll();
-  }
+  }, [dispatch]);
 
-  const handleProductQuantityUpdate = (mealId: MealId, product: DiaryProduct): void => {
-    navigate('ProductPreview', {
+  const handleProductQuantityUpdate = useCallback((mealId: MealId, product: DiaryProduct): void => {
+    navigation.navigate('ProductPreview', {
       product: product.data,
       quantity: product.quantity,
       async onProductQuantityUpdated(quantity) {
@@ -85,7 +85,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         dispatch(Actions.mealProductQuantityUpdate(mealId, product.data.id, quantity));
       }
     });
-  }
+  }, [navigation, dispatch]);
 
   const Header = (
     <>
@@ -106,7 +106,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         ItemSeparatorComponent={MealItemSeparator}
         ListHeaderComponent={Header}
         renderItem={({ item: meal, index }) => (
-          <MealItem
+          <MealItemMemo
             meal={meal}
             index={index}
             onMealOpen={handleMealOpen}

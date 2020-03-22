@@ -152,3 +152,5 @@ interface IsOpenedProp {
   isOpened?: boolean
   theme: Theme
 }
+
+export const MealItemMemo = React.memo(MealItem);
