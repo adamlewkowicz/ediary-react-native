@@ -12,6 +12,7 @@ import {
 } from '../../types';
 import { UNIT_TYPES, DATE_TIME, DATE_DAY, KCAL_IN_ONE_MACRO_GRAM } from '../consts';
 import { LayoutAnimation, Alert, ToastAndroid } from 'react-native';
+import { FetchifyError } from '../error';
 
 export const debounce = () => {
   let timeout: NodeJS.Timeout;
@@ -203,6 +204,11 @@ export const fetchify = async <T>(
   const { signal } = controller;
 
   const response = await fetch(input, { signal, ...init });
+
+  if (!response.ok) {
+    throw new FetchifyError(response.statusText);
+  }
+
   const json: T = await response.json();
 
   return json;
