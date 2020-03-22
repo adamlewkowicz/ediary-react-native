@@ -1,4 +1,3 @@
-export * from './ButtonReveal';
 export * from './ChartMacroBar';
 export * from './ChartCircle';
 export * from './InputMetaText';

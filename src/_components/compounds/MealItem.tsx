@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { H2, H4, TextHighlight } from '../atoms/Text';
-import { ButtonReveal, ChartMacroCircles } from '../../_components';
+import { ChartMacroCircles } from '../../_components';
 import { MealProductItem } from './MealProductItem';
 import { ButtonSecondary } from '../molecules/_index';
 import { Selectors } from '../../store';
@@ -55,7 +55,6 @@ export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>
       </InfoContainer>
       {props.meal.isOpened && (
         <>
-          {/* <RevealMealButton onPress={handleMealPress} /> */}
           <ChartsContainer>
             <ChartMacroCircles
               values={props.meal.calcedMacro}
@@ -126,12 +125,6 @@ const ProductsContainer = styled.View`
 
 const Spinner = styled(ActivityIndicator)`
   margin: 10px 0;
-`
-
-const RevealMealButton = styled(ButtonReveal)`
-  position: absolute;
-  top: 70px;
-  z-index: 200;
 `
 
 const AddProductButton = styled(ButtonSecondary)`
