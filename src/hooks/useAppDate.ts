@@ -1,14 +1,12 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Selectors, Actions } from '../store';
+import { useBoundAction } from './useBoundAction';
 
 export const useAppDate = () => {
-  const dispatch = useDispatch();
   const appDate = useSelector(Selectors.getAppDate);
-  const appDateDay = useSelector(Selectors.getAppDay)
+  const appDateDay = useSelector(Selectors.getAppDay);
 
-  const update = (nextDate: Date) => {
-    dispatch(Actions.appDateUpdated(nextDate));
-  }
+  const update = useBoundAction(Actions.appDateUpdated);
 
   return { appDate, appDateDay, update };
 }

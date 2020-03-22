@@ -8,3 +8,4 @@ export * from './useNetworkSubscription';
 export * from './useCalculatedMacro';
 export * from './useProductHistory';
 export * from './useAppDate';
+export * from './useBoundAction';
