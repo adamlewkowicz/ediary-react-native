@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../../store';
 import { FlatList, InteractionManager } from 'react-native';
-import { DateChanger } from '../../components/DateChanger';
+import { DateChangerMemo } from '../../components/DateChanger';
 import styled from 'styled-components/native';
 import { MealId } from '../../types';
 import { DiaryMeal, DiaryMealOrTemplateId, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
@@ -93,7 +93,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
 
   const Header = (
     <>
-      <DateChanger
+      <DateChangerMemo
         value={appDate}
         onChange={appDateContext.update}
       />

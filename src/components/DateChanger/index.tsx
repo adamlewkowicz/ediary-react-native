@@ -45,8 +45,8 @@ export const DateChanger = (props: DateChangerProps) => {
         <ArrowIconLeft {...ARROW_ICON_STYLE} />
       </DayChangeButton>
       <CalendarButton onPress={handleDateChange}>
-        <Title>{dayjsDate.format('dddd')}</Title>
-        <DateInfo>{dayjsDate.format('DD MMMM YYYY')}</DateInfo>
+        <Title>{dayjsDate.format(DAYJS_DAY)}</Title>
+        <DateInfo>{dayjsDate.format(DAYJS_MAIN_DATE)}</DateInfo>
       </CalendarButton>
       <DayChangeButton
         accessibilityLabel="Następny dzień"
@@ -89,8 +89,14 @@ const DateInfo = styled(TextPrimary)`
   font-family: ${props => props.theme.fontWeight.light};
 `
 
+export const DateChangerMemo = React.memo(DateChanger);
+
 const ARROW_ICON_STYLE = {
   fill: theme.color.highlight,
   width: 26,
   height: 26,
 }
+
+const DAYJS_DAY = 'dddd';
+
+const DAYJS_MAIN_DATE = 'DD MMMM YYYY';
