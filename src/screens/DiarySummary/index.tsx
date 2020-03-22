@@ -4,7 +4,7 @@ import { DiarySummaryChart } from '../../components/DiarySummaryChart';
 import { Meal } from '../../database/entities';
 import { useSelector } from 'react-redux';
 import { Selectors } from '../../store';
-import { calcMacroNeedsLeft } from '../../common/utils';
+import { calculateMacroNeeds } from '../../common/utils';
 import { MacroElements } from '../../types';
 import styled from 'styled-components/native';
 import { MACRO_ELEMENTS } from '../../common/consts';
@@ -17,25 +17,27 @@ interface DiarySummaryScreenProps {}
 export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
   const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...baseMacro }));
   const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]);
-  const macroNeeds = useSelector(Selectors.getMacroNeeds);
+  const userMacroNeeds = useSelector(Selectors.getUserMacroNeeds);
   const todayDay = useSelector(Selectors.getAppDay);
 
   async function handleMacroSummaryFetch() {
     const result = await Meal.getMacroSummary(todayDay);
-    setMacroSummary(result.average);
-    setHistoryRecords(result.data.map(record => ({
+    const nextHistoryRecords = result.data.map(record => ({
       value: record.kcal,
       date: new Date(record.day as any)
-    })));
+    }));
+
+    setMacroSummary(result.average);
+    setHistoryRecords(nextHistoryRecords);
   }
 
   useFocusEffect(() => {
     handleMacroSummaryFetch();
   });
 
-  const macroNeedsLeft = useMemo(() => 
-    calcMacroNeedsLeft(macroSummary, macroNeeds),
-    [macroSummary, macroNeeds] 
+  const macroNeeds = useMemo(() => 
+    calculateMacroNeeds(macroSummary, userMacroNeeds),
+    [macroSummary, userMacroNeeds] 
   );
 
   return (
@@ -60,8 +62,8 @@ export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
           <Block align="flex-end">
             <StyledRatioInfo
               allowedDiff={15}
-              ratio={macroNeedsLeft[element].ratio}
-              value={macroNeedsLeft[element].diff}
+              ratio={macroNeeds[element].percentage}
+              value={macroNeeds[element].left}
             />
             <Text size="big" margin="0 5px 0 0">
               {Math.round(macroSummary[element])}
