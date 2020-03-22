@@ -78,7 +78,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
       product: product.data,
       quantity: product.quantity,
       async onProductQuantityUpdated(quantity) {
-        navigation.goBack();
+        navigation.navigate('NutritionHome');
 
         await InteractionManager.runAfterInteractions();
 

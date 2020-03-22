@@ -8,7 +8,7 @@ export const useCalculatedMacro = <T extends MacroElements>(
   macroValues: T,
   quantity: number
 ) => {
-  const userMacroNeeds = useSelector(Selectors.getMacroNeeds); 
+  const userMacroNeeds = useSelector(Selectors.getUserMacroNeeds); 
 
   const macro = useMemo(
     () => calculateMacroPerQuantity(macroValues, quantity),
