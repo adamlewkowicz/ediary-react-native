@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { H2, H4, TextHighlight } from '../atoms/Text';
 import { ChartMacroCircles } from '../../_components';
-import { MealProductItem } from './MealProductItem';
+import { MealProductItemMemo } from './MealProductItem';
 import { ButtonSecondary } from '../molecules/_index';
 import { Selectors } from '../../store';
 import { ChartMacroBarsBase } from './ChartMacroBarsBase';
@@ -10,6 +10,7 @@ import { ActivityIndicator } from 'react-native';
 import { DiaryMeal, DiaryMealOrTemplateId } from '../../store/reducers/diary';
 import { MealId } from '../../types';
 import { isDiaryMeal } from '../../store/reducers/diary/helpers';
+import { Theme } from '../../common/theme';
 
 interface MealItemProps<
   Meal extends Selectors.MealCalced,
@@ -24,63 +25,64 @@ interface MealItemProps<
 }
 
 export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>) => {
+  const { meal } = props;
 
-  const handleMealPress = (): void => {
-    props.onMealOpen(props.meal.data.id);
+  const handleMealOpen = (): void => {
+    props.onMealOpen(meal.data.id);
   }
 
   const handleMealDelete = (): void => {
-    if (isDiaryMeal(props.meal)) {
-      props.onMealDelete(props.meal);
+    if (isDiaryMeal(meal)) {
+      props.onMealDelete(meal);
     }
   }
 
+  const handleProductAdd = (): void => {
+    props.onProductAdd(meal);
+  }
+
   return (
-    <Container isOpened={props.meal.isOpened}>
+    <Container isOpened={meal.isOpened}>
       <InfoContainer
-        onPress={handleMealPress}
+        onPress={handleMealOpen}
         onLongPress={__DEV__ ? undefined : handleMealDelete}
-        isOpened={props.meal.isOpened}
+        isOpened={meal.isOpened}
       >
-        <Time>{props.meal.dateTimeBase}</Time>
+        <MealTime>{meal.dateTimeBase}</MealTime>
         <BaseInfo>
-          <MealName isOpened={props.meal.isOpened}>
-            {props.meal.data.name}
+          <MealName isOpened={meal.isOpened}>
+            {meal.data.name}
           </MealName>
-          <Calories>{props.meal.calcedMacro.kcal.toFixed(0)} kcal</Calories>
+          <Calories>
+            {meal.calcedMacro.kcal.toFixed(0)} kcal
+          </Calories>
         </BaseInfo>
         <ChartMacroBarsBase
-          percentages={props.meal.macroPercentages}
+          percentages={meal.macroPercentages}
         />
       </InfoContainer>
-      {props.meal.isOpened && (
+      {meal.isOpened && (
         <>
           <ChartsContainer>
             <ChartMacroCircles
-              values={props.meal.calcedMacro}
-              percentages={props.meal.macroPercentages}
+              values={meal.calcedMacro}
+              percentages={meal.macroPercentages}
             />
           </ChartsContainer>
           <ProductsContainer>
-            {props.meal.products.map(product => (
-              <MealProductItem
+            {meal.products.map(product => (
+              <MealProductItemMemo
                 key={product.data.id}
-                name={product.data.name}
-                quantity={product.quantity}
-                kcal={product.calcedMacro.kcal}
-                onPress={() => props.onProductQuantityUpdate(
-                  props.meal.data.id as MealId,
-                  product
-                )}
-                onDelete={() => props.onProductDelete(
-                  props.meal.data.id as MealId,
-                  product
-                )}
+                mealId={meal.data.id as MealId}
+                product={product}
+                onQuantityUpdate={props.onProductQuantityUpdate}
+                onDelete={props.onProductDelete}
               />
             ))}
-            {props.meal.isAddingProduct && <Spinner size={25} />}
+            {meal.isAddingProduct && <Spinner size={25} />}
             <AddProductButton
-              onPress={() => props.onProductAdd?.(props.meal)}
+              accessibilityLabel="Dodaj produkt do posiłku"
+              onPress={handleProductAdd}
             >
               Dodaj produkt
             </AddProductButton>
@@ -100,7 +102,7 @@ const Calories = styled(TextHighlight)`
   color: ${props => props.theme.color.highlightSecondary};
 `
 
-const Time = styled(H4)``
+const MealTime = H4;
 
 const BaseInfo = styled.View`
   flex-direction: row;
@@ -115,7 +117,6 @@ const ChartsContainer = styled.View`
   background-color: ${props => props.theme.color.primary};
 `
 
-// TODO: HARDOCDED COLOR
 const ProductsContainer = styled.View`
   background-color: ${props => props.theme.color.primary};
   padding: 5px 15px;
@@ -131,10 +132,6 @@ const AddProductButton = styled(ButtonSecondary)`
   margin: 20px 0;
 `
 
-interface IsOpenedProp {
-  isOpened?: boolean
-}
-
 const Container = styled.View<IsOpenedProp>`
   position: relative;
   background-color: ${props => props.isOpened ? props.theme.color.primary : '#fff'};
@@ -147,5 +144,10 @@ const InfoContainer = styled.TouchableOpacity<IsOpenedProp>`
 
 // @ts-ignore
 const MealName = styled<IsOpenedProp>(H2)`
-  color: ${props => props.isOpened ? '#fff' : props.theme.color.primary};
+  color: ${(props: IsOpenedProp) => props.isOpened ? '#fff' : props.theme.color.primary};
 `
+
+interface IsOpenedProp {
+  isOpened?: boolean
+  theme: Theme
+}

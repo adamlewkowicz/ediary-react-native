@@ -2,24 +2,30 @@ import React from 'react';
 import { Table, H4, TextHighlight, TextPrimary } from '..';
 import { TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
+import { MealId } from '../../types';
+import { DiaryProduct } from '../../store/reducers/diary';
 
-interface MealProductItemProps {
-  onPress?: () => void
-  onDelete?: () => void
-  name: string
-  quantity: number
-  kcal: number
+interface MealProductItemProps<T> {
+  mealId: MealId
+  product: T
+  onQuantityUpdate: (mealId: MealId, product: T) => void
+  onDelete: (mealId: MealId, product: T) => void
 }
 
-export const MealProductItem = (props: MealProductItemProps) => {
+export const MealProductItem = <T extends DiaryProduct>(props: MealProductItemProps<T>) => {
+  const { product, mealId } = props;
+
   return (
-    <TouchableOpacity onPress={props.onPress} onLongPress={props.onDelete}>
+    <TouchableOpacity
+      onPress={() => props.onQuantityUpdate(mealId, product)}
+      onLongPress={() => props.onDelete(mealId, product)}
+    >
       <Table.Row>
         <Details>
-          <ProductName>{props.name}</ProductName>
-          <Quantity>{props.quantity}g - 1 porcja</Quantity>
+          <ProductName>{product.data.name}</ProductName>
+          <Quantity>{product.quantity}g</Quantity>
         </Details>
-        <Calories>{props.kcal.toFixed(0)} kcal</Calories>
+        <Calories>{product.calcedMacro.kcal.toFixed(0)} kcal</Calories>
       </Table.Row>
     </TouchableOpacity>
   );
@@ -41,3 +47,5 @@ const Calories = styled(TextHighlight)`
 const Details = styled.View`
   flex: 1;
 `
+
+export const MealProductItemMemo = React.memo(MealProductItem);
