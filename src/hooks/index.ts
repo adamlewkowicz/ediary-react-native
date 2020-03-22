@@ -1,5 +1,4 @@
 export * from './useUserId';
-export * from './useConnected';
 export * from './useIdleStatus';
 export * from './useDebouncedValue';
 export * from './useProductsSearch';

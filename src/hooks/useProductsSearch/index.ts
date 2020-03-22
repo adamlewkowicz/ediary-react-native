@@ -3,12 +3,14 @@ import { Product } from '../../database/entities';
 import { ABORT_ERROR_NAME } from '../../common/consts';
 import { BarcodeId } from '../../types';
 import { productsSearchReducer, initialState } from './reducer';
-import { useConnected, useDebouncedValue } from '../';
+import { useDebouncedValue } from '../';
+import { useSelector } from 'react-redux';
+import { Selectors } from '../../store';
 
 export const useProductsSearch = () => {
   const [state, dispatch] = useReducer(productsSearchReducer, initialState);
   const debouncedProductName = useDebouncedValue(state.productName, 800);
-  const isConnected = useConnected();
+  const isConnected = useSelector(Selectors.getAppIsConnected);
 
   const updateProductName = (productName: string): void => {
     dispatch({ type: 'PRODUCT_NAME_UPDATED', payload: productName });
