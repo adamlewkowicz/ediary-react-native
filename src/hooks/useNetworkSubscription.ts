@@ -7,9 +7,9 @@ export const useNetworkSubscription = (): void => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener(state => {
+    const unsubscribe = NetInfo.addEventListener(netInfoState => {
       dispatch(
-        Actions.appConnectionStatusUpdated(state.isConnected)
+        Actions.appConnectionStatusUpdated(netInfoState.isConnected)
       );
     });
 
