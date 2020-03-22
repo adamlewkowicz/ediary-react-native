@@ -14,10 +14,11 @@ import {
 import { useNavigationData, useCalculatedMacro } from '../../hooks';
 import { ProductPreviewScreenNavigationProps } from '../../navigation';
 import { fillArrayWithinRange } from '../../common/utils';
+import { Product } from '../../database/entities';
 
 export const ProductPreviewScreen = () => {
   const { params, navigation } = useNavigationData<ProductPreviewScreenNavigationProps>();
-  const [{ value: productPortion = 100 } = {}] = params.product.portions ?? [];
+  const [{ value: productPortion = Product.defaultPortion } = {}] = params.product.portions ?? [];
   const [quantity, setQuantity] = useState<number>(params.quantity ?? 0);
   const {
     macro,
