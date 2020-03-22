@@ -80,16 +80,8 @@ export const ProductPreviewScreen = () => {
           {macro.kcal.toFixed(0)} kcal
         </Calories>
         <ChartMacroCircles
-          values={[
-            macro.carbs,
-            macro.prots,
-            macro.fats
-          ]}
-          percentages={[
-            macroPercentages.carbs,
-            macroPercentages.prots,
-            macroPercentages.fats
-          ]}
+          values={macro}
+          percentages={macroPercentages}
         />
         <TableMacro
           macro={macro}

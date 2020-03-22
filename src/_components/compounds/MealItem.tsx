@@ -58,16 +58,8 @@ export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>
           {/* <RevealMealButton onPress={handleMealPress} /> */}
           <ChartsContainer>
             <ChartMacroCircles
-              values={[
-                props.meal.calcedMacro.carbs,
-                props.meal.calcedMacro.prots,
-                props.meal.calcedMacro.fats,
-              ]}
-              percentages={[
-                props.meal.macroPercentages.carbs,
-                props.meal.macroPercentages.prots,
-                props.meal.macroPercentages.fats,
-              ]}
+              values={props.meal.calcedMacro}
+              percentages={props.meal.macroPercentages}
             />
           </ChartsContainer>
           <ProductsContainer>

@@ -12,12 +12,14 @@ export type PortionUnit = 'g' | 'ml';
 export type BaseMacroElement = typeof BASE_MACRO_ELEMENTS[number];
 export type MacroElement = typeof MACRO_ELEMENTS[number];
 
-export type MacroElements = {
-  [key in MacroElement]: number
+export interface BaseMacroElements<T = number> {
+  carbs: T
+  prots: T
+  fats: T
 }
 
-export type BaseMacroElements = {
-  [key in BaseMacroElement]: number
+export interface MacroElements<T = number> extends BaseMacroElements<T> {
+  kcal: T
 }
 
 export type PortionType = typeof PORTION_TYPES[number];
