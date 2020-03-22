@@ -7,7 +7,7 @@ import { ButtonSecondary } from '../molecules/_index';
 import { Selectors } from '../../store';
 import { ChartMacroBarsBase } from './ChartMacroBarsBase';
 import { ActivityIndicator } from 'react-native';
-import { DiaryMeal, DiaryMealOrTemplateId } from '../../store/reducers/diary';
+import { DiaryMeal, DiaryMealOrTemplate } from '../../store/reducers/diary';
 import { MealId } from '../../types';
 import { isDiaryMeal } from '../../store/reducers/diary/helpers';
 import { Theme } from '../../common/theme';
@@ -17,7 +17,8 @@ interface MealItemProps<
   Product extends Meal['products'][number] = Meal['products'][number]
 > {
   meal: Meal
-  onMealOpen: (mealId: DiaryMealOrTemplateId) => void
+  index: number
+  onMealOpen: (meal: DiaryMealOrTemplate, index: number) => void
   onMealDelete: (meal: DiaryMeal) => void
   onProductAdd: (meal: Meal) => void
   onProductQuantityUpdate: (mealId: MealId, product: Product) => void
@@ -28,7 +29,7 @@ export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>
   const { meal } = props;
 
   const handleMealOpen = (): void => {
-    props.onMealOpen(meal.data.id);
+    props.onMealOpen(meal, props.index);
   }
 
   const handleMealDelete = (): void => {

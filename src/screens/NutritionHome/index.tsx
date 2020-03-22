@@ -5,7 +5,7 @@ import { FlatList, InteractionManager } from 'react-native';
 import { DateChangerMemo } from '../../components/DateChanger';
 import styled from 'styled-components/native';
 import { MealId } from '../../types';
-import { DiaryMeal, DiaryMealOrTemplateId, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
+import { DiaryMeal, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
 import { useNavigationData, useAppDate } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
 import { MealItem, MealItemSeparator, ChartsMacroNeeds } from '../../_components';
@@ -58,11 +58,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     );
   }
 
-  const handleMealOpen = (
-    mealId: DiaryMealOrTemplateId,
-    meal: Selectors.MealCalced,
-    index: number
-  ): void => {
+  const handleMealOpen = (meal: DiaryMealOrTemplate, index: number): void => {
     const scroll = () => {
       mealListRef.current?.scrollToIndex({
         index,
@@ -72,7 +68,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
 
     layoutAnimateEase();
 
-    dispatch(Actions.mealOpenToggled(mealId));
+    dispatch(Actions.mealOpenToggled(meal.data.id));
 
     if (!meal.isOpened) scroll();
   }
@@ -112,7 +108,8 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         renderItem={({ item: meal, index }) => (
           <MealItem
             meal={meal}
-            onMealOpen={(mealId) => handleMealOpen(mealId, meal, index)}
+            index={index}
+            onMealOpen={handleMealOpen}
             onMealDelete={handleMealDelete}
             onProductAdd={handleProductAdd}
             onProductQuantityUpdate={handleProductQuantityUpdate}
