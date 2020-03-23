@@ -3,7 +3,7 @@ import { Product } from '../../database/entities';
 import { ABORT_ERROR_NAME } from '../../common/consts';
 import { BarcodeId } from '../../types';
 import { productsSearchReducer, initialState } from './reducer';
-import { useDebouncedValue } from '../';
+import { useDebouncedValue } from '..';
 import { useSelector } from 'react-redux';
 import { Selectors } from '../../store';
 

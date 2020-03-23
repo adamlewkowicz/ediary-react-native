@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { Selectors, Actions } from '../store';
-import { useBoundAction } from './useBoundAction';
+import { useBoundAction } from './use-bound-action';
 
 export const useAppDate = () => {
   const appDate = useSelector(Selectors.getAppDate);
