@@ -8,7 +8,7 @@ import { MealId } from '../../types';
 import { DiaryMeal, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
 import { useNavigationData, useAppDate } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
-import { ChartsMacroNeeds, MealItemMemo } from '../../_components';
+import { ChartsMacroNeeds, MealItemMemo, ItemSeparator } from '../../_components';
 import * as Utils from '../../utils';
 
 interface NutritionHomeScreenProps {}
