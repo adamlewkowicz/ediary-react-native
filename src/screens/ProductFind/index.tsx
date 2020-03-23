@@ -7,7 +7,7 @@ import { BarcodeButton } from '../../components/BarcodeButton';
 import { useProductsSearch, useNavigationData, useProductHistory } from '../../hooks';
 import { FlatList } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
-import { H3, ProductSearchItem, ButtonSecondaryArrow } from '../../_components';
+import { H3, ButtonSecondaryArrow, ProductSearchItemMemo } from '../../_components';
 import * as Utils from '../../utils';
 
 interface ProductFindScreenProps {}
@@ -53,7 +53,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
     });
   }
 
-  const handleItemPress = useCallback((product: ProductOrNormalizedProduct) => {
+  const handleProductSelect = useCallback((product: ProductOrNormalizedProduct) => {
     if (params.onProductSelected && !hasBeenPressed.current) {
       hasBeenPressed.current = true;
 
@@ -139,11 +139,9 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
         keyboardShouldPersistTaps="handled"
         ItemSeparatorComponent={Separator}
         renderItem={({ item: product }) => (
-          <ProductSearchItem
+          <ProductSearchItemMemo
             product={product}
-            onPress={handleItemPress}
-            accessibilityLabel="Dodaj produkt do posiłku"
-            accessibilityHint="Wraca na główną stronę i dodaje produkt do posiłku"
+            onSelect={handleProductSelect}
           />
         )}
       />

@@ -5,13 +5,18 @@ import { MacroDetails } from '../molecules/_index';
 import { theme } from '../../common/theme';
 import { ProductOrNormalizedProduct } from '../../database/entities';
 
-interface ProductSearchItemProps {
-  product: ProductOrNormalizedProduct
+interface ProductSearchItemProps<T = ProductOrNormalizedProduct> {
+  product: T
+  onSelect: (product: T) => void
 }
 
 export const ProductSearchItem = (props: ProductSearchItemProps) => {
   return (
-    <Container>
+    <Container
+      onPress={() => props.onSelect(props.product)}
+      accessibilityLabel="Dodaj produkt do posiłku"
+      accessibilityHint="Wraca na główną stronę i dodaje produkt do posiłku"
+    >
       <ProductName>{props.product.name}</ProductName>
       <Content>
         <MacroContainer>
@@ -23,12 +28,12 @@ export const ProductSearchItem = (props: ProductSearchItemProps) => {
           <MacroDetails
             title="B"
             color={theme.color.prots}
-            value={25.51}
+            value={props.product.macro.prots}
           />
           <MacroDetails
             title="T"
             color={theme.color.fats}
-            value={113.51}
+            value={props.product.macro.fats}
           />
         </MacroContainer>
         <Info>
@@ -70,3 +75,5 @@ const MacroContainer = styled.View`
 const ProductName = styled(H2)`
   font-size: 14px;
 `
+
+export const ProductSearchItemMemo = React.memo(ProductSearchItem);
