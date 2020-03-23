@@ -1,4 +1,9 @@
 import { ToastAndroid, Alert, LayoutAnimation } from 'react-native';
+import { Client } from 'bugsnag-react-native';
+import { BUGSNAG_API_KEY } from 'react-native-dotenv';
+import { IS_DEV } from '../common/consts';
+
+const bugsnag = new Client(BUGSNAG_API_KEY);
 
 export const createDebouncedFunc = <T extends (...args: any) => any>(
   callback: T,
@@ -49,3 +54,11 @@ export const layoutAnimateEase = (onAnimationDidEnd?: () => void) => {
 }
 
 export const toLocaleString = (value: number) => new Intl.NumberFormat('pl-PL').format(value);
+
+export const handleError = (error: Error): void => {
+  if (IS_DEV) {
+    throw error;
+  } else {
+    bugsnag.notify(error);
+  }
+}
