@@ -33,7 +33,6 @@ export const getMealsCalced = createSelector(
 
       return {
         ...meal,
-        ...calcedMacro,
         calcedMacro,
         macroPercentages
       }
