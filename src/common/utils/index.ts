@@ -286,7 +286,7 @@ const calculateMacroValueNeed = (
 export const calculateMacroNeeds = <T extends object>(
   macroValuesEaten: T,
   macroValuesNeeded: T
-): { [key: string]: MacroNeed } => objectMap(
+): MacroElements<MacroNeed> => objectMap(
   macroValuesEaten,
   (macroName, macroValueEaten) => {
     // TODO: refactor types
@@ -306,22 +306,6 @@ type MacroNeed = {
   needed: number
   left: number,
   percentage: number
-}
-
-export const reduceObjectsSum = <
-  A extends ObjectNumeric,
->(sum: A | {} = {}, currentObject: A): A => {
-  const nextSum = { ...sum } as A;
-
-  for (const key in currentObject) {
-    if (nextSum[key] == null) {
-      (nextSum as any)[key] = 0;
-    }
-    
-    (nextSum as any)[key] = round((nextSum as any)[key] + currentObject[key], 100);
-  }
-
-  return nextSum;
 }
 
 export const sortByDateTime: SortHOF<{ dateTime: DateTime }> = (a, b) => {
@@ -359,18 +343,29 @@ export const toastCenter = (message: string): void => {
   );
 }
 
-const calculateObjectsValueSum = <T extends { [key: string]: number }>(
-  objects: T[],
-  initialObj: T = objects[0],
-): T => {
-  return objects.reduce<T>((acc, current) => {
+const calculateObjectsValueSum = <T extends ObjectNumeric>(objects: T[]): T => {
+  const [initialObj, ...restObjects] = objects;
+
+  return restObjects.reduce<T>((acc, current) => {
     const next = { ...acc };
 
     for (const key in next) {
       // @ts-ignore
-      next[key] += current[key];
+      next[key] = Math.round(next[key] + current[key]);
     }
 
     return next;
   }, { ...initialObj });
+}
+
+export const calculateMacroSum = <
+  M extends MacroElements,
+  T extends { calcedMacro: M } = { calcedMacro: M }
+>(
+  items: T[]
+): M => {
+  const macroValueObjects = items.map(item => item.calcedMacro);
+  const macroValueSum = calculateObjectsValueSum(macroValueObjects)
+
+  return macroValueSum;
 }

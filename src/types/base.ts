@@ -20,6 +20,7 @@ export interface BaseMacroElements<T = number> {
 
 export interface MacroElements<T = number> extends BaseMacroElements<T> {
   kcal: T
+  [key: string]: T
 }
 
 export type PortionType = typeof PORTION_TYPES[number];
