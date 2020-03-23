@@ -9,7 +9,7 @@ import { useProductsSearch, useNavigationData, useProductHistory } from '../../h
 import { FlatList } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import { H3, ProductSearchItem, ButtonSecondaryArrow } from '../../_components';
-import { utils } from '../../utils';
+import * as Utils from '../../utils';
 
 interface ProductFindScreenProps {}
 
@@ -48,7 +48,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
 
         navigate('ProductFind');
 
-        utils.toastCenter(`Utworzono produkt "${createdProduct.name}"`);
+        Utils.toastCenter(`Utworzono produkt "${createdProduct.name}"`);
         productHistory.addProduct(createdProduct);
       }
     });

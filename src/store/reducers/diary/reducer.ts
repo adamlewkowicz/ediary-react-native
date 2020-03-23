@@ -19,7 +19,7 @@ import {
 import { DiaryAction } from '../../actions';
 import { DiaryState } from './types';
 import { defaultTemplates } from '../../../common/helpers';
-import { utils } from '../../../utils';
+import * as Utils from '../../../utils';
 
 const initialState: DiaryState = {
   meals: [],
@@ -159,7 +159,7 @@ export function diaryReducer(
           return {
             ...product,
             quantity,
-            calcedMacro: utils.calculateMacroPerQuantity(product.data.macro, quantity)
+            calcedMacro: Utils.calculateMacroPerQuantity(product.data.macro, quantity)
           }
         }
         return product;

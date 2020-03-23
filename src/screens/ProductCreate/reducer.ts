@@ -1,7 +1,7 @@
 import { PortionUnit, BarcodeId } from '../../types';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
 import { Product, IProductRequired } from '../../database/entities';
-import { utils } from '../../utils';
+import * as Utils from '../../utils';
 
 interface ProductData {
   name: string
@@ -53,7 +53,7 @@ export function productCreateReducer(
     }
     case 'CALORIES_EVALUATED': 
       const { carbs, prots, fats } = state.productData;
-      const calcedKcal = utils.calculateCaloriesByMacro({
+      const calcedKcal = Utils.calculateCaloriesByMacro({
         carbs: Number(carbs),
         prots: Number(prots),
         fats: Number(fats)

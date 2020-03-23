@@ -22,9 +22,9 @@ import {
 } from '../../reducers/diary';
 import { batch } from 'react-redux';
 import { ProductResolver } from '../../../screens';
-import { utils } from '../../../utils';
+import * as Utils from '../../../utils';
 
-const debounceA = utils.debounce();
+const debounceA = Utils.debounce();
 
 async function _updateMealMacro(mealId: MealId, store: StoreState) {
   const meals = Selectors.getMealsCalced(store);

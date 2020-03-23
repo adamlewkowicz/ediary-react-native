@@ -4,7 +4,7 @@ import { WheatIcon, SteakIcon, DropIcon, FireIcon } from '../Icons';
 import { TextMeta } from '../Elements';
 import { theme } from '../../common/theme';
 import { ViewProps } from 'react-native';
-import { utils } from '../../utils';
+import * as Utils from '../../utils';
 
 interface NutritionBoxProps extends ViewProps {
   value: number
@@ -26,7 +26,7 @@ export const NutritionBox = ({
         fill={theme.color[element]}
       />
       <TextMeta
-        value={utils.toLocaleString(value)}
+        value={Utils.toLocaleString(value)}
         meta={element === 'kcal' ? 'kcal' : 'g'}
         valueFontSize={theme.fontSize.regular}
         metaFontSize={theme.fontSize.tiny}

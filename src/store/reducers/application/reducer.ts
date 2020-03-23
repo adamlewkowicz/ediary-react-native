@@ -7,10 +7,10 @@ import { DateDay } from '../../../types';
 import dayjs from 'dayjs';
 import { ApplicationState } from './types';
 import { ApplicationAction } from '../../actions';
-import { utils } from '../../../utils';
+import * as Utils from '../../../utils';
 
 const date = new Date;
-const todayDateDay = utils.getDayFromDate(date);
+const todayDateDay = Utils.getDayFromDate(date);
 
 const initialState: ApplicationState = {
   date,

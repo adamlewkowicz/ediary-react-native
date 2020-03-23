@@ -10,7 +10,7 @@ import { MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitlesLong, baseMacro } from '../../common/helpers';
 import { RatioInfo } from '../../components/RatioInfo';
 import { useFocusEffect } from '@react-navigation/native';
-import { utils } from '../../utils';
+import * as Utils from '../../utils';
 
 interface DiarySummaryScreenProps {}
 
@@ -36,7 +36,7 @@ export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
   });
 
   const macroNeeds = useMemo(() => 
-    utils.calculateMacroNeeds(macroSummary, userMacroNeeds),
+    Utils.calculateMacroNeeds(macroSummary, userMacroNeeds),
     [macroSummary, userMacroNeeds] 
   );
 

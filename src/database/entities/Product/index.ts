@@ -29,7 +29,7 @@ import { ProductImage } from '../ProductImage';
 import { Macro } from '../../embeds/Macro';
 import { FindMostUsedResult, FindMostProductIdsResult } from './types';
 import { NormalizedProduct } from '../../../services/IlewazyApi/types';
-import { utils } from '../../../utils';
+import * as Utils from '../../../utils';
 
 @Entity('product')
 @Unique<Product>(['name', 'isVerified'])
@@ -177,7 +177,7 @@ export class Product extends GenericEntity {
 
     const savedProducts = await Product.findByNameLike(name);
     const minProductsFoundLimit = 3;
-    const sortByMostAccurateProductName = utils.sortByMostAccurateName(name);
+    const sortByMostAccurateProductName = Utils.sortByMostAccurateName(name);
 
     if (savedProducts.length <= minProductsFoundLimit) {
       const fetchedProducts = await ilewazyApi.findByName(name, controller);
@@ -236,7 +236,7 @@ export class Product extends GenericEntity {
     
     if (!savedProducts.length || !hasVerifiedProduct) {
       const fetchedProducts = await friscoApi.findByQuery(barcode, controller);
-      const createdProducts = await utils.mapAsyncSequence(
+      const createdProducts = await Utils.mapAsyncSequence(
         fetchedProducts, Product.saveNormalizedProduct
       );
 

@@ -2,7 +2,7 @@ import { Product } from '../../../database/entities';
 import { ProductHistoryAction } from '../../actions';
 import { getProductsFromAction } from './helpers';
 import { PRODUCT_HISTORY_ADDED } from '../../consts';
-import { utils } from '../../../utils';
+import * as Utils from '../../../utils';
 
 interface ProductHistoryState {
   products: Product[]
@@ -25,7 +25,7 @@ export function productHistoryReducer(
     const isAfterFirstFetch = !state.isAfterFirstFetch && action.type === PRODUCT_HISTORY_ADDED;
     
     const products = [...extractedProducts, ...state.products]
-      .filter(utils.filterByUniqueId)
+      .filter(Utils.filterByUniqueId)
       .splice(0, maxNumberOfProducts);
 
     return { products, isAfterFirstFetch };

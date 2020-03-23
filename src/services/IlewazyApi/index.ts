@@ -8,7 +8,7 @@ import {
 import { PortionUnit, PortionType } from '../../types';
 import { Product } from '../../database/entities';
 import { KNOWN_PORTION_TYPES, PORTION_MAP } from './consts';
-import { utils } from '../../utils';
+import * as Utils from '../../utils';
 
 export class IlewazyApi {
 
@@ -21,7 +21,7 @@ export class IlewazyApi {
   ): Promise<NormalizedProduct[]> {
     const parsedName = encodeURIComponent(name);
 
-    const { data = [] } = await utils.fetchify<IleWazyPayload>(
+    const { data = [] } = await Utils.fetchify<IleWazyPayload>(
       `${IlewazyApi.searchURL}${parsedName}`,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
       controller,
@@ -47,13 +47,13 @@ export class IlewazyApi {
     if (payload.simple_sugars) {
       const simpleSugars = Number(payload.simple_sugars);
       if (!Number.isNaN(simpleSugars)) {
-        carbs = utils.round(carbs + simpleSugars, 100);
+        carbs = Utils.round(carbs + simpleSugars, 100);
       }
     }
     if (payload.fatty_acid) {
       const fattyAcid = Number(payload.fatty_acid);
       if (!Number.isNaN(fattyAcid)) {
-        fats = utils.round(fats + fattyAcid, 100);
+        fats = Utils.round(fats + fattyAcid, 100);
       }
     }
 

@@ -14,7 +14,7 @@ import {
 import { useNavigationData, useCalculatedMacro } from '../../hooks';
 import { ProductPreviewScreenNavigationProps } from '../../navigation';
 import { Product } from '../../database/entities';
-import { utils } from '../../utils';
+import * as Utils from '../../utils';
 
 export const ProductPreviewScreen = () => {
   const { params, navigation } = useNavigationData<ProductPreviewScreenNavigationProps>();
@@ -115,4 +115,4 @@ const Calories = styled(H1)`
   margin-bottom: 10px;
 `
 
-const PORTIONS = utils.fillArrayWithinRange({ from: 1, to: 6 });
+const PORTIONS = Utils.fillArrayWithinRange({ from: 1, to: 6 });

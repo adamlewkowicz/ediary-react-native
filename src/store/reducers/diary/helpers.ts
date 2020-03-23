@@ -10,7 +10,7 @@ import {
 } from './types';
 import dayjs from 'dayjs';
 import { MealId, TemplateId } from '../../../types';
-import { utils } from '../../../utils';
+import * as Utils from '../../../utils';
 
 export const getDiaryMealTemplate = (
   template: MealTemplate
@@ -34,7 +34,7 @@ export const normalizeProductEntity = (
     mealId,
     quantity,
     data: productEntity,
-    calcedMacro: utils.calculateMacroPerQuantity(productEntity.macro, quantity)
+    calcedMacro: Utils.calculateMacroPerQuantity(productEntity.macro, quantity)
   }
   
   return normalizedProduct;
@@ -51,7 +51,7 @@ export const normalizeMealEntity = (
     type: 'meal',
     isOpened: openMealByDefault,
     isAddingProduct: false,
-    dateTime: utils.getTimeFromDate(meal.date),
+    dateTime: Utils.getTimeFromDate(meal.date),
     dateTimeBase: dayjs(meal.date).format(DAYJS_DATETIME_BASE),
     productIds: mealProducts.map(mealProduct => mealProduct.productId),
   }

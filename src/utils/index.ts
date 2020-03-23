@@ -5,5 +5,3 @@ export * from './generic';
 export * from './parse';
 export * from './sort';
 export * from './date';
-
-export * as utils from '.';

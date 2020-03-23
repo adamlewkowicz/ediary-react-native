@@ -9,7 +9,7 @@ import { DiaryMeal, DiaryProduct, DiaryMealOrTemplate } from '../../store/reduce
 import { useNavigationData, useAppDate } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
 import { MealItemSeparator, ChartsMacroNeeds, MealItemMemo } from '../../_components';
-import { utils } from '../../utils';
+import * as Utils from '../../utils';
 
 interface NutritionHomeScreenProps {}
 
@@ -43,7 +43,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   }, [dispatch, navigate]);
   
   const handleMealDelete = useCallback((meal: DiaryMeal): void => {
-    utils.alertDelete(
+    Utils.alertDelete(
       'Usuń posiłek',
       `Czy jesteś pewnien że chcesz usunąć "${meal.data.name}"?`,
       () => dispatch(Actions.mealDelete(meal.data.id))
@@ -51,7 +51,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   }, [dispatch]);
 
   const handleProductDelete = useCallback((mealId: MealId, product: DiaryProduct): void => {
-    utils.alertDelete(
+    Utils.alertDelete(
       'Usuń produkt',
       `Czy jesteś pewnien że chcesz usunąć "${product.data.name}"?`,
       () => dispatch(Actions.mealProductDelete(mealId, product.data.id))
@@ -66,7 +66,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
       });
     }
 
-    utils.layoutAnimateEase();
+    Utils.layoutAnimateEase();
 
     dispatch(Actions.mealOpenToggled(meal.data.id));
 
