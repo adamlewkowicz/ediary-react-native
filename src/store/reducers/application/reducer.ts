@@ -4,13 +4,13 @@ import {
   APP_STATUS_UPDATED
 } from '../../consts';
 import { DateDay } from '../../../types';
-import { getDayFromDate } from '../../../common/utils';
 import dayjs from 'dayjs';
 import { ApplicationState } from './types';
 import { ApplicationAction } from '../../actions';
+import { utils } from '../../../utils';
 
 const date = new Date;
-const todayDateDay = getDayFromDate(date);
+const todayDateDay = utils.getDayFromDate(date);
 
 const initialState: ApplicationState = {
   date,

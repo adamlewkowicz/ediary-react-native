@@ -1,8 +1,8 @@
 import { MacroElements } from '../types';
 import { useMemo } from 'react';
-import { calculateMacroPerQuantity, calculateMacroPercentages, calculateMacroNeeds } from '../common/utils';
 import { useSelector } from 'react-redux';
 import { Selectors } from '../store';
+import { utils } from '../utils';
 
 export const useCalculatedMacro = <T extends MacroElements>(
   macroValues: T,
@@ -11,17 +11,17 @@ export const useCalculatedMacro = <T extends MacroElements>(
   const userMacroNeeds = useSelector(Selectors.getUserMacroNeeds); 
 
   const macro = useMemo(
-    () => calculateMacroPerQuantity(macroValues, quantity),
+    () => utils.calculateMacroPerQuantity(macroValues, quantity),
     [macroValues, quantity]
   );
 
   const macroPercentages = useMemo(
-    () => calculateMacroPercentages(macro),
+    () => utils.calculateMacroPercentages(macro),
     [macro]
   );
 
   const macroNeeds = useMemo(
-    () => calculateMacroNeeds(macro, userMacroNeeds),
+    () => utils.calculateMacroNeeds(macro, userMacroNeeds),
     [macro, userMacroNeeds]
   );
   

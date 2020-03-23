@@ -17,8 +17,8 @@ import { IProfileRequired } from '../../database/entities';
 import { STEP_TITLES } from './consts';
 import { Actions } from '../../store';
 import { NumericPicker } from '../../components/NumericPicker';
-import { fillArrayWithinRange } from '../../common/utils';
 import { SelectionOptions } from '../../components/SelectionOptions';
+import { utils } from '../../utils';
 
 interface ProfileCreateScreenProps {}
 
@@ -179,6 +179,6 @@ const MetricsHeading = styled.Text`
   margin-bottom: 10px;
 `
 
-const AGE_VALUES = fillArrayWithinRange({ from: 10, to: 120 });
-const WEIGHT_VALUES = fillArrayWithinRange({ from: 40, to: 180 });
-const HEIGHT_VALUES = fillArrayWithinRange({ from: 100, to: 210 });
+const AGE_VALUES = utils.fillArrayWithinRange({ from: 10, to: 120 });
+const WEIGHT_VALUES = utils.fillArrayWithinRange({ from: 40, to: 180 });
+const HEIGHT_VALUES = utils.fillArrayWithinRange({ from: 100, to: 210 });

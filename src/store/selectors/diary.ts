@@ -2,7 +2,7 @@ import { MacroElements } from '../../types';
 import { StoreState } from '..';
 import { createSelector } from 'reselect';
 import { getUserMacroNeeds } from './user';
-import { calculateMacroPercentages, calculateMacroNeeds, sortByDateTime, calculateMacroSum } from '../../common/utils';
+import { utils } from '../../utils';
 
 const BASE_MACRO: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 
@@ -27,9 +27,9 @@ export const getMealsCalced = createSelector(
     .map(meal => {
       const calcedMacro = meal.type === 'template'
         ? BASE_MACRO
-        : calculateMacroSum(meal.products);
+        : utils.calculateMacroSum(meal.products);
 
-      const macroPercentages = calculateMacroPercentages(calcedMacro);
+      const macroPercentages = utils.calculateMacroPercentages(calcedMacro);
 
       return {
         ...meal,
@@ -38,18 +38,18 @@ export const getMealsCalced = createSelector(
         macroPercentages
       }
     })
-    .sort(sortByDateTime)
+    .sort(utils.sortByDateTime)
 );
 
 const getMealsMacroSum = createSelector(
   getMealsCalced,
-  (meals): MacroElements => calculateMacroSum(meals)
+  (meals): MacroElements => utils.calculateMacroSum(meals)
 );
 
 export const getCalcedMacroNeeds = createSelector(
   getMealsMacroSum,
   getUserMacroNeeds,
-  calculateMacroNeeds
+  utils.calculateMacroNeeds
 );
 
 export type MealsCalced = ReturnType<typeof getMealsCalced>;

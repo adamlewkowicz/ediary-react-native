@@ -4,13 +4,13 @@ import { DiarySummaryChart } from '../../components/DiarySummaryChart';
 import { Meal } from '../../database/entities';
 import { useSelector } from 'react-redux';
 import { Selectors } from '../../store';
-import { calculateMacroNeeds } from '../../common/utils';
 import { MacroElements } from '../../types';
 import styled from 'styled-components/native';
 import { MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitlesLong, baseMacro } from '../../common/helpers';
 import { RatioInfo } from '../../components/RatioInfo';
 import { useFocusEffect } from '@react-navigation/native';
+import { utils } from '../../utils';
 
 interface DiarySummaryScreenProps {}
 
@@ -36,7 +36,7 @@ export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
   });
 
   const macroNeeds = useMemo(() => 
-    calculateMacroNeeds(macroSummary, userMacroNeeds),
+    utils.calculateMacroNeeds(macroSummary, userMacroNeeds),
     [macroSummary, userMacroNeeds] 
   );
 

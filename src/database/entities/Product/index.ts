@@ -23,13 +23,13 @@ import { SqliteENUM } from '../../decorators';
 import { EntityType, EntityRequired } from '../../types';
 import { PRODUCT_UNITS } from '../../../common/consts';
 import { ilewazyApi } from '../../../services/IlewazyApi';
-import { mapAsyncSequence, sortByMostAccurateName } from '../../../common/utils';
 import { MinLength } from 'class-validator';
 import { GenericEntity } from '../../generics/GenericEntity';
 import { ProductImage } from '../ProductImage';
 import { Macro } from '../../embeds/Macro';
 import { FindMostUsedResult, FindMostProductIdsResult } from './types';
 import { NormalizedProduct } from '../../../services/IlewazyApi/types';
+import { utils } from '../../../utils';
 
 @Entity('product')
 @Unique<Product>(['name', 'isVerified'])
@@ -177,7 +177,7 @@ export class Product extends GenericEntity {
 
     const savedProducts = await Product.findByNameLike(name);
     const minProductsFoundLimit = 3;
-    const sortByMostAccurateProductName = sortByMostAccurateName(name);
+    const sortByMostAccurateProductName = utils.sortByMostAccurateName(name);
 
     if (savedProducts.length <= minProductsFoundLimit) {
       const fetchedProducts = await ilewazyApi.findByName(name, controller);
@@ -236,7 +236,7 @@ export class Product extends GenericEntity {
     
     if (!savedProducts.length || !hasVerifiedProduct) {
       const fetchedProducts = await friscoApi.findByQuery(barcode, controller);
-      const createdProducts = await mapAsyncSequence(
+      const createdProducts = await utils.mapAsyncSequence(
         fetchedProducts, Product.saveNormalizedProduct
       );
 

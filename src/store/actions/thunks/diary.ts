@@ -15,7 +15,6 @@ import {
   mealProductAddFinished,
 } from '../creators';
 import { DateDay, ProductId, MealId } from '../../../types';
-import { debounce, findOrFail } from '../../../common/utils';
 import { Thunk, StoreState, Selectors } from '../..';
 import {
   MealTemplate,
@@ -23,8 +22,9 @@ import {
 } from '../../reducers/diary';
 import { batch } from 'react-redux';
 import { ProductResolver } from '../../../screens';
+import { utils } from '../../../utils';
 
-const debounceA = debounce();
+const debounceA = utils.debounce();
 
 async function _updateMealMacro(mealId: MealId, store: StoreState) {
   const meals = Selectors.getMealsCalced(store);
