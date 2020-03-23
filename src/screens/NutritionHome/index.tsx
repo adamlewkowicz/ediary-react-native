@@ -8,7 +8,7 @@ import { MealId } from '../../types';
 import { DiaryMeal, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
 import { useNavigationData, useAppDate } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
-import { MealItemSeparator, ChartsMacroNeeds, MealItemMemo } from '../../_components';
+import { ChartsMacroNeeds, MealItemMemo } from '../../_components';
 import * as Utils from '../../utils';
 
 interface NutritionHomeScreenProps {}
@@ -103,7 +103,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         ref={mealListRef}
         data={meals}
         keyExtractor={mealKeyExtractor}
-        ItemSeparatorComponent={MealItemSeparator}
+        ItemSeparatorComponent={ItemSeparator}
         ListHeaderComponent={Header}
         renderItem={({ item: meal, index }) => (
           <MealItemMemo

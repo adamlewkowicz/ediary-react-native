@@ -1,13 +1,12 @@
 import React, { useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
-import { Separator } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { useProductsSearch, useNavigationData, useProductHistory } from '../../hooks';
 import { FlatList } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
-import { H3, ButtonSecondaryArrow, ProductSearchItemMemo } from '../../_components';
+import { H3, ButtonSecondaryArrow, ProductSearchItemMemo, ItemSeparator } from '../../_components';
 import * as Utils from '../../utils';
 
 interface ProductFindScreenProps {}
@@ -137,7 +136,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
         data={productSource}
         keyExtractor={productKeyExtractor}
         keyboardShouldPersistTaps="handled"
-        ItemSeparatorComponent={Separator}
+        ItemSeparatorComponent={ItemSeparator}
         renderItem={({ item: product }) => (
           <ProductSearchItemMemo
             product={product}

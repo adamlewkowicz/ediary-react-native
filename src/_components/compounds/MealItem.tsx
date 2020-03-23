@@ -94,11 +94,6 @@ export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>
   );
 }
 
-export const MealItemSeparator = styled.View`
-  height: 1px;
-  background-color: ${props => props.theme.color.quaternary};
-`
-
 const Calories = styled(TextHighlight)`
   color: ${props => props.theme.color.highlightSecondary};
 `
