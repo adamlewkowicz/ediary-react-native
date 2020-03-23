@@ -1,10 +1,14 @@
 import { ToastAndroid, Alert, LayoutAnimation } from 'react-native';
 
-export const debounce = () => {
+export const createDebouncedFunc = <T extends (...args: any) => any>(
+  callback: T,
+  delay = 250
+) => {
   let timeout: NodeJS.Timeout;
-  return (callback: () => void, delay = 250) => {
+
+  return (...args: Parameters<T>) => {
     clearTimeout(timeout);
-    timeout = setTimeout(callback, delay);
+    timeout = setTimeout(() => callback(args), delay);
   }
 }
 

@@ -24,17 +24,6 @@ import { batch } from 'react-redux';
 import { ProductResolver } from '../../../screens';
 import * as Utils from '../../../utils';
 
-const debounceA = Utils.debounce();
-
-async function _updateMealMacro(mealId: MealId, store: StoreState) {
-  const meals = Selectors.getMealsCalced(store);
-  const foundMeal = meals.find(meal => meal.data.id === mealId);
-  if (foundMeal) {
-    const { carbs, prots, fats, kcal } = foundMeal;
-    await Meal.update(mealId, { macro: { carbs, prots, fats, kcal }});
-  }
-}
-
 export const mealCreate = (
   name: Meal['name'],
   date: Date,
@@ -60,7 +49,7 @@ export const mealProductCreate = (
 ): Thunk => async (dispatch, getState) => {
   const newProduct = await Meal.addAndCreateProduct(mealId, payload);
   dispatch(mealProductAdded(mealId, { mealId, ...newProduct }, newProduct));
-  await _updateMealMacro(mealId, getState());
+  await updateMealMacro(mealId, getState());
 }
 
 export const mealProductDelete = (
@@ -68,7 +57,7 @@ export const mealProductDelete = (
   productId: ProductId
 ): Thunk => async (dispatch, getState) => {
   const { meals, templates } = getState().diary;
-  const meal = findOrFail(meals, meal => meal.data.id === mealId);
+  const meal = Utils.findOrFail(meals, meal => meal.data.id === mealId);
   const template = templates.find(template => template.name === meal.data.name);
   const isLatestProductOfMeal = meal.productIds.length === 1;
   const isCreatedFromTemplate = template !== undefined;
@@ -79,7 +68,7 @@ export const mealProductDelete = (
   } else {
     dispatch(mealProductDeleted(mealId, productId));
     await MealProduct.delete({ mealId, productId });
-    await _updateMealMacro(mealId, getState());
+    await updateMealMacro(mealId, getState());
   }
 }
 
@@ -87,12 +76,9 @@ export const mealProductQuantityUpdate = (
   mealId: MealId,
   productId: ProductId,
   quantity: number
-): Thunk => async (dispatch, getState) => {
+): Thunk => (dispatch, getState) => {
   dispatch(productQuantityUpdated(productId, quantity));
-  debounceA(async () => {
-    await MealProduct.update({ mealId, productId }, { quantity });
-    await _updateMealMacro(mealId, getState());
-  }, 300);
+  updateProductQuantityDebounced(mealId, productId, quantity, getState());
 }
 
 export const mealsFindByDay = (
@@ -114,7 +100,7 @@ export const mealCreateFromTemplate = (
   dispatch(
     mealAdded(createdMeal)
   );
-  await _updateMealMacro(createdMeal.id, getState());
+  await updateMealMacro(createdMeal.id, getState());
 }
 
 export const mealProductAdd = (
@@ -136,7 +122,7 @@ export const mealProductAdd = (
       mealProductAdded(mealId, product, rawProduct)
     );
   }
-  await _updateMealMacro(mealId, getState());
+  await updateMealMacro(mealId, getState());
 }
 
 export const mealOrTemplateProductAdd = (
@@ -175,3 +161,25 @@ export const mealOrTemplateProductAdd = (
 
   dispatch(mealProductAddFinished(mealId));
 }
+
+async function updateMealMacro(mealId: MealId, state: StoreState): Promise<void> {
+  const meals = Selectors.getMealsCalced(state);
+  const foundMeal = meals.find(meal => meal.data.id === mealId);
+
+  if (foundMeal) {
+    const { carbs, prots, fats, kcal } = foundMeal.calcedMacro;
+    await Meal.update(mealId, { macro: { carbs, prots, fats, kcal }});
+  }
+}
+
+async function updateProductQuantity(
+  mealId: MealId,
+  productId: ProductId,
+  quantity: number,
+  state: StoreState
+): Promise<void> {
+  await MealProduct.update({ mealId, productId }, { quantity });
+  await updateMealMacro(mealId, state);
+}
+
+const updateProductQuantityDebounced = Utils.createDebouncedFunc(updateProductQuantity);

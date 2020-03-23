@@ -1,19 +1,20 @@
 import {
-  debounce,
   mapAsyncSequence,
   filterByUniqueId,
   findOrFail,
   sortByMostAccurateName,
 } from '.';
+import { createDebouncedFunc } from './common';
 
-test('debounce - debounced function gets called only once', () => {
+test('createDebouncedFunc - debounced function gets called only once', () => {
   jest.useFakeTimers();
   const actionMock = jest.fn();
-  const debounceHandler = debounce();
-  const debounceTime = 150;
 
-  debounceHandler(actionMock, debounceTime);
-  debounceHandler(actionMock, debounceTime);
+  const debounceTime = 150;
+  const debouncedAction = createDebouncedFunc(actionMock, debounceTime);
+
+  debouncedAction(actionMock, debounceTime);
+  debouncedAction(actionMock, debounceTime);
 
   jest.advanceTimersByTime(debounceTime);
 
