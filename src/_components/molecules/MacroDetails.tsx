@@ -13,9 +13,9 @@ export const MacroDetails = (props: MacroDetailsProps) => {
     <Container>
       <Stripe color={props.color} />
       <Title color={props.color}>{props.title}</Title>
-      <TextPrimary>
-        {props.value.toFixed(0)} g
-      </TextPrimary>
+      <Value>
+        {props.value.toFixed(0)}g
+      </Value>
     </Container>
   );
 }
@@ -23,7 +23,8 @@ export const MacroDetails = (props: MacroDetailsProps) => {
 const Container = styled.View`
   flex-direction: row;
   align-items: center;
-  /* width: 140px; */
+  margin-right: 16px;
+  min-width: 45px;
 `
 
 const Stripe = styled.View<{
@@ -35,9 +36,13 @@ const Stripe = styled.View<{
   margin-right: 4px;
 `
 
+const Value = styled(TextPrimary)`
+  font-size: ${props => props.theme.fontSize.small};
+`
+
 const Title = styled(H4)<{
   color: string
 }>`
-  margin-right: 5px;
+  margin-right: 8px;
   color: ${props => props.color};
 `

@@ -1,9 +1,8 @@
 import React, { useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
-import { ProductListItemMemo, Separator } from '../../components/ProductListItem';
+import { Separator } from '../../components/ProductListItem';
 import { InputSearcher } from '../../components/InputSearcher';
-import { Block } from '../../components/Elements';
 import { BarcodeButton } from '../../components/BarcodeButton';
 import { useProductsSearch, useNavigationData, useProductHistory } from '../../hooks';
 import { FlatList } from 'react-native';
@@ -117,7 +116,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
 
   return (
     <Container>
-      <Block space="space-between" align="center">
+      <SearchContainer>
         <InputSearcher
           value={state.productName}
           placeholder="Nazwa produktu"
@@ -129,19 +128,18 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
           accessibilityLabel="Zeskanuj kod kreskowy"
           onPress={handleBarcodeScan}
         />
-      </Block>
+      </SearchContainer>
       <ProductsTitle>
         {showProductHistory ? 'Ostatnio używane produkty:' : 'Znalezione produkty:'}
       </ProductsTitle>
       <RenderInfo />
-      <ProductSearchItem />
       <FlatList
         data={productSource}
         keyExtractor={productKeyExtractor}
         keyboardShouldPersistTaps="handled"
         ItemSeparatorComponent={Separator}
         renderItem={({ item: product }) => (
-          <ProductListItemMemo
+          <ProductSearchItem
             product={product}
             onPress={handleItemPress}
             accessibilityLabel="Dodaj produkt do posiłku"
@@ -153,9 +151,16 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
   );
 }
 
+const SearchContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: ${props => `0 ${props.theme.spacing.screenPadding}`};
+`
+
 const Container = styled.View`
-  padding: 20px 20px 60px 20px;
   margin-bottom: 10px;
+  padding: ${props => `${props.theme.spacing.screenPadding} 0`};
 `
 
 const NotFoundInfo = styled.Text`
@@ -166,7 +171,8 @@ const NotFoundInfo = styled.Text`
 `
 
 const ProductsTitle = styled(H3)`
-  margin: 10px 0;
+  margin: 15px 0 5px 0;
+  padding: ${props => `0 ${props.theme.spacing.screenPadding}`};
 `
 
 const AddOwnProductButton = styled(ButtonSecondaryArrow)`
