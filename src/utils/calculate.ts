@@ -1,5 +1,11 @@
-import { ObjectNumeric, MacroElements, BaseMacroElements, ObjectEntries } from '../types';
-import { KCAL_IN_ONE_MACRO_GRAM, MACRO } from '../common/consts';
+import {
+  ObjectNumeric,
+  MacroElements,
+  BaseMacroElements,
+  ObjectEntries,
+  WeightGoal,
+} from '../types';
+import { KCAL_PER_MACRO_GRAM, MACRO, FORMULA_RATIO_BY_WEIGHT_GOAL } from '../common/consts';
 import { objectMap, round } from './generic';
 
 const objectEntries: ObjectEntries = Object.entries;
@@ -9,7 +15,7 @@ export const calculateCaloriesByMacro = (
 ): number => {
   return objectEntries(macro)
     .reduce(
-      (kcal, [macroName, macroQuantity]) => kcal += macroQuantity * KCAL_IN_ONE_MACRO_GRAM[macroName],
+      (kcal, [macroName, macroQuantity]) => kcal += macroQuantity * KCAL_PER_MACRO_GRAM[macroName],
       0
     );
 }
@@ -103,4 +109,22 @@ export const calculateMacroSum = <
   }
 
   return { ...MACRO } as M;
+}
+
+export function calculateDailyMacroNeedsByGoal(
+  weight: number,
+  weightGoal: WeightGoal,
+): MacroElements {
+  const ratioByWeightGoal = FORMULA_RATIO_BY_WEIGHT_GOAL[weightGoal];
+
+  const carbs = round(ratioByWeightGoal.carbs * weight);
+  const prots = round(ratioByWeightGoal.prots * weight);
+  const fats = round(ratioByWeightGoal.fats * weight);
+  const baseMacroNeeds = { carbs, prots, fats };
+
+  const kcal = round(calculateCaloriesByMacro(baseMacroNeeds));
+
+  const macroNeeds: MacroElements = { ...baseMacroNeeds, kcal };
+
+  return macroNeeds;
 }

@@ -27,8 +27,14 @@ export const ABORT_ERROR_NAME = 'AbortError' as const;
 
 export const MACRO: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 
-export enum KCAL_IN_ONE_MACRO_GRAM {
+export enum KCAL_PER_MACRO_GRAM {
   carbs = 4,
   prots = 4,
   fats = 9
 }
+
+export const FORMULA_RATIO_BY_WEIGHT_GOAL = {
+  decrease: { carbs: 2.2, prots: 2.6, fats: 0.45 },
+  maintain: { carbs: 3.5, prots: 2.2, fats: 0.8 },
+  increase: { carbs: 4.4, prots: 2.2, fats: 0.9 }
+} as const;
