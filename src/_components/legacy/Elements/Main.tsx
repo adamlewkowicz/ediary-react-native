@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
-import { ThemeColor, ThemeFontSize } from '../../common/theme';
-import { WheatIcon, SteakIcon, DropIcon, FireIcon } from '../Icons';
+import { ThemeColor, ThemeFontSize } from '../../../common/theme';
+import { WheatIcon, SteakIcon, DropIcon, FireIcon } from '../../molecules/Icons';
 import { TextAlignProperty } from 'csstype';
 
 export const nutritionIcon = {

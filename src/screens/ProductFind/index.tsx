@@ -1,8 +1,8 @@
 import React, { useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
-import { InputSearcher } from '../../components/InputSearcher';
-import { BarcodeButton } from '../../components/BarcodeButton';
+import { InputSearcher } from '../../_components/molecules/InputSearcher';
+import { BarcodeButton } from '../../_components/molecules/BarcodeButton';
 import { useProductsSearch, useNavigationData, useProductHistory } from '../../hooks';
 import { FlatList } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';

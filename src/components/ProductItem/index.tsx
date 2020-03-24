@@ -1,11 +1,11 @@
 import React from 'react';
 import styled, { css } from 'styled-components/native';
-import { TrashIcon } from '../Icons';
+import { TrashIcon } from '../../_components/molecules/Icons';
 // @ts-ignore
 import Swipeable from 'react-native-swipeable';
 import { MacroElements } from '../../types';
 import { TouchableOpacity } from 'react-native';
-import { Block } from '../Elements';
+import { Block } from '../../_components/legacy/Elements';
 import { NutritionBox } from '../NutritionBox';
 import { MACRO_ELEMENTS } from '../../common/consts';
 import { InputRow } from '../InputRow';

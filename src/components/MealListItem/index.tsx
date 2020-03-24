@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { ProgressBar } from '../ProgressBar';
+import { ProgressBar } from '../../_components/molecules/ProgressBar';
 import { FlatList, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { MealsWithRatio } from '../../store/selectors';
-import { Button } from '../Button';
+import { Button } from '../../_components/legacy/Button';
 import { BASE_MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitlesLong } from '../../common/helpers';
 import { DiaryMealOrTemplateId } from '../../store/reducers/diary';

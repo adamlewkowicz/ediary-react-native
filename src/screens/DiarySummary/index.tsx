@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { H1, Text, Block, TitleSecondary } from '../../components/Elements';
-import { DiarySummaryChart } from '../../components/DiarySummaryChart';
+import { H1, Text, Block, TitleSecondary } from '../../_components/legacy/Elements';
+import { DiarySummaryChart } from '../../_components/compounds/DiarySummaryChart';
 import { Meal } from '../../database/entities';
 import { useSelector } from 'react-redux';
 import { Selectors } from '../../store';
@@ -8,7 +8,7 @@ import { MacroElements } from '../../types';
 import styled from 'styled-components/native';
 import { MACRO_ELEMENTS } from '../../common/consts';
 import { elementTitlesLong, baseMacro } from '../../common/helpers';
-import { RatioInfo } from '../../components/RatioInfo';
+import { RatioInfo } from '../../_components/legacy/RatioInfo';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Utils from '../../utils';
 

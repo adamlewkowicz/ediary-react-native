@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { Block } from '../../components/Elements';
+import { Block } from '../../_components/legacy/Elements';
 import {
   WomanIcon,
   ManIcon,
   MuscleIcon,
   MeasureIcon,
   FemaleBodyIcon,
-} from '../../components/Icons';
-import { Button } from '../../components/Button';
-import { Heading } from '../../components/Elements/Heading';
+} from '../../_components/molecules/Icons';
+import { Button } from '../../_components/legacy/Button';
+import { Heading } from '../../_components/legacy/Elements/Heading';
 import { WeightGoal } from '../../types';
 import { useDispatch } from 'react-redux';
 import { useUserId } from '../../hooks';
 import { IProfileRequired } from '../../database/entities';
 import { STEP_TITLES } from './consts';
 import { Actions } from '../../store';
-import { NumericPicker } from '../../components/NumericPicker';
-import { SelectionOptions } from '../../components/SelectionOptions';
+import { NumericPicker } from '../../_components/molecules/NumericPicker';
+import { SelectionOptions } from '../../_components/compounds/SelectionOptions';
 import * as Utils from '../../utils';
 
 interface ProfileCreateScreenProps {}

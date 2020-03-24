@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { ProgressBar } from '../ProgressBar';
-import { Block } from '../Elements';
+import { ProgressBar } from '../../_components/molecules/ProgressBar';
+import { Block } from '../../_components/legacy/Elements';
 
 interface MacroCardProps {
   colors: readonly string[],

@@ -6,10 +6,8 @@ function loadStories() {
   // const req = require.context('./src/components', true, /\.story\.tsx$/);
   
   if (IS_DEV) {
-    require('../src/components/SelectionBox/story');
-    require('../src/components/PhraseSelector/story');
-    require('../src/components/InputSearcher/story');
-    require('../src/components/ProductListItem/story');
+    require('../src/_components/molecules/SelectionBox/story');
+    require('../src/_components/molecules/InputSearcher/story');
   }
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { ProgressBar } from '../../components/ProgressBar';
+import { ProgressBar } from '../molecules/ProgressBar';
 import { theme } from '../../common/theme';
 import { BaseMacroElements } from '../../types';
 

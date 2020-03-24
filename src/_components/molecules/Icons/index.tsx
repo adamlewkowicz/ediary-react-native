@@ -1,6 +1,6 @@
 import React from 'react';
 import Svg, { G, Path, SvgProps, Rect } from 'react-native-svg';
-import { theme } from '../../common/theme';
+import { theme } from '../../../common/theme';
 const StyledPath = Path as any;
 
 export const SteakIcon = (props: SvgProps) => (

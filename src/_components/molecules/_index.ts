@@ -13,3 +13,7 @@ export * as Group from './InputGroup';
 export * from './TextSplit';
 export * from './MacroDetails';
 export * from './ChartMacroCircleLeft';
+export * from './ProgressBar';
+export * from './InputSearcher';
+export * from './Icons';
+export * from './BarcodeButton';

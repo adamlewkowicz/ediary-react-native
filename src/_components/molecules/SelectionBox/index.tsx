@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components/native';
-import { theme } from '../../common/theme';
+import { theme } from '../../../common/theme';
 import { CheckedIcon } from '../Icons';
 import { SvgProps } from 'react-native-svg';
 

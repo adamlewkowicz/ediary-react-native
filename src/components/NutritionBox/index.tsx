@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { WheatIcon, SteakIcon, DropIcon, FireIcon } from '../Icons';
-import { TextMeta } from '../Elements';
+import { WheatIcon, SteakIcon, DropIcon, FireIcon } from '../../_components/molecules/Icons';
+import { TextMeta } from '../../_components/legacy/Elements';
 import { theme } from '../../common/theme';
 import { ViewProps } from 'react-native';
 import * as Utils from '../../utils';

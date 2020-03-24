@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components/native';
 import dayjs from 'dayjs';
 import { DatePickerAndroid, DatePickerAndroidDateSetAction } from 'react-native';
-import { RightArrowIcon } from '../Icons';
-import { TextPrimary, H1 } from '../../_components';
-import { theme } from '../../common/theme';
+import { RightArrowIcon } from '../../molecules/Icons';
+import { TextPrimary, H1 } from '../..';
+import { theme } from '../../../common/theme';
 
 interface DateChangerProps {
   value: Date

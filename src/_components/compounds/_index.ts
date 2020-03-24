@@ -7,3 +7,5 @@ export * from './ChartCalories';
 export * from './ChartMacroBarsBase';
 export * from './ProductSearchItem';
 export * from './ChartsMacroNeeds';
+export * from './DateChanger';
+export * from './DiarySummaryChart';

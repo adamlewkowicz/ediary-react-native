@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { TextPrimary } from '../atoms/_index';
 import { TouchableOpacityProps } from 'react-native';
-import { RightArrowIcon } from '../../components/Icons';
+import { RightArrowIcon } from './Icons';
 import { theme } from '../../common/theme';
 import { SvgProps } from 'react-native-svg';
 
