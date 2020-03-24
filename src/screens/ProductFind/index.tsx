@@ -1,12 +1,17 @@
 import React, { useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
-import { InputSearcher } from '../../_components/molecules/InputSearcher';
-import { BarcodeButton } from '../../_components/molecules/BarcodeButton';
 import { useProductsSearch, useNavigationData, useProductHistory } from '../../hooks';
 import { FlatList } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
-import { H3, ButtonSecondaryArrow, ProductSearchItemMemo, ItemSeparator } from '../../_components';
+import {
+  H3,
+  ButtonSecondaryArrow,
+  ProductSearchItemMemo,
+  ItemSeparator,
+  InputSearcher,
+  BarcodeButton,
+} from '../../components';
 import * as Utils from '../../utils';
 
 interface ProductFindScreenProps {}

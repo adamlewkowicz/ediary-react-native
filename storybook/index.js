@@ -6,8 +6,8 @@ function loadStories() {
   // const req = require.context('./src/components', true, /\.story\.tsx$/);
   
   if (IS_DEV) {
-    require('../src/_components/molecules/SelectionBox/story');
-    require('../src/_components/molecules/InputSearcher/story');
+    require('../src/components/molecules/SelectionBox/story');
+    require('../src/components/molecules/InputSearcher/story');
   }
 }
 

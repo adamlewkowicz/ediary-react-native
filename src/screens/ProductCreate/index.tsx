@@ -17,7 +17,7 @@ import {
   InputRef,
   InputButtonRef,
   InputMetaTextRef,
-} from '../../_components';
+} from '../../components';
 
 interface ProductCreateScreenProps {}
 

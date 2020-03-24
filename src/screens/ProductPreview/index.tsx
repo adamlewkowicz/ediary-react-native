@@ -10,7 +10,7 @@ import {
   RadioInputsRow,
   InputMetaText,
   ButtonPrimary,
-} from '../../_components';
+} from '../../components';
 import { useNavigationData, useCalculatedMacro } from '../../hooks';
 import { ProductPreviewScreenNavigationProps } from '../../navigation';
 import { Product } from '../../database/entities';

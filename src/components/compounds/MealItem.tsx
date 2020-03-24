@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { H2, H4, TextHighlight } from '../atoms/Text';
-import { ChartMacroCircles } from '../../_components';
+import { ChartMacroCircles } from '../../components';
 import { MealProductItemMemo } from './MealProductItem';
 import { ButtonSecondary } from '../molecules/_index';
 import { Selectors } from '../../store';

@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../../store';
 import { FlatList, InteractionManager } from 'react-native';
-import { DateChangerMemo } from '../../_components/compounds/DateChanger';
+import { DateChangerMemo } from '../../components/compounds/DateChanger';
 import styled from 'styled-components/native';
 import { MealId } from '../../types';
 import { DiaryMeal, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
 import { useNavigationData, useAppDate } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
-import { ChartsMacroNeeds, MealItemMemo, ItemSeparator } from '../../_components';
+import { ChartsMacroNeeds, MealItemMemo, ItemSeparator } from '../../components';
 import * as Utils from '../../utils';
 
 interface NutritionHomeScreenProps {}
