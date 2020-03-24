@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { ChartCircle, ChartCircleProps } from './ChartCircle';
-import { H4, TextSecondary } from '../../atoms/Text';
+import { H4, TextSecondary } from '../Text';
 
 interface ChartMacroCircleProps extends ChartCircleProps {
   title: string

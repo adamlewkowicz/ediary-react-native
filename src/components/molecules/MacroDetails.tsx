@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { TextPrimary, H4 } from '../atoms/Text';
+import { TextPrimary, H4 } from './Text';
 
 interface MacroDetailsProps {
   color: string

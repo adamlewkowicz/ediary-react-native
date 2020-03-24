@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { TextTertiary, H2 } from '../atoms/Text';
+import { TextTertiary, H2 } from '.';
 
 interface TextSplitProps {
   primary: string | number

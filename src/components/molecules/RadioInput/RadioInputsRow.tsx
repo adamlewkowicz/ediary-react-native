@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { RadioInput } from '.';
-import { H3 } from '../../atoms/Text';
+import { H3 } from '../Text';
 
 interface RadioInputsRowProps<T> {
   activeValue: T

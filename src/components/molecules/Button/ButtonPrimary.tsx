@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native'
 import { TouchableOpacityProps } from 'react-native';
-import { Text } from '../../atoms/Text';
+import { Text } from '../Text';
 
 interface ButtonPrimaryProps extends TouchableOpacityProps {
   children: string
