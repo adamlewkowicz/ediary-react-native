@@ -49,12 +49,6 @@ export const Text = styled.Text<TextProps>`
   }};
 `;
 
-export const H1 = styled(Text)`
-  font-family: ${props => props.theme.fontWeight.medium};
-  color: ${props => props.theme.color.dark10};
-  font-size: ${props => props.theme.fontSize.big};
-`;
-
 export const TitleSecondary = styled(Text)`
   color: ${props => props.theme.colors.midGray};
   font-size: ${props => props.theme.fontSize.tiny};
