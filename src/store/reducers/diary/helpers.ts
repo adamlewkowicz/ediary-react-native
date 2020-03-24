@@ -18,8 +18,7 @@ export const getDiaryMealTemplate = (
   productIds: [],
   isOpened: false,
   isAddingProduct: false,
-  time: template.dateTime,
-  timeBase: template.dateTimeBase as any,
+  timeBase: template.timeBase,
 });
 
 export const normalizeProductEntity = (
@@ -49,7 +48,6 @@ export const normalizeMealEntity = (
     type: 'meal',
     isOpened: openMealByDefault,
     isAddingProduct: false,
-    time: Utils.getTimeFromDateTime(meal.date),
     timeBase: Utils.getTimeBaseFromDateTime(meal.date),
     productIds: mealProducts.map(mealProduct => mealProduct.productId),
   }

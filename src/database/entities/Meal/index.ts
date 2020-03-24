@@ -142,7 +142,7 @@ export class Meal extends GenericEntity {
   ): Promise<Meal> {
     const newMeal = {
       name: template.name,
-      date: dayjs(date).format(`${DAYJS_DATE} ${template.dateTime}`)
+      date: dayjs(date).format(`${DAYJS_DATE} ${template.time}`)
     }
     return Meal.createWithProductId(
       newMeal,
