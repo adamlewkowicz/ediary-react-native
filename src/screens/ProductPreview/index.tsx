@@ -5,7 +5,6 @@ import {
   Section,
   ChartMacroCircles,
   H1,
-  ScreenContainer,
   TableMacro,
   RadioInputsRow,
   InputMetaText,
@@ -57,7 +56,7 @@ export const ProductPreviewScreen = () => {
   }
 
   return (
-    <ScreenContainer>
+    <Container>
       <ProductName>{params.product.name}</ProductName>
       <Section title="Ilość produktu">
         <RadioInputsRow
@@ -97,9 +96,13 @@ export const ProductPreviewScreen = () => {
           ]}
         />
       </Section>
-    </ScreenContainer>
+    </Container>
   );
 }
+
+const Container = styled.View`
+  padding: ${props => props.theme.spacing.screenPadding};
+`
 
 const SaveProductButton = styled(ButtonPrimary)`
   margin-right: 5px;
