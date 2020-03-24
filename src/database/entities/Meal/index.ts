@@ -15,11 +15,10 @@ import { DeepPartial } from 'typeorm';
 import { EntityType } from '../../types';
 import { GenericEntity } from '../../generics/GenericEntity';
 import dayjs from 'dayjs';
-import { DATE_FORMAT, DATE_DAY } from '../../../common/consts';
+import { DATE_FORMAT, DATE_DAY, MACRO } from '../../../common/consts';
 import { Macro } from '../../embeds/Macro';
 import { MealTemplate } from '../../../store/reducers/diary';
 import { GetMacroSummaryResult, GetMacroHistoryResult } from './types';
-import { baseMacro } from '../../../common/helpers';
 import * as Utils from '../../../utils';
 
 @Entity('meal')
@@ -180,7 +179,7 @@ export class Meal extends GenericEntity {
         if (existingRecord) {
           return existingRecord;
         }
-        return { day, ...baseMacro };
+        return { day, ...MACRO };
       });
 
     return filledRecords;
@@ -208,7 +207,7 @@ export class Meal extends GenericEntity {
         }
       }
       return summedMacro;
-    }, { ...baseMacro });
+    }, { ...MACRO });
 
     const macroSummary: GetMacroSummaryResult = {
       data: macroHistory,

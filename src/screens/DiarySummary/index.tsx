@@ -6,8 +6,7 @@ import { useSelector } from 'react-redux';
 import { Selectors } from '../../store';
 import { MacroElements } from '../../types';
 import styled from 'styled-components/native';
-import { MACRO_ELEMENTS } from '../../common/consts';
-import { elementTitlesLong, baseMacro } from '../../common/helpers';
+import { MACRO_ELEMENTS, MACRO } from '../../common/consts';
 import { RatioInfo } from '../../components/legacy/RatioInfo';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Utils from '../../utils';
@@ -16,7 +15,7 @@ import { H1 } from '../../components';
 interface DiarySummaryScreenProps {}
 
 export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
-  const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...baseMacro }));
+  const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...MACRO }));
   const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]);
   const userMacroNeeds = useSelector(Selectors.getUserMacroNeeds);
   const todayDay = useSelector(Selectors.getAppDay);
@@ -57,7 +56,7 @@ export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
           accessibilityLabel="Średnia wartość makroskładniku"
         >
           <Text priority={0}>
-            {elementTitlesLong[element]}{' '}
+            {ELEMENT_TITLES[element]}{' '}
             ({element === 'kcal' ? 'kcal' : 'g'})
           </Text>
           <Block align="flex-end">
@@ -110,3 +109,10 @@ type HistoryRecord = {
   value: number
   date: Date
 }
+
+const ELEMENT_TITLES = {
+  carbs: 'Węglowodany',
+  prots: 'Białka',
+  fats: 'Tłuszcze',
+  kcal: 'Kalorie',
+} as const;

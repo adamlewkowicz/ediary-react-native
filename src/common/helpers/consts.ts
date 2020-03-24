@@ -1,12 +1,4 @@
-import { MacroElements } from '../../types';
 import { MealTemplate } from '../../store/reducers/diary';
-
-export const baseMacro: MacroElements = {
-  carbs: 0,
-  prots: 0,
-  fats: 0,
-  kcal: 0
-}
 
 export const defaultTemplates = [
   {
