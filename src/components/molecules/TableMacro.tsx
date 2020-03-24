@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { TextSecondary, TextPrimary, Table } from '../molecules/index';
+import { TextSecondary, TextPrimary, Table } from '../';
 import { MacroElements } from '../../types';
 
 interface TableMacro<T extends MacroElements> {

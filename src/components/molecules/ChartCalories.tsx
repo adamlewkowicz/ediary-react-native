@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { ChartCircle } from '../molecules/index';
+import { ChartCircle } from '../';
 import { theme } from '../../common/theme';
-import { H1, TextTertiary } from '../molecules/Text';
+import { H1, TextTertiary } from '../';
 import { View } from 'react-native';
 
 interface ChartCaloriesProps {

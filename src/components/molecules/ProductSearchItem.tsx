@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { H2, TextSecondary } from '../molecules/Text';
-import { MacroDetails } from '../molecules/index';
+import { H2, TextSecondary, MacroDetails } from '../';
 import { theme } from '../../common/theme';
 import { ProductOrNormalizedProduct } from '../../database/entities';
 

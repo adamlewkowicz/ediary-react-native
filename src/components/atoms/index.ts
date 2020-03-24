@@ -10,3 +10,4 @@ export * from './Chart';
 export * from './ScreenContainer';
 export * as Table from './Table';
 export * from './ItemSeparator';
+export * from './SelectionBox';

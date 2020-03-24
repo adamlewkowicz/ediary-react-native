@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChartMacroBar } from '../molecules/Chart/ChartMacroBar';
+import { ChartMacroBar } from '../';
 import { theme } from '../../common/theme';
 import styled from 'styled-components/native';
 

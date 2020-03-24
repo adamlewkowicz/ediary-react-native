@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../../store';
 import { FlatList, InteractionManager } from 'react-native';
-import { DateChangerMemo } from '../../components/compounds/DateChanger';
+import { DateChangerMemo } from '../../components/molecules/DateChanger';
 import styled from 'styled-components/native';
 import { MealId } from '../../types';
 import { DiaryMeal, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';

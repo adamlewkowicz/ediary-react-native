@@ -7,7 +7,7 @@ import {
 import { APP_ROUTE } from './consts';
 import { DiarySummaryScreen } from '../screens';
 import { theme } from '../common/theme';
-import { ReportIcon, DishIcon } from '../components/molecules/Icons';
+import { ReportIcon, DishIcon } from '../components';
 import { NutritionStack } from './NutritionStack';
 import { RouteProp } from '@react-navigation/native';
 

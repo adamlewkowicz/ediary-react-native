@@ -7,7 +7,8 @@ import {
   MuscleIcon,
   MeasureIcon,
   FemaleBodyIcon,
-} from '../../components/molecules/Icons';
+  NumericPicker,
+} from '../../components';
 import { Button } from '../../components/legacy/Button';
 import { Heading } from '../../components/legacy/Elements/Heading';
 import { WeightGoal } from '../../types';
@@ -16,8 +17,7 @@ import { useUserId } from '../../hooks';
 import { IProfileRequired } from '../../database/entities';
 import { STEP_TITLES } from './consts';
 import { Actions } from '../../store';
-import { NumericPicker } from '../../components/molecules/NumericPicker';
-import { SelectionOptions } from '../../components/compounds/SelectionOptions';
+import { SelectionOptions } from '../../components/molecules/SelectionOptions';
 import * as Utils from '../../utils';
 
 interface ProfileCreateScreenProps {}

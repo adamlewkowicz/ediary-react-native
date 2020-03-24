@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { H1, Text, Block, TitleSecondary } from '../../components/legacy/Elements';
-import { DiarySummaryChart } from '../../components/compounds/DiarySummaryChart';
+import { Text, Block, TitleSecondary } from '../../components/legacy/Elements';
+import { DiarySummaryChart } from '../../components/molecules/DiarySummaryChart';
 import { Meal } from '../../database/entities';
 import { useSelector } from 'react-redux';
 import { Selectors } from '../../store';
@@ -11,6 +11,7 @@ import { elementTitlesLong, baseMacro } from '../../common/helpers';
 import { RatioInfo } from '../../components/legacy/RatioInfo';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Utils from '../../utils';
+import { H1 } from '../../components';
 
 interface DiarySummaryScreenProps {}
 

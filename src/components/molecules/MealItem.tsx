@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { H2, H4, TextHighlight } from '../molecules/Text';
-import { ChartMacroCircles } from '../../components';
+import { H2, H4, TextHighlight } from '../';
+import { ChartMacroCircles } from '..';
 import { MealProductItemMemo } from './MealProductItem';
-import { ButtonSecondary } from '../molecules/index';
+import { ButtonSecondary } from '../';
 import { Selectors } from '../../store';
 import { ChartMacroBarsBase } from './ChartMacroBarsBase';
 import { ActivityIndicator } from 'react-native';
