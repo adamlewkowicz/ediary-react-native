@@ -1,6 +1,6 @@
 import React, { RefObject } from 'react';
 import styled from 'styled-components/native';
-import { ButtonSecondary, InputRef, InputProps } from '../index';
+import { ButtonSecondary, InputRef, InputProps } from '../../index';
 import { TouchableOpacityProps, TextInput } from 'react-native';
 
 interface InputButtonProps extends InputProps {

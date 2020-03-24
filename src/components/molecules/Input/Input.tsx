@@ -1,8 +1,8 @@
 import React, { ReactNode, RefObject } from 'react';
 import styled from 'styled-components/native'
 import { TextInputProps, TextInput as NativeTextInput } from 'react-native';
-import { theme } from '../../common/theme';
-import { InputLabel } from '../index';
+import { theme } from '../../../common/theme';
+import { InputLabel } from '../../index';
 
 export interface InputProps extends TextInputProps  {
   label: string

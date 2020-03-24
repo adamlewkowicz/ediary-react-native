@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { TextInputProps, ActivityIndicator } from 'react-native';
-import { LoupeIcon } from '../Icons';
+import { LoupeIcon } from '../../Icons';
 
 interface InputSearcherProps extends TextInputProps {
   showLabel?: boolean

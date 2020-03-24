@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { BarcodeIcon } from '../Icons';
+import { BarcodeIcon } from '../../Icons';
 import { TouchableOpacityProps } from 'react-native';
 
 interface BarcodeButtonProps extends TouchableOpacityProps {}

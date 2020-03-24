@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { H2 } from '../atoms/Text';
+import { H2 } from '../../atoms/Text';
 
 interface RadioInputProps {
   value: boolean

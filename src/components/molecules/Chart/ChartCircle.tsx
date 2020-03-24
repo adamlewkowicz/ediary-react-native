@@ -7,7 +7,7 @@ import Svg, {
 } from 'react-native-svg';
 import { useSpring, animated } from 'react-spring';
 import styled from 'styled-components/native';
-import { theme } from '../../common/theme';
+import { theme } from '../../../common/theme';
 
 export interface ChartCircleProps {
   percentages: number
