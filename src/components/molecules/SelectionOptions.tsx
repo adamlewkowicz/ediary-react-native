@@ -1,5 +1,5 @@
 import React from 'react';
-import { SelectionBox } from '../../index';
+import { SelectionBox } from '../';
 import { SvgProps } from 'react-native-svg';
 
 interface SelectionOptionsProps<T> {
