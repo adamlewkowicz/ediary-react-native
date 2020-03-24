@@ -81,45 +81,27 @@ export const initProductCreateReducer = (
   }
 });
 
-export const normalizeProductData = (productData: ProductData): IProductRequired => {
-  const {
-    carbs, prots, fats, kcal,
-    portionQuantity,
-    fattyAcids, sugars,
-    barcode,
-    ...restData
-  } = productData;
+export const normalizeProductData = (productData: ProductData) => {
+  const { fattyAcids, sugars, ...restData } = productData;
 
   const macro = {
-    carbs: Number(carbs),
-    prots: Number(prots),
-    fats: Number(fats), 
-    kcal: Number(kcal)
+    carbs: Number(productData.carbs),
+    prots: Number(productData.prots),
+    fats: Number(productData.fats), 
+    kcal: Number(productData.kcal)
   }
 
-  const normalizedBarcode = barcode.length ? barcode : null;
+  const barcode = productData.barcode.length ? productData.barcode : null;
+  const portionQuantity = Number(productData.portionQuantity);
+  
+  const product = {
+    ...restData,
+    macro,
+    barcode,
+    portionQuantity,
+  }
 
-  const normalizedPortion = Number(portionQuantity);
-
-  if (
-    !Number.isNaN(normalizedPortion) &&
-    normalizedPortion > 0 &&
-    normalizedPortion !== Product.defaultPortion
-  ) {
-    return {
-      macro,
-      barcode: normalizedBarcode,
-      portions: [
-        {
-          type: 'portion',
-          value: normalizedPortion
-        }
-      ],
-      ...restData,
-    }
-  } 
-
-  return { macro, barcode: normalizedBarcode, ...restData };
+  return product;
 }
 
 type ProductCreateAction =

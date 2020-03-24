@@ -106,6 +106,29 @@ export class Product extends GenericEntity {
     return Product.defaultPortion;
   }
 
+  static saveWithPortion(
+    productData: IProductRequired,
+    portionQuantity: number,
+    portionType = 'portion'
+  ): Promise<Product> {
+    if (
+      portionQuantity > 0 &&
+      portionQuantity !== Product.defaultPortion
+    ) {
+      return Product.save({
+        ...productData,
+        portions: [
+          {
+            type: portionType,
+            value: portionQuantity,
+          }
+        ],
+      });
+    }
+
+    return Product.save(productData);
+  }
+
   static findByNameLike(name: string): Promise<Product[]> {
     const limit = 10;
     
