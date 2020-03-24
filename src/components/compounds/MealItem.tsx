@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { H2, H4, TextHighlight } from '../molecules/Text';
 import { ChartMacroCircles } from '../../components';
 import { MealProductItemMemo } from './MealProductItem';
-import { ButtonSecondary } from '../molecules/_index';
+import { ButtonSecondary } from '../molecules/index';
 import { Selectors } from '../../store';
 import { ChartMacroBarsBase } from './ChartMacroBarsBase';
 import { ActivityIndicator } from 'react-native';

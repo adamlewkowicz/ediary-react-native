@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { Selectors } from '../../store';
 import { ChartCalories } from './ChartCalories';
-import { ChartMacroCircleLeft } from '../molecules/_index';
+import { ChartMacroCircleLeft } from '../molecules/index';
 import { theme } from '../../common/theme';
 
 interface ChartsMacroNeedsProps {

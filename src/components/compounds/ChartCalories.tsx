@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { ChartCircle } from '../molecules/_index';
+import { ChartCircle } from '../molecules/index';
 import { theme } from '../../common/theme';
 import { H1, TextTertiary } from '../molecules/Text';
 import { View } from 'react-native';
