@@ -134,6 +134,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
       <RenderInfo />
       <FlatList
         data={productSource}
+        style={flatListStyle}
         keyExtractor={productKeyExtractor}
         keyboardShouldPersistTaps="handled"
         ItemSeparatorComponent={ItemSeparator}
@@ -175,6 +176,8 @@ const ProductsTitle = styled(H3)`
 const AddOwnProductButton = styled(ButtonSecondaryArrow)`
   margin-right: 5px;
 `
+
+const flatListStyle = { marginBottom: 50 };
 
 const productKeyExtractor = (product: ProductOrNormalizedProduct): string => {
   const productId = '_id' in product ? product._id : product.id;
