@@ -18,10 +18,10 @@ export const WEIGHT_GOAL = ['decrease', 'maintain', 'increase'] as const;
 export const IS_DEV: boolean = (global as any).__DEV__;
 export const APP_ENV = (process.env.APP_ENV || 'development') as Environment;
 
-export const DATE_DAY = 'YYYY-MM-DD';
-export const DAYJS_DATETIME_BASE = 'HH:mm' as const;
-export const DATE_TIME = 'HH:mm:ss' as const;
-export const DATE_FORMAT = `${DATE_DAY} ${DATE_TIME}`;
+export const DAYJS_DATE = 'YYYY-MM-DD';
+export const DAYJS_DATE_TIME = 'YYYY-MM-DD HH:mm:ss';
+export const DAYJS_TIME = 'HH:mm:ss';
+export const DAYJS_TIME_BASE = 'HH:mm';
 
 export const ABORT_ERROR_NAME = 'AbortError' as const;
 

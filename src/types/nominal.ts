@@ -1,12 +1,12 @@
-export interface DateDay extends String {
+export interface DayjsDate extends String {
   _dateDayBrand: 'YYYY-MM-DD';
 }
 
-export interface DateTime extends String {
+export interface DayjsTime extends String {
   _dateTimeBrand: 'HH:mm:ss'
 }
 
-export interface DateTimeBase extends String {
+export interface DayjsTimeBase extends String {
   _dateTimeBrand: 'HH:mm'
 }
 

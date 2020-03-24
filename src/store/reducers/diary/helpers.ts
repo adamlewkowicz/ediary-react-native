@@ -1,4 +1,4 @@
-import { DAYJS_DATETIME_BASE } from '../../../common/consts';
+import { DAYJS_TIME_BASE } from '../../../common/consts';
 import { Meal, IProductMerged, Product } from '../../../database/entities';
 import {
   DiaryMealTemplate,
@@ -51,8 +51,8 @@ export const normalizeMealEntity = (
     type: 'meal',
     isOpened: openMealByDefault,
     isAddingProduct: false,
-    dateTime: Utils.getTimeFromDate(meal.date),
-    dateTimeBase: dayjs(meal.date).format(DAYJS_DATETIME_BASE),
+    dateTime: Utils.getTimeFromDateTime(meal.date),
+    dateTimeBase: dayjs(meal.date).format(DAYJS_TIME_BASE),
     productIds: mealProducts.map(mealProduct => mealProduct.productId),
   }
 

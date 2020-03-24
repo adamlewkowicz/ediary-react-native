@@ -9,13 +9,13 @@ import {
 } from 'typeorm';
 import { Product, IProductMerged } from '../Product';
 import { MealProduct } from '../MealProduct';
-import { MealId, UserId, DateDay, ProductId } from '../../../types';
+import { MealId, UserId, DayjsDate, ProductId } from '../../../types';
 import { User } from '../User';
 import { DeepPartial } from 'typeorm';
 import { EntityType } from '../../types';
 import { GenericEntity } from '../../generics/GenericEntity';
 import dayjs from 'dayjs';
-import { DATE_FORMAT, DATE_DAY, MACRO } from '../../../common/consts';
+import { DAYJS_DATE_TIME, DAYJS_DATE, MACRO } from '../../../common/consts';
 import { Macro } from '../../embeds/Macro';
 import { MealTemplate } from '../../../store/reducers/diary';
 import { GetMacroSummaryResult, GetMacroHistoryResult } from './types';
@@ -54,14 +54,14 @@ export class Meal extends GenericEntity {
     payload: DeepPartial<IMeal>,
     date: Date
   ): Promise<Meal> {
-    const formattedDate = dayjs(date).format(DATE_FORMAT);
+    const formattedDate = dayjs(date).format(DAYJS_DATE_TIME);
     return this.save({
       ...payload,
       date: formattedDate
     });
   }
 
-  static findByDay(dateDay: DateDay) {
+  static findByDay(dateDay: DayjsDate) {
     return this.find({
       where: { date: Between(`${dateDay} 00:00:00`, `${dateDay} 23:59:59`) },
       relations: ['mealProducts', 'mealProducts.product']
@@ -142,7 +142,7 @@ export class Meal extends GenericEntity {
   ): Promise<Meal> {
     const newMeal = {
       name: template.name,
-      date: dayjs(date).format(`${DATE_DAY} ${template.dateTime}`)
+      date: dayjs(date).format(`${DAYJS_DATE} ${template.dateTime}`)
     }
     return Meal.createWithProductId(
       newMeal,
@@ -152,12 +152,12 @@ export class Meal extends GenericEntity {
   }
 
   static async getMacroHistory(
-    endDay: DateDay = Utils.getDayFromDate(dayjs()),
+    endDay: DayjsDate = Utils.getDateFromDateTime(dayjs()),
     daysToSubtract = 7,
   ): Promise<GetMacroHistoryResult[]> {
     const date = dayjs(endDay as any);
     const endDate = date.subtract(daysToSubtract, 'day');
-    const startDay = Utils.getDayFromDate(endDate);
+    const startDay = Utils.getDateFromDateTime(endDate);
 
     const result: GetMacroHistoryResult[] = await Meal
       .createQueryBuilder('meal')
@@ -174,7 +174,7 @@ export class Meal extends GenericEntity {
     const filledRecords: GetMacroHistoryResult[] = Array
       .from({ length: daysToSubtract })
       .map<GetMacroHistoryResult>((_, index) => {
-        const day = Utils.getDayFromDate(endDate.add(index + 1, 'day'));
+        const day = Utils.getDateFromDateTime(endDate.add(index + 1, 'day'));
         const existingRecord = result.find(record => record.day === day);
         if (existingRecord) {
           return existingRecord;
@@ -186,7 +186,7 @@ export class Meal extends GenericEntity {
   }
 
   static async getMacroSummary(
-    startDay: DateDay = Utils.getDayFromDate(dayjs()),
+    startDay: DayjsDate = Utils.getDateFromDateTime(dayjs()),
     daysToSubtract = 7,
   ): Promise<GetMacroSummaryResult> {
     const macroHistory = await this.getMacroHistory(startDay, daysToSubtract);

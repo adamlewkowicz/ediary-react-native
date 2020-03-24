@@ -1,17 +1,15 @@
 import dayjs from 'dayjs';
-import { DateDay, DateTime } from '../types';
-import { DATE_DAY, DATE_TIME } from '../common/consts';
+import { DayjsDate, DayjsTime } from '../types';
+import { DAYJS_DATE, DAYJS_TIME } from '../common/consts';
 
-export function getDayFromDate(
+export function getDateFromDateTime(
   date: dayjs.ConfigType
-): DateDay {
-  const dateDay: DateDay = dayjs(date).format(DATE_DAY) as any;
-  return dateDay;
+): DayjsDate {
+  return dayjs(date).format(DAYJS_DATE) as any as DayjsDate;
 }
 
-export function getTimeFromDate(
+export function getTimeFromDateTime(
   date: dayjs.ConfigType
-) {
-  const dateTime: DateTime = dayjs(date).format(DATE_TIME) as any;
-  return dateTime;
+): DayjsTime {
+  return dayjs(date).format(DAYJS_TIME) as any as DayjsTime;
 }

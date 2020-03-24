@@ -14,7 +14,7 @@ import {
   mealProductAddStarted,
   mealProductAddFinished,
 } from '../creators';
-import { DateDay, ProductId, MealId } from '../../../types';
+import { DayjsDate, ProductId, MealId } from '../../../types';
 import { Thunk, StoreState, Selectors } from '../..';
 import {
   MealTemplate,
@@ -82,7 +82,7 @@ export const mealProductQuantityUpdate = (
 }
 
 export const mealsFindByDay = (
-  dateDay: DateDay
+  dateDay: DayjsDate
 ): Thunk => async (dispatch) => {
   const foundMeals = await Meal.findByDay(dateDay);
   dispatch(mealsLoaded(foundMeals));
