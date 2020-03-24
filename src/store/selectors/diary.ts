@@ -3,8 +3,7 @@ import { StoreState } from '..';
 import { createSelector } from 'reselect';
 import { getUserMacroNeeds } from './user';
 import * as Utils from '../../utils';
-
-const BASE_MACRO: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
+import { MACRO } from '../../common/consts';
 
 const getMeals = (state: StoreState) => state.diary.meals;
 
@@ -26,7 +25,7 @@ export const getMealsCalced = createSelector(
   meals => meals
     .map(meal => {
       const calcedMacro = meal.type === 'template'
-        ? BASE_MACRO
+        ? { ...MACRO }
         : Utils.calculateMacroSum(meal.products);
 
       const macroPercentages = Utils.calculateMacroPercentages(calcedMacro);

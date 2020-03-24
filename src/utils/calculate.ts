@@ -1,5 +1,5 @@
 import { ObjectNumeric, MacroElements, BaseMacroElements, ObjectEntries } from '../types';
-import { KCAL_IN_ONE_MACRO_GRAM } from '../common/consts';
+import { KCAL_IN_ONE_MACRO_GRAM, MACRO } from '../common/consts';
 import { objectMap, round } from './generic';
 
 const objectEntries: ObjectEntries = Object.entries;
@@ -96,7 +96,11 @@ export const calculateMacroSum = <
   items: T[]
 ): M => {
   const macroValueObjects = items.map(item => item.calcedMacro);
-  const macroValueSum = calculateObjectsValueSum(macroValueObjects)
 
-  return macroValueSum;
+  if (macroValueObjects.length) {
+    const macroValueSum = calculateObjectsValueSum(macroValueObjects);
+    return macroValueSum;
+  }
+
+  return { ...MACRO } as M;
 }

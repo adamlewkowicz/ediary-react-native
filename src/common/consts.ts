@@ -1,4 +1,4 @@
-import { Environment } from '../types';
+import { Environment, MacroElements } from '../types';
 
 export const DEFAULT_CONNECTION: 'default' = 'default';
 
@@ -24,6 +24,8 @@ export const DATE_TIME = 'HH:mm:ss' as const;
 export const DATE_FORMAT = `${DATE_DAY} ${DATE_TIME}`;
 
 export const ABORT_ERROR_NAME = 'AbortError' as const;
+
+export const MACRO: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
 
 export enum KCAL_IN_ONE_MACRO_GRAM {
   carbs = 4,
