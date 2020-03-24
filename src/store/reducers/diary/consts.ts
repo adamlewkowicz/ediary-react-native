@@ -1,6 +1,6 @@
-import { MealTemplate } from '../../store/reducers/diary';
+import { MealTemplate } from './types';
 
-export const defaultTemplates = [
+export const DEFAULT_MEAL_TEMPLATES = [
   {
     id: -1,
     name: 'Śniadanie I',
