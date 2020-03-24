@@ -23,7 +23,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
 
   useEffect(() => {
     dispatch(Actions.mealsFindByDay(appDateDay));
-  }, [appDateDay]);
+  }, [dispatch, appDateDay]);
 
   const handleProductAdd = useCallback((meal: DiaryMealOrTemplate): void => {
     navigate('ProductFind', {
