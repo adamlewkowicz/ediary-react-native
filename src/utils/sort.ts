@@ -1,8 +1,8 @@
 import { SortHOF, DayjsTime } from '../types';
 
-export const sortByDateTime: SortHOF<{ dateTime: DayjsTime }> = (a, b) => {
-  const timeA = Number(a.dateTime.replace(/:/g, ''));
-  const timeB = Number(b.dateTime.replace(/:/g, ''));
+export const sortByDateTime: SortHOF<{ time: DayjsTime }> = (a, b) => {
+  const timeA = Number(a.time.replace(/:/g, ''));
+  const timeB = Number(b.time.replace(/:/g, ''));
   return timeA > timeB ? 1 : -1;
 }
 

@@ -21,8 +21,8 @@ interface DiaryMealBase {
   productIds: ProductId[]
   isOpened: boolean
   isAddingProduct: boolean
-  dateTime: DayjsTime
-  dateTimeBase: string
+  time: DayjsTime
+  timeBase: DayjsTimeBase
 }
 
 export interface DiaryMealTemplate extends DiaryMealBase {

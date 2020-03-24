@@ -49,7 +49,7 @@ export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>
         onLongPress={__DEV__ ? undefined : handleMealDelete}
         isOpened={meal.isOpened}
       >
-        <MealTime>{meal.dateTimeBase}</MealTime>
+        <MealTime>{meal.timeBase}</MealTime>
         <BaseInfo>
           <MealName isOpened={meal.isOpened}>
             {meal.data.name}
