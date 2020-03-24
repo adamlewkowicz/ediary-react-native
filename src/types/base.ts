@@ -1,13 +1,14 @@
 import {
   MACRO_ELEMENTS,
   BASE_MACRO_ELEMENTS,
-  PORTION_TYPES,
+  PRODUCT_PORTION_TYPE,
   UNIT_TYPES,
+  PRODUCT_UNIT_TYPE,
 } from '../common/consts';
 import { NavigationProp, ParamListBase, RouteProp } from '@react-navigation/native';
 
 export type UnitType = typeof UNIT_TYPES[number];
-export type PortionUnit = 'g' | 'ml';
+export type ProductUnitType = typeof PRODUCT_UNIT_TYPE[number];
 
 export type BaseMacroElement = typeof BASE_MACRO_ELEMENTS[number];
 export type MacroElement = typeof MACRO_ELEMENTS[number];
@@ -23,7 +24,7 @@ export interface MacroElements<T = number> extends BaseMacroElements<T> {
   [key: string]: T
 }
 
-export type PortionType = typeof PORTION_TYPES[number];
+export type ProductPortionType = typeof PRODUCT_PORTION_TYPE[number];
 
 export type WeightGoal = 'decrease' | 'maintain' | 'increase';
 

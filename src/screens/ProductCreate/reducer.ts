@@ -1,4 +1,4 @@
-import { PortionUnit, BarcodeId } from '../../types';
+import { ProductUnitType, BarcodeId } from '../../types';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
 import { Product, IProductRequired } from '../../database/entities';
 import * as Utils from '../../utils';
@@ -18,7 +18,7 @@ interface ProductData {
 }
 
 export interface ProductCreateState {
-  portionUnitType: PortionUnit,
+  portionUnitType: ProductUnitType,
   productData: ProductData
 }
 

@@ -13,7 +13,7 @@ import {
   BarcodeId,
   ProductId,
   UserId,
-  PortionUnit,
+  ProductUnitType,
   FilterHOF,
 } from '../../../types';
 import { User } from '../User';
@@ -21,7 +21,7 @@ import { ProductPortion } from '../ProductPortion';
 import { friscoApi } from '../../../services/FriscoApi';
 import { SqliteENUM } from '../../decorators';
 import { EntityType, EntityRequired } from '../../types';
-import { PRODUCT_UNITS } from '../../../common/consts';
+import { PRODUCT_UNIT_TYPE } from '../../../common/consts';
 import { ilewazyApi } from '../../../services/IlewazyApi';
 import { MinLength } from 'class-validator';
 import { GenericEntity } from '../../generics/GenericEntity';
@@ -57,8 +57,8 @@ export class Product extends GenericEntity {
    * Each macro value describes it's value in 100 units of this type.  
   */
   @Column('text', { default: 'g' })
-  @SqliteENUM(PRODUCT_UNITS)
-  unit!: PortionUnit;
+  @SqliteENUM(PRODUCT_UNIT_TYPE)
+  unit!: ProductUnitType;
 
   @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;
