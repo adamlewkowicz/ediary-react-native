@@ -25,5 +25,5 @@ jobs:
       env:
         CI: true
 
-  - name: Run type check
+    - name: Run type check
       run: npm run type-check
