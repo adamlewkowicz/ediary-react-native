@@ -5,18 +5,28 @@ import { TouchableOpacityProps, TextInput } from 'react-native';
 
 interface InputButtonProps extends InputProps {
   buttonText: string
+  buttonLabel?: string
   onButtonPress: TouchableOpacityProps['onPress']
 }
 
 export const InputButton = (props: InputButtonProps) => {
-  const { buttonText, onButtonPress, forwardedRef, ...inputProps } = props;
+  const {
+    buttonText,
+    buttonLabel = buttonText,
+    onButtonPress,
+    forwardedRef, 
+    ...inputProps
+  } = props;
 
   return (
     <InputRef
       {...inputProps}
       ref={forwardedRef}
       rightContent={(
-        <ButtonSecondaryStyled onPress={onButtonPress}>
+        <ButtonSecondaryStyled
+          onPress={onButtonPress}
+          accessibilityLabel={buttonLabel}
+        >
           {buttonText}
         </ButtonSecondaryStyled>
       )}
@@ -31,4 +41,4 @@ export const InputButtonRef = React.forwardRef<TextInput, InputButtonProps>(
 const ButtonSecondaryStyled = styled(props => <ButtonSecondary {...props} />)`
   margin-left: ${props => props.theme.margin.inputSpace};
   min-width: 100px;
-`
+` as typeof ButtonSecondary

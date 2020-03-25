@@ -3,6 +3,7 @@ import { fireEvent } from '@testing-library/react-native';
 import { Product } from '../../database/entities';
 import { ProductCreateScreen } from '.';
 import { renderSetup } from '../../../__tests__/utils';
+import { APP_ROUTE } from '../../navigation/consts';
 
 describe('<ProductCreateScreen />', () => {
 
@@ -52,6 +53,42 @@ describe('<ProductCreateScreen />', () => {
     fireEvent.press(saveProductButton);
 
     expect(productSaveSpy).toHaveBeenCalledTimes(1);
+  });
+
+  describe('when presses calories calculate button', () => {
+
+    it('should calculate calories based on provided macro nutriements 🧮', () => {
+      const ctx = renderSetup(<ProductCreateScreen />);
+
+      const kcalInput = ctx.getByLabelText('Kalorie');
+      fireEvent.changeText(kcalInput, '0');
+
+      const carbsInput = ctx.getByLabelText('Węglowodany');
+      fireEvent.changeText(carbsInput, '100');
+
+      const calculateCaloriesButton = ctx.getByLabelText('Oblicz');
+      fireEvent.press(calculateCaloriesButton);
+
+      expect(kcalInput.getProp('value')).not.toEqual('0');
+    });
+    
+  });
+
+  describe('when presses barcode scan button', () => {
+
+    it('should navigate to barcode scan screen 🧭', () => {
+      const ctx = renderSetup(<ProductCreateScreen />); 
+
+      const barcodeScanButton = ctx.getByLabelText('Zeskanuj');
+      fireEvent.press(barcodeScanButton);
+
+      expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledTimes(1);
+      expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledWith(
+        APP_ROUTE.BarcodeScan,
+        expect.any(Object)
+      );
+    });
+
   });
 
 });
