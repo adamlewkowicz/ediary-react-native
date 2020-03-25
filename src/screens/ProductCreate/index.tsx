@@ -17,7 +17,7 @@ import {
   InputRef,
   InputButtonRef,
   InputMetaTextRef,
-} from '../../_components';
+} from '../../components';
 
 interface ProductCreateScreenProps {}
 
@@ -42,12 +42,10 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
   const barcodeInputRef = useRef<TextInput>(null);
 
   async function handleProductCreate() {
-    const normalizedProductData = normalizeProductData(state.productData);
+    const { portionQuantity, ...productData } = normalizeProductData(state.productData);
+    const productWithUserId = { ...productData, userId };
 
-    const createdProduct = await Product.save({
-      ...normalizedProductData,
-      userId,
-    });
+    const createdProduct = await Product.saveWithPortion(productWithUserId, portionQuantity);
 
     params.onProductCreated?.(createdProduct);
   }
@@ -179,7 +177,10 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           ref={barcodeInputRef}
         />
       </Section>
-      <ButtonPrimary onPress={handleProductCreate}>
+      <ButtonPrimary
+        accessibilityLabel="Zapisz produkt"
+        onPress={handleProductCreate}
+      >
         Zapisz produkt
       </ButtonPrimary>
     </Container>

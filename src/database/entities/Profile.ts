@@ -12,9 +12,9 @@ import { SqliteENUM } from '../decorators';
 import { WEIGHT_GOAL } from '../../common/consts';
 import { Macro } from '../embeds/Macro';
 import { User } from './User';
-import { measureMacroNeeds } from '../../common/helpers';
 import { GenericEntity } from '../generics/GenericEntity';
 import { EntityType } from '../types';
+import { calculateDailyMacroNeedsByGoal } from '../../utils';
 
 @Entity('profile')
 export class Profile extends GenericEntity {
@@ -57,7 +57,7 @@ export class Profile extends GenericEntity {
   @BeforeInsert()
   measureMacroNeeds() {
     const { weight, weightGoal } = this;
-    const macroNeeds = measureMacroNeeds({ weight, weightGoal });
+    const macroNeeds = calculateDailyMacroNeedsByGoal(weight, weightGoal);
     this.macroNeeds = macroNeeds;
   }
 }

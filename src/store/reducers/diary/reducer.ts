@@ -18,13 +18,13 @@ import {
 } from './helpers';
 import { DiaryAction } from '../../actions';
 import { DiaryState } from './types';
-import { defaultTemplates } from '../../../common/helpers';
+import { DEFAULT_MEAL_TEMPLATES } from './consts';
 import * as Utils from '../../../utils';
 
 const initialState: DiaryState = {
   meals: [],
   products: [],
-  templates: defaultTemplates
+  templates: DEFAULT_MEAL_TEMPLATES
 }
 
 export function diaryReducer(

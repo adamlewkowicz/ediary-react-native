@@ -1,12 +1,17 @@
 import React, { useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
-import { InputSearcher } from '../../components/InputSearcher';
-import { BarcodeButton } from '../../components/BarcodeButton';
 import { useProductsSearch, useNavigationData, useProductHistory } from '../../hooks';
 import { FlatList } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
-import { H3, ButtonSecondaryArrow, ProductSearchItemMemo, ItemSeparator } from '../../_components';
+import {
+  H3,
+  ButtonSecondaryArrow,
+  ProductSearchItemMemo,
+  ItemSeparator,
+  InputSearcher,
+  BarcodeButton,
+} from '../../components';
 import * as Utils from '../../utils';
 
 interface ProductFindScreenProps {}
@@ -134,6 +139,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
       <RenderInfo />
       <FlatList
         data={productSource}
+        style={flatListStyle}
         keyExtractor={productKeyExtractor}
         keyboardShouldPersistTaps="handled"
         ItemSeparatorComponent={ItemSeparator}
@@ -175,6 +181,8 @@ const ProductsTitle = styled(H3)`
 const AddOwnProductButton = styled(ButtonSecondaryArrow)`
   margin-right: 5px;
 `
+
+const flatListStyle = { marginBottom: 50 };
 
 const productKeyExtractor = (product: ProductOrNormalizedProduct): string => {
   const productId = '_id' in product ? product._id : product.id;

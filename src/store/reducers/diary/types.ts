@@ -1,9 +1,9 @@
 import {
   MealId,
-  DateTime,
+  DayjsTime,
   ProductId,
   TemplateId,
-  DateTimeBase,
+  DayjsTimeBase,
 } from '../../../types';
 import { IProduct, IMeal } from '../../../database/entities';
 
@@ -21,8 +21,7 @@ interface DiaryMealBase {
   productIds: ProductId[]
   isOpened: boolean
   isAddingProduct: boolean
-  dateTime: DateTime
-  dateTimeBase: string
+  timeBase: DayjsTimeBase
 }
 
 export interface DiaryMealTemplate extends DiaryMealBase {
@@ -54,6 +53,6 @@ export type DiaryMealOrTemplate = DiaryMeal | DiaryMealTemplate;
 export interface MealTemplate {
   id: TemplateId
   name: string
-  dateTime: DateTime
-  dateTimeBase: DateTimeBase
+  time: DayjsTime
+  timeBase: DayjsTimeBase
 }

@@ -1,5 +1,11 @@
-import { ObjectNumeric, MacroElements, BaseMacroElements, ObjectEntries } from '../types';
-import { KCAL_IN_ONE_MACRO_GRAM } from '../common/consts';
+import {
+  ObjectNumeric,
+  MacroElements,
+  BaseMacroElements,
+  ObjectEntries,
+  WeightGoal,
+} from '../types';
+import { KCAL_PER_MACRO_GRAM, MACRO, FORMULA_RATIO_BY_WEIGHT_GOAL } from '../common/consts';
 import { objectMap, round } from './generic';
 
 const objectEntries: ObjectEntries = Object.entries;
@@ -9,7 +15,7 @@ export const calculateCaloriesByMacro = (
 ): number => {
   return objectEntries(macro)
     .reduce(
-      (kcal, [macroName, macroQuantity]) => kcal += macroQuantity * KCAL_IN_ONE_MACRO_GRAM[macroName],
+      (kcal, [macroName, macroQuantity]) => kcal += macroQuantity * KCAL_PER_MACRO_GRAM[macroName],
       0
     );
 }
@@ -19,13 +25,14 @@ export const calculatePercentage = (portion: number, total: number): number => {
   return Math.floor(portion / total * 100);
 }
 
-export const calculateMacroPerQuantity = <T extends MacroElements>(
-  macroValuesPerHundredQuantity: T,
+export const calculateMacroPerQuantity = (
+  macroValuesPerHundredQuantity: MacroElements,
   quantity: number
-): T => objectMap(
+): MacroElements => objectMap(
   macroValuesPerHundredQuantity,
   (_, macroValue: number) => round(macroValue * quantity / 100, 100)
-);
+  // TODO: Remove duck typing
+) as MacroElements;
 
 export const calculateMacroPercentages = <T extends BaseMacroElements>(
   macroValues: T
@@ -49,14 +56,13 @@ const calculateMacroValueNeed = (
   percentage: calculatePercentage(eaten, needed),
 });
 
-export const calculateMacroNeeds = <T extends object>(
-  macroValuesEaten: T,
-  macroValuesNeeded: T
+export const calculateMacroNeeds = <T extends ObjectNumeric>(
+  macroValuesEaten: MacroElements,
+  macroValuesNeeded: MacroElements
 ): MacroElements<MacroNeed> => objectMap(
   macroValuesEaten,
   (macroName, macroValueEaten) => {
-    // TODO: refactor types
-    const macroValueNeeded = macroValuesNeeded[macroName] as any as number;
+    const macroValueNeeded = macroValuesNeeded[macroName];
 
     const macroValueNeed = calculateMacroValueNeed(
       macroValueEaten,
@@ -65,7 +71,8 @@ export const calculateMacroNeeds = <T extends object>(
 
     return macroValueNeed;
   }
-);
+  // TODO: Remove duck typing
+) as MacroElements<MacroNeed>;
 
 type MacroNeed = {
   eaten: number
@@ -96,7 +103,29 @@ export const calculateMacroSum = <
   items: T[]
 ): M => {
   const macroValueObjects = items.map(item => item.calcedMacro);
-  const macroValueSum = calculateObjectsValueSum(macroValueObjects)
 
-  return macroValueSum;
+  if (macroValueObjects.length) {
+    const macroValueSum = calculateObjectsValueSum(macroValueObjects);
+    return macroValueSum;
+  }
+
+  return { ...MACRO } as M;
+}
+
+export function calculateDailyMacroNeedsByGoal(
+  weight: number,
+  weightGoal: WeightGoal,
+): MacroElements {
+  const ratioByWeightGoal = FORMULA_RATIO_BY_WEIGHT_GOAL[weightGoal];
+
+  const carbs = round(ratioByWeightGoal.carbs * weight);
+  const prots = round(ratioByWeightGoal.prots * weight);
+  const fats = round(ratioByWeightGoal.fats * weight);
+  const baseMacroNeeds = { carbs, prots, fats };
+
+  const kcal = round(calculateCaloriesByMacro(baseMacroNeeds));
+
+  const macroNeeds: MacroElements = { ...baseMacroNeeds, kcal };
+
+  return macroNeeds;
 }

@@ -13,7 +13,7 @@ export const createDebouncedFunc = <T extends (...args: any) => any>(
 
   return (...args: Parameters<T>) => {
     clearTimeout(timeout);
-    timeout = setTimeout(() => callback(args), delay);
+    timeout = setTimeout(() => callback(...args as Parameters<T>[]), delay);
   }
 }
 

@@ -2,12 +2,12 @@ import React from 'react';
 import {
   fireEvent,
   wait,
-  within,
 } from '@testing-library/react-native';
 import { renderSetup } from '../../../__tests__/utils';
 import { Meal, Product, MealProduct } from '../../database/entities';
 import { NutritionHomeScreen } from '.';
 import { Alert } from 'react-native';
+import { APP_ROUTE } from '../../navigation/consts';
 
 describe('<NutritionHomeScreen />', () => {
 
@@ -17,52 +17,39 @@ describe('<NutritionHomeScreen />', () => {
     return { productMock, mealMock };
   }
 
-  it('should create new meal and display it', async () => {
-    const mealName = 'Cucumber soup';
-    const ctx = renderSetup(<NutritionHomeScreen />);
-
-    const createMealNameInput = ctx.getByPlaceholderText('Kurczak z warzywami');
-    fireEvent.changeText(createMealNameInput, mealName);
-  
-    const createMealConfirmButton = ctx.getByLabelText('Utwórz nowy posiłek');
-    fireEvent.press(createMealConfirmButton);
-    
-    const toggleMealButton = await ctx.findByText(mealName);
-  
-    expect(toggleMealButton).toBeTruthy();
-    expect(await Meal.findOneOrFail({ name: mealName })).toBeInstanceOf(Meal);
-  });
-
   describe('when adds new product to meal 🥗', () => {
 
     it('should navigate to product find screen 🧭', async () => {
       const ctx = renderSetup(<NutritionHomeScreen />);
-    
-      const [toggleMealButton] = await ctx.findAllByLabelText('Pokaż szczegóły posiłku');
-      fireEvent.press(toggleMealButton);
-    
-      const addMealProductNavButton = await ctx.findByLabelText('Wyszukaj produkt do posiłku');
-      fireEvent.press(addMealProductNavButton);
+
+      const [firstMealTemplateOpenButton] = await ctx.findAllByLabelText('Pokaż szczegóły posiłku');
+      fireEvent.press(firstMealTemplateOpenButton);
+
+      const addProductToMealButton = await ctx.findByLabelText('Dodaj produkt do posiłku');
+      fireEvent.press(addProductToMealButton);
 
       expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledTimes(1);
-      expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledWith('ProductFind', expect.any(Object));
+      expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledWith(
+        APP_ROUTE.ProductFind,
+        expect.any(Object)
+      );
     });
 
     it('should add selected product to meal', async () => {
       const productMock = await Product.save({ name: 'Tomatoes' });
       const productResolverMock = async () => productMock;
-      const navigationItemPressMock = (_: any, params: any) => params.onItemPress(productResolverMock);
+      const navigationProductSelectedMock = (_: any, params: any) => params.onProductSelected(productResolverMock);
       const ctx = renderSetup(<NutritionHomeScreen />);
 
       ctx.mocks.navigationContext.navigate
-        .mockImplementationOnce(navigationItemPressMock)
+        .mockImplementationOnce(navigationProductSelectedMock)
         .mockImplementationOnce(() => {});
 
-      const [toggleMealButton] = await ctx.findAllByLabelText('Pokaż szczegóły posiłku');
-      fireEvent.press(toggleMealButton);
-    
-      const addMealProductNavButton = await ctx.findByLabelText('Wyszukaj produkt do posiłku');
-      fireEvent.press(addMealProductNavButton);
+      const [firstMealTemplateOpenButton] = await ctx.findAllByLabelText('Pokaż szczegóły posiłku');
+      fireEvent.press(firstMealTemplateOpenButton);
+
+      const addProductToMealButton = await ctx.findByLabelText('Dodaj produkt do posiłku');
+      fireEvent.press(addProductToMealButton);
 
       const addedProduct = await ctx.findByText(productMock.name);
 
@@ -72,29 +59,30 @@ describe('<NutritionHomeScreen />', () => {
       expect(ctx.mocks.navigationContext.navigate).toHaveBeenNthCalledWith(2, 'NutritionHome');
       expect(await MealProduct.findOneOrFail({ productId: productMock.id })).toBeInstanceOf(MealProduct);
     });
-    
+
   });
 
   describe('when changes product\'s quantity', () => {
 
-    const arrange = async () => {
+    const arrangeProductQuantityUpdate = async () => {
+      const { productMock, mealMock } = await mockMealWithProduct();
       const quantityMock = 180;
-      const productMock = await Product.save({ name: 'Milk', macro: { kcal: 100 }});
-      const mealMock = await Meal.createWithProductId({ name: 'Milk soup' }, productMock.id);
+
+      const navigationProductQuantityUpdateMock = (_: any, params: any) => params.onProductQuantityUpdated(quantityMock);
+
       const ctx = renderSetup(<NutritionHomeScreen />);
-  
+
+      ctx.mocks.navigationContext.navigate
+        .mockImplementationOnce(navigationProductQuantityUpdateMock);
+
       const toggleMealButton = await ctx.findByText(mealMock.name);
       fireEvent.press(toggleMealButton);
-    
-      const toggleProductButton = await ctx.findByLabelText('Pokaż szczegóły lub usuń produkt');
-      fireEvent.press(toggleProductButton);
-    
-      const productQuantityInput = await ctx.findByLabelText('Zmień ilość produktu');
-      fireEvent.changeText(productQuantityInput, quantityMock);
+
+      const productItem = await ctx.findByText(productMock.name);
+      fireEvent.press(productItem);
 
       return {
         ...ctx,
-        toggleProductButton,
         mocks: {
           ...ctx.mocks,
           quantity: quantityMock,
@@ -104,49 +92,59 @@ describe('<NutritionHomeScreen />', () => {
       }
     }
 
+    it('should navigate to product preview screen 🧭', async () => {
+      const ctx = await arrangeProductQuantityUpdate();
+
+      expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledTimes(2);
+      expect(ctx.mocks.navigationContext.navigate).toHaveBeenNthCalledWith(1,
+        APP_ROUTE.ProductPreview,
+        expect.any(Object)
+      );
+    });
+
     it('should update displayed quantity 🧮', async () => {
-      const ctx = await arrange();
-      
-      const productQuantityText = await within(ctx.toggleProductButton).findByLabelText('Ilość produktu');
+      const ctx = await arrangeProductQuantityUpdate();
+
+      const productQuantityText = await ctx.findByLabelText('Ilość produktu');
 
       expect(productQuantityText).toHaveTextContent(ctx.mocks.quantity + 'g');
     });
 
     it('should update quantity in database 🗄️', async () => {
-      const mealProductUpdateSpy = jest.spyOn(MealProduct, 'update');
-      const ctx = await arrange();
-      const productId = ctx.mocks.product.id;
-      const mealId = ctx.mocks.meal.id;
-      const quantity = ctx.mocks.quantity;
+      const { mocks: { product, meal, quantity }} = await arrangeProductQuantityUpdate();
+      const productId = product.id;
+      const mealId = meal.id;
 
-      await wait(() => expect(mealProductUpdateSpy).toHaveBeenCalledTimes(1));
-      expect(mealProductUpdateSpy).toHaveBeenCalledWith({ productId, mealId  },{ quantity });
+      // updating MealProduct and Meal entity is debounced
+      await wait(async () => {
+        const updatedMealProduct = await MealProduct.findOneOrFail({ mealId, productId, quantity });
+        expect(updatedMealProduct).toBeInstanceOf(MealProduct);
+      });
     });
 
   });
 
   it('removing meal should work 🗑️', async () => {
-    const productMock = await Product.save({ name: 'Milk', macro: { kcal: 100 }});
-    const mealMock = await Meal.createWithProductId({ name: 'Milk soup' }, productMock.id);
+    const { mealMock } = await mockMealWithProduct();
     const mealDeleteSpy = jest.spyOn(Meal, 'delete');
-    const alertSpy = jest.spyOn(Alert, 'alert')
-      .mockImplementationOnce((title, msg, [onCancel, onSuccess]: any) => onSuccess.onPress());
+    const alertConfirmSpy = jest.spyOn(Alert, 'alert')
+      .mockImplementationOnce((title, msg, [onCancel, onConfirm]: any) => onConfirm.onPress());
     const ctx = renderSetup(<NutritionHomeScreen />);
 
     const removeMealButton = await ctx.findByText(mealMock.name);
     fireEvent.longPress(removeMealButton);
 
-    expect(alertSpy).toHaveBeenCalledTimes(1);
+    expect(alertConfirmSpy).toHaveBeenCalledTimes(1);
     expect(mealDeleteSpy).toHaveBeenCalledTimes(1);
     await wait(() => expect(ctx.queryByText(mealMock.name)).toBeNull());
   });
 
   it('removing product from meal should work 🗑️', async () => {
-    const { productMock, mealMock } = await mockMealWithProduct(); 
+    const { productMock, mealMock } = await mockMealWithProduct();
     const ctx = renderSetup(<NutritionHomeScreen />);
     const mealProductDeleteSpy = jest.spyOn(MealProduct, 'delete');
-    const alertSpy = jest.spyOn(Alert, 'alert')
-      .mockImplementationOnce((title, msg, [onCancel, onSuccess]: any) => onSuccess.onPress());
+    const alertConfirmSpy = jest.spyOn(Alert, 'alert')
+      .mockImplementationOnce((title, msg, [onCancel, onConfirm]: any) => onConfirm.onPress());
 
     const toggleMealButton = await ctx.findByText(mealMock.name);
     fireEvent.press(toggleMealButton);
@@ -154,7 +152,7 @@ describe('<NutritionHomeScreen />', () => {
     const productDeleteButton = await ctx.findByLabelText('Pokaż szczegóły lub usuń produkt');
     fireEvent.longPress(productDeleteButton);
 
-    expect(alertSpy).toHaveBeenCalledTimes(1);
+    expect(alertConfirmSpy).toHaveBeenCalledTimes(1);
     expect(mealProductDeleteSpy).toHaveBeenCalledTimes(1);
     await wait(() => expect(ctx.queryByText(productMock.name)).toBeNull());
   });

@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../../store';
 import { FlatList, InteractionManager } from 'react-native';
-import { DateChangerMemo } from '../../components/DateChanger';
+import { DateChangerMemo } from '../../components/molecules/DateChanger';
 import styled from 'styled-components/native';
 import { MealId } from '../../types';
 import { DiaryMeal, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
 import { useNavigationData, useAppDate } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
-import { ChartsMacroNeeds, MealItemMemo, ItemSeparator } from '../../_components';
+import { ChartsMacroNeeds, MealItemMemo, ItemSeparator } from '../../components';
 import * as Utils from '../../utils';
 
 interface NutritionHomeScreenProps {}
@@ -23,7 +23,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
 
   useEffect(() => {
     dispatch(Actions.mealsFindByDay(appDateDay));
-  }, [appDateDay]);
+  }, [dispatch, appDateDay]);
 
   const handleProductAdd = useCallback((meal: DiaryMealOrTemplate): void => {
     navigate('ProductFind', {
@@ -87,6 +87,8 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     });
   }, [navigation, dispatch]);
 
+  const handleScrollFailSilently = useCallback(() => {}, []);
+
   const Header = (
     <>
       <DateChangerMemo
@@ -105,6 +107,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         keyExtractor={mealKeyExtractor}
         ItemSeparatorComponent={ItemSeparator}
         ListHeaderComponent={Header}
+        onScrollToIndexFailed={handleScrollFailSilently}
         renderItem={({ item: meal, index }) => (
           <MealItemMemo
             meal={meal}

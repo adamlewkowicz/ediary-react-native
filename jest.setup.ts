@@ -6,6 +6,9 @@ import { createConnection, getConnection } from 'typeorm';
 import { config } from './src/database/config/config';
 import { NativeModules } from 'react-native';
 
+jest.mock('react-native/Libraries/Components/ScrollResponder');
+jest.mock('react-native/Libraries/LayoutAnimation/LayoutAnimation.js');
+
 (global as any).__DEV__ = false;
 
 global.requestIdleCallback = jest.fn((callback: any) => callback());

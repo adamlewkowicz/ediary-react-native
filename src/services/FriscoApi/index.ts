@@ -1,11 +1,11 @@
-import { BarcodeId, MacroElement, MacroElements, PortionType } from '../../types';
-import { baseMacro } from '../../common/helpers';
+import { BarcodeId, MacroElement, MacroElements, ProductPortionType } from '../../types';
 import { NormalizedProduct } from '../IlewazyApi/types';
 import { FriscoResponse, FriscoNutritionBrandbank } from './types/response';
 import { FriscoProductId } from './types/common';
 import { FriscoQueryResponse } from './types';
 import { Product } from '../../database/entities';
-import * as Utilss from '../../utils';
+import * as Utils from '../../utils';
+import { MACRO } from '../../common/consts';
 
 export class FriscoApi {
 
@@ -128,7 +128,7 @@ export class FriscoApi {
         }
       }
       return macro;
-    }, { ...baseMacro });
+    }, { ...MACRO });
 
     if (Object.values(macro).every(value => value === 0)) {
       return null;
@@ -141,7 +141,7 @@ export class FriscoApi {
       const { value, unit } = Utils.getNumAndUnitFromString(heading);
 
       if ((unit === 'g' || unit === 'ml') && value !== null) {
-        const type: PortionType = 'portion';
+        const type: ProductPortionType = 'portion';
         return [{
           type,
           value,
@@ -204,7 +204,7 @@ export class FriscoApi {
         }
         return macro;
       }, {
-        ...baseMacro,
+        ...MACRO,
         kcal: sustenanceCalories
       });
   
