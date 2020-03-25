@@ -9,6 +9,7 @@ test('findByQuery - product is normalized correctly', async () => {
   const fetchMock = fetch;
 
   (fetchMock as jest.Mock).mockImplementationOnce(async () => ({
+    ok: true,
     async json() {
       return friscoResponseMock;
     }
