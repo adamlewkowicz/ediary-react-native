@@ -54,9 +54,9 @@ export const layoutAnimateEase = (onAnimationDidEnd?: () => void) => {
 export const toLocaleString = (value: number) => new Intl.NumberFormat('pl-PL').format(value);
 
 const createBugsnagGetter = () => {
-  let bugsnag: BugsnagClient;
+  let bugsnag: BugsnagClient | undefined;
 
-  return (): BugsnagClient => {
+  return (): BugsnagClient | undefined => {
     if (!bugsnag && !IS_DEV) {
       bugsnag = new BugsnagClient(BUGSNAG_API_KEY);
     }
@@ -70,6 +70,6 @@ export const handleError = (error: Error): void => {
   if (IS_DEV) {
     throw error;
   } else {
-    getBugsnag().notify(error);
+    getBugsnag()?.notify(error);
   }
 }
