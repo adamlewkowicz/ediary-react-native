@@ -14,6 +14,10 @@ jobs:
       with:
         java-version: 1.8
 
+    - name: Create .env file
+      run: |
+        echo BUGSNAG_API_KEY=${{ secrets.BUGSNAG_API_KEY }} >> .env
+
     - name: Run npm install
       run: |
         npm i --silent

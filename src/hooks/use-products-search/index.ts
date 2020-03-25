@@ -6,6 +6,7 @@ import { productsSearchReducer, initialState } from './reducer';
 import { useDebouncedValue } from '..';
 import { useSelector } from 'react-redux';
 import { Selectors } from '../../store';
+import * as Utils from '../../utils';
 
 export const useProductsSearch = () => {
   const [state, dispatch] = useReducer(productsSearchReducer, initialState);
@@ -42,7 +43,7 @@ export const useProductsSearch = () => {
 
       } catch(error) {
         if (error.name !== ABORT_ERROR_NAME) {
-          throw error;
+          Utils.handleError(error);
         }
       } finally {
         dispatch({ type: 'PRODUCTS_SEARCH_FINISHED' });
@@ -71,7 +72,7 @@ export const useProductsSearch = () => {
 
       } catch (error) {
         if (error.name !== ABORT_ERROR_NAME) {
-          throw error;
+          Utils.handleError(error);
         }
       } finally {
         dispatch({ type: 'BARCODE_SEARCH_FINISHED' });
