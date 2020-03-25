@@ -23,6 +23,7 @@ jobs:
       run: |
         cd android
         echo ${{ secrets.RELEASE_KEYSTORE_BASE64 }} | base64 -d > ./app/release-key.keystore
+        echo BUGSNAG_API_KEY=${{ secrets.BUGSNAG_API_KEY }} >> .env
         chmod +x ./gradlew
         ./gradlew assembleRelease
 
