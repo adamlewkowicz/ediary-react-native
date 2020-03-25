@@ -66,10 +66,10 @@ export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
               value={macroNeeds[element].left}
             />
             <Text size="big" margin="0 5px 0 0">
-              {Math.round(macroSummary[element])}
+              {macroSummary[element].toFixed(0)}
             </Text>
             <Text size="regular" priority={3}>
-              / {macroNeeds[element]}
+              / {macroNeeds[element].needed.toFixed(0)}
             </Text>
           </Block>
         </MacroElementContainer>
