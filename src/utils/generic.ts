@@ -46,17 +46,18 @@ export const fillArrayWithinRange = (
 
 export const objectMap = <
   T extends object,
+  R,
   Property extends keyof T = keyof T,
   Value = T[Property]
 >(
   obj: T,
-  callback: (property: Property, value: Value) => Value
-): T => {
+  callback: (property: Property, value: Value) => R
+) => {
   return Object.fromEntries(
     Object
       .entries(obj)
       .map(([property, value]) => [property, callback(property as Property, value)])
-  ) as T;
+  );
 }
 
 export const round = (value: number, scale = 10) => Math.round(value * scale) / scale;

@@ -25,13 +25,14 @@ export const calculatePercentage = (portion: number, total: number): number => {
   return Math.floor(portion / total * 100);
 }
 
-export const calculateMacroPerQuantity = <T extends MacroElements>(
-  macroValuesPerHundredQuantity: T,
+export const calculateMacroPerQuantity = (
+  macroValuesPerHundredQuantity: MacroElements,
   quantity: number
-): T => objectMap(
+): MacroElements => objectMap(
   macroValuesPerHundredQuantity,
   (_, macroValue: number) => round(macroValue * quantity / 100, 100)
-);
+  // TODO: Remove duck typing
+) as MacroElements;
 
 export const calculateMacroPercentages = <T extends BaseMacroElements>(
   macroValues: T
@@ -55,14 +56,13 @@ const calculateMacroValueNeed = (
   percentage: calculatePercentage(eaten, needed),
 });
 
-export const calculateMacroNeeds = <T extends object>(
-  macroValuesEaten: T,
-  macroValuesNeeded: T
+export const calculateMacroNeeds = <T extends ObjectNumeric>(
+  macroValuesEaten: MacroElements,
+  macroValuesNeeded: MacroElements
 ): MacroElements<MacroNeed> => objectMap(
   macroValuesEaten,
   (macroName, macroValueEaten) => {
-    // TODO: refactor types
-    const macroValueNeeded = macroValuesNeeded[macroName] as any as number;
+    const macroValueNeeded = macroValuesNeeded[macroName];
 
     const macroValueNeed = calculateMacroValueNeed(
       macroValueEaten,
@@ -71,7 +71,8 @@ export const calculateMacroNeeds = <T extends object>(
 
     return macroValueNeed;
   }
-);
+  // TODO: Remove duck typing
+) as MacroElements<MacroNeed>;
 
 type MacroNeed = {
   eaten: number

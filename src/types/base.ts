@@ -13,15 +13,17 @@ export type ProductUnitType = typeof PRODUCT_UNIT_TYPE[number];
 export type BaseMacroElement = typeof BASE_MACRO_ELEMENTS[number];
 export type MacroElement = typeof MACRO_ELEMENTS[number];
 
-export interface BaseMacroElements<T = number> {
+export type BaseMacroElements<T = number> = {
   carbs: T
   prots: T
   fats: T
 }
 
-export interface MacroElements<T = number> extends BaseMacroElements<T> {
+export type MacroElements<T = number> = {
+  carbs: T
+  prots: T
+  fats: T
   kcal: T
-  [key: string]: T
 }
 
 export type ProductPortionType = typeof PRODUCT_PORTION_TYPE[number];
