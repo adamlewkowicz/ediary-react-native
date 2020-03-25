@@ -22,7 +22,7 @@ describe('<ProductFindScreen />', () => {
 
     describe('when selects product', () => {
 
-      it.only('should return choosen product as product resolver', async () => {
+      it('should return choosen product as product resolver', async () => {
         const paramsMock = {
           onProductSelected: jest.fn()
         }
