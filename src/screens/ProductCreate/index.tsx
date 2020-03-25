@@ -177,7 +177,10 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           ref={barcodeInputRef}
         />
       </Section>
-      <ButtonPrimary onPress={handleProductCreate}>
+      <ButtonPrimary
+        accessibilityLabel="Zapisz produkt"
+        onPress={handleProductCreate}
+      >
         Zapisz produkt
       </ButtonPrimary>
     </Container>

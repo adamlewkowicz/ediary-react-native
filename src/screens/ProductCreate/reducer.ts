@@ -1,6 +1,5 @@
 import { ProductUnitType, BarcodeId } from '../../types';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
-import { Product, IProductRequired } from '../../database/entities';
 import * as Utils from '../../utils';
 
 interface ProductData {
