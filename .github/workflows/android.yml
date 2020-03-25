@@ -13,6 +13,9 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+      run: |
+        echo BUGSNAG_API_KEY=${{ secrets.BUGSNAG_API_KEY }} >> .env
+        ls
 
     - name: Run npm install
       run: |
@@ -23,8 +26,6 @@ jobs:
       run: |
         cd android
         echo ${{ secrets.RELEASE_KEYSTORE_BASE64 }} | base64 -d > ./app/release-key.keystore
-        echo BUGSNAG_API_KEY=${{ secrets.BUGSNAG_API_KEY }} >> .env
-        ls
         chmod +x ./gradlew
         ./gradlew assembleRelease
 
