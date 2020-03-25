@@ -87,6 +87,8 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
     });
   }, [navigation, dispatch]);
 
+  const handleScrollFailSilently = useCallback(() => {}, []);
+
   const Header = (
     <>
       <DateChangerMemo
@@ -105,6 +107,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         keyExtractor={mealKeyExtractor}
         ItemSeparatorComponent={ItemSeparator}
         ListHeaderComponent={Header}
+        onScrollToIndexFailed={handleScrollFailSilently}
         renderItem={({ item: meal, index }) => (
           <MealItemMemo
             meal={meal}

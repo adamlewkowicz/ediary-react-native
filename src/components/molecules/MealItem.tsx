@@ -48,6 +48,7 @@ export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>
         onPress={handleMealOpen}
         onLongPress={__DEV__ ? undefined : handleMealDelete}
         isOpened={meal.isOpened}
+        accessibilityLabel="Pokaż szczegóły posiłku"
       >
         <MealTime>{meal.timeBase}</MealTime>
         <BaseInfo>

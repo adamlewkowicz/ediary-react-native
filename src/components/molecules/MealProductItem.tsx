@@ -17,13 +17,17 @@ export const MealProductItem = <T extends DiaryProduct>(props: MealProductItemPr
 
   return (
     <TouchableOpacity
+      accessibilityLabel="Pokaż szczegóły lub usuń produkt"
+      accessibilityHint="Dotknij produkt aby zobaczyć szczegóły, lub przytrzymaj aby go usunąć"
       onPress={() => props.onQuantityUpdate(mealId, product)}
       onLongPress={() => props.onDelete(mealId, product)}
     >
       <Table.Row>
         <Details>
           <ProductName>{product.data.name}</ProductName>
-          <Quantity>{product.quantity}g</Quantity>
+          <Quantity accessibilityLabel="Ilość produktu">
+            {product.quantity}g
+          </Quantity>
         </Details>
         <Calories>{product.calcedMacro.kcal.toFixed(0)} kcal</Calories>
       </Table.Row>
