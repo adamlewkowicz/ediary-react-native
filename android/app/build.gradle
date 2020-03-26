@@ -138,6 +138,8 @@ android {
         versionName "1.0.0-beta.0"
         missingDimensionStrategy 'react-native-camera', 'mlkit'
         multiDexEnabled true
+        testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     splits {
         abi {
@@ -214,6 +216,8 @@ dependencies {
     implementation project(':react-native-sqlite-storage')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
+
+    androidTestImplementation('com.wix:detox:+')
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
