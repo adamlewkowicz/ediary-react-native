@@ -5,7 +5,7 @@ import { H4, TextSecondary } from '../Text';
 
 interface ChartMacroCircleProps extends ChartCircleProps {
   title: string
-  value: number | string
+  value: number
 }
 
 export const ChartMacroCircle = (props: ChartMacroCircleProps) => {
@@ -17,7 +17,7 @@ export const ChartMacroCircle = (props: ChartMacroCircleProps) => {
       >
         <H4>{props.percentages}%</H4>
       </ChartCircle>
-      <TextSecondary>{props.value}g</TextSecondary>
+      <TextSecondary>{props.value.toFixed(1)}g</TextSecondary>
       <H4>{props.title}</H4>
     </Container>
   );
