@@ -14,6 +14,7 @@ import { useNavigationData, useCalculatedMacro } from '../../hooks';
 import { ProductPreviewScreenNavigationProps } from '../../navigation';
 import { Product } from '../../database/entities';
 import * as Utils from '../../utils';
+import { ScrollView } from 'react-native';
 
 export const ProductPreviewScreen = () => {
   const { params, navigation } = useNavigationData<ProductPreviewScreenNavigationProps>();
@@ -100,7 +101,7 @@ export const ProductPreviewScreen = () => {
   );
 }
 
-const Container = styled.View`
+const Container = styled(ScrollView)`
   padding: ${props => props.theme.spacing.screenPadding};
 `
 

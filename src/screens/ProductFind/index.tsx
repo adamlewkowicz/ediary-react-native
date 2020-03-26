@@ -139,7 +139,6 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
       <RenderInfo />
       <FlatList
         data={productSource}
-        style={flatListStyle}
         keyExtractor={productKeyExtractor}
         keyboardShouldPersistTaps="handled"
         ItemSeparatorComponent={ItemSeparator}
@@ -162,8 +161,8 @@ const SearchContainer = styled.View`
 `
 
 const Container = styled.View`
-  margin-bottom: 10px;
-  padding: ${props => `${props.theme.spacing.screenPadding} 0`};
+  flex: 1;
+  padding-top: ${props => props.theme.spacing.screenPadding};
 `
 
 const NotFoundInfo = styled.Text`
@@ -181,8 +180,6 @@ const ProductsTitle = styled(H3)`
 const AddOwnProductButton = styled(ButtonSecondaryArrow)`
   margin-right: 5px;
 `
-
-const flatListStyle = { marginBottom: 50 };
 
 const productKeyExtractor = (product: ProductOrNormalizedProduct): string => {
   const productId = '_id' in product ? product._id : product.id;

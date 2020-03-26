@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../../store';
 import { FlatList, InteractionManager } from 'react-native';
 import { DateChangerMemo } from '../../components/molecules/DateChanger';
-import styled from 'styled-components/native';
 import { MealId } from '../../types';
 import { DiaryMeal, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
 import { useNavigationData, useAppDate } from '../../hooks';
@@ -100,32 +99,26 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   );
 
   return (
-    <Container>
-      <FlatList
-        ref={mealListRef}
-        data={meals}
-        keyExtractor={mealKeyExtractor}
-        ItemSeparatorComponent={ItemSeparator}
-        ListHeaderComponent={Header}
-        onScrollToIndexFailed={handleScrollFailSilently}
-        renderItem={({ item: meal, index }) => (
-          <MealItemMemo
-            meal={meal}
-            index={index}
-            onMealOpen={handleMealOpen}
-            onMealDelete={handleMealDelete}
-            onProductAdd={handleProductAdd}
-            onProductQuantityUpdate={handleProductQuantityUpdate}
-            onProductDelete={handleProductDelete}
-          />
-        )}
-      />
-    </Container>
+    <FlatList
+      ref={mealListRef}
+      data={meals}
+      keyExtractor={mealKeyExtractor}
+      ItemSeparatorComponent={ItemSeparator}
+      ListHeaderComponent={Header}
+      onScrollToIndexFailed={handleScrollFailSilently}
+      renderItem={({ item: meal, index }) => (
+        <MealItemMemo
+          meal={meal}
+          index={index}
+          onMealOpen={handleMealOpen}
+          onMealDelete={handleMealDelete}
+          onProductAdd={handleProductAdd}
+          onProductQuantityUpdate={handleProductQuantityUpdate}
+          onProductDelete={handleProductDelete}
+        />
+      )}
+    />
   );
 }
-
-const Container = styled.View`
-  flex: 1;
-`
 
 const mealKeyExtractor = (meal: Selectors.MealCalced): string => `${meal.type}${meal.data.id}`;
