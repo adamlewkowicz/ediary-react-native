@@ -1,52 +1,41 @@
-import { ProductUnit, BarcodeId } from '../../types';
+import { ProductUnitType, BarcodeId } from '../../types';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
+import * as Utils from '../../utils';
 
-export interface ProductCreateState {
+interface ProductData {
   name: string
   producer: string
-  portion: string
-  unit: ProductUnit
-  portionOptions: {
-    title: string
-    value: PortionOption
-    selected: boolean
-  }[]
-  portionOption: PortionOption
+  brand: string
+  portionQuantity: string
   carbs: string
+  sugars: string
   prots: string
   fats: string
+  fattyAcids: string
   kcal: string
   barcode: BarcodeId | string
 }
 
+export interface ProductCreateState {
+  portionUnitType: ProductUnitType,
+  productData: ProductData
+}
+
 export const initialState: ProductCreateState = {
-  name: '',
-  producer: '',
-  portionOptions: [
-    {
-      title: '100g',
-      value: '100g',
-      selected: true
-    },
-    {
-      title: 'porcję',
-      value: 'portion',
-      selected: false
-    },
-    {
-      title: 'opakowanie',
-      value: 'package',
-      selected: false
-    }
-  ],
-  portionOption: '100g',
-  unit: 'g',
-  portion: '100',
-  carbs: '',
-  prots: '',
-  fats: '',
-  kcal: '',
-  barcode: '',
+  portionUnitType: 'g',
+  productData: {
+    name: '',
+    producer: '',
+    brand: '',
+    portionQuantity: '',
+    carbs: '',
+    sugars: '',
+    prots: '',
+    fats: '',
+    fattyAcids: '',
+    kcal: '',
+    barcode: '',    
+  },
 }
 
 export function productCreateReducer(
@@ -54,18 +43,28 @@ export function productCreateReducer(
   action: ProductCreateAction,
 ): ProductCreateState {
   switch(action.type) {
-    case 'UPDATE': return {
+    case 'PRODUCT_DATA_UPDATED': return {
       ...state,
-      ...action.payload
+      productData: {
+        ...state.productData,
+        ...action.payload,
+      }
     }
-    case 'SELECT_PORTION_OPTION': return {
-      ...state,
-      portionOptions: state.portionOptions.map(option => ({
-        ...option,
-        selected: option.value === action.payload
-      })),
-      portionOption: action.payload
-    }
+    case 'CALORIES_EVALUATED': 
+      const { carbs, prots, fats } = state.productData;
+      const calcedKcal = Utils.calculateCaloriesByMacro({
+        carbs: Number(carbs),
+        prots: Number(prots),
+        fats: Number(fats)
+      });
+
+      return {
+        ...state,
+        productData: {
+          ...state.productData,
+          kcal: String(calcedKcal)
+        }
+      }
     default: return state;
   }
 }
@@ -74,24 +73,40 @@ export const initProductCreateReducer = (
   { barcode = '', name = '' }: Params
 ): ProductCreateState => ({
   ...initialState,
-  name,
-  barcode,
+  productData: {
+    name,
+    barcode,
+    ...initialState.productData,
+  }
 });
 
-export type PortionOption = '100g' | 'portion' | 'package';
+export const normalizeProductData = (productData: ProductData) => {
+  const { fattyAcids, sugars, ...restData } = productData;
 
-type Update = {
-  type: 'UPDATE'
-  payload: Partial<ProductCreateState>
-}
+  const macro = {
+    carbs: Number(productData.carbs),
+    prots: Number(productData.prots),
+    fats: Number(productData.fats), 
+    kcal: Number(productData.kcal)
+  }
 
-type SelectPortionOption = {
-  type: 'SELECT_PORTION_OPTION'
-  payload: PortionOption
+  const barcode = productData.barcode.length ? productData.barcode : null;
+  const portionQuantity = Number(productData.portionQuantity);
+  
+  const product = {
+    ...restData,
+    macro,
+    barcode,
+    portionQuantity,
+  }
+
+  return product;
 }
 
 type ProductCreateAction =
-  | Update
-  | SelectPortionOption
+  | { type: 'PRODUCT_DATA_UPDATED', payload: ProductDataPayload }
+  | { type: 'CALORIES_EVALUATED' }
 
 type Params = ProductCreateScreenNavigationProps['route']['params'];
+
+export type ProductDataPayload = Partial<ProductCreateState['productData']>;

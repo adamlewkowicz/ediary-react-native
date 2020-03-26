@@ -1,7 +1,7 @@
-import { DateDay } from '../../../types';
+import { DayjsDate } from '../../../types';
 
 export type GetMacroHistoryResult = {
-  day: DateDay
+  day: DayjsDate
   carbs: number
   prots: number
   fats: number

@@ -5,10 +5,10 @@ import {
   IleWazyItem,
   IleWazyUnitData,
 } from './types';
-import { round, fetchify } from '../../common/utils';
-import { ProductUnit, PortionType } from '../../types';
+import { ProductUnitType, ProductPortionType } from '../../types';
 import { Product } from '../../database/entities';
 import { KNOWN_PORTION_TYPES, PORTION_MAP } from './consts';
+import * as Utils from '../../utils';
 
 export class IlewazyApi {
 
@@ -21,7 +21,7 @@ export class IlewazyApi {
   ): Promise<NormalizedProduct[]> {
     const parsedName = encodeURIComponent(name);
 
-    const { data = [] } = await fetchify<IleWazyPayload>(
+    const { data = [] } = await Utils.fetchify<IleWazyPayload>(
       `${IlewazyApi.searchURL}${parsedName}`,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
       controller,
@@ -37,8 +37,8 @@ export class IlewazyApi {
     const kcal = Number(payload.energia);
     let carbs = Number(payload.weglowodany);
     let fats = Number(payload.tluszcz);
-    const unit: ProductUnit = 'g';
-    const defaultPortionType: PortionType = 'portion';
+    const unit: ProductUnitType = 'g';
+    const defaultPortionType: ProductPortionType = 'portion';
 
     if (name.charAt(name.length - 1) === '.') {
       name = name.slice(0, -1);
@@ -47,13 +47,13 @@ export class IlewazyApi {
     if (payload.simple_sugars) {
       const simpleSugars = Number(payload.simple_sugars);
       if (!Number.isNaN(simpleSugars)) {
-        carbs = round(carbs + simpleSugars, 100);
+        carbs = Utils.round(carbs + simpleSugars, 100);
       }
     }
     if (payload.fatty_acid) {
       const fattyAcid = Number(payload.fatty_acid);
       if (!Number.isNaN(fattyAcid)) {
-        fats = round(fats + fattyAcid, 100);
+        fats = Utils.round(fats + fattyAcid, 100);
       }
     }
 

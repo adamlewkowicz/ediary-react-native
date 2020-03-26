@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ActivityIndicator, Alert } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import { USER_ID_UNSYNCED, DEFAULT_CONNECTION } from '../../common/consts';
 import { Actions } from '../../store';
 import { User } from '../../database/entities';
@@ -7,6 +7,7 @@ import { databaseConfig } from '../../database/config/config';
 import { getOrCreateConnection } from '../../database/utils/getOrCreateConnection';
 import styled from 'styled-components/native';
 import { useDispatch } from 'react-redux';
+import * as Utils from '../../utils';
 
 interface AppLoadingScreenProps {}
 
@@ -47,10 +48,7 @@ export const AppLoadingScreen = (props: AppLoadingScreenProps) => {
           );
         }
       } catch(error) {
-        Alert.alert(
-          error.name,
-          error.message
-        );
+        Utils.handleError(error);
       }
     }
 

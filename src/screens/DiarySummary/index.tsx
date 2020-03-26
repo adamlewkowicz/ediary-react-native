@@ -1,41 +1,43 @@
 import React, { useState, useMemo } from 'react';
-import { H1, Text, Block, TitleSecondary } from '../../components/Elements';
-import { DiarySummaryChart } from '../../components/DiarySummaryChart';
+import { Text, Block, TitleSecondary } from '../../components/legacy/Elements';
+import { DiarySummaryChart } from '../../components/molecules/DiarySummaryChart';
 import { Meal } from '../../database/entities';
 import { useSelector } from 'react-redux';
 import { Selectors } from '../../store';
-import { calcMacroNeedsLeft } from '../../common/utils';
 import { MacroElements } from '../../types';
 import styled from 'styled-components/native';
-import { MACRO_ELEMENTS } from '../../common/consts';
-import { elementTitlesLong, baseMacro } from '../../common/helpers';
-import { RatioInfo } from '../../components/RatioInfo';
+import { MACRO_ELEMENTS, MACRO } from '../../common/consts';
+import { RatioInfo } from '../../components/legacy/RatioInfo';
 import { useFocusEffect } from '@react-navigation/native';
+import * as Utils from '../../utils';
+import { H1 } from '../../components';
 
 interface DiarySummaryScreenProps {}
 
 export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
-  const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...baseMacro }));
+  const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...MACRO }));
   const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]);
-  const macroNeeds = useSelector(Selectors.getMacroNeeds);
+  const userMacroNeeds = useSelector(Selectors.getUserMacroNeeds);
   const todayDay = useSelector(Selectors.getAppDay);
 
   async function handleMacroSummaryFetch() {
     const result = await Meal.getMacroSummary(todayDay);
-    setMacroSummary(result.average);
-    setHistoryRecords(result.data.map(record => ({
+    const nextHistoryRecords = result.data.map(record => ({
       value: record.kcal,
       date: new Date(record.day as any)
-    })));
+    }));
+
+    setMacroSummary(result.average);
+    setHistoryRecords(nextHistoryRecords);
   }
 
   useFocusEffect(() => {
     handleMacroSummaryFetch();
   });
 
-  const macroNeedsLeft = useMemo(() => 
-    calcMacroNeedsLeft(macroSummary, macroNeeds),
-    [macroSummary, macroNeeds] 
+  const macroNeeds = useMemo(() => 
+    Utils.calculateMacroNeeds(macroSummary, userMacroNeeds),
+    [macroSummary, userMacroNeeds] 
   );
 
   return (
@@ -54,20 +56,20 @@ export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
           accessibilityLabel="Średnia wartość makroskładniku"
         >
           <Text priority={0}>
-            {elementTitlesLong[element]}{' '}
+            {ELEMENT_TITLES[element]}{' '}
             ({element === 'kcal' ? 'kcal' : 'g'})
           </Text>
           <Block align="flex-end">
             <StyledRatioInfo
               allowedDiff={15}
-              ratio={macroNeedsLeft[element].ratio}
-              value={macroNeedsLeft[element].diff}
+              ratio={macroNeeds[element].percentage}
+              value={macroNeeds[element].left}
             />
             <Text size="big" margin="0 5px 0 0">
-              {Math.round(macroSummary[element])}
+              {macroSummary[element].toFixed(0)}
             </Text>
             <Text size="regular" priority={3}>
-              / {macroNeeds[element]}
+              / {macroNeeds[element].needed.toFixed(0)}
             </Text>
           </Block>
         </MacroElementContainer>
@@ -107,3 +109,10 @@ type HistoryRecord = {
   value: number
   date: Date
 }
+
+const ELEMENT_TITLES = {
+  carbs: 'Węglowodany',
+  prots: 'Białka',
+  fats: 'Tłuszcze',
+  kcal: 'Kalorie',
+} as const;

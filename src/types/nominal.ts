@@ -1,17 +1,17 @@
-export interface DateDay extends String {
+export interface DayjsDate extends String {
   _dateDayBrand: 'YYYY-MM-DD';
 }
 
-export interface DateTime extends String {
+export interface DayjsTime extends String {
   _dateTimeBrand: 'HH:mm:ss'
+}
+
+export interface DayjsTimeBase extends String {
+  _dateTimeBrand: 'HH:mm'
 }
 
 export interface TemplateId extends Number {
   _templateIdBrand: number;
-}
-
-export interface TemplateIdReverted extends Number {
-  _TemplateIdRevertedBrand: number;
 }
 
 export interface ProfileId extends Number {

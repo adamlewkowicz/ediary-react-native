@@ -1,6 +1,6 @@
 import {
   MEAL_PRODUCT_ADDED,
-  PRODUCT_HISTORY_RECENT_ADDED,
+  PRODUCT_HISTORY_ADDED,
   MEAL_ADDED,
 } from '../../consts';
 import { Product } from '../../../database/entities';
@@ -8,10 +8,10 @@ import { ProductHistoryAction } from '../../actions';
 
 export const getProductsFromAction = (action: ProductHistoryAction): Product[] => {
   switch(action.type) {
-    case PRODUCT_HISTORY_RECENT_ADDED:
+    case PRODUCT_HISTORY_ADDED:
       return action.payload;
     case MEAL_PRODUCT_ADDED:
-      if (action.meta.rawProduct) {
+      if (action.meta.rawProduct instanceof Product) {
         return [action.meta.rawProduct];
       }
     case MEAL_ADDED: 

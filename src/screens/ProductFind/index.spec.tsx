@@ -1,9 +1,10 @@
 import React from 'react';
 import { fireEvent } from '@testing-library/react-native';
 import { renderSetup } from '../../../__tests__/utils';
-import { Product } from '../../database/entities';
+import { Product, Meal } from '../../database/entities';
 import { ProductFindScreen } from '.';
 import { ProductFindScreenNavigationProps } from '../../navigation';
+import { APP_ROUTE } from '../../navigation/consts';
 
 describe('<ProductFindScreen />', () => {
 
@@ -19,11 +20,11 @@ describe('<ProductFindScreen />', () => {
       await ctx.findByText(productMock.name);
     });
 
-    describe('when presses on found product', () => {
+    describe('when selects product', () => {
 
       it('should return choosen product as product resolver', async () => {
         const paramsMock = {
-          onItemPress: jest.fn()
+          onProductSelected: jest.fn()
         }
         const productMock = await Product.save({ name: 'tomatoe' });
         const ctx = renderSetup<ProductFindScreenNavigationProps>(
@@ -36,40 +37,22 @@ describe('<ProductFindScreen />', () => {
         const addProductToMealButton = await ctx.findByLabelText('Dodaj produkt do posiłku');
         fireEvent.press(addProductToMealButton);
   
-        expect(paramsMock.onItemPress).toHaveBeenCalledTimes(1);
-        expect(paramsMock.onItemPress).toHaveBeenCalledWith(expect.any(Function));
-      });
-
-    });
-
-    describe('when no products were found 🚫', () => {
-
-      it('should display product create button', async () => {
-        const ctx = renderSetup(<ProductFindScreen />);
-  
-        const productFindInput = ctx.getByLabelText('Nazwa szukanego produktu');
-        fireEvent.changeText(productFindInput, 'abc');
-  
-        const productCreateButton = await ctx.findByLabelText('Dodaj własny produkt');
-        fireEvent.press(productCreateButton);
-  
-        expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledTimes(1);
-        expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledWith(
-          'ProductCreate', expect.any(Object)
+        expect(paramsMock.onProductSelected).toHaveBeenCalledTimes(1);
+        expect(paramsMock.onProductSelected).toHaveBeenCalledWith(
+          expect.any(Function),
+          productMock.portion
         );
       });
-  
+
     });
 
   });
 
   it('should display recently used products', async () => {
     const productMock = await Product.save({ name: 'Fish' });
-    // store has to be mocked, since recent products are fetched on home screen and
-    // after interactions has been finished
-    const initialState = { productHistory: [productMock] };
+    await Meal.createWithProductId({ name: 'Fish soup' }, productMock.id);
   
-    const ctx = renderSetup(<ProductFindScreen />, { initialState });
+    const ctx = renderSetup(<ProductFindScreen />);
   
     await ctx.findByText(productMock.name);
   });
@@ -84,7 +67,8 @@ describe('<ProductFindScreen />', () => {
 
       expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledTimes(1);
       expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledWith(
-        'BarcodeScan', expect.any(Object)
+        APP_ROUTE.BarcodeScan,
+        expect.any(Object)
       );
     });
 

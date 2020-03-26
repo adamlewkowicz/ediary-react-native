@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { Block } from '../../components/Elements';
+import { Block } from '../../components/legacy/Elements';
 import {
   WomanIcon,
   ManIcon,
   MuscleIcon,
   MeasureIcon,
   FemaleBodyIcon,
-} from '../../components/Icons';
-import { Button } from '../../components/Button';
-import { Heading } from '../../components/Elements/Heading';
+  NumericPicker,
+} from '../../components';
+import { Button } from '../../components/legacy/Button';
+import { Heading } from '../../components/legacy/Elements/Heading';
 import { WeightGoal } from '../../types';
 import { useDispatch } from 'react-redux';
 import { useUserId } from '../../hooks';
 import { IProfileRequired } from '../../database/entities';
 import { STEP_TITLES } from './consts';
 import { Actions } from '../../store';
-import { NumericPicker } from '../../components/NumericPicker';
-import { fillArrayWithinRange } from '../../common/utils';
-import { SelectionOptions } from '../../components/SelectionOptions';
+import { SelectionOptions } from '../../components/molecules/SelectionOptions';
+import * as Utils from '../../utils';
 
 interface ProfileCreateScreenProps {}
 
@@ -179,6 +179,6 @@ const MetricsHeading = styled.Text`
   margin-bottom: 10px;
 `
 
-const AGE_VALUES = fillArrayWithinRange({ from: 10, to: 120 });
-const WEIGHT_VALUES = fillArrayWithinRange({ from: 40, to: 180 });
-const HEIGHT_VALUES = fillArrayWithinRange({ from: 100, to: 210 });
+const AGE_VALUES = Utils.fillArrayWithinRange({ from: 10, to: 120 });
+const WEIGHT_VALUES = Utils.fillArrayWithinRange({ from: 40, to: 180 });
+const HEIGHT_VALUES = Utils.fillArrayWithinRange({ from: 100, to: 210 });

@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 import { SvgProps } from 'react-native-svg';
 import { Theme } from '../common/theme';
 

@@ -8,5 +8,6 @@ export const APP_ROUTE = {
       ProductCreate: 'ProductCreate',
       ProductFind: 'ProductFind',
       BarcodeScan: 'BarcodeScan',
+      ProductPreview: 'ProductPreview',
     DiarySummary: 'DiarySummary',
 } as const;

@@ -13,13 +13,18 @@ import {
 } from '../screens';
 import { RouteProp } from '@react-navigation/native';
 import { theme } from '../common/theme';
+import { ProductPreviewScreen } from '../screens/ProductPreview';
+import { DiaryProduct } from '../store/reducers/diary';
 
 const Stack = createStackNavigator<NutritionStackParamList>();
 
 export type NutritionStackParamList = {
   [APP_ROUTE.NutritionHome]: {};
   [APP_ROUTE.ProductFind]: {
-    onItemPress?: (productResolver: ProductResolver) => void
+    onProductSelected?: (
+      productResolver: ProductResolver,
+      productQuantity: number
+    ) => void
   };
   [APP_ROUTE.ProductCreate]: {
     barcode?: BarcodeId
@@ -29,6 +34,11 @@ export type NutritionStackParamList = {
   [APP_ROUTE.BarcodeScan]: {
     onBarcodeDetected?: (barcode: BarcodeId) => void
     onPhotoTaken?: (data: TakePictureResponse) => void
+  };
+  [APP_ROUTE.ProductPreview]: {
+    product: DiaryProduct['data']
+    quantity?: number
+    onProductQuantityUpdated?: (quantity: number) => void
   };
 }
 
@@ -65,6 +75,11 @@ export const NutritionStack = (props: NutritionStackProps) => {
         component={BarcodeScanScreen}
         options={{ title: 'Zeskanuj kod kreskowy' }}
       />
+      <Stack.Screen
+        name={APP_ROUTE.ProductPreview}
+        component={ProductPreviewScreen}
+        options={{ title: 'Dane produktu' }}
+      />
     </Stack.Navigator>
   );
 }
@@ -82,6 +97,8 @@ export type ProductFindScreenNavigationProps = ScreenProps<'ProductFind'>;
 export type ProductCreateScreenNavigationProps = ScreenProps<'ProductCreate'>;
 
 export type BarcodeScanScreenNavigationProps = ScreenProps<'BarcodeScan'>;
+
+export type ProductPreviewScreenNavigationProps = ScreenProps<'ProductPreview'>;
 
 type ScreenProps<
   K extends keyof NutritionStackParamList
