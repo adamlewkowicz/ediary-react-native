@@ -1,16 +1,16 @@
-import { AppActions } from '../../actions/types/application';
 import {
   APP_DATE_UPDATED,
   APP_CONNECTION_STATUS_UPDATED,
-  APP_INITIALIZED
+  APP_STATUS_UPDATED
 } from '../../consts';
-import { DateDay } from '../../../types';
-import { getDayFromDate } from '../../../common/utils';
+import { DayjsDate } from '../../../types';
 import dayjs from 'dayjs';
 import { ApplicationState } from './types';
+import { ApplicationAction } from '../../actions';
+import * as Utils from '../../../utils';
 
 const date = new Date;
-const todayDateDay = getDayFromDate(date);
+const todayDateDay = Utils.getDateFromDateTime(date);
 
 const initialState: ApplicationState = {
   date,
@@ -18,23 +18,22 @@ const initialState: ApplicationState = {
   todayDate: date,
   todayDay: todayDateDay,
   isConnected: false,
-  initialized: false,
   status: 'INITIALIZING'
 }
 
 export function applicationReducer(
   state = initialState,
-  action: AppActions
+  action: ApplicationAction
 ): ApplicationState {
   switch(action.type) {
-    case APP_INITIALIZED: return {
+    case APP_STATUS_UPDATED: return {
       ...state,
-      initialized: true
+      status: action.payload,
     }
     case APP_DATE_UPDATED: return {
       ...state,
       date: action.payload,
-      day: dayjs(action.payload).format('YYYY-MM-DD') as any as DateDay
+      day: dayjs(action.payload).format('YYYY-MM-DD') as any as DayjsDate
     }
     case APP_CONNECTION_STATUS_UPDATED: return {
       ...state,

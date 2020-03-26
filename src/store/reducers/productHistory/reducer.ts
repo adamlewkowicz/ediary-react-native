@@ -1,22 +1,35 @@
-import { filterByUniqueId } from '../../../common/utils';
 import { Product } from '../../../database/entities';
 import { ProductHistoryAction } from '../../actions';
 import { getProductsFromAction } from './helpers';
+import { PRODUCT_HISTORY_ADDED } from '../../consts';
+import * as Utils from '../../../utils';
 
-export function productHistoryReducer(
-  state: Product[] = [],
-  action: ProductHistoryAction
-): ProductHistoryState {
-  const products = getProductsFromAction(action);
-  if (products.length) {
-    const maxNumberOfProducts = 8;
-    const mergedProducts = [...products, ...state]
-      .filter(filterByUniqueId)
-      .splice(0, maxNumberOfProducts);
-  
-    return mergedProducts;
-  }
-  return state;
+interface ProductHistoryState {
+  products: Product[]
+  isAfterFirstFetch: boolean
 }
 
-type ProductHistoryState = Product[];
+const initialState: ProductHistoryState = {
+  products: [],
+  isAfterFirstFetch: false,
+}
+
+export function productHistoryReducer(
+  state = initialState,
+  action: ProductHistoryAction
+): ProductHistoryState {
+  const extractedProducts = getProductsFromAction(action);
+
+  if (extractedProducts.length) {
+    const maxNumberOfProducts = 8;
+    const isAfterFirstFetch = !state.isAfterFirstFetch && action.type === PRODUCT_HISTORY_ADDED;
+    
+    const products = [...extractedProducts, ...state.products]
+      .filter(Utils.filterByUniqueId)
+      .splice(0, maxNumberOfProducts);
+
+    return { products, isAfterFirstFetch };
+  }
+
+  return state;
+}

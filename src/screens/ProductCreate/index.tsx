@@ -1,206 +1,194 @@
-import React, { useReducer, useRef, createRef, useEffect } from 'react';
-import styled, { css } from 'styled-components/native';
-import { BasicInput, BasicInputRef } from '../../components/BasicInput';
+import React, { useReducer, useRef } from 'react';
+import styled from 'styled-components/native';
 import {
   productCreateReducer,
-  ProductCreateState,
-  PortionOption,
   initProductCreateReducer,
+  ProductDataPayload,
+  normalizeProductData,
 } from './reducer';
-import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import { InputRow } from '../../components/InputRow';
-import { Options } from '../../components/Options';
-import { NavigationScreenProps } from 'react-navigation';
-import { useUserId } from '../../hooks';
+import { TextInput, ScrollView } from 'react-native';
+import { useUserId, useNavigationData } from '../../hooks';
 import { Product } from '../../database/entities';
-import { parseNumber } from '../../common/utils';
-import { useDispatch } from 'react-redux';
-import { Actions } from '../../store';
-import { ProductCreateParams } from './params';
-import { useNavigationParams } from '../../hooks/useNavigationParams';
-import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
-import { useNavigation } from 'react-navigation-hooks';
+import { ProductCreateScreenNavigationProps } from '../../navigation';
+import {
+  Section,
+  Group,
+  ButtonPrimary,
+  InputRef,
+  InputButtonRef,
+  InputMetaTextRef,
+} from '../../components';
 
-interface ProductCreateProps extends
-  NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
+interface ProductCreateScreenProps {}
 
-export const ProductCreate = (props: ProductCreateProps) => {
-  const params = useNavigationParams<ProductCreateParams>();
+export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
+  const { params, navigation, navigate } = useNavigationData<ProductCreateScreenNavigationProps>();
   const [state, dispatch] = useReducer(
     productCreateReducer,
     params,
     initProductCreateReducer
   );
-  const storeDispatch = useDispatch();
   const userId = useUserId();
-  const { current: refsList } = useRef({
-    producer: createRef<TextInput>(),
-    portion: createRef<TextInput>(),
-    carbs: createRef<TextInput>(),
-    prots: createRef<TextInput>(),
-    fats: createRef<TextInput>(),
-    kcal: createRef<TextInput>(),
-    barcode: createRef<TextInput>(),
-  });
-  const navigation = useNavigation();
-
-  function handleUpdate(payload: Partial<ProductCreateState>) {
-    dispatch({
-      type: 'UPDATE',
-      payload
-    });
-  }
+  
+  const brandInputRef = useRef<TextInput>(null);
+  const producerInputRef = useRef<TextInput>(null);
+  const portionQuantityInputRef = useRef<TextInput>(null);
+  const carbsInputRef = useRef<TextInput>(null);
+  const sugarsInputRef = useRef<TextInput>(null);
+  const protsInputRef = useRef<TextInput>(null);
+  const fatsInputRef = useRef<TextInput>(null);
+  const fattyAcidsInputRef = useRef<TextInput>(null);
+  const kcalInputRef = useRef<TextInput>(null);
+  const barcodeInputRef = useRef<TextInput>(null);
 
   async function handleProductCreate() {
-    const {
-      portionOption,
-      portionOptions,
-      portion,
-      barcode,
-      carbs,
-      prots,
-      fats,
-      kcal,
-      ...data
-    } = state;
+    const { portionQuantity, ...productData } = normalizeProductData(state.productData);
+    const productWithUserId = { ...productData, userId };
 
-    if (!data.name.length) {
-      return;
-    }
-
-    const createdProduct = await Product.save({
-      ...data,
-      name: data.name.trim(),
-      barcode: barcode.length ? barcode : null,
-      userId,
-      macro: {
-        carbs: Number(carbs),
-        prots: Number(prots),
-        fats: Number(fats),
-        kcal: Number(kcal),
-      }
-    });
-
-    storeDispatch(
-      Actions.productHistoryRecentAdded([createdProduct])
-    );
+    const createdProduct = await Product.saveWithPortion(productWithUserId, portionQuantity);
 
     params.onProductCreated?.(createdProduct);
   }
-  
-  useEffect(() => {
-    navigation.setParams({ _handleProductCreate: handleProductCreate });
-  }, [state]);
 
-  function handlePortionOptionChange(option: PortionOption) {
-    dispatch({
-      type: 'SELECT_PORTION_OPTION',
-      payload: option
+  const handleProductDataUpdate = (payload: ProductDataPayload): void => {
+    dispatch({ type: 'PRODUCT_DATA_UPDATED', payload });
+  }
+
+  const handleCaloriesEvaluation = (): void => {
+    dispatch({ type: 'CALORIES_EVALUATED' });
+  }
+  
+  const handleBarcodeScanNavigation = (): void => {
+    navigate('BarcodeScan', {
+      onBarcodeDetected(barcode) {
+        navigation.goBack();
+        handleProductDataUpdate({ barcode });
+      }
     });
   }
 
   return (
-    <ScrollView>
-      <Container>
-        <BasicInput
+    <Container keyboardShouldPersistTaps="handled">
+      <Section title="Podstawowe dane">
+        <InputRef 
           label="Nazwa"
-          accessibilityLabel="Nazwa produktu"
-          value={state.name}
-          onChangeText={name => handleUpdate({ name })}
-          onSubmitEditing={refsList.producer.current?.focus}
+          placeholder="Mleko UHT 3.2 %"
+          value={state.productData.name}
+          onChangeText={name => handleProductDataUpdate({ name })}
+          onSubmitEditing={brandInputRef.current?.focus}
         />
-        <BasicInputRef
+        <InputRef
+          ref={brandInputRef}
+          label="Marka"
+          placeholder="Łaciate"
+          value={state.productData.brand}
+          onChangeText={brand => handleProductDataUpdate({ brand })}
+          onSubmitEditing={producerInputRef.current?.focus}
+        />
+        <InputRef 
           label="Producent"
-          accessibilityLabel="Producent"
-          value={state.producer}
-          onChangeText={producer => handleUpdate({ producer })}
-          onSubmitEditing={refsList.portion.current?.focus}
-          ref={refsList.producer}
+          placeholder="Mlekovita"
+          value={state.productData.producer}
+          onChangeText={producer => handleProductDataUpdate({ producer })}
+          ref={producerInputRef}
+          onSubmitEditing={portionQuantityInputRef.current?.focus}
         />
-        <OptionsContainer>
-          <InfoTitle>Wartości odżywcze na:</InfoTitle>
-          <Options
-            value={state.portionOptions}
-            onChange={handlePortionOptionChange}
+        <InputMetaTextRef
+          label="Ilość w jednej porcji"
+          placeholder="100"
+          value={state.productData.portionQuantity}
+          onChangeText={portionQuantity => handleProductDataUpdate({ portionQuantity })}
+          metaText={state.portionUnitType}
+          keyboardType={KEYBOARD_NUMERIC}
+          ref={portionQuantityInputRef}
+          onSubmitEditing={carbsInputRef.current?.focus}
+        />
+      </Section>
+      <Section
+        title="Makroskładniki"
+        description={`Na 100${state.portionUnitType} produtku`}
+      >
+        <Group.Container>
+          <InputRef
+            value={state.productData.carbs}
+            onChangeText={carbs => handleProductDataUpdate({ carbs })}
+            label="Węglowodany"
+            placeholder="0"
+            keyboardType={KEYBOARD_NUMERIC}
+            ref={carbsInputRef}
+            onSubmitEditing={sugarsInputRef.current?.focus}
           />
-        </OptionsContainer>
-        <InputRow
-          title={PORTION_TITLE[state.portionOption]}
-          value={state.portion}
-          onChangeText={portion => handleUpdate({ portion: parseNumber(portion, 10000, 6) })}
-          onSubmitEditing={refsList.carbs.current?.focus}
-          ref={refsList.portion}
-          accessibilityLabel="Ilość produktu"
-          styles={InputCss}
-        />
-        {NUTRITION_INPUTS.map(data => (
-          <InputRow
-            key={data.title}
-            title={data.title}
-            value={state[data.property]}
-            onChangeText={value => handleUpdate({ [data.property]: parseNumber(value, 10000, 6) })}
-            onSubmitEditing={refsList[data.nextRef].current?.focus}
-            ref={refsList[data.property]}
-            accessibilityLabel={data.title}
-            styles={InputCss}
+          <Group.Separator />
+          <InputRef
+            label="w tym cukry"
+            placeholder="0"
+            keyboardType={KEYBOARD_NUMERIC}
+            ref={sugarsInputRef}
+            onSubmitEditing={protsInputRef.current?.focus}
           />
-        ))}
-        <InputRow
-          title="Kod kreskowy"
-          keyboardType="default"
-          ref={refsList.barcode}
-          value={state.barcode as string}
-          onChangeText={barcode => handleUpdate({ barcode })}
-          onSubmitEditing={handleProductCreate}
-          accessibilityLabel="Kod kreskowy"
-          styles={InputCss}
+        </Group.Container>
+        <InputMetaTextRef
+          value={state.productData.prots}
+          onChangeText={prots => handleProductDataUpdate({ prots })}
+          label="Białko"
+          placeholder="0"
+          metaText="g"
+          keyboardType={KEYBOARD_NUMERIC}
+          ref={protsInputRef}
+          onSubmitEditing={fatsInputRef.current?.focus}
         />
-      </Container>
-    </ScrollView>
+        <Group.Container>
+          <InputRef
+            value={state.productData.fats}
+            onChangeText={fats => handleProductDataUpdate({ fats })}
+            label="Tłuszcze"
+            placeholder="0"
+            keyboardType={KEYBOARD_NUMERIC}
+            ref={fatsInputRef}
+            onSubmitEditing={fattyAcidsInputRef.current?.focus}
+          />
+          <Group.Separator />
+          <InputRef
+            label="w tym kwasy tłuszczowe"
+            placeholder="0"
+            keyboardType={KEYBOARD_NUMERIC}
+            ref={fattyAcidsInputRef}
+            onSubmitEditing={kcalInputRef.current?.focus}
+          />
+        </Group.Container>
+        <InputButtonRef
+          value={state.productData.kcal}
+          onChangeText={kcal => handleProductDataUpdate({ kcal })}
+          label="Kalorie"
+          placeholder="0"
+          buttonText="Oblicz"
+          keyboardType={KEYBOARD_NUMERIC}
+          onButtonPress={handleCaloriesEvaluation}
+          ref={kcalInputRef}
+          onSubmitEditing={barcodeInputRef.current?.focus}
+        />
+      </Section>
+      <Section title="Inne">
+        <InputButtonRef
+          label="Kod kreskowy"
+          placeholder="5900512300108"
+          buttonText="Zeskanuj"
+          onButtonPress={handleBarcodeScanNavigation}
+          ref={barcodeInputRef}
+        />
+      </Section>
+      <ButtonPrimary
+        accessibilityLabel="Zapisz produkt"
+        onPress={handleProductCreate}
+      >
+        Zapisz produkt
+      </ButtonPrimary>
+    </Container>
   );
 }
 
-const Container = styled.KeyboardAvoidingView`
+const KEYBOARD_NUMERIC = 'numeric';
+
+const Container = styled(ScrollView)`
   padding: 20px;
 `
-
-const InfoTitle = styled.Text`
-  text-align: center;
-  font-size: ${props => props.theme.fontSize.regular};
-  font-family: ${props => props.theme.fontWeight.regular};
-`
-
-const SaveButton = styled(TouchableOpacity)`
-  margin-right: 10px;
-`
-
-const SaveText = styled.Text`
-  font-family: ${props => props.theme.fontWeight.regular};
-  color: ${props => props.theme.color.focus};
-`
-
-const OptionsContainer = styled.View`
-  margin: 10px 0;
-`
-
-const InputCss = css`
-  margin-bottom: 10px;
-`
-
-const navigationOptions: ProductCreateProps['navigationOptions'] = ({ navigation }) => ({
-  headerTitle: 'Stwórz produkt',
-  headerRight: (
-    <SaveButton
-      onPress={navigation.getParam('_handleProductCreate')}
-      accessibilityLabel="Zapisz produkt"  
-    >
-      <SaveText>Zapisz</SaveText>
-    </SaveButton>
-  )
-});
-
-ProductCreate.navigationOptions = navigationOptions;
-interface ProductCreateOptions {
-  headerTitle: string
-  headerRight: JSX.Element
-}

@@ -1,88 +1,55 @@
-import { BASE_MACRO_ELEMENTS } from '../../common/consts';
 import { MacroElements } from '../../types';
 import { StoreState } from '..';
 import { createSelector } from 'reselect';
-import { macroNeeds } from './user';
-import { calcMacroNeedsLeft } from '../../common/utils';
+import { getUserMacroNeeds } from './user';
+import * as Utils from '../../utils';
+import { MACRO } from '../../common/consts';
 
-const baseMacro: MacroElements = { carbs: 0, prots: 0, fats: 0, kcal: 0 };
+const getMeals = (state: StoreState) => state.diary.meals;
 
-const meals = (state: StoreState) => state.diary.meals;
-const products = (state: StoreState) => state.diary.products;
+const getProducts = (state: StoreState) => state.diary.products;
 
-const calcedProducts = createSelector(
-  products,
-  products => products.map(product => ({
-    ...product,
-    carbs: Math.round(product.macro.carbs * product.quantity / 100),
-    prots: Math.round(product.macro.prots * product.quantity / 100),
-    fats: Math.round(product.macro.fats * product.quantity / 100),
-    kcal: Math.round(product.macro.kcal * product.quantity / 100)
-  })
-));
-
-const mealsWithProducts = createSelector(
-  meals,
-  calcedProducts,
+const getMealsWithProducts = createSelector(
+  getMeals,
+  getProducts,
   (meals, products) => meals.map(meal => ({
     ...meal,
-    products: meal.productIds.flatMap(productId => {
-      const foundProduct = products.find(product => product.id === productId);
-      return foundProduct ? [foundProduct] : []
-    })
+    products: meal.productIds.flatMap(productId => 
+      products.find(product => product.data.id === productId) ?? []
+    )
   }))
 );
 
-export const calcedMeals = createSelector(
-  mealsWithProducts,
-  meals => meals.map(meal => {
-    const summedMacro = meal.products.reduce((macro, product) => ({
-      ...macro,
-      carbs: macro.carbs += product.carbs,
-      prots: macro.prots += product.prots,
-      fats: macro.fats += product.fats,
-      kcal: macro.kcal += product.kcal,
-    }), { ...baseMacro });
-
-    return { ...meal, ...summedMacro }
-  })
-);
-
-export const mealsWithRatio = createSelector(
-  calcedMeals,
+export const getMealsCalced = createSelector(
+  getMealsWithProducts,
   meals => meals
     .map(meal => {
-      const macroSum = meal.carbs + meal.prots + meal.fats;
-      const macroRatio = BASE_MACRO_ELEMENTS.map(element => ({
-        value: meal[element] / macroSum,
-        element
-      }));
-      return { ...meal, macroRatio };
+      const calcedMacro = meal.type === 'template'
+        ? { ...MACRO }
+        : Utils.calculateMacroSum(meal.products);
+
+      const macroPercentages = Utils.calculateMacroPercentages(calcedMacro);
+
+      return {
+        ...meal,
+        calcedMacro,
+        macroPercentages
+      }
     })
-    .sort((a, b) => {
-      const timeA = Number(a.time.replace(/:/g, ''));
-      const timeB = Number(b.time.replace(/:/g, ''));
-      return timeA > timeB ? 1 : -1;
-    })
+    .sort(Utils.sortByDateTime)
 );
 
-const mealsMacroSum = createSelector(
-  calcedMeals,
-  meals => meals.reduce((sum, meal) => ({
-    ...sum,
-    carbs: Math.round(sum.carbs + meal.carbs),
-    prots: Math.round(sum.prots + meal.prots),
-    fats: Math.round(sum.fats + meal.fats),
-    kcal: Math.round(sum.kcal + meal.kcal)
-  }), { ...baseMacro })
+const getMealsMacroSum = createSelector(
+  getMealsCalced,
+  (meals): MacroElements => Utils.calculateMacroSum(meals)
 );
 
-export const macroNeedsLeft = createSelector(
-  mealsMacroSum,
-  macroNeeds,
-  (macroSum, macroNeeds) => calcMacroNeedsLeft(macroSum, macroNeeds)
+export const getCalcedMacroNeeds = createSelector(
+  getMealsMacroSum,
+  getUserMacroNeeds,
+  Utils.calculateMacroNeeds
 );
 
-export type MacroNeedsLeft = ReturnType<typeof macroNeedsLeft>;
-export type MealsWithRatio = ReturnType<typeof mealsWithRatio>;
-export type MacroNeeds = ReturnType<typeof macroNeeds>;
+export type MealsCalced = ReturnType<typeof getMealsCalced>;
+export type MealCalced = MealsCalced[number];
+export type MacroNeeds = ReturnType<typeof getCalcedMacroNeeds>;

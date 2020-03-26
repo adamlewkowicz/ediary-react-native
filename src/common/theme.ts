@@ -1,4 +1,18 @@
 
+const color_V2 = {
+  primary: '#26367A',
+  secondary: '#B5BACC',
+  tertiary: '#E1E5F5',
+  quaternary: '#F3F5FC',
+  quinary: '#f7f9ff',
+
+  highlight: '#3F71FF',
+  highlightSecondary: '#6BB4DD',
+
+  success: '#2DD266',
+  error: '#FF7979',
+} as const;
+
 const color = {
   focus: '#5361E0',
   secondary: '#C7C6CB',
@@ -26,6 +40,8 @@ const color = {
   gray: '#BCBAC6',
   lightGray: '#f1f0f5',
   midGray: '#cdcbd6',
+
+  ...color_V2,
 } as const;
 
 export const theme = {
@@ -38,10 +54,26 @@ export const theme = {
     small: 12,
     tiny: 11,
   },
+  margin: {
+    heading: 15,
+    inputSpace: 15,
+  },
+  spacing: {
+    tablePadding: 15,
+    screenPadding: '20px',
+    sectionSecondary: 20,
+
+    primary: 40,
+    secondary: 20,
+    tertiary: 15,
+    quaternary: 10,
+    quinary: 5,
+  },
   fontWeight: {
-    regular: 'DMSans-Regular',
-    medium: 'DMSans-Medium',
-    bold: 'DMSans-Bold',
+    light: 'Hind-Light',
+    regular: 'Hind-Regular',
+    medium: 'Hind-Medium',
+    bold: 'Hind-Bold',
   },
   color,
   /** alias */

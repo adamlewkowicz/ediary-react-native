@@ -11,13 +11,23 @@ jobs:
         node-version: [10.x]
     steps:
     - uses: actions/checkout@v1
+    
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+
+    - name: Create .env file
+      run: |
+        echo BUGSNAG_API_KEY=${{ secrets.BUGSNAG_API_KEY }} >> .env
+
     - name: Run npm install
       run: npm install --silent
+
     - name: Run tests
       run: npm run test:ci
       env:
         CI: true
+
+    - name: Run type check
+      run: npm run type-check

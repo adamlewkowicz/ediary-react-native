@@ -1,8 +1,8 @@
 import { UserState } from './types';
-import { UserActions } from '../../actions';
+import { UserAction } from '../../actions';
 import {
-  APP_INITIALIZED,
   USER_PROFILE_CREATED,
+  USER_INITIALIZED,
 } from '../../consts';
 
 const initialState: UserState = {
@@ -18,11 +18,11 @@ const initialState: UserState = {
 
 export function userReducer(
   state = initialState,
-  action: UserActions
+  action: UserAction
 ): UserState {
   switch(action.type) {
-    case APP_INITIALIZED:
-      const { profile, ...data } = action.payload.user;
+    case USER_INITIALIZED:
+      const { profile, ...data } = action.payload;
       return {
         ...state,
         ...profile && {
