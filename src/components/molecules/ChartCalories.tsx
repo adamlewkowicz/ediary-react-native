@@ -14,7 +14,7 @@ interface ChartCaloriesProps {
 export const ChartCalories = (props: ChartCaloriesProps) => {
   return (
     <ChartCircle 
-      percentages={props.percentages}
+      percentage={props.percentages}
       size={200}
       width={8}
       gradientColors={theme.gradient.kcal}
