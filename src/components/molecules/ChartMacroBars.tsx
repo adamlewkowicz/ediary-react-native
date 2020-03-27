@@ -15,23 +15,23 @@ export const ChartMacroBars = (props: ChartMacroBarsProps) => {
     <Container>
       <ChartMacroBar
         title="Węglowodany"
-        percentages={carbs}
-        colors={theme.gradient.carbs}
+        percentage={carbs}
+        gradientColors={theme.gradient.carbs}
       />
       <ChartMacroBar
         title="Białko"
-        percentages={prots}
-        colors={theme.gradient.prots}
+        percentage={prots}
+        gradientColors={theme.gradient.prots}
       />
       <ChartMacroBar
         title="Tłuszcze"
-        percentages={fats}
-        colors={theme.gradient.fats}
+        percentage={fats}
+        gradientColors={theme.gradient.fats}
       />
       <ChartMacroBar
         title="Kalorie"
-        percentages={kcal}
-        colors={theme.gradient.kcal}
+        percentage={kcal}
+        gradientColors={theme.gradient.kcal}
       />
     </Container>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { ProgressBar } from '../';
+import { ChartProgressBar } from '../';
 import { theme } from '../../common/theme';
 import { BaseMacroElements } from '../../types';
 
@@ -11,17 +11,17 @@ interface ChartMacroBarsBaseProps {
 export const ChartMacroBarsBase = (props: ChartMacroBarsBaseProps) => {
   return (
     <Container>
-      <ProgressBar
-        percentages={props.percentages.carbs}
-        colors={theme.gradient.carbs}
+      <ChartProgressBar
+        percentage={props.percentages.carbs}
+        gradientColors={theme.gradient.carbs}
       />
-      <ProgressBar
-        percentages={props.percentages.prots}
-        colors={theme.gradient.prots}
+      <ChartProgressBar
+        percentage={props.percentages.prots}
+        gradientColors={theme.gradient.prots}
       />
-      <ProgressBar
-        percentages={props.percentages.fats}
-        colors={theme.gradient.fats}
+      <ChartProgressBar
+        percentage={props.percentages.fats}
+        gradientColors={theme.gradient.fats}
       />
     </Container>
   );
