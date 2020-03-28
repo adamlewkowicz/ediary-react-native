@@ -38,8 +38,6 @@ target 'EdiaryMobileApp' do
 
   pod 'react-native-sqlite-storage', :path => '../node_modules/react-native-sqlite-storage'
 
-  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
-
   pod 'react-native-camera', :path => '../node_modules/react-native-camera'
 
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
