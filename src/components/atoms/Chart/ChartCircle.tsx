@@ -3,11 +3,12 @@ import Svg, {
   Circle,
   CircleProps,
 } from 'react-native-svg';
-import { useSpring, animated } from 'react-spring';
 import styled from 'styled-components/native';
 import { theme } from '../../../common/theme';
 import { SvgGradientDef } from '../Svg';
 import * as Utils from '../../../utils';
+import { useAnimatedSpring } from '../../../hooks';
+import { Animated } from 'react-native';
 
 export interface ChartCircleProps {
   percentage: number
@@ -27,11 +28,6 @@ export const ChartCircle = (props: ChartCircleProps) => {
   const radius = Math.floor(size / 2.5);
   const strokeDasharray = Utils.calculateCircleStrokeDasharray(radius, width);
 
-  const interpolation = [
-    [0, 100],
-    [strokeDasharray, 0]
-  ] as const;
-
   const genericCircleProps: CircleProps = {
     cx: xAxisCenterCoord,
     cy: yAxisCenterCoord,
@@ -40,14 +36,10 @@ export const ChartCircle = (props: ChartCircleProps) => {
     strokeWidth: width,
   }
 
-  const ratioSpring: any = useSpring({
-    from: { value: percentage },
-    to: { value: percentage },
-    delay: 100,
-    config: {
-      tension: 140,
-      friction: 18,
-    }
+  const animatedValue = useAnimatedSpring(percentage);
+  const animatedStrokeDashoffset = animatedValue.interpolate({
+    inputRange: [0, 100],
+    outputRange: [strokeDasharray, 0]
   });
 
   return (
@@ -66,7 +58,7 @@ export const ChartCircle = (props: ChartCircleProps) => {
           stroke={`url(#${GRADIENT_ID})`}
           strokeLinecap="round"
           strokeDasharray={strokeDasharray}
-          strokeDashoffset={ratioSpring.value.interpolate(...interpolation)}
+          strokeDashoffset={animatedStrokeDashoffset}
         />
       </SvgContainer>
       <Content>
@@ -94,4 +86,4 @@ const Content = styled.View`
   position: absolute;
 `
 
-const AnimatedPercentageCircle = animated(Circle);
+const AnimatedPercentageCircle = Animated.createAnimatedComponent(Circle);
