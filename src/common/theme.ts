@@ -57,8 +57,8 @@ export const THEME = {
   spacing: spacing_V2,
   fontSize: {
     h1: 27,
-    h2: 18, // 19 ?
-    h3: 16,
+    h2: 23,
+    h3: 18, // 19?
     regular: 14,
     small: 12,
   },
