@@ -15,7 +15,7 @@ export const ChartProgressBar = ({ height = 5, ...props }: ChartProgressBarProps
   const percentage = props.percentage > 100 ? 100 : props.percentage;
   const animatedValue = useAnimatedSpring(percentage);
 
-  const widthAnimation = animatedValue.interpolate({
+  const animatedWidth = animatedValue.interpolate({
     inputRange: [0, 100],
     outputRange: ['0%', '100%']
   });
@@ -31,7 +31,7 @@ export const ChartProgressBar = ({ height = 5, ...props }: ChartProgressBarProps
           colors={props.gradientColors}
         />
         <BarAnimated
-          width={widthAnimation}
+          width={animatedWidth}
           height={height}
           fill={`url(#${GRADIENT_ID})`}
         />

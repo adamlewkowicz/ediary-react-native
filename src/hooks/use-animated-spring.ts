@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react'
 import { Animated, Easing } from 'react-native';
 
-export const useAnimatedSpring = <T extends number>(toValue: T, delay = 0) => {
+export const useAnimatedSpring = <T extends number>(toValue: T, delay = 0): Animated.Value => {
   const animatedValue = useRef(new Animated.Value(0));
 
   useEffect(() => {
