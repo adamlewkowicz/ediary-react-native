@@ -1,6 +1,7 @@
 
 export const color_V2 = {
   primary: '#26367A',
+  primaryLight: '#FFFFFF',
   secondary: '#B5BACC',
   tertiary: '#E1E5F5',
   quaternary: '#F3F5FC',
@@ -19,6 +20,16 @@ export const spacing_V2 = {
   base: 24,
   large: 48,
   xLarge: 64,
+} as const;
+
+const spacingPX = {
+  tiny: '8px',
+  small: '16px',
+  base: '24px',
+  large: '48px',
+  xLarge: '64px',
+
+  baseXSmall: `${spacing_V2.base}px ${spacing_V2.small}px`
 } as const;
 
 const color = {
@@ -55,6 +66,7 @@ const color = {
 export const THEME = {
   color: color_V2,
   spacing: spacing_V2,
+  spacingPX,
   fontSize: {
     h1: 27,
     h2: 23,
@@ -72,6 +84,7 @@ export const THEME = {
 } as const;
 
 export const theme = {
+  spacingPX,
   fontSize: {
     huge: 25,
     big: 22,

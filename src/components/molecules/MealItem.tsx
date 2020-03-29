@@ -105,7 +105,7 @@ const BaseInfo = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: 5px 0 10px 0;
+  margin: 5px 0 8px 0;
 `
 
 const ChartsContainer = styled.View`
@@ -135,7 +135,7 @@ const Container = styled.View<IsOpenedProp>`
 `
 
 const InfoContainer = styled.TouchableOpacity<IsOpenedProp>`
-  padding: ${props => props.theme.spacing.screenPadding};
+  padding: ${props => props.theme.spacingPX.baseXSmall};
   background-color: ${props => props.isOpened ? props.theme.color.primary : '#fff'};
 `
 

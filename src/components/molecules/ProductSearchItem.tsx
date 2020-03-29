@@ -59,7 +59,7 @@ const Calories = styled(H2)`
 `
 
 const Container = styled.TouchableOpacity`
-  padding: ${props => props.theme.spacing.screenPadding};
+  padding: ${props => props.theme.spacingPX.baseXSmall};
 `
 
 const Info = styled.View`

@@ -16,7 +16,7 @@ export const TypeFrame = () => (
       fontSize={THEME.fontSize.h2}
     />
     <TypeComponent
-      name="HeaderH2"
+      name="HeaderH3"
       fontWeight="light"
       fontSize={THEME.fontSize.h3}
     />
@@ -34,6 +34,11 @@ export const TypeFrame = () => (
     <TypeComponent
       name="TextRegularSecondary"
       color={THEME.color.secondary}
+      fontSize={THEME.fontSize.regular}
+    />
+    <TypeComponent
+      name="TextRegularQuaternary"
+      color={THEME.color.quaternary}
       fontSize={THEME.fontSize.regular}
     />
     <TypeComponent

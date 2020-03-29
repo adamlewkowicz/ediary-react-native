@@ -13,7 +13,7 @@ export const SizingFrame = (props: SizingFrameProps) => {
       {Object.entries(spacing_V2).map(([name, size]) => (
         <SizingComponent
           key={name}
-          name={name}
+          name={name + size}
           size={size}
         />
       ))}
