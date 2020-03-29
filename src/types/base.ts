@@ -1,26 +1,32 @@
 import {
   MACRO_ELEMENTS,
   BASE_MACRO_ELEMENTS,
-  PORTION_TYPES,
+  PRODUCT_PORTION_TYPE,
   UNIT_TYPES,
+  PRODUCT_UNIT_TYPE,
 } from '../common/consts';
 import { NavigationProp, ParamListBase, RouteProp } from '@react-navigation/native';
 
 export type UnitType = typeof UNIT_TYPES[number];
-export type PortionUnit = 'g' | 'ml';
+export type ProductUnitType = typeof PRODUCT_UNIT_TYPE[number];
 
 export type BaseMacroElement = typeof BASE_MACRO_ELEMENTS[number];
 export type MacroElement = typeof MACRO_ELEMENTS[number];
 
-export type MacroElements = {
-  [key in MacroElement]: number
+export type BaseMacroElements<T = number> = {
+  carbs: T
+  prots: T
+  fats: T
 }
 
-export type BaseMacroElements = {
-  [key in BaseMacroElement]: number
+export type MacroElements<T = number> = {
+  carbs: T
+  prots: T
+  fats: T
+  kcal: T
 }
 
-export type PortionType = typeof PORTION_TYPES[number];
+export type ProductPortionType = typeof PRODUCT_PORTION_TYPE[number];
 
 export type WeightGoal = 'decrease' | 'maintain' | 'increase';
 
@@ -31,9 +37,15 @@ export type ApplicationStatus = 'INITIALIZING' | 'CREATING PROFILE' | 'INITIALIZ
 /** Higher order function type for `Array.prototype.filter` method callback. */
 export type FilterHOF<T> = (value: T, index: number, values: T[]) => boolean;
 
+export type SortHOF<T> = (itemA: T, itemB: T) => -1 | 0 | 1;
+
 export type BaseScreenProps = {
   navigation: NavigationProp<ParamListBase>
   route: RouteProp<Record<string, object>, string>
+}
+
+export type ObjectNumeric = {
+  [key: string]: number
 }
 
 export type ObjectEntries = <

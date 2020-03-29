@@ -1,109 +1,58 @@
 import {
   MealId,
-  TemplateIdReverted,
-  DateTime,
+  DayjsTime,
   ProductId,
   TemplateId,
-  DateDay,
-  BarcodeId,
-  PortionUnit,
-  MacroElement,
-  MacroElements,
+  DayjsTimeBase,
 } from '../../../types';
-import { Product, IProductMerged } from '../../../database/entities';
+import { IProduct, IMeal } from '../../../database/entities';
 
 export interface DiaryState {
-  meals: (DiaryMeal | DiaryMealTemplate)[]
+  meals: DiaryMealOrTemplate[]
   products: DiaryProduct[]
-  templates: DiaryTemplate[]
+  templates: MealTemplate[]
 }
 
-export type DiaryMealId = MealId | TemplateIdReverted;
-export type DiaryMealType = 'meal' | 'template';
+type DiaryMealType = 'meal' | 'template';
 
-export interface DiaryMealBase {
-  id: DiaryMealId
-  name: string
-  macro: {
-    carbs: number
-    prots: number
-    fats: number
-    kcal: number
-  }
-  date: string | null
-  time: DateTime
-  updatedAt?: number
-  createdAt?: number
+interface DiaryMealBase {
+  data: IMeal | MealTemplate
   type: DiaryMealType
-  isToggled: boolean
   productIds: ProductId[]
-  day: DateDay | null
-  dateTimeBase: string
+  isOpened: boolean
+  isAddingProduct: boolean
+  timeBase: DayjsTimeBase
 }
 
 export interface DiaryMealTemplate extends DiaryMealBase {
-  id: TemplateIdReverted
-  date: null
-  day: null
-  templateId: TemplateId
   type: 'template'
+  data: MealTemplate
 }
 
 export interface DiaryMeal extends DiaryMealBase {
-  id: MealId
-  date: string
-  day: DateDay
   type: 'meal'
+  data: IMeal
 }
 
 export interface DiaryProduct {
-  data: Product | IProductMerged
-  isToggled: boolean
+  data: IProduct
   quantity: number
   mealId: MealId | null
-  _calcedMacro?: {
-    carbs: number
-    prots: number
-    fats: number
-    kcal: number
-  }
-
-  id: ProductId
-  name: string
-  producer?: string | null
-  img?: string
-  barcode: BarcodeId | null
-  unit: PortionUnit
-  userId?: number | null
-  isVerified: boolean | null
-  updatedAt: Date
-  createdAt: Date
-  macro: {
-    carbs: number
-    prots: number
-    fats: number
-    kcal: number
-  }
   calcedMacro: {
-    element: MacroElement
-    value: number
-  }[]
+    carbs: number
+    prots: number
+    fats: number
+    kcal: number
+  }
 }
 
-export interface DiaryTemplate {
+export type DiaryMealOrTemplateId = MealId | TemplateId;
+
+export type DiaryMealOrTemplate = DiaryMeal | DiaryMealTemplate;
+
+export interface MealTemplate {
   id: TemplateId
   name: string
-  time: DateTime
+  time: DayjsTime
+  timeBase: DayjsTimeBase
 }
-
-export type NormalizeMealsResult = {
-  meals: DiaryMeal[]
-  products: DiaryProduct[]
-}
-
-export type NormalizeMealResult = {
-  meal: DiaryMeal
-  products: DiaryProduct[]
-}
-
-export interface CalcMacroByQuantityData extends MacroElements {}

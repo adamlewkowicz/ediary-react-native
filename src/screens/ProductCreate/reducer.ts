@@ -1,26 +1,28 @@
-import { PortionUnit, BarcodeId } from '../../types';
+import { ProductUnitType, BarcodeId } from '../../types';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
-import { calculateCaloriesByMacro } from '../../common/utils';
+import * as Utils from '../../utils';
+
+interface ProductData {
+  name: string
+  producer: string
+  brand: string
+  portionQuantity: string
+  carbs: string
+  sugars: string
+  prots: string
+  fats: string
+  fattyAcids: string
+  kcal: string
+  barcode: BarcodeId | string
+}
 
 export interface ProductCreateState {
-  portionUnit: PortionUnit,
-  productData: {
-    name: string
-    producer: string
-    brand: string
-    portionQuantity: string
-    carbs: string
-    sugars: string
-    prots: string
-    fats: string
-    fattyAcids: string
-    kcal: string
-    barcode: BarcodeId | string
-  }
+  portionUnitType: ProductUnitType,
+  productData: ProductData
 }
 
 export const initialState: ProductCreateState = {
-  portionUnit: 'g',
+  portionUnitType: 'g',
   productData: {
     name: '',
     producer: '',
@@ -50,7 +52,7 @@ export function productCreateReducer(
     }
     case 'CALORIES_EVALUATED': 
       const { carbs, prots, fats } = state.productData;
-      const calcedKcal = calculateCaloriesByMacro({
+      const calcedKcal = Utils.calculateCaloriesByMacro({
         carbs: Number(carbs),
         prots: Number(prots),
         fats: Number(fats)
@@ -77,6 +79,29 @@ export const initProductCreateReducer = (
     ...initialState.productData,
   }
 });
+
+export const normalizeProductData = (productData: ProductData) => {
+  const { fattyAcids, sugars, ...restData } = productData;
+
+  const macro = {
+    carbs: Number(productData.carbs),
+    prots: Number(productData.prots),
+    fats: Number(productData.fats), 
+    kcal: Number(productData.kcal)
+  }
+
+  const barcode = productData.barcode.length ? productData.barcode : null;
+  const portionQuantity = Number(productData.portionQuantity);
+  
+  const product = {
+    ...restData,
+    macro,
+    barcode,
+    portionQuantity,
+  }
+
+  return product;
+}
 
 type ProductCreateAction =
   | { type: 'PRODUCT_DATA_UPDATED', payload: ProductDataPayload }

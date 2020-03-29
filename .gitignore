@@ -69,3 +69,4 @@ buck-out/
 /design-system/yarn.lock
 /design-system/dist/
 /design-system/package-lock.json
+.env

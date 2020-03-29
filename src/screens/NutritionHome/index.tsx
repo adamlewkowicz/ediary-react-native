@@ -1,235 +1,124 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../../store';
-import { FlatList, Alert, SafeAreaView as View, InteractionManager } from 'react-native';
-import { DateChanger } from '../../components/DateChanger';
-import styled from 'styled-components/native';
-import { MealListItem } from '../../components/MealListItem';
-import { MealId, ProductId } from '../../types';
-import { DiaryMealTemplate, DiaryMeal, DiaryMealId } from '../../store/reducers/diary';
-import { CaloriesChart } from '../../components/CaloriesChart';
-import { useAfterInteractions, useNavigationData } from '../../hooks';
-import { ProductItem } from '../../components/ProductItem';
+import { FlatList, InteractionManager } from 'react-native';
+import { DateChangerMemo } from '../../components/molecules/DateChanger';
+import { MealId } from '../../types';
+import { DiaryMeal, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
+import { useNavigationData, useAppDate } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
-import { ChartMacroCircles, MealItem, MealItemSeparator, ButtonSecondary, H1, ButtonSecondaryArrow, ChartCircle, ChartCalories } from '../../_components';
-import { layoutAnimateEase } from '../../common/utils';
-import { MealWithRatio } from '../../store/selectors';
-import { Product } from '../../database/entities';
+import { ChartsMacroNeeds, MealItemMemo, ItemSeparator } from '../../components';
+import * as Utils from '../../utils';
 
 interface NutritionHomeScreenProps {}
 
 export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   const { navigate, navigation } = useNavigationData<NutritionHomeScreenNavigationProps>();
-  const [processedMealId, setProcessedMealId] = useState<DiaryMealId | null>(null);
+  const { appDate, appDateDay, ...appDateContext } = useAppDate();
   const dispatch = useDispatch();
-  const appDate = useSelector(Selectors.getAppDate);
-  const appDateDay = useSelector(Selectors.getAppDay);
-  const macroNeedsLeft = useSelector(Selectors.getMacroNeedsLeft);
-  const mealsWithRatio = useSelector(Selectors.getMealsWithRatio);
-  const mealListRef = useRef<FlatList<Selectors.MealWithRatio>>(null);
-
-  useAfterInteractions(() => dispatch(Actions.productHistoryRecentLoad()));
+  const macroNeeds = useSelector(Selectors.getCalcedMacroNeeds);
+  const meals = useSelector(Selectors.getMealsCalced);
+  const mealListRef = useRef<FlatList<Selectors.MealCalced>>(null);
 
   useEffect(() => {
     dispatch(Actions.mealsFindByDay(appDateDay));
-  }, [appDateDay]);
+  }, [dispatch, appDateDay]);
 
-  const handleProductFindNavigation = (
-    meal: DiaryMeal | DiaryMealTemplate
-  ) => {
+  const handleProductAdd = useCallback((meal: DiaryMealOrTemplate): void => {
     navigate('ProductFind', {
-      async onItemPress(productResolver) {
+      async onProductSelected(productResolver, productQuantity) {
         navigate('NutritionHome');
-        setProcessedMealId(meal.id);
-        const foundProduct = await productResolver();
 
         await dispatch(
           Actions.mealOrTemplateProductAdd(
             meal,
-            foundProduct.id,
+            productResolver,
+            productQuantity,
             appDate
           )
         );
-
-        setProcessedMealId(null);
       }
     });
-  }
-
+  }, [dispatch, navigate]);
   
-  const handleProductCreateNavigation = () => {
-    navigate('ProductCreate', {
-      onProductCreated: () => navigate('NutritionHome')
-    });
-  }
-
-  const handleMealDelete = <T extends { id: MealId, name: string }>(
-    meal: T
-  ) => {
-    Alert.alert(
+  const handleMealDelete = useCallback((meal: DiaryMeal): void => {
+    Utils.alertDelete(
       'Usuń posiłek',
-      `Czy jesteś pewnien że chcesz usunąć "${meal.name}"?`,
-      [
-        {
-          text: 'Anuluj',
-          style: 'cancel'
-        },
-        {
-          text: 'OK',
-          onPress: () => dispatch(Actions.mealDelete(meal.id))
-        }
-      ]
+      `Czy jesteś pewnien że chcesz usunąć "${meal.data.name}"?`,
+      () => dispatch(Actions.mealDelete(meal.data.id))
     );
-  }
+  }, [dispatch]);
 
-  const handleProductDelete = <T extends { id: ProductId; name: string }>(
-    mealId: MealId,
-    product: T
-  ) => {
-    Alert.alert(
+  const handleProductDelete = useCallback((mealId: MealId, product: DiaryProduct): void => {
+    Utils.alertDelete(
       'Usuń produkt',
-      `Czy jesteś pewnien że chcesz usunąć "${product.name}"?`,
-      [
-        {
-          text: 'Anuluj',
-          style: 'cancel'
-        },
-        {
-          text: 'OK',
-          onPress: () => dispatch(Actions.mealProductDelete(mealId, product.id))
-        }
-      ]
+      `Czy jesteś pewnien że chcesz usunąć "${product.data.name}"?`,
+      () => dispatch(Actions.mealProductDelete(mealId, product.data.id))
     );
-  }
+  }, [dispatch]);
 
-  const handleMealPress = (
-    mealId: DiaryMealId,
-    meal: Selectors.MealWithRatio,
-    index: number
-  ): void => {
+  const handleMealOpen = useCallback((meal: DiaryMealOrTemplate, index: number): void => {
     const scroll = () => {
       mealListRef.current?.scrollToIndex({
         index,
-        // viewPosition: 0.2,
-        // animated: true,
         viewOffset: 50,
       });
     }
 
-    layoutAnimateEase();
+    Utils.layoutAnimateEase();
 
-    dispatch(Actions.mealToggled(mealId));
+    dispatch(Actions.mealOpenToggled(meal.data.id));
 
-    if (!meal.isToggled) scroll();
-  }
+    if (!meal.isOpened) scroll();
+  }, [dispatch]);
 
-  const handleProductPress = (mealId: MealId, product: Product) => {
-    navigate('ProductPreview', {
-      product,
-      onProductQuantityUpdated(quantity) {
-        navigation.goBack();
-        InteractionManager.runAfterInteractions(() => {
-          dispatch(Actions.mealProductQuantityUpdate(mealId, product.id, quantity));
-        });
+  const handleProductQuantityUpdate = useCallback((mealId: MealId, product: DiaryProduct): void => {
+    navigation.navigate('ProductPreview', {
+      product: product.data,
+      quantity: product.quantity,
+      async onProductQuantityUpdated(quantity) {
+        navigation.navigate('NutritionHome');
+
+        await InteractionManager.runAfterInteractions();
+
+        dispatch(Actions.mealProductQuantityUpdate(mealId, product.data.id, quantity));
       }
     });
-  }
+  }, [navigation, dispatch]);
+
+  const handleScrollFailSilently = useCallback(() => {}, []);
 
   const Header = (
     <>
-      <DateChanger
+      <DateChangerMemo
         value={appDate}
-        onChange={date => dispatch(Actions.appDateUpdated(date))}
+        onChange={appDateContext.update}
       />
-      <ChartCalories
-        percentages={macroNeedsLeft.kcal.ratio}
-        value={macroNeedsLeft.kcal.eaten}
-        valueLeft={macroNeedsLeft.kcal.needed}
-      />
-      <ChartMacroCircles
-        values={[
-          macroNeedsLeft.carbs.eaten,
-          macroNeedsLeft.prots.eaten,
-          macroNeedsLeft.carbs.eaten,
-        ]}
-        percentages={[
-          macroNeedsLeft.carbs.ratio,
-          macroNeedsLeft.prots.ratio,
-          macroNeedsLeft.fats.ratio,
-        ]}
-        // valuesLeft={[
-        //   macroNeedsLeft.carbs.needed,
-        //   macroNeedsLeft.prots.needed,
-        //   macroNeedsLeft.fats.needed,
-        // ]}
-      />
+      <ChartsMacroNeeds macroNeeds={macroNeeds} />
     </>
   );
 
-  const Footer = (
-    <ContentContainer>
-      <ButtonAddOwnProduct onPress={handleProductCreateNavigation}>
-        Utwórz własny produkt
-      </ButtonAddOwnProduct>
-    </ContentContainer>
-  );
-
   return (
-    <Container>
-      <FlatList
-        ref={mealListRef}
-        data={mealsWithRatio}
-        keyExtractor={mealKeyExtractor}
-        ItemSeparatorComponent={MealItemSeparator}
-        ListFooterComponent={Footer}
-        ListHeaderComponent={Header}
-        renderItem={({ item: meal, index }) => (
-          <MealItem
-            meal={meal}
-            onMealPress={(mealId) => handleMealPress(mealId, meal, index)}
-            onProductAdd={handleProductFindNavigation}
-            onProductPress={handleProductPress}
-            isAddingProduct={processedMealId === meal.id}
-          />
-        )}
-      />
-      {/* <FlatList
-        data={mealsWithRatio}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({ item: meal }) => (
-          <MealListItem
-            meal={meal}
-            isBeingProcessed={processedMealId === meal.id}
-            onProductAdd={() => handleProductFindNavigation(meal)}
-            onToggle={mealId => dispatch(Actions.mealToggled(mealId))}
-            onLongPress={__DEV__ || meal.type === 'template' ? undefined : () => handleMealDelete(meal)}
-            renderProduct={(product) => meal.type === 'template' ? null : (
-              <ProductItem
-                product={product}
-                onDelete={() => handleProductDelete(meal.id, product)}
-                onToggle={() => dispatch(Actions.productToggled(product.id))}
-                onQuantityUpdate={(quantity) => dispatch(
-                  Actions.mealProductQuantityUpdate(meal.id, product.id, quantity)
-                )}
-              />
-            )}
-          />
-        )}
-      /> */}
-    </Container>
+    <FlatList
+      ref={mealListRef}
+      data={meals}
+      keyExtractor={mealKeyExtractor}
+      ItemSeparatorComponent={ItemSeparator}
+      ListHeaderComponent={Header}
+      onScrollToIndexFailed={handleScrollFailSilently}
+      renderItem={({ item: meal, index }) => (
+        <MealItemMemo
+          meal={meal}
+          index={index}
+          onMealOpen={handleMealOpen}
+          onMealDelete={handleMealDelete}
+          onProductAdd={handleProductAdd}
+          onProductQuantityUpdate={handleProductQuantityUpdate}
+          onProductDelete={handleProductDelete}
+        />
+      )}
+    />
   );
 }
 
-const Container = styled.View`
-  flex: 1;
-`
-
-const ContentContainer = styled.View`
-  margin: 40px 0 15px 0;
-`
-
-const ButtonAddOwnProduct = styled(ButtonSecondaryArrow)`
-  margin: ${props => `0 ${props.theme.spacing.screenPadding}`};
-`
-
-const mealKeyExtractor = (meal: MealWithRatio): string => meal.id.toString();
+const mealKeyExtractor = (meal: Selectors.MealCalced): string => `${meal.type}${meal.data.id}`;

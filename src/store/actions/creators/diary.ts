@@ -1,23 +1,31 @@
 import {
-  MEAL_UPDATED,
   MEAL_DELETED,
   MEAL_PRODUCT_DELETED,
-  PRODUCT_UPDATED,
-  MEAL_TOGGLED,
-  PRODUCT_TOGGLED,
+  PRODUCT_QUANTITY_UPDATED,
+  MEAL_OPEN_TOGGLED,
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
   MEALS_LOADED,
+  MEAL_PRODUCT_ADD_STARTED,
+  MEAL_PRODUCT_ADD_FINISHED,
 } from '../../consts';
 import { MealId, ProductId } from '../../../types';
-import { Meal, IProductMerged, Product } from '../../../database/entities';
-import { DiaryMeal, DiaryProduct, DiaryMealId } from '../../reducers/diary';
+import { Meal, IProductMerged, IProduct } from '../../../database/entities';
+import { DiaryMealOrTemplateId } from '../../reducers/diary';
 
-export const mealsLoaded = (
-  meals: Meal[]
-) => ({
+export const mealsLoaded = (meals: Meal[]) => ({
   type: MEALS_LOADED,
   payload: meals
+});
+
+export const mealProductAddStarted = (mealId: DiaryMealOrTemplateId) => ({
+  type: MEAL_PRODUCT_ADD_STARTED,
+  meta: { mealId }
+});
+
+export const mealProductAddFinished = (mealId: DiaryMealOrTemplateId) => ({
+  type: MEAL_PRODUCT_ADD_FINISHED,
+  meta: { mealId }
 });
 
 export const mealAdded = (
@@ -25,15 +33,6 @@ export const mealAdded = (
 ) => ({
   type: MEAL_ADDED,
   payload: meal,
-});
-
-export const mealUpdated = (
-  mealId: MealId,
-  meal: Partial<DiaryMeal>
-) => ({
-  type: MEAL_UPDATED,
-  payload: meal,
-  meta: { mealId }
 });
 
 export const mealDeleted = (mealId: MealId) => ({
@@ -44,7 +43,7 @@ export const mealDeleted = (mealId: MealId) => ({
 export const mealProductAdded = (
   mealId: MealId,
   product: IProductMerged,
-  rawProduct: Product | IProductMerged,
+  rawProduct: IProduct,
 ) => ({
   type: MEAL_PRODUCT_ADDED,
   payload: product,
@@ -59,27 +58,20 @@ export const mealProductDeleted = (
   meta: { mealId, productId }
 });
 
-export const productUpdated = (
+export const productQuantityUpdated = (
   productId: ProductId,
-  product: Partial<DiaryProduct>
+  quantity: number
 ) => ({
-  type: PRODUCT_UPDATED,
-  payload: product,
+  type: PRODUCT_QUANTITY_UPDATED,
+  payload: quantity,
   meta: { productId }
 });
 
-export const mealToggled = (
-  mealId: DiaryMealId | null
+export const mealOpenToggled = (
+  mealId: DiaryMealOrTemplateId | null
 ) => ({
-  type: MEAL_TOGGLED,
+  type: MEAL_OPEN_TOGGLED,
   meta: { mealId }
-});
-
-export const productToggled = (
-  productId: ProductId | null
-) => ({
-  type: PRODUCT_TOGGLED,
-  payload: productId
 });
 
 export type MealAdded = ReturnType<typeof mealAdded>;
@@ -89,9 +81,9 @@ export type DiaryAction =
   | MealAdded
   | MealProductAdded
   | ReturnType<typeof mealsLoaded>
-  | ReturnType<typeof mealUpdated>
   | ReturnType<typeof mealDeleted>
   | ReturnType<typeof mealProductDeleted>
-  | ReturnType<typeof productUpdated>
-  | ReturnType<typeof mealToggled>
-  | ReturnType<typeof productToggled>
+  | ReturnType<typeof productQuantityUpdated>
+  | ReturnType<typeof mealOpenToggled>
+  | ReturnType<typeof mealProductAddStarted>
+  | ReturnType<typeof mealProductAddFinished>

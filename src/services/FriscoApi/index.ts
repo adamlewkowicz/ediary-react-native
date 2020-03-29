@@ -1,11 +1,11 @@
-import { BarcodeId, MacroElement, MacroElements, PortionType } from '../../types';
-import { round, getNumAndUnitFromString, fetchify } from '../../common/utils';
-import { baseMacro } from '../../common/helpers';
+import { BarcodeId, MacroElement, MacroElements, ProductPortionType } from '../../types';
 import { NormalizedProduct } from '../IlewazyApi/types';
 import { FriscoResponse, FriscoNutritionBrandbank } from './types/response';
 import { FriscoProductId } from './types/common';
 import { FriscoQueryResponse } from './types';
 import { Product } from '../../database/entities';
+import * as Utils from '../../utils';
+import { MACRO } from '../../common/consts';
 
 export class FriscoApi {
 
@@ -20,7 +20,7 @@ export class FriscoApi {
   }> {
     const parsedQuery = encodeURIComponent(query as string);
 
-    const { products: raw } = await fetchify<FriscoQueryResponse>(
+    const { products: raw } = await Utils.fetchify<FriscoQueryResponse>(
       `${FriscoApi.searchURL}${parsedQuery}` +
       '&includeCategories=true&pageIndex=1&deliveryMethod=Van&pageSize=60' +
       '&language=pl&facetCount=100&includeWineFacets=false',
@@ -61,7 +61,7 @@ export class FriscoApi {
     controller?: AbortController
   ): Promise<NormalizedProduct | null> {
 
-    const data = await fetchify<FriscoResponse>(
+    const data = await Utils.fetchify<FriscoResponse>(
       `https://products.frisco.pl/api/products/get/${productId}`,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
       controller
@@ -94,7 +94,7 @@ export class FriscoApi {
     const {
       value: nullablePortion,
       unit
-    } = getNumAndUnitFromString(portionHeading);
+    } = Utils.getNumAndUnitFromString(portionHeading);
 
     const portion = nullablePortion ?? Product.defaultPortion;
 
@@ -118,17 +118,17 @@ export class FriscoApi {
 
       if (foundMacroElement) {
         const [, element] = foundMacroElement;
-        const { value, unit: elementUnit } = getNumAndUnitFromString(bank.Values[0]);
+        const { value, unit: elementUnit } = Utils.getNumAndUnitFromString(bank.Values[0]);
 
         if (elementUnit !== 'g' && element !== 'kcal') {
           return macro;
         }
         if (value !== null) {
-          macro[element] = round(macro[element] + value);
+          macro[element] = Utils.round(macro[element] + value);
         }
       }
       return macro;
-    }, { ...baseMacro });
+    }, { ...MACRO });
 
     if (Object.values(macro).every(value => value === 0)) {
       return null;
@@ -138,10 +138,10 @@ export class FriscoApi {
     const name = data.officialProductName.replace(/\./, '');
     const description = data.description;
     const portions = macroField.content.Headings.flatMap(heading => {
-      const { value, unit } = getNumAndUnitFromString(heading);
+      const { value, unit } = Utils.getNumAndUnitFromString(heading);
 
       if ((unit === 'g' || unit === 'ml') && value !== null) {
-        const type: PortionType = 'portion';
+        const type: ProductPortionType = 'portion';
         return [{
           type,
           value,
@@ -200,11 +200,11 @@ export class FriscoApi {
       const macro: MacroElements = substances.reduce((macro, substance) => {
         const element = macroMap[substance.name];
         if (element) {
-          macro[element] = round(macro[element] + substance.quantity);
+          macro[element] = Utils.round(macro[element] + substance.quantity);
         }
         return macro;
       }, {
-        ...baseMacro,
+        ...MACRO,
         kcal: sustenanceCalories
       });
   

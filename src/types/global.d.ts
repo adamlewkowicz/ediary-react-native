@@ -5,3 +5,9 @@ declare module "sql-formatter" {
   }
   export default main
 }
+
+declare module "react-native-dotenv" {
+  const BUGSNAG_API_KEY: string;
+  
+  export { BUGSNAG_API_KEY };
+}

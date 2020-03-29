@@ -1,41 +1,28 @@
 import { 
   Meal,
-  Product,
   MealProduct,
-  IMeal,
   IProductRequired,
 } from '../../../database/entities';
 import {
   mealDeleted,
-  mealUpdated,
   mealProductDeleted,
-  productUpdated,
-  mealToggled,
+  productQuantityUpdated,
+  mealOpenToggled,
   mealProductAdded,
   mealAdded,
   mealsLoaded,
+  mealProductAddStarted,
+  mealProductAddFinished,
 } from '../creators';
-import { DateDay, ProductId, MealId } from '../../../types';
-import { debounce, findOrFail } from '../../../common/utils';
+import { DayjsDate, ProductId, MealId } from '../../../types';
 import { Thunk, StoreState, Selectors } from '../..';
 import {
-  DiaryMeal,
-  DiaryProduct,
-  DiaryTemplate,
-  DiaryMealTemplate,
+  MealTemplate,
+  DiaryMealOrTemplate,
 } from '../../reducers/diary';
 import { batch } from 'react-redux';
-
-const debounceA = debounce();
-
-async function _updateMealMacro(mealId: MealId, store: StoreState) {
-  const meals = Selectors.getCalcedMeals(store);
-  const foundMeal = meals.find(meal => meal.id === mealId);
-  if (foundMeal) {
-    const { carbs, prots, fats, kcal } = foundMeal;
-    await Meal.update(mealId, { macro: { carbs, prots, fats, kcal }});
-  }
-}
+import { ProductResolver } from '../../../screens';
+import * as Utils from '../../../utils';
 
 export const mealCreate = (
   name: Meal['name'],
@@ -44,7 +31,7 @@ export const mealCreate = (
   const meal = await Meal.createWithDate({ name }, date);
   
   batch(() => {
-    dispatch(mealToggled(null));
+    dispatch(mealOpenToggled(null));
     dispatch(mealAdded(meal));
   });
 }
@@ -56,22 +43,13 @@ export const mealDelete = (
   await Meal.delete(mealId);
 }
 
-export const mealUpdate = (
-  mealId: MealId,
-  meal: Partial<DiaryMeal & IMeal>
-): Thunk => async (dispatch, getState) => {
-  dispatch(mealUpdated(mealId, meal));
-  await Meal.update(mealId, meal);
-  await _updateMealMacro(mealId, getState());
-}
-
 export const mealProductCreate = (
   mealId: MealId,
   payload: IProductRequired
 ): Thunk => async (dispatch, getState) => {
   const newProduct = await Meal.addAndCreateProduct(mealId, payload);
   dispatch(mealProductAdded(mealId, { mealId, ...newProduct }, newProduct));
-  await _updateMealMacro(mealId, getState());
+  await updateMealMacro(mealId, getState());
 }
 
 export const mealProductDelete = (
@@ -79,8 +57,8 @@ export const mealProductDelete = (
   productId: ProductId
 ): Thunk => async (dispatch, getState) => {
   const { meals, templates } = getState().diary;
-  const meal = findOrFail(meals, meal => meal.id === mealId);
-  const template = templates.find(template => template.name === meal.name);
+  const meal = Utils.findOrFail(meals, meal => meal.data.id === mealId);
+  const template = templates.find(template => template.name === meal.data.name);
   const isLatestProductOfMeal = meal.productIds.length === 1;
   const isCreatedFromTemplate = template !== undefined;
   
@@ -90,7 +68,7 @@ export const mealProductDelete = (
   } else {
     dispatch(mealProductDeleted(mealId, productId));
     await MealProduct.delete({ mealId, productId });
-    await _updateMealMacro(mealId, getState());
+    await updateMealMacro(mealId, getState());
   }
 }
 
@@ -98,34 +76,23 @@ export const mealProductQuantityUpdate = (
   mealId: MealId,
   productId: ProductId,
   quantity: number
-): Thunk => async (dispatch, getState) => {
-  dispatch(productUpdated(productId, { quantity }));
-  debounceA(async () => {
-    await MealProduct.update({ mealId, productId }, { quantity });
-    await _updateMealMacro(mealId, getState());
-  }, 300);
-}
-
-export const productUpdate = (
-  productId: ProductId,
-  product: Partial<DiaryProduct>
-): Thunk => async (dispatch) => {
-  dispatch(productUpdated(productId, product));
-  await Product.update(productId, product);
+): Thunk => (dispatch, getState) => {
+  dispatch(productQuantityUpdated(productId, quantity));
+  updateProductQuantityDebounced(mealId, productId, quantity, getState());
 }
 
 export const mealsFindByDay = (
-  dateDay: DateDay
+  dateDay: DayjsDate
 ): Thunk => async (dispatch) => {
   const foundMeals = await Meal.findByDay(dateDay);
   dispatch(mealsLoaded(foundMeals));
 }
 
 export const mealCreateFromTemplate = (
-  template: DiaryTemplate,
-  date: Date,
+  template: MealTemplate,
   productId: ProductId,
-  quantity?: number,
+  quantity: number,
+  date: Date,
 ): Thunk<Promise<void>> => async (dispatch, getState) => {
   const createdMeal = await Meal.createFromTemplate(
     template, date, productId, quantity
@@ -133,13 +100,13 @@ export const mealCreateFromTemplate = (
   dispatch(
     mealAdded(createdMeal)
   );
-  await _updateMealMacro(createdMeal.id, getState());
+  await updateMealMacro(createdMeal.id, getState());
 }
 
 export const mealProductAdd = (
   mealId: MealId,
   productId: ProductId,
-  quantity?: number
+  quantity: number
 ): Thunk<Promise<void>> => async (dispatch, getState) => {
   const { product, action, rawProduct } = await Meal.addProduct(
     mealId,
@@ -148,30 +115,71 @@ export const mealProductAdd = (
   );
   if (action === 'update') {
     dispatch(
-      productUpdated(productId, { quantity: product.quantity })
+      productQuantityUpdated(productId, product.quantity)
     );
-  } else {
+  } else if (action === 'create') {
     dispatch(
       mealProductAdded(mealId, product, rawProduct)
     );
   }
-  await _updateMealMacro(mealId, getState());
+  await updateMealMacro(mealId, getState());
 }
 
 export const mealOrTemplateProductAdd = (
-  meal: DiaryMeal | DiaryMealTemplate,
-  productId: ProductId,
+  meal: DiaryMealOrTemplate,
+  productResolver: ProductResolver,
+  quantity: number,
   date: Date,
 ): Thunk<Promise<void>> => async (dispatch) => {
+  const mealId = meal.data.id;
+
+  dispatch(mealProductAddStarted(mealId));
+
+  const product = await productResolver();
+  const productId = product.id;
+
   if (meal.type === 'template') {
-    const { name, templateId, time } = meal;
-    const template: DiaryTemplate = { id: templateId, name, time };
+    const template: MealTemplate = meal.data;
+
     await dispatch(
       mealCreateFromTemplate(
-        template, date, productId
+        template,
+        productId,
+        quantity,
+        date,
       )
     );
-  } else {
-    await dispatch(mealProductAdd(meal.id, productId));
+  } else if (meal.type === 'meal') {
+    await dispatch(
+      mealProductAdd(
+        mealId as MealId,
+        productId,
+        quantity
+      )
+    );
+  }
+
+  dispatch(mealProductAddFinished(mealId));
+}
+
+async function updateMealMacro(mealId: MealId, state: StoreState): Promise<void> {
+  const meals = Selectors.getMealsCalced(state);
+  const foundMeal = meals.find(meal => meal.data.id === mealId);
+
+  if (foundMeal) {
+    const { carbs, prots, fats, kcal } = foundMeal.calcedMacro;
+    await Meal.update(mealId, { macro: { carbs, prots, fats, kcal }});
   }
 }
+
+async function updateProductQuantity(
+  mealId: MealId,
+  productId: ProductId,
+  quantity: number,
+  state: StoreState
+): Promise<void> {
+  await MealProduct.update({ mealId, productId }, { quantity });
+  await updateMealMacro(mealId, state);
+}
+
+const updateProductQuantityDebounced = Utils.createDebouncedFunc(updateProductQuantity);
