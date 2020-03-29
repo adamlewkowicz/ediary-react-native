@@ -52,6 +52,25 @@ const color = {
   ...color_V2,
 } as const;
 
+export const THEME = {
+  color: color_V2,
+  spacing: spacing_V2,
+  fontSize: {
+    h1: 27,
+    h2: 18, // 19 ?
+    h3: 16,
+    regular: 14,
+    small: 12,
+  },
+  fontWeight: {
+    light: 'Hind-Light',
+    regular: 'Hind-Regular',
+    medium: 'Hind-Medium',
+    bold: 'Hind-Bold',
+  },
+  fontName: 'Hind',
+} as const;
+
 export const theme = {
   fontSize: {
     huge: 25,

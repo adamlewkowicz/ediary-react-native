@@ -1,37 +1,45 @@
 import * as React from 'react';
 import { FrameContainer } from '../components/FrameContainer';
 import { TypeComponent } from '../components/TypeComponent';
+import { THEME } from '../../src/common/theme';
 
 export const TypeFrame = () => (
   <FrameContainer title="Type">
     <TypeComponent
       name="HeaderH1"
-      fontSize={64}
+      fontWeight="light"
+      fontSize={THEME.fontSize.h1}
     />
     <TypeComponent
       name="HeaderH2"
-      fontSize={44}
+      fontWeight="light"
+      fontSize={THEME.fontSize.h2}
     />
     <TypeComponent
-      name="HeaderH3"
-      fontSize={24}
-    />
-    <TypeComponent
-      name="HeaderH4"
-      fontSize={16}
+      name="HeaderH2"
+      fontWeight="light"
+      fontSize={THEME.fontSize.h3}
     />
 
     <TypeComponent
       name="TextRegular"
-      fontSize={16}
+      fontSize={THEME.fontSize.regular}
     />
     <TypeComponent
       name="TextSmall"
-      fontSize={14}
+      fontSize={THEME.fontSize.small}
+    />
+
+
+    <TypeComponent
+      name="TextRegularSecondary"
+      color={THEME.color.secondary}
+      fontSize={THEME.fontSize.regular}
     />
     <TypeComponent
-      name="TextXSmall"
-      fontSize={11}
+      name="TextRegularQuinary"
+      color={THEME.color.quinary}
+      fontSize={THEME.fontSize.regular}
     />
   </FrameContainer>
 );

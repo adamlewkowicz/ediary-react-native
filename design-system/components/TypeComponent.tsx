@@ -1,15 +1,22 @@
 import * as React from 'react';
 import { Component, Text, StyleSheet } from 'react-figma';
-import { theme } from '../../src/common/theme';
+import { theme, THEME } from '../../src/common/theme';
 
 interface TypeComponentProps {
   name: string
+  color?: string
+  fontWeight?: string
   fontSize: number
 }
 
 export const TypeComponent = (props: TypeComponentProps) => {
   const fontSizeText = `${props.fontSize}px`;
   const formattedName = props.name.split(/(?=[A-Z])/).join(' ');
+
+  const {
+    color = THEME.color.primary,
+    fontWeight = 'regular',
+  } = props;
 
   return (
     <>
@@ -22,7 +29,8 @@ export const TypeComponent = (props: TypeComponentProps) => {
           style={{
             fontSize: props.fontSize,
             fontFamily: theme.fontWeight.base,
-            color: theme.color.primary,
+            fontWeight,
+            color,
           }}
         >
           {formattedName}
