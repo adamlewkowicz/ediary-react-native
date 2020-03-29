@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { SvgGradientDef } from '../Svg';
 import Svg, { Rect } from 'react-native-svg';
-import { useSpring, config, animated } from 'react-spring';
+import { Animated } from 'react-native';
+import { useAnimatedSpring } from '../../../hooks';
 
 export interface ChartProgressBarProps {
   percentage: number
@@ -10,15 +11,13 @@ export interface ChartProgressBarProps {
   gradientColors: readonly [string, string]
 }
 
-export const ChartProgressBar = (props: ChartProgressBarProps) => {
+export const ChartProgressBar = ({ height = 5, ...props }: ChartProgressBarProps) => {
   const percentage = props.percentage > 100 ? 100 : props.percentage;
-  const { height = 5 } = props;
+  const animatedValue = useAnimatedSpring(percentage);
 
-  const springProps: any = useSpring({
-    from: { percentage },
-    to: { percentage },
-    delay: 100,
-    config: config.wobbly
+  const animatedWidth = animatedValue.interpolate({
+    inputRange: [0, 100],
+    outputRange: ['0%', '100%']
   });
 
   return (
@@ -32,7 +31,7 @@ export const ChartProgressBar = (props: ChartProgressBarProps) => {
           colors={props.gradientColors}
         />
         <BarAnimated
-          width={springProps.percentage.interpolate((v: number) => v + '%')}
+          width={animatedWidth}
           height={height}
           fill={`url(#${GRADIENT_ID})`}
         />
@@ -51,4 +50,4 @@ const SvgContainer = styled(Svg)`
   background-color: ${props => props.theme.color.quinary};
 `
 
-const BarAnimated = animated(Rect);
+const BarAnimated = Animated.createAnimatedComponent(Rect);

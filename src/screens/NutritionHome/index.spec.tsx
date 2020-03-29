@@ -107,7 +107,9 @@ describe('<NutritionHomeScreen />', () => {
 
       const productQuantityText = await ctx.findByLabelText('Ilość produktu');
 
-      expect(productQuantityText).toHaveTextContent(ctx.mocks.quantity + 'g');
+      await wait(() => {
+        expect(productQuantityText).toHaveTextContent(ctx.mocks.quantity + 'g');
+      });
     });
 
     it('should update quantity in database 🗄️', async () => {
