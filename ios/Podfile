@@ -36,14 +36,6 @@ target 'EdiaryMobileApp' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
-
-  pod 'RNSVG', :path => '../node_modules/react-native-svg'
-
-  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
-
-  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
-
   target 'EdiaryMobileAppTests' do
     inherit! :search_paths
     # Pods for testing
