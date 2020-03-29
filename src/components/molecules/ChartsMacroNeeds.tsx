@@ -24,21 +24,21 @@ export const ChartsMacroNeeds = (props: ChartsMacroNeedsProps) => {
           title="Węglowodany (g)"
           value={carbs.eaten}
           valueLeft={carbs.needed}
-          percentages={carbs.percentage}
+          percentage={carbs.percentage}
           gradientColors={theme.gradient.carbs}
         />
         <ChartMacroCircleLeft
           title="Białko (g)"
           value={prots.eaten}
           valueLeft={prots.needed}
-          percentages={prots.percentage}
+          percentage={prots.percentage}
           gradientColors={theme.gradient.prots}
         />
         <ChartMacroCircleLeft
           title="Tłuszcze (g)"
           value={fats.eaten}
           valueLeft={fats.needed}
-          percentages={fats.percentage}
+          percentage={fats.percentage}
           gradientColors={theme.gradient.fats}
         />
       </CirclesContainer>

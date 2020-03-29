@@ -57,8 +57,8 @@ const TAB_ICON_SIZE = {
 };
 
 const TAB_BAR_ICON = {
-  [APP_ROUTE.NutritionStack]: ReportIcon,
-  [APP_ROUTE.DiarySummary]: DishIcon,
+  [APP_ROUTE.NutritionStack]: DishIcon,
+  [APP_ROUTE.DiarySummary]: ReportIcon,
 };
 
 export type NutritionStackNavigationProp = ScreenProps<'NutritionStack'>;

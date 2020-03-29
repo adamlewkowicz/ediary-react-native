@@ -129,3 +129,11 @@ export function calculateDailyMacroNeedsByGoal(
 
   return macroNeeds;
 }
+
+export const calculateCircleStrokeDasharray = (
+  radius: number,
+  strokeWidth: number
+): number => {
+  const FORMULA_CONSTANT = 2;
+  return Math.floor(FORMULA_CONSTANT * Math.PI * radius) + strokeWidth;
+}

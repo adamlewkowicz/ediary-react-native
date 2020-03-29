@@ -86,7 +86,8 @@ export const NutritionStack = (props: NutritionStackProps) => {
 
 const SCREEN_OPTIONS: StackNavigationOptions = {
   headerTitleStyle: {
-    fontFamily: theme.fontWeight.regular
+    fontFamily: theme.fontWeight.light,
+    fontSize: theme.fontSize.largeXL,
   }
 }
 

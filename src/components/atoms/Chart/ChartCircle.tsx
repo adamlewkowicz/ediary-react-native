@@ -1,16 +1,17 @@
 import React, { ReactNode } from 'react';
 import Svg, {
   Circle,
-  Defs,
-  LinearGradient,
-  Stop,
+  CircleProps,
 } from 'react-native-svg';
-import { useSpring, animated } from 'react-spring';
 import styled from 'styled-components/native';
 import { theme } from '../../../common/theme';
+import { SvgGradientDef } from '../Svg';
+import * as Utils from '../../../utils';
+import { useAnimatedSpring } from '../../../hooks';
+import { Animated } from 'react-native';
 
 export interface ChartCircleProps {
-  percentages: number
+  percentage: number
   size?: number
   width?: number
   children?: ReactNode
@@ -18,63 +19,46 @@ export interface ChartCircleProps {
 }
 
 export const ChartCircle = (props: ChartCircleProps) => {
-  const {
-    size: SIZE = 80,
-    width: WIDTH = 5,
-  } = props;
-  const [firstColor, secondColor] = props.gradientColors;
+  const { size = 80, width = 5 } = props;
+  const percentage = props.percentage > 100 ? 100 : props.percentage;
 
-  const percentages = props.percentages > 100 ? 100 : props.percentages;
+  const xAxisCenterCoord = Math.floor(size / 2);
+  const yAxisCenterCoord = xAxisCenterCoord;
 
-  const ratioSpring: any = useSpring({
-    from: { value: percentages },
-    to: { value: percentages },
-    delay: 100,
-    config: {
-      tension: 140,
-      friction: 18,
-    }
+  const radius = Math.floor(size / 2.5);
+  const strokeDasharray = Utils.calculateCircleStrokeDasharray(radius, width);
+
+  const genericCircleProps: CircleProps = {
+    cx: xAxisCenterCoord,
+    cy: yAxisCenterCoord,
+    r: radius,
+    fill: 'none',
+    strokeWidth: width,
+  }
+
+  const animatedValue = useAnimatedSpring(percentage);
+  const animatedStrokeDashoffset = animatedValue.interpolate({
+    inputRange: [0, 100],
+    outputRange: [strokeDasharray, 0]
   });
 
-  const CX = SIZE / 2;
-  const CY = CX;
-  const RADIUS = SIZE / 2.5;
-  
   return (
     <Container>
-      <SvgContainer height={SIZE} width={SIZE}>
-        <Defs>
-          <LinearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-            <Stop
-              offset="0%"
-              stopColor={firstColor}
-              stopOpacity="1"
-            />
-            <Stop
-              offset="100%"
-              stopColor={secondColor}
-              stopOpacity="1"
-            />
-          </LinearGradient>
-        </Defs>
-        <AnimatedCircle
-          cx={CX}
-          cy={CY}
-          r={RADIUS}
-          fill="none"
-          stroke={theme.colors.quinary}
-          strokeWidth={WIDTH}
+      <SvgContainer height={size} width={size}>
+        <SvgGradientDef
+          id={GRADIENT_ID}
+          colors={props.gradientColors}
         />
-        <AnimatedCircle
-          cx={CX}
-          cy={CY}
-          r={RADIUS}
-          fill="none"
-          stroke="url(#grad1)"
-          strokeWidth={WIDTH}
-          strokeDasharray="1000"
-          strokeDashoffset={ratioSpring.value.interpolate(...SETTINGS.interpolation)}
+        <Circle
+          {...genericCircleProps}
+          stroke={theme.colors.quinary}
+        />
+        <AnimatedPercentageCircle
+          {...genericCircleProps}
+          stroke={`url(#${GRADIENT_ID})`}
           strokeLinecap="round"
+          strokeDasharray={strokeDasharray}
+          strokeDashoffset={animatedStrokeDashoffset}
         />
       </SvgContainer>
       <Content>
@@ -83,6 +67,8 @@ export const ChartCircle = (props: ChartCircleProps) => {
     </Container>
   );
 }
+
+const GRADIENT_ID = '#ChartCircle';
 
 const SvgContainer = styled(Svg)`
   align-self: center;
@@ -100,14 +86,4 @@ const Content = styled.View`
   position: absolute;
 `
 
-const SETTINGS = {
-  size: 80,
-  thickness: 5,
-  radius: 35,
-  interpolation: [
-    [1, 100],
-    [1000, 495]
-  ]
-} as const;
-
-const AnimatedCircle = animated(Circle);
+const AnimatedPercentageCircle = Animated.createAnimatedComponent(Circle);

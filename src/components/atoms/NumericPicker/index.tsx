@@ -1,5 +1,6 @@
 import React from 'react';
-import { Picker, PickerProps } from 'react-native'
+import { Picker } from '@react-native-community/picker';
+import { PickerProps } from '@react-native-community/picker/typings/Picker';
 import styled from 'styled-components/native';
 
 interface NumericPickerProps<T> extends PickerProps {
@@ -19,7 +20,7 @@ export function NumericPicker <T extends number>(props: NumericPickerProps<T>) {
   return (
     <StyledPicker
       selectedValue={props.value}
-      onValueChange={value => onChange(value)}
+      onValueChange={value => onChange(value as T)}
       {...pickerProps}
     >
       {props.options.map(value => 

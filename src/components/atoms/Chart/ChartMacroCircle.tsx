@@ -5,19 +5,19 @@ import { H4, TextSecondary } from '../Text';
 
 interface ChartMacroCircleProps extends ChartCircleProps {
   title: string
-  value: number | string
+  value: number
 }
 
 export const ChartMacroCircle = (props: ChartMacroCircleProps) => {
   return (
     <Container>
       <ChartCircle
-        percentages={props.percentages}
+        percentage={props.percentage}
         gradientColors={props.gradientColors}
       >
-        <H4>{props.percentages}%</H4>
+        <H4>{props.percentage}%</H4>
       </ChartCircle>
-      <TextSecondary>{props.value}g</TextSecondary>
+      <TextSecondary>{props.value.toFixed(1)}g</TextSecondary>
       <H4>{props.title}</H4>
     </Container>
   );
