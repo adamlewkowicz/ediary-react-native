@@ -68,7 +68,7 @@ const getBugsnag = createBugsnagGetter();
 
 export const handleError = (error: Error): void => {
   if (IS_DEV) {
-    throw error;
+    console.error(error);
   } else {
     getBugsnag()?.notify(error);
   }
