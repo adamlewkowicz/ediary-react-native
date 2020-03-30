@@ -12,7 +12,7 @@ export const ButtonPrimary = ({ children, ...props }: ButtonPrimaryProps) => {
   return (
     <Container {...props}>
       {props.isLoading ? (
-        <ActivityIndicator />
+        <ActivityIndicator color="#fff" />
       ) : (
         <ButtonText>{children}</ButtonText>
       )}

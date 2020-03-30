@@ -1,10 +1,5 @@
-import React, { useReducer, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components/native';
-import {
-  productCreateReducer,
-  initProductCreateReducer,
-  normalizeProductData,
-} from './reducer';
 import { TextInput, ScrollView } from 'react-native';
 import { useUserId, useNavigationData, useAppError } from '../../hooks';
 import { Product } from '../../database/entities';
@@ -19,19 +14,17 @@ import {
 } from '../../components';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import * as Utils from '../../utils';
+import { ProductUnitType } from '../../types';
 
 interface ProductCreateScreenProps {}
 
 export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
   const { params, navigation, navigate } = useNavigationData<ProductCreateScreenNavigationProps>();
-  const [state, dispatch] = useReducer(
-    productCreateReducer,
-    params,
-    initProductCreateReducer
-  );
-  const userId = useUserId();
+  const [portionUnitType] = useState<ProductUnitType>('g');
   const [isLoading, setIsLoading] = useState(false);
   const { setAppError } = useAppError();
+  const userId = useUserId();
 
   const brandInputRef = useRef<TextInput>(null);
   const producerInputRef = useRef<TextInput>(null);
@@ -45,21 +38,12 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
   const barcodeInputRef = useRef<TextInput>(null);
 
   const formik = useFormik({
-    initialValues: {
-      name: '',
-      brand: '',
-      producer: '',
-      portionQuantity: '',
-      carbs: '',
-      sugars: '',
-      prots: '',
-      fats: '',
-      fattyAcids: '',
-      kcal: '',
-      barcode: '',
-    },
+    initialValues: INITIAL_VALUES,
+    validationSchema: getValidationSchema(portionUnitType),
     async onSubmit(values) {
       try {
+        if (isLoading) return;
+
         setIsLoading(true);
 
         const { portionQuantity, ...productData } = normalizeProductData(values);
@@ -74,35 +58,21 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
       } finally {
         setIsLoading(false);
       }
-    },
-    validationSchema: Yup.object({
-      name: Yup.string()
-        .min(MIN_PRODUCT_NAME, `Nazwa powinna zawierać min. ${MIN_PRODUCT_NAME} znaki`)
-        .required('Nazwa jest wymagana'),
-      brand: Yup.string(),
-      producer: Yup.string(),
-      portionQuantity: Yup
-        .number()
-        .max(
-          MAX_PORTION_QUANTITY,
-          `Maksymalna ilość w jednej porcji to ${MAX_PORTION_QUANTITY} ${state.portionUnitType}`
-        ),
-      carbs: Yup.number(),
-      sugars: Yup.number(),
-      prots: Yup.number(),
-      fats: Yup.number(),
-      fattyAcids: Yup.number(),
-      kcal: Yup.number(),
-      barcode: Yup.string(),
-    })
+    }
   });
 
-  const handleSubmit = (): void => {
-    formik.handleSubmit();
-  }
+  const handleSubmit = (): void => formik.handleSubmit();
 
   const handleCaloriesEvaluation = (): void => {
-    dispatch({ type: 'CALORIES_EVALUATED' });
+    const calcedKcal = Utils.calculateCaloriesByMacro({
+      carbs: Number(formik.values.carbs),
+      prots: Number(formik.values.prots),
+      fats: Number(formik.values.fats)
+    });
+
+    if (!Number.isNaN(calcedKcal)) {
+      formik.setFieldValue('kcal', String(calcedKcal));
+    }
   }
   
   const handleBarcodeScanNavigation = (): void => {
@@ -150,12 +120,12 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           isDirty={formik.touched.producer}
         />
         <InputMetaTextRef
-          label="Ilość w jednej porcji"
+          label={`Ilość ${portionUnitType} w jednej porcji`}
           placeholder="100"
           value={formik.values.portionQuantity}
           onChangeText={formik.handleChange('portionQuantity') as any}
           onBlur={formik.handleBlur('portionQuantity') as any}
-          metaText={state.portionUnitType}
+          metaText={portionUnitType}
           keyboardType="numeric"
           ref={portionQuantityInputRef}
           onSubmitEditing={carbsInputRef.current?.focus}
@@ -165,7 +135,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
       </Section>
       <Section
         title="Makroskładniki"
-        description={`Na 100${state.portionUnitType} produtku`}
+        description={`Na 100${portionUnitType} produtku`}
       >
         <Group.Container>
           <InputRef
@@ -274,12 +244,6 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
   );
 }
 
-const KEYBOARD_NUMERIC = 'numeric';
-
-const MAX_PORTION_QUANTITY = 2000;
-
-const MIN_PRODUCT_NAME = 3;
-
 const Container = styled(ScrollView)`
   padding: 0 20px;
 `
@@ -287,3 +251,67 @@ const Container = styled(ScrollView)`
 const SaveProductButton = styled(ButtonPrimary)`
   margin-bottom: 20px;
 `
+
+const INITIAL_VALUES = {
+  name: '',
+  brand: '',
+  producer: '',
+  portionQuantity: '',
+  carbs: '',
+  sugars: '',
+  prots: '',
+  fats: '',
+  fattyAcids: '',
+  kcal: '',
+  barcode: '',
+};
+
+const MAX_PORTION_QUANTITY = 2000;
+
+const MIN_PRODUCT_NAME = 3;
+
+const getValidationSchema = (portionUnitType: ProductUnitType) => Yup.object({
+  name: Yup.string()
+    .min(MIN_PRODUCT_NAME, `Nazwa powinna zawierać min. ${MIN_PRODUCT_NAME} znaki`)
+    .required('Nazwa jest wymagana'),
+  brand: Yup.string(),
+  producer: Yup.string(),
+  portionQuantity: Yup
+    .number()
+    .max(
+      MAX_PORTION_QUANTITY,
+      `Maksymalna ilość w jednej porcji to ${MAX_PORTION_QUANTITY} ${portionUnitType}`
+    ),
+  carbs: Yup.number(),
+  sugars: Yup.number(),
+  prots: Yup.number(),
+  fats: Yup.number(),
+  fattyAcids: Yup.number(),
+  kcal: Yup.number(),
+  barcode: Yup.string(),
+});
+
+type FormData = typeof INITIAL_VALUES;
+
+const normalizeProductData = (productData: FormData) => {
+  const { fattyAcids, sugars, ...restData } = productData;
+
+  const macro = {
+    carbs: Number(productData.carbs),
+    prots: Number(productData.prots),
+    fats: Number(productData.fats), 
+    kcal: Number(productData.kcal)
+  }
+
+  const barcode = productData.barcode.length ? productData.barcode : null;
+  const portionQuantity = Number(productData.portionQuantity);
+  
+  const product = {
+    ...restData,
+    macro,
+    barcode,
+    portionQuantity,
+  }
+
+  return product;
+}
