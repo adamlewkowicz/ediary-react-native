@@ -33,6 +33,7 @@
     "bugsnag-react-native": "^2.23.6",
     "class-validator": "^0.9.1",
     "dayjs": "^1.8.15",
+    "formik": "^2.1.4",
     "intl": "^1.2.5",
     "react": "^16.9.0",
     "react-native": "^0.61.5",
@@ -50,7 +51,8 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "styled-components": "^4.3.2",
-    "typeorm": "^0.2.18"
+    "typeorm": "^0.2.18",
+    "yup": "^0.28.3"
   },
   "devDependencies": {
     "@babel/core": "7.5.5",
@@ -72,6 +74,7 @@
     "@types/redux": "^3.6.0",
     "@types/remote-redux-devtools": "^0.5.3",
     "@types/styled-components": "^4.1.18",
+    "@types/yup": "^0.26.33",
     "@typescript-eslint/eslint-plugin": "^2.2.0",
     "@typescript-eslint/parser": "^2.2.0",
     "babel-jest": "^24.9.0",
