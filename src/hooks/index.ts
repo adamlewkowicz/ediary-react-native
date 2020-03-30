@@ -9,3 +9,4 @@ export * from './use-product-history';
 export * from './use-app-date';
 export * from './use-bound-action';
 export * from './use-animated-spring';
+export * from './use-app-error';
