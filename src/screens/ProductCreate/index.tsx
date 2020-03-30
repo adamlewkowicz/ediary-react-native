@@ -1,13 +1,12 @@
-import React, { useReducer, useRef } from 'react';
+import React, { useReducer, useRef, useState } from 'react';
 import styled from 'styled-components/native';
 import {
   productCreateReducer,
   initProductCreateReducer,
-  ProductDataPayload,
   normalizeProductData,
 } from './reducer';
 import { TextInput, ScrollView } from 'react-native';
-import { useUserId, useNavigationData } from '../../hooks';
+import { useUserId, useNavigationData, useAppError } from '../../hooks';
 import { Product } from '../../database/entities';
 import { ProductCreateScreenNavigationProps } from '../../navigation';
 import {
@@ -31,6 +30,8 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
     initProductCreateReducer
   );
   const userId = useUserId();
+  const [isLoading, setIsLoading] = useState(false);
+  const { setAppError } = useAppError();
 
   const brandInputRef = useRef<TextInput>(null);
   const producerInputRef = useRef<TextInput>(null);
@@ -57,8 +58,22 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
       kcal: '',
       barcode: '',
     },
-    onSubmit(values) {
-      console.log(values)
+    async onSubmit(values) {
+      try {
+        setIsLoading(true);
+
+        const { portionQuantity, ...productData } = normalizeProductData(values);
+        const productWithUserId = { ...productData, userId };
+    
+        const createdProduct = await Product.saveWithPortion(productWithUserId, portionQuantity);
+    
+        params.onProductCreated?.(createdProduct);
+
+      } catch(error) {
+        setAppError(error);
+      } finally {
+        setIsLoading(false);
+      }
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -82,20 +97,8 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
     })
   });
 
-  async function handleProductCreate() {
-    formik.submitForm();
-    const normalizedProductData = normalizeProductData(formik.values);
-    const { portionQuantity, ...productData } = normalizeProductData(state.productData);
-    const productWithUserId = { ...productData, userId };
-
-    const createdProduct = await Product.saveWithPortion(productWithUserId, portionQuantity);
-
-    params.onProductCreated?.(createdProduct);
-  }
-
-  const handleProductDataUpdate = (payload: ProductDataPayload): void => {
-    // formik.handleChange('')
-    // dispatch({ type: 'PRODUCT_DATA_UPDATED', payload });
+  const handleSubmit = (): void => {
+    formik.handleSubmit();
   }
 
   const handleCaloriesEvaluation = (): void => {
@@ -107,7 +110,6 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
       onBarcodeDetected(barcode) {
         navigation.goBack();
         formik.setFieldValue('barcode', barcode);
-        handleProductDataUpdate({ barcode });
       }
     });
   }
@@ -119,7 +121,8 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           label="Nazwa"
           placeholder="Mleko UHT 3.2 %"
           value={formik.values.name}
-          onChangeText={formik.handleChange('name')}
+          onChangeText={formik.handleChange('name') as any}
+          onBlur={formik.handleBlur('name') as any}
           onSubmitEditing={brandInputRef.current?.focus}
           error={formik.errors.name}
           isDirty={formik.touched.name}
@@ -129,7 +132,8 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           label="Marka"
           placeholder="Łaciate"
           value={formik.values.brand}
-          onChangeText={formik.handleChange('brand')}
+          onChangeText={formik.handleChange('brand') as any}
+          onBlur={formik.handleBlur('brand') as any}
           onSubmitEditing={producerInputRef.current?.focus}
           error={formik.errors.brand}
           isDirty={formik.touched.brand}
@@ -138,7 +142,8 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           label="Producent"
           placeholder="Mlekovita"
           value={formik.values.producer}
-          onChangeText={formik.handleChange('producer')}
+          onChangeText={formik.handleChange('producer') as any}
+          onBlur={formik.handleBlur('producer') as any}
           ref={producerInputRef}
           onSubmitEditing={portionQuantityInputRef.current?.focus}
           error={formik.errors.producer}
@@ -148,7 +153,8 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           label="Ilość w jednej porcji"
           placeholder="100"
           value={formik.values.portionQuantity}
-          onChangeText={formik.handleChange('portionQuantity')}
+          onChangeText={formik.handleChange('portionQuantity') as any}
+          onBlur={formik.handleBlur('portionQuantity') as any}
           metaText={state.portionUnitType}
           keyboardType="numeric"
           ref={portionQuantityInputRef}
@@ -164,7 +170,8 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
         <Group.Container>
           <InputRef
             value={formik.values.carbs}
-            onChangeText={formik.handleChange('carbs')}
+            onChangeText={formik.handleChange('carbs') as any}
+            onBlur={formik.handleBlur('carbs') as any}
             label="Węglowodany"
             placeholder="0"
             keyboardType="numeric"
@@ -175,6 +182,9 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           />
           <Group.Separator />
           <InputRef
+            value={formik.values.sugars}
+            onChangeText={formik.handleChange('sugars') as any}
+            onBlur={formik.handleBlur('sugars') as any}
             label="w tym cukry"
             placeholder="0"
             keyboardType="numeric"
@@ -186,7 +196,8 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
         </Group.Container>
         <InputMetaTextRef
           value={formik.values.prots}
-          onChangeText={formik.handleChange('prots')}
+          onChangeText={formik.handleChange('prots') as any}
+          onBlur={formik.handleBlur('prots') as any}
           label="Białko"
           placeholder="0"
           metaText="g"
@@ -199,7 +210,8 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
         <Group.Container>
           <InputRef
             value={formik.values.fats}
-            onChangeText={formik.handleChange('fats')}
+            onChangeText={formik.handleChange('fats') as any}
+            onBlur={formik.handleBlur('fats') as any}
             label="Tłuszcze"
             placeholder="0"
             keyboardType="numeric"
@@ -210,6 +222,9 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           />
           <Group.Separator />
           <InputRef
+            value={formik.values.fattyAcids}
+            onChangeText={formik.handleChange('fattyAcids') as any}
+            onBlur={formik.handleBlur('fattyAcids') as any}
             label="w tym kwasy tłuszczowe"
             placeholder="0"
             keyboardType="numeric"
@@ -221,7 +236,8 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
         </Group.Container>
         <InputButtonRef
           value={formik.values.kcal}
-          onChangeText={formik.handleChange('kcal')}
+          onChangeText={formik.handleChange('kcal') as any}
+          onBlur={formik.handleBlur('kcal') as any}
           label="Kalorie"
           placeholder="0"
           buttonText="Oblicz"
@@ -236,7 +252,8 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
       <Section title="Inne">
         <InputButtonRef
           value={formik.values.barcode}
-          onChangeText={formik.handleChange('barcode')}
+          onChangeText={formik.handleChange('barcode') as any}
+          onBlur={formik.handleBlur('barcode') as any}
           label="Kod kreskowy"
           placeholder="5900512300108"
           buttonText="Zeskanuj"
@@ -248,7 +265,8 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
       </Section>
       <SaveProductButton
         accessibilityLabel="Zapisz produkt"
-        onPress={handleProductCreate}
+        onPress={handleSubmit}
+        isLoading={isLoading}
       >
         Zapisz produkt
       </SaveProductButton>
