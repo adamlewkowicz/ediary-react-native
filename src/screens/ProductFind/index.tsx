@@ -1,14 +1,18 @@
 import React, { useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
-import { ProductListItemMemo, Separator } from '../../components/ProductListItem';
-import { InputSearcher } from '../../components/InputSearcher';
-import { Block } from '../../components/Elements';
-import { BarcodeButton } from '../../components/BarcodeButton';
 import { useProductsSearch, useNavigationData, useProductHistory } from '../../hooks';
-import { FlatList, ToastAndroid } from 'react-native';
+import { FlatList } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
-import { H3, ProductSearchItem, ButtonSecondaryArrow } from '../../_components';
+import {
+  H3,
+  ButtonSecondaryArrow,
+  ProductSearchItemMemo,
+  ItemSeparator,
+  InputSearcher,
+  BarcodeButton,
+} from '../../components';
+import * as Utils from '../../utils';
 
 interface ProductFindScreenProps {}
 
@@ -22,8 +26,12 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
     debouncedProductName,
     ...productSearch
   } = useProductsSearch();
+
   const showProductHistory = !state.isDirty;
-  const productSource: ProductOrNormalizedProduct[] = showProductHistory ? productHistory.data : state.products;
+
+  const productSource: ProductOrNormalizedProduct[] = showProductHistory
+    ? productHistory.data
+    : state.products;
 
   function handleBarcodeScan() {
     navigate('BarcodeScan', {
@@ -42,20 +50,15 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
         productSearch.addProduct(createdProduct);
 
         navigate('ProductFind');
-        
-        ToastAndroid.showWithGravity(
-          `Utworzono produkt "${createdProduct.name}"`,
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER
-        );
 
+        Utils.toastCenter(`Utworzono produkt "${createdProduct.name}"`);
         productHistory.addProduct(createdProduct);
       }
     });
   }
 
-  const handleItemPress = useCallback((product: ProductOrNormalizedProduct) => {
-    if (params.onItemPress && !hasBeenPressed.current) {
+  const handleProductSelect = useCallback((product: ProductOrNormalizedProduct) => {
+    if (params.onProductSelected && !hasBeenPressed.current) {
       hasBeenPressed.current = true;
 
       const productResolver: ProductResolver = async () => {
@@ -65,7 +68,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
         return Product.saveNormalizedProduct(product);
       }
 
-      params.onItemPress(productResolver);
+      params.onProductSelected(productResolver, product.portion);
     }
   }, [params]);
 
@@ -117,7 +120,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
 
   return (
     <Container>
-      <Block space="space-between" align="center">
+      <SearchContainer>
         <InputSearcher
           value={state.productName}
           placeholder="Nazwa produktu"
@@ -129,23 +132,20 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
           accessibilityLabel="Zeskanuj kod kreskowy"
           onPress={handleBarcodeScan}
         />
-      </Block>
+      </SearchContainer>
       <ProductsTitle>
         {showProductHistory ? 'Ostatnio używane produkty:' : 'Znalezione produkty:'}
       </ProductsTitle>
       <RenderInfo />
-      <ProductSearchItem />
       <FlatList
         data={productSource}
         keyExtractor={productKeyExtractor}
         keyboardShouldPersistTaps="handled"
-        ItemSeparatorComponent={Separator}
+        ItemSeparatorComponent={ItemSeparator}
         renderItem={({ item: product }) => (
-          <ProductListItemMemo
+          <ProductSearchItemMemo
             product={product}
-            onPress={handleItemPress}
-            accessibilityLabel="Dodaj produkt do posiłku"
-            accessibilityHint="Wraca na główną stronę i dodaje produkt do posiłku"
+            onSelect={handleProductSelect}
           />
         )}
       />
@@ -153,9 +153,16 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
   );
 }
 
+const SearchContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: ${props => `0 ${props.theme.spacing.screenPadding}`};
+`
+
 const Container = styled.View`
-  padding: 20px 20px 60px 20px;
-  margin-bottom: 10px;
+  flex: 1;
+  padding-top: ${props => props.theme.spacing.screenPadding};
 `
 
 const NotFoundInfo = styled.Text`
@@ -166,7 +173,8 @@ const NotFoundInfo = styled.Text`
 `
 
 const ProductsTitle = styled(H3)`
-  margin: 10px 0;
+  margin: 15px 0 5px 0;
+  padding: ${props => `0 ${props.theme.spacing.screenPadding}`};
 `
 
 const AddOwnProductButton = styled(ButtonSecondaryArrow)`

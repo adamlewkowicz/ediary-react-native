@@ -17,7 +17,7 @@ import {
   InputRef,
   InputButtonRef,
   InputMetaTextRef,
-} from '../../_components';
+} from '../../components';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -85,11 +85,10 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
   async function handleProductCreate() {
     formik.submitForm();
     const normalizedProductData = normalizeProductData(formik.values);
+    const { portionQuantity, ...productData } = normalizeProductData(state.productData);
+    const productWithUserId = { ...productData, userId };
 
-    const createdProduct = await Product.save({
-      ...normalizedProductData,
-      userId,
-    });
+    const createdProduct = await Product.saveWithPortion(productWithUserId, portionQuantity);
 
     params.onProductCreated?.(createdProduct);
   }
@@ -151,7 +150,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           value={formik.values.portionQuantity}
           onChangeText={formik.handleChange('portionQuantity')}
           metaText={state.portionUnitType}
-          keyboardType={KEYBOARD_NUMERIC}
+          keyboardType="numeric"
           ref={portionQuantityInputRef}
           onSubmitEditing={carbsInputRef.current?.focus}
           error={formik.errors.portionQuantity}
@@ -168,7 +167,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             onChangeText={formik.handleChange('carbs')}
             label="Węglowodany"
             placeholder="0"
-            keyboardType={KEYBOARD_NUMERIC}
+            keyboardType="numeric"
             ref={carbsInputRef}
             onSubmitEditing={sugarsInputRef.current?.focus}
             error={formik.errors.carbs}
@@ -178,7 +177,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           <InputRef
             label="w tym cukry"
             placeholder="0"
-            keyboardType={KEYBOARD_NUMERIC}
+            keyboardType="numeric"
             ref={sugarsInputRef}
             onSubmitEditing={protsInputRef.current?.focus}
             error={formik.errors.sugars}
@@ -191,7 +190,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           label="Białko"
           placeholder="0"
           metaText="g"
-          keyboardType={KEYBOARD_NUMERIC}
+          keyboardType="numeric"
           ref={protsInputRef}
           onSubmitEditing={fatsInputRef.current?.focus}
           error={formik.errors.prots}
@@ -203,7 +202,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             onChangeText={formik.handleChange('fats')}
             label="Tłuszcze"
             placeholder="0"
-            keyboardType={KEYBOARD_NUMERIC}
+            keyboardType="numeric"
             ref={fatsInputRef}
             onSubmitEditing={fattyAcidsInputRef.current?.focus}
             error={formik.errors.fats}
@@ -213,7 +212,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           <InputRef
             label="w tym kwasy tłuszczowe"
             placeholder="0"
-            keyboardType={KEYBOARD_NUMERIC}
+            keyboardType="numeric"
             ref={fattyAcidsInputRef}
             onSubmitEditing={kcalInputRef.current?.focus}
             error={formik.errors.fattyAcids}
@@ -226,7 +225,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           label="Kalorie"
           placeholder="0"
           buttonText="Oblicz"
-          keyboardType={KEYBOARD_NUMERIC}
+          keyboardType="numeric"
           onButtonPress={handleCaloriesEvaluation}
           ref={kcalInputRef}
           onSubmitEditing={barcodeInputRef.current?.focus}
@@ -247,9 +246,12 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           isDirty={formik.touched.barcode}
         />
       </Section>
-      <ButtonPrimary onPress={handleProductCreate}>
+      <SaveProductButton
+        accessibilityLabel="Zapisz produkt"
+        onPress={handleProductCreate}
+      >
         Zapisz produkt
-      </ButtonPrimary>
+      </SaveProductButton>
     </Container>
   );
 }
@@ -261,5 +263,9 @@ const MAX_PORTION_QUANTITY = 2000;
 const MIN_PRODUCT_NAME = 3;
 
 const Container = styled(ScrollView)`
-  padding: 20px;
+  padding: 0 20px;
+`
+
+const SaveProductButton = styled(ButtonPrimary)`
+  margin-bottom: 20px;
 `

@@ -5,24 +5,25 @@ import {
   Section,
   ChartMacroCircles,
   H1,
-  ScreenContainer,
   TableMacro,
   RadioInputsRow,
   InputMetaText,
   ButtonPrimary,
-} from '../../_components';
+} from '../../components';
 import { useNavigationData, useCalculatedMacro } from '../../hooks';
 import { ProductPreviewScreenNavigationProps } from '../../navigation';
-import { fillArrayWithinRange } from '../../common/utils';
+import { Product } from '../../database/entities';
+import * as Utils from '../../utils';
+import { ScrollView } from 'react-native';
 
 export const ProductPreviewScreen = () => {
   const { params, navigation } = useNavigationData<ProductPreviewScreenNavigationProps>();
-  const [{ value: productPortion = 100 } = {}] = params.product.portions ?? [];
-  const [quantity, setQuantity] = useState<number>(params.product.quantity ?? 0);
+  const [{ value: productPortion = Product.defaultPortion } = {}] = params.product.portions ?? [];
+  const [quantity, setQuantity] = useState<number>(params.quantity ?? 0);
   const {
-    macro: productMacro,
-    macroPercentages: productMacroPercentages,
-    macroNeeds: productMacroNeeds,
+    macro,
+    macroPercentages,
+    macroNeeds,
   } = useCalculatedMacro(params.product.macro, quantity);
 
   const isEditMode = params.onProductQuantityUpdated != null;
@@ -44,9 +45,9 @@ export const ProductPreviewScreen = () => {
     navigation.setOptions({
       headerTitle: 'Edytuj ilość produktu',
       headerRight: () => (
-        <ButtonPrimary onPress={handleQuantityUpdate}>
+        <SaveProductButton onPress={handleQuantityUpdate}>
           Zapisz
-        </ButtonPrimary>
+        </SaveProductButton>
       )
     });
   } else {
@@ -56,7 +57,7 @@ export const ProductPreviewScreen = () => {
   }
 
   return (
-    <ScreenContainer>
+    <Container>
       <ProductName>{params.product.name}</ProductName>
       <Section title="Ilość produktu">
         <RadioInputsRow
@@ -76,37 +77,38 @@ export const ProductPreviewScreen = () => {
       </Section>
       <Section title="Makroskładniki">
         <Calories>
-          {productMacro.kcal.toFixed(0)} kcal
+          {macro.kcal.toFixed(0)} kcal
         </Calories>
         <ChartMacroCircles
-          values={[
-            productMacro.carbs,
-            productMacro.prots,
-            productMacro.fats
-          ]}
-          percentages={[
-            productMacroPercentages.carbs,
-            productMacroPercentages.prots,
-            productMacroPercentages.fats
-          ]}
+          values={macro}
+          percentages={macroPercentages}
         />
         <TableMacro
-          macro={productMacro}
+          macro={macro}
         />
       </Section>
       <Section title="Dzienne cele">
         <ChartMacroBars
           percentages={[
-            productMacroNeeds.carbs.percentage,
-            productMacroNeeds.prots.percentage,
-            productMacroNeeds.fats.percentage,
-            productMacroNeeds.kcal.percentage
+            macroNeeds.carbs.percentage,
+            macroNeeds.prots.percentage,
+            macroNeeds.fats.percentage,
+            macroNeeds.kcal.percentage
           ]}
         />
       </Section>
-    </ScreenContainer>
+    </Container>
   );
 }
+
+const Container = styled(ScrollView)`
+  padding: ${props => props.theme.spacing.screenPadding};
+`
+
+const SaveProductButton = styled(ButtonPrimary)`
+  margin-right: 5px;
+  min-width: 80px;
+`
 
 const ProductName = styled(H1)`
   margin-bottom: 20px;
@@ -117,4 +119,4 @@ const Calories = styled(H1)`
   margin-bottom: 10px;
 `
 
-const PORTIONS = fillArrayWithinRange({ from: 1, to: 6 });
+const PORTIONS = Utils.fillArrayWithinRange({ from: 1, to: 6 });

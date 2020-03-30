@@ -1,10 +1,10 @@
-import { DateDay, ApplicationStatus } from '../../../types';
+import { DayjsDate, ApplicationStatus } from '../../../types';
 
 export interface ApplicationState {
   date: Date
-  day: DateDay
+  day: DayjsDate
   todayDate: Date
-  todayDay: DateDay
+  todayDay: DayjsDate
   isConnected: boolean
   status: ApplicationStatus
 }

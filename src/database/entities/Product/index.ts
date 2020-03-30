@@ -13,7 +13,7 @@ import {
   BarcodeId,
   ProductId,
   UserId,
-  PortionUnit,
+  ProductUnitType,
   FilterHOF,
 } from '../../../types';
 import { User } from '../User';
@@ -21,15 +21,15 @@ import { ProductPortion } from '../ProductPortion';
 import { friscoApi } from '../../../services/FriscoApi';
 import { SqliteENUM } from '../../decorators';
 import { EntityType, EntityRequired } from '../../types';
-import { PRODUCT_UNITS } from '../../../common/consts';
+import { PRODUCT_UNIT_TYPE } from '../../../common/consts';
 import { ilewazyApi } from '../../../services/IlewazyApi';
-import { mapAsyncSequence, sortByMostAccurateName } from '../../../common/utils';
 import { MinLength } from 'class-validator';
 import { GenericEntity } from '../../generics/GenericEntity';
 import { ProductImage } from '../ProductImage';
 import { Macro } from '../../embeds/Macro';
 import { FindMostUsedResult, FindMostProductIdsResult } from './types';
 import { NormalizedProduct } from '../../../services/IlewazyApi/types';
+import * as Utils from '../../../utils';
 
 @Entity('product')
 @Unique<Product>(['name', 'isVerified'])
@@ -57,8 +57,8 @@ export class Product extends GenericEntity {
    * Each macro value describes it's value in 100 units of this type.  
   */
   @Column('text', { default: 'g' })
-  @SqliteENUM(PRODUCT_UNITS)
-  unit!: PortionUnit;
+  @SqliteENUM(PRODUCT_UNIT_TYPE)
+  unit!: ProductUnitType;
 
   @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;
@@ -104,6 +104,29 @@ export class Product extends GenericEntity {
       return firstPortion.value;
     }
     return Product.defaultPortion;
+  }
+
+  static saveWithPortion(
+    productData: IProductRequired,
+    portionQuantity: number,
+    portionType = 'portion'
+  ): Promise<Product> {
+    if (
+      portionQuantity > 0 &&
+      portionQuantity !== Product.defaultPortion
+    ) {
+      return Product.save({
+        ...productData,
+        portions: [
+          {
+            type: portionType,
+            value: portionQuantity,
+          }
+        ],
+      });
+    }
+
+    return Product.save(productData);
   }
 
   static findByNameLike(name: string): Promise<Product[]> {
@@ -177,7 +200,7 @@ export class Product extends GenericEntity {
 
     const savedProducts = await Product.findByNameLike(name);
     const minProductsFoundLimit = 3;
-    const sortByMostAccurateProductName = sortByMostAccurateName(name);
+    const sortByMostAccurateProductName = Utils.sortByMostAccurateName(name);
 
     if (savedProducts.length <= minProductsFoundLimit) {
       const fetchedProducts = await ilewazyApi.findByName(name, controller);
@@ -236,7 +259,7 @@ export class Product extends GenericEntity {
     
     if (!savedProducts.length || !hasVerifiedProduct) {
       const fetchedProducts = await friscoApi.findByQuery(barcode, controller);
-      const createdProducts = await mapAsyncSequence(
+      const createdProducts = await Utils.mapAsyncSequence(
         fetchedProducts, Product.saveNormalizedProduct
       );
 

@@ -1,28 +1,30 @@
 import {
-  MEAL_UPDATED,
   MEAL_DELETED,
   MEAL_PRODUCT_DELETED,
-  PRODUCT_UPDATED,
-  MEAL_TOGGLED,
-  PRODUCT_TOGGLED,
+  PRODUCT_QUANTITY_UPDATED,
+  MEAL_OPEN_TOGGLED,
   MEAL_PRODUCT_ADDED,
   MEAL_ADDED,
   MEALS_LOADED,
+  MEAL_PRODUCT_ADD_STARTED,
+  MEAL_PRODUCT_ADD_FINISHED,
 } from '../../consts';
 import {
-  calcMacroByQuantity,
-  getMealFromTemplate,
-  normalizeMeals,
-  normalizeMeal,
+  getDiaryMealTemplate,
+  normalizeProductEntity,
+  normalizeMealEntities,
+  normalizeMealEntity,
+  isEqualMealId,
 } from './helpers';
 import { DiaryAction } from '../../actions';
 import { DiaryState } from './types';
-import { defaultTemplates } from '../../../common/helpers';
+import { DEFAULT_MEAL_TEMPLATES } from './consts';
+import * as Utils from '../../../utils';
 
 const initialState: DiaryState = {
   meals: [],
   products: [],
-  templates: defaultTemplates
+  templates: DEFAULT_MEAL_TEMPLATES
 }
 
 export function diaryReducer(
@@ -31,25 +33,26 @@ export function diaryReducer(
 ): DiaryState {
   switch(action.type) {
     case MEALS_LOADED:
-      const { meals, products } = normalizeMeals(action.payload);
+      const { meals, products } = normalizeMealEntities(action.payload);
+
       return {
         ...state,
         products,
         meals: [
-          ...state.templates.flatMap(template => {
-            if (meals.some(meal => meal.name === template.name)) {
+          ...state.templates.flatMap(mealTemplate => {
+            if (meals.some(meal => meal.data.name === mealTemplate.name)) {
               return [];
             }
-            const mealTemplate = getMealFromTemplate(template);
-            return [mealTemplate];
+            const diaryMealTemplate = getDiaryMealTemplate(mealTemplate);
+            return diaryMealTemplate;
           }),
           ...meals
         ]
       }
     case MEAL_ADDED: {
-      const { meal: normalizedMeal, products: normalizedProducts } = normalizeMeal(action.payload);
+      const { meal: normalizedMeal, products: normalizedProducts } = normalizeMealEntity(action.payload);
       const foundTemplate = state.templates.find(template =>
-        template.name === normalizedMeal.name
+        template.name === normalizedMeal.data.name
       );
       const isMealCreatedFromTemplate = foundTemplate !== undefined;
       
@@ -58,8 +61,9 @@ export function diaryReducer(
           ...state,
           products: [...state.products, ...normalizedProducts],
           meals: state.meals.map(meal => {
-            if (meal.type === 'template' && meal.templateId === foundTemplate?.id) {
-              return { ...normalizedMeal, isToggled: true };
+            // TODO: refactor
+            if (meal.type === 'template' && meal.data.name === foundTemplate?.name) {
+              return { ...normalizedMeal, isOpened: true };
             }
             return meal;
           })
@@ -68,7 +72,7 @@ export function diaryReducer(
       return {
         ...state,
         products: [...state.products, ...normalizedProducts],
-        meals: [...state.meals, { ...normalizedMeal, type: 'meal' }]
+        meals: [...state.meals, { ...normalizedMeal, isOpened: true }]
       }
     }
     case MEAL_DELETED: return {
@@ -77,57 +81,67 @@ export function diaryReducer(
         product.mealId !== action.meta.mealId
       ),
       meals: state.meals.flatMap(meal => {
-        if (meal.id === action.meta.mealId) {
+        if (meal.data.id === action.meta.mealId) {
           const foundTemplate = state.templates.find(template => 
-            template.name === meal.name  
+            template.name === meal.data.name  
           );
           if (foundTemplate) {
-            const mealFromTemplate = getMealFromTemplate(foundTemplate);
-            return [mealFromTemplate];
+            const diaryMealTemplate = getDiaryMealTemplate(foundTemplate);
+            return diaryMealTemplate;
           }
           return [];
         }
-        return [meal];
+        return meal;
       })
     }
-    case MEAL_TOGGLED: return {
+    case MEAL_OPEN_TOGGLED: return {
       ...state,
       meals: state.meals.map(meal => ({
         ...meal,
-        isToggled: action.meta.mealId === meal.id
-          ? !meal.isToggled
+        isOpened: action.meta.mealId === meal.data.id
+          ? !meal.isOpened
           : false
       }))
     }
-    case MEAL_UPDATED: return {
+    case MEAL_PRODUCT_ADD_STARTED: return {
       ...state,
-      meals: state.meals.map(meal =>
-        meal.type === 'meal' && meal.id === action.meta.mealId
-          ? { ...meal, ...action.payload }
-          : meal
+      meals: state.meals.map(meal => isEqualMealId(meal, action.meta.mealId)
+        ? { ...meal, isAddingProduct: true }
+        : meal
       )
     }
-    case MEAL_PRODUCT_ADDED: return {
+    case MEAL_PRODUCT_ADD_FINISHED: return {
       ...state,
-      meals: state.meals.map(meal => 
-        meal.id === action.meta.mealId 
-          ? { ...meal, productIds: [...meal.productIds, action.payload.id] }
-          : meal
-      ),
-      products: [
-        ...state.products,
-        {
-          ...action.payload,
-          data: action.meta.rawProduct,
-          isToggled: false,
-          calcedMacro: calcMacroByQuantity(action.payload.macro, action.payload.quantity),
-        }
-      ]
+      meals: state.meals.map(meal => isEqualMealId(meal, action.meta.mealId) && meal.isAddingProduct
+        ? { ...meal, isAddingProduct: false }
+        : meal
+      )
     }
+    case MEAL_PRODUCT_ADDED:
+      const normalizedProduct = normalizeProductEntity(
+        action.payload, 
+        action.payload.mealId,
+        action.payload.quantity
+      );
+      
+      return {
+        ...state,
+        meals: state.meals.map(meal => {
+          if (isEqualMealId(meal, action.meta.mealId)) {
+            return {
+              ...meal,
+              productIds: [...meal.productIds, normalizedProduct.data.id],
+              isAddingProduct: false,
+            }
+          }
+          return meal;
+        }),
+        products: [...state.products, normalizedProduct]
+      }
     case MEAL_PRODUCT_DELETED: return {
       ...state,
       meals: state.meals.map(meal => {
-        if (meal.type === 'meal' && meal.id === action.meta.mealId) {
+        if (isEqualMealId(meal, action.meta.mealId)) {
           const productIds = meal.productIds.filter(productId =>
             productId !== action.meta.productId
           );
@@ -135,35 +149,21 @@ export function diaryReducer(
         }
         return meal;
       }),
-      products: state.products.filter(product => product.id !== action.meta.productId)
+      products: state.products.filter(product => product.data.id !== action.meta.productId)
     }
-    case PRODUCT_UPDATED: return {
+    case PRODUCT_QUANTITY_UPDATED: return {
       ...state,
       products: state.products.map(product => {
-        if (product.id === action.meta.productId) {
-          const merged = { ...product, ...action.payload };
-          if (
-            'quantity' in action.payload &&
-            action.payload.quantity !== product.quantity
-          ) {
-            return {
-              ...merged,
-              calcedMacro: calcMacroByQuantity(merged.macro, merged.quantity)
-            }
+        if (product.data.id === action.meta.productId) {
+          const quantity = action.payload;
+          return {
+            ...product,
+            quantity,
+            calcedMacro: Utils.calculateMacroPerQuantity(product.data.macro, quantity)
           }
-          return merged;
         }
         return product;
       })
-    }
-    case PRODUCT_TOGGLED: return {
-      ...state,
-      products: state.products.map(product => ({
-        ...product,
-        isToggled: action.payload === product.id
-          ? !product.isToggled
-          : false
-      }))
     }
     default: return state;
   }

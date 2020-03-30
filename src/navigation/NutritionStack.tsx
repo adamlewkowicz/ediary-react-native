@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator, StackNavigationProp, StackNavigationOptions } from '@react-navigation/stack';
 import { APP_ROUTE } from './consts';
-import { BarcodeId, ProductId } from '../types';
+import { BarcodeId } from '../types';
 import { Product } from '../database/entities';
 import { TakePictureResponse } from 'react-native-camera/types';
 import {
@@ -14,13 +14,17 @@ import {
 import { RouteProp } from '@react-navigation/native';
 import { theme } from '../common/theme';
 import { ProductPreviewScreen } from '../screens/ProductPreview';
+import { DiaryProduct } from '../store/reducers/diary';
 
 const Stack = createStackNavigator<NutritionStackParamList>();
 
 export type NutritionStackParamList = {
   [APP_ROUTE.NutritionHome]: {};
   [APP_ROUTE.ProductFind]: {
-    onItemPress?: (productResolver: ProductResolver) => void
+    onProductSelected?: (
+      productResolver: ProductResolver,
+      productQuantity: number
+    ) => void
   };
   [APP_ROUTE.ProductCreate]: {
     barcode?: BarcodeId
@@ -32,7 +36,8 @@ export type NutritionStackParamList = {
     onPhotoTaken?: (data: TakePictureResponse) => void
   };
   [APP_ROUTE.ProductPreview]: {
-    product: Product
+    product: DiaryProduct['data']
+    quantity?: number
     onProductQuantityUpdated?: (quantity: number) => void
   };
 }
@@ -81,7 +86,8 @@ export const NutritionStack = (props: NutritionStackProps) => {
 
 const SCREEN_OPTIONS: StackNavigationOptions = {
   headerTitleStyle: {
-    fontFamily: theme.fontWeight.regular
+    fontFamily: theme.fontWeight.light,
+    fontSize: theme.fontSize.largeXL,
   }
 }
 
