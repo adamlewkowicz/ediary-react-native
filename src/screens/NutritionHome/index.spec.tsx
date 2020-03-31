@@ -22,7 +22,7 @@ describe('<NutritionHomeScreen />', () => {
     it('should navigate to product find screen 🧭', async () => {
       const ctx = renderSetup(<NutritionHomeScreen />);
 
-      const [firstMealTemplateOpenButton] = await ctx.findAllByLabelText('Pokaż szczegóły posiłku');
+      const [firstMealTemplateOpenButton] = await ctx.findAllByLabelText('Pokaż szczegóły lub usuń posiłek');
       fireEvent.press(firstMealTemplateOpenButton);
 
       const addProductToMealButton = await ctx.findByLabelText('Dodaj produkt do posiłku');
@@ -45,7 +45,7 @@ describe('<NutritionHomeScreen />', () => {
         .mockImplementationOnce(navigationProductSelectedMock)
         .mockImplementationOnce(() => {});
 
-      const [firstMealTemplateOpenButton] = await ctx.findAllByLabelText('Pokaż szczegóły posiłku');
+      const [firstMealTemplateOpenButton] = await ctx.findAllByLabelText('Pokaż szczegóły lub usuń posiłek');
       fireEvent.press(firstMealTemplateOpenButton);
 
       const addProductToMealButton = await ctx.findByLabelText('Dodaj produkt do posiłku');

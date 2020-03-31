@@ -18,7 +18,8 @@ export const MealProductItem = <T extends DiaryProduct>(props: MealProductItemPr
   return (
     <TouchableOpacity
       accessibilityLabel="Pokaż szczegóły lub usuń produkt"
-      accessibilityHint="Dotknij produkt aby zobaczyć szczegóły, lub przytrzymaj aby go usunąć"
+      accessibilityHint="Dotknij aby wyświetlić szczegóły produktu, lub przytrzymaj aby go usunąć"
+      accessibilityRole="link"
       onPress={() => props.onQuantityUpdate(mealId, product)}
       onLongPress={() => props.onDelete(mealId, product)}
     >
