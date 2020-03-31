@@ -6,7 +6,7 @@ import { ThemeProvider } from 'styled-components/native';
 import { Store } from 'redux';
 import { User } from '../../src/database/entities';
 import { USER_ID_UNSYNCED } from '../../src/common/consts';
-import { render } from '@testing-library/react-native';
+import { render } from 'react-native-testing-library';
 import { NavigationContainer, NavigationContext, NavigationRouteContext } from '@react-navigation/native';
 import { BaseScreenProps } from '../../src/types';
 
