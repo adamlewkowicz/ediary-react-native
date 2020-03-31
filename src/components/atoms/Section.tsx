@@ -11,7 +11,9 @@ interface SectionProps {
 export const Section = (props: SectionProps) => {
   return (
     <Container>
-      <Title>{props.title}</Title>
+      <Title accessibilityRole="text">
+        {props.title}
+      </Title>
       {props.description && <H3>{props.description}</H3>}
       {props.children}
     </Container>
