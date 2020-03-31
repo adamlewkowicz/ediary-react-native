@@ -67,3 +67,6 @@ buck-out/
 /ios/Pods/
 
 .env
+
+/dist
+/build
