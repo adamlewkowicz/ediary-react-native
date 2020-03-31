@@ -2,6 +2,7 @@ import React from 'react';
 import {
   fireEvent,
   wait,
+  within,
 } from '@testing-library/react-native';
 import { renderSetup } from '../../../__tests__/utils';
 import { Meal, Product, MealProduct } from '../../database/entities';
@@ -16,6 +17,20 @@ describe('<NutritionHomeScreen />', () => {
     const mealMock = await Meal.createWithProductId({ name: 'Milk soup' }, productMock.id);
     return { productMock, mealMock };
   }
+
+  describe('when touches meal 👆', () => {
+
+    it('should reveal details 📜', async () => {
+      const ctx = renderSetup(<NutritionHomeScreen />);
+
+      const [firstMealTemplateContainer] = await ctx.findAllByLabelText('Posiłek');
+      const mealTemplateOpenButton = within(firstMealTemplateContainer).getByLabelText('Pokaż szczegóły lub usuń posiłek');
+      fireEvent.press(mealTemplateOpenButton);
+
+      expect(firstMealTemplateContainer).toBeExpanded();
+    });
+
+  });
 
   describe('when adds new product to meal 🥗', () => {
 

@@ -45,6 +45,7 @@ export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>
   return (
     <Container
       isOpened={meal.isOpened}
+      accessibilityLabel="Posiłek"
       accessibilityState={{ expanded: meal.isOpened }}
     >
       <InfoContainer
