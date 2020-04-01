@@ -2,7 +2,7 @@ import React, { ReactNode, useContext } from 'react';
 import styled from 'styled-components/native';
 import { H1 } from '../Text';
 import { ActiveStepContext } from './StepContainer';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native';
 
 interface StepProps {
   title: string
