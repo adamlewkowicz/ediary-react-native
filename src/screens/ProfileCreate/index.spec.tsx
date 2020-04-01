@@ -26,7 +26,10 @@ describe('<ProfileCreateScreen />', () => {
 
     fireEvent.press(nextStepButton);
 
+    const [firstCallArguments] = productSaveSpy.mock.calls;
+
     expect(productSaveSpy).toHaveBeenCalledTimes(1);
+    expect(firstCallArguments).toMatchSnapshot();
   });
 
 });

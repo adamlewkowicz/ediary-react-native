@@ -1,8 +1,9 @@
 import React from 'react';
 import { SelectionBox } from '../';
 import { SvgProps } from 'react-native-svg';
+import { ViewProps, View } from 'react-native';
 
-interface SelectionOptionsProps<T> {
+interface SelectionOptionsProps<T> extends ViewProps {
   options: SelectionOption<T>[]
   value: T
   onChange: (value: T) => void
@@ -28,9 +29,9 @@ export function SelectionOptions<T>(
   });
 
   return (
-    <>
+    <View accessibilityRole="radiogroup" style={props.style}>
       {renderOptions}
-    </>
+    </View>
   );
 }
 

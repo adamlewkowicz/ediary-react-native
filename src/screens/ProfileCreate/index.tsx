@@ -7,15 +7,14 @@ import {
   MeasureIcon,
   FemaleBodyIcon,
   NumericPicker,
-  ButtonPrimary,
-  H1,
+  StepContainer,
+  Step,
   TextPrimary,
 } from '../../components';
 import { WeightGoal } from '../../types';
 import { useDispatch } from 'react-redux';
 import { useUserId, useAppError } from '../../hooks';
 import { IProfileRequired } from '../../database/entities';
-import { STEP_TITLES } from './consts';
 import { Actions } from '../../store';
 import { SelectionOptions } from '../../components/molecules/SelectionOptions';
 import * as Utils from '../../utils';
@@ -23,7 +22,6 @@ import * as Utils from '../../utils';
 interface ProfileCreateScreenProps {}
 
 export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
-  const [step, setStep] = useState<0 | 1 | 2>(0);
   const [male, setMale] = useState(true);
   const [height, setHeight] = useState(175);
   const [weight, setWeight] = useState(65);
@@ -57,67 +55,58 @@ export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
     }
   }
 
-  const isLastStep = step === 2;
-
-  const handleNextStepButtonPress = () => {
-    if (isLastStep) {
-      handleProfileCreate();
-    } else {
-      setStep(step => step + 1 as 0 | 1);
-    }
-  }
-
-  const steps = [
-    (
-      <>
-        <GenderContainer accessibilityRole="radiogroup">
-          <SelectionOptions
-            value={male}
-            onChange={setMale}
-            options={[
-              {
-                value: true,
-                title: 'Mężczyzna',
-                Icon: ManIcon,
-              },
-              {
-                value: false,
-                title: 'Kobieta',
-                Icon: WomanIcon,
-              }
-            ]}
+  return (
+    <StepContainer
+      buttonTitle="Kontynuuj"
+      lastStepButtonTitle="Zapisz"
+      onSubmit={handleProfileCreate}
+      isLoading={isLoading}
+    >
+      <Step title="Wybierz płeć" index={0}>
+        <GenderOptions
+          value={male}
+          onChange={setMale}
+          options={[
+            {
+              value: true,
+              title: 'Mężczyzna',
+              Icon: ManIcon,
+            },
+            {
+              value: false,
+              title: 'Kobieta',
+              Icon: WomanIcon,
+            }
+          ]}
+        />
+      </Step>
+      <Step title="Twoje pomiary" index={1}>
+        <MetricsContainer>
+          <MetricsHeading>Wzrost</MetricsHeading>
+          <NumericPicker
+            value={height}
+            onChange={setHeight}
+            options={HEIGHT_VALUES}
+            renderOptionLabel={height => `${height} cm`}
           />
-        </GenderContainer>
-      </>
-    ),
-    (
-      <MetricsContainer>
-        <MetricsHeading>Wzrost</MetricsHeading>
-        <NumericPicker
-          value={height}
-          onChange={setHeight}
-          options={HEIGHT_VALUES}
-          renderOptionLabel={height => `${height} cm`}
-        />
-        <MetricsHeading>Waga</MetricsHeading>
-        <NumericPicker
-          value={weight}
-          onChange={setWeight}
-          options={WEIGHT_VALUES}
-          renderOptionLabel={weight => `${weight} kg`}
-        />
-        <MetricsHeading>Wiek</MetricsHeading>
-        <NumericPicker
-          value={age}
-          onChange={age => setAge(age)}
-          options={AGE_VALUES}
-          renderOptionLabel={age => `${age} lat`}
-        />
-      </MetricsContainer>
-    ),
-    (
-      <WeightGoalContainer accessibilityRole="radiogroup">
-        <SelectionOptions
+          <MetricsHeading>Waga</MetricsHeading>
+          <NumericPicker
+            value={weight}
+            onChange={setWeight}
+            options={WEIGHT_VALUES}
+            renderOptionLabel={weight => `${weight} kg`}
+          />
+          <MetricsHeading>Wiek</MetricsHeading>
+          <NumericPicker
+            value={age}
+            onChange={age => setAge(age)}
+            options={AGE_VALUES}
+            renderOptionLabel={age => `${age} lat`}
+          />
+        </MetricsContainer>
+      </Step>
+      <Step title="Wybierz cel" index={2}>
+        <WeightGoalOptions
           value={weightGoal}
           onChange={setWeightGoal}
           optionLabel="Wybierz cel"
@@ -142,68 +131,29 @@ export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
             }
           ]}
         />
-      </WeightGoalContainer>
-    )
-  ] as const;
-
-  return (
-    <Container>
-      <Heading>
-        {STEP_TITLES[step]}
-      </Heading>
-      <Content>
-        {steps[step]}
-      </Content>
-      <InfoContainer>
-        <ButtonPrimary
-          isLoading={isLoading}
-          onPress={handleNextStepButtonPress}
-          accessibilityLabel="Przejdź dalej"
-        >
-          {isLastStep ? 'Zapisz' : 'Kontynuuj'}
-        </ButtonPrimary>
-      </InfoContainer>
-    </Container>
+      </Step>
+    </StepContainer>
   );
 }
 
-const Container = styled.View`
-  padding: 10px;
-  justify-content: space-between;
-  flex: 1;
-`
-
-const GenderContainer = styled.View`
+const GenderOptions = styled(SelectionOptions)`
   flex-direction: row;
   justify-content: space-around;
-`
-
-const Heading = styled(H1)`
-  text-align: center;
-  margin: 15px 0 25px 0;
-`
-
-const Content = styled.ScrollView`
-  padding: 10px;
-`
+` as typeof SelectionOptions;
 
 const MetricsContainer = styled.View`
   padding: 5px 0;
-`
-
-const InfoContainer = styled.View`
-  padding: 25px 15px;
 `
 
 const MetricsHeading = styled(TextPrimary)`
   margin-bottom: 10px;
 `
 
-const WeightGoalContainer = styled.View`
+const WeightGoalOptions = styled(SelectionOptions)`
   justify-content: space-evenly;
   align-items: center;
   padding: 0 8px;
-`
+` as typeof SelectionOptions; 
 
 const AGE_VALUES = Utils.fillArrayWithinRange({ from: 10, to: 120 });
 const WEIGHT_VALUES = Utils.fillArrayWithinRange({ from: 40, to: 180 });
