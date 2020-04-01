@@ -8,6 +8,8 @@ import {
   MeasureIcon,
   FemaleBodyIcon,
   NumericPicker,
+  StepContainer,
+  Step,
 } from '../../components';
 import { Button } from '../../components/legacy/Button';
 import { Heading } from '../../components/legacy/Elements/Heading';
@@ -131,6 +133,18 @@ export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
       </Block>
     )
   ] as const;
+
+  const Steps = (
+    <StepContainer
+      buttonTitle="Kontynuuj"
+      lastStepButtonTitle="Zapisz"
+      onSubmit={handleProfileCreate}
+    >
+      <Step title="Wybierz płeć">
+
+      </Step>
+    </StepContainer>
+  )
 
   return (
     <Container>
