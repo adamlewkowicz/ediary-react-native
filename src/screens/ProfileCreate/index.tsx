@@ -62,24 +62,22 @@ export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
       onSubmit={handleProfileCreate}
     >
       <Step title="Wybierz płeć" index={0}>
-        <GenderContainer accessibilityRole="radiogroup">
-          <SelectionOptions
-            value={male}
-            onChange={setMale}
-            options={[
-              {
-                value: true,
-                title: 'Mężczyzna',
-                Icon: ManIcon,
-              },
-              {
-                value: false,
-                title: 'Kobieta',
-                Icon: WomanIcon,
-              }
-            ]}
-          />
-        </GenderContainer>
+        <GenderOptions
+          value={male}
+          onChange={setMale}
+          options={[
+            {
+              value: true,
+              title: 'Mężczyzna',
+              Icon: ManIcon,
+            },
+            {
+              value: false,
+              title: 'Kobieta',
+              Icon: WomanIcon,
+            }
+          ]}
+        />
       </Step>
       <Step title="Twoje pomiary" index={1}>
         <MetricsContainer>
@@ -107,42 +105,40 @@ export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
         </MetricsContainer>
       </Step>
       <Step title="Wybierz cel" index={2}>
-        <WeightGoalContainer accessibilityRole="radiogroup">
-          <SelectionOptions
-            value={weightGoal}
-            onChange={setWeightGoal}
-            optionLabel="Wybierz cel"
-            options={[
-              {
-                value: 'decrease',
-                title: 'Redukcja',
-                description: 'Chcę zmniejszyć wagę',
-                Icon: FemaleBodyIcon
-              },
-              {
-                value: 'maintain',
-                title: 'Utrzymanie',
-                description: 'Chcę utrzymać obecną wagę',
-                Icon: MeasureIcon
-              },
-              {
-                value: 'increase',
-                title: 'Zwiększenie',
-                description: 'Chcę zwiększyć wagę',
-                Icon: MuscleIcon
-              }
-            ]}
-          />
-        </WeightGoalContainer>
+        <WeightGoalOptions
+          value={weightGoal}
+          onChange={setWeightGoal}
+          optionLabel="Wybierz cel"
+          options={[
+            {
+              value: 'decrease',
+              title: 'Redukcja',
+              description: 'Chcę zmniejszyć wagę',
+              Icon: FemaleBodyIcon
+            },
+            {
+              value: 'maintain',
+              title: 'Utrzymanie',
+              description: 'Chcę utrzymać obecną wagę',
+              Icon: MeasureIcon
+            },
+            {
+              value: 'increase',
+              title: 'Zwiększenie',
+              description: 'Chcę zwiększyć wagę',
+              Icon: MuscleIcon
+            }
+          ]}
+        />
       </Step>
     </StepContainer>
   );
 }
 
-const GenderContainer = styled.View`
+const GenderOptions = styled(SelectionOptions)`
   flex-direction: row;
   justify-content: space-around;
-`
+` as typeof SelectionOptions;
 
 const MetricsContainer = styled.View`
   padding: 5px 0;
@@ -152,11 +148,11 @@ const MetricsHeading = styled(TextPrimary)`
   margin-bottom: 10px;
 `
 
-const WeightGoalContainer = styled.View`
+const WeightGoalOptions = styled(SelectionOptions)`
   justify-content: space-evenly;
   align-items: center;
   padding: 0 8px;
-`
+` as typeof SelectionOptions; 
 
 const AGE_VALUES = Utils.fillArrayWithinRange({ from: 10, to: 120 });
 const WEIGHT_VALUES = Utils.fillArrayWithinRange({ from: 40, to: 180 });
