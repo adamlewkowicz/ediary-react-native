@@ -158,6 +158,7 @@ export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
         <ButtonPrimary
           isLoading={isLoading}
           onPress={handleNextStepButtonPress}
+          accessibilityLabel="Przejdź dalej"
         >
           {isLastStep ? 'Zapisz' : 'Kontynuuj'}
         </ButtonPrimary>
