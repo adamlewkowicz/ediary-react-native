@@ -111,7 +111,9 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
     headerRight: () => (
       <AddOwnProductButton
         onPress={handleProductCreate}
-        accessibilityLabel="Stwórz własny produkt"  
+        accessibilityLabel="Stwórz własny produkt"
+        accessibilityHint="Przechodzi do tworzenia własnego produktu"
+        role="link"
       >
         Stwórz
       </AddOwnProductButton>
@@ -125,6 +127,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
           value={state.productName}
           placeholder="Nazwa produktu"
           accessibilityLabel="Nazwa szukanego produktu"
+          accessibilityRole="search"
           onChangeText={productSearch.updateProductName}
           isLoading={state.isSearching}
         />

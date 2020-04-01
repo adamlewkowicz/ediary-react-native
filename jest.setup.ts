@@ -2,6 +2,7 @@ import 'core-js/features/array/flat-map';
 import 'core-js/features/object/from-entries';
 import 'reflect-metadata';
 import '@testing-library/jest-native/extend-expect';
+import './test-utils/extend-expect';
 import { createConnection, getConnection } from 'typeorm';
 import { config } from './src/database/config/config';
 

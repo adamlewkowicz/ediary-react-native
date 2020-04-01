@@ -4,6 +4,7 @@ import { SvgGradientDef } from '../Svg';
 import Svg, { Rect } from 'react-native-svg';
 import { Animated } from 'react-native';
 import { useAnimatedSpring } from '../../../hooks';
+import { getA11yProgressBarProps } from '../../../utils';
 
 export interface ChartProgressBarProps {
   percentage: number
@@ -21,7 +22,7 @@ export const ChartProgressBar = ({ height = 5, ...props }: ChartProgressBarProps
   });
 
   return (
-    <Container>
+    <Container {...getA11yProgressBarProps(props.percentage)}>
       <SvgContainer
         width="100%"
         height={height}
@@ -40,7 +41,7 @@ export const ChartProgressBar = ({ height = 5, ...props }: ChartProgressBarProps
   );
 }
 
-const Container = styled.View`
+const Container = styled.TouchableOpacity`
   flex: 1;
 `
 
