@@ -60,6 +60,7 @@ export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
       buttonTitle="Kontynuuj"
       lastStepButtonTitle="Zapisz"
       onSubmit={handleProfileCreate}
+      isLoading={isLoading}
     >
       <Step title="Wybierz płeć" index={0}>
         <GenderOptions

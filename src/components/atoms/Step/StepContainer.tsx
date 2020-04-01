@@ -9,7 +9,7 @@ interface StepContainerProps {
   buttonTitle: string
   lastStepButtonTitle: string
   onSubmit: () => void
-  isLoading?: boolean
+  isLoading: boolean
   children: ReactNodeArray
 }
 
@@ -26,11 +26,11 @@ export const StepContainer = (props: StepContainerProps) => {
   }
 
   return (
-    <Container>
+    <Container accessibilityRole="tablist">
       <ActiveStepContext.Provider value={step.activeStep}>
         {props.children}
       </ActiveStepContext.Provider>
-      <InfoContainer>
+      <InfoContainer accessibilityRole="toolbar">
         {!step.isFirstStep && (
           <BackButton
             onPress={step.back}
@@ -67,6 +67,6 @@ const NextButton = styled(ButtonPrimary)`
 `
 
 const InfoContainer = styled.View`
-  padding: 25px 15px;
+  padding: 20px 15px;
   flex-direction: row;
 `

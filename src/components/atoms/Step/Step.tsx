@@ -2,6 +2,7 @@ import React, { ReactNode, useContext } from 'react';
 import styled from 'styled-components/native';
 import { H1 } from '../Text';
 import { ActiveStepContext } from './StepContainer';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface StepProps {
   title: string
@@ -17,10 +18,10 @@ export const Step = (props: StepProps) => {
   }
 
   return (
-    <>
+    <ScrollView accessibilityRole="tab">
       <Heading>{props.title}</Heading>
       <Content>{props.children}</Content>
-    </>
+    </ScrollView>
   );
 }
 
