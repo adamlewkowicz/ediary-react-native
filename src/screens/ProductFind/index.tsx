@@ -2,7 +2,7 @@ import React, { useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
 import { useProductsSearch, useNavigationData, useProductHistory } from '../../hooks';
-import { FlatList } from 'react-native';
+import { FlatList, ListRenderItem } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import {
   H3,
@@ -121,7 +121,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
     )
   });
 
-  const renderItem = ({ item: product }) => (
+  const renderItem: ListRenderItem<ProductOrNormalizedProduct> = ({ item: product }) => (
     <ProductSearchItemMemo
       product={product}
       onSelect={handleProductSelect}
@@ -175,6 +175,7 @@ const SearchContainer = styled.View`
   align-items: center;
   justify-content: space-between;
   padding: ${props => `0 ${props.theme.spacing.screenPadding}`};
+  margin-bottom: 16px;
 `
 
 const Container = styled.View`
