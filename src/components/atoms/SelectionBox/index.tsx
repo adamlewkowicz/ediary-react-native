@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import { theme } from '../../../common/theme';
 import { CheckedIcon } from '../Icons';
 import { SvgProps } from 'react-native-svg';
+import { H2, TextSecondary } from '../Text';
 
 interface SelectionBoxProps {
   children?: ReactNode
@@ -16,7 +17,7 @@ interface SelectionBoxProps {
 }
 
 export const SelectionBox = (props: SelectionBoxProps) => {
-  const iconFill = props.isActive ? theme.color.focus : 'rgba(1,1,1,.7)';
+  const iconFill = props.isActive ? theme.color.focus : theme.color.primary;
 
   return (
     <TouchableWrapper
@@ -43,7 +44,7 @@ export const SelectionBox = (props: SelectionBoxProps) => {
       )}
       {props.isActive && (
         <CheckedStyled
-          fill={theme.color.focus}
+          fill={theme.color.highlight}
           width={CHECKED_ICON_SIZE}
           height={CHECKED_ICON_SIZE}
         />
@@ -64,10 +65,9 @@ const TouchableWrapper = styled.TouchableOpacity<{
   isActive: boolean
   noFlex?: boolean
 }>`
-  border-radius: 5px;
   padding: 10px;
   position: relative;
-  border-color: ${props => props.theme.color[props.isActive ? 'focus' : 'secondary']};
+  border-color: ${props => props.theme.color[props.isActive ? 'highlight' : 'tertiary']};
   border-width: 1px;
   align-items: center;
   margin: 20px;
@@ -75,15 +75,13 @@ const TouchableWrapper = styled.TouchableOpacity<{
   flex: 1;
 `
 
-const Title = styled.Text`
-  font-size: 16px;
-  font-family: ${props => props.theme.fontWeight.medium};
-  margin: 10px 0;
+const Title = styled(H2)`
+  margin: 10px 0 4px 0;
 `
 
 const IconContainer = styled.View`
   border-radius: 50;
-  background-color: rgba(141, 152, 252, .1);
+  background-color: ${props => props.theme.color.quinary};
   padding: 10px;
 `
 
@@ -93,8 +91,7 @@ const CheckedStyled = styled(CheckedIcon)`
   top: ${-CHECKED_ICON_SIZE / 2};
 `
 
-const Description = styled.Text`
-  font-family: ${props => props.theme.fontWeight.regular};
+const Description = styled(TextSecondary)`
   text-align: center;
-  margin: 5px 0;
+  margin-bottom: 5px;
 `
