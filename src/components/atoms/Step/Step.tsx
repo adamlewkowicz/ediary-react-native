@@ -1,7 +1,7 @@
-import React, { ReactNode, useContext, ReactNodeArray } from 'react';
+import React, { ReactNode, useContext } from 'react';
 import styled from 'styled-components/native';
 import { H1 } from '../Text';
-import { ActiveStepContext } from './index';
+import { ActiveStepContext } from './StepContainer';
 
 interface StepProps {
   title: string
