@@ -12,6 +12,7 @@ interface SelectionBoxProps {
   description?: string
   Icon?: (props: SvgProps) => JSX.Element
   noFlex?: boolean
+  a11yLabel?: string
 }
 
 export const SelectionBox = (props: SelectionBoxProps) => {
@@ -22,6 +23,9 @@ export const SelectionBox = (props: SelectionBoxProps) => {
       isActive={props.isActive}
       onPress={() => props.onChange(!props.isActive)}
       noFlex={props.noFlex}
+      accessibilityLabel={props.a11yLabel}
+      accessibilityRole="radiogroup"
+      accessibilityState={{ selected: props.isActive }}
     >
       {props.Icon && (
         <IconContainer>

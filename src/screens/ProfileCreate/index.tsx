@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { Block } from '../../components/legacy/Elements';
 import {
   WomanIcon,
   ManIcon,
@@ -57,7 +56,7 @@ export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
   const steps = [
     (
       <>
-        <Block row space="space-around">
+        <GenderContainer accessibilityRole="radiogroup">
           <SelectionOptions
             value={male}
             onChange={setMale}
@@ -74,7 +73,7 @@ export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
               }
             ]}
           />
-        </Block>
+        </GenderContainer>
       </>
     ),
     (
@@ -103,10 +102,11 @@ export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
       </MetricsContainer>
     ),
     (
-      <Block space="space-evenly" row={false} align="center">
+      <WeightGoalContainer accessibilityRole="radiogroup">
         <SelectionOptions
           value={weightGoal}
           onChange={setWeightGoal}
+          optionLabel="Wybierz cel"
           options={[
             {
               value: 'decrease',
@@ -128,7 +128,7 @@ export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
             }
           ]}
         />
-      </Block>
+      </WeightGoalContainer>
     )
   ] as const;
 
@@ -156,6 +156,11 @@ const Container = styled.View`
   flex: 1;
 `
 
+const GenderContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+`
+
 const MainHeading = styled(Heading)`
   text-align: center;
   margin: 15px 0 25px 0;
@@ -177,6 +182,12 @@ const InfoContainer = styled.View`
 const MetricsHeading = styled.Text`
   font-size: ${props => props.theme.fontSize.regular};
   margin-bottom: 10px;
+`
+
+const WeightGoalContainer = styled.View`
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0 8px;
 `
 
 const AGE_VALUES = Utils.fillArrayWithinRange({ from: 10, to: 120 });
