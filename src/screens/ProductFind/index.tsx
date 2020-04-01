@@ -13,6 +13,7 @@ import {
   BarcodeButton,
 } from '../../components';
 import * as Utils from '../../utils';
+import { TabContainer } from '../../components/atoms/Tab';
 
 interface ProductFindScreenProps {}
 
@@ -120,6 +121,13 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
     )
   });
 
+  const renderItem = ({ item: product }) => (
+    <ProductSearchItemMemo
+      product={product}
+      onSelect={handleProductSelect}
+    />
+  );
+
   return (
     <Container>
       <SearchContainer>
@@ -136,22 +144,28 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
           onPress={handleBarcodeScan}
         />
       </SearchContainer>
-      <ProductsTitle>
-        {showProductHistory ? 'Ostatnio używane produkty:' : 'Znalezione produkty:'}
-      </ProductsTitle>
-      <RenderInfo />
-      <FlatList
-        data={productSource}
-        keyExtractor={productKeyExtractor}
-        keyboardShouldPersistTaps="handled"
-        ItemSeparatorComponent={ItemSeparator}
-        renderItem={({ item: product }) => (
-          <ProductSearchItemMemo
-            product={product}
-            onSelect={handleProductSelect}
-          />
-        )}
-      />
+      <TabContainer
+        routes={[
+          (
+            <>
+              <RenderInfo />
+              <FlatList
+                data={productHistory.data}
+                renderItem={renderItem}
+                {...listProps}
+              />
+            </>
+          ),
+          (
+            <FlatList
+              data={state.products}
+              renderItem={renderItem}
+              {...listProps}
+            />
+          )
+        ]}
+      >
+      </TabContainer>
     </Container>
   );
 }
@@ -187,6 +201,12 @@ const AddOwnProductButton = styled(ButtonSecondaryArrow)`
 const productKeyExtractor = (product: ProductOrNormalizedProduct): string => {
   const productId = '_id' in product ? product._id : product.id;
   return String(productId);
+}
+
+const listProps = {
+  keyExtractor: productKeyExtractor,
+  keyboardShouldPersistTaps: "handled",
+  ItemSeparatorComponent: ItemSeparator,
 }
 
 export type ProductResolver = () => Promise<Product>;
