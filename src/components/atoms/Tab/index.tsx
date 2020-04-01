@@ -1,16 +1,8 @@
 import * as React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { TabView, SceneMap, SceneRendererProps } from 'react-native-tab-view';
 import styled from 'styled-components/native';
 import { TabButton } from './TabButton';
-
-const FirstRoute = () => (
-  <View style={[styles.scene, { backgroundColor: '#ff4081' }]} />
-);
-
-const SecondRoute = () => (
-  <View style={[styles.scene, { backgroundColor: '#673ab7' }]} />
-);
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -57,12 +49,6 @@ export const TabContainer = (props: TabContainerProps) => {
     />
   );
 }
-
-const styles = StyleSheet.create({
-  scene: {
-    flex: 1,
-  },
-});
 
 const TabBarContainer = styled.View`
   flex-direction: row;
