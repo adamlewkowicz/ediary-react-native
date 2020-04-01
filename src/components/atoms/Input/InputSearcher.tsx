@@ -2,15 +2,19 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { TextInputProps, ActivityIndicator } from 'react-native';
 import { LoupeIcon } from '../Icons';
+import { theme } from '../../../common/theme';
 
 interface InputSearcherProps extends TextInputProps {
   showLabel?: boolean
-  isLoading?: boolean
+  isLoading: boolean
 }
 
-export const InputSearcher = ({ isLoading = false, ...inputProps}: InputSearcherProps) => (
+export const InputSearcher = ({ isLoading, ...props }: InputSearcherProps) => (
   <Container>
-    <Input {...inputProps} />
+    <Input
+      placeholderTextColor={theme.color.secondary}
+      {...props}
+     />
     {isLoading && <Spinner />}
     <StyledLoupeIcon {...LOUPE_ICON_STYLE} />
   </Container>
@@ -19,7 +23,7 @@ export const InputSearcher = ({ isLoading = false, ...inputProps}: InputSearcher
 const LOUPE_SIZE = 16;
 
 const LOUPE_ICON_STYLE = {
-  fill: "#272733",
+  fill: theme.color.primary,
   width: LOUPE_SIZE,
   height: LOUPE_SIZE,
   style: { transform: [{ translateY: -LOUPE_SIZE / 2 }] }
@@ -44,9 +48,9 @@ const StyledLoupeIcon = styled(LoupeIcon)`
 `
 
 const Input = styled.TextInput`
-  background-color: ${props => props.theme.colors.lightGray};
-  border-radius: ${props => props.theme.radius.rounded};
+  background-color: ${props => props.theme.color.quinary};
   font-family: ${props => props.theme.fontWeight.regular};
   font-size: ${props => props.theme.fontSize.regular};
-  padding: 10px 45px;
+  color: ${props => props.theme.color.primary};
+  padding: 10px 48px;
 `
