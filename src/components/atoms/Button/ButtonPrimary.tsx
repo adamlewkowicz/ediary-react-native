@@ -10,7 +10,10 @@ interface ButtonPrimaryProps extends TouchableOpacityProps {
 
 export const ButtonPrimary = ({ children, ...props }: ButtonPrimaryProps) => {
   return (
-    <Container {...props}>
+    <Container
+      accessibilityState={{ disabled: props.isLoading }}
+      {...props}
+    >
       {props.isLoading ? (
         <ActivityIndicator color="#fff" />
       ) : (

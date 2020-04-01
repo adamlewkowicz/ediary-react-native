@@ -7,12 +7,18 @@ import { SvgProps } from 'react-native-svg';
 
 export interface ButtonSecondaryProps extends TouchableOpacityProps {
   children: string
+  role?: 'button' | 'link'
   Icon?: (props: SvgProps) => JSX.Element
 }
 
-export const ButtonSecondary = ({ children, Icon, ...props }: ButtonSecondaryProps) => {
+export const ButtonSecondary = (props: ButtonSecondaryProps) => {
+  const { children, Icon, role = 'button' } = props;
+  
   return (
-    <Container {...props}>
+    <Container
+      accessibilityRole={role}
+      {...props}
+    >
       <ButtonText>{children}</ButtonText>
       {Icon && <Icon {...ICON_STYLE} />}
     </Container>
