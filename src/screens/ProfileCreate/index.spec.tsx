@@ -10,8 +10,8 @@ describe('<ProfileCreateScreen />', () => {
     renderSetup(<ProfileCreateScreen />);
   });
 
-  it('should create new profile 🧑', async () => {
-    const productSaveSpy = jest.spyOn(Profile, 'save');
+  it('creating new profile should work 🧑', async () => {
+    const profileSaveSpy = jest.spyOn(Profile, 'save');
 
     const ctx = renderSetup(<ProfileCreateScreen />);
 
@@ -26,9 +26,9 @@ describe('<ProfileCreateScreen />', () => {
 
     fireEvent.press(nextStepButton);
 
-    const [firstCallArguments] = productSaveSpy.mock.calls;
+    const [firstCallArguments] = profileSaveSpy.mock.calls;
 
-    expect(productSaveSpy).toHaveBeenCalledTimes(1);
+    expect(profileSaveSpy).toHaveBeenCalledTimes(1);
     expect(firstCallArguments).toMatchSnapshot();
   });
 
