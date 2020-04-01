@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-export const useSteps = (options: Options) => {
+export const useSteps = (stepCount: number) => {
   const [activeStep, setActiveStep] = useState(0);
   const isFirstStep = activeStep === 0;
-  const isLastStep = activeStep === options.stepCount - 1;
+  const isLastStep = activeStep === stepCount - 1;
 
   const next = (): void => {
     if (!isLastStep) {
@@ -22,9 +22,6 @@ export const useSteps = (options: Options) => {
     next,
     back,
     isLastStep,
+    isFirstStep,
   }
-}
-
-interface Options {
-  stepCount: number
 }
