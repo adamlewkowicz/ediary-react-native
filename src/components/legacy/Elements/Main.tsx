@@ -1,27 +1,6 @@
 import styled from 'styled-components/native';
 import { ThemeColor, ThemeFontSize } from '../../../common/theme';
-import { WheatIcon, SteakIcon, DropIcon, FireIcon } from '../../';
 import { TextAlignProperty } from 'csstype';
-
-export const nutritionIcon = {
-  carbs: WheatIcon,
-  prots: SteakIcon,
-  fats: DropIcon,
-  kcal: FireIcon
-}
-
-export const Title = styled.Text`
-  font-family: ${props => props.theme.fontWeight.medium};
-  text-transform: uppercase;
-  color: ${props => props.theme.color.gray};
-  font-size: ${props => props.theme.fontSize.small};
-  letter-spacing: 0.5px;
-`;
-
-export const Layout = styled.View`
-  padding: 10px;
-  background: ${props => props.theme.color.primaryLight};
-`;
 
 export interface TextProps {
   priority?: 0 | 1 | 2 | 3 | 4
