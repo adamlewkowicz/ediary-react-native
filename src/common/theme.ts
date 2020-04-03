@@ -23,13 +23,20 @@ export const spacing_V2 = {
 } as const;
 
 const spacingPX = {
+  micro: '4px',
   tiny: '8px',
   small: '16px',
   base: '24px',
   large: '48px',
   xLarge: '64px',
+} as const;
 
-  baseXSmall: `${spacing_V2.base}px ${spacing_V2.small}px`
+const spacingHelpers = {
+  baseXSmall: '24px 16px',
+  tinyVertical: '8px 0px',
+  smallVertical: '16px 0px',
+  smallHorizontal: '0px 16px',
+  microXSmall: '4px 16px',
 } as const;
 
 const color = {
@@ -66,7 +73,10 @@ const color = {
 export const THEME = {
   color: color_V2,
   spacing: spacing_V2,
-  spacingPX,
+  spacingPX: {
+    ...spacingPX,
+    ...spacingHelpers,
+  },
   fontSize: {
     h1: 27,
     h2: 23,
@@ -84,7 +94,10 @@ export const THEME = {
 } as const;
 
 export const theme = {
-  spacingPX,
+  spacingPX: {
+    ...spacingPX,
+    ...spacingHelpers,
+  },
   fontSize: {
     huge: 25,
     big: 22,

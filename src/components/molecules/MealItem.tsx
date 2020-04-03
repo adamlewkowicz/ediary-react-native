@@ -112,38 +112,38 @@ const BaseInfo = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: 5px 0 8px 0;
+  margin: ${({ theme }) => `${theme.spacingPX.micro} 0px ${theme.spacingPX.tiny} 0px`};
 `
 
 const ChartsContainer = styled.View`
-  padding: 0 20px;
+  padding: ${props => props.theme.spacingPX.smallHorizontal};
   border: ${props => `1px solid ${props.theme.color.quinary}`}; 
   background-color: ${props => props.theme.color.primary};
 `
 
 const ProductsContainer = styled.View`
   background-color: ${props => props.theme.color.primary};
-  padding: 5px 15px;
+  padding: ${props => props.theme.spacingPX.microXSmall};
   border-bottom-width: 1px;
   border-bottom-color: ${props => props.theme.color.tertiary};
 `
 
 const Spinner = styled(ActivityIndicator)`
-  margin: 10px 0;
+  margin: ${props => props.theme.spacingPX.tinyVertical};
 `
 
 const AddProductButton = styled(ButtonSecondary)`
-  margin: 20px 0;
+  margin: ${props => props.theme.spacingPX.smallVertical};
 `
 
 const Container = styled.View<IsOpenedProp>`
   position: relative;
-  background-color: ${props => props.isOpened ? props.theme.color.primary : '#fff'};
+  background-color: ${props => props.theme.color[props.isOpened ? 'primary' : 'primaryLight']};
 `
 
 const InfoContainer = styled.TouchableOpacity<IsOpenedProp>`
   padding: ${props => props.theme.spacingPX.baseXSmall};
-  background-color: ${props => props.isOpened ? props.theme.color.primary : '#fff'};
+  background-color: ${props => props.theme.color[props.isOpened ? 'primary' : 'primaryLight']};
 `
 
 // @ts-ignore
