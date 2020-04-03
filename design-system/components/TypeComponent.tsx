@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component, Text, StyleSheet } from 'react-figma';
-import { theme, THEME } from '../../src/common/theme';
+import { theme } from '../../src/common/theme';
 
 interface TypeComponentProps {
   name: string
@@ -14,7 +14,7 @@ export const TypeComponent = (props: TypeComponentProps) => {
   const formattedName = props.name.split(/(?=[A-Z])/).join(' ');
 
   const {
-    color = THEME.color.primary,
+    color = theme.color.primary,
     fontWeight = 'regular',
   } = props;
 

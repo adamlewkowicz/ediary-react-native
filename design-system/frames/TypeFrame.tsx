@@ -1,50 +1,50 @@
 import * as React from 'react';
 import { FrameContainer } from '../components/FrameContainer';
 import { TypeComponent } from '../components/TypeComponent';
-import { THEME } from '../../src/common/theme';
+import { theme } from '../../src/common/theme';
 
 export const TypeFrame = () => (
   <FrameContainer title="Type">
     <TypeComponent
       name="HeaderH1"
       fontWeight="light"
-      fontSize={THEME.fontSize.h1}
+      fontSize={theme.fontSize.h1}
     />
     <TypeComponent
       name="HeaderH2"
       fontWeight="light"
-      fontSize={THEME.fontSize.h2}
+      fontSize={theme.fontSize.h2}
     />
     <TypeComponent
       name="HeaderH3"
       fontWeight="light"
-      fontSize={THEME.fontSize.h3}
+      fontSize={theme.fontSize.h3}
     />
 
     <TypeComponent
       name="TextRegular"
-      fontSize={THEME.fontSize.regular}
+      fontSize={theme.fontSize.regular}
     />
     <TypeComponent
       name="TextSmall"
-      fontSize={THEME.fontSize.small}
+      fontSize={theme.fontSize.small}
     />
 
 
     <TypeComponent
       name="TextRegularSecondary"
-      color={THEME.color.secondary}
-      fontSize={THEME.fontSize.regular}
+      color={theme.color.secondary}
+      fontSize={theme.fontSize.regular}
     />
     <TypeComponent
       name="TextRegularQuaternary"
-      color={THEME.color.quaternary}
-      fontSize={THEME.fontSize.regular}
+      color={theme.color.quaternary}
+      fontSize={theme.fontSize.regular}
     />
     <TypeComponent
       name="TextRegularQuinary"
-      color={THEME.color.quinary}
-      fontSize={THEME.fontSize.regular}
+      color={theme.color.quinary}
+      fontSize={theme.fontSize.regular}
     />
   </FrameContainer>
 );
