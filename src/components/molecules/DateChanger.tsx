@@ -38,7 +38,11 @@ export const DateChanger = (props: DateChangerProps) => {
       >
         <ArrowIconLeft {...ARROW_ICON_STYLE} />
       </DayChangeButton>
-      <CalendarButton onPress={handleOpen}>
+      <CalendarButton
+        onPress={handleOpen}
+        accessibilityRole="button"
+        accessibilityLabel="Zmień datę"
+      >
         <Title>{dayjsDate.format(DAYJS_DAY)}</Title>
         <DateInfo>{dayjsDate.format(DAYJS_MAIN_DATE)}</DateInfo>
       </CalendarButton>

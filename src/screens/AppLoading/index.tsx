@@ -7,12 +7,13 @@ import { databaseConfig } from '../../database/config/config';
 import { getOrCreateConnection } from '../../database/utils/getOrCreateConnection';
 import styled from 'styled-components/native';
 import { useDispatch } from 'react-redux';
-import * as Utils from '../../utils';
+import { useAppError } from '../../hooks';
 
 interface AppLoadingScreenProps {}
 
 export const AppLoadingScreen = (props: AppLoadingScreenProps) => {
   const dispatch = useDispatch();
+  const { setAppError } = useAppError();
 
   useEffect(() => {
     async function setup() {
@@ -48,7 +49,7 @@ export const AppLoadingScreen = (props: AppLoadingScreenProps) => {
           );
         }
       } catch(error) {
-        Utils.handleError(error);
+        setAppError(error);
       }
     }
 

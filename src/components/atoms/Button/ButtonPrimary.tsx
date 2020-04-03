@@ -1,16 +1,24 @@
 import React from 'react';
 import styled from 'styled-components/native'
-import { TouchableOpacityProps } from 'react-native';
+import { TouchableOpacityProps, ActivityIndicator } from 'react-native';
 import { Text } from '../Text';
 
 interface ButtonPrimaryProps extends TouchableOpacityProps {
   children: string
+  isLoading?: boolean
 }
 
 export const ButtonPrimary = ({ children, ...props }: ButtonPrimaryProps) => {
   return (
-    <Container {...props}>
-      <ButtonText>{children}</ButtonText>
+    <Container
+      accessibilityState={{ disabled: props.isLoading }}
+      {...props}
+    >
+      {props.isLoading ? (
+        <ActivityIndicator color="#fff" />
+      ) : (
+        <ButtonText>{children}</ButtonText>
+      )}
     </Container>
   );
 }

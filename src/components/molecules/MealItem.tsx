@@ -43,12 +43,17 @@ export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>
   }
 
   return (
-    <Container isOpened={meal.isOpened}>
+    <Container
+      isOpened={meal.isOpened}
+      accessibilityLabel="Posiłek"
+      accessibilityState={{ expanded: meal.isOpened }}
+    >
       <InfoContainer
         onPress={handleMealOpen}
         onLongPress={__DEV__ ? undefined : handleMealDelete}
         isOpened={meal.isOpened}
-        accessibilityLabel="Pokaż szczegóły posiłku"
+        accessibilityLabel="Pokaż szczegóły lub usuń posiłek"
+        accessibilityHint="Dotknij aby wyświetlić szczegóły posiłku, lub przytrzymaj aby go usunąć"
       >
         <MealTime>{meal.timeBase}</MealTime>
         <BaseInfo>
@@ -84,6 +89,8 @@ export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>
             {meal.isAddingProduct && <Spinner size={25} />}
             <AddProductButton
               accessibilityLabel="Dodaj produkt do posiłku"
+              accessibilityHint="Przechodzi do wyszukiwarki produktów"
+              role="link"
               onPress={handleProductAdd}
             >
               Dodaj produkt
