@@ -40,6 +40,8 @@ const spacingHelpers = {
   smallHorizontal: '0px 16px',
   microXSmall: '4px 16px',
   smallXBaseVertical: '16px 0 24px 0',
+  largeHorizontal: '0 48px',
+  smallXMicroVertical: '16px 0px 4px 0px',
 } as const;
 
 const color = {
