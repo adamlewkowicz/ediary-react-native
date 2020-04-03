@@ -12,7 +12,7 @@ import {
   ProductResolver,
 } from '../screens';
 import { RouteProp } from '@react-navigation/native';
-import { theme } from '../common/theme';
+import { THEME } from '../common/theme';
 import { ProductPreviewScreen } from '../screens/ProductPreview';
 import { DiaryProduct } from '../store/reducers/diary';
 
@@ -86,8 +86,8 @@ export const NutritionStack = (props: NutritionStackProps) => {
 
 const SCREEN_OPTIONS: StackNavigationOptions = {
   headerTitleStyle: {
-    fontFamily: theme.fontWeight.light,
-    fontSize: theme.fontSize.h3,
+    fontFamily: THEME.fontWeight.light,
+    fontSize: THEME.fontSize.h3,
   }
 }
 

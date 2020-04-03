@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components/native';
-import { theme } from '../../../common/theme';
+import { THEME } from '../../../common/theme';
 import { CheckedIcon } from '../Icons';
 import { SvgProps } from 'react-native-svg';
 import { H2, TextSecondary } from '../Text';
@@ -17,7 +17,7 @@ interface SelectionBoxProps {
 }
 
 export const SelectionBox = (props: SelectionBoxProps) => {
-  const iconFill = props.isActive ? theme.color.focus : theme.color.primary;
+  const iconFill = props.isActive ? THEME.color.focus : THEME.color.primary;
 
   return (
     <TouchableWrapper
@@ -44,7 +44,7 @@ export const SelectionBox = (props: SelectionBoxProps) => {
       )}
       {props.isActive && (
         <CheckedStyled
-          fill={theme.color.highlight}
+          fill={THEME.color.highlight}
           width={CHECKED_ICON_SIZE}
           height={CHECKED_ICON_SIZE}
         />

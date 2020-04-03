@@ -1,7 +1,7 @@
 import React, { ReactNode, RefObject } from 'react';
 import styled from 'styled-components/native'
 import { TextInputProps, TextInput as NativeTextInput } from 'react-native';
-import { theme } from '../../../common/theme';
+import { THEME } from '../../../common/theme';
 import { InputLabel, TextPrimary } from '../index';
 
 export interface InputProps extends TextInputProps  {
@@ -36,7 +36,7 @@ export const Input = (props: InputProps) => {
         <TextInput
           status={validationStatus}
           accessibilityLabel={accessibilityLabel}
-          placeholderTextColor={theme.color.tertiary}
+          placeholderTextColor={THEME.color.tertiary}
           ref={forwardedRef}
           {...inputProps}
         />

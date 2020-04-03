@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChartMacroBar } from '../';
-import { theme } from '../../common/theme';
+import { THEME } from '../../common/theme';
 import styled from 'styled-components/native';
 
 interface ChartMacroBarsProps {
@@ -16,22 +16,22 @@ export const ChartMacroBars = (props: ChartMacroBarsProps) => {
       <ChartMacroBar
         title="Węglowodany"
         percentage={carbs}
-        gradientColors={theme.gradient.carbs}
+        gradientColors={THEME.gradient.carbs}
       />
       <ChartMacroBar
         title="Białko"
         percentage={prots}
-        gradientColors={theme.gradient.prots}
+        gradientColors={THEME.gradient.prots}
       />
       <ChartMacroBar
         title="Tłuszcze"
         percentage={fats}
-        gradientColors={theme.gradient.fats}
+        gradientColors={THEME.gradient.fats}
       />
       <ChartMacroBar
         title="Kalorie"
         percentage={kcal}
-        gradientColors={theme.gradient.kcal}
+        gradientColors={THEME.gradient.kcal}
       />
     </Container>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { H2, TextSecondary, MacroDetails } from '../';
-import { theme } from '../../common/theme';
+import { THEME } from '../../common/theme';
 import { ProductOrNormalizedProduct } from '../../database/entities';
 
 interface ProductSearchItemProps<T = ProductOrNormalizedProduct> {
@@ -21,17 +21,17 @@ export const ProductSearchItem = (props: ProductSearchItemProps) => {
         <MacroContainer>
           <MacroDetails
             title="W"
-            color={theme.color.carbs}
+            color={THEME.color.carbs}
             value={props.product.macro.carbs}
           />
           <MacroDetails
             title="B"
-            color={theme.color.prots}
+            color={THEME.color.prots}
             value={props.product.macro.prots}
           />
           <MacroDetails
             title="T"
-            color={theme.color.fats}
+            color={THEME.color.fats}
             value={props.product.macro.fats}
           />
         </MacroContainer>

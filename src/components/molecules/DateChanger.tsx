@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import dayjs from 'dayjs';
 import { RightArrowIcon, TextPrimary, H1 } from '../';
-import { theme } from '../../common/theme';
+import { THEME } from '../../common/theme';
 import DateTimePicker, { BaseProps as DatePickerBaseProps } from '@react-native-community/datetimepicker';
 
 interface DateChangerProps {
@@ -57,7 +57,7 @@ export const DateChanger = (props: DateChangerProps) => {
           value={props.value}
           mode="date"
           display="calendar"
-          textColor={theme.color.primary}
+          textColor={THEME.color.primary}
           onChange={handleOnChange}
         />
       )}
@@ -98,7 +98,7 @@ const DateInfo = styled(TextPrimary)`
 export const DateChangerMemo = React.memo(DateChanger);
 
 const ARROW_ICON_STYLE = {
-  fill: theme.color.highlight,
+  fill: THEME.color.highlight,
   width: 26,
   height: 26,
 }

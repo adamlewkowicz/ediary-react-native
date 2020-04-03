@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native'
 import { TouchableOpacityProps, ActivityIndicator } from 'react-native';
 import { Text } from '../Text';
-import { theme } from '../../../common/theme';
+import { THEME } from '../../../common/theme';
 
 interface ButtonPrimaryProps extends TouchableOpacityProps {
   children: string
@@ -16,7 +16,7 @@ export const ButtonPrimary = ({ children, ...props }: ButtonPrimaryProps) => {
       {...props}
     >
       {props.isLoading ? (
-        <ActivityIndicator color={theme.color.primaryLight} />
+        <ActivityIndicator color={THEME.color.primaryLight} />
       ) : (
         <ButtonText>{children}</ButtonText>
       )}

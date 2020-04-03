@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { configureStore, Actions, StoreState } from '../../src/store';
-import { theme } from '../../src/common/theme';
+import { THEME } from '../../src/common/theme';
 import { ThemeProvider } from 'styled-components/native';
 import { Store } from 'redux';
 import { User } from '../../src/database/entities';
@@ -35,7 +35,7 @@ export function renderSetup<
   return {
     ...render(
       <Provider store={storeMock}>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={THEME}>
           <NavigationContainer>
             <NavigationContext.Provider value={navigationCtxMock as any}>
               <NavigationRouteContext.Provider value={{ params } as any}>
