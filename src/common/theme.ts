@@ -15,6 +15,7 @@ export const color_V2 = {
 } as const;
 
 export const spacing_V2 = {
+  micro: 4,
   tiny: 8,
   small: 16,
   base: 24,
@@ -33,10 +34,12 @@ const spacingPX = {
 
 const spacingHelpers = {
   baseXSmall: '24px 16px',
+  baseVertical: '24px 0',
   tinyVertical: '8px 0px',
   smallVertical: '16px 0px',
   smallHorizontal: '0px 16px',
   microXSmall: '4px 16px',
+  smallXBaseVertical: '16px 0 24px 0',
 } as const;
 
 const color = {

@@ -20,7 +20,7 @@ export const RadioInput = ({ value, text, onChange, ...inputProps }: RadioInputP
   );
 }
 
-const SIZE = 42 as const;
+const SIZE = 42;
 
 const Container = styled.TouchableOpacity<{
   isActive: boolean

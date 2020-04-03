@@ -72,7 +72,7 @@ const Container = styled.View`
 `
 
 const DayChangeButton = styled.TouchableOpacity`
-  padding: 20px;
+  padding: ${props => props.theme.spacingPX.base};
 `
 
 const ArrowIconRight = styled(RightArrowIcon)``
@@ -84,12 +84,11 @@ const ArrowIconLeft = styled(ArrowIconRight)`
 const CalendarButton = styled.TouchableOpacity`
   display: flex;
   align-items: center;
-  margin: 30px 0;
+  margin: ${props => props.theme.spacingPX.baseVertical};
 `
 
 const Title = styled(H1)`
   font-size: 27px;
-
 `
 
 const DateInfo = styled(TextPrimary)`

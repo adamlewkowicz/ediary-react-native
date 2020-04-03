@@ -22,11 +22,11 @@ export const ChartMacroBar = (props: ChartMacroBarProps) => {
 }
 
 const Container = styled.View`
-  margin-bottom: ${props => props.theme.spacing.tertiary}px;
+  margin-bottom: ${props => props.theme.spacingPX.small};
 `
 
 const Details = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: ${props => props.theme.spacingPX.tiny};
 `

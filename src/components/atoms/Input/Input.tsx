@@ -56,7 +56,7 @@ export const InputRef = React.forwardRef<NativeTextInput, InputProps>(
 );
 
 const Container = styled.View`
-  margin-bottom: 20px;
+  margin-bottom: ${props => props.theme.spacingPX.small};
   flex: 1;
 `
 
@@ -82,7 +82,7 @@ const Content = styled.View`
 `
 
 const ErrorMessage = styled(TextPrimary)`
-  margin-top: 5px;
+  margin-top: ${props => props.theme.spacingPX.micro};
   color: ${props => props.theme.color.error};
 `
 

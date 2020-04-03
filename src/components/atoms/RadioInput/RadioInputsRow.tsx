@@ -38,7 +38,7 @@ const RadioInputsContainer = styled.View`
 `
 
 const StyledRadioInput = styled(RadioInput)`
-  margin-right: 5px;
+  margin-right: ${props => props.theme.spacingPX.micro};
 `
 
 const Title = styled(H3)`

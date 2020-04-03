@@ -37,5 +37,5 @@ export const TableMacro = <T extends MacroElements>(
 }
 
 const Container = styled.View`
-  margin: ${props => `${props.theme.spacing.sectionSecondary}px 0`};
+  margin: ${props => props.theme.spacingPX.baseVertical};
 `

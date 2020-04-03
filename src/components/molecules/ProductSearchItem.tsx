@@ -68,7 +68,7 @@ const Info = styled.View`
 
 const MacroContainer = styled.View`
   flex-direction: row;
-  margin-bottom: 4px;
+  margin-bottom: ${props => props.theme.spacingPX.micro};
 `
 
 const ProductName = styled(H2)`

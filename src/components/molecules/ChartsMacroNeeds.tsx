@@ -50,6 +50,6 @@ export const ChartsMacroNeeds = (props: ChartsMacroNeedsProps) => {
 const CirclesContainer = styled.View`
   flex-direction: row;
   justify-content: space-around;
-  padding: 0 20px;
-  margin: ${props => `${props.theme.spacing.secondary}px 0`};
+  padding: ${props => props.theme.spacingPX.smallHorizontal};
+  margin: ${props => props.theme.spacingPX.smallVertical};
 `
