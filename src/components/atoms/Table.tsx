@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import { TableHeading as TH } from './Text';
 
 export const HeadRow = styled.View`
-  padding: ${props => props.theme.spacingPX.small};
+  padding: ${props => props.theme.spacing.small};
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

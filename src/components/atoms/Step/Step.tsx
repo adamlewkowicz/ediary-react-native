@@ -27,9 +27,9 @@ export const Step = (props: StepProps) => {
 
 const Heading = styled(H1)`
   text-align: center;
-  margin: ${props => props.theme.spacingPX.smallXBaseVertical};
+  margin: ${props => props.theme.spacing.smallXBaseVertical};
 `
 
 const Content = styled.ScrollView`
-  padding: ${props => props.theme.spacingPX.tiny};
+  padding: ${props => props.theme.spacing.tiny};
 `

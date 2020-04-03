@@ -11,7 +11,7 @@ export const theme = {
   color: COLOR,
   gradient: GRADIENT,
 
-  spacingPX: SPACING,
+  spacing: SPACING,
   spacingRaw: SPACING_RAW,
 
   zIndex: Z_INDEX,

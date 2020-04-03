@@ -161,27 +161,27 @@ const SearchContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: ${props => props.theme.spacingPX.smallHorizontal};
+  padding: ${props => props.theme.spacing.smallHorizontal};
 `
 
 const Container = styled.View`
   flex: 1;
-  padding-top: ${props => props.theme.spacingPX.small};
+  padding-top: ${props => props.theme.spacing.small};
 `
 
 const NotFoundInfo = styled(TextPrimary)`
   text-align: center;
-  margin-top: ${props => props.theme.spacingPX.base};
-  padding: ${props => props.theme.spacingPX.largeHorizontal};
+  margin-top: ${props => props.theme.spacing.base};
+  padding: ${props => props.theme.spacing.largeHorizontal};
 `
 
 const ProductsTitle = styled(H3)`
-  margin: ${props => props.theme.spacingPX.smallXMicroVertical};
-  padding: ${props => props.theme.spacingPX.smallHorizontal};
+  margin: ${props => props.theme.spacing.smallXMicroVertical};
+  padding: ${props => props.theme.spacing.smallHorizontal};
 `
 
 const AddOwnProductButton = styled(ButtonSecondaryArrow)`
-  margin-right: ${props => props.theme.spacingPX.micro};
+  margin-right: ${props => props.theme.spacing.micro};
 `
 
 const productKeyExtractor = (product: ProductOrNormalizedProduct): string => {

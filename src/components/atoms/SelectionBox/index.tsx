@@ -65,12 +65,12 @@ const TouchableWrapper = styled.TouchableOpacity<{
   isActive: boolean
   noFlex?: boolean
 }>`
-  padding: ${props => props.theme.spacingPX.tiny};
+  padding: ${props => props.theme.spacing.tiny};
   position: relative;
   border-color: ${props => props.theme.color[props.isActive ? 'highlight' : 'tertiary']};
   border-width: 1px;
   align-items: center;
-  margin: ${props => props.theme.spacingPX.base};
+  margin: ${props => props.theme.spacing.base};
   width: 100%;
   flex: 1;
 `

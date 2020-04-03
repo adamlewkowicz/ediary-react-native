@@ -112,28 +112,28 @@ const BaseInfo = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: ${({ theme }) => `${theme.spacingPX.micro} 0px ${theme.spacingPX.tiny} 0px`};
+  margin: ${({ theme }) => `${theme.spacing.micro} 0px ${theme.spacing.tiny} 0px`};
 `
 
 const ChartsContainer = styled.View`
-  padding: ${props => props.theme.spacingPX.smallHorizontal};
+  padding: ${props => props.theme.spacing.smallHorizontal};
   border: ${props => `1px solid ${props.theme.color.quinary}`}; 
   background-color: ${props => props.theme.color.primary};
 `
 
 const ProductsContainer = styled.View`
   background-color: ${props => props.theme.color.primary};
-  padding: ${props => props.theme.spacingPX.microXSmall};
+  padding: ${props => props.theme.spacing.microXSmall};
   border-bottom-width: 1px;
   border-bottom-color: ${props => props.theme.color.tertiary};
 `
 
 const Spinner = styled(ActivityIndicator)`
-  margin: ${props => props.theme.spacingPX.tinyVertical};
+  margin: ${props => props.theme.spacing.tinyVertical};
 `
 
 const AddProductButton = styled(ButtonSecondary)`
-  margin: ${props => props.theme.spacingPX.smallVertical};
+  margin: ${props => props.theme.spacing.smallVertical};
 `
 
 const Container = styled.View<IsOpenedProp>`
@@ -142,7 +142,7 @@ const Container = styled.View<IsOpenedProp>`
 `
 
 const InfoContainer = styled.TouchableOpacity<IsOpenedProp>`
-  padding: ${props => props.theme.spacingPX.baseXSmall};
+  padding: ${props => props.theme.spacing.baseXSmall};
   background-color: ${props => props.theme.color[props.isOpened ? 'primary' : 'primaryLight']};
 `
 

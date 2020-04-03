@@ -102,21 +102,21 @@ export const ProductPreviewScreen = () => {
 }
 
 const Container = styled(ScrollView)`
-  padding: ${props => props.theme.spacingPX.small};
+  padding: ${props => props.theme.spacing.small};
 `
 
 const SaveProductButton = styled(ButtonPrimary)`
-  margin-right: ${props => props.theme.spacingPX.micro};
+  margin-right: ${props => props.theme.spacing.micro};
   min-width: 80px;
 `
 
 const ProductName = styled(H1)`
-  margin-bottom: ${props => props.theme.spacingPX.base};
+  margin-bottom: ${props => props.theme.spacing.base};
 `
 
 const Calories = styled(H1)`
   text-align: center;
-  margin-bottom: ${props => props.theme.spacingPX.tiny};
+  margin-bottom: ${props => props.theme.spacing.tiny};
 `
 
 const PORTIONS = Utils.fillArrayWithinRange({ from: 1, to: 6 });

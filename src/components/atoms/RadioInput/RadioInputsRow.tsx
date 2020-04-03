@@ -29,7 +29,7 @@ export const RadioInputsRow = <T extends number>(props: RadioInputsRowProps<T>) 
 }
 
 const Container = styled.View`
-  margin-bottom: ${props => props.theme.spacingPX.base};
+  margin-bottom: ${props => props.theme.spacing.base};
 `
 
 const RadioInputsContainer = styled.View`
@@ -38,9 +38,9 @@ const RadioInputsContainer = styled.View`
 `
 
 const StyledRadioInput = styled(RadioInput)`
-  margin-right: ${props => props.theme.spacingPX.micro};
+  margin-right: ${props => props.theme.spacing.micro};
 `
 
 const Title = styled(H3)`
-  margin-bottom: ${props => props.theme.spacingPX.micro};
+  margin-bottom: ${props => props.theme.spacing.micro};
 `

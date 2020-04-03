@@ -59,7 +59,7 @@ const Calories = styled(H2)`
 `
 
 const Container = styled.TouchableOpacity`
-  padding: ${props => props.theme.spacingPX.baseXSmall};
+  padding: ${props => props.theme.spacing.baseXSmall};
 `
 
 const Info = styled.View`
@@ -68,7 +68,7 @@ const Info = styled.View`
 
 const MacroContainer = styled.View`
   flex-direction: row;
-  margin-bottom: ${props => props.theme.spacingPX.micro};
+  margin-bottom: ${props => props.theme.spacing.micro};
 `
 
 const ProductName = styled(H2)`
