@@ -88,7 +88,7 @@ const Description = styled(TitleSecondary)`
 
 const Container = styled.ScrollView`
   padding: 15px;
-  background: #fff;
+  background: ${props => props.theme.color.primaryLight};
   min-height: 100%;
 `
 

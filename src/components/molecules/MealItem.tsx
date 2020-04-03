@@ -148,7 +148,7 @@ const InfoContainer = styled.TouchableOpacity<IsOpenedProp>`
 
 // @ts-ignore
 const MealName = styled<IsOpenedProp>(H2)`
-  color: ${(props: IsOpenedProp) => props.isOpened ? '#fff' : props.theme.color.primary};
+  color: ${(props: IsOpenedProp) => props.theme.color[props.isOpened ? 'primaryLight' : 'primary']};
 `
 
 interface IsOpenedProp {

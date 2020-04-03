@@ -30,7 +30,7 @@ export const ButtonSecondaryArrow = (props: ButtonSecondaryProps) => (
 );
 
 const Container = styled.TouchableOpacity`
-  background-color: #fff;
+  background-color: ${props => props.theme.color.primaryLight};
   border: ${props => `1px solid ${props.theme.color.highlight}`};
   padding: 10px;
   flex-direction: row;

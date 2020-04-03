@@ -20,7 +20,7 @@ export const Title = styled.Text`
 
 export const Layout = styled.View`
   padding: 10px;
-  background: #fff;
+  background: ${props => props.theme.color.primaryLight};
 `;
 
 export interface TextProps {

@@ -69,7 +69,7 @@ const StyledCamera = styled(RNCamera)`
 `
 
 const PhotoButton = styled.TouchableOpacity`
-  background: #fff;
+  background: ${props => props.theme.color.primaryLight};
 `
 
 const PhotoTitle = styled.Text`

@@ -20,7 +20,7 @@ const Container = styled.TouchableOpacity`
 `
 
 const Title = styled.Text`
-  color: #fff;
+  color: ${props => props.theme.color.primaryLight};
   font-family: ${props => props.theme.fontWeight.medium};
   text-align: center;
   font-size: ${props => props.theme.fontSize.regular};
