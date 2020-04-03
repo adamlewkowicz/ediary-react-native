@@ -56,7 +56,7 @@ export const ChartCircle = (props: ChartCircleProps) => {
         />
         <Circle
           {...genericCircleProps}
-          stroke={theme.colors.quinary}
+          stroke={theme.color.quinary}
         />
         <AnimatedPercentageCircle
           {...genericCircleProps}

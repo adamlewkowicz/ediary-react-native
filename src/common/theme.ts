@@ -112,23 +112,6 @@ export const theme = {
     small: 12,
     tiny: 11,
   },
-  margin: {
-    heading: 15,
-    inputSpace: 15,
-  },
-  spacing: {
-    tablePadding: 15,
-    screenPadding: '20px',
-    sectionSecondary: 20,
-
-    primary: 40,
-    secondary: 20,
-    tertiary: 15,
-    quaternary: 10,
-    quinary: 5,
-
-    ...spacing_V2,
-  },
   fontWeight: {
     base: 'Hind',
     light: 'Hind-Light',
@@ -137,8 +120,6 @@ export const theme = {
     bold: 'Hind-Bold',
   },
   color,
-  /** alias */
-  colors: color,
   gradient: {
     carbs: ['#5DCF8B', '#C5FFC7'],
     prots: ['#5DB4CF', '#C5FBFF'],
@@ -148,13 +129,6 @@ export const theme = {
   zIndex: {
     inputSearcherLoupe: 2,
   },
-  radius: {
-    rounded: 30,
-    button: 8,
-  },
-  padding: {
-    button: '12px 15px'
-  }
 } as const;
 
 export type Theme = typeof theme;

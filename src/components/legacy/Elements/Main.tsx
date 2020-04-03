@@ -29,7 +29,7 @@ export const Text = styled.Text<TextProps>`
 `;
 
 export const TitleSecondary = styled(Text)`
-  color: ${props => props.theme.colors.midGray};
+  color: ${props => props.theme.color.midGray};
   font-size: ${props => props.theme.fontSize.tiny};
   text-transform: uppercase;
   letter-spacing: 0.5px;
