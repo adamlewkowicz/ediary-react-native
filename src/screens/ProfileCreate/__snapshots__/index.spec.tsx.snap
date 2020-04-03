@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<ProfileCreateScreen /> should create new profile 🧑 1`] = `
+exports[`<ProfileCreateScreen /> creating new profile should work 🧑 1`] = `
 Array [
   Object {
     "age": 25,
