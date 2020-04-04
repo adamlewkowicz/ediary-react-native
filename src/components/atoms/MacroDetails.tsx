@@ -33,7 +33,7 @@ const Stripe = styled.View<{
   background-color: ${props => props.color};
   width: 1px;
   height: 100%;
-  margin-right: 4px;
+  margin-right: ${props => props.theme.spacing.micro};
 `
 
 const Value = styled(TextPrimary)`
@@ -43,6 +43,6 @@ const Value = styled(TextPrimary)`
 const Title = styled(H4)<{
   color: string
 }>`
-  margin-right: 8px;
+  margin-right: ${props => props.theme.spacing.tiny};
   color: ${props => props.color};
 `

@@ -21,9 +21,9 @@ export const Section = (props: SectionProps) => {
 }
 
 const Title = styled(H2)`
-  margin-bottom: 10px;
+  margin-bottom: ${props => props.theme.spacing.small};
 `
 
 const Container = styled.View`
-  margin: 20px 0;
+  margin: ${props => props.theme.spacing.baseVertical};
 `

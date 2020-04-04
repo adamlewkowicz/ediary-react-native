@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components/native';
-import { theme } from '../../../common/theme';
+import { THEME } from '../../../common/theme';
 import { CheckedIcon } from '../Icons';
 import { SvgProps } from 'react-native-svg';
 import { H2, TextSecondary } from '../Text';
@@ -17,7 +17,7 @@ interface SelectionBoxProps {
 }
 
 export const SelectionBox = (props: SelectionBoxProps) => {
-  const iconFill = props.isActive ? theme.color.focus : theme.color.primary;
+  const iconFill = props.isActive ? THEME.color.highlight : THEME.color.primary;
 
   return (
     <TouchableWrapper
@@ -44,7 +44,7 @@ export const SelectionBox = (props: SelectionBoxProps) => {
       )}
       {props.isActive && (
         <CheckedStyled
-          fill={theme.color.highlight}
+          fill={THEME.color.highlight}
           width={CHECKED_ICON_SIZE}
           height={CHECKED_ICON_SIZE}
         />
@@ -65,12 +65,12 @@ const TouchableWrapper = styled.TouchableOpacity<{
   isActive: boolean
   noFlex?: boolean
 }>`
-  padding: 10px;
+  padding: ${props => props.theme.spacing.tiny};
   position: relative;
   border-color: ${props => props.theme.color[props.isActive ? 'highlight' : 'tertiary']};
   border-width: 1px;
   align-items: center;
-  margin: 20px;
+  margin: ${props => props.theme.spacing.base};
   width: 100%;
   flex: 1;
 `
@@ -80,7 +80,7 @@ const Title = styled(H2)`
 `
 
 const IconContainer = styled.View`
-  border-radius: 50;
+  border-radius: 50px;
   background-color: ${props => props.theme.color.quinary};
   padding: 10px;
 `
