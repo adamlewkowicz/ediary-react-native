@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FrameContainer } from '../components/FrameContainer';
-import { color_V2 } from '../../src/common/theme';
+import { THEME } from '../../src/common/theme';
 import { Component, View, Text } from 'react-figma';
 
 export const capitalize = (value: string) => value[0].toUpperCase() + value.substr(1, value.length);
@@ -12,7 +12,7 @@ interface ColorFrameProps {
 export const ColorFrame = (props: ColorFrameProps) => {
   return (
     <FrameContainer title="Color">
-      {Object.entries(color_V2).map(([name, color]) => (
+      {Object.entries(THEME.color).map(([name, color]) => (
         <Component
           key={color}
           name={`Color${capitalize(name)}`}
