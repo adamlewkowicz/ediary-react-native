@@ -10,7 +10,7 @@ import {
   ProductSearchItemMemo,
   ItemSeparator,
   InputSearcher,
-  BarcodeButton,
+  ButtonBarcode,
   TextPrimary,
 } from '../../components';
 import * as Utils from '../../utils';
@@ -132,7 +132,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
           onChangeText={productSearch.updateProductName}
           isLoading={state.isSearching}
         />
-        <BarcodeButton
+        <ButtonBarcode
           accessibilityLabel="Zeskanuj kod kreskowy"
           onPress={handleBarcodeScan}
         />
