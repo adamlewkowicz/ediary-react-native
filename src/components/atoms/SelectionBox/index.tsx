@@ -80,7 +80,7 @@ const Title = styled(H2)`
 `
 
 const IconContainer = styled.View`
-  border-radius: 50;
+  border-radius: 50px;
   background-color: ${props => props.theme.color.quinary};
   padding: 10px;
 `

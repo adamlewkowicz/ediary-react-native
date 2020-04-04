@@ -8,43 +8,43 @@ export const TypeFrame = () => (
     <TypeComponent
       name="HeaderH1"
       fontWeight="light"
-      fontSize={THEME.fontSize.h1}
+      fontSize={THEME.fontSizeRaw.h1}
     />
     <TypeComponent
       name="HeaderH2"
       fontWeight="light"
-      fontSize={THEME.fontSize.h2}
+      fontSize={THEME.fontSizeRaw.h2}
     />
     <TypeComponent
       name="HeaderH3"
       fontWeight="light"
-      fontSize={THEME.fontSize.h3}
+      fontSize={THEME.fontSizeRaw.h3}
     />
 
     <TypeComponent
       name="TextRegular"
-      fontSize={THEME.fontSize.regular}
+      fontSize={THEME.fontSizeRaw.regular}
     />
     <TypeComponent
       name="TextSmall"
-      fontSize={THEME.fontSize.small}
+      fontSize={THEME.fontSizeRaw.small}
     />
 
 
     <TypeComponent
       name="TextRegularSecondary"
       color={THEME.color.secondary}
-      fontSize={THEME.fontSize.regular}
+      fontSize={THEME.fontSizeRaw.regular}
     />
     <TypeComponent
       name="TextRegularQuaternary"
       color={THEME.color.quaternary}
-      fontSize={THEME.fontSize.regular}
+      fontSize={THEME.fontSizeRaw.regular}
     />
     <TypeComponent
       name="TextRegularQuinary"
       color={THEME.color.quinary}
-      fontSize={THEME.fontSize.regular}
+      fontSize={THEME.fontSizeRaw.regular}
     />
   </FrameContainer>
 );
