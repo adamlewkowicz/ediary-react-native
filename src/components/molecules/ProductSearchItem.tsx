@@ -55,7 +55,7 @@ const Content = styled.View`
 `
 
 const Calories = styled(H2)`
-  font-size: ${props => props.theme.fontSize.large};
+  font-size: ${props => props.theme.fontSize.h4};
 `
 
 const Container = styled.TouchableOpacity`

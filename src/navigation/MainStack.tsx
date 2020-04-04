@@ -46,7 +46,7 @@ const TAB_BAR_OPTIONS: BottomTabBarOptions = {
   showIcon: true,
   activeTintColor: THEME.color.highlight,
   labelStyle: {
-    fontSize: THEME.fontSize.tiny,
+    fontSize: THEME.fontSize.small,
     fontFamily: THEME.fontWeight.regular,
   },
 };

@@ -30,7 +30,7 @@ export const Text = styled.Text<TextProps>`
 
 export const TitleSecondary = styled(Text)`
   color: ${props => props.theme.color.tertiary};
-  font-size: ${props => props.theme.fontSize.tiny};
+  font-size: ${props => props.theme.fontSize.small};
   text-transform: uppercase;
   letter-spacing: 0.5px;
 `;
