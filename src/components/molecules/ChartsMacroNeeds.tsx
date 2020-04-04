@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { Selectors } from '../../store';
 import { ChartCalories } from './ChartCalories';
 import { ChartMacroCircleLeft } from '../';
-import { theme } from '../../common/theme';
+import { THEME } from '../../common/theme';
 
 interface ChartsMacroNeedsProps {
   macroNeeds: Selectors.MacroNeeds
@@ -25,21 +25,21 @@ export const ChartsMacroNeeds = (props: ChartsMacroNeedsProps) => {
           value={carbs.eaten}
           valueLeft={carbs.needed}
           percentage={carbs.percentage}
-          gradientColors={theme.gradient.carbs}
+          gradientColors={THEME.gradient.carbs}
         />
         <ChartMacroCircleLeft
           title="Białko (g)"
           value={prots.eaten}
           valueLeft={prots.needed}
           percentage={prots.percentage}
-          gradientColors={theme.gradient.prots}
+          gradientColors={THEME.gradient.prots}
         />
         <ChartMacroCircleLeft
           title="Tłuszcze (g)"
           value={fats.eaten}
           valueLeft={fats.needed}
           percentage={fats.percentage}
-          gradientColors={theme.gradient.fats}
+          gradientColors={THEME.gradient.fats}
         />
       </CirclesContainer>
 
@@ -50,6 +50,6 @@ export const ChartsMacroNeeds = (props: ChartsMacroNeedsProps) => {
 const CirclesContainer = styled.View`
   flex-direction: row;
   justify-content: space-around;
-  padding: 0 20px;
-  margin: ${props => `${props.theme.spacing.secondary}px 0`};
+  padding: ${props => props.theme.spacing.smallHorizontal};
+  margin: ${props => props.theme.spacing.smallVertical};
 `

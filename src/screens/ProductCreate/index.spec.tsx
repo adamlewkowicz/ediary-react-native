@@ -68,7 +68,7 @@ describe('<ProductCreateScreen />', () => {
       const carbsInput = ctx.getByLabelText('Węglowodany');
       fireEvent.changeText(carbsInput, '100');
 
-      const calculateCaloriesButton = ctx.getByLabelText('Oblicz');
+      const calculateCaloriesButton = ctx.getByLabelText('Oblicz kalorie');
       fireEvent.press(calculateCaloriesButton);
 
       expect(kcalInput.getProp('value')).not.toEqual('0');

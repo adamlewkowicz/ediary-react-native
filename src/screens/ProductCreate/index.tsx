@@ -211,6 +211,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           label="Kalorie"
           placeholder="0"
           buttonText="Oblicz"
+          buttonLabel="Oblicz kalorie"
           keyboardType="numeric"
           onButtonPress={handleCaloriesEvaluation}
           ref={kcalInputRef}

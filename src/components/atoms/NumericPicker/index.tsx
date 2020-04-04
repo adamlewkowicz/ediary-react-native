@@ -37,5 +37,5 @@ export function NumericPicker <T extends number>(props: NumericPickerProps<T>) {
 const StyledPicker = styled(Picker)`
   background-color: rgba(1,1,1,.03);
   margin-bottom: 35px;
-  color: ${props => props.theme.color.focus};
+  color: ${props => props.theme.color.highlight};
 `

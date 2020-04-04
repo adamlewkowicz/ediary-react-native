@@ -19,5 +19,5 @@ const BARCODE_ICON_STYLE = {
 
 const Container = styled.TouchableOpacity`
   padding: 6px;
-  border-radius: 50;
+  border-radius: 50px;
 `
