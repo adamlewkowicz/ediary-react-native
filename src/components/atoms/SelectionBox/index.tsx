@@ -17,7 +17,7 @@ interface SelectionBoxProps {
 }
 
 export const SelectionBox = (props: SelectionBoxProps) => {
-  const iconFill = props.isActive ? THEME.color.focus : THEME.color.primary;
+  const iconFill = props.isActive ? THEME.color.highlight : THEME.color.primary;
 
   return (
     <TouchableWrapper

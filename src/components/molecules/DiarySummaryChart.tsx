@@ -14,7 +14,7 @@ const X_AXIS_HEIGHT = 30;
 const YAxisContentInset = { top: 10, bottom: 10 };
 const YAxisSvg = {
   fontSize: 10,
-  fill: THEME.color.gray20,
+  fill: THEME.color.tertiary,
   fontFamily: THEME.fontWeight.regular,
 };
 const XAxisSvg = {
@@ -28,7 +28,7 @@ const XAxisSvg = {
 };
 const AreaChartSvg = { fill: `url(#${GRADIENT_ID})` };
 const AreaChartContentInset = { top: 15, bottom: 15 };
-const GridSvg = { stroke: THEME.color.gray10 };
+const GridSvg = { stroke: THEME.color.quaternary };
 const XAxisContentInset = { left: 10, right: 30 };
 
 interface DiarySummaryChartProps {

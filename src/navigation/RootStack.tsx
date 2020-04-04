@@ -54,7 +54,7 @@ const NAVIGATION_THEME: NavigationTheme = {
   colors: {
     ...DefaultTheme.colors,
     background: THEME.color.primaryLight,
-    primary: THEME.color.focus,
+    primary: THEME.color.highlight,
     text: THEME.color.primary,
   },
 };
