@@ -6,6 +6,8 @@ import {
   PRODUCT_UNIT_TYPE,
 } from '../common/consts';
 import { NavigationProp, ParamListBase, RouteProp } from '@react-navigation/native';
+import { FriscoProductId } from '../services/FriscoApi/types';
+import { BarcodeId } from './nominal';
 
 export type UnitType = typeof UNIT_TYPES[number];
 export type ProductUnitType = typeof PRODUCT_UNIT_TYPE[number];
@@ -53,3 +55,28 @@ export type ObjectEntries = <
   Property extends keyof T = keyof T,
   Value = T[Property]
 >(object: T) => [Property, Value][];
+
+export type NormalizedPortions = {
+  type: ProductPortionType
+  unit: ProductUnitType
+  value: number
+}[]
+
+export interface NormalizedProduct {
+  _id: string | number | FriscoProductId
+  name: string
+  portion: number
+  macro: {
+    carbs: number
+    prots: number
+    fats: number
+    kcal: number
+  }
+  portions: NormalizedPortions
+  unit?: ProductUnitType | null
+  images?: string[]
+  barcode?: BarcodeId
+  producer?: string
+  description?: string
+  ingredients?: string[]
+}

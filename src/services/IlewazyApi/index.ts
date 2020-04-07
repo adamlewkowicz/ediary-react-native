@@ -1,14 +1,7 @@
-import {
-  IleWazyPayload,
-  IleWazyPortionType,
-  NormalizedProduct,
-  IleWazyItem,
-  IleWazyUnitData,
-  NormalizedPortions,
-} from './types';
-import { ProductUnitType } from '../../types';
+import * as ApiTypes from './types';
+import { ProductUnitType, NormalizedProduct, NormalizedPortions } from '../../types';
 import { Product } from '../../database/entities';
-import { KNOWN_PORTION_TYPES, PORTION_MAP } from './consts';
+import { KNOWN_PORTION_TYPES, KNOWN_PORTION_MAP } from './consts';
 import * as Utils from '../../utils';
 
 export class IlewazyApi {
@@ -23,7 +16,7 @@ export class IlewazyApi {
   ): Promise<NormalizedProduct[]> {
     const parsedName = encodeURIComponent(name);
 
-    const { data = [] } = await Utils.fetchify<IleWazyPayload>(
+    const { data = [] } = await Utils.fetchify<ApiTypes.SearchPayload>(
       `${this.#SEARCH_URL}${parsedName}`,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
       controller,
@@ -34,11 +27,11 @@ export class IlewazyApi {
     return normalizedProducts;
   }
 
-  private normalizeProducts(data: IleWazyItem[]): NormalizedProduct[] {
+  private normalizeProducts(data: ApiTypes.ProductItem[]): NormalizedProduct[] {
     return data.map(payload => this.normalizeProduct(payload));
   }
 
-  private normalizeProduct(payload: IleWazyItem): NormalizedProduct {
+  private normalizeProduct(payload: ApiTypes.ProductItem): NormalizedProduct {
     const _id = payload.id;
     let name = payload.ingredient_name
       .replace(this.#PRODUCT_NAME_CLUTTERED_PHRASE, '')
@@ -84,12 +77,14 @@ export class IlewazyApi {
     return normalizedProduct;
   }
 
-  private normalizeUnitData(data: IleWazyItem['unitdata']): UnitDataEntry[] {
+  private normalizeUnitData(data: ApiTypes.ProductItem['unitdata']): UnitDataEntry[] {
     return Object
       .entries(data)
       .filter((entry): entry is UnitDataEntry => {
         const [portionType, data] = entry;
-        const isKnownPortionType = KNOWN_PORTION_TYPES.includes(portionType);
+        const isKnownPortionType = KNOWN_PORTION_TYPES.includes(
+          portionType as ApiTypes.PortionType
+        );
 
         return isKnownPortionType && data != null;
       });
@@ -102,7 +97,7 @@ export class IlewazyApi {
 
     const portions = unitData
       .map(([portionType, data]) => ({
-        type: PORTION_MAP[portionType],
+        type: KNOWN_PORTION_MAP[portionType],
         value: Number(data?.unit_weight),
         unit,
       }))
@@ -120,4 +115,4 @@ export class IlewazyApi {
 
 export const ilewazyApi = new IlewazyApi;
 
-type UnitDataEntry = [IleWazyPortionType, IleWazyUnitData]
+type UnitDataEntry = [ApiTypes.PortionType, ApiTypes.UnitData]
