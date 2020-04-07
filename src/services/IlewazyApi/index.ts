@@ -13,9 +13,9 @@ import * as Utils from '../../utils';
 
 export class IlewazyApi {
 
-  private SEARCH_URL = 'http://www.ilewazy.pl/ajax/load-products/ppage/14/keyword/' as const;
-  private IMAGE_URL = 'http://static.ilewazy.pl/dziennik/470/' as const;
-  private PRODUCT_NAME_CLUTTERED_PHRASE = 'WA:ŻYWO' as const;
+  readonly #SEARCH_URL = 'http://www.ilewazy.pl/ajax/load-products/ppage/14/keyword/';
+  readonly #IMAGE_URL = 'http://static.ilewazy.pl/dziennik/470/';
+  readonly #PRODUCT_NAME_CLUTTERED_PHRASE = 'WA:ŻYWO';
 
   async findByName(
     name: string,
@@ -24,7 +24,7 @@ export class IlewazyApi {
     const parsedName = encodeURIComponent(name);
 
     const { data = [] } = await Utils.fetchify<IleWazyPayload>(
-      `${this.SEARCH_URL}${parsedName}`,
+      `${this.#SEARCH_URL}${parsedName}`,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
       controller,
     );
@@ -41,7 +41,7 @@ export class IlewazyApi {
   private normalizeProduct(payload: IleWazyItem): NormalizedProduct {
     const _id = payload.id;
     let name = payload.ingredient_name
-      .replace(this.PRODUCT_NAME_CLUTTERED_PHRASE, '')
+      .replace(this.#PRODUCT_NAME_CLUTTERED_PHRASE, '')
       .trim();
     const prots = Number(payload.bialko);
     const kcal = Number(payload.energia);
@@ -68,7 +68,7 @@ export class IlewazyApi {
 
     const { portions, defaultPortionQuantity } = this.normalizePortionData(unitData, unit);
 
-    const images = unitData.map(([, data]) => `${this.IMAGE_URL}${data.filename}`);
+    const images = unitData.map(([, data]) => `${this.#IMAGE_URL}${data.filename}`);
 
     const macro = { prots, carbs, fats, kcal };
 
