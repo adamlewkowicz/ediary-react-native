@@ -4,16 +4,18 @@ import {
   NormalizedProduct,
   IleWazyItem,
   IleWazyUnitData,
+  NormalizedPortions,
 } from './types';
-import { ProductUnitType, ProductPortionType } from '../../types';
+import { ProductUnitType } from '../../types';
 import { Product } from '../../database/entities';
 import { KNOWN_PORTION_TYPES, PORTION_MAP } from './consts';
 import * as Utils from '../../utils';
 
 export class IlewazyApi {
 
-  private static searchURL = 'http://www.ilewazy.pl/ajax/load-products/ppage/14/keyword/';
-  private static imageURL = 'http://static.ilewazy.pl/dziennik/470/';
+  private SEARCH_URL = 'http://www.ilewazy.pl/ajax/load-products/ppage/14/keyword/' as const;
+  private IMAGE_URL = 'http://static.ilewazy.pl/dziennik/470/' as const;
+  private PRODUCT_NAME_CLUTTERED_PHRASE = 'WA:ŻYWO' as const;
 
   async findByName(
     name: string,
@@ -22,57 +24,51 @@ export class IlewazyApi {
     const parsedName = encodeURIComponent(name);
 
     const { data = [] } = await Utils.fetchify<IleWazyPayload>(
-      `${IlewazyApi.searchURL}${parsedName}`,
+      `${this.SEARCH_URL}${parsedName}`,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
       controller,
     );
 
-    return data.map(this.normalizeProduct);
+    const normalizedProducts = this.normalizeProducts(data);
+
+    return normalizedProducts;
+  }
+
+  private normalizeProducts(data: IleWazyItem[]): NormalizedProduct[] {
+    return data.map(payload => this.normalizeProduct(payload));
   }
 
   private normalizeProduct(payload: IleWazyItem): NormalizedProduct {
     const _id = payload.id;
-    let name = payload.ingredient_name.replace('WA:ŻYWO', '').trim();
+    let name = payload.ingredient_name
+      .replace(this.PRODUCT_NAME_CLUTTERED_PHRASE, '')
+      .trim();
     const prots = Number(payload.bialko);
     const kcal = Number(payload.energia);
+    const simpleSugars = Number(payload.simple_sugars);
+    const fattyAcid = Number(payload.fatty_acid);
     let carbs = Number(payload.weglowodany);
     let fats = Number(payload.tluszcz);
-    const unit: ProductUnitType = 'g';
-    const defaultPortionType: ProductPortionType = 'portion';
 
-    if (name.charAt(name.length - 1) === '.') {
+    const unit: ProductUnitType = 'g';
+
+    if (Utils.isLastCharEqual(name, '.')) {
       name = name.slice(0, -1);
     }
 
-    if (payload.simple_sugars) {
-      const simpleSugars = Number(payload.simple_sugars);
-      if (!Number.isNaN(simpleSugars)) {
-        carbs = Utils.round(carbs + simpleSugars, 100);
-      }
-    }
-    if (payload.fatty_acid) {
-      const fattyAcid = Number(payload.fatty_acid);
-      if (!Number.isNaN(fattyAcid)) {
-        fats = Utils.round(fats + fattyAcid, 100);
-      }
+    if (Utils.isANumber(simpleSugars)) {
+      carbs = Utils.round(carbs + simpleSugars, 100);
     }
 
-    const portions = Object
-      .entries(payload.unitdata)
-      .filter(([key]) => KNOWN_PORTION_TYPES.includes(key))
-      .map(([key, data]) => ({
-        type: PORTION_MAP[key as IleWazyPortionType] || defaultPortionType,
-        value: Number(data!.unit_weight),
-        unit,
-      }));
+    if (Utils.isANumber(fattyAcid)) {
+      fats = Utils.round(fats + fattyAcid, 100);
+    }
 
-    const [firstPortion] = portions;
-    const defaultPortion = firstPortion?.value ?? Product.defaultPortion;
+    const unitData = this.normalizeUnitData(payload.unitdata);
 
-    const images = Object
-      .values(payload.unitdata)
-      .filter((unitdata): unitdata is IleWazyUnitData => typeof unitdata?.filename === 'string')
-      .map(unitdata => `${IlewazyApi.imageURL}${unitdata.filename}`);
+    const { portions, defaultPortionQuantity } = this.normalizePortionData(unitData, unit);
+
+    const images = unitData.map(([, data]) => `${this.IMAGE_URL}${data.filename}`);
 
     const macro = { prots, carbs, fats, kcal };
 
@@ -82,11 +78,46 @@ export class IlewazyApi {
       macro,
       portions,
       images,
-      portion: defaultPortion,
+      portion: defaultPortionQuantity,
     }
     
     return normalizedProduct;
   }
+
+  private normalizeUnitData(data: IleWazyItem['unitdata']): UnitDataEntry[] {
+    return Object
+      .entries(data)
+      .filter((entry): entry is UnitDataEntry => {
+        const [portionType, data] = entry;
+        const isKnownPortionType = KNOWN_PORTION_TYPES.includes(portionType);
+
+        return isKnownPortionType && data != null;
+      });
+  }
+
+  private normalizePortionData(
+    unitData: UnitDataEntry[],
+    unit: ProductUnitType
+  ): { defaultPortionQuantity: number, portions: NormalizedPortions } {
+
+    const portions = unitData
+      .map(([portionType, data]) => ({
+        type: PORTION_MAP[portionType],
+        value: Number(data?.unit_weight),
+        unit,
+      }))
+      .filter(portion => Utils.isANumber(portion.value));
+
+    const [firstPortion] = portions;
+    const defaultPortionQuantity = firstPortion?.value ?? Product.defaultPortion;
+
+    return {
+      defaultPortionQuantity,
+      portions,
+    }
+  }
 }
 
 export const ilewazyApi = new IlewazyApi;
+
+type UnitDataEntry = [IleWazyPortionType, IleWazyUnitData]
