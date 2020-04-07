@@ -8,7 +8,7 @@ import { MACRO } from '../../common/consts';
 
 export class FriscoApi {
 
-  readonly #SEARCH_URL = 'https://commerce.frisco.pl/api/offer/products/query?search=';
+  private readonly SEARCH_URL = 'https://commerce.frisco.pl/api/offer/products/query?search=';
 
   private async findAndParseByQuery(
     query: string | BarcodeId,
@@ -20,7 +20,7 @@ export class FriscoApi {
     const parsedQuery = encodeURIComponent(query as string);
 
     const { products: raw } = await Utils.fetchify<FriscoQueryResponse>(
-      `${this.#SEARCH_URL}${parsedQuery}` +
+      `${this.SEARCH_URL}${parsedQuery}` +
       '&includeCategories=true&pageIndex=1&deliveryMethod=Van&pageSize=60' +
       '&language=pl&facetCount=100&includeWineFacets=false',
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
