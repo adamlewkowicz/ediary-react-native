@@ -1,5 +1,4 @@
-import { BarcodeId, MacroElement, MacroElements, ProductPortionType } from '../../types';
-import { NormalizedProduct } from '../IlewazyApi/types';
+import { BarcodeId, MacroElement, MacroElements, ProductPortionType, NormalizedProduct } from '../../types';
 import { FriscoResponse, FriscoNutritionBrandbank } from './types/response';
 import { FriscoProductId } from './types/common';
 import { FriscoQueryResponse } from './types';

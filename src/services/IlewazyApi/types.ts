@@ -1,4 +1,4 @@
-import { ProductPortionType } from '../../../types';
+import { ProductPortionType } from '../../types';
 
 export interface SearchPayload {
   page: null
