@@ -8,7 +8,7 @@ import { MACRO } from '../../common/consts';
 
 export class FriscoApi {
 
-  private static searchURL = 'https://commerce.frisco.pl/api/offer/products/query?search=';
+  readonly #SEARCH_URL = 'https://commerce.frisco.pl/api/offer/products/query?search=';
 
   private async findAndParseByQuery(
     query: string | BarcodeId,
@@ -20,7 +20,7 @@ export class FriscoApi {
     const parsedQuery = encodeURIComponent(query as string);
 
     const { products: raw } = await Utils.fetchify<FriscoQueryResponse>(
-      `${FriscoApi.searchURL}${parsedQuery}` +
+      `${this.#SEARCH_URL}${parsedQuery}` +
       '&includeCategories=true&pageIndex=1&deliveryMethod=Van&pageSize=60' +
       '&language=pl&facetCount=100&includeWineFacets=false',
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
@@ -66,10 +66,10 @@ export class FriscoApi {
       controller
     );
 
-    const macroSectionId = 2;
-    const macroFieldId = 85;
+    const MACRO_SECTION_ID = 2;
+    const MACRO_FIELD_ID = 85;
     const macroSection = data.brandbank.find(brand =>
-      brand.sectionId === macroSectionId
+      brand.sectionId === MACRO_SECTION_ID
     );
     
     if (!macroSection) {
@@ -77,7 +77,7 @@ export class FriscoApi {
     }
 
     const macroField = (macroSection as any as FriscoNutritionBrandbank).fields.find(field => 
-      field.fieldId === macroFieldId
+      field.fieldId === MACRO_FIELD_ID
     );
 
     if (!macroField) {
@@ -129,7 +129,7 @@ export class FriscoApi {
       return macro;
     }, { ...MACRO });
 
-    if (Object.values(macro).every(value => value === 0)) {
+    if (Utils.eachValueEqualsZero(macro)) {
       return null;
     }
 
@@ -183,7 +183,7 @@ export class FriscoApi {
           ingrd.replace(/,/, '')
         )
       );
-      const portion = Math.round(product.grammage * 1000);
+      const portion = Utils.round(product.grammage * 1000);
       const brand = product.brand;
       const producer = product.producer;
       const portions: [] = [];

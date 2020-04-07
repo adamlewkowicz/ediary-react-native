@@ -12,3 +12,11 @@ export const isLastCharEqual = (value: string, character: string): boolean => {
 export const isANumber = (value: number): boolean => {
   return !Number.isNaN(value);
 }
+
+const eachValueEquals = <V>(
+  equalityValue: V
+) => <T extends object>(obj: T): boolean => {
+  return Object.values(obj).every(value => value === equalityValue);
+}
+
+export const eachValueEqualsZero = eachValueEquals(0);

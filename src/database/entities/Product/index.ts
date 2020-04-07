@@ -15,6 +15,7 @@ import {
   UserId,
   ProductUnitType,
   FilterHOF,
+  NormalizedProduct,
 } from '../../../types';
 import { User } from '../User';
 import { ProductPortion } from '../ProductPortion';
@@ -28,7 +29,6 @@ import { GenericEntity } from '../../generics/GenericEntity';
 import { ProductImage } from '../ProductImage';
 import { Macro } from '../../embeds/Macro';
 import { FindMostUsedResult, FindMostProductIdsResult } from './types';
-import { NormalizedProduct } from '../../../services/IlewazyApi/types';
 import * as Utils from '../../../utils';
 
 @Entity('product')
