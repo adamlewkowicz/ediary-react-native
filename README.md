@@ -43,7 +43,7 @@ Play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://p
 ![Podgląd](https://i.imgur.com/7cH5o3z.png)
 
 ## Zdjęcia
-![Śledzenie kalorii](https://i.imgur.com/tVUkQcN.png)
+![Śledzenie kalorii](https://i.imgur.com/fp1SDNv.png)
 ![Baza produktów](https://i.imgur.com/22aMekg.png)
 ![Wykres](https://i.imgur.com/60l12BC.png)
 ![Własne posiłki](https://i.imgur.com/RyvtNe1.png)
