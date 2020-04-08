@@ -7,10 +7,10 @@ import { ProductCreateScreenNavigationProps } from '../../navigation';
 import {
   Section,
   Group,
-  ButtonPrimary,
-  InputRef,
   InputButtonRef,
   InputMetaTextRef,
+  InputForm,
+  ButtonPrimary,
 } from '../../components';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -48,9 +48,9 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
 
         const { portionQuantity, ...productData } = normalizeProductData(values);
         const productWithUserId = { ...productData, userId };
-    
+
         const createdProduct = await Product.saveWithPortion(productWithUserId, portionQuantity);
-    
+
         params.onProductCreated?.(createdProduct);
 
       } catch(error) {
@@ -74,7 +74,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
       formik.setFieldValue('kcal', String(calcedKcal));
     }
   }
-  
+
   const handleBarcodeScanNavigation = (): void => {
     navigate('BarcodeScan', {
       onBarcodeDetected(barcode) {
@@ -87,37 +87,28 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
   return (
     <Container keyboardShouldPersistTaps="handled">
       <Section title="Podstawowe dane">
-        <InputRef 
+        <InputForm
           label="Nazwa"
           placeholder="Mleko UHT 3.2 %"
-          value={formik.values.name}
-          onChangeText={formik.handleChange('name') as any}
-          onBlur={formik.handleBlur('name') as any}
+          formik={formik}
+          formikProperty="name"
           onSubmitEditing={brandInputRef.current?.focus}
-          error={formik.errors.name}
-          isDirty={formik.touched.name}
         />
-        <InputRef
-          ref={brandInputRef}
+        <InputForm
           label="Marka"
           placeholder="Łaciate"
-          value={formik.values.brand}
-          onChangeText={formik.handleChange('brand') as any}
-          onBlur={formik.handleBlur('brand') as any}
+          ref={brandInputRef}
+          formik={formik}
+          formikProperty="brand"
           onSubmitEditing={producerInputRef.current?.focus}
-          error={formik.errors.brand}
-          isDirty={formik.touched.brand}
         />
-        <InputRef 
+        <InputForm
           label="Producent"
           placeholder="Mlekovita"
-          value={formik.values.producer}
-          onChangeText={formik.handleChange('producer') as any}
-          onBlur={formik.handleBlur('producer') as any}
           ref={producerInputRef}
+          formik={formik}
+          formikProperty="producer"
           onSubmitEditing={portionQuantityInputRef.current?.focus}
-          error={formik.errors.producer}
-          isDirty={formik.touched.producer}
         />
         <InputMetaTextRef
           label={`Ilość ${portionUnitType} w jednej porcji`}
@@ -138,30 +129,24 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
         description={`Na 100${portionUnitType} produtku`}
       >
         <Group.Container>
-          <InputRef
-            value={formik.values.carbs}
-            onChangeText={formik.handleChange('carbs') as any}
-            onBlur={formik.handleBlur('carbs') as any}
+          <InputForm
             label="Węglowodany"
             placeholder="0"
+            formik={formik}
+            formikProperty="carbs"
             keyboardType="numeric"
             ref={carbsInputRef}
             onSubmitEditing={sugarsInputRef.current?.focus}
-            error={formik.errors.carbs}
-            isDirty={formik.touched.carbs}
           />
           <Group.Separator />
-          <InputRef
-            value={formik.values.sugars}
-            onChangeText={formik.handleChange('sugars') as any}
-            onBlur={formik.handleBlur('sugars') as any}
+          <InputForm
+            formik={formik}
+            formikProperty="sugars"
             label="w tym cukry"
             placeholder="0"
             keyboardType="numeric"
             ref={sugarsInputRef}
             onSubmitEditing={protsInputRef.current?.focus}
-            error={formik.errors.sugars}
-            isDirty={formik.touched.sugars}
           />
         </Group.Container>
         <InputMetaTextRef
@@ -178,30 +163,24 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           isDirty={formik.touched.prots}
         />
         <Group.Container>
-          <InputRef
-            value={formik.values.fats}
-            onChangeText={formik.handleChange('fats') as any}
-            onBlur={formik.handleBlur('fats') as any}
+          <InputForm
             label="Tłuszcze"
             placeholder="0"
             keyboardType="numeric"
+            formik={formik}
+            formikProperty="fats"
             ref={fatsInputRef}
             onSubmitEditing={fattyAcidsInputRef.current?.focus}
-            error={formik.errors.fats}
-            isDirty={formik.touched.fats}
           />
           <Group.Separator />
-          <InputRef
-            value={formik.values.fattyAcids}
-            onChangeText={formik.handleChange('fattyAcids') as any}
-            onBlur={formik.handleBlur('fattyAcids') as any}
+          <InputForm
             label="w tym kwasy tłuszczowe"
             placeholder="0"
             keyboardType="numeric"
+            formik={formik}
+            formikProperty="fats"
             ref={fattyAcidsInputRef}
             onSubmitEditing={kcalInputRef.current?.focus}
-            error={formik.errors.fattyAcids}
-            isDirty={formik.touched.fattyAcids}
           />
         </Group.Container>
         <InputButtonRef
@@ -300,13 +279,13 @@ const normalizeProductData = (productData: FormData) => {
   const macro = {
     carbs: Number(productData.carbs),
     prots: Number(productData.prots),
-    fats: Number(productData.fats), 
+    fats: Number(productData.fats),
     kcal: Number(productData.kcal)
   }
 
   const barcode = productData.barcode.length ? productData.barcode : null;
   const portionQuantity = Number(productData.portionQuantity);
-  
+
   const product = {
     ...restData,
     macro,

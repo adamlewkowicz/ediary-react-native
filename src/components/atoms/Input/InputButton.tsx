@@ -38,7 +38,7 @@ export const InputButtonRef = React.forwardRef<TextInput, InputButtonProps>(
   (props, ref) => <InputButton {...props} forwardedRef={ref as RefObject<TextInput>} />
 );
 
-const ButtonSecondaryStyled = styled(ButtonSecondary)`
+const ButtonSecondaryStyled = styled(props => <ButtonSecondary {...props} />)`
   margin-left: ${props => props.theme.spacing.small};
   min-width: 100px;
 ` as IButtonSecondary;
