@@ -43,10 +43,10 @@ Play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://p
 ![Podgląd](https://i.imgur.com/7cH5o3z.png)
 
 ## Zdjęcia
-![Śledzenie kalorii](https://i.imgur.com/XMSWdiY.png)
-![Baza produktów](https://i.imgur.com/22aMekg.png)
-![Wykres](https://i.imgur.com/60l12BC.png)
-![Własne posiłki](https://i.imgur.com/RyvtNe1.png)
+![Śledzenie kalorii](https://i.imgur.com/HorWQXD.png)
+![Baza produktów](https://i.imgur.com/wbY8JLY.png)
+![Własne posiłki](https://i.imgur.com/a6a1jgI.png)
+![Własne produkty](https://i.imgur.com/IvvL3zM.png)
 
 ## Roadmap
 - Śledzenie i pomiary wagi ciała
