@@ -43,12 +43,17 @@ export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>
   }
 
   return (
-    <Container isOpened={meal.isOpened}>
+    <Container
+      isOpened={meal.isOpened}
+      accessibilityLabel="Posiłek"
+      accessibilityState={{ expanded: meal.isOpened }}
+    >
       <InfoContainer
         onPress={handleMealOpen}
         onLongPress={__DEV__ ? undefined : handleMealDelete}
         isOpened={meal.isOpened}
-        accessibilityLabel="Pokaż szczegóły posiłku"
+        accessibilityLabel="Pokaż szczegóły lub usuń posiłek"
+        accessibilityHint="Dotknij aby wyświetlić szczegóły posiłku, lub przytrzymaj aby go usunąć"
       >
         <MealTime>{meal.timeBase}</MealTime>
         <BaseInfo>
@@ -84,6 +89,8 @@ export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>
             {meal.isAddingProduct && <Spinner size={25} />}
             <AddProductButton
               accessibilityLabel="Dodaj produkt do posiłku"
+              accessibilityHint="Przechodzi do wyszukiwarki produktów"
+              role="link"
               onPress={handleProductAdd}
             >
               Dodaj produkt
@@ -105,43 +112,43 @@ const BaseInfo = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: 5px 0 10px 0;
+  margin: ${({ theme }) => `${theme.spacing.micro} 0px ${theme.spacing.tiny} 0px`};
 `
 
 const ChartsContainer = styled.View`
-  padding: 0 20px;
+  padding: ${props => props.theme.spacing.smallHorizontal};
   border: ${props => `1px solid ${props.theme.color.quinary}`}; 
   background-color: ${props => props.theme.color.primary};
 `
 
 const ProductsContainer = styled.View`
   background-color: ${props => props.theme.color.primary};
-  padding: 5px 15px;
+  padding: ${props => props.theme.spacing.microXSmall};
   border-bottom-width: 1px;
   border-bottom-color: ${props => props.theme.color.tertiary};
 `
 
 const Spinner = styled(ActivityIndicator)`
-  margin: 10px 0;
+  margin: ${props => props.theme.spacing.tinyVertical};
 `
 
 const AddProductButton = styled(ButtonSecondary)`
-  margin: 20px 0;
+  margin: ${props => props.theme.spacing.smallVertical};
 `
 
 const Container = styled.View<IsOpenedProp>`
   position: relative;
-  background-color: ${props => props.isOpened ? props.theme.color.primary : '#fff'};
+  background-color: ${props => props.theme.color[props.isOpened ? 'primary' : 'primaryLight']};
 `
 
 const InfoContainer = styled.TouchableOpacity<IsOpenedProp>`
-  padding: ${props => props.theme.spacing.screenPadding};
-  background-color: ${props => props.isOpened ? props.theme.color.primary : '#fff'};
+  padding: ${props => props.theme.spacing.baseXSmall};
+  background-color: ${props => props.theme.color[props.isOpened ? 'primary' : 'primaryLight']};
 `
 
 // @ts-ignore
 const MealName = styled<IsOpenedProp>(H2)`
-  color: ${(props: IsOpenedProp) => props.isOpened ? '#fff' : props.theme.color.primary};
+  color: ${(props: IsOpenedProp) => props.theme.color[props.isOpened ? 'primaryLight' : 'primary']};
 `
 
 interface IsOpenedProp {

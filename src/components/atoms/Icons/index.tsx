@@ -1,6 +1,6 @@
 import React from 'react';
 import Svg, { G, Path, SvgProps, Rect } from 'react-native-svg';
-import { theme } from '../../../common/theme';
+import { THEME } from '../../../common/theme';
 const StyledPath = Path as any;
 
 export const SteakIcon = (props: SvgProps) => (
@@ -11,7 +11,7 @@ export const SteakIcon = (props: SvgProps) => (
     viewBox="0 0 229.202 229.202"
     style={{ enableBackground: 'new 0 0 229.202 229.202' }}
     xmlSpace="preserve"
-    fill={theme.color.prots}
+    fill={THEME.color.prots}
     {...props as any}
   >
     <G>
@@ -46,7 +46,7 @@ export const WheatIcon = (props: SvgProps) => (
     width="950.002px"
     height="950.002px"
     viewBox="0 0 950.002 950.002"
-    fill={theme.color.carbs}
+    fill={THEME.color.carbs}
     xmlSpace="preserve"
     {...props as any}
   >

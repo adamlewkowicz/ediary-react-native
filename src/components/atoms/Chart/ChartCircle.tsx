@@ -4,11 +4,12 @@ import Svg, {
   CircleProps,
 } from 'react-native-svg';
 import styled from 'styled-components/native';
-import { theme } from '../../../common/theme';
+import { THEME } from '../../../common/theme';
 import { SvgGradientDef } from '../Svg';
 import * as Utils from '../../../utils';
 import { useAnimatedSpring } from '../../../hooks';
 import { Animated } from 'react-native';
+import { getA11yProgressBarProps } from '../../../utils';
 
 export interface ChartCircleProps {
   percentage: number
@@ -44,14 +45,18 @@ export const ChartCircle = (props: ChartCircleProps) => {
 
   return (
     <Container>
-      <SvgContainer height={size} width={size}>
+      <SvgContainer
+        {...getA11yProgressBarProps(percentage)}
+        height={size}
+        width={size}
+      >
         <SvgGradientDef
           id={GRADIENT_ID}
           colors={props.gradientColors}
         />
         <Circle
           {...genericCircleProps}
-          stroke={theme.colors.quinary}
+          stroke={THEME.color.quinary}
         />
         <AnimatedPercentageCircle
           {...genericCircleProps}

@@ -2,6 +2,7 @@ import React from 'react';
 import {
   fireEvent,
   wait,
+  within,
 } from '@testing-library/react-native';
 import { renderSetup } from '../../../__tests__/utils';
 import { Meal, Product, MealProduct } from '../../database/entities';
@@ -17,12 +18,26 @@ describe('<NutritionHomeScreen />', () => {
     return { productMock, mealMock };
   }
 
+  describe('when touches meal 👆', () => {
+
+    it('should reveal details 📜', async () => {
+      const ctx = renderSetup(<NutritionHomeScreen />);
+
+      const [firstMealTemplateContainer] = await ctx.findAllByLabelText('Posiłek');
+      const mealTemplateOpenButton = within(firstMealTemplateContainer).getByLabelText('Pokaż szczegóły lub usuń posiłek');
+      fireEvent.press(mealTemplateOpenButton);
+
+      expect(firstMealTemplateContainer).toBeExpanded();
+    });
+
+  });
+
   describe('when adds new product to meal 🥗', () => {
 
     it('should navigate to product find screen 🧭', async () => {
       const ctx = renderSetup(<NutritionHomeScreen />);
 
-      const [firstMealTemplateOpenButton] = await ctx.findAllByLabelText('Pokaż szczegóły posiłku');
+      const [firstMealTemplateOpenButton] = await ctx.findAllByLabelText('Pokaż szczegóły lub usuń posiłek');
       fireEvent.press(firstMealTemplateOpenButton);
 
       const addProductToMealButton = await ctx.findByLabelText('Dodaj produkt do posiłku');
@@ -45,7 +60,7 @@ describe('<NutritionHomeScreen />', () => {
         .mockImplementationOnce(navigationProductSelectedMock)
         .mockImplementationOnce(() => {});
 
-      const [firstMealTemplateOpenButton] = await ctx.findAllByLabelText('Pokaż szczegóły posiłku');
+      const [firstMealTemplateOpenButton] = await ctx.findAllByLabelText('Pokaż szczegóły lub usuń posiłek');
       fireEvent.press(firstMealTemplateOpenButton);
 
       const addProductToMealButton = await ctx.findByLabelText('Dodaj produkt do posiłku');

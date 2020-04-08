@@ -5,7 +5,7 @@ import * as SvgCharts from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 import * as scale from 'd3-scale';
 import dayjs from 'dayjs';
-import { theme } from '../../common/theme';
+import { THEME } from '../../common/theme';
 import styled from 'styled-components/native';
 
 const GRADIENT_ID = 'diary-summary-chart';
@@ -14,12 +14,12 @@ const X_AXIS_HEIGHT = 30;
 const YAxisContentInset = { top: 10, bottom: 10 };
 const YAxisSvg = {
   fontSize: 10,
-  fill: theme.color.gray20,
-  fontFamily: theme.fontWeight.regular,
+  fill: THEME.color.tertiary,
+  fontFamily: THEME.fontWeight.regular,
 };
 const XAxisSvg = {
   fill: 'black',
-  fontFamily: theme.fontWeight.regular,
+  fontFamily: THEME.fontWeight.regular,
   fontSize: 8,
   fontWeight: 'bold',
   rotation: 20,
@@ -28,7 +28,7 @@ const XAxisSvg = {
 };
 const AreaChartSvg = { fill: `url(#${GRADIENT_ID})` };
 const AreaChartContentInset = { top: 15, bottom: 15 };
-const GridSvg = { stroke: theme.color.gray10 };
+const GridSvg = { stroke: THEME.color.quaternary };
 const XAxisContentInset = { left: 10, right: 30 };
 
 interface DiarySummaryChartProps {
@@ -74,8 +74,8 @@ export const DiarySummaryChart = (props: DiarySummaryChartProps) => {
 const Gradient = ({ index }: { index?: number }) => (
   <Defs key={index}>
     <LinearGradient id={GRADIENT_ID} x1="0%" y1="0%" x2="0%" y2="100%">
-      <Stop offset="0%" stopColor={theme.gradient.kcal[0]} stopOpacity={0.8}/>
-      <Stop offset="100%" stopColor={theme.gradient.kcal[1]} stopOpacity={0.2}/>
+      <Stop offset="0%" stopColor={THEME.gradient.kcal[0]} stopOpacity={0.8}/>
+      <Stop offset="100%" stopColor={THEME.gradient.kcal[1]} stopOpacity={0.2}/>
     </LinearGradient>
   </Defs>
 );
