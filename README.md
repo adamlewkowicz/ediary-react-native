@@ -1,6 +1,6 @@
 <img
-  src="https://i.imgur.com/vqb5yyq.png"
-  data-canonical-src="https://i.imgur.com/vqb5yyq.png"
+  src="https://i.imgur.com/gIPQ6eZ.png"
+  data-canonical-src="https://i.imgur.com/gIPQ6eZ.png"
   alt="E-diary logo"
   align="left"
 />
@@ -44,8 +44,8 @@ Play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://p
 
 ## Zdjęcia
 ![Śledzenie kalorii](https://i.imgur.com/HorWQXD.png)
+![Własne posiłki](https://i.imgur.com/hKhRXoh.png)
 ![Baza produktów](https://i.imgur.com/wbY8JLY.png)
-![Własne posiłki](https://i.imgur.com/a6a1jgI.png)
 ![Własne produkty](https://i.imgur.com/IvvL3zM.png)
 
 ## Roadmap
