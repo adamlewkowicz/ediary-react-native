@@ -39,4 +39,4 @@ jobs:
     - uses: actions/upload-artifact@master
       with:
         name: ediary-release-source-map
-        path: ./android/app/build/generated/sourcemaps/react/index.android.bundle
+        path: ./android/app/build/generated/sourcemaps/react/release/index.android.bundle
