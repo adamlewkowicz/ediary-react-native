@@ -35,3 +35,8 @@ jobs:
       with:
         name: ediary-release
         path: ./android/app/build/outputs/apk/release/app-release.apk
+
+    - uses: actions/upload-artifact@master
+      with:
+        name: ediary-release-source-map
+        path: ./android/app/build/generated/sourcemaps/react/index.android.bundle
