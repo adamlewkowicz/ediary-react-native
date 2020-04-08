@@ -40,7 +40,7 @@ Play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://p
 - Figma (design, prototypowanie UI)
 
 ## Podgląd
-![Podgląd](https://i.imgur.com/7cH5o3z.png)
+![Podgląd](https://i.imgur.com/BbGDqfx.png)
 
 ## Zdjęcia
 ![Śledzenie kalorii](https://i.imgur.com/HorWQXD.png)
