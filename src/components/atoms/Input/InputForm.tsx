@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputProps, InputRef } from './Input';
+import { InputProps, Input } from './Input';
 import { TextInput } from 'react-native';
 
 interface InputFormProps<
@@ -31,7 +31,7 @@ export const InputForm = React.forwardRef((
   } = props;
 
   return (
-    <InputRef
+    <Input
       value={formik.values[property]}
       onChangeText={formik.handleChange(property)}
       onBlur={formik.handleBlur(property)}

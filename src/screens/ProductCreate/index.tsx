@@ -7,8 +7,8 @@ import { ProductCreateScreenNavigationProps } from '../../navigation';
 import {
   Section,
   Group,
-  InputButtonRef,
-  InputMetaTextRef,
+  InputButton,
+  InputMetaText,
   InputForm,
   ButtonPrimary,
 } from '../../components';
@@ -110,7 +110,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
           formikProperty="producer"
           onSubmitEditing={portionQuantityInputRef.current?.focus}
         />
-        <InputMetaTextRef
+        <InputMetaText
           label={`Ilość ${portionUnitType} w jednej porcji`}
           placeholder="100"
           value={formik.values.portionQuantity}
@@ -149,7 +149,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             onSubmitEditing={protsInputRef.current?.focus}
           />
         </Group.Container>
-        <InputMetaTextRef
+        <InputMetaText
           value={formik.values.prots}
           onChangeText={formik.handleChange('prots') as any}
           onBlur={formik.handleBlur('prots') as any}
@@ -178,12 +178,12 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
             placeholder="0"
             keyboardType="numeric"
             formik={formik}
-            formikProperty="fats"
+            formikProperty="fattyAcids"
             ref={fattyAcidsInputRef}
             onSubmitEditing={kcalInputRef.current?.focus}
           />
         </Group.Container>
-        <InputButtonRef
+        <InputButton
           value={formik.values.kcal}
           onChangeText={formik.handleChange('kcal') as any}
           onBlur={formik.handleBlur('kcal') as any}
@@ -200,7 +200,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
         />
       </Section>
       <Section title="Inne">
-        <InputButtonRef
+        <InputButton
           value={formik.values.barcode}
           onChangeText={formik.handleChange('barcode') as any}
           onBlur={formik.handleBlur('barcode') as any}

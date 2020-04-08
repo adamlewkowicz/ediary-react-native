@@ -1,6 +1,6 @@
-import React, { RefObject } from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
-import { ButtonSecondary, InputRef, InputProps } from '../../index';
+import { ButtonSecondary, Input, InputProps } from '../../index';
 import { TouchableOpacityProps, TextInput } from 'react-native';
 
 interface InputButtonProps extends InputProps {
@@ -9,19 +9,21 @@ interface InputButtonProps extends InputProps {
   onButtonPress: TouchableOpacityProps['onPress']
 }
 
-export const InputButton = (props: InputButtonProps) => {
+export const InputButton = React.forwardRef((
+  props: InputButtonProps,
+  ref: React.Ref<TextInput>
+) => {
   const {
     buttonText,
     buttonLabel = buttonText,
     onButtonPress,
-    forwardedRef, 
     ...inputProps
   } = props;
 
   return (
-    <InputRef
+    <Input
       {...inputProps}
-      ref={forwardedRef}
+      ref={ref}
       rightContent={(
         <ButtonSecondaryStyled
           onPress={onButtonPress}
@@ -32,11 +34,7 @@ export const InputButton = (props: InputButtonProps) => {
       )}
     />
   );
-}
-
-export const InputButtonRef = React.forwardRef<TextInput, InputButtonProps>(
-  (props, ref) => <InputButton {...props} forwardedRef={ref as RefObject<TextInput>} />
-);
+});
 
 const ButtonSecondaryStyled = styled(props => <ButtonSecondary {...props} />)`
   margin-left: ${props => props.theme.spacing.small};
