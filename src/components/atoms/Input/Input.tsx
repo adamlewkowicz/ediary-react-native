@@ -37,7 +37,6 @@ export const Input = React.forwardRef((
         <TextInput
           status={validationStatus}
           accessibilityLabel={accessibilityLabel}
-          placeholderTextColor={THEME.color.tertiary}
           ref={ref}
           {...inputProps}
         />
@@ -57,7 +56,9 @@ const Container = styled.View`
   flex: 1;
 `
 
-const TextInput = styled.TextInput<{
+const TextInput = styled.TextInput.attrs(props => ({
+  placeholderTextColor: THEME.color.tertiary as string
+}))<{
   status: ValidationStatus
 }>`
   border-bottom-color: ${props => {

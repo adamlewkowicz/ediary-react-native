@@ -16,18 +16,12 @@ export const InputSearcher = ({ isLoading, ...props }: InputSearcherProps) => (
       {...props}
      />
     {isLoading && <Spinner />}
-    <StyledLoupeIcon {...LOUPE_ICON_STYLE} />
+    <StyledLoupeIcon />
   </Container>
 );
 
-const LOUPE_SIZE = 16;
-
-const LOUPE_ICON_STYLE = {
-  fill: THEME.color.primary,
-  width: LOUPE_SIZE,
-  height: LOUPE_SIZE,
-  style: { transform: [{ translateY: -LOUPE_SIZE / 2 }] }
-}
+const LOUPE_ICON_SIZE = 16;
+const LOUPE_ICON_TRANSFORM_Y = LOUPE_ICON_SIZE * -1 / 2;
 
 const Container = styled.View`
   position: relative;
@@ -36,15 +30,20 @@ const Container = styled.View`
 
 const Spinner = styled(ActivityIndicator)`
   position: absolute;
-  right: 15px;
+  right: ${props => props.theme.spacing.small};
   top: 50%;
   transform: translateY(-10px);
 `
 
-const StyledLoupeIcon = styled(LoupeIcon)`
+const StyledLoupeIcon = styled(LoupeIcon).attrs(props => ({
+  fill: props.theme.color.primary,
+  width: LOUPE_ICON_SIZE,
+  height: LOUPE_ICON_SIZE,
+}))`
   position: absolute;
   top: 50%;
   left: 15px;
+  transform: translateY(${LOUPE_ICON_TRANSFORM_Y}px);
 `
 
 const Input = styled.TextInput`
