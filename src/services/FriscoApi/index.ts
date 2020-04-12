@@ -29,5 +29,3 @@ export class FriscoApi {
   }
 
 }
-
-export const friscoApi = new FriscoApi;

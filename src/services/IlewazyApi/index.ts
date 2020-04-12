@@ -115,6 +115,4 @@ export class IlewazyApi {
   }
 }
 
-export const ilewazyApi = new IlewazyApi;
-
 type UnitDataEntry = [ApiTypes.PortionType, ApiTypes.UnitData]
