@@ -19,7 +19,6 @@ import {
 } from '../../../types';
 import { User } from '../User';
 import { ProductPortion } from '../ProductPortion';
-import { FriscoApi, IlewazyApi } from '../../../services';
 import { SqliteENUM } from '../../decorators';
 import { EntityType, EntityRequired } from '../../types';
 import { PRODUCT_UNIT_TYPE } from '../../../common/consts';
@@ -29,6 +28,7 @@ import { ProductImage } from '../ProductImage';
 import { Macro } from '../../embeds/Macro';
 import { FindMostUsedResult, FindMostProductIdsResult } from './types';
 import * as Utils from '../../../utils';
+import { ProductSearchApi } from '../../../services/ProductSearchApi';
 
 @Entity('product')
 @Unique<Product>(['name', 'isVerified'])
@@ -105,10 +105,8 @@ export class Product extends GenericEntity {
     return Product.defaultPortion;
   }
 
-  private static friscoApi = new FriscoApi();
+  private static searchApi = new ProductSearchApi();
   
-  private static ilewazyApi = new IlewazyApi();
-
   static saveWithPortion(
     productData: IProductRequired,
     portionQuantity: number,
@@ -206,7 +204,7 @@ export class Product extends GenericEntity {
     const sortByMostAccurateProductName = Utils.sortByMostAccurateName(name);
 
     if (savedProducts.length <= minProductsFoundLimit) {
-      const fetchedProducts = await Product.ilewazyApi.findByName(name, controller);
+      const fetchedProducts = await Product.searchApi.findByName(name, controller);
 
       const mergedProducts = [...savedProducts, ...fetchedProducts]
         .filter(Product.filterProductsByNameAndInstance)
@@ -261,7 +259,7 @@ export class Product extends GenericEntity {
     const hasVerifiedProduct = savedProducts.some(product => product.isVerified);
     
     if (!savedProducts.length || !hasVerifiedProduct) {
-      const fetchedProducts = await Product.friscoApi.findByBarcode(barcode, controller);
+      const fetchedProducts = await Product.searchApi.findByBarcode(barcode, controller);
       const createdProducts = await Utils.mapAsyncSequence(
         fetchedProducts, Product.saveNormalizedProduct
       );
