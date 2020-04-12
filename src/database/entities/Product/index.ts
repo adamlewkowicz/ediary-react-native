@@ -258,7 +258,7 @@ export class Product extends GenericEntity {
     const hasVerifiedProduct = savedProducts.some(product => product.isVerified);
     
     if (!savedProducts.length || !hasVerifiedProduct) {
-      const fetchedProducts = await friscoApi.findByQuery(barcode, controller);
+      const fetchedProducts = await friscoApi.findByBarcode(barcode, controller);
       const createdProducts = await Utils.mapAsyncSequence(
         fetchedProducts, Product.saveNormalizedProduct
       );

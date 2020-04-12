@@ -15,7 +15,7 @@ test('findByQuery - product is normalized correctly', async () => {
     }
   }));
 
-  const [normalizedProduct] = await friscoApi.findByQuery(name);
+  const [normalizedProduct] = await friscoApi.findByBarcode(name);
 
   expect(fetchMock).toHaveBeenCalledTimes(1);
   expect(normalizedProduct).toMatchSnapshot();
