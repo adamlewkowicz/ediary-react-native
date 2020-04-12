@@ -1,8 +1,5 @@
 import { FriscoApi } from '.';
 import friscoResponseMock from './__mocks__/frisco-query.json';
-(global as any).fetch = require('node-fetch');
-
-jest.mock('node-fetch');
 
 describe('FriscoApi', () => {
 
@@ -12,9 +9,9 @@ describe('FriscoApi', () => {
 
   test('findByQuery - product is normalized correctly', async () => {
     const name = 'apple';
-    const fetchMock = fetch;
+    const fetchMock = fetch as jest.Mock;
   
-    (fetchMock as jest.Mock).mockImplementationOnce(async () => ({
+    fetchMock.mockImplementationOnce(async () => ({
       ok: true,
       json: async () => friscoResponseMock
     }));
