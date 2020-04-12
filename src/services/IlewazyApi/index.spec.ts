@@ -1,26 +1,32 @@
-import { ilewazyApi } from '.';
+import { IlewazyApi } from '.';
 import ilewazyResponseMock from './__mocks__/ilewazy.json';
 (global as any).fetch = require('node-fetch');
 
 jest.mock('node-fetch');
 
-test('findByName - products are normalized correctly', async () => {
-  const name = 'apple';
-  const fetchMock = fetch;
+describe('IlewazyApi', () => {
 
-  (fetchMock as jest.Mock).mockImplementationOnce(async () => ({
-    ok: true,
-    async json() {
-      return ilewazyResponseMock;
-    }
-  }));
+  let ilewazyApi: IlewazyApi;
 
-  const [
-    firstNormalizedProduct,
-    secondNormalizedProduct,
-  ] = await ilewazyApi.findByName(name);
+  beforeEach(() => ilewazyApi = new IlewazyApi());
 
-  expect(fetchMock).toHaveBeenCalledTimes(1);
-  expect(firstNormalizedProduct).toMatchSnapshot();
-  expect(secondNormalizedProduct).toMatchSnapshot();
+  test('findByName - products are normalized correctly', async () => {
+    const name = 'apple';
+    const fetchMock = fetch;
+  
+    (fetchMock as jest.Mock).mockImplementationOnce(async () => ({
+      ok: true,
+      json: async () => ilewazyResponseMock
+    }));
+  
+    const [
+      firstNormalizedProduct,
+      secondNormalizedProduct,
+    ] = await ilewazyApi.findByName(name);
+  
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(firstNormalizedProduct).toMatchSnapshot();
+    expect(secondNormalizedProduct).toMatchSnapshot();
+  });
+
 });

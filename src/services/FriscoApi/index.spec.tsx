@@ -16,9 +16,7 @@ describe('FriscoApi', () => {
   
     (fetchMock as jest.Mock).mockImplementationOnce(async () => ({
       ok: true,
-      async json() {
-        return friscoResponseMock;
-      }
+      json: async () => friscoResponseMock
     }));
   
     const [normalizedProduct] = await friscoApi.findByBarcode(name);
