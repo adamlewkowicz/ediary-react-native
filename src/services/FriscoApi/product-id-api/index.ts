@@ -1,6 +1,6 @@
 import * as Utils from '../../../utils';
 import { FriscoResponse, FriscoProductId, FriscoNutritionBrandbank, MacroField } from '../types';
-import { NormalizedProduct, MacroElement, MacroElements, ProductPortionType } from '../../../types';
+import { NormalizedProduct, MacroElement, MacroElements, ProductPortionType, NormalizedPortion } from '../../../types';
 import { Product } from '../../../database/entities';
 import { MACRO } from '../../../common/consts';
 
@@ -36,9 +36,9 @@ export class FriscoProductIdApi {
       return null;
     }
 
-    const normalizedPortionData = this.normalizeProductPortion(macroField);
+    const normalizedBasePortion = this.normalizeProductBasePortion(macroField);
 
-    if (normalizedPortionData == null) {
+    if (normalizedBasePortion == null) {
       return null;
     }
 
@@ -46,7 +46,6 @@ export class FriscoProductIdApi {
     const name = data.officialProductName.replace(/\./, '');
     const description = data.description;
     const portions = this.normalizeProductPortions(macroField);
-
     const macro = this.normalizeProductMacro(macroField);
 
     if (Utils.eachValueEqualsZero(macro)) {
@@ -59,13 +58,13 @@ export class FriscoProductIdApi {
       description,
       portions,
       macro,
-      ...normalizedPortionData
+      ...normalizedBasePortion
     }
 
     return normalizedProduct;
   }
 
-  private normalizeProductPortion(macroField: MacroField): NormalizedPortion | null {
+  private normalizeProductBasePortion(macroField: MacroField): NormalizedBasePortion | null {
     const [portionHeading] = macroField.content.Headings;
 
     if (!portionHeading) {
@@ -75,28 +74,37 @@ export class FriscoProductIdApi {
     const { value, unit } = Utils.getNumAndUnitFromString(portionHeading);
     const portion = value ?? Product.defaultPortion;
 
-    if (unit !== 'g' && unit !== 'ml') {
-      return null;
+    if (this.isKnownUnitType(unit)) {
+      return { portion, unit };
     }
     
-    return { portion, unit };
+    return null;
   }
 
-  private normalizeProductPortions(macroField: MacroField) {
-    return macroField.content.Headings.flatMap(heading => {
-      const { value, unit } = Utils.getNumAndUnitFromString(heading);
+  private normalizeProductPortions(macroField: MacroField): NormalizedPortion[] {
+    return macroField.content.Headings
+      .map(heading => {
+        const { value, unit } = Utils.getNumAndUnitFromString(heading);
 
-      if ((unit === 'g' || unit === 'ml') && value !== null) {
-        const type: ProductPortionType = 'portion';
-        return [{
-          type,
-          value,
-          unit
-        }];
-      }
+        if (value != null && this.isKnownUnitType(unit)) {
+          const type: ProductPortionType = 'portion';
 
-      return [];
-    });
+          const normalizedPortion: NormalizedPortion = {
+            type,
+            value,
+            unit
+          }
+
+          return normalizedPortion;
+        }
+
+        return null;
+      })
+      .filter((portionData): portionData is NormalizedPortion => portionData !== null);
+  }
+
+  private isKnownUnitType(unitType: string | null): unitType is KnownUnitType {
+    return unitType === UNIT_GRAM;
   }
 
   private normalizeProductMacro(macroField: MacroField): MacroElements {
@@ -107,8 +115,9 @@ export class FriscoProductIdApi {
       if (foundMacroElement) {
         const [, element] = foundMacroElement;
         const { value, unit: elementUnit } = Utils.getNumAndUnitFromString(bank.Values[0]);
+        const isUnknownUnitType = !this.isKnownUnitType(elementUnit);
 
-        if (elementUnit !== 'g' && element !== 'kcal') {
+        if (isUnknownUnitType && element !== 'kcal') {
           return macro;
         }
         if (value !== null) {
@@ -131,7 +140,11 @@ const MACRO_MAP: { [key: string]: MacroElement } = {
   'białko': 'prots',
 }
 
-type NormalizedPortion = {
+const UNIT_GRAM = 'g';
+
+type KnownUnitType = 'g' | 'ml'
+
+type NormalizedBasePortion = {
   portion: number
   unit: 'g' | 'ml'
 }

@@ -56,11 +56,13 @@ export type ObjectEntries = <
   Value = T[Property]
 >(object: T) => [Property, Value][];
 
-export type NormalizedPortions = {
+export type NormalizedPortion = {
   type: ProductPortionType
   unit: ProductUnitType
   value: number
-}[]
+}
+
+export type NormalizedPortions = NormalizedPortion[]
 
 export interface NormalizedProduct {
   _id: string | number | FriscoProductId
