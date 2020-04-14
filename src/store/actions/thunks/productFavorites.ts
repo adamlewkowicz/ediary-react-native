@@ -10,7 +10,7 @@ export const productFavoritesLoad = (userId: UserId): Thunk => async (dispatch) 
 }
 
 export const productFavoritesAdd = (
-  userId: UserId, product: Product
+  product: Product, userId: UserId
 ): Thunk => async (dispatch) => {
   await ProductFavorite.save({ userId, productId: product.id });
 

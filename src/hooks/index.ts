@@ -11,3 +11,4 @@ export * from './use-bound-action';
 export * from './use-animated-spring';
 export * from './use-app-error';
 export * from './use-steps';
+export * from './use-product-favorites';
