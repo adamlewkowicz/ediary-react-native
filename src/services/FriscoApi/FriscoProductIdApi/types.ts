@@ -63,8 +63,10 @@ interface IngredientsBrandbank extends BrandbankLayout {
       Reference: 'Na porcję'
       Headers: string[]
       'Wartość energetyczna': {
-        Quantity: '2,3 kJ'
-        Percentage: '0.00'
+        /** 2,3 kJ */
+        Quantity: string
+        /** '0.00' */
+        Percentage: string
         Rating: null | string
       }
       Footers: string[]
