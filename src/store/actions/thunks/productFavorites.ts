@@ -1,6 +1,6 @@
 import { Thunk } from '../../store';
 import { UserId, ProductId } from '../../../types';
-import { User, Product, ProductFavorite } from '../../../database/entities';
+import { User, ProductFavorite, IProduct } from '../../../database/entities';
 import {
   productFavoritesLoaded,
   productFavoritesAdded,
@@ -16,7 +16,7 @@ export const productFavoritesLoad = (
 }
 
 export const productFavoritesAdd = (
-  product: Product,
+  product: IProduct,
   userId: UserId
 ): Thunk => async (dispatch) => {
   await ProductFavorite.save({ userId, productId: product.id });

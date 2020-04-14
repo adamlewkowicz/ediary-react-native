@@ -1,4 +1,4 @@
-import { Product } from '../../../database/entities';
+import { IProduct } from '../../../database/entities';
 import {
   PRODUCT_FAVORITES_LOADED,
   PRODUCT_FAVORITES_ADDED,
@@ -6,7 +6,7 @@ import {
 } from '../../consts';
 import { ProductId } from '../../../types';
 
-export const productFavoritesAdded = (product: Product) => ({
+export const productFavoritesAdded = (product: IProduct) => ({
   type: PRODUCT_FAVORITES_ADDED,
   payload: product,
 });
@@ -16,7 +16,7 @@ export const productFavoritesDeleted = (productId: ProductId) => ({
   payload: productId,
 });
 
-export const productFavoritesLoaded = (products: Product[]) => ({
+export const productFavoritesLoaded = (products: IProduct[]) => ({
   type: PRODUCT_FAVORITES_LOADED,
   payload: products,
 });

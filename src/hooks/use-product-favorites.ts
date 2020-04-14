@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../store';
 import { useCallback } from 'react';
-import { Product } from '../database/entities';
+import { IProduct } from '../database/entities';
 import { useUserId } from './use-user-id';
 import { ProductId } from '../types';
 
@@ -10,7 +10,7 @@ export const useProductFavorites = () => {
   const userId = useUserId();
   const dispatch = useDispatch();
 
-  const addProduct = useCallback((product: Product) => {
+  const addProduct = useCallback((product: IProduct) => {
     dispatch(
       Actions.productFavoritesAdd(product, userId)
     );

@@ -1,4 +1,4 @@
-import { Product } from '../../../database/entities';
+import { IProduct } from '../../../database/entities';
 import { ProductFavoritesAction } from '../../actions';
 import {
   PRODUCT_FAVORITES_LOADED,
@@ -7,7 +7,7 @@ import {
 } from '../../consts';
 
 interface ProductFavoritesState {
-  products: Product[]
+  products: IProduct[]
   isLoading: boolean
 }
 
@@ -23,7 +23,6 @@ export const productFavoritesReducer = (
   switch(action.type) {
     case PRODUCT_FAVORITES_ADDED: return {
       ...state,
-      isLoading: false,
       products: [action.payload, ...state.products],
     }
     case PRODUCT_FAVORITES_DELETED: return {
@@ -32,7 +31,8 @@ export const productFavoritesReducer = (
     }
     case PRODUCT_FAVORITES_LOADED: return {
       ...state,
-      products: action.payload
+      products: action.payload,
+      isLoading: false,
     }
     default: return state;
   }

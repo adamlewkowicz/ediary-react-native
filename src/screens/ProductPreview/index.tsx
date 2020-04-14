@@ -9,6 +9,7 @@ import {
   RadioInputsRow,
   InputMetaText,
   ButtonPrimary,
+  ButtonFavorite,
 } from '../../components';
 import {
   useNavigationData,
@@ -30,7 +31,7 @@ export const ProductPreviewScreen = () => {
     macroNeeds,
   } = useCalculatedMacro(params.product.macro, quantity);
   const productFavorites = useProductFavorites();
-  
+
   const isFavorite = productFavorites.data.some(
     product => product.id === params.product.id
   );
@@ -68,6 +69,11 @@ export const ProductPreviewScreen = () => {
   return (
     <Container>
       <ProductName>{params.product.name}</ProductName>
+      <ButtonFavorite
+        isFavorite={isFavorite}
+        onFavoriteAdd={() => productFavorites.add(params.product)}
+        onFavoriteDelete={() => productFavorites.delete(params.product.id)}
+      />
       <Section title="Ilość produktu">
         <RadioInputsRow
           title="Porcje"
