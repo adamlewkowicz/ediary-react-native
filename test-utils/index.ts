@@ -1,1 +1,1 @@
-export * from './renderSetup';
+export * from './render-setup';
