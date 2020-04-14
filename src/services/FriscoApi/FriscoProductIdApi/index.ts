@@ -10,7 +10,7 @@ export class FriscoProductIdApi {
 
   async findOne(productId: ApiTypes.FriscoProductId, controller?: AbortController): Promise<NormalizedProduct | null> {
     
-    const data = await Utils.fetchify<ApiTypes.FriscoResponse>(
+    const data = await Utils.fetchify<ApiTypes.Response>(
       `${this.searchURL}${productId}`,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
       controller
@@ -19,7 +19,7 @@ export class FriscoProductIdApi {
     return this.normalizeProduct(data);
   }
 
-  private normalizeProduct(data: ApiTypes.FriscoResponse): NormalizedProduct | null {
+  private normalizeProduct(data: ApiTypes.Response): NormalizedProduct | null {
     const macroField = this.getProductMacroField(data);
 
     if (macroField == null) {
@@ -54,7 +54,7 @@ export class FriscoProductIdApi {
     return normalizedProduct;
   }
 
-  private getProductMacroField(data: ApiTypes.FriscoResponse): ApiTypes.MacroField | null {
+  private getProductMacroField(data: ApiTypes.Response): ApiTypes.MacroField | null {
     const MACRO_SECTION_ID = 2;
     const MACRO_FIELD_ID = 85;
     const macroSection = data.brandbank.find(brand => brand.sectionId === MACRO_SECTION_ID);

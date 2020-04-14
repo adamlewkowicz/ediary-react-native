@@ -11,7 +11,7 @@ export class IlewazyApi {
   async findByName(name: string, controller?: AbortController): Promise<NormalizedProduct[]> {
     const parsedName = encodeURIComponent(name);
 
-    const { data = [] } = await Utils.fetchify<ApiTypes.SearchPayload>(
+    const { data = [] } = await Utils.fetchify<ApiTypes.Response>(
       `${this.SEARCH_URL}${parsedName}`,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
       controller,

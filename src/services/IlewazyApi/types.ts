@@ -1,6 +1,6 @@
 import { ProductPortionType } from '../../types';
 
-export interface SearchPayload {
+export interface Response {
   page: null
   records: string
   total: number

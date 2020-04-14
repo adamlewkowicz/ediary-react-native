@@ -1,5 +1,5 @@
 import { BarcodeId } from '../../../types';
-import { FriscoProductId } from '../types/common';
+import { FriscoProductId } from '../FriscoProductIdApi/types';
 
 export interface FriscoQueryResponse {
   products: FriscoQueryResponseProduct[]

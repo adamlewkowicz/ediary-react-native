@@ -1,5 +1,5 @@
 
-export interface FriscoResponse {
+export interface Response {
   productId: FriscoProductId
   seoData: {
     title: string
@@ -8,12 +8,39 @@ export interface FriscoResponse {
   },
   description: string
   officialProductName: string
-  brandbank: (
-    FriscoNutritionBrandbank | FriscoProducerBrandbank
-  )[]
+  brandbank: Brandbank[]
 }
 
-interface FriscoProducerBrandbank {
+type Brandbank = NutritionBrandbank | ProducerBrandbank | IngredientsBrandbank
+
+interface BrandbankLayout {
+  sectionId: number
+  sectionName: string
+  fields: {
+    fieldId: number
+    fieldName: string
+  }[]
+}
+
+export interface NutritionBrandbank extends BrandbankLayout {
+  sectionId: 2
+  sectionName: 'Wartości odżywcze'
+  fields: MacroField[]
+}
+
+export interface MacroField {
+  fieldId: 85
+  fieldName: 'Wartości odżywcze'
+  content: {
+    Headings: string[]
+    Nutrients: {
+      Name: NutritionName
+      Values: string[]
+    }[]
+  }
+}
+
+interface ProducerBrandbank extends BrandbankLayout {
   sectionId: 3
   sectionName: 'Informacje producenta'
   fields: [
@@ -25,7 +52,7 @@ interface FriscoProducerBrandbank {
   ]
 }
 
-export interface FriscoIngredientsBrandbank extends FriscoBrandbank {
+interface IngredientsBrandbank extends BrandbankLayout {
   sectionId: 1
   sectionName: 'Składniki'
   fields: ({
@@ -50,36 +77,12 @@ export interface FriscoIngredientsBrandbank extends FriscoBrandbank {
   })[]
 }
 
-export interface FriscoNutritionBrandbank extends FriscoBrandbank {
-  sectionId: 2
-  sectionName: 'Wartości odżywcze'
-  fields: MacroField[]
-}
-
-export interface MacroField {
-  fieldId: 85
-  fieldName: 'Wartości odżywcze'
-  content: {
-    Headings: string[]
-    Nutrients: {
-      Name: FriscoNutritionName
-      Values: string[]
-    }[]
-  }
-}
-
-interface FriscoBrandbank {
-  fieldId: number
-  fieldName: string
-  fields: {
-    fieldId: number
-    fieldName: string
-    content: any
-  }[]
-}
-
-type FriscoNutritionName =
-  | 'Energia' | 'Tłuszcz ' | ' w tym kwasy nasycone '
-  | 'Węglowodany ' | ' w tym cukry ' | 'Białko '
+type NutritionName =
+  | 'Energia'
+  | 'Tłuszcz '
+  | ' w tym kwasy nasycone '
+  | 'Węglowodany '
+  | ' w tym cukry '
+  | 'Białko '
   
 export interface FriscoProductId extends String {}
