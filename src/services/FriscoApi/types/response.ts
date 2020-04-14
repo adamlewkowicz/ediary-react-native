@@ -52,17 +52,19 @@ export interface FriscoIngredientsBrandbank extends FriscoBrandbank {
 export interface FriscoNutritionBrandbank extends FriscoBrandbank {
   sectionId: 2
   sectionName: 'Wartości odżywcze'
-  fields: {
-    fieldId: 85
-    fieldName: 'Wartości odżywcze'
-    content: {
-      Headings: string[]
-      Nutrients: {
-        Name: FriscoNutritionName
-        Values: string[]
-      }[]
-    }
-  }[]
+  fields: MacroField[]
+}
+
+export interface MacroField {
+  fieldId: 85
+  fieldName: 'Wartości odżywcze'
+  content: {
+    Headings: string[]
+    Nutrients: {
+      Name: FriscoNutritionName
+      Values: string[]
+    }[]
+  }
 }
 
 interface FriscoBrandbank {
