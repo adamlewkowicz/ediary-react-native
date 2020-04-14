@@ -1,40 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`entity generated sql matches migration's sql: [meal] - generated to migrated 1`] = `
-"Snapshot Diff:
-Compared values have no visual difference."
-`;
-
-exports[`entity generated sql matches migration's sql: [meal_product] - generated to migrated 1`] = `
-"Snapshot Diff:
-Compared values have no visual difference."
-`;
-
-exports[`entity generated sql matches migration's sql: [product] - generated to migrated 1`] = `
-"Snapshot Diff:
-Compared values have no visual difference."
-`;
-
-exports[`entity generated sql matches migration's sql: [product_images] - generated to migrated 1`] = `
-"Snapshot Diff:
-Compared values have no visual difference."
-`;
-
-exports[`entity generated sql matches migration's sql: [product_portions] - generated to migrated 1`] = `
-"Snapshot Diff:
-Compared values have no visual difference."
-`;
-
-exports[`entity generated sql matches migration's sql: [profile] - generated to migrated 1`] = `
-"Snapshot Diff:
-Compared values have no visual difference."
-`;
-
-exports[`entity generated sql matches migration's sql: [user] - generated to migrated 1`] = `
-"Snapshot Diff:
-Compared values have no visual difference."
-`;
-
 exports[`entity generated sql matches snapshot: meal 1`] = `
 "CREATE TABLE \\"meal\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
