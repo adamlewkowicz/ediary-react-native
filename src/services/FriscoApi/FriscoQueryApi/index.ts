@@ -45,7 +45,7 @@ export class FriscoQueryApi {
     const description = data.description;
     const barcode = data.ean;
     const images = data.imageUrl ? [data.imageUrl] : [];
-    const portion = Utils.round(data.grammage * MILIGRAMS_PER_GRAM);
+    const portion = this.normalizeProductPortion(data.grammage);
     const brand = data.brand;
     const producer = data.producer;
     const portions: [] = [];
@@ -67,6 +67,13 @@ export class FriscoQueryApi {
     }
 
     return normalizedProduct;
+  }
+
+  private normalizeProductPortion(portionInMiligrams: number): number {
+    const MILIGRAMS_PER_GRAM = 1000;
+    const portionInGrams = Utils.round(portionInMiligrams * MILIGRAMS_PER_GRAM);
+
+    return portionInGrams;
   }
 
   private normalizeProductMacro(substances: ApiTypes.ProductSubstance[], kcal: number): MacroElements {
@@ -98,5 +105,3 @@ const MACRO_NAME_MAP: { [key: string]: MacroElement } = {
   'tłuszcz': 'fats',
   ' tym kwasy tłuszczowe nasyconew': 'fats',
 }
-
-const MILIGRAMS_PER_GRAM = 1000;
