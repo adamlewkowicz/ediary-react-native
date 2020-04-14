@@ -13,7 +13,7 @@ import * as Utils from '../../utils';
 interface NutritionHomeScreenProps {}
 
 export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
-  const { navigate, navigation } = useNavigationData<NutritionHomeScreenNavigationProps>();
+  const { navigate } = useNavigationData<NutritionHomeScreenNavigationProps>();
   const { appDate, appDateDay, ...appDateContext } = useAppDate();
   const dispatch = useDispatch();
   const macroNeeds = useSelector(Selectors.getCalcedMacroNeeds);
@@ -39,7 +39,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         );
       }
     });
-  }, [dispatch, navigate]);
+  }, [dispatch, navigate, appDate]);
   
   const handleMealDelete = useCallback((meal: DiaryMeal): void => {
     Utils.alertDelete(
@@ -73,18 +73,18 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   }, [dispatch]);
 
   const handleProductQuantityUpdate = useCallback((mealId: MealId, product: DiaryProduct): void => {
-    navigation.navigate('ProductPreview', {
+    navigate('ProductPreview', {
       product: product.data,
       quantity: product.quantity,
       async onProductQuantityUpdated(quantity) {
-        navigation.navigate('NutritionHome');
+        navigate('NutritionHome');
 
         await InteractionManager.runAfterInteractions();
 
         dispatch(Actions.mealProductQuantityUpdate(mealId, product.data.id, quantity));
       }
     });
-  }, [navigation, dispatch]);
+  }, [navigate, dispatch]);
 
   const handleScrollFailSilently = useCallback(() => {}, []);
 
