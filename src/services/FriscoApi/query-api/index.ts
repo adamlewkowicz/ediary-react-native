@@ -1,5 +1,5 @@
 import { NormalizedProduct, MacroElement, MacroElements } from '../../../types';
-import { FriscoQueryResponse } from '../types';
+import { FriscoQueryResponse, FriscoQueryResponseProduct, ProductSubstance } from '../types';
 import * as Utils from '../../../utils';
 import { MACRO } from '../../../common/consts';
 
@@ -25,65 +25,78 @@ export class FriscoQueryApi {
 
     return { normalized, unnormalized };
   }
-
+  
   private normalizeProducts(products: FriscoQueryResponse['products']): NormalizedProduct[] {
-    return products.flatMap(data => {
-      const { product, productId } = data;
-      const { components = [], substances, sustenanceCalories } = product.contentData;
-  
-      if (!substances || !substances.length || !sustenanceCalories) {
-        return [];
-      }
-  
-      const _id = productId;
-      const name = product.name.pl;
-      const description = product.description;
-      const barcode = product.ean;
-      const images = product.imageUrl ? [product.imageUrl] : [];
-      const ingredients = components.flatMap(ingredient =>
-        ingredient.split(', ').map(ingrd =>
-          ingrd.replace(/,/, '')
-        )
-      );
-      const portion = Utils.round(product.grammage * 1000);
-      const brand = product.brand;
-      const producer = product.producer;
-      const portions: [] = [];
-  
-      const macroMap: { [key: string]: MacroElement } = {
-        'węglowodany': 'carbs',
-        'w tym cukry': 'carbs',
-        'białko': 'prots',
-        'tłuszcz': 'fats',
-        'w tym kwasy tłuszczowe nasycone': 'fats',
-      }
-  
-      const macro: MacroElements = substances.reduce((macro, substance) => {
-        const element = macroMap[substance.name];
-        if (element) {
-          macro[element] = Utils.round(macro[element] + substance.quantity);
-        }
-        return macro;
-      }, {
-        ...MACRO,
-        kcal: sustenanceCalories
-      });
-  
-      const normalizedProduct = {
-        _id, 
-        name, 
-        description,
-        barcode,
-        images,
-        ingredients,
-        portion,
-        brand,
-        producer,
-        portions,
-        macro,
-      }
-  
-      return [normalizedProduct];
-    });
+    return products
+      .map(product => this.normalizeProduct(product))
+      .filter((product): product is NormalizedProduct => product !== null);
   }
-} 
+
+  private normalizeProduct(product: FriscoQueryResponseProduct): NormalizedProduct | null {
+    const { product: data, productId } = product;
+    const { components = [], substances, sustenanceCalories } = data.contentData;
+
+    if (!substances || !substances.length || !sustenanceCalories) {
+      return null;
+    }
+
+    const _id = productId;
+    const name = data.name.pl;
+    const description = data.description;
+    const barcode = data.ean;
+    const images = data.imageUrl ? [data.imageUrl] : [];
+    const portion = Utils.round(data.grammage * MILIGRAMS_PER_GRAM);
+    const brand = data.brand;
+    const producer = data.producer;
+    const portions: [] = [];
+    const ingredients = this.normalizeProductIngredients(components);
+    const macro = this.normalizeProductMacro(substances, sustenanceCalories);
+
+    const normalizedProduct = {
+      _id, 
+      name, 
+      description,
+      barcode,
+      images,
+      ingredients,
+      portion,
+      brand,
+      producer,
+      portions,
+      macro,
+    }
+
+    return normalizedProduct;
+  }
+
+  private normalizeProductMacro(substances: ProductSubstance[], kcal: number): MacroElements {
+    return substances.reduce((macro, substance) => {
+      const element = MACRO_NAME_MAP[substance.name];
+
+      if (element) {
+        macro[element] = Utils.round(macro[element] + substance.quantity);
+      }
+
+      return macro;
+    }, { ...MACRO, kcal });
+  }
+
+  private normalizeProductIngredients(components: string[]): string[] {
+    return components.flatMap(ingredient =>
+      ingredient
+        .split(', ')
+        .map(ingrd => ingrd.replace(/,/, ''))
+    );
+  }
+
+}
+
+const MACRO_NAME_MAP: { [key: string]: MacroElement } = {
+  'węglowodany': 'carbs',
+  'w tym cukry': 'carbs',
+  'białko': 'prots',
+  'tłuszcz': 'fats',
+  ' tym kwasy tłuszczowe nasyconew': 'fats',
+}
+
+const MILIGRAMS_PER_GRAM = 1000;
