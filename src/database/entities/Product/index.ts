@@ -204,13 +204,19 @@ export class Product extends GenericEntity {
     const sortByMostAccurateProductName = Utils.sortByMostAccurateName(name);
 
     if (savedProducts.length <= minProductsFoundLimit) {
-      const fetchedProducts = await Product.searchApi.findByName(name, controller);
+      try {
+        const fetchedProducts = await Product.searchApi.findByName(name, controller);
 
-      const mergedProducts = [...savedProducts, ...fetchedProducts]
-        .filter(Product.filterProductsByNameAndInstance)
-        .sort(sortByMostAccurateProductName);
+        const mergedProducts = [...savedProducts, ...fetchedProducts]
+          .filter(Product.filterProductsByNameAndInstance)
+          .sort(sortByMostAccurateProductName);
+  
+        return mergedProducts;
+      } catch(error) {
+        Utils.handleError(error);
 
-      return mergedProducts;
+        return savedProducts.sort(sortByMostAccurateProductName);
+      }
     }
 
     return savedProducts.sort(sortByMostAccurateProductName);
