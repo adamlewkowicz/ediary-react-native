@@ -1,27 +1,60 @@
 import { getDatabaseSchema } from './utils/getSchema';
 import { getConnection } from 'typeorm';
-import snapshotDiff from 'snapshot-diff';
 
-test('migrations run up and down without issues', async () => {
-  const connection = getConnection();
-  await connection.dropDatabase();
-  await connection.runMigrations();
+describe('Database', () => {
 
-  for (const _migration of connection.migrations) {
-    await connection.undoLastMigration();
-  }
+  describe('migrations', () => {
 
-  const tables = await getDatabaseSchema();
-  expect(tables.length).toBe(0);
-});
+    it('should migrate without issues', async () => {
+      const connection = getConnection();
+      await connection.dropDatabase();
+      await connection.runMigrations();
+    });
 
-test('entity generated sql matches snapshot', async () => {
-  const connection = getConnection();
-  await connection.dropDatabase();
-  await connection.synchronize();
-  const schema = await getDatabaseSchema();
+    it('should revert migrations without issues', async () => {
+      const connection = getConnection();
+      await connection.dropDatabase();
+      await connection.runMigrations();
+    
+      for (const _migration of connection.migrations) {
+        await connection.undoLastMigration();
+      }
+    
+      const tables = await getDatabaseSchema();
+      expect(tables.length).toBe(0);
+    });
 
-  for (const { prettySql, tbl_name } of schema) {
-    expect(prettySql).toMatchSnapshot(tbl_name);
-  }
+  });
+
+  describe('migrated schema', () => {
+
+    it('should match snapshot', async () => {
+      const connection = getConnection();
+      await connection.dropDatabase();
+      await connection.runMigrations();
+  
+      const schema = await getDatabaseSchema();
+  
+      for (const { prettySql, tbl_name } of schema) {
+        expect(prettySql).toMatchSnapshot(tbl_name);
+      }
+    });
+
+  });
+
+  describe('automatically generated schema', () => {
+
+    it('should match snapshot', async () => {
+      const connection = getConnection();
+      await connection.dropDatabase();
+      await connection.synchronize();
+      const schema = await getDatabaseSchema();
+    
+      for (const { prettySql, tbl_name } of schema) {
+        expect(prettySql).toMatchSnapshot(tbl_name);
+      }
+    });
+
+  });
+
 });
