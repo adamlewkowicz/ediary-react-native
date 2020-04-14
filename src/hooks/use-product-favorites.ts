@@ -1,18 +1,30 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../store';
 import { useCallback } from 'react';
-import { UserId } from '../types';
 import { Product } from '../database/entities';
+import { useUserId } from './use-user-id';
+import { ProductId } from '../types';
 
 export const useProductFavorites = () => {
-  const { products: data } = useSelector(Selectors.getProductFavorites);
+  const { products } = useSelector(Selectors.getProductFavorites);
+  const userId = useUserId();
   const dispatch = useDispatch();
 
-  const addProduct = useCallback((product: Product, userId: UserId) => {
+  const addProduct = useCallback((product: Product) => {
     dispatch(
       Actions.productFavoritesAdd(product, userId)
     );
-  }, [dispatch]);
+  }, [dispatch, userId]);
 
-  return { data, addProduct };
+  const deleteProduct = useCallback((productId: ProductId) => {
+    dispatch(
+      Actions.productFavoritesDelete(productId, userId)
+    );
+  }, [dispatch, userId]);
+
+  return {
+    data: products,
+    add: addProduct,
+    delete: deleteProduct,
+  };
 }
