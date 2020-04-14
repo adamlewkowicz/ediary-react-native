@@ -103,6 +103,20 @@ export class User extends GenericEntity {
       userId
     });
   }
+
+  static async findProductFavorites(userId: UserId): Promise<Product[]> {
+    const productFavorites = await ProductFavorite.find({
+      where: { userId },
+      relations: ['products']
+    });
+
+    const products = productFavorites.flatMap(productFavorite =>
+      productFavorite.product ? [productFavorite.product] : []
+    );
+
+    return products;
+  }
+
 }
 
 export type IUser = EntityType<User>;

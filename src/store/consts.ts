@@ -20,3 +20,7 @@ export const USER_INITIALIZED = 'USER_INITIALIZED' as const;
 
 // Product history
 export const PRODUCT_HISTORY_ADDED = 'PRODUCT_HISTORY_ADDED' as const;
+
+// Product favorites
+export const PRODUCT_FAVORITES_LOADED = 'PRODUCT_FAVORITES_LOADED' as const;
+export const PRODUCT_FAVORITES_ADDED = 'PRODUCT_FAVORITES_ADDED' as const;
