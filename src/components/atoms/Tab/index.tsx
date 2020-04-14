@@ -1,27 +1,22 @@
-import * as React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { Dimensions } from 'react-native';
 import { TabView, SceneMap, SceneRendererProps } from 'react-native-tab-view';
 import styled from 'styled-components/native';
 import { TabButton } from './TabButton';
 
-const initialLayout = { width: Dimensions.get('window').width };
-
 interface TabContainerProps {
-  children: React.ReactNodeArray
-  routes: any[]
+  routes: { [key: string]: () => JSX.Element }
 }
 
 export const TabContainer = (props: TabContainerProps) => {
-  const [activeIndex, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'first', title: 'Ostatnio używane' },
-    { key: 'second', title: 'Znalezione' },
-  ]);
+  const [activeIndex, setIndex] = useState(0);
+  const [routes] = useState(() => 
+    Object
+      .keys(props.routes)
+      .map(routeName => ({ key: routeName }))
+  );
 
-  const renderScene = SceneMap({
-    first: () => props.routes[0],
-    second: () => props.routes[1],
-  });
+  const renderScene = SceneMap(props.routes);
 
   const renderTabBar = (props: SceneRendererProps) => {
     return (
@@ -29,7 +24,7 @@ export const TabContainer = (props: TabContainerProps) => {
         {routes.map((route, index) => (
           <TabButton
             key={route.key}
-            title={route.title}
+            title={route.key}
             onPress={() => props.jumpTo(route.key)}
             isActive={index === activeIndex}
           />
@@ -49,6 +44,8 @@ export const TabContainer = (props: TabContainerProps) => {
     />
   );
 }
+
+const initialLayout = { width: Dimensions.get('window').width };
 
 const TabBarContainer = styled.View`
   flex-direction: row;

@@ -2,7 +2,7 @@ import React, { useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
 import { useProductsSearch, useNavigationData, useProductHistory } from '../../hooks';
-import { FlatList, ListRenderItem } from 'react-native';
+import { FlatList, ListRenderItem, FlatListProps } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import {
   H3,
@@ -15,6 +15,7 @@ import {
 } from '../../components';
 import * as Utils from '../../utils';
 import { TabContainer } from '../../components/atoms/Tab';
+import { Tab } from '../../components/atoms/Tab/Tab';
 
 interface ProductFindScreenProps {}
 
@@ -146,8 +147,8 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
         />
       </SearchContainer>
       <TabContainer
-        routes={[
-          (
+        routes={{
+          'Ostatnio używane': () => (
             <>
               <RenderInfo />
               <FlatList
@@ -157,16 +158,15 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
               />
             </>
           ),
-          (
+          'Znalezione': () => (
             <FlatList
               data={state.products}
               renderItem={renderItem}
               {...listProps}
             />
           )
-        ]}
-      >
-      </TabContainer>
+        }}
+      />
     </Container>
   );
 }
@@ -203,7 +203,7 @@ const productKeyExtractor = (product: ProductOrNormalizedProduct): string => {
   return String(productId);
 }
 
-const listProps = {
+const listProps: Partial<FlatListProps<ProductOrNormalizedProduct>> = {
   keyExtractor: productKeyExtractor,
   keyboardShouldPersistTaps: "handled",
   ItemSeparatorComponent: ItemSeparator,
