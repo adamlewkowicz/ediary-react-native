@@ -1,6 +1,6 @@
 import React from 'react';
 import { Product } from '../../database/entities';
-import { renderSetup } from '../../../__tests__/utils';
+import { renderSetup } from '../../../test-utils';
 import { ProductPreviewScreen } from '.';
 
 describe('<ProductPreviewScreen />', () => {
