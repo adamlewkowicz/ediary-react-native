@@ -82,6 +82,17 @@ exports[`entity generated sql matches snapshot: product 1`] = `
 )"
 `;
 
+exports[`entity generated sql matches snapshot: product_favorites 1`] = `
+"CREATE TABLE \\"product_favorites\\" (
+  \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+  \\"productId\\" integer NOT NULL,
+  \\"userId\\" integer NOT NULL,
+  CONSTRAINT \\"productId_userId\\" UNIQUE (\\"productId\\", \\"userId\\"),
+  CONSTRAINT \\"FK_9e77761f6faae49a6cb68182f1a\\" FOREIGN KEY (\\"productId\\") REFERENCES \\"product\\" (\\"id\\") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT \\"FK_9599d7698cbd231acf287d7c563\\" FOREIGN KEY (\\"userId\\") REFERENCES \\"user\\" (\\"id\\") ON DELETE NO ACTION ON UPDATE NO ACTION
+)"
+`;
+
 exports[`entity generated sql matches snapshot: product_images 1`] = `
 "CREATE TABLE \\"product_images\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
