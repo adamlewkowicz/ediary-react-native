@@ -10,18 +10,20 @@ export interface FriscoResponse {
   description: string
   officialProductName: string
   brandbank: (
-    FriscoNutritionBrandbank | {
-      sectionId: 3
-      sectionName: 'Informacje producenta'
-      fields: [
-        {
-          fieldId: 25
-          fieldName: 'Marka'
-          content: string[]
-        }
-      ]
-    }
+    FriscoNutritionBrandbank | FriscoProducerBrandbank
   )[]
+}
+
+interface FriscoProducerBrandbank {
+  sectionId: 3
+  sectionName: 'Informacje producenta'
+  fields: [
+    {
+      fieldId: 25
+      fieldName: 'Marka'
+      content: string[]
+    }
+  ]
 }
 
 export interface FriscoIngredientsBrandbank extends FriscoBrandbank {

@@ -1,5 +1,5 @@
 import * as Utils from '../../../utils';
-import { FriscoResponse, FriscoProductId, FriscoNutritionBrandbank, MacroField } from '../types';
+import { FriscoResponse, FriscoProductId, MacroField } from '../types';
 import { NormalizedProduct, MacroElement, MacroElements, ProductPortionType, NormalizedPortion } from '../../../types';
 import { Product } from '../../../database/entities';
 import { MACRO } from '../../../common/consts';
@@ -20,19 +20,9 @@ export class FriscoProductIdApi {
   }
 
   private normalizeProduct(data: FriscoResponse): NormalizedProduct | null {
-    const MACRO_SECTION_ID = 2;
-    const MACRO_FIELD_ID = 85;
-    const macroSection = data.brandbank.find(brand => brand.sectionId === MACRO_SECTION_ID);
-    
-    if (!macroSection) {
-      return null;
-    }
+    const macroField = this.getProductMacroField(data);
 
-    const macroField = (macroSection as any as FriscoNutritionBrandbank).fields.find(field => 
-      field.fieldId === MACRO_FIELD_ID
-    );
-
-    if (!macroField) {
+    if (macroField == null) {
       return null;
     }
 
@@ -62,6 +52,24 @@ export class FriscoProductIdApi {
     }
 
     return normalizedProduct;
+  }
+
+  private getProductMacroField(data: FriscoResponse): MacroField | null {
+    const MACRO_SECTION_ID = 2;
+    const MACRO_FIELD_ID = 85;
+    const macroSection = data.brandbank.find(brand => brand.sectionId === MACRO_SECTION_ID);
+    
+    if (macroSection?.sectionId !== MACRO_SECTION_ID) {
+      return null;
+    }
+
+    const macroField = macroSection.fields.find(field => field.fieldId === MACRO_FIELD_ID);
+
+    if (macroField == null) {
+      return null;
+    }
+
+    return macroField;
   }
 
   private normalizeProductBasePortion(macroField: MacroField): NormalizedBasePortion | null {
@@ -110,7 +118,7 @@ export class FriscoProductIdApi {
   private normalizeProductMacro(macroField: MacroField): MacroElements {
     return macroField.content.Nutrients.reduce((macro, bank) => {
       const parsedName = bank.Name.toLowerCase().trim();
-      const foundMacroElement = Object.entries(MACRO_MAP).find(([macroName]) => parsedName.includes(macroName));
+      const foundMacroElement = Object.entries(MACRO_NAME_MAP).find(([macroName]) => parsedName.includes(macroName));
 
       if (foundMacroElement) {
         const [, element] = foundMacroElement;
@@ -130,7 +138,7 @@ export class FriscoProductIdApi {
 
 }
 
-const MACRO_MAP: { [key: string]: MacroElement } = {
+const MACRO_NAME_MAP: { [key: string]: MacroElement } = {
   'wartość energetyczna': 'kcal',
   'energia': 'kcal',
   'tłuszcz': 'fats',
