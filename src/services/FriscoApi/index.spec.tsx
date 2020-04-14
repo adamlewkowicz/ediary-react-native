@@ -9,7 +9,7 @@ describe('FriscoApi', () => {
 
   describe('findByBarcode()', () => {
 
-    it('should normalize product correctly', async () => {
+    it('should normalize product correctly 📝', async () => {
       const name = 'apple';
       const fetchMock = fetch as jest.Mock;
     

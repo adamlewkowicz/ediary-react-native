@@ -9,7 +9,7 @@ describe('IlewazyApi', () => {
 
   describe('findByName()', () => {
 
-    it('should normalize products correctly', async () => {
+    it('should normalize products correctly 📝', async () => {
       const name = 'apple';
       const fetchMock = fetch as jest.Mock;
     
