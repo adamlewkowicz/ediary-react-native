@@ -3,14 +3,17 @@ import { SvgProps } from 'react-native-svg';
 import { Theme } from '../common/theme';
 
 declare global {
+
   declare module "react-native-swipeable" {
     const content: React.ComponentClass<any, any>
     export default content
   }
+
   declare module "*.svg" {
     const content: React.ComponentClass<SvgProps, any>
     export default content
   }
+
   declare module NodeJS  {
     interface Global {
       requestIdleCallback: ((
@@ -20,6 +23,13 @@ declare global {
       cancelIdleCallback: ((handle: RequestIdleCallbackHandle) => void);
     }
   }
+
+  declare interface NodeModule {
+    hot?: {
+      accept(path?: () => void, callback?: () => void): void
+    }
+  }
+
 }
 
 declare module "typeorm" {
