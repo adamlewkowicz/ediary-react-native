@@ -52,7 +52,7 @@ export class FriscoQueryApi {
     const ingredients = this.normalizeProductIngredients(components);
     const macro = this.normalizeProductMacro(substances, sustenanceCalories);
 
-    const normalizedProduct = {
+    const normalizedProduct: NormalizedProduct = {
       _id, 
       name, 
       description,

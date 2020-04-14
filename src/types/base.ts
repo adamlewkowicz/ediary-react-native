@@ -68,6 +68,7 @@ export interface NormalizedProduct {
   _id: string | number | FriscoProductId
   name: string
   portion: number
+  brand?: string
   macro: {
     carbs: number
     prots: number
