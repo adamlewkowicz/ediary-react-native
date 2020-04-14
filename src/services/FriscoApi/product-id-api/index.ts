@@ -1,5 +1,5 @@
 import * as Utils from '../../../utils';
-import { FriscoResponse, FriscoProductId, MacroField } from '../types';
+import * as ApiTypes from '../types';
 import { NormalizedProduct, MacroElement, MacroElements, ProductPortionType, NormalizedPortion } from '../../../types';
 import { Product } from '../../../database/entities';
 import { MACRO } from '../../../common/consts';
@@ -8,9 +8,9 @@ export class FriscoProductIdApi {
 
   private searchURL = 'https://products.frisco.pl/api/products/get/';
 
-  async findOne(productId: FriscoProductId, controller?: AbortController): Promise<NormalizedProduct | null> {
+  async findOne(productId: ApiTypes.FriscoProductId, controller?: AbortController): Promise<NormalizedProduct | null> {
     
-    const data = await Utils.fetchify<FriscoResponse>(
+    const data = await Utils.fetchify<ApiTypes.FriscoResponse>(
       `${this.searchURL}${productId}`,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
       controller
@@ -19,7 +19,7 @@ export class FriscoProductIdApi {
     return this.normalizeProduct(data);
   }
 
-  private normalizeProduct(data: FriscoResponse): NormalizedProduct | null {
+  private normalizeProduct(data: ApiTypes.FriscoResponse): NormalizedProduct | null {
     const macroField = this.getProductMacroField(data);
 
     if (macroField == null) {
@@ -54,7 +54,7 @@ export class FriscoProductIdApi {
     return normalizedProduct;
   }
 
-  private getProductMacroField(data: FriscoResponse): MacroField | null {
+  private getProductMacroField(data: ApiTypes.FriscoResponse): ApiTypes.MacroField | null {
     const MACRO_SECTION_ID = 2;
     const MACRO_FIELD_ID = 85;
     const macroSection = data.brandbank.find(brand => brand.sectionId === MACRO_SECTION_ID);
@@ -72,7 +72,7 @@ export class FriscoProductIdApi {
     return macroField;
   }
 
-  private normalizeProductBasePortion(macroField: MacroField): NormalizedBasePortion | null {
+  private normalizeProductBasePortion(macroField: ApiTypes.MacroField): NormalizedBasePortion | null {
     const [portionHeading] = macroField.content.Headings;
 
     if (!portionHeading) {
@@ -89,7 +89,7 @@ export class FriscoProductIdApi {
     return null;
   }
 
-  private normalizeProductPortions(macroField: MacroField): NormalizedPortion[] {
+  private normalizeProductPortions(macroField: ApiTypes.MacroField): NormalizedPortion[] {
     return macroField.content.Headings
       .map(heading => {
         const { value, unit } = Utils.getNumAndUnitFromString(heading);
@@ -115,7 +115,7 @@ export class FriscoProductIdApi {
     return unitType === UNIT_GRAM;
   }
 
-  private normalizeProductMacro(macroField: MacroField): MacroElements {
+  private normalizeProductMacro(macroField: ApiTypes.MacroField): MacroElements {
     return macroField.content.Nutrients.reduce((macro, bank) => {
       const parsedName = bank.Name.toLowerCase().trim();
       const foundMacroElement = Object.entries(MACRO_NAME_MAP).find(([macroName]) => parsedName.includes(macroName));
