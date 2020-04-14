@@ -1,6 +1,6 @@
-import { PortionMap } from './types';
+import { KnownPortionMap, PortionType } from './types';
 
-export const PORTION_MAP: PortionMap = {
+export const KNOWN_PORTION_MAP: KnownPortionMap = {
   'garsc': 'handful',
   'kromka': 'slice',
   'lyzka': 'spoon',
@@ -9,4 +9,4 @@ export const PORTION_MAP: PortionMap = {
   'sztuka': 'piece'
 } as const;
 
-export const KNOWN_PORTION_TYPES = Object.keys(PORTION_MAP);
+export const KNOWN_PORTION_TYPES = Object.keys(KNOWN_PORTION_MAP) as PortionType[];

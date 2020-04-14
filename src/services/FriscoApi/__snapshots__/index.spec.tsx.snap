@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`findByQuery - product is normalized correctly 1`] = `
+exports[`FriscoApi findByBarcode() should normalize product correctly 📝 1`] = `
 Object {
   "_id": "9295",
   "barcode": "54490086",
