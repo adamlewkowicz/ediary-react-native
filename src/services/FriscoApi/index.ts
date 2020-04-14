@@ -1,6 +1,6 @@
 import { BarcodeId, NormalizedProduct } from '../../types';
-import { FriscoQueryApi } from './query-api';
-import { FriscoProductIdApi } from './product-id-api';
+import { FriscoQueryApi } from './FriscoQueryApi';
+import { FriscoProductIdApi } from './FriscoProductIdApi';
 
 export class FriscoApi {
 
