@@ -8,10 +8,11 @@ export const useAppError = () => {
     userFriendlyMessage = 'Wystąpił nieoczekiwany błąd'
   ): void => {
     Utils.handleError(error);
+
     ToastAndroid.showWithGravity(
       userFriendlyMessage,
       ToastAndroid.LONG,
-      ToastAndroid.BOTTOM
+      ToastAndroid.CENTER
     );
   }
 

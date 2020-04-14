@@ -1,14 +1,14 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { configureStore, Actions, StoreState } from '../../src/store';
-import { THEME } from '../../src/common/theme';
+import { configureStore, Actions, StoreState } from '../src/store';
+import { THEME } from '../src/common/theme';
 import { ThemeProvider } from 'styled-components/native';
 import { Store } from 'redux';
-import { User } from '../../src/database/entities';
-import { USER_ID_UNSYNCED } from '../../src/common/consts';
+import { User } from '../src/database/entities';
+import { USER_ID_UNSYNCED } from '../src/common/consts';
 import { render } from '@testing-library/react-native';
 import { NavigationContainer, NavigationContext, NavigationRouteContext } from '@react-navigation/native';
-import { BaseScreenProps } from '../../src/types';
+import { BaseScreenProps } from '../src/types';
 
 let userMock: User;
 

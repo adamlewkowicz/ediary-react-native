@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, wait } from '@testing-library/react-native';
 import { Product } from '../../database/entities';
 import { ProductCreateScreen } from '.';
-import { renderSetup } from '../../../__tests__/utils';
+import { renderSetup } from '../../../test-utils';
 import { APP_ROUTE } from '../../navigation/consts';
 
 describe('<ProductCreateScreen />', () => {

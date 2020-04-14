@@ -1,6 +1,6 @@
 import { Product } from '.'
 import { Meal } from '../Meal';
-import { NormalizedProduct } from '../../../services/IlewazyApi/types';
+import { NormalizedProduct } from '../../../types';
 
 describe('Product', () => {
 

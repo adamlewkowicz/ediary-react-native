@@ -17,13 +17,11 @@ export function configureStore(
     )
   );
 
-  if (module.hot) {
-    module.hot.accept(() => {
-      // eslint-disable-next-line
-      const { rootReducer } = require('./reducers');
-      store.replaceReducer(rootReducer);
-    });
-  }
+  module.hot?.accept(() => {
+    // eslint-disable-next-line
+    const { rootReducer } = require('./reducers');
+    store.replaceReducer(rootReducer);
+  });
 
   return store;
 }
