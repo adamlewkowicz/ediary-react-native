@@ -1,4 +1,3 @@
-import { FriscoProductId } from './common';
 
 export interface FriscoResponse {
   productId: FriscoProductId
@@ -82,3 +81,5 @@ interface FriscoBrandbank {
 type FriscoNutritionName =
   | 'Energia' | 'Tłuszcz ' | ' w tym kwasy nasycone '
   | 'Węglowodany ' | ' w tym cukry ' | 'Białko '
+  
+export interface FriscoProductId extends String {}

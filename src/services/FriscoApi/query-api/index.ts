@@ -1,5 +1,5 @@
 import { NormalizedProduct, MacroElement, MacroElements } from '../../../types';
-import { FriscoQueryResponse, FriscoQueryResponseProduct, ProductSubstance } from '../types';
+import * as ApiTypes from './types';
 import * as Utils from '../../../utils';
 import { MACRO } from '../../../common/consts';
 
@@ -9,11 +9,11 @@ export class FriscoQueryApi {
 
   async find(query: string, controller?: AbortController): Promise<{
     normalized: NormalizedProduct[]
-    unnormalized: FriscoQueryResponse['products']
+    unnormalized: ApiTypes.FriscoQueryResponse['products']
   }> {
     const parsedQuery = encodeURIComponent(query);
 
-    const { products: unnormalized } = await Utils.fetchify<FriscoQueryResponse>(
+    const { products: unnormalized } = await Utils.fetchify<ApiTypes.FriscoQueryResponse>(
       `${this.SEARCH_URL}${parsedQuery}` +
       '&includeCategories=true&pageIndex=1&deliveryMethod=Van&pageSize=60' +
       '&language=pl&facetCount=100&includeWineFacets=false',
@@ -26,13 +26,13 @@ export class FriscoQueryApi {
     return { normalized, unnormalized };
   }
   
-  private normalizeProducts(products: FriscoQueryResponse['products']): NormalizedProduct[] {
+  private normalizeProducts(products: ApiTypes.FriscoQueryResponse['products']): NormalizedProduct[] {
     return products
       .map(product => this.normalizeProduct(product))
       .filter((product): product is NormalizedProduct => product !== null);
   }
 
-  private normalizeProduct(product: FriscoQueryResponseProduct): NormalizedProduct | null {
+  private normalizeProduct(product: ApiTypes.FriscoQueryResponseProduct): NormalizedProduct | null {
     const { product: data, productId } = product;
     const { components = [], substances, sustenanceCalories } = data.contentData;
 
@@ -69,7 +69,7 @@ export class FriscoQueryApi {
     return normalizedProduct;
   }
 
-  private normalizeProductMacro(substances: ProductSubstance[], kcal: number): MacroElements {
+  private normalizeProductMacro(substances: ApiTypes.ProductSubstance[], kcal: number): MacroElements {
     return substances.reduce((macro, substance) => {
       const element = MACRO_NAME_MAP[substance.name];
 

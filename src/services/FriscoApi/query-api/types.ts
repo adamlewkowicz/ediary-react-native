@@ -1,5 +1,5 @@
-import { MacroElement, BarcodeId } from '../../../types';
-import { FriscoProductId } from './common';
+import { BarcodeId } from '../../../types';
+import { FriscoProductId } from '../types/common';
 
 export interface FriscoQueryResponse {
   products: FriscoQueryResponseProduct[]
@@ -37,7 +37,3 @@ export interface ProductSubstance {
 }
 
 type QuerySubstanceName = 'białko' | 'węglowodany' | 'tłuszcz' | 'błonnik' | 'sód'
-
-export type QueryMacroMap = {
-  [key in QuerySubstanceName]: MacroElement
-}

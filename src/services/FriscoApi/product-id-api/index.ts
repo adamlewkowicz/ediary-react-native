@@ -1,5 +1,5 @@
 import * as Utils from '../../../utils';
-import * as ApiTypes from '../types';
+import * as ApiTypes from './types';
 import { NormalizedProduct, MacroElement, MacroElements, ProductPortionType, NormalizedPortion } from '../../../types';
 import { Product } from '../../../database/entities';
 import { MACRO } from '../../../common/consts';
