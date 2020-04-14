@@ -42,7 +42,7 @@ export const useProductsSearch = () => {
         dispatch({ type: 'PRODUCTS_SEARCH_SUCCEEDED', payload });
 
       } catch(error) {
-        setAppError(error);
+        setAppError(error, ERROR_MESSAGE);
       } finally {
         dispatch({ type: 'PRODUCTS_SEARCH_FINISHED' });
       }
@@ -69,7 +69,7 @@ export const useProductsSearch = () => {
         dispatch({ type: 'BARCODE_SEARCH_SUCCEEDED', payload: { barcode, products }});
 
       } catch (error) {
-        setAppError(error);
+        setAppError(error, ERROR_MESSAGE);
       } finally {
         dispatch({ type: 'BARCODE_SEARCH_FINISHED' });
       }
@@ -89,3 +89,5 @@ export const useProductsSearch = () => {
     debouncedProductName,
   }
 }
+
+const ERROR_MESSAGE = 'Pobieranie produktów nie powiodło się';
