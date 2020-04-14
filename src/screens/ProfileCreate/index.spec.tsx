@@ -1,6 +1,6 @@
 import React from 'react';
 import { ProfileCreateScreen } from '.';
-import { renderSetup } from '../../../__tests__/utils';
+import { renderSetup } from '../../../test-utils';
 import { fireEvent } from '@testing-library/react-native';
 import { Profile } from '../../database/entities';
 

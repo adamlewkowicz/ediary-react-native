@@ -65,7 +65,7 @@ export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
               ratio={macroNeeds[element].percentage}
               value={macroNeeds[element].left}
             />
-            <Text size="big" margin="0 5px 0 0">
+            <Text size="h2" margin="0 5px 0 0">
               {macroSummary[element].toFixed(0)}
             </Text>
             <Text size="regular" priority={3}>
@@ -88,7 +88,7 @@ const Description = styled(TitleSecondary)`
 
 const Container = styled.ScrollView`
   padding: 15px;
-  background: #fff;
+  background: ${props => props.theme.color.primaryLight};
   min-height: 100%;
 `
 
@@ -100,7 +100,7 @@ const MacroElementContainer = styled.View`
 
 const StyledRatioInfo = styled(RatioInfo)`
   margin: 0 8px 0 0;
-  font-size: ${props => props.theme.fontSize.tiny};
+  font-size: ${props => props.theme.fontSize.small};
 `
 
 const CHART_DATE_FORMAT = 'ddd D/M';

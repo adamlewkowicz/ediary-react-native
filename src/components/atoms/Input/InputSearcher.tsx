@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { TextInputProps, ActivityIndicator } from 'react-native';
 import { LoupeIcon } from '../Icons';
-import { theme } from '../../../common/theme';
+import { THEME } from '../../../common/theme';
 
 interface InputSearcherProps extends TextInputProps {
   showLabel?: boolean
@@ -12,7 +12,7 @@ interface InputSearcherProps extends TextInputProps {
 export const InputSearcher = ({ isLoading, ...props }: InputSearcherProps) => (
   <Container>
     <Input
-      placeholderTextColor={theme.color.secondary}
+      placeholderTextColor={THEME.color.secondary}
       {...props}
      />
     {isLoading && <Spinner />}
@@ -23,7 +23,7 @@ export const InputSearcher = ({ isLoading, ...props }: InputSearcherProps) => (
 const LOUPE_SIZE = 16;
 
 const LOUPE_ICON_STYLE = {
-  fill: theme.color.primary,
+  fill: THEME.color.primary,
   width: LOUPE_SIZE,
   height: LOUPE_SIZE,
   style: { transform: [{ translateY: -LOUPE_SIZE / 2 }] }

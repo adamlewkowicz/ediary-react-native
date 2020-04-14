@@ -37,7 +37,7 @@ export const MealProductItem = <T extends DiaryProduct>(props: MealProductItemPr
 }
 
 const ProductName = styled(TextPrimary)`
-  color: #fff;
+  color: ${props => props.theme.color.primaryLight};
   margin-bottom: 1px;
 `
 

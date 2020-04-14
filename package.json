@@ -1,6 +1,6 @@
 {
   "name": "Ediary",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "postinstall": "npx jetify",
@@ -14,9 +14,10 @@
     "android:clean": "cd android && gradlew clean && cd .. && react-native run-android",
     "android": "npm run android:clean",
     "typeorm": "ts-node ./node_modules/typeorm/cli -f ./src/database/config/config.migration.ts",
-    "test:db": "ts-node-dev --respawn ./scripts/test-db",
+    "test:db": "ts-node-dev --respawn ./test-utils/test-db",
     "postversion": "react-native-version",
     "beta": "npm version prerelease --preid=beta",
+    "figma": "cd design-system && npm run webpack:watch",
     "major:beta": "npm version premajor --preid=beta"
   },
   "husky": {
@@ -51,7 +52,7 @@
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "styled-components": "^4.3.2",
+    "styled-components": "^5.0.1",
     "typeorm": "^0.2.18",
     "yup": "^0.28.3"
   },
@@ -62,7 +63,6 @@
     "@babel/runtime": "7.5.5",
     "@bam.tech/react-native-make": "^1.0.3",
     "@react-native-community/eslint-config": "0.0.3",
-    "@storybook/react-native": "^5.1.10",
     "@testing-library/jest-native": "^3.0.2",
     "@testing-library/react-native": "^5.0.3",
     "@types/jest": "24.0.15",
@@ -96,7 +96,6 @@
     "redux-devtools-extension": "^2.13.8",
     "reflect-metadata": "^0.1.13",
     "remote-redux-devtools": "^0.5.16",
-    "require-context.macro": "^1.1.1",
     "snapshot-diff": "^0.5.2",
     "sql-formatter": "^2.3.3",
     "sqlite3": "^4.0.9",
