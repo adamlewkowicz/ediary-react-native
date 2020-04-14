@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`IlewazyApi findByName - products are normalized correctly 1`] = `
+exports[`IlewazyApi findByName() should normalize products correctly 1`] = `
 Object {
   "_id": "16390",
   "images": Array [
@@ -30,7 +30,7 @@ Object {
 }
 `;
 
-exports[`IlewazyApi findByName - products are normalized correctly 2`] = `
+exports[`IlewazyApi findByName() should normalize products correctly 2`] = `
 Object {
   "_id": "17551",
   "images": Array [

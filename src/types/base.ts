@@ -6,7 +6,7 @@ import {
   PRODUCT_UNIT_TYPE,
 } from '../common/consts';
 import { NavigationProp, ParamListBase, RouteProp } from '@react-navigation/native';
-import { FriscoProductId } from '../services/FriscoApi/types';
+import { FriscoProductId } from '../services/FriscoApi/FriscoProductIdApi/types';
 import { BarcodeId } from './nominal';
 
 export type UnitType = typeof UNIT_TYPES[number];
