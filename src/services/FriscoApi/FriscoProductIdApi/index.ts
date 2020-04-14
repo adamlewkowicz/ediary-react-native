@@ -6,7 +6,7 @@ import { MACRO } from '../../../common/consts';
 
 export class FriscoProductIdApi {
 
-  private searchURL = 'https://products.frisco.pl/api/products/get/';
+  private readonly searchURL = 'https://products.frisco.pl/api/products/get/';
 
   async findOne(productId: ApiTypes.FriscoProductId, controller?: AbortController): Promise<NormalizedProduct | null> {
     

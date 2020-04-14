@@ -6,13 +6,13 @@ import * as Utils from '../../utils';
 
 export class IlewazyApi {
 
-  private readonly SEARCH_URL = 'http://www.ilewazy.pl/ajax/load-products/ppage/14/keyword/';
+  private readonly searchURL = 'http://www.ilewazy.pl/ajax/load-products/ppage/14/keyword/';
   
   async findByName(name: string, controller?: AbortController): Promise<NormalizedProduct[]> {
     const parsedName = encodeURIComponent(name);
 
     const { data = [] } = await Utils.fetchify<ApiTypes.Response>(
-      `${this.SEARCH_URL}${parsedName}`,
+      `${this.searchURL}${parsedName}`,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
       controller,
     );
@@ -30,8 +30,8 @@ export class IlewazyApi {
     const _id = payload.id;
     const name = this.normalizeProductName(payload.ingredient_name);
     const macro = this.normalizeProductMacro(payload);
-    const unitData = this.normalizeUnitData(payload.unitdata);
-    const { portions, defaultPortionQuantity } = this.normalizePortionData(unitData);
+    const unitData = this.normalizeProductUnitData(payload.unitdata);
+    const { portions, defaultPortionQuantity } = this.normalizeProductPortionData(unitData);
     const images = this.normalizeProductImages(unitData);
 
     const normalizedProduct: NormalizedProduct = {
@@ -79,7 +79,7 @@ export class IlewazyApi {
     return { carbs, prots, fats, kcal };
   }
 
-  private normalizeUnitData(data: ApiTypes.ProductItem['unitdata']): UnitDataEntry[] {
+  private normalizeProductUnitData(data: ApiTypes.ProductItem['unitdata']): UnitDataEntry[] {
     return Object
       .entries(data)
       .filter((entry): entry is UnitDataEntry => {
@@ -92,7 +92,7 @@ export class IlewazyApi {
       });
   }
 
-  private normalizePortionData(
+  private normalizeProductPortionData(
     unitData: UnitDataEntry[],
     unit: ProductUnitType = 'g'
   ): { defaultPortionQuantity: number, portions: NormalizedPortions } {

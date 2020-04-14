@@ -5,7 +5,7 @@ import { MACRO } from '../../../common/consts';
 
 export class FriscoQueryApi {
   
-  private readonly SEARCH_URL = 'https://commerce.frisco.pl/api/offer/products/query?search=';
+  private readonly searchURL = 'https://commerce.frisco.pl/api/offer/products/query?search=';
 
   async find(query: string, controller?: AbortController): Promise<{
     normalized: NormalizedProduct[]
@@ -14,7 +14,7 @@ export class FriscoQueryApi {
     const parsedQuery = encodeURIComponent(query);
 
     const { products: unnormalized } = await Utils.fetchify<ApiTypes.FriscoQueryResponse>(
-      `${this.SEARCH_URL}${parsedQuery}` +
+      `${this.searchURL}${parsedQuery}` +
       '&includeCategories=true&pageIndex=1&deliveryMethod=Van&pageSize=60' +
       '&language=pl&facetCount=100&includeWineFacets=false',
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }},
