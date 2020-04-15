@@ -38,4 +38,14 @@ export class ProductFavorite extends GenericEntity {
   @JoinColumn({ name: 'userId' })
   user?: User;
 
+  static async isFavorite(productId: ProductId, userId: UserId): Promise<boolean> {
+    const productFavorite = await ProductFavorite.findOne({ productId, userId });
+
+    if (productFavorite != null) {
+      return true;
+    }
+
+    return false;
+  }
+
 }

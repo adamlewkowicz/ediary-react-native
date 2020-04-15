@@ -15,6 +15,7 @@ import {
   useNavigationData,
   useCalculatedMacro,
   useProductFavorites,
+  useIsFavoriteProduct,
 } from '../../hooks';
 import { ProductPreviewScreenNavigationProps } from '../../navigation';
 import { Product } from '../../database/entities';
@@ -31,10 +32,7 @@ export const ProductPreviewScreen = () => {
     macroNeeds,
   } = useCalculatedMacro(params.product.macro, quantity);
   const productFavorites = useProductFavorites();
-
-  const isFavorite = productFavorites.data.some(
-    product => product.id === params.product.id
-  );
+  const isFavorite = useIsFavoriteProduct(params.product.id);
 
   const isEditMode = params.onProductQuantityUpdated != null;
 
@@ -69,11 +67,13 @@ export const ProductPreviewScreen = () => {
   return (
     <Container>
       <ProductName>{params.product.name}</ProductName>
-      <ButtonFavorite
-        isFavorite={isFavorite}
-        onFavoriteAdd={() => productFavorites.add(params.product)}
-        onFavoriteDelete={() => productFavorites.delete(params.product.id)}
-      />
+      {isFavorite !== null && (
+        <ButtonFavorite
+          isFavorite={isFavorite}
+          onFavoriteAdd={() => productFavorites.add(params.product)}
+          onFavoriteDelete={() => productFavorites.delete(params.product.id)}
+        />
+      )}
       <Section title="Ilość produktu">
         <RadioInputsRow
           title="Porcje"
