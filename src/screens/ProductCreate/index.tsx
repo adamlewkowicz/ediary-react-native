@@ -17,9 +17,7 @@ import * as Yup from 'yup';
 import * as Utils from '../../utils';
 import { ProductUnitType } from '../../types';
 
-interface ProductCreateScreenProps {}
-
-export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
+export const ProductCreateScreen = () => {
   const { params, navigation, navigate } = useNavigationData<ProductCreateScreenNavigationProps>();
   const [portionUnitType] = useState<ProductUnitType>('g');
   const [isLoading, setIsLoading] = useState(false);

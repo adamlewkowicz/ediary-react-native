@@ -1,7 +1,7 @@
 import React, { ReactNode, RefObject } from 'react';
 import styled from 'styled-components/native'
 import { TextInputProps, TextInput as NativeTextInput } from 'react-native';
-import { theme } from '../../../common/theme';
+import { THEME } from '../../../common/theme';
 import { InputLabel, TextPrimary } from '../index';
 
 export interface InputProps extends TextInputProps  {
@@ -36,7 +36,7 @@ export const Input = (props: InputProps) => {
         <TextInput
           status={validationStatus}
           accessibilityLabel={accessibilityLabel}
-          placeholderTextColor={theme.color.tertiary}
+          placeholderTextColor={THEME.color.tertiary}
           ref={forwardedRef}
           {...inputProps}
         />
@@ -56,7 +56,7 @@ export const InputRef = React.forwardRef<NativeTextInput, InputProps>(
 );
 
 const Container = styled.View`
-  margin-bottom: 20px;
+  margin-bottom: ${props => props.theme.spacing.small};
   flex: 1;
 `
 
@@ -82,7 +82,7 @@ const Content = styled.View`
 `
 
 const ErrorMessage = styled(TextPrimary)`
-  margin-top: 5px;
+  margin-top: ${props => props.theme.spacing.micro};
   color: ${props => props.theme.color.error};
 `
 

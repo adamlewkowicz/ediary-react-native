@@ -4,7 +4,7 @@ import Svg, {
   CircleProps,
 } from 'react-native-svg';
 import styled from 'styled-components/native';
-import { theme } from '../../../common/theme';
+import { THEME } from '../../../common/theme';
 import { SvgGradientDef } from '../Svg';
 import * as Utils from '../../../utils';
 import { useAnimatedSpring } from '../../../hooks';
@@ -56,7 +56,7 @@ export const ChartCircle = (props: ChartCircleProps) => {
         />
         <Circle
           {...genericCircleProps}
-          stroke={theme.colors.quinary}
+          stroke={THEME.color.quinary}
         />
         <AnimatedPercentageCircle
           {...genericCircleProps}

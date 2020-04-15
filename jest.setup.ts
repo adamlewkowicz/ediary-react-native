@@ -16,6 +16,7 @@ globalObject.__DEV__ = false;
 globalObject.requestIdleCallback = jest.fn((callback: any) => callback());
 globalObject.cancelIdleCallback = jest.fn();
 globalObject.AbortController = jest.fn(() => ({ signal: {}, abort() {} }));
+globalObject.fetch = jest.genMockFromModule('node-fetch');
 
 beforeEach(async () => {
   const connection = await createConnection(config.test);

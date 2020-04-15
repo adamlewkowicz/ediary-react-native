@@ -11,12 +11,11 @@ import {
   ItemSeparator,
   InputSearcher,
   BarcodeButton,
+  TextPrimary,
 } from '../../components';
 import * as Utils from '../../utils';
 
-interface ProductFindScreenProps {}
-
-export const ProductFindScreen = (props: ProductFindScreenProps) => {
+export const ProductFindScreen = () => {
   const { params, navigate, navigation } = useNavigationData<ProductFindScreenNavigationProps>();
   const productHistory = useProductHistory();
   const hasBeenPressed = useRef(false);
@@ -160,28 +159,27 @@ const SearchContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: ${props => `0 ${props.theme.spacing.screenPadding}`};
+  padding: ${props => props.theme.spacing.smallHorizontal};
 `
 
 const Container = styled.View`
   flex: 1;
-  padding-top: ${props => props.theme.spacing.screenPadding};
+  padding-top: ${props => props.theme.spacing.small};
 `
 
-const NotFoundInfo = styled.Text`
-  margin-top: 25px;
+const NotFoundInfo = styled(TextPrimary)`
   text-align: center;
-  font-family: ${props => props.theme.fontWeight.regular};
-  padding: 0 50px;
+  margin-top: ${props => props.theme.spacing.base};
+  padding: ${props => props.theme.spacing.largeHorizontal};
 `
 
 const ProductsTitle = styled(H3)`
-  margin: 15px 0 5px 0;
-  padding: ${props => `0 ${props.theme.spacing.screenPadding}`};
+  margin: ${props => props.theme.spacing.smallXMicroVertical};
+  padding: ${props => props.theme.spacing.smallHorizontal};
 `
 
 const AddOwnProductButton = styled(ButtonSecondaryArrow)`
-  margin-right: 5px;
+  margin-right: ${props => props.theme.spacing.micro};
 `
 
 const productKeyExtractor = (product: ProductOrNormalizedProduct): string => {

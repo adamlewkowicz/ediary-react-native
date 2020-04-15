@@ -31,7 +31,7 @@ export const StepContainer = (props: StepContainerProps) => {
         {props.children}
       </ActiveStepContext.Provider>
       <InfoContainer accessibilityRole="toolbar">
-        {!step.isFirstStep && (
+        {!step.isFirstStep && !props.isLoading && (
           <BackButton
             onPress={step.back}
             accessibilityLabel="Wróć"
