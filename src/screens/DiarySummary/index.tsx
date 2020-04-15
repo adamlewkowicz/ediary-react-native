@@ -12,9 +12,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import * as Utils from '../../utils';
 import { H1 } from '../../components';
 
-interface DiarySummaryScreenProps {}
-
-export const DiarySummaryScreen = (props: DiarySummaryScreenProps) => {
+export const DiarySummaryScreen = () => {
   const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...MACRO }));
   const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]);
   const userMacroNeeds = useSelector(Selectors.getUserMacroNeeds);
