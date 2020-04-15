@@ -6,10 +6,11 @@ import { TabButton } from './TabButton';
 
 interface TabContainerProps {
   routes: { [key: string]: () => JSX.Element }
+  activeIndex: number
+  onIndexChange: (index: number) => void
 }
 
 export const TabContainer = (props: TabContainerProps) => {
-  const [activeIndex, setIndex] = useState(0);
   const [routes] = useState(() => 
     Object
       .keys(props.routes)
@@ -18,7 +19,7 @@ export const TabContainer = (props: TabContainerProps) => {
 
   const renderScene = SceneMap(props.routes);
 
-  const renderTabBar = (props: SceneRendererProps) => {
+  const renderTabBar = (_props: SceneRendererProps) => {
     return (
       <TabBarContainer>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -26,8 +27,8 @@ export const TabContainer = (props: TabContainerProps) => {
             <TabButton
               key={route.key}
               title={route.key}
-              onPress={() => props.jumpTo(route.key)}
-              isActive={index === activeIndex}
+              onPress={() => _props.jumpTo(route.key)}
+              isActive={index === props.activeIndex}
             />
           ))}
         </ScrollView>
@@ -37,9 +38,9 @@ export const TabContainer = (props: TabContainerProps) => {
 
   return (
     <TabView
-      navigationState={{ index: activeIndex, routes }}
+      navigationState={{ index: props.activeIndex, routes }}
       renderScene={renderScene}
-      onIndexChange={setIndex}
+      onIndexChange={props.onIndexChange}
       initialLayout={initialLayout}
       renderTabBar={renderTabBar}
       swipeEnabled

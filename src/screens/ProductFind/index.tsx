@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
 import { useProductsSearch, useNavigationData, useProductHistory, useProductFavorites, useProductsCreated } from '../../hooks';
@@ -30,6 +30,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
   } = useProductsSearch();
   const productFavorites = useProductFavorites();
   const productsCreated = useProductsCreated();
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const showProductHistory = !state.isDirty;
 
@@ -131,6 +132,13 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
     />
   );
 
+  const handleChangeText = (text: string) => {
+    if (activeTabIndex !== 1) {
+      setActiveTabIndex(1);
+    }
+    productSearch.updateProductName(text);
+  }
+
   const genericListProps = {
     ...listProps,
     renderItem,
@@ -144,7 +152,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
           placeholder="Nazwa produktu"
           accessibilityLabel="Nazwa szukanego produktu"
           accessibilityRole="search"
-          onChangeText={productSearch.updateProductName}
+          onChangeText={handleChangeText}
           isLoading={state.isSearching}
         />
         <BarcodeButton
@@ -153,6 +161,8 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
         />
       </SearchContainer>
       <TabContainer
+        activeIndex={activeTabIndex}
+        onIndexChange={setActiveTabIndex}
         routes={{
           'Ostatnio używane': () => (
             <>
