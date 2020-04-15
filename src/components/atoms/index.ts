@@ -11,3 +11,5 @@ export * as Table from './Table';
 export * from './ItemSeparator';
 export * from './SelectionBox';
 export * from './NumericPicker';
+export * from './Svg';
+export * from './Step';

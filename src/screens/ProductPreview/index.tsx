@@ -14,6 +14,7 @@ import { useNavigationData, useCalculatedMacro } from '../../hooks';
 import { ProductPreviewScreenNavigationProps } from '../../navigation';
 import { Product } from '../../database/entities';
 import * as Utils from '../../utils';
+import { ScrollView } from 'react-native';
 
 export const ProductPreviewScreen = () => {
   const { params, navigation } = useNavigationData<ProductPreviewScreenNavigationProps>();
@@ -100,22 +101,22 @@ export const ProductPreviewScreen = () => {
   );
 }
 
-const Container = styled.View`
-  padding: ${props => props.theme.spacing.screenPadding};
+const Container = styled(ScrollView)`
+  padding: ${props => props.theme.spacing.small};
 `
 
 const SaveProductButton = styled(ButtonPrimary)`
-  margin-right: 5px;
+  margin-right: ${props => props.theme.spacing.micro};
   min-width: 80px;
 `
 
 const ProductName = styled(H1)`
-  margin-bottom: 20px;
+  margin-bottom: ${props => props.theme.spacing.base};
 `
 
 const Calories = styled(H1)`
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: ${props => props.theme.spacing.tiny};
 `
 
 const PORTIONS = Utils.fillArrayWithinRange({ from: 1, to: 6 });

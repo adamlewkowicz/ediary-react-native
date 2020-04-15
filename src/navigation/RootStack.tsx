@@ -7,7 +7,7 @@ import {
 import { NavigationContainer, DefaultTheme, RouteProp } from '@react-navigation/native';
 import { MainStack } from './MainStack';
 import { Theme as NavigationTheme } from '@react-navigation/native/lib/typescript/src/types';
-import { theme } from '../common/theme';
+import { THEME } from '../common/theme';
 import { useSelector } from 'react-redux';
 import { APP_ROUTE } from './consts';
 import { Selectors } from '../store';
@@ -53,8 +53,9 @@ const NAVIGATION_THEME: NavigationTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#fff',
-    primary: theme.color.focus,
+    background: THEME.color.primaryLight,
+    primary: THEME.color.highlight,
+    text: THEME.color.primary,
   },
 };
 

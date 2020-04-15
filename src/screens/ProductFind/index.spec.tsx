@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent } from '@testing-library/react-native';
-import { renderSetup } from '../../../__tests__/utils';
+import { renderSetup } from '../../../test-utils';
 import { Product, Meal } from '../../database/entities';
 import { ProductFindScreen } from '.';
 import { ProductFindScreenNavigationProps } from '../../navigation';

@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../../store';
 import { FlatList, InteractionManager } from 'react-native';
 import { DateChangerMemo } from '../../components/molecules/DateChanger';
-import styled from 'styled-components/native';
 import { MealId } from '../../types';
 import { DiaryMeal, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
 import { useNavigationData, useAppDate } from '../../hooks';
@@ -11,10 +10,8 @@ import { NutritionHomeScreenNavigationProps } from '../../navigation';
 import { ChartsMacroNeeds, MealItemMemo, ItemSeparator } from '../../components';
 import * as Utils from '../../utils';
 
-interface NutritionHomeScreenProps {}
-
-export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
-  const { navigate, navigation } = useNavigationData<NutritionHomeScreenNavigationProps>();
+export const NutritionHomeScreen = () => {
+  const { navigate } = useNavigationData<NutritionHomeScreenNavigationProps>();
   const { appDate, appDateDay, ...appDateContext } = useAppDate();
   const dispatch = useDispatch();
   const macroNeeds = useSelector(Selectors.getCalcedMacroNeeds);
@@ -40,7 +37,7 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
         );
       }
     });
-  }, [dispatch, navigate]);
+  }, [dispatch, navigate, appDate]);
   
   const handleMealDelete = useCallback((meal: DiaryMeal): void => {
     Utils.alertDelete(
@@ -74,18 +71,18 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   }, [dispatch]);
 
   const handleProductQuantityUpdate = useCallback((mealId: MealId, product: DiaryProduct): void => {
-    navigation.navigate('ProductPreview', {
+    navigate('ProductPreview', {
       product: product.data,
       quantity: product.quantity,
       async onProductQuantityUpdated(quantity) {
-        navigation.navigate('NutritionHome');
+        navigate('NutritionHome');
 
         await InteractionManager.runAfterInteractions();
 
         dispatch(Actions.mealProductQuantityUpdate(mealId, product.data.id, quantity));
       }
     });
-  }, [navigation, dispatch]);
+  }, [navigate, dispatch]);
 
   const handleScrollFailSilently = useCallback(() => {}, []);
 
@@ -100,32 +97,26 @@ export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
   );
 
   return (
-    <Container>
-      <FlatList
-        ref={mealListRef}
-        data={meals}
-        keyExtractor={mealKeyExtractor}
-        ItemSeparatorComponent={ItemSeparator}
-        ListHeaderComponent={Header}
-        onScrollToIndexFailed={handleScrollFailSilently}
-        renderItem={({ item: meal, index }) => (
-          <MealItemMemo
-            meal={meal}
-            index={index}
-            onMealOpen={handleMealOpen}
-            onMealDelete={handleMealDelete}
-            onProductAdd={handleProductAdd}
-            onProductQuantityUpdate={handleProductQuantityUpdate}
-            onProductDelete={handleProductDelete}
-          />
-        )}
-      />
-    </Container>
+    <FlatList
+      ref={mealListRef}
+      data={meals}
+      keyExtractor={mealKeyExtractor}
+      ItemSeparatorComponent={ItemSeparator}
+      ListHeaderComponent={Header}
+      onScrollToIndexFailed={handleScrollFailSilently}
+      renderItem={({ item: meal, index }) => (
+        <MealItemMemo
+          meal={meal}
+          index={index}
+          onMealOpen={handleMealOpen}
+          onMealDelete={handleMealDelete}
+          onProductAdd={handleProductAdd}
+          onProductQuantityUpdate={handleProductQuantityUpdate}
+          onProductDelete={handleProductDelete}
+        />
+      )}
+    />
   );
 }
-
-const Container = styled.View`
-  flex: 1;
-`
 
 const mealKeyExtractor = (meal: Selectors.MealCalced): string => `${meal.type}${meal.data.id}`;

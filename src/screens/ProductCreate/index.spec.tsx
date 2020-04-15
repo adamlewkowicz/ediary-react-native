@@ -1,8 +1,8 @@
 import React from 'react';
-import { fireEvent } from '@testing-library/react-native';
+import { fireEvent, wait } from '@testing-library/react-native';
 import { Product } from '../../database/entities';
 import { ProductCreateScreen } from '.';
-import { renderSetup } from '../../../__tests__/utils';
+import { renderSetup } from '../../../test-utils';
 import { APP_ROUTE } from '../../navigation/consts';
 
 describe('<ProductCreateScreen />', () => {
@@ -29,7 +29,7 @@ describe('<ProductCreateScreen />', () => {
     const nameInput = ctx.getByLabelText('Nazwa');
     const producerInput = ctx.getByLabelText('Producent');
     const brandInput = ctx.getByLabelText('Marka');
-    const portionQuantityInput = ctx.getByLabelText('Ilość w jednej porcji');
+    const portionQuantityInput = ctx.getByLabelText('Ilość g w jednej porcji');
     const carbsInput = ctx.getByLabelText('Węglowodany');
     const sugarsInput = ctx.getByLabelText('w tym cukry');
     const protsInput = ctx.getByLabelText('Białko');
@@ -52,7 +52,9 @@ describe('<ProductCreateScreen />', () => {
     fireEvent.changeText(barcodeInput, productMock.barcode);
     fireEvent.press(saveProductButton);
 
-    expect(productSaveSpy).toHaveBeenCalledTimes(1);
+    await wait(() => {
+      expect(productSaveSpy).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('when presses calories calculate button', () => {
@@ -66,7 +68,7 @@ describe('<ProductCreateScreen />', () => {
       const carbsInput = ctx.getByLabelText('Węglowodany');
       fireEvent.changeText(carbsInput, '100');
 
-      const calculateCaloriesButton = ctx.getByLabelText('Oblicz');
+      const calculateCaloriesButton = ctx.getByLabelText('Oblicz kalorie');
       fireEvent.press(calculateCaloriesButton);
 
       expect(kcalInput.getProp('value')).not.toEqual('0');

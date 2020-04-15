@@ -3,6 +3,7 @@ import { SortHOF, DayjsTimeBase } from '../types';
 export const sortByDateTime: SortHOF<{ timeBase: DayjsTimeBase }> = (a, b) => {
   const timeA = Number(a.timeBase.replace(/:/g, ''));
   const timeB = Number(b.timeBase.replace(/:/g, ''));
+  if (timeA === timeB) return 0;
   return timeA > timeB ? 1 : -1;
 }
 
@@ -23,7 +24,7 @@ export function sortByMostAccurateName(phrase: string): SortHOF<{ name: string }
     const bNameHasNotBeenFound = bIndex === notFoundIndex;
   
     if (aNameHasNotBeenFound && bNameHasNotBeenFound) {
-      return -1;
+      return 0;
     }
     if (aNameHasNotBeenFound) {
       return 1;

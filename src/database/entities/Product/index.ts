@@ -15,21 +15,20 @@ import {
   UserId,
   ProductUnitType,
   FilterHOF,
+  NormalizedProduct,
 } from '../../../types';
 import { User } from '../User';
 import { ProductPortion } from '../ProductPortion';
-import { friscoApi } from '../../../services/FriscoApi';
 import { SqliteENUM } from '../../decorators';
 import { EntityType, EntityRequired } from '../../types';
 import { PRODUCT_UNIT_TYPE } from '../../../common/consts';
-import { ilewazyApi } from '../../../services/IlewazyApi';
 import { MinLength } from 'class-validator';
 import { GenericEntity } from '../../generics/GenericEntity';
 import { ProductImage } from '../ProductImage';
 import { Macro } from '../../embeds/Macro';
 import { FindMostUsedResult, FindMostProductIdsResult } from './types';
-import { NormalizedProduct } from '../../../services/IlewazyApi/types';
 import * as Utils from '../../../utils';
+import { ProductSearchApi } from '../../../services/ProductSearchApi';
 
 @Entity('product')
 @Unique<Product>(['name', 'isVerified'])
@@ -106,6 +105,8 @@ export class Product extends GenericEntity {
     return Product.defaultPortion;
   }
 
+  private static searchApi = new ProductSearchApi();
+  
   static saveWithPortion(
     productData: IProductRequired,
     portionQuantity: number,
@@ -203,13 +204,19 @@ export class Product extends GenericEntity {
     const sortByMostAccurateProductName = Utils.sortByMostAccurateName(name);
 
     if (savedProducts.length <= minProductsFoundLimit) {
-      const fetchedProducts = await ilewazyApi.findByName(name, controller);
+      try {
+        const fetchedProducts = await Product.searchApi.findByName(name, controller);
 
-      const mergedProducts = [...savedProducts, ...fetchedProducts]
-        .filter(Product.filterProductsByNameAndInstance)
-        .sort(sortByMostAccurateProductName);
+        const mergedProducts = [...savedProducts, ...fetchedProducts]
+          .filter(Product.filterProductsByNameAndInstance)
+          .sort(sortByMostAccurateProductName);
+  
+        return mergedProducts;
+      } catch(error) {
+        Utils.handleError(error);
 
-      return mergedProducts;
+        return savedProducts.sort(sortByMostAccurateProductName);
+      }
     }
 
     return savedProducts.sort(sortByMostAccurateProductName);
@@ -258,7 +265,7 @@ export class Product extends GenericEntity {
     const hasVerifiedProduct = savedProducts.some(product => product.isVerified);
     
     if (!savedProducts.length || !hasVerifiedProduct) {
-      const fetchedProducts = await friscoApi.findByQuery(barcode, controller);
+      const fetchedProducts = await Product.searchApi.findByBarcode(barcode, controller);
       const createdProducts = await Utils.mapAsyncSequence(
         fetchedProducts, Product.saveNormalizedProduct
       );

@@ -1,17 +1,17 @@
 import { useReducer, useEffect } from 'react';
 import { Product } from '../../database/entities';
-import { ABORT_ERROR_NAME } from '../../common/consts';
 import { BarcodeId } from '../../types';
 import { productsSearchReducer, initialState } from './reducer';
 import { useDebouncedValue } from '..';
 import { useSelector } from 'react-redux';
 import { Selectors } from '../../store';
-import * as Utils from '../../utils';
+import { useAppError } from '../use-app-error';
 
 export const useProductsSearch = () => {
   const [state, dispatch] = useReducer(productsSearchReducer, initialState);
   const debouncedProductName = useDebouncedValue(state.productName, 800);
   const isConnected = useSelector(Selectors.getAppIsConnected);
+  const { setAppError } = useAppError();
 
   const updateProductName = (productName: string): void => {
     dispatch({ type: 'PRODUCT_NAME_UPDATED', payload: productName });
@@ -42,9 +42,7 @@ export const useProductsSearch = () => {
         dispatch({ type: 'PRODUCTS_SEARCH_SUCCEEDED', payload });
 
       } catch(error) {
-        if (error.name !== ABORT_ERROR_NAME) {
-          Utils.handleError(error);
-        }
+        setAppError(error, ERROR_MESSAGE);
       } finally {
         dispatch({ type: 'PRODUCTS_SEARCH_FINISHED' });
       }
@@ -71,9 +69,7 @@ export const useProductsSearch = () => {
         dispatch({ type: 'BARCODE_SEARCH_SUCCEEDED', payload: { barcode, products }});
 
       } catch (error) {
-        if (error.name !== ABORT_ERROR_NAME) {
-          Utils.handleError(error);
-        }
+        setAppError(error, ERROR_MESSAGE);
       } finally {
         dispatch({ type: 'BARCODE_SEARCH_FINISHED' });
       }
@@ -93,3 +89,5 @@ export const useProductsSearch = () => {
     debouncedProductName,
   }
 }
+
+const ERROR_MESSAGE = 'Pobieranie produktów nie powiodło się';

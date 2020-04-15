@@ -1,6 +1,6 @@
 <img
-  src="https://i.imgur.com/vqb5yyq.png"
-  data-canonical-src="https://i.imgur.com/vqb5yyq.png"
+  src="https://i.imgur.com/MYChiUX.png"
+  data-canonical-src="https://i.imgur.com/MYChiUX.png"
   alt="E-diary logo"
   align="left"
 />
@@ -40,13 +40,13 @@ Play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://p
 - Figma (design, prototypowanie UI)
 
 ## Podgląd
-![Podgląd](https://i.imgur.com/7cH5o3z.png)
+![Podgląd](https://i.imgur.com/BbGDqfx.png)
 
 ## Zdjęcia
-![Śledzenie kalorii](https://i.imgur.com/tVUkQcN.png)
-![Baza produktów](https://i.imgur.com/22aMekg.png)
-![Wykres](https://i.imgur.com/60l12BC.png)
-![Własne posiłki](https://i.imgur.com/RyvtNe1.png)
+![Śledzenie kalorii](https://i.imgur.com/HorWQXD.png)
+![Własne posiłki](https://i.imgur.com/WoaTfKk.png)
+![Baza produktów](https://i.imgur.com/wbY8JLY.png)
+![Własne produkty](https://i.imgur.com/IvvL3zM.png)
 
 ## Roadmap
 - Śledzenie i pomiary wagi ciała

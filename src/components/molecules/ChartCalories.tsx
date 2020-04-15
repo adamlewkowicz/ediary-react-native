@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { ChartCircle } from '../';
-import { theme } from '../../common/theme';
+import { THEME } from '../../common/theme';
 import { H1, TextTertiary } from '../';
 import { View } from 'react-native';
 
@@ -14,10 +14,10 @@ interface ChartCaloriesProps {
 export const ChartCalories = (props: ChartCaloriesProps) => {
   return (
     <ChartCircle 
-      percentages={props.percentages}
+      percentage={props.percentages}
       size={200}
       width={8}
-      gradientColors={theme.gradient.kcal}
+      gradientColors={THEME.gradient.kcal}
     >
       <Content>
         <CaloriesEaten>{props.value.toFixed(0)}</CaloriesEaten>

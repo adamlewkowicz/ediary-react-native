@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import dayjs from 'dayjs';
-import { DatePickerAndroid, DatePickerAndroidDateSetAction } from 'react-native';
 import { RightArrowIcon, TextPrimary, H1 } from '../';
-import { theme } from '../../common/theme';
+import { THEME } from '../../common/theme';
+import DateTimePicker, { BaseProps as DatePickerBaseProps } from '@react-native-community/datetimepicker';
 
 interface DateChangerProps {
   value: Date
@@ -12,23 +12,18 @@ interface DateChangerProps {
 
 export const DateChanger = (props: DateChangerProps) => {
   const dayjsDate = dayjs(props.value);
+  const [isOpened, setIsOpened] = useState(false);
 
-  async function handleDateChange() {
-    try {
-      const result = await DatePickerAndroid.open({
-        date: props.value
-      });
+  const handleOpen = (): void => setIsOpened(true);
 
-      if (result.action === 'dateSetAction') {
-        const { year, month, day } = result as DatePickerAndroidDateSetAction;
-        const date = new Date(year, month, day);
-  
-        props.onChange(date);
-      }
-    } catch {}
+  const handleOnChange: DatePickerBaseProps['onChange'] = (event, date): void => {
+    setIsOpened(false);
+    if (date) {
+      props.onChange(date);
+    }
   }
 
-  const handleDayChange = (direction: 'prev' | 'next') => {
+  const handleDayChange = (direction: 'prev' | 'next'): void => {
     const numericDirection = direction === 'prev' ? -1 : 1;
     const date = dayjsDate.add(numericDirection, 'day').toDate();
 
@@ -43,7 +38,11 @@ export const DateChanger = (props: DateChangerProps) => {
       >
         <ArrowIconLeft {...ARROW_ICON_STYLE} />
       </DayChangeButton>
-      <CalendarButton onPress={handleDateChange}>
+      <CalendarButton
+        onPress={handleOpen}
+        accessibilityRole="button"
+        accessibilityLabel="Zmień datę"
+      >
         <Title>{dayjsDate.format(DAYJS_DAY)}</Title>
         <DateInfo>{dayjsDate.format(DAYJS_MAIN_DATE)}</DateInfo>
       </CalendarButton>
@@ -53,6 +52,15 @@ export const DateChanger = (props: DateChangerProps) => {
       >
         <ArrowIconRight {...ARROW_ICON_STYLE} />
       </DayChangeButton>
+      {isOpened && (
+        <DateTimePicker
+          value={props.value}
+          mode="date"
+          display="calendar"
+          textColor={THEME.color.primary}
+          onChange={handleOnChange}
+        />
+      )}
     </Container>
   );
 }
@@ -64,7 +72,7 @@ const Container = styled.View`
 `
 
 const DayChangeButton = styled.TouchableOpacity`
-  padding: 20px;
+  padding: ${props => props.theme.spacing.base};
 `
 
 const ArrowIconRight = styled(RightArrowIcon)``
@@ -76,12 +84,11 @@ const ArrowIconLeft = styled(ArrowIconRight)`
 const CalendarButton = styled.TouchableOpacity`
   display: flex;
   align-items: center;
-  margin: 30px 0;
+  margin: ${props => props.theme.spacing.baseVertical};
 `
 
 const Title = styled(H1)`
   font-size: 27px;
-
 `
 
 const DateInfo = styled(TextPrimary)`
@@ -91,7 +98,7 @@ const DateInfo = styled(TextPrimary)`
 export const DateChangerMemo = React.memo(DateChanger);
 
 const ARROW_ICON_STYLE = {
-  fill: theme.color.highlight,
+  fill: THEME.color.highlight,
   width: 26,
   height: 26,
 }

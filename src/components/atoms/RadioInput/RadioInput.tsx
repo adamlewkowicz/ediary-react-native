@@ -20,12 +20,12 @@ export const RadioInput = ({ value, text, onChange, ...inputProps }: RadioInputP
   );
 }
 
-const SIZE = 42 as const;
+const SIZE = '42px';
 
 const Container = styled.TouchableOpacity<{
   isActive: boolean
 }>`
-  border-radius: 50;
+  border-radius: 50px;
   border: ${props => `1px solid ${props.theme.color[props.isActive ? 'highlight' : 'tertiary']}`};
   width: ${SIZE};
   height: ${SIZE};

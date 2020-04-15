@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { H2, TextSecondary, MacroDetails } from '../';
-import { theme } from '../../common/theme';
+import { THEME } from '../../common/theme';
 import { ProductOrNormalizedProduct } from '../../database/entities';
 
 interface ProductSearchItemProps<T = ProductOrNormalizedProduct> {
@@ -21,17 +21,17 @@ export const ProductSearchItem = (props: ProductSearchItemProps) => {
         <MacroContainer>
           <MacroDetails
             title="W"
-            color={theme.color.carbs}
+            color={THEME.color.carbs}
             value={props.product.macro.carbs}
           />
           <MacroDetails
             title="B"
-            color={theme.color.prots}
+            color={THEME.color.prots}
             value={props.product.macro.prots}
           />
           <MacroDetails
             title="T"
-            color={theme.color.fats}
+            color={THEME.color.fats}
             value={props.product.macro.fats}
           />
         </MacroContainer>
@@ -55,11 +55,11 @@ const Content = styled.View`
 `
 
 const Calories = styled(H2)`
-  font-size: ${props => props.theme.fontSize.large};
+  font-size: ${props => props.theme.fontSize.h4};
 `
 
 const Container = styled.TouchableOpacity`
-  padding: ${props => props.theme.spacing.screenPadding};
+  padding: ${props => props.theme.spacing.baseXSmall};
 `
 
 const Info = styled.View`
@@ -68,7 +68,7 @@ const Info = styled.View`
 
 const MacroContainer = styled.View`
   flex-direction: row;
-  margin-bottom: 4px;
+  margin-bottom: ${props => props.theme.spacing.micro};
 `
 
 const ProductName = styled(H2)`

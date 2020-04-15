@@ -134,8 +134,8 @@ android {
         applicationId "com.ediarymobileapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 11
-        versionName "1.0.0-beta.0"
+        versionCode 17
+        versionName "1.0.3"
         missingDimensionStrategy 'react-native-camera', 'mlkit'
         multiDexEnabled true
         testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
@@ -208,12 +208,6 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-reanimated')
-    implementation project(':react-native-gesture-handler')
-    implementation project(':react-native-svg')
-    implementation project(':react-native-camera')
-    implementation project(':react-native-linear-gradient')
-    implementation project(':react-native-sqlite-storage')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
 

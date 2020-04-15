@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ProfileCreateScreen /> creating new profile should work 🧑 1`] = `
+Array [
+  Object {
+    "age": 25,
+    "height": 175,
+    "male": true,
+    "userId": 0,
+    "weight": 65,
+    "weightGoal": "increase",
+  },
+]
+`;

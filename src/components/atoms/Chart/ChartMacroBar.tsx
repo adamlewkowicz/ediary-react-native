@@ -1,32 +1,32 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { TextPrimary, TextTertiary } from '../Text';
-import { ProgressBar, ProgressBarProps } from './ProgressBar';
+import { ChartProgressBar, ChartProgressBarProps } from './ChartProgressBar';
 
-interface ChartMacroBarProps extends ProgressBarProps {
+interface ChartMacroBarProps extends ChartProgressBarProps {
   title: string
-  percentages: number
+  percentage: number
 }
 
 export const ChartMacroBar = (props: ChartMacroBarProps) => {
   const { title, ...progressBarProps } = props;
   return (
     <Container>
-      <DetailsContainer>
+      <Details>
         <TextTertiary>{title}</TextTertiary>
-        <TextPrimary>{progressBarProps.percentages}%</TextPrimary>
-      </DetailsContainer>
-      <ProgressBar {...progressBarProps} />
+        <TextPrimary>{progressBarProps.percentage}%</TextPrimary>
+      </Details>
+      <ChartProgressBar {...progressBarProps} />
     </Container>
   );
 }
 
 const Container = styled.View`
-  margin-bottom: ${props => props.theme.spacing.tertiary}px;
+  margin-bottom: ${props => props.theme.spacing.small};
 `
 
-const DetailsContainer = styled.View`
+const Details = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: ${props => props.theme.spacing.tiny};
 `

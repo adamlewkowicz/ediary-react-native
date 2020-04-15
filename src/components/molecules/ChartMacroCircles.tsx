@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { theme } from '../../common/theme';
+import { THEME } from '../../common/theme';
 import { ChartMacroCircle } from '../';
 import { BaseMacroElements } from '../../types';
 
@@ -14,20 +14,20 @@ export const ChartMacroCircles = (props: ChartMacroCirclesProps) => (
     <ChartMacroCircle
       title="Węglowodany"
       value={props.values.carbs}
-      percentages={props.percentages.carbs}
-      gradientColors={theme.gradient.carbs}
+      percentage={props.percentages.carbs}
+      gradientColors={THEME.gradient.carbs}
     />
     <ChartMacroCircle
       title="Białko"
       value={props.values.prots}
-      percentages={props.percentages.prots}
-      gradientColors={theme.gradient.prots}
+      percentage={props.percentages.prots}
+      gradientColors={THEME.gradient.prots}
     />
     <ChartMacroCircle
       title="Tłuszcze"
       value={props.values.fats}
-      percentages={props.percentages.fats}
-      gradientColors={theme.gradient.fats}
+      percentage={props.percentages.fats}
+      gradientColors={THEME.gradient.fats}
     />
   </Container>
 );
@@ -35,6 +35,6 @@ export const ChartMacroCircles = (props: ChartMacroCirclesProps) => (
 const Container = styled.View`
   flex-direction: row;
   justify-content: space-around;
-  padding: 0 20px;
-  margin: ${props => `${props.theme.spacing.secondary}px 0`};
+  padding: ${props => props.theme.spacing.smallHorizontal};
+  margin: ${props => props.theme.spacing.smallVertical};
 `
