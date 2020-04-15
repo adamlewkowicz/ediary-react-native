@@ -21,7 +21,7 @@ export const TabContainer = (props: TabContainerProps) => {
   const renderTabBar = (props: SceneRendererProps) => {
     return (
       <TabBarContainer>
-        <ScrollView horizontal>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {routes.map((route, index) => (
             <TabButton
               key={route.key}
@@ -54,4 +54,5 @@ const TabBarContainer = styled.View`
   border-bottom-color: ${props => props.theme.color.tertiary};
   border-bottom-width: 1px;
   padding: ${props => props.theme.spacing.smallHorizontal};
+  margin-top: ${props => props.theme.spacing.tiny};
 `
