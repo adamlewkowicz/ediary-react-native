@@ -15,7 +15,6 @@ import {
 } from '../../components';
 import * as Utils from '../../utils';
 import { TabContainer } from '../../components/atoms/Tab';
-import { Tab } from '../../components/atoms/Tab/Tab';
 
 interface ProductFindScreenProps {}
 
@@ -130,6 +129,11 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
     />
   );
 
+  const genericListProps = {
+    ...listProps,
+    renderItem,
+  }
+
   return (
     <Container>
       <SearchContainer>
@@ -153,16 +157,20 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
               <RenderInfo />
               <FlatList
                 data={productHistory.data}
-                renderItem={renderItem}
-                {...listProps}
+                {...genericListProps}
               />
             </>
           ),
           'Znalezione': () => (
             <FlatList
               data={state.products}
-              renderItem={renderItem}
-              {...listProps}
+              {...genericListProps}
+            />
+          ),
+          'Ulubione': () => (
+            <FlatList
+              data={state.products}
+              {...genericListProps}
             />
           )
         }}

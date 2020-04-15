@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dimensions } from 'react-native';
+import { Dimensions, ScrollView } from 'react-native';
 import { TabView, SceneMap, SceneRendererProps } from 'react-native-tab-view';
 import styled from 'styled-components/native';
 import { TabButton } from './TabButton';
@@ -21,14 +21,16 @@ export const TabContainer = (props: TabContainerProps) => {
   const renderTabBar = (props: SceneRendererProps) => {
     return (
       <TabBarContainer>
-        {routes.map((route, index) => (
-          <TabButton
-            key={route.key}
-            title={route.key}
-            onPress={() => props.jumpTo(route.key)}
-            isActive={index === activeIndex}
-          />
-        ))}
+        <ScrollView horizontal>
+          {routes.map((route, index) => (
+            <TabButton
+              key={route.key}
+              title={route.key}
+              onPress={() => props.jumpTo(route.key)}
+              isActive={index === activeIndex}
+            />
+          ))}
+        </ScrollView>
       </TabBarContainer>
     );
   }
@@ -49,7 +51,7 @@ const initialLayout = { width: Dimensions.get('window').width };
 
 const TabBarContainer = styled.View`
   flex-direction: row;
-  justify-content: space-evenly;
   border-bottom-color: ${props => props.theme.color.tertiary};
   border-bottom-width: 1px;
+  padding: ${props => props.theme.spacing.smallHorizontal};
 `

@@ -22,4 +22,5 @@ const Container = styled.TouchableOpacity<{
   padding: 16px 0;
   border-bottom-width: 2px;
   border-bottom-color: ${props => props.isActive ? props.theme.color.highlight : '#fff'};
+  margin-right: ${props => props.theme.spacing.base};
 `
