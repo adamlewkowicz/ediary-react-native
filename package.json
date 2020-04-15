@@ -62,7 +62,6 @@
     "@babel/runtime": "7.5.5",
     "@bam.tech/react-native-make": "^1.0.3",
     "@react-native-community/eslint-config": "^1.0.0",
-    "@storybook/react-native": "^5.1.10",
     "@testing-library/jest-native": "^3.0.2",
     "@testing-library/react-native": "^5.0.3",
     "@types/jest": "24.0.15",
