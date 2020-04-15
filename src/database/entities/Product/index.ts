@@ -29,6 +29,7 @@ import { Macro } from '../../embeds/Macro';
 import { FindMostUsedResult, FindMostProductIdsResult } from './types';
 import * as Utils from '../../../utils';
 import { ProductSearchApi } from '../../../services/ProductSearchApi';
+import { ProductFavorite } from '../ProductFavorite';
 
 @Entity('product')
 @Unique<Product>(['name', 'isVerified'])
@@ -94,6 +95,13 @@ export class Product extends GenericEntity {
     { cascade: true }
   )
   images?: ProductImage[];
+
+  @OneToMany(
+    type => ProductFavorite,
+    productFavorite => productFavorite.product,
+    { onDelete: 'CASCADE' }
+  )
+  favorites?: ProductFavorite[];
 
   static defaultPortion = 100;
 
