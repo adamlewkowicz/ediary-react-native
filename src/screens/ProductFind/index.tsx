@@ -1,7 +1,7 @@
 import React, { useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
-import { useProductsSearch, useNavigationData, useProductHistory, useProductFavorites } from '../../hooks';
+import { useProductsSearch, useNavigationData, useProductHistory, useProductFavorites, useProductsCreated } from '../../hooks';
 import { FlatList, ListRenderItem, FlatListProps } from 'react-native';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import {
@@ -29,6 +29,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
     ...productSearch
   } = useProductsSearch();
   const productFavorites = useProductFavorites();
+  const productsCreated = useProductsCreated();
 
   const showProductHistory = !state.isDirty;
 
@@ -171,6 +172,12 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
           'Ulubione': () => (
             <FlatList
               data={productFavorites.data}
+              {...genericListProps}
+            />
+          ),
+          'Utworzone': () => (
+            <FlatList
+              data={productsCreated.data}
               {...genericListProps}
             />
           )
