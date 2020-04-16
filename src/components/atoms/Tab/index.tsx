@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState, ReactNode, useRef } from 'react';
 import { Dimensions, ScrollView } from 'react-native';
 import { TabView, SceneMap, SceneRendererProps } from 'react-native-tab-view';
 import styled from 'styled-components/native';
@@ -17,11 +17,16 @@ export const TabContainer = <T extends string>(props: TabContainerProps<T>) => {
   const [routes] = useState(() => 
     props.routeNames.map(routeName => ({ key: routeName }))
   );
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const renderTabBar = (_props: SceneRendererProps) => {
     return (
       <TabBarContainer>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView
+          ref={scrollViewRef}
+          showsHorizontalScrollIndicator={false}
+          horizontal
+        >
           {routes.map((route, index) => (
             <TabButton
               key={route.key}
