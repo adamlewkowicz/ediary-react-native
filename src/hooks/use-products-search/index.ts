@@ -91,3 +91,5 @@ export const useProductsSearch = () => {
 }
 
 const ERROR_MESSAGE = 'Pobieranie produktów nie powiodło się';
+
+export { ProductsSearchState } from './reducer';

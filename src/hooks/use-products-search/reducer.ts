@@ -1,7 +1,7 @@
 import { ProductOrNormalizedProduct, Product } from '../../database/entities';
 import { BarcodeId } from '../../types';
 
-interface ProductsSearchState {
+export interface ProductsSearchState {
   productName: string
   barcode: BarcodeId | null
   products: ProductOrNormalizedProduct[]

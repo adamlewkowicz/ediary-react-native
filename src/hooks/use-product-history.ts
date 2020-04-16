@@ -4,8 +4,8 @@ import { Product } from '../database/entities';
 import { useEffect } from 'react';
 
 export const useProductHistory = () => {
-  const dispatch = useDispatch();
   const { products: data, isAfterFirstFetch } = useSelector(Selectors.getProductHistory);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!isAfterFirstFetch) {

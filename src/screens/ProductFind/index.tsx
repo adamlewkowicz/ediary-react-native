@@ -1,20 +1,19 @@
 import React, { useRef, useCallback, useState } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
-import { useProductsSearch, useNavigationData, useProductHistory, useProductFavorites, useProductsCreated } from '../../hooks';
-import { FlatList, ListRenderItem, FlatListProps } from 'react-native';
+import { useProductsSearch, useNavigationData, useProductHistory } from '../../hooks';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import {
-  H3,
   ButtonSecondaryArrow,
-  ProductSearchItemMemo,
-  ItemSeparator,
   InputSearcher,
   BarcodeButton,
-  TextPrimary,
 } from '../../components';
 import * as Utils from '../../utils';
 import { TabContainer } from '../../components/atoms/Tab';
+import { ProductFindFavoritesList } from '../../components/molecules/ProductFindFavoritesList';
+import { ProductFindCreatedList } from '../../components/molecules/ProductFindCreatedList';
+import { ProductFindRecentList } from '../../components/molecules/ProductFindRecentList';
+import { ProductFindSearchList } from '../../components/molecules/ProductFindSearchList';
 
 interface ProductFindScreenProps {}
 
@@ -28,15 +27,9 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
     debouncedProductName,
     ...productSearch
   } = useProductsSearch();
-  const productFavorites = useProductFavorites();
-  const productsCreated = useProductsCreated();
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const showProductHistory = !state.isDirty;
-
-  const productSource: ProductOrNormalizedProduct[] = showProductHistory
-    ? productHistory.data
-    : state.products;
 
   function handleBarcodeScan() {
     navigate('BarcodeScan', {
@@ -77,41 +70,6 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
     }
   }, [params]);
 
-  function RenderInfo() {
-    const {
-      isSearching,
-      products,
-      barcode,
-      isTyping,
-    } = state;
-    const isBusy = isSearching || isTyping;
-    const isProductsNotEmpty = products.length > 0;
-    const isProductNameNotTouched = debouncedProductName.length === 0;
-    const hasNotBeenSearching = isProductNameNotTouched && barcode === null;
-
-    if (isBusy || isProductsNotEmpty || hasNotBeenSearching) {
-      return null;
-    }
-
-    const notFoundMessage = barcode !== null
-      ? `z podanym kodem kreskowym: ${barcode}`
-      : `o podanej nazwie: ${debouncedProductName}`;
-
-    return (
-      <>
-        <NotFoundInfo>
-          Nie znaleziono produktów {'\n'}
-          {notFoundMessage}
-        </NotFoundInfo>
-        {!isConnected && (
-          <NotFoundInfo>
-            Aby wyszukiwać więcej produktów, przejdź do trybu online.
-          </NotFoundInfo>
-        )}
-      </>
-    );
-  }
-
   navigation.setOptions({
     headerRight: () => (
       <AddOwnProductButton
@@ -125,23 +83,11 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
     )
   });
 
-  const renderItem: ListRenderItem<ProductOrNormalizedProduct> = ({ item: product }) => (
-    <ProductSearchItemMemo
-      product={product}
-      onSelect={handleProductSelect}
-    />
-  );
-
   const handleChangeText = (text: string) => {
     if (activeTabIndex !== 1) {
       setActiveTabIndex(1);
     }
     productSearch.updateProductName(text);
-  }
-
-  const genericListProps = {
-    ...listProps,
-    renderItem,
   }
 
   return (
@@ -165,31 +111,21 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
         onIndexChange={setActiveTabIndex}
         routes={{
           'Ostatnio używane': () => (
-            <>
-              <RenderInfo />
-              <FlatList
-                data={productHistory.data}
-                {...genericListProps}
-              />
-            </>
+            <ProductFindRecentList onSelect={handleProductSelect} />
           ),
           'Znalezione': () => (
-            <FlatList
-              data={state.products}
-              {...genericListProps}
+            <ProductFindSearchList
+              onSelect={handleProductSelect}
+              state={state}
+              isConnected={isConnected}
+              productSearchName={debouncedProductName}
             />
           ),
           'Ulubione': () => (
-            <FlatList
-              data={productFavorites.data}
-              {...genericListProps}
-            />
+            <ProductFindFavoritesList onSelect={handleProductSelect} />
           ),
           'Utworzone': () => (
-            <FlatList
-              data={productsCreated.data}
-              {...genericListProps}
-            />
+            <ProductFindCreatedList onSelect={handleProductSelect} />
           )
         }}
       />
@@ -209,30 +145,8 @@ const Container = styled.View`
   padding-top: ${props => props.theme.spacing.small};
 `
 
-const NotFoundInfo = styled(TextPrimary)`
-  text-align: center;
-  margin-top: ${props => props.theme.spacing.base};
-  padding: ${props => props.theme.spacing.largeHorizontal};
-`
-
-const ProductsTitle = styled(H3)`
-  margin: ${props => props.theme.spacing.smallXMicroVertical};
-  padding: ${props => props.theme.spacing.smallHorizontal};
-`
-
 const AddOwnProductButton = styled(ButtonSecondaryArrow)`
   margin-right: ${props => props.theme.spacing.micro};
 `
-
-const productKeyExtractor = (product: ProductOrNormalizedProduct): string => {
-  const productId = '_id' in product ? product._id : product.id;
-  return String(productId);
-}
-
-const listProps: Partial<FlatListProps<ProductOrNormalizedProduct>> = {
-  keyExtractor: productKeyExtractor,
-  keyboardShouldPersistTaps: "handled",
-  ItemSeparatorComponent: ItemSeparator,
-}
 
 export type ProductResolver = () => Promise<Product>;
