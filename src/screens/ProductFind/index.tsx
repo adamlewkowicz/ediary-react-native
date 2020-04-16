@@ -10,16 +10,16 @@ import {
 } from '../../components';
 import * as Utils from '../../utils';
 import { TabContainer } from '../../components/atoms/Tab';
-import { ProductFindFavoritesList } from '../../components/molecules/ProductFindFavoritesList';
-import { ProductFindCreatedList } from '../../components/molecules/ProductFindCreatedList';
-import { ProductFindRecentList } from '../../components/molecules/ProductFindRecentList';
-import { ProductFindSearchList } from '../../components/molecules/ProductFindSearchList';
+import { ProductFindFavoritesList, ProductFindFavoritesListMemo } from '../../components/molecules/ProductFindFavoritesList';
+import { ProductFindCreatedList, ProductFindCreatedListMemo } from '../../components/molecules/ProductFindCreatedList';
+import { ProductFindRecentList, ProductFindRecentListMemo } from '../../components/molecules/ProductFindRecentList';
+import { ProductFindSearchList, ProductFindSearchListMemo } from '../../components/molecules/ProductFindSearchList';
 
 interface ProductFindScreenProps {}
 
 export const ProductFindScreen = (props: ProductFindScreenProps) => {
   const { params, navigate, navigation } = useNavigationData<ProductFindScreenNavigationProps>();
-  const productHistory = useProductHistory();
+  // const productHistory = useProductHistory();
   const hasBeenPressed = useRef(false);
   const {
     state,
@@ -50,7 +50,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
         navigate('ProductFind');
 
         Utils.toastCenter(`Utworzono produkt "${createdProduct.name}"`);
-        productHistory.addProduct(createdProduct);
+        // productHistory.addProduct(createdProduct);
       }
     });
   }
@@ -68,7 +68,7 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
 
       params.onProductSelected(productResolver, product.portion);
     }
-  }, [params]);
+  }, [params.onProductSelected]);
 
   navigation.setOptions({
     headerRight: () => (
@@ -84,9 +84,9 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
   });
 
   const handleChangeText = (text: string) => {
-    if (activeTabIndex !== 1) {
-      setActiveTabIndex(1);
-    }
+    // if (activeTabIndex !== 1) {
+    //   setActiveTabIndex(1);
+    // }
     productSearch.updateProductName(text);
   }
 
@@ -109,24 +109,27 @@ export const ProductFindScreen = (props: ProductFindScreenProps) => {
       <TabContainer
         activeIndex={activeTabIndex}
         onIndexChange={setActiveTabIndex}
-        routes={{
-          'Ostatnio używane': () => (
-            <ProductFindRecentList onSelect={handleProductSelect} />
-          ),
-          'Znalezione': () => (
-            <ProductFindSearchList
-              onSelect={handleProductSelect}
-              state={state}
-              isConnected={isConnected}
-              productSearchName={debouncedProductName}
-            />
-          ),
-          'Ulubione': () => (
-            <ProductFindFavoritesList onSelect={handleProductSelect} />
-          ),
-          'Utworzone': () => (
-            <ProductFindCreatedList onSelect={handleProductSelect} />
-          )
+        routeNames={['Ostatnio używane', 'Ulubione', 'Utworzone', 'Znalezione']}
+        renderScene={({ route }) => {
+          switch(route.key) {
+            case 'Ostatnio używane': return (
+              <ProductFindRecentListMemo onSelect={handleProductSelect} />
+            );
+            case 'Ulubione': return (
+              <ProductFindFavoritesListMemo onSelect={handleProductSelect} />
+            );
+            case 'Utworzone': return (
+              <ProductFindCreatedListMemo onSelect={handleProductSelect} />
+            );
+            case 'Znalezione': return (
+              <ProductFindSearchListMemo
+                onSelect={handleProductSelect}
+                state={state}
+                isConnected={isConnected}
+                productSearchName={debouncedProductName}
+              />
+            );
+          }
         }}
       />
     </Container>

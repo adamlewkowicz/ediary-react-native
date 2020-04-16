@@ -19,5 +19,5 @@ export const useProductHistory = () => {
     );
   }
 
-  return { data, addProduct };
+  return { data, addProduct, isAfterFirstFetch };
 }

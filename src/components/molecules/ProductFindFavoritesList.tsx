@@ -8,6 +8,7 @@ interface ProductFindFavoritesListProps {
 
 export const ProductFindFavoritesList = (props: ProductFindFavoritesListProps) => {
   const productFavorites = useProductFavorites();
+  console.log('render ProductFindFavoritesList')
 
   return (
     <ProductFindList
@@ -16,3 +17,5 @@ export const ProductFindFavoritesList = (props: ProductFindFavoritesListProps) =
     />
   );
 }
+
+export const ProductFindFavoritesListMemo = React.memo(ProductFindFavoritesList);

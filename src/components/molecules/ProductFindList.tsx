@@ -8,6 +8,8 @@ import { ProductSearchItemMemo } from './ProductSearchItem';
 export interface ProductFindListProps<T = ProductOrNormalizedProduct | IProduct> {
   data: T[]
   onSelect: (product: T) => void
+  isLoading?: boolean
+  onRefresh?: () => void
 }
 
 export const ProductFindList = (props: ProductFindListProps) => (
@@ -22,6 +24,8 @@ export const ProductFindList = (props: ProductFindListProps) => (
     keyExtractor={productKeyExtractor}
     keyboardShouldPersistTaps="handled"
     ItemSeparatorComponent={ItemSeparator}
+    refreshing={props.isLoading ?? false}
+    onRefresh={() => props.onRefresh?.()}
   />
 );
 

@@ -8,11 +8,16 @@ interface ProductFindCreatedListProps {
 
 export const ProductFindCreatedList = (props: ProductFindCreatedListProps) => {
   const productsCreated = useProductsCreated();
+  console.log('render ProductFindCreatedList')
 
   return (
     <ProductFindList
       data={productsCreated.data}
       onSelect={props.onSelect}
+      isLoading={productsCreated.isLoading}
+      onRefresh={productsCreated.refresh}
     />
   );
 }
+
+export const ProductFindCreatedListMemo = React.memo(ProductFindCreatedList);

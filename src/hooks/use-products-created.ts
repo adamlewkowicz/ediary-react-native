@@ -2,12 +2,30 @@ import { useEffect, useState } from 'react'
 import { Product, IProduct } from '../database/entities';
 import { useUserId } from './use-user-id';
 import { useAppError } from './use-app-error';
+import { useIsMountedDebounced } from './use-is-mounted-debounced';
 
 export const useProductsCreated = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState<IProduct[]>([]);
+  const isMountedDebounced = useIsMountedDebounced();
   const userId = useUserId();
-  const appError = useAppError();
+  const { setAppError } = useAppError();
+
+  const fetchProductsCreated = async () => {
+    try {
+      setIsLoading(true);
+
+      const products = await Product.find({ where: { userId }});
+
+      setProducts(products);
+      
+    } catch(error) {
+      setAppError(error);
+
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
     const fetchProductsCreated = async () => {
@@ -17,15 +35,23 @@ export const useProductsCreated = () => {
         const products = await Product.find({ where: { userId }});
   
         setProducts(products);
+        
       } catch(error) {
-        appError.setAppError(error);
+        setAppError(error);
+
       } finally {
         setIsLoading(false);
       }
     }
 
-    fetchProductsCreated();
-  }, [userId, appError]);
+    if (isMountedDebounced) {
+      fetchProductsCreated();
+    }
+  }, [userId, isMountedDebounced]);
 
-  return { isLoading, data: products };
+  return {
+    isLoading,
+    data: products,
+    refresh: fetchProductsCreated
+  };
 }

@@ -7,12 +7,16 @@ interface ProductFindRecentListProps {
 }
 
 export const ProductFindRecentList = (props: ProductFindRecentListProps) => {
+  console.log('render ProductFindRecentList')
   const productHistory = useProductHistory();
 
   return (
     <ProductFindList
       data={productHistory.data}
       onSelect={props.onSelect}
+      isLoading={!productHistory.isAfterFirstFetch}
     />
   );
 }
+
+export const ProductFindRecentListMemo = React.memo(ProductFindRecentList);

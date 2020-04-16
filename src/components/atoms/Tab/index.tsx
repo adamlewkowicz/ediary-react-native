@@ -1,23 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, ReactNode } from 'react';
 import { Dimensions, ScrollView } from 'react-native';
 import { TabView, SceneMap, SceneRendererProps } from 'react-native-tab-view';
 import styled from 'styled-components/native';
 import { TabButton } from './TabButton';
+import { Text } from '../Text';
 
-interface TabContainerProps {
-  routes: { [key: string]: () => JSX.Element }
+interface TabContainerProps<T> {
+  routes?: { [key: string]: () => JSX.Element }
+  routeNames: T[]
   activeIndex: number
   onIndexChange: (index: number) => void
+  renderScene: (props: { route: { key: T }}) => ReactNode
 }
 
-export const TabContainer = (props: TabContainerProps) => {
+export const TabContainer = <T extends string>(props: TabContainerProps<T>) => {
   const [routes] = useState(() => 
-    Object
-      .keys(props.routes)
-      .map(routeName => ({ key: routeName }))
+    props.routeNames.map(routeName => ({ key: routeName }))
   );
-
-  const renderScene = SceneMap(props.routes);
 
   const renderTabBar = (_props: SceneRendererProps) => {
     return (
@@ -39,11 +38,15 @@ export const TabContainer = (props: TabContainerProps) => {
   return (
     <TabView
       navigationState={{ index: props.activeIndex, routes }}
-      renderScene={renderScene}
+      renderScene={props.renderScene}
       onIndexChange={props.onIndexChange}
       initialLayout={initialLayout}
       renderTabBar={renderTabBar}
       swipeEnabled
+      lazy
+      renderLazyPlaceholder={() => (
+        <Text>Loading</Text>
+      )}
     />
   );
 }

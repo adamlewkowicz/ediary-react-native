@@ -19,7 +19,7 @@ const initialState: ProductFavoritesState = {
 export const productFavoritesReducer = (
   state = initialState,
   action: ProductFavoritesAction
-) => {
+): ProductFavoritesState => {
   switch(action.type) {
     case PRODUCT_FAVORITES_ADDED: return {
       ...state,

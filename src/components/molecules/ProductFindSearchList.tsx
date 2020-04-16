@@ -53,6 +53,7 @@ export const ProductFindSearchList = (props: ProductFindSearchListProps) => {
       <ProductFindList
         data={props.state.products}
         onSelect={props.onSelect}
+        isLoading={props.state.isSearching}
       />
     </>
   );
@@ -63,3 +64,5 @@ const NotFoundInfo = styled(TextPrimary)`
   margin-top: ${props => props.theme.spacing.base};
   padding: ${props => props.theme.spacing.largeHorizontal};
 `
+
+export const ProductFindSearchListMemo = React.memo(ProductFindSearchList);
