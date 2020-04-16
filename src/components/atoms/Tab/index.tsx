@@ -1,4 +1,4 @@
-import React, { useState, ReactNode, useRef } from 'react';
+import React, { useState, ReactNode, useRef, useEffect } from 'react';
 import { Dimensions, ScrollView } from 'react-native';
 import { TabView, SceneMap, SceneRendererProps } from 'react-native-tab-view';
 import styled from 'styled-components/native';
@@ -19,6 +19,20 @@ export const TabContainer = <T extends string>(props: TabContainerProps<T>) => {
   );
   const scrollViewRef = useRef<ScrollView>(null);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (props.activeIndex === routes.length - 1) {
+        scrollViewRef.current?.scrollToEnd();
+      } else if (props.activeIndex === 0) {
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
+      }
+    }
+
+    handleScroll();
+  }, [props.activeIndex]);
+
+
+
   const renderTabBar = (_props: SceneRendererProps) => {
     return (
       <TabBarContainer>
@@ -31,7 +45,9 @@ export const TabContainer = <T extends string>(props: TabContainerProps<T>) => {
             <TabButton
               key={route.key}
               title={route.key}
-              onPress={() => _props.jumpTo(route.key)}
+              onPress={() => {
+                _props.jumpTo(route.key);
+              }}
               isActive={index === props.activeIndex}
             />
           ))}
@@ -62,6 +78,6 @@ const TabBarContainer = styled.View`
   flex-direction: row;
   border-bottom-color: ${props => props.theme.color.tertiary};
   border-bottom-width: 1px;
-  padding: ${props => props.theme.spacing.smallHorizontal};
+  /* padding: ${props => props.theme.spacing.smallHorizontal}; */
   margin-top: ${props => props.theme.spacing.tiny};
 `
