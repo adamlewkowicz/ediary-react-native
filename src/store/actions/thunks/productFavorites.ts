@@ -5,6 +5,7 @@ import {
   productFavoritesLoaded,
   productFavoritesAdded,
   productFavoritesDeleted,
+  productFavoritesToggled,
 } from '../creators';
 
 export const productFavoritesLoad = (
@@ -22,6 +23,15 @@ export const productFavoritesAdd = (
   await ProductFavorite.save({ userId, productId: product.id });
 
   dispatch(productFavoritesAdded(product));
+}
+
+export const productFavoritesToggle = (
+  product: IProduct,
+  userId: UserId,
+): Thunk => async (dispatch) => {
+  const { isFavorite } = await ProductFavorite.toggleFavorite(product.id, userId);
+
+  dispatch(productFavoritesToggled(product, isFavorite));
 }
 
 export const productFavoritesDelete = (

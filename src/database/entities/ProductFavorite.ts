@@ -48,4 +48,20 @@ export class ProductFavorite extends GenericEntity {
     return false;
   }
 
+  static async toggleFavorite(
+    productId: ProductId,
+    userId: UserId
+  ): Promise<{ isFavorite: boolean }> {
+    const result = await ProductFavorite.delete({ productId, userId });
+    const hasBeenDeleted = result.affected === 1;
+
+    if (hasBeenDeleted) {
+      return { isFavorite: false };
+    }
+
+    await ProductFavorite.save({ productId, userId });
+
+    return { isFavorite: true };
+  }
+
 }

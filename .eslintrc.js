@@ -19,5 +19,6 @@ module.exports = {
     '@typescript-eslint/no-empty-interface': 0,
     'no-param-reassign': 2,
     '@typescript-eslint/no-use-before-define': 0,
+    'react/display-name': 1,
   }
 };

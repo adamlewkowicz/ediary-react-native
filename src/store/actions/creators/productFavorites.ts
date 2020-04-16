@@ -3,6 +3,7 @@ import {
   PRODUCT_FAVORITES_LOADED,
   PRODUCT_FAVORITES_ADDED,
   PRODUCT_FAVORITES_DELETED,
+  PRODUCT_FAVORITES_TOGGLED,
 } from '../../consts';
 import { ProductId } from '../../../types';
 
@@ -21,7 +22,14 @@ export const productFavoritesLoaded = (products: IProduct[]) => ({
   payload: products,
 });
 
+export const productFavoritesToggled = (product: IProduct, isFavorite: boolean) => ({
+  type: PRODUCT_FAVORITES_TOGGLED,
+  payload: product,
+  meta: { isFavorite }
+});
+
 export type ProductFavoritesAction = 
   | ReturnType<typeof productFavoritesAdded>
   | ReturnType<typeof productFavoritesLoaded>
   | ReturnType<typeof productFavoritesDeleted>
+  | ReturnType<typeof productFavoritesToggled>

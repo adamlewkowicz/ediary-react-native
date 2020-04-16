@@ -70,8 +70,7 @@ export const ProductPreviewScreen = () => {
       {isFavorite !== null && (
         <ButtonFavorite
           isFavorite={isFavorite}
-          onFavoriteAdd={() => productFavorites.add(params.product)}
-          onFavoriteDelete={() => productFavorites.delete(params.product.id)}
+          onFavoriteToggle={() => productFavorites.toggle(params.product)}
         />
       )}
       <Section title="Ilość produktu">

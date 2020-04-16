@@ -22,9 +22,16 @@ export const useProductFavorites = () => {
     );
   }, [dispatch, userId]);
 
+  const toggleProduct = useCallback((product: IProduct) => {
+    dispatch(
+      Actions.productFavoritesToggle(product, userId)
+    );
+  }, [dispatch, userId]);
+
   return {
     data: products,
     add: addProduct,
     delete: deleteProduct,
+    toggle: toggleProduct,
   };
 }

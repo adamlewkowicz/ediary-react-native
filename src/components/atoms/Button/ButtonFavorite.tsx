@@ -4,22 +4,23 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface ButtonFavoriteProps {
   isFavorite: boolean
-  onFavoriteAdd: () => void
-  onFavoriteDelete: () => void
+  onFavoriteAdd?: () => void
+  onFavoriteDelete?: () => void
+  onFavoriteToggle?: () => void
 }
 
 export const ButtonFavorite = (props: ButtonFavoriteProps) => {
 
   const handleFavoriteAction = () => {
     if (props.isFavorite) {
-      props.onFavoriteDelete();
+      props.onFavoriteDelete?.();
     } else {
-      props.onFavoriteAdd();
+      props.onFavoriteAdd?.();
     }
   }
 
   return (
-    <Container onPress={handleFavoriteAction}>
+    <Container onPress={props.onFavoriteToggle}>
       <Icon name="rocket" size={30} color="#900" />
     </Container>
   );
