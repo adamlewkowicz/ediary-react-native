@@ -10,9 +10,7 @@ import { NutritionHomeScreenNavigationProps } from '../../navigation';
 import { ChartsMacroNeeds, MealItemMemo, ItemSeparator } from '../../components';
 import * as Utils from '../../utils';
 
-interface NutritionHomeScreenProps {}
-
-export const NutritionHomeScreen = (props: NutritionHomeScreenProps) => {
+export const NutritionHomeScreen = () => {
   const { navigate } = useNavigationData<NutritionHomeScreenNavigationProps>();
   const { appDate, appDateDay, ...appDateContext } = useAppDate();
   const dispatch = useDispatch();

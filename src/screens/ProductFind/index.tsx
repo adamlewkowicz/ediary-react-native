@@ -15,9 +15,7 @@ import { ProductFindCreatedList, ProductFindCreatedListMemo } from '../../compon
 import { ProductFindRecentList, ProductFindRecentListMemo } from '../../components/molecules/ProductFindRecentList';
 import { ProductFindSearchList, ProductFindSearchListMemo } from '../../components/molecules/ProductFindSearchList';
 
-interface ProductFindScreenProps {}
-
-export const ProductFindScreen = (props: ProductFindScreenProps) => {
+export const ProductFindScreen = () => {
   const { params, navigate, navigation } = useNavigationData<ProductFindScreenNavigationProps>();
   // const productHistory = useProductHistory();
   const hasBeenPressed = useRef(false);
