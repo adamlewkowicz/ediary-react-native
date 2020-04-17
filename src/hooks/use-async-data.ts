@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAppError } from './use-app-error';
+import * as Utils from '../utils';
 
 export const useAsyncData = <T>(options: {
   initialValue: T
@@ -13,11 +14,16 @@ export const useAsyncData = <T>(options: {
   const refresh = useCallback(() => setIsRefreshRequested(true), []);
 
   useEffect(() => {
+    const abortController = new AbortController();
+    
     const handleAsyncTask = async () => {
       try {
         setIsLoading(true);
 
-        const result = await options.asyncTask();
+        const result = await Utils.cancelablePromise<T>(
+          options.asyncTask(),
+          abortController
+        );
 
         setData(result);
 
@@ -33,6 +39,8 @@ export const useAsyncData = <T>(options: {
     if (isRefreshRequested) {
       handleAsyncTask();
     }
+
+    return () => abortController.abort();
   }, [isRefreshRequested]);
   
   return { data, isLoading, refresh };

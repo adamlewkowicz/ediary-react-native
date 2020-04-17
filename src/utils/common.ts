@@ -75,7 +75,10 @@ export const handleError = (error: Error): void => {
   }
 }
 
-export const cancelablePromise = <T, P extends Promise<T>>(promise: P, signal: AbortSignal): Promise<T> => {
+export const cancelablePromise = <T, P extends Promise<T> = Promise<T>>(
+  promise: P,
+  { signal }: AbortController,
+): Promise<T> => {
   return new Promise<T>(async (resolve, reject) => {
     const abortHandler = () => reject(new AbortError());
 
