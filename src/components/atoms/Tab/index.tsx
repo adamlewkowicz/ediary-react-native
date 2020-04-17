@@ -1,37 +1,52 @@
 import React, { useState, ReactNode, useRef, useEffect } from 'react';
 import { Dimensions, ScrollView } from 'react-native';
-import { TabView, SceneMap, SceneRendererProps } from 'react-native-tab-view';
+import { TabView, SceneRendererProps } from 'react-native-tab-view';
 import styled from 'styled-components/native';
 import { TabButton } from './TabButton';
 import { Text } from '../Text';
 
-interface TabContainerProps<T> {
-  routes?: { [key: string]: () => JSX.Element }
-  routeNames: T[]
-  activeIndex: number
-  onIndexChange: (index: number) => void
-  renderScene: (props: { route: { key: T }}) => ReactNode
+interface TabContainerProps<T, X extends { [key: string]: ReactNode }> {
+  routes: X
+  activeRoute: keyof X
+  onRouteChange?: (route: keyof X) => void
 }
 
-export const TabContainer = <T extends string>(props: TabContainerProps<T>) => {
+export const TabContainer = <T extends string, X extends { [key: string]: ReactNode }>(props: TabContainerProps<T, X>) => {
   const [routes] = useState(() => 
-    props.routeNames.map(routeName => ({ key: routeName }))
+    Object
+      .keys(props.routes)
+      .map((routeName: keyof X) => ({ key: routeName }))
+  );
+  const routeIndexMap = Object.fromEntries(
+    Object
+      .keys(props.routes)
+      .map((routeName, index) => [routeName, index])
   );
   const scrollViewRef = useRef<ScrollView>(null);
 
+  const activeIndex = routeIndexMap[props.activeRoute];
+
+  const renderScene = () => props.routes[props.activeRoute];
+
+  const handleIndexChange = (index: number) => {
+    const result = routes.find((_, routeIndex) => routeIndex === index);
+
+    if (result) {
+      props.onRouteChange?.(result.key);
+    }
+  }
+
   useEffect(() => {
     const handleScroll = () => {
-      if (props.activeIndex === routes.length - 1) {
+      if (activeIndex === routes.length - 1) {
         scrollViewRef.current?.scrollToEnd();
-      } else if (props.activeIndex === 0) {
+      } else if (activeIndex === 0) {
         scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
       }
     }
 
     handleScroll();
-  }, [props.activeIndex]);
-
-
+  }, [activeIndex]);
 
   const renderTabBar = (_props: SceneRendererProps) => {
     return (
@@ -48,7 +63,7 @@ export const TabContainer = <T extends string>(props: TabContainerProps<T>) => {
               onPress={() => {
                 _props.jumpTo(route.key);
               }}
-              isActive={index === props.activeIndex}
+              isActive={index === activeIndex}
             />
           ))}
         </ScrollView>
@@ -58,9 +73,9 @@ export const TabContainer = <T extends string>(props: TabContainerProps<T>) => {
 
   return (
     <TabView
-      navigationState={{ index: props.activeIndex, routes }}
-      renderScene={props.renderScene}
-      onIndexChange={props.onIndexChange}
+      navigationState={{ index: activeIndex, routes: routes }}
+      renderScene={renderScene}
+      onIndexChange={handleIndexChange}
       initialLayout={initialLayout}
       renderTabBar={renderTabBar}
       swipeEnabled

@@ -14,6 +14,7 @@ import { ProductFindFavoritesList, ProductFindFavoritesListMemo } from '../../co
 import { ProductFindCreatedList, ProductFindCreatedListMemo } from '../../components/molecules/ProductFindCreatedList';
 import { ProductFindRecentList, ProductFindRecentListMemo } from '../../components/molecules/ProductFindRecentList';
 import { ProductFindSearchList, ProductFindSearchListMemo } from '../../components/molecules/ProductFindSearchList';
+import { ValueOf } from '../../types';
 
 export const ProductFindScreen = () => {
   const { params, navigate, navigation } = useNavigationData<ProductFindScreenNavigationProps>();
@@ -25,7 +26,7 @@ export const ProductFindScreen = () => {
     debouncedProductName,
     ...productSearch
   } = useProductsSearch();
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [activeRoute, setActiveRoute] = useState<TabRoute>(TAB_ROUTE.recent);
 
   const showProductHistory = !state.isDirty;
 
@@ -82,8 +83,8 @@ export const ProductFindScreen = () => {
   });
 
   const handleInputFocus = (): void => {
-    if (activeTabIndex !== 3) {
-      setActiveTabIndex(3);
+    if (activeRoute !== TAB_ROUTE.search) {
+      setActiveRoute(TAB_ROUTE.search);
     }
   }
 
@@ -105,34 +106,34 @@ export const ProductFindScreen = () => {
         />
       </SearchContainer>
       <TabContainer
-        activeIndex={activeTabIndex}
-        onIndexChange={setActiveTabIndex}
-        routeNames={['Ostatnio używane', 'Ulubione', 'Utworzone', 'Znalezione']}
-        renderScene={({ route }) => {
-          switch(route.key) {
-            case 'Ostatnio używane': return (
-              <ProductFindRecentListMemo onSelect={handleProductSelect} />
-            );
-            case 'Ulubione': return (
-              <ProductFindFavoritesListMemo onSelect={handleProductSelect} />
-            );
-            case 'Utworzone': return (
-              <ProductFindCreatedListMemo onSelect={handleProductSelect} />
-            );
-            case 'Znalezione': return (
-              <ProductFindSearchListMemo
-                onSelect={handleProductSelect}
-                state={state}
-                isConnected={isConnected}
-                productSearchName={debouncedProductName}
-              />
-            );
-          }
+        activeRoute={activeRoute}
+        onRouteChange={setActiveRoute}
+        routes={{
+          [TAB_ROUTE.recent]: <ProductFindRecentListMemo onSelect={handleProductSelect} />,
+          [TAB_ROUTE.favorite]: <ProductFindFavoritesListMemo onSelect={handleProductSelect} />,
+          [TAB_ROUTE.created]: <ProductFindCreatedListMemo onSelect={handleProductSelect} />,
+          [TAB_ROUTE.search]: (
+            <ProductFindSearchListMemo
+              onSelect={handleProductSelect}
+              state={state}
+              isConnected={isConnected}
+              productSearchName={debouncedProductName}
+            />
+          )
         }}
       />
     </Container>
   );
 }
+
+const TAB_ROUTE = {
+  recent: 'Ostatnio używane',
+  favorite: 'Ulubione',
+  created: 'Utworzone',
+  search: 'Znalezione',
+} as const;
+
+type TabRoute = ValueOf<typeof TAB_ROUTE>;
 
 const SearchContainer = styled.View`
   flex-direction: row;
