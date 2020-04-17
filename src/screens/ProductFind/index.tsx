@@ -81,11 +81,10 @@ export const ProductFindScreen = () => {
     )
   });
 
-  const handleChangeText = (text: string) => {
-    // if (activeTabIndex !== 1) {
-    //   setActiveTabIndex(1);
-    // }
-    productSearch.updateProductName(text);
+  const handleInputFocus = (): void => {
+    if (activeTabIndex !== 3) {
+      setActiveTabIndex(3);
+    }
   }
 
   return (
@@ -96,8 +95,9 @@ export const ProductFindScreen = () => {
           placeholder="Nazwa produktu"
           accessibilityLabel="Nazwa szukanego produktu"
           accessibilityRole="search"
-          onChangeText={handleChangeText}
+          onChangeText={productSearch.updateProductName}
           isLoading={state.isSearching}
+          onFocus={handleInputFocus}
         />
         <BarcodeButton
           accessibilityLabel="Zeskanuj kod kreskowy"
