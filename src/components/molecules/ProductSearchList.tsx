@@ -1,35 +1,30 @@
 import React from 'react';
 import { ProductList, ProductListProps } from './ProductList';
-import { ProductsSearchState } from '../../hooks';
+import { useProductSearch } from '../../hooks';
 import styled from 'styled-components/native';
 import { TextPrimary } from '../atoms';
+import { BarcodeId } from '../../types';
 
 interface ProductSearchListProps extends Omit<ProductListProps, 'data'> {
-  state: ProductsSearchState
-  isConnected: boolean
-  productSearchName: string
+  productName: string
+  barcode: null | BarcodeId
 }
 
 export const ProductSearchList = (props: ProductSearchListProps) => {
-  function RenderInfo() {
-    const {
-      isSearching,
-      products,
-      barcode,
-      isTyping,
-    } = props.state;
-    const isBusy = isSearching || isTyping;
-    const isProductsNotEmpty = products.length > 0;
-    const isProductNameNotTouched = props.productSearchName.length === 0;
-    const hasNotBeenSearching = isProductNameNotTouched && barcode === null;
+  const { isConnected, isLoading, products } = useProductSearch(props.productName, props.barcode);
 
-    if (isBusy || isProductsNotEmpty || hasNotBeenSearching) {
+  function RenderInfo() {
+    const isProductsNotEmpty = products.length > 0;
+    const isProductNameNotTouched = props.productName.length === 0;
+    const hasNotBeenSearching = isProductNameNotTouched && props.barcode === null;
+
+    if (isLoading || isProductsNotEmpty || hasNotBeenSearching) {
       return null;
     }
 
-    const notFoundMessage = barcode !== null
-      ? `z podanym kodem kreskowym: ${barcode}`
-      : `o podanej nazwie: ${props.productSearchName}`;
+    const notFoundMessage = props.barcode !== null
+      ? `z podanym kodem kreskowym: ${props.barcode}`
+      : `o podanej nazwie: ${props.productName}`;
 
     return (
       <>
@@ -37,7 +32,7 @@ export const ProductSearchList = (props: ProductSearchListProps) => {
           Nie znaleziono produktów {'\n'}
           {notFoundMessage}
         </NotFoundInfo>
-        {!props.isConnected && (
+        {!isConnected && (
           <NotFoundInfo>
             Aby wyszukiwać więcej produktów, przejdź do trybu online.
           </NotFoundInfo>
@@ -48,11 +43,11 @@ export const ProductSearchList = (props: ProductSearchListProps) => {
 
   return (
     <>
-      <RenderInfo />    
+      <RenderInfo />
       <ProductList
-        data={props.state.products}
+        data={products}
+        isLoading={isLoading}
         onProductSelect={props.onProductSelect}
-        isLoading={props.state.isSearching}
       />
     </>
   );

@@ -1,7 +1,10 @@
 import React, { useRef, useCallback, useState } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
-import { useProductsSearch, useNavigationData } from '../../hooks';
+import {
+  useNavigationData,
+  useDebouncedValue,
+} from '../../hooks';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import {
   ButtonSecondaryArrow,
@@ -14,38 +17,35 @@ import {
 } from '../../components';
 import * as Utils from '../../utils';
 import { TabContainer } from '../../components/atoms/Tab';
-import { ValueOf } from '../../types';
+import { ValueOf, BarcodeId } from '../../types';
 
-export const ProductScreen = () => {
+export const ProductFindScreen = () => {
   const { params, navigate, navigation } = useNavigationData<ProductFindScreenNavigationProps>();
   const hasBeenPressed = useRef(false);
-  const {
-    state,
-    isConnected,
-    debouncedProductName,
-    ...productSearch
-  } = useProductsSearch();
   const [activeRoute, setActiveRoute] = useState<TabRoute>(TAB_ROUTE.recent);
-
-  const showProductHistory = !state.isDirty;
+  const [barcode, setBarcode] = useState<BarcodeId | null>(null);
+  const [productName, setProductName] = useState('');
+  const [createdProduct, setCreatedProduct] = useState<Product | null>(null);
+  const productNameDebounced = useDebouncedValue(productName);
 
   function handleBarcodeScan() {
     navigate('BarcodeScan', {
       onBarcodeDetected(barcode) {
         navigate('ProductFind');
-        productSearch.updateBarcode(barcode);
+
+        setBarcode(barcode);
       }
     });
   }
 
   function handleProductCreate() {
     navigate('ProductCreate', {
-      barcode: state.barcode ?? undefined,
-      name: debouncedProductName.trim(),
+      barcode: barcode ?? undefined,
+      name: productNameDebounced.trim(),
       onProductCreated(createdProduct) {
-        productSearch.addProduct(createdProduct);
-
+        // productSearch.addProduct(createdProduct);
         navigate('ProductFind');
+        setActiveRoute(TAB_ROUTE.created);
 
         Utils.toastCenter(`Utworzono produkt "${createdProduct.name}"`);
         // productHistory.addProduct(createdProduct);
@@ -91,12 +91,11 @@ export const ProductScreen = () => {
     <Container>
       <SearchContainer>
         <InputSearcher
-          value={state.productName}
+          value={productName}
+          onChangeText={setProductName}
           placeholder="Nazwa produktu"
           accessibilityLabel="Nazwa szukanego produktu"
           accessibilityRole="search"
-          onChangeText={productSearch.updateProductName}
-          isLoading={state.isSearching}
           onFocus={handleInputFocus}
         />
         <BarcodeButton
@@ -114,9 +113,8 @@ export const ProductScreen = () => {
           [TAB_ROUTE.search]: (
             <ProductSearchListMemo
               onProductSelect={handleProductSelect}
-              state={state}
-              isConnected={isConnected}
-              productSearchName={debouncedProductName}
+              productName={productNameDebounced}
+              barcode={barcode}
             />
           )
         }}

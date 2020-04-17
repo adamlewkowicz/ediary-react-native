@@ -16,3 +16,5 @@ export * from './use-is-favorite-product';
 export * from './use-products-created';
 export * from './use-is-mounted-debounced';
 export * from './use-async-data';
+export * from './use-is-connected';
+export * from './use-product-search';
