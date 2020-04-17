@@ -2,13 +2,12 @@ import React from 'react';
 import { ProductFindList, ProductFindListProps } from './ProductFindList';
 import { ProductsSearchState } from '../../hooks';
 import styled from 'styled-components/native';
-import { TextPrimary, H3 } from '../atoms';
+import { TextPrimary } from '../atoms';
 
-interface ProductFindSearchListProps {
+interface ProductFindSearchListProps extends Omit<ProductFindListProps, 'data'> {
   state: ProductsSearchState
   isConnected: boolean
   productSearchName: string
-  onSelect: ProductFindListProps['onSelect']
 }
 
 export const ProductFindSearchList = (props: ProductFindSearchListProps) => {
@@ -52,7 +51,7 @@ export const ProductFindSearchList = (props: ProductFindSearchListProps) => {
       <RenderInfo />    
       <ProductFindList
         data={props.state.products}
-        onSelect={props.onSelect}
+        onProductSelect={props.onProductSelect}
         isLoading={props.state.isSearching}
       />
     </>

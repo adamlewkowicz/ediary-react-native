@@ -2,9 +2,7 @@ import React from 'react';
 import { ProductFindList, ProductFindListProps } from './ProductFindList';
 import { useProductFavorites } from '../../hooks';
 
-interface ProductFindFavoritesListProps {
-  onSelect: ProductFindListProps['onSelect']
-}
+interface ProductFindFavoritesListProps extends Omit<ProductFindListProps, 'data'> {}
 
 export const ProductFindFavoritesList = (props: ProductFindFavoritesListProps) => {
   const productFavorites = useProductFavorites();
@@ -15,7 +13,7 @@ export const ProductFindFavoritesList = (props: ProductFindFavoritesListProps) =
       data={productFavorites.data}
       isLoading={productFavorites.isLoading}
       onRefresh={productFavorites.refresh}
-      onSelect={props.onSelect}
+      onProductSelect={props.onProductSelect}
     />
   );
 }

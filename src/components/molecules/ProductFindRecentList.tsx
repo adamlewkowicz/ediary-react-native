@@ -2,9 +2,7 @@ import React from 'react';
 import { ProductFindList, ProductFindListProps } from './ProductFindList';
 import { useProductHistory } from '../../hooks';
 
-interface ProductFindRecentListProps {
-  onSelect: ProductFindListProps['onSelect']
-}
+interface ProductFindRecentListProps extends Omit<ProductFindListProps, 'data'> {}
 
 export const ProductFindRecentList = (props: ProductFindRecentListProps) => {
   console.log('render ProductFindRecentList')
@@ -13,7 +11,7 @@ export const ProductFindRecentList = (props: ProductFindRecentListProps) => {
   return (
     <ProductFindList
       data={productHistory.data}
-      onSelect={props.onSelect}
+      onProductSelect={props.onProductSelect}
       isLoading={!productHistory.isAfterFirstFetch}
     />
   );

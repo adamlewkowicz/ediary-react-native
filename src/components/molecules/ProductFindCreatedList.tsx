@@ -2,9 +2,7 @@ import React from 'react';
 import { useProductsCreated } from '../../hooks';
 import { ProductFindList, ProductFindListProps } from './ProductFindList';
 
-interface ProductFindCreatedListProps {
-  onSelect: ProductFindListProps['onSelect']
-}
+interface ProductFindCreatedListProps extends Omit<ProductFindListProps, 'data'> {}
 
 export const ProductFindCreatedList = (props: ProductFindCreatedListProps) => {
   const productsCreated = useProductsCreated();
@@ -13,7 +11,7 @@ export const ProductFindCreatedList = (props: ProductFindCreatedListProps) => {
   return (
     <ProductFindList
       data={productsCreated.data}
-      onSelect={props.onSelect}
+      onProductSelect={props.onProductSelect}
       isLoading={productsCreated.isLoading}
       onRefresh={productsCreated.refresh}
     />

@@ -4,7 +4,7 @@ import { useAsyncData } from './use-async-data';
 
 export const useProductFavorites = () => {
   const userId = useUserId();
-  const result = useAsyncData<IProduct[]>({
+  const result = useAsyncData<Product[]>({
     initialValue: [],
     asyncTask: () => Product.findFavorites(userId),
   });

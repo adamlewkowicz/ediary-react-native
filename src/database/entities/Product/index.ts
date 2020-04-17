@@ -303,7 +303,7 @@ export class Product extends GenericEntity {
 
 }
 
-export type IProduct = EntityType<Product, 'portion'>;
+export type IProduct = EntityType<Product>;
 export type IProductRequired = EntityRequired<IProduct,
   | 'name'
   | 'macro'

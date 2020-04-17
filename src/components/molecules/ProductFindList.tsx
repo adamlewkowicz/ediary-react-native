@@ -6,9 +6,9 @@ import { ItemSeparator } from '../atoms';
 import { ProductSearchItemMemo } from './ProductSearchItem';
 import styled from 'styled-components/native';
 
-export interface ProductFindListProps<T = ProductOrNormalizedProduct | IProduct> {
+export interface ProductFindListProps<T = ProductOrNormalizedProduct> {
   data: T[]
-  onSelect: (product: T) => void
+  onProductSelect: (product: T) => void
   isLoading?: boolean
   onRefresh?: () => void
 }
@@ -22,7 +22,7 @@ export const ProductFindList = (props: ProductFindListProps) => (
     renderItem={({ item: product }) => (
       <ProductSearchItemMemo
         product={product}
-        onSelect={props.onSelect}
+        onSelect={props.onProductSelect}
       />
     )}
     refreshControl={(

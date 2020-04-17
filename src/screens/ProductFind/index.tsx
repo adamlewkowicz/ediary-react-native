@@ -1,6 +1,6 @@
 import React, { useRef, useCallback, useState } from 'react';
 import styled from 'styled-components/native';
-import { Product, ProductOrNormalizedProduct } from '../../database/entities';
+import { Product, ProductOrNormalizedProduct, IProduct } from '../../database/entities';
 import { useProductsSearch, useNavigationData, useProductHistory } from '../../hooks';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import {
@@ -109,12 +109,12 @@ export const ProductFindScreen = () => {
         activeRoute={activeRoute}
         onRouteChange={setActiveRoute}
         routes={{
-          [TAB_ROUTE.recent]: <ProductFindRecentListMemo onSelect={handleProductSelect} />,
-          [TAB_ROUTE.favorite]: <ProductFindFavoritesListMemo onSelect={handleProductSelect} />,
-          [TAB_ROUTE.created]: <ProductFindCreatedListMemo onSelect={handleProductSelect} />,
+          [TAB_ROUTE.recent]: <ProductFindRecentListMemo onProductSelect={handleProductSelect} />,
+          [TAB_ROUTE.favorite]: <ProductFindFavoritesListMemo onProductSelect={handleProductSelect} />,
+          [TAB_ROUTE.created]: <ProductFindCreatedListMemo onProductSelect={handleProductSelect} />,
           [TAB_ROUTE.search]: (
             <ProductFindSearchListMemo
-              onSelect={handleProductSelect}
+              onProductSelect={handleProductSelect}
               state={state}
               isConnected={isConnected}
               productSearchName={debouncedProductName}
