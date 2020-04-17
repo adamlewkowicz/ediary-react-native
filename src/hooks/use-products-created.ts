@@ -28,22 +28,6 @@ export const useProductsCreated = () => {
   }
 
   useEffect(() => {
-    const fetchProductsCreated = async () => {
-      try {
-        setIsLoading(true);
-
-        const products = await Product.find({ where: { userId }});
-  
-        setProducts(products);
-        
-      } catch(error) {
-        setAppError(error);
-
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
     if (isMountedDebounced) {
       fetchProductsCreated();
     }

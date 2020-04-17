@@ -1,37 +1,39 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { Selectors, Actions } from '../store';
-import { useCallback } from 'react';
-import { IProduct } from '../database/entities';
+import { useState, useEffect } from 'react';
+import { IProduct, Product } from '../database/entities';
 import { useUserId } from './use-user-id';
-import { ProductId } from '../types';
+import { useAppError } from './use-app-error';
 
 export const useProductFavorites = () => {
-  const { products } = useSelector(Selectors.getProductFavorites);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshRequested, setIsRefreshRequested] = useState(true);
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const { setAppError } = useAppError();
   const userId = useUserId();
-  const dispatch = useDispatch();
 
-  const addProduct = useCallback((product: IProduct) => {
-    dispatch(
-      Actions.productFavoritesAdd(product, userId)
-    );
-  }, [dispatch, userId]);
+  const refresh = () => setIsRefreshRequested(true);
 
-  const deleteProduct = useCallback((productId: ProductId) => {
-    dispatch(
-      Actions.productFavoritesDelete(productId, userId)
-    );
-  }, [dispatch, userId]);
+  useEffect(() => {
+    const fetchProductFavorites = async () => {
+      try {
+        setIsLoading(true);
 
-  const toggleProduct = useCallback((product: IProduct) => {
-    dispatch(
-      Actions.productFavoritesToggle(product, userId)
-    );
-  }, [dispatch, userId]);
+        const result = await Product.findFavorites(userId);
 
-  return {
-    data: products,
-    add: addProduct,
-    delete: deleteProduct,
-    toggle: toggleProduct,
-  };
+        setProducts(result);
+
+      } catch(error) {
+        setAppError(error);
+
+      } finally {
+        setIsLoading(false);
+        setIsRefreshRequested(false);
+      }
+    }
+
+    if (isRefreshRequested) {
+      fetchProductFavorites();
+    }
+  }, [userId, isRefreshRequested]);
+  
+  return { data: products, isLoading, refresh };
 }

@@ -284,6 +284,19 @@ export class Product extends GenericEntity {
     return savedProducts;
   }
 
+  static async findFavorites(userId: UserId): Promise<Product[]> {
+    const productFavorites = await ProductFavorite.find({
+      where: { userId },
+      relations: ['product']
+    });
+
+    const products = productFavorites.flatMap(productFavorite =>
+      productFavorite.product ? [productFavorite.product] : []
+    );
+
+    return products;
+  }
+
 }
 
 export type IProduct = EntityType<Product, 'portion'>;

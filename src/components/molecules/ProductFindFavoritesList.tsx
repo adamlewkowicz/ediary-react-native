@@ -13,6 +13,8 @@ export const ProductFindFavoritesList = (props: ProductFindFavoritesListProps) =
   return (
     <ProductFindList
       data={productFavorites.data}
+      isLoading={productFavorites.isLoading}
+      onRefresh={productFavorites.refresh}
       onSelect={props.onSelect}
     />
   );
