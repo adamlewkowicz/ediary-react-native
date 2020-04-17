@@ -1,19 +1,19 @@
 
 import React from 'react';
 import { FlatList, RefreshControl as NativeRefreshControl } from 'react-native';
-import { ProductOrNormalizedProduct, IProduct } from '../../database/entities';
+import { ProductOrNormalizedProduct } from '../../database/entities';
 import { ItemSeparator } from '../atoms';
 import { ProductSearchItemMemo } from './ProductSearchItem';
 import styled from 'styled-components/native';
 
-export interface ProductFindListProps<T = ProductOrNormalizedProduct> {
+export interface ProductListProps<T = ProductOrNormalizedProduct> {
   data: T[]
   onProductSelect: (product: T) => void
   isLoading?: boolean
   onRefresh?: () => void
 }
 
-export const ProductFindList = (props: ProductFindListProps) => (
+export const ProductList = (props: ProductListProps) => (
   <FlatList
     data={props.data}
     keyExtractor={productKeyExtractor}

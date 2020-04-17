@@ -1,16 +1,16 @@
 import React from 'react';
-import { ProductFindList, ProductFindListProps } from './ProductFindList';
+import { ProductList, ProductListProps } from './ProductList';
 import { ProductsSearchState } from '../../hooks';
 import styled from 'styled-components/native';
 import { TextPrimary } from '../atoms';
 
-interface ProductFindSearchListProps extends Omit<ProductFindListProps, 'data'> {
+interface ProductSearchListProps extends Omit<ProductListProps, 'data'> {
   state: ProductsSearchState
   isConnected: boolean
   productSearchName: string
 }
 
-export const ProductFindSearchList = (props: ProductFindSearchListProps) => {
+export const ProductSearchList = (props: ProductSearchListProps) => {
   function RenderInfo() {
     const {
       isSearching,
@@ -49,7 +49,7 @@ export const ProductFindSearchList = (props: ProductFindSearchListProps) => {
   return (
     <>
       <RenderInfo />    
-      <ProductFindList
+      <ProductList
         data={props.state.products}
         onProductSelect={props.onProductSelect}
         isLoading={props.state.isSearching}
@@ -64,4 +64,4 @@ const NotFoundInfo = styled(TextPrimary)`
   padding: ${props => props.theme.spacing.largeHorizontal};
 `
 
-export const ProductFindSearchListMemo = React.memo(ProductFindSearchList);
+export const ProductSearchListMemo = React.memo(ProductSearchList);
