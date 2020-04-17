@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useProductsCreated } from '../../hooks';
 import { ProductList, ProductListProps } from './ProductList';
+import { Product } from '../../database/entities';
 
-interface ProductCreatedListProps extends Omit<ProductListProps, 'data'> {}
+interface ProductCreatedListProps extends Omit<ProductListProps, 'data'> {
+  createdProduct: Product | null
+}
 
 const ProductCreatedList = (props: ProductCreatedListProps) => {
   const productsCreated = useProductsCreated();
-  console.log('render ProductCreatedList')
+
+  useEffect(() => {
+    if (props.createdProduct !== null) {
+      productsCreated.refresh();
+    }
+  }, [props.createdProduct]);
 
   return (
     <ProductList

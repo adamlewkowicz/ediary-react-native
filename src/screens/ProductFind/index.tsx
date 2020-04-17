@@ -43,8 +43,8 @@ export const ProductFindScreen = () => {
       barcode: barcode ?? undefined,
       name: productNameDebounced.trim(),
       onProductCreated(createdProduct) {
-        // productSearch.addProduct(createdProduct);
         navigate('ProductFind');
+        setCreatedProduct(createdProduct);
         setActiveRoute(TAB_ROUTE.created);
 
         Utils.toastCenter(`Utworzono produkt "${createdProduct.name}"`);
@@ -107,9 +107,18 @@ export const ProductFindScreen = () => {
         activeRoute={activeRoute}
         onRouteChange={setActiveRoute}
         routes={{
-          [TAB_ROUTE.recent]: <ProductRecentListMemo onProductSelect={handleProductSelect} />,
-          [TAB_ROUTE.favorite]: <ProductFavoritesListMemo onProductSelect={handleProductSelect} />,
-          [TAB_ROUTE.created]: <ProductCreatedListMemo onProductSelect={handleProductSelect} />,
+          [TAB_ROUTE.recent]: (
+            <ProductRecentListMemo onProductSelect={handleProductSelect} />
+          ),
+          [TAB_ROUTE.favorite]: (
+            <ProductFavoritesListMemo onProductSelect={handleProductSelect} />
+          ),
+          [TAB_ROUTE.created]: (
+            <ProductCreatedListMemo
+              onProductSelect={handleProductSelect}
+              createdProduct={createdProduct}
+            />
+          ),
           [TAB_ROUTE.search]: (
             <ProductSearchListMemo
               onProductSelect={handleProductSelect}
