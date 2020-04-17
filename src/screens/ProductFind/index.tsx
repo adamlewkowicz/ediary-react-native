@@ -1,24 +1,23 @@
 import React, { useRef, useCallback, useState } from 'react';
 import styled from 'styled-components/native';
-import { Product, ProductOrNormalizedProduct, IProduct } from '../../database/entities';
-import { useProductsSearch, useNavigationData, useProductHistory } from '../../hooks';
+import { Product, ProductOrNormalizedProduct } from '../../database/entities';
+import { useProductsSearch, useNavigationData } from '../../hooks';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import {
   ButtonSecondaryArrow,
   InputSearcher,
   BarcodeButton,
+  ProductRecentListMemo,
+  ProductFavoritesListMemo,
+  ProductCreatedListMemo,
+  ProductSearchListMemo,
 } from '../../components';
 import * as Utils from '../../utils';
 import { TabContainer } from '../../components/atoms/Tab';
-import { ProductFindFavoritesList, ProductFindFavoritesListMemo } from '../../components/molecules/ProductFindFavoritesList';
-import { ProductFindCreatedList, ProductFindCreatedListMemo } from '../../components/molecules/ProductFindCreatedList';
-import { ProductFindRecentList, ProductFindRecentListMemo } from '../../components/molecules/ProductFindRecentList';
-import { ProductFindSearchList, ProductFindSearchListMemo } from '../../components/molecules/ProductFindSearchList';
 import { ValueOf } from '../../types';
 
-export const ProductFindScreen = () => {
+export const ProductScreen = () => {
   const { params, navigate, navigation } = useNavigationData<ProductFindScreenNavigationProps>();
-  // const productHistory = useProductHistory();
   const hasBeenPressed = useRef(false);
   const {
     state,
@@ -109,11 +108,11 @@ export const ProductFindScreen = () => {
         activeRoute={activeRoute}
         onRouteChange={setActiveRoute}
         routes={{
-          [TAB_ROUTE.recent]: <ProductFindRecentListMemo onProductSelect={handleProductSelect} />,
-          [TAB_ROUTE.favorite]: <ProductFindFavoritesListMemo onProductSelect={handleProductSelect} />,
-          [TAB_ROUTE.created]: <ProductFindCreatedListMemo onProductSelect={handleProductSelect} />,
+          [TAB_ROUTE.recent]: <ProductRecentListMemo onProductSelect={handleProductSelect} />,
+          [TAB_ROUTE.favorite]: <ProductFavoritesListMemo onProductSelect={handleProductSelect} />,
+          [TAB_ROUTE.created]: <ProductCreatedListMemo onProductSelect={handleProductSelect} />,
           [TAB_ROUTE.search]: (
-            <ProductFindSearchListMemo
+            <ProductSearchListMemo
               onProductSelect={handleProductSelect}
               state={state}
               isConnected={isConnected}
