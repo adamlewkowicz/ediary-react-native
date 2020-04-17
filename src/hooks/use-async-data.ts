@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAppError } from './use-app-error';
 
-export const useAsyncTask = <T>(
-  initialValue: T,
-  promise: () => Promise<T>
-) => {
+export const useAsyncData = <T>(options: {
+  initialValue: T
+  asyncTask: () => Promise<T>
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshRequested, setIsRefreshRequested] = useState(true);
-  const [data, setData] = useState<T>(initialValue);
+  const [data, setData] = useState<T>(options.initialValue);
   const { setAppError } = useAppError();
 
   const refresh = useCallback(() => setIsRefreshRequested(true), []);
@@ -17,7 +17,7 @@ export const useAsyncTask = <T>(
       try {
         setIsLoading(true);
 
-        const result = await promise();
+        const result = await options.asyncTask();
 
         setData(result);
 

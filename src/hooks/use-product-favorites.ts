@@ -1,13 +1,13 @@
 import { IProduct, Product } from '../database/entities';
 import { useUserId } from './use-user-id';
-import { useAsyncTask } from './use-async-task';
+import { useAsyncData } from './use-async-data';
 
 export const useProductFavorites = () => {
   const userId = useUserId();
-  const result = useAsyncTask<IProduct[]>(
-    [],
-    () => Product.findFavorites(userId)
-  );
+  const result = useAsyncData<IProduct[]>({
+    initialValue: [],
+    asyncTask: () => Product.findFavorites(userId),
+  });
 
   return result;
 }
