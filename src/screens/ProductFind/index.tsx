@@ -21,7 +21,7 @@ import { ValueOf, BarcodeId } from '../../types';
 
 export const ProductFindScreen = () => {
   const { params, navigate, navigation } = useNavigationData<ProductFindScreenNavigationProps>();
-  const hasBeenPressed = useRef(false);
+  const hasProductBeenSelected = useRef(false);
   const [activeRoute, setActiveRoute] = useState<TabRoute>(TAB_ROUTE.recent);
   const [barcode, setBarcode] = useState<BarcodeId | null>(null);
   const [productName, setProductName] = useState('');
@@ -41,7 +41,7 @@ export const ProductFindScreen = () => {
   function handleProductCreate() {
     navigate('ProductCreate', {
       barcode: barcode ?? undefined,
-      name: productNameDebounced.trim(),
+      name: productName.trim(),
       onProductCreated(createdProduct) {
         navigate('ProductFind');
         setCreatedProduct(createdProduct);
@@ -53,19 +53,21 @@ export const ProductFindScreen = () => {
     });
   }
 
-  const handleProductSelect = useCallback((product: ProductOrNormalizedProduct) => {
-    if (params.onProductSelected && !hasBeenPressed.current) {
-      hasBeenPressed.current = true;
-
-      const productResolver: ProductResolver = async () => {
-        if (product instanceof Product) {
-          return product;
-        }
-        return Product.saveNormalizedProduct(product);
-      }
-
-      params.onProductSelected(productResolver, product.portion);
+  const handleProductSelect = useCallback((product: ProductOrNormalizedProduct): void => {
+    if (!params.onProductSelected || hasProductBeenSelected.current) {
+      return;
     }
+
+    hasProductBeenSelected.current = true;
+
+    const productResolver: ProductResolver = async () => {
+      if (product instanceof Product) {
+        return product;
+      }
+      return Product.saveNormalizedProduct(product);
+    }
+
+    params.onProductSelected(productResolver, product.portion);
   }, [params.onProductSelected]);
 
   navigation.setOptions({
