@@ -1,9 +1,10 @@
-import React, { useRef, useCallback, useState } from 'react';
+import React, { useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
 import {
   useNavigationData,
   useDebouncedValue,
+  useNativeState,
 } from '../../hooks';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import {
@@ -21,14 +22,23 @@ import { ValueOf, BarcodeId } from '../../types';
 import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
 
+interface ProductFindScreenState {
+  activeRoute: TabRoute
+  productName: string
+  barcode: BarcodeId | null
+  createdProduct: Product | null
+}
+
 export const ProductFindScreen = () => {
   const { params, navigate, navigation } = useNavigationData<ProductFindScreenNavigationProps>();
+  const [state, setState] = useNativeState<ProductFindScreenState>({
+    activeRoute: TAB_ROUTE.recent,
+    productName: '',
+    barcode: null,
+    createdProduct: null,
+  });
   const hasProductBeenSelected = useRef(false);
-  const [activeRoute, setActiveRoute] = useState<TabRoute>(TAB_ROUTE.recent);
-  const [barcode, setBarcode] = useState<BarcodeId | null>(null);
-  const [productName, setProductName] = useState('');
-  const [createdProduct, setCreatedProduct] = useState<Product | null>(null);
-  const productNameDebounced = useDebouncedValue(productName);
+  const productNameDebounced = useDebouncedValue(state.productName);
   const dispatch = useDispatch();
 
   function handleBarcodeScan() {
@@ -36,22 +46,25 @@ export const ProductFindScreen = () => {
       onBarcodeDetected(barcode) {
         navigate('ProductFind');
 
-        setBarcode(barcode);
+        setState({ barcode });
       }
     });
   }
 
   function handleProductCreate() {
     navigate('ProductCreate', {
-      barcode: barcode ?? undefined,
-      name: productName.trim(),
+      barcode: state.barcode ?? undefined,
+      name: state.productName.trim(),
       onProductCreated(createdProduct) {
         navigate('ProductFind');
-        setCreatedProduct(createdProduct);
-        setActiveRoute(TAB_ROUTE.created);
+
+        setState({
+          activeRoute: TAB_ROUTE.created,
+          createdProduct,
+        });
 
         Utils.toastCenter(`Utworzono produkt "${createdProduct.name}"`);
-        
+
         dispatch(Actions.productHistoryAdded([createdProduct]));
       }
     });
@@ -88,8 +101,8 @@ export const ProductFindScreen = () => {
   });
 
   const handleInputFocus = (): void => {
-    if (activeRoute !== TAB_ROUTE.search) {
-      setActiveRoute(TAB_ROUTE.search);
+    if (state.activeRoute !== TAB_ROUTE.search) {
+      setState({ activeRoute: TAB_ROUTE.search });
     }
   }
 
@@ -97,8 +110,8 @@ export const ProductFindScreen = () => {
     <Container>
       <SearchContainer>
         <InputSearcher
-          value={productName}
-          onChangeText={setProductName}
+          value={state.productName}
+          onChangeText={productName => setState({ productName })}
           placeholder="Nazwa produktu"
           accessibilityLabel="Nazwa szukanego produktu"
           accessibilityRole="search"
@@ -110,8 +123,8 @@ export const ProductFindScreen = () => {
         />
       </SearchContainer>
       <TabContainer
-        activeRoute={activeRoute}
-        onRouteChange={setActiveRoute}
+        activeRoute={state.activeRoute}
+        onRouteChange={activeRoute => setState({ activeRoute })}
         routes={{
           [TAB_ROUTE.recent]: (
             <ProductRecentListMemo onProductSelect={handleProductSelect} />
@@ -122,14 +135,14 @@ export const ProductFindScreen = () => {
           [TAB_ROUTE.created]: (
             <ProductCreatedListMemo
               onProductSelect={handleProductSelect}
-              createdProduct={createdProduct}
+              createdProduct={state.createdProduct}
             />
           ),
           [TAB_ROUTE.search]: (
             <ProductSearchListMemo
               onProductSelect={handleProductSelect}
               productName={productNameDebounced}
-              barcode={barcode}
+              barcode={state.barcode}
             />
           )
         }}
