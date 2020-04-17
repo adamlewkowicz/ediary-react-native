@@ -1,41 +1,13 @@
-import { useEffect, useState } from 'react'
 import { Product, IProduct } from '../database/entities';
 import { useUserId } from './use-user-id';
-import { useAppError } from './use-app-error';
-import { useIsMountedDebounced } from './use-is-mounted-debounced';
+import { useAsyncTask } from './use-async-task';
 
 export const useProductsCreated = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const isMountedDebounced = useIsMountedDebounced();
   const userId = useUserId();
-  const { setAppError } = useAppError();
+  const result = useAsyncTask<IProduct[]>(
+    [],
+    () => Product.findOwn(userId)
+  );
 
-  const fetchProductsCreated = async () => {
-    try {
-      setIsLoading(true);
-
-      const products = await Product.find({ where: { userId }});
-
-      setProducts(products);
-      
-    } catch(error) {
-      setAppError(error);
-
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    if (isMountedDebounced) {
-      fetchProductsCreated();
-    }
-  }, [userId, isMountedDebounced]);
-
-  return {
-    isLoading,
-    data: products,
-    refresh: fetchProductsCreated
-  };
+  return result;
 }

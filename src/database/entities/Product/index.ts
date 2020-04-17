@@ -297,6 +297,10 @@ export class Product extends GenericEntity {
     return products;
   }
 
+  static findOwn(userId: UserId): Promise<Product[]> {
+    return Product.find({ where: { userId }});
+  }
+
 }
 
 export type IProduct = EntityType<Product, 'portion'>;
