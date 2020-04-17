@@ -18,6 +18,8 @@ import {
 import * as Utils from '../../utils';
 import { TabContainer } from '../../components/atoms/Tab';
 import { ValueOf, BarcodeId } from '../../types';
+import { useDispatch } from 'react-redux';
+import { Actions } from '../../store';
 
 export const ProductFindScreen = () => {
   const { params, navigate, navigation } = useNavigationData<ProductFindScreenNavigationProps>();
@@ -27,6 +29,7 @@ export const ProductFindScreen = () => {
   const [productName, setProductName] = useState('');
   const [createdProduct, setCreatedProduct] = useState<Product | null>(null);
   const productNameDebounced = useDebouncedValue(productName);
+  const dispatch = useDispatch();
 
   function handleBarcodeScan() {
     navigate('BarcodeScan', {
@@ -48,7 +51,8 @@ export const ProductFindScreen = () => {
         setActiveRoute(TAB_ROUTE.created);
 
         Utils.toastCenter(`Utworzono produkt "${createdProduct.name}"`);
-        // productHistory.addProduct(createdProduct);
+        
+        dispatch(Actions.productHistoryAdded([createdProduct]));
       }
     });
   }
