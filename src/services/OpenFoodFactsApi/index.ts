@@ -16,9 +16,15 @@ export class OpenFoodFactsApi {
     this.URL = `https://${this.country}.openfoodfacts.org`;
   }
 
-  async findByBarcode(barcode: BarcodeId): Promise<NormalizedProduct | null> {
+  async findByBarcode(
+    barcode: BarcodeId,
+    controller?: AbortController
+  ): Promise<NormalizedProduct | null> {
+
     const response = await Utils.fetchify<ApiTypes.Response>(
-      `${this.URL}/api/v0/product/${barcode}.json`
+      `${this.URL}/api/v0/product/${barcode}.json`,
+      {},
+      controller
     );
 
     const normalizedProduct = this.normalizeProduct(response);
