@@ -53,18 +53,34 @@ export class OpenFoodFactsApi {
 
   private normalizeMacro(nutriments: ApiTypes.Product['nutriments']): MacroElements {
     const carbs = nutriments['carbohydrates_100g'];
+    const sugars = nutriments['sugars_100g'];
     const prots = nutriments['proteins_100g'];
     const fats = nutriments['fat_100g'];
-    const kcal = nutriments['energy-kcal_100g'];
+    const fattyAcids = nutriments['saturated-fat_100g'];
+    const kcal = nutriments['energy_value'];
 
     const macro = {
       carbs,
+      sugars,
       prots,
       fats,
+      fattyAcids,
       kcal,
     }
 
     return macro;
+  }
+
+  private normalizePortion(servingSize: string): number {
+    if (servingSize.includes(GRAM_UNIT)) {
+      const portionWithoutUnit = servingSize.replace(GRAM_UNIT, '');
+      const normalizedPortion = Number(portionWithoutUnit);
+
+      if (Utils.isANumber(normalizedPortion)) {
+        return normalizedPortion; 
+      }
+    }
+    return Product.defaultPortion;
   }
 
   private normalizePortions(portion: number): NormalizedProduct['portions'] {
@@ -80,17 +96,6 @@ export class OpenFoodFactsApi {
     return [];
   }
   
-  private normalizePortion(servingSize: string): number {
-    if (servingSize.includes(GRAM_UNIT)) {
-      const portionWithoutUnit = servingSize.replace(GRAM_UNIT, '');
-      const normalizedPortion = Number(portionWithoutUnit);
-
-      if (Utils.isANumber(normalizedPortion)) {
-        return normalizedPortion; 
-      }
-    }
-    return Product.defaultPortion;
-  }
 }
 
 const GRAM_UNIT = 'g';

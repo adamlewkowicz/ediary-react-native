@@ -21,14 +21,14 @@ export interface Product {
     'proteins_unit':	"g"
     'sugars_100g':	1
     'sugars_unit':	"g"
-    'energy-kcal_value':	746
-    'energy_value':	746
+    'energy-kcal_value':	number
+    'energy_value':	number
     'salt_serving':	0.002
     'energy-kcal':	3121
     'proteins_100g':	1
     'saturated-fat_value':	54
     'salt_value':	0.02
-    'saturated-fat_100g':	54
+    'saturated-fat_100g':	number
     'sugars':	1
     'energy_unit':	"kcal"
     'energy-kcal_unit':	"kcal"
@@ -47,8 +47,8 @@ export interface Product {
     'salt_unit':	"g"
     'energy-kcal_serving':	312
     'saturated-fat_unit':	"g"
-    'fat_value':	82
-    'fat_100g':	82
+    'fat_value':	number
+    'fat_100g':	number
     'sugars_serving':	0.1
     'salt':	0.02
     'fat_serving':	8.2
