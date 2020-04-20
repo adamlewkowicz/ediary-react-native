@@ -2,12 +2,17 @@ import { BarcodeId, NormalizedProduct, MacroElements } from '../../types';
 import * as Utils from '../../utils';
 import * as ApiTypes from './types';
 import { Product } from '../../database/entities';
+import { name as appName } from '../../../app.json';
+import { version as appVersion } from '../../../package.json';
+import { Platform } from 'react-native';
 
 export class OpenFoodFactsApi {
   
   URL: string
 
   NOT_FOUND_STATUS = 0;
+
+  userAgent = `UserAgent: ${appName} - ${Platform.OS} - Version ${appVersion} -`;
 
   country: ApiTypes.Country;
   
@@ -23,13 +28,28 @@ export class OpenFoodFactsApi {
 
     const response = await Utils.fetchify<ApiTypes.Response>(
       `${this.URL}/api/v0/product/${barcode}.json`,
-      {},
+      { headers: { 'User-Agent': this.userAgent }},
       controller
     );
 
     const normalizedProduct = this.normalizeProduct(response);
 
     return normalizedProduct;
+  }
+
+  async findByCategory(
+    category: string,
+    page = 1,
+    controller?: AbortController
+  ): Promise<unknown> {
+
+    const response = await Utils.fetchify(
+      `${this.URL}/category/${category}/${page}.json`,
+      { headers: { 'User-Agent': this.userAgent }},
+      controller
+    );
+
+    return response;
   }
 
   private normalizeProduct(response: ApiTypes.Response): NormalizedProduct | null {
