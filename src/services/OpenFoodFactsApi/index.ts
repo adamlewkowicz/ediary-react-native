@@ -8,9 +8,12 @@ export class OpenFoodFactsApi {
   URL: string
 
   NOT_FOUND_STATUS = 0;
+
+  country: ApiTypes.Country;
   
-  constructor(country = 'world') {
-    this.URL = `https://${country}.openfoodfacts.org`;
+  constructor(country: ApiTypes.Country = 'pl') {
+    this.country = country;
+    this.URL = `https://${this.country}.openfoodfacts.org`;
   }
 
   async findByBarcode(barcode: BarcodeId): Promise<NormalizedProduct | null> {
@@ -39,6 +42,7 @@ export class OpenFoodFactsApi {
     const macro = this.normalizeMacro(product.nutriments);
     const portion = this.normalizePortion(product.serving_size);
     const portions = this.normalizePortions(portion);
+    const images = this.normalizeImages(product);
 
     const normalizedProduct: NormalizedProduct = {
       _id,
@@ -46,6 +50,7 @@ export class OpenFoodFactsApi {
       macro,
       portion,
       portions,
+      images,
     }
 
     return normalizedProduct;
@@ -94,6 +99,22 @@ export class OpenFoodFactsApi {
       ]
     }
     return [];
+  }
+
+  private normalizeImages(product: ApiTypes.Product): string[] {
+    const imageUrls: string[] = [];
+    const baseImageUrl = product.image_url;
+    const nutritionImageUrl = product.image_nutrition_url;
+
+    if (baseImageUrl) {
+      imageUrls.push(baseImageUrl);
+    }
+
+    if (nutritionImageUrl) {
+      imageUrls.push(nutritionImageUrl);
+    }
+
+    return imageUrls;
   }
   
 }

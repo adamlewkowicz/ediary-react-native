@@ -3,6 +3,10 @@
 exports[`OpenFoodFactsApi findByBarcode() should normalize product correctly 📝 1`] = `
 Object {
   "_id": "5900512300108",
+  "images": Array [
+    "https://static.openfoodfacts.org/images/products/590/051/230/0108/front_en.3.400.jpg",
+    "https://static.openfoodfacts.org/images/products/590/051/230/0108/nutrition_pl.22.400.jpg",
+  ],
   "macro": Object {
     "carbs": 1,
     "fats": 82,

@@ -10,6 +10,8 @@ export type Response = ({
 export interface Product {
   _id: string
   product_name_pl?: string
+  image_url?: string
+  image_nutrition_url?: string
   /** 10g */
   serving_size: string
   nutriments: {
@@ -62,5 +64,17 @@ export interface Product {
     'fruits-vegetables-nuts-estimate-from-ingredients_100g':	0
     'proteins_serving':	0.1
   }
-
+  selected_images: {
+    nutrition: {
+      pl?: string
+    }
+    display: {
+      pl?: string
+    }
+    front: {
+      pl?: string
+    }
+  }
 }
+
+export type Country = 'pl' | 'world'
