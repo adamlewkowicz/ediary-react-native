@@ -26,13 +26,20 @@ export class OpenFoodFactsApi {
     controller?: AbortController
   ): Promise<NormalizedProduct | null> {
 
-    const response = await Utils.fetchify<ApiTypes.Response>(
+    const response = await Utils.fetchify<ApiTypes.ResponseEan>(
       `${this.URL}/api/v0/product/${barcode}.json`,
       { headers: { 'User-Agent': this.userAgent }},
       controller
     );
 
-    const normalizedProduct = this.normalizeProduct(response);
+    if (
+      response.status === this.NOT_FOUND_STATUS ||
+      response.product == null
+    ) {
+      return null;
+    }
+
+    const normalizedProduct = this.normalizeProduct(response.product);
 
     return normalizedProduct;
   }
@@ -52,13 +59,7 @@ export class OpenFoodFactsApi {
     return response;
   }
 
-  private normalizeProduct(response: ApiTypes.Response): NormalizedProduct | null {
-    const { status, product } = response;
-
-    if (status === this.NOT_FOUND_STATUS || product == null) {
-      return null;
-    }
-
+  private normalizeProduct(product: ApiTypes.Product): NormalizedProduct | null {
     if (product.product_name_pl == null) {
       return null;
     }
