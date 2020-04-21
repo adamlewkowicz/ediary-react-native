@@ -7,7 +7,7 @@ import {
 import { APP_ROUTE } from './consts';
 import { DiarySummaryScreen } from '../screens';
 import { THEME } from '../common/theme';
-import { ReportIcon, DishIcon } from '../components';
+import { BottomTab } from '../components';
 import { NutritionStack } from './NutritionStack';
 import { RouteProp } from '@react-navigation/native';
 
@@ -22,12 +22,7 @@ export const MainStack = () => (
   <Tab.Navigator
     initialRouteName={APP_ROUTE.NutritionStack}
     tabBarOptions={TAB_BAR_OPTIONS}
-    screenOptions={({ route }) => ({
-      tabBarIcon: ({ color }) => {
-        const Icon = TAB_BAR_ICON[route.name];
-        return <Icon fill={color} {...TAB_ICON_SIZE} />;
-      },
-    })}
+    tabBar={BottomTab}
   >
     <Tab.Screen
       name={APP_ROUTE.NutritionStack}
@@ -45,20 +40,11 @@ export const MainStack = () => (
 const TAB_BAR_OPTIONS: BottomTabBarOptions = {
   showIcon: true,
   activeTintColor: THEME.color.highlight,
+  inactiveTintColor: THEME.color.quaternary,
   labelStyle: {
     fontSize: THEME.fontSizeRaw.small,
     fontFamily: THEME.fontWeight.regular,
   },
-};
-
-const TAB_ICON_SIZE = {
-  width: 22,
-  height: 22,
-};
-
-const TAB_BAR_ICON = {
-  [APP_ROUTE.NutritionStack]: DishIcon,
-  [APP_ROUTE.DiarySummary]: ReportIcon,
 };
 
 export type NutritionStackNavigationProp = ScreenProps<'NutritionStack'>;
