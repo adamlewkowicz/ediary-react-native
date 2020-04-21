@@ -20,3 +20,7 @@ const eachValueEquals = <V>(
 }
 
 export const eachValueEqualsZero = eachValueEquals(0);
+
+export const isNil = <T>(value: T | Nil): value is Nil => value == null;
+
+type Nil = null | undefined;

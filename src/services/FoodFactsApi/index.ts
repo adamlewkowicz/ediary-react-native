@@ -5,6 +5,7 @@ import { name as appName } from '../../../app.json';
 import { version as appVersion } from '../../../package.json';
 import { Platform } from 'react-native';
 import { OpenFoodFactsApi, ApiTypes } from 'openfoodfac-ts';
+import { Nutriments } from 'openfoodfac-ts/src/OpenFoodFactsApi/types/product';
 
 export class FoodFactsApi {
 
@@ -50,13 +51,23 @@ export class FoodFactsApi {
   }
 
   private normalizeProduct(product: ApiTypes.Product): NormalizedProduct | null {
-    if (product.product_name_pl == null) {
+    if (
+      Utils.isNil(product._id) ||
+      Utils.isNil(product.product_name_pl) ||
+      Utils.isNil(product.product_name) ||
+      Utils.isNil(product.nutriments)
+    ) {
+      return null;
+    }
+
+    const macro = this.normalizeMacro(product.nutriments);
+
+    if (macro === null) {
       return null;
     }
 
     const _id = product._id;
     const name = product.product_name_pl;
-    const macro = this.normalizeMacro(product.nutriments);
     const portion = this.normalizePortion(product.serving_size);
     const portions = this.normalizePortions(portion);
     const images = this.normalizeImages(product);
@@ -73,7 +84,7 @@ export class FoodFactsApi {
     return normalizedProduct;
   }
 
-  private normalizeMacro(nutriments: ApiTypes.Product['nutriments']): MacroElements {
+  private normalizeMacro(nutriments: Nutriments): MacroElements | null {
     const carbs = nutriments['carbohydrates_100g'];
     const sugars = nutriments['sugars_100g'];
     const prots = nutriments['proteins_100g'];
@@ -81,20 +92,28 @@ export class FoodFactsApi {
     const fattyAcids = nutriments['saturated-fat_100g'];
     const kcal = nutriments['energy_value'];
 
+    const baseMacro = { carbs, prots, fats, kcal };
+
+    if (
+      Utils.isNil(baseMacro.carbs) ||
+      Utils.isNil(baseMacro.prots) ||
+      Utils.isNil(baseMacro.fats) ||
+      Utils.isNil(baseMacro.kcal)
+    ) {
+      return null;
+    }
+
     const macro = {
-      carbs,
+      ...baseMacro as MacroElements,
       sugars,
-      prots,
-      fats,
       fattyAcids,
-      kcal,
     }
 
     return macro;
   }
 
-  private normalizePortion(servingSize: string): number {
-    if (servingSize.includes(GRAM_UNIT)) {
+  private normalizePortion(servingSize?: string): number {
+    if (servingSize?.includes(GRAM_UNIT)) {
       const portionWithoutUnit = servingSize.replace(GRAM_UNIT, '');
       const normalizedPortion = Number(portionWithoutUnit);
 
