@@ -9,7 +9,18 @@ export class ProductSearchApi {
   private ilewazyApi = new IlewazyApi();
   private foodFactsApi = new FoodFactsApi();
 
-  findByName = this.ilewazyApi.findByName.bind(this.ilewazyApi);
+  async findByName(
+    name: string,
+    controller?: AbortController
+  ): Promise<NormalizedProduct[]> {
+    const foodFactsProducts = await this.foodFactsApi.findByName(name, 1, controller);
+
+    if (foodFactsProducts.length) {
+      return foodFactsProducts;
+    }
+    
+    return this.ilewazyApi.findByName(name, controller);
+  }
 
   async findByBarcode(
     barcode: BarcodeId,

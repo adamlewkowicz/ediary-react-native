@@ -30,6 +30,25 @@ export class FoodFactsApi {
     return this.normalizeProduct(product);
   }
 
+  async findByName(
+    name: string,
+    page = 1,
+    controller?: AbortController
+  ): Promise<NormalizedProduct[]> {
+
+    const { products } = await this.openFoodFactsApi.findProductsBySearchTerm(
+      name,
+      page,
+      controller
+    );
+
+    return this.normalizeProducts(products);
+  }
+
+  private normalizeProducts(products: ApiTypes.Product[]): NormalizedProduct[] {
+    return products.flatMap(product => this.normalizeProduct(product) ?? []);
+  }
+
   private normalizeProduct(product: ApiTypes.Product): NormalizedProduct | null {
     if (product.product_name_pl == null) {
       return null;
