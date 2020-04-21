@@ -1,11 +1,11 @@
-import { OpenFoodFactsApi } from '.';
+import { FoodFactsApi } from '.';
 import openFoodFactsResponseMock from './__mocks__/response.json';
 
-describe('OpenFoodFactsApi', () => {
+describe('FoodFactsApi', () => {
 
-  let openFoodFactsApi: OpenFoodFactsApi;
+  let foodFactsApi: FoodFactsApi;
 
-  beforeEach(() => openFoodFactsApi = new OpenFoodFactsApi());
+  beforeEach(() => foodFactsApi = new FoodFactsApi());
 
   describe('findByBarcode()', () => {
 
@@ -18,7 +18,7 @@ describe('OpenFoodFactsApi', () => {
         json: async () => openFoodFactsResponseMock
       }));
     
-      const normalizedProduct = await openFoodFactsApi.findByBarcode(barcode);
+      const normalizedProduct = await foodFactsApi.findByBarcode(barcode);
     
       expect(fetchMock).toHaveBeenCalledTimes(1);
       expect(normalizedProduct).toMatchSnapshot();

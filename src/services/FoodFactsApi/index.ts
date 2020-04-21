@@ -1,62 +1,33 @@
 import { BarcodeId, NormalizedProduct, MacroElements } from '../../types';
 import * as Utils from '../../utils';
-import * as ApiTypes from './types';
 import { Product } from '../../database/entities';
 import { name as appName } from '../../../app.json';
 import { version as appVersion } from '../../../package.json';
 import { Platform } from 'react-native';
+import { OpenFoodFactsApi, ApiTypes } from 'openfoodfac-ts';
 
-export class OpenFoodFactsApi {
+export class FoodFactsApi {
+
+  openFoodFactsApi = new OpenFoodFactsApi({
+    country: 'pl',
+    userAgent: `UserAgent: ${appName} - ${Platform.OS} - Version ${appVersion} -`
+  });
   
-  URL: string
-
-  NOT_FOUND_STATUS = 0;
-
-  userAgent = `UserAgent: ${appName} - ${Platform.OS} - Version ${appVersion} -`;
-
-  country: ApiTypes.Country;
-  
-  constructor(country: ApiTypes.Country = 'pl') {
-    this.country = country;
-    this.URL = `https://${this.country}.openfoodfacts.org`;
-  }
-
   async findByBarcode(
     barcode: BarcodeId,
     controller?: AbortController
   ): Promise<NormalizedProduct | null> {
 
-    const response = await Utils.fetchify<ApiTypes.ResponseEan>(
-      `${this.URL}/api/v0/product/${barcode}.json`,
-      { headers: { 'User-Agent': this.userAgent }},
+    const product = await this.openFoodFactsApi.findProductByBarcode(
+      barcode as string,
       controller
     );
 
-    if (
-      response.status === this.NOT_FOUND_STATUS ||
-      response.product == null
-    ) {
+    if (product === null) {
       return null;
     }
 
-    const normalizedProduct = this.normalizeProduct(response.product);
-
-    return normalizedProduct;
-  }
-
-  async findByCategory(
-    category: string,
-    page = 1,
-    controller?: AbortController
-  ): Promise<unknown> {
-
-    const response = await Utils.fetchify(
-      `${this.URL}/category/${category}/${page}.json`,
-      { headers: { 'User-Agent': this.userAgent }},
-      controller
-    );
-
-    return response;
+    return this.normalizeProduct(product);
   }
 
   private normalizeProduct(product: ApiTypes.Product): NormalizedProduct | null {

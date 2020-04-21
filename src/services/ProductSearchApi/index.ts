@@ -1,13 +1,13 @@
 import { FriscoApi } from '../FriscoApi';
 import { IlewazyApi } from '../IlewazyApi';
-import { OpenFoodFactsApi } from '../OpenFoodFactsApi';
+import { FoodFactsApi } from '../FoodFactsApi';
 import { BarcodeId, NormalizedProduct } from '../../types';
 
 export class ProductSearchApi {
   
   private friscoApi = new FriscoApi();
   private ilewazyApi = new IlewazyApi();
-  private openFoodFactsApi = new OpenFoodFactsApi();
+  private foodFactsApi = new FoodFactsApi();
 
   findByName = this.ilewazyApi.findByName.bind(this.ilewazyApi);
 
@@ -15,7 +15,7 @@ export class ProductSearchApi {
     barcode: BarcodeId,
     controller?: AbortController
   ): Promise<NormalizedProduct[]> {
-    const foodFactsProduct = await this.openFoodFactsApi.findByBarcode(
+    const foodFactsProduct = await this.foodFactsApi.findByBarcode(
       barcode,
       controller,
     );
