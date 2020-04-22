@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { TouchableOpacityProps } from 'react-native';
 import { SvgProps } from 'react-native-svg';
 
-interface ButtonBottomTabProps extends TouchableOpacityProps {
+interface BottomTabBarButtonProps extends TouchableOpacityProps {
   Icon: React.ComponentClass<SvgProps, any>
   size?: number
   fill?: string
@@ -12,7 +12,7 @@ interface ButtonBottomTabProps extends TouchableOpacityProps {
   color?: string
 }
 
-export const ButtonBottomTab = (props: ButtonBottomTabProps) => {
+export const BottomTabBarButton = (props: BottomTabBarButtonProps) => {
   const { size = 24, fill, Icon, color, ...btnProps } = props;
 
   return (

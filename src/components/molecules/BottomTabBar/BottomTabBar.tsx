@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { BottomTabBarProps as NativeBottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { ButtonBottomTab } from '../atoms';
+import { BottomTabBarButton } from './BottomTabBarButton';
 import CutleryIcon from '../../../assets/img/cutlery.svg';
 import NoteIcon from '../../../assets/img/note.svg';
-import { APP_ROUTE } from '../../navigation/consts';
+import { APP_ROUTE } from '../../../navigation/consts';
 
-interface BottomTabProps extends NativeBottomTabBarProps {}
+interface BottomTabBarProps extends NativeBottomTabBarProps {}
 
-export const BottomTab = (props: BottomTabProps) => {
+export const BottomTabBar = (props: BottomTabBarProps) => {
 
   const tabBarButtons = props.state.routes.map((route, index) => {
     const { options } = props.descriptors[route.key];
@@ -39,7 +39,7 @@ export const BottomTab = (props: BottomTabProps) => {
     const color = isFocused ? props.activeTintColor : props.inactiveTintColor;
 
     return (
-      <ButtonBottomTab
+      <BottomTabBarButton
         key={route.key}
         accessibilityLabel={options.tabBarAccessibilityLabel}
         onPress={handleOnPress}

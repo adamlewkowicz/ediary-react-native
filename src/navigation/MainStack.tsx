@@ -7,7 +7,7 @@ import {
 import { APP_ROUTE } from './consts';
 import { DiarySummaryScreen } from '../screens';
 import { THEME } from '../common/theme';
-import { BottomTab } from '../components';
+import { BottomTabBar } from '../components';
 import { NutritionStack } from './NutritionStack';
 import { RouteProp } from '@react-navigation/native';
 
@@ -22,7 +22,7 @@ export const MainStack = () => (
   <Tab.Navigator
     initialRouteName={APP_ROUTE.NutritionStack}
     tabBarOptions={TAB_BAR_OPTIONS}
-    tabBar={BottomTab}
+    tabBar={BottomTabBar}
   >
     <Tab.Screen
       name={APP_ROUTE.NutritionStack}

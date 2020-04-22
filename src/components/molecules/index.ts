@@ -9,4 +9,4 @@ export * from './ProductSearchItem';
 export * from './ChartsMacroNeeds';
 export * from './DateChanger';
 export * from './DiarySummaryChart';
-export * from './BottomTab';
+export * from './BottomTabBar';
