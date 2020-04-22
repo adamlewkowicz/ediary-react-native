@@ -11,7 +11,7 @@ export * from './use-animated-spring';
 export * from './use-app-error';
 export * from './use-steps';
 export * from './use-product-favorites';
-export * from './use-is-favorite-product';
+export * from './use-product-favorite';
 export * from './use-products-created';
 export * from './use-async-data';
 export * from './use-is-connected';

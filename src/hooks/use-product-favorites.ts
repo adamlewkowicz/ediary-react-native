@@ -1,4 +1,4 @@
-import { IProduct, Product } from '../database/entities';
+import { Product } from '../database/entities';
 import { useUserId } from './use-user-id';
 import { useAsyncData } from './use-async-data';
 

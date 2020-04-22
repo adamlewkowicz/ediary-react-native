@@ -14,8 +14,7 @@ import {
 import {
   useNavigationData,
   useCalculatedMacro,
-  useProductFavorites,
-  useIsFavoriteProduct,
+  useProductFavorite,
 } from '../../hooks';
 import { ProductPreviewScreenNavigationProps } from '../../navigation';
 import { Product } from '../../database/entities';
@@ -31,8 +30,7 @@ export const ProductPreviewScreen = () => {
     macroPercentages,
     macroNeeds,
   } = useCalculatedMacro(params.product.macro, quantity);
-  const productFavorites = useProductFavorites();
-  const isFavorite = useIsFavoriteProduct(params.product.id);
+  const productFavorite = useProductFavorite(params.product.id);
 
   const isEditMode = params.onProductQuantityUpdated != null;
 
@@ -67,10 +65,10 @@ export const ProductPreviewScreen = () => {
   return (
     <Container>
       <ProductName>{params.product.name}</ProductName>
-      {isFavorite !== null && (
+      {productFavorite.isFavorite !== null && (
         <ButtonFavorite
-          isFavorite={isFavorite}
-          onFavoriteToggle={() => productFavorites.toggle(params.product)}
+          isFavorite={productFavorite.isFavorite}
+          onToggle={productFavorite.toggle}
         />
       )}
       <Section title="Ilość produktu">
