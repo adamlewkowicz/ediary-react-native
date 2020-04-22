@@ -196,7 +196,7 @@ export class Product extends GenericEntity {
   
   static async findAndFetchByNameLike(
     name: string,
-    controller?: AbortController,
+    controller: AbortController,
   ): Promise<ProductOrNormalizedProduct[]> {
 
     const savedProducts = await Product.findByNameLike(name);
