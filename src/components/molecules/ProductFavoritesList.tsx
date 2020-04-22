@@ -6,7 +6,6 @@ interface ProductFavoritesListProps extends Omit<ProductListProps, 'data'> {}
 
 export const ProductFavoritesList = (props: ProductFavoritesListProps) => {
   const productFavorites = useProductFavorites();
-  console.log('render ProductFavoritesList')
 
   return (
     <ProductList

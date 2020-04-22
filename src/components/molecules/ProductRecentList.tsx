@@ -5,14 +5,13 @@ import { useProductHistory } from '../../hooks';
 interface ProductRecentListProps extends Omit<ProductListProps, 'data'> {}
 
 export const ProductRecentList = (props: ProductRecentListProps) => {
-  console.log('render ProductRecentList')
   const productHistory = useProductHistory();
 
   return (
     <ProductList
       data={productHistory.data}
       onProductSelect={props.onProductSelect}
-      isLoading={!productHistory.isAfterFirstFetch}
+      isLoading={productHistory.isLoading}
     />
   );
 }
