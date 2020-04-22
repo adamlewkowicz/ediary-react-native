@@ -24,8 +24,7 @@ export const ButtonBottomTab = (props: ButtonBottomTabProps) => {
       <Icon
         width={size}
         height={size}
-        fill="#000"
-        currentColor="#000"
+        fill={color}
       />
     </Container>
   );

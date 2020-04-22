@@ -40,7 +40,7 @@ export const MainStack = () => (
 const TAB_BAR_OPTIONS: BottomTabBarOptions = {
   showIcon: true,
   activeTintColor: THEME.color.highlight,
-  inactiveTintColor: THEME.color.quaternary,
+  inactiveTintColor: THEME.color.tertiary,
   labelStyle: {
     fontSize: THEME.fontSizeRaw.small,
     fontFamily: THEME.fontWeight.regular,
