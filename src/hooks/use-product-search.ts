@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useIsConnected } from './use-is-connected';
 import { useAppError } from './use-app-error';
 import { ProductOrNormalizedProduct, Product } from '../database/entities';
 import { BarcodeId } from '../types';
+import { useNativeState } from './use-native-state';
 
 interface ProductSearchState {
   products: ProductOrNormalizedProduct[]
@@ -10,7 +11,7 @@ interface ProductSearchState {
 }
 
 export const useProductSearch = (productName: string, barcode: null | BarcodeId) => {
-  const [state, setState] = useState<ProductSearchState>({
+  const [state, setState] = useNativeState<ProductSearchState>({
     products: [],
     isLoading: false,
   });
@@ -29,16 +30,16 @@ export const useProductSearch = (productName: string, barcode: null | BarcodeId)
 
     const findProductsByName = async (): Promise<void> => {
       try {
-        setState(state => ({ ...state, isLoading: true }));
+        setState({ isLoading: true });
 
         const products = await Product[methodName](trimmedName, controller);
     
-        // TODO: Prevent dispatching products if connection is lost and payload is empty
+        // TODO: Prevent adding products if connection is lost and payload is empty
         setState({ products, isLoading: false });
 
       } catch(error) {
         setAppError(error, ERROR_MESSAGE);
-        setState(state => ({ ...state, isLoading: false }));
+        setState({ isLoading: false });
       }
     }
 
@@ -57,7 +58,7 @@ export const useProductSearch = (productName: string, barcode: null | BarcodeId)
 
     const findProductsByBarcode = async (): Promise<void> => {
       try {
-        setState(state => ({ ...state, isLoading: true }));
+        setState({ isLoading: true });
 
         const products = await Product[methodName](barcode, controller);
 
@@ -65,7 +66,7 @@ export const useProductSearch = (productName: string, barcode: null | BarcodeId)
 
       } catch (error) {
         setAppError(error, ERROR_MESSAGE);
-        setState(state => ({ ...state, isLoading: false }));
+        setState({ isLoading: false });
       }
     }
 
