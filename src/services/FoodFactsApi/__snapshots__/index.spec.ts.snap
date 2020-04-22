@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`OpenFoodFactsApi findByBarcode() should normalize product correctly 📝 1`] = `
+exports[`FoodFactsApi findOneByBarcode() should normalize product correctly 📝 1`] = `
 Object {
   "_id": "5900512300108",
   "images": Array [

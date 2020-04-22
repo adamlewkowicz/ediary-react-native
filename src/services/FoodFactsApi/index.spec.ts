@@ -1,5 +1,5 @@
 import { FoodFactsApi } from '.';
-import openFoodFactsResponseMock from './__mocks__/response.json';
+import findOneByBarcodeResponseMock from 'openfoodfac-ts/src/OpenFoodFactsApi/__mocks__/response.json';
 
 describe('FoodFactsApi', () => {
 
@@ -7,7 +7,7 @@ describe('FoodFactsApi', () => {
 
   beforeEach(() => foodFactsApi = new FoodFactsApi());
 
-  describe('findByBarcode()', () => {
+  describe('findOneByBarcode()', () => {
 
     it('should normalize product correctly 📝', async () => {
       const barcode = '5900512300108';
@@ -15,7 +15,7 @@ describe('FoodFactsApi', () => {
     
       fetchMock.mockImplementationOnce(async () => ({
         ok: true,
-        json: async () => openFoodFactsResponseMock
+        json: async () => findOneByBarcodeResponseMock
       }));
     
       const normalizedProduct = await foodFactsApi.findOneByBarcode(barcode);
