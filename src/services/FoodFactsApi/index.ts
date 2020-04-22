@@ -5,7 +5,6 @@ import { name as appName } from '../../../app.json';
 import { version as appVersion } from '../../../package.json';
 import { Platform } from 'react-native';
 import { OpenFoodFactsApi, ApiTypes } from 'openfoodfac-ts';
-import { Nutriments } from 'openfoodfac-ts/src/OpenFoodFactsApi/types/product';
 
 export class FoodFactsApi {
 
@@ -84,7 +83,7 @@ export class FoodFactsApi {
     return normalizedProduct;
   }
 
-  private normalizeMacro(nutriments: Nutriments): MacroElements | null {
+  private normalizeMacro(nutriments: ApiTypes.Nutriments): MacroElements | null {
     const carbs = nutriments['carbohydrates_100g'];
     const sugars = nutriments['sugars_100g'];
     const prots = nutriments['proteins_100g'];
