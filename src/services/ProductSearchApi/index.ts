@@ -1,12 +1,25 @@
-import { FriscoApi } from '../FriscoApi';
 import { IlewazyApi } from '../IlewazyApi';
+import { FoodFactsApi } from '../FoodFactsApi';
+import { NormalizedProduct } from '../../types';
 
 export class ProductSearchApi {
   
-  private friscoApi = new FriscoApi();
   private ilewazyApi = new IlewazyApi();
+  private foodFactsApi = new FoodFactsApi();
 
-  findByBarcode = this.friscoApi.findByBarcode.bind(this.friscoApi);
-  findByName = this.ilewazyApi.findByName.bind(this.ilewazyApi);
+  async findByName(
+    name: string,
+    controller?: AbortController
+  ): Promise<NormalizedProduct[]> {
+    const foodFactsProducts = await this.foodFactsApi.findByName(name, 1, controller);
 
+    if (foodFactsProducts.length) {
+      return foodFactsProducts;
+    }
+    
+    return this.ilewazyApi.findByName(name, controller);
+  }
+
+  findOneByBarcode = this.foodFactsApi.findOneByBarcode.bind(this.foodFactsApi);
+  
 }

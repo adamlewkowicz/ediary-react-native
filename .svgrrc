@@ -1,4 +1,7 @@
 {
-  "svgo": false,
-  "native": true
+
+  "replaceAttrValues": {
+    "#3F71FF": "{props.fill}",
+    "currentColor": "{props.fill}"
+  }
 }
