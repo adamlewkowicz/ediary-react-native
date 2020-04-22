@@ -262,15 +262,17 @@ export class Product extends GenericEntity {
     controller: AbortController
   ): Promise<Product[]> {
     const savedProducts = await this.findByBarcode(barcode);
-    const hasVerifiedProduct = savedProducts.some(product => product.isVerified);
+    const hasNoSavedProducts = !savedProducts.length;
+    const hasNoVerifiedProduct = !savedProducts.some(product => product.isVerified);
     
-    if (!savedProducts.length || !hasVerifiedProduct) {
-      const fetchedProducts = await Product.searchApi.findByBarcode(barcode, controller);
-      const createdProducts = await Utils.mapAsyncSequence(
-        fetchedProducts, Product.saveNormalizedProduct
-      );
+    if (hasNoSavedProducts || hasNoVerifiedProduct) {
+      const fetchedProduct = await Product.searchApi.findOneByBarcode(barcode, controller);
 
-      return [ ...createdProducts, ...savedProducts];
+      if (fetchedProduct) {
+        const createdProduct = await Product.saveNormalizedProduct(fetchedProduct);
+
+        return [createdProduct, ...savedProducts];
+      }
     }
 
     return savedProducts;
