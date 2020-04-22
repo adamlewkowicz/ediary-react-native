@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { BottomTabBarProps as NativeBottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { BottomTabBarButton } from './BottomTabBarButton';
-import CutleryIcon from '../../../assets/img/cutlery.svg';
-import NoteIcon from '../../../assets/img/note.svg';
+import CutleryIcon from '../../../../assets/img/cutlery.svg';
+import NoteIcon from '../../../../assets/img/note.svg';
 import { APP_ROUTE } from '../../../navigation/consts';
 
 interface BottomTabBarProps extends NativeBottomTabBarProps {}
