@@ -18,9 +18,8 @@ export const useProductFavorite = (productId: ProductId) => {
   }, [productId, userId]);
 
   const toggle = useCallback(async () => {
-    const result = await ProductFavorite.toggleFavorite(productId, userId);
-
-    setIsFavorite(result.isFavorite);
+    setIsFavorite(isFavorite => !isFavorite);
+    await ProductFavorite.toggleFavorite(productId, userId);
   }, [productId, userId]);
 
   return { isFavorite, toggle };

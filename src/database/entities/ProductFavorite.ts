@@ -52,10 +52,11 @@ export class ProductFavorite extends GenericEntity {
     productId: ProductId,
     userId: UserId
   ): Promise<{ isFavorite: boolean }> {
-    const result = await ProductFavorite.delete({ productId, userId });
-    const hasBeenDeleted = result.affected === 1;
+    const productFavorite = await ProductFavorite.findOne({ productId, userId });
 
-    if (hasBeenDeleted) {
+    if (productFavorite) {
+      await ProductFavorite.delete({ productId, userId });
+
       return { isFavorite: false };
     }
 

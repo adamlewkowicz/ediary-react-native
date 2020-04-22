@@ -7,7 +7,7 @@ import styled from 'styled-components/native';
 import { THEME } from '../../../common/theme';
 import { SvgGradientDef } from '../Svg';
 import * as Utils from '../../../utils';
-import { useAnimatedSpring } from '../../../hooks';
+import { useAnimatedTiming } from '../../../hooks';
 import { Animated } from 'react-native';
 import { getA11yProgressBarProps } from '../../../utils';
 
@@ -37,7 +37,7 @@ export const ChartCircle = (props: ChartCircleProps) => {
     strokeWidth: width,
   }
 
-  const animatedValue = useAnimatedSpring(percentage);
+  const animatedValue = useAnimatedTiming(percentage);
   const animatedStrokeDashoffset = animatedValue.interpolate({
     inputRange: [0, 100],
     outputRange: [strokeDasharray, 0]

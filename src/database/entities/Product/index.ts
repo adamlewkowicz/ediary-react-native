@@ -7,6 +7,7 @@ import {
   JoinColumn,
   Unique,
   Like,
+  Index,
 } from 'typeorm';
 import { MealProduct, IMealProduct } from '../MealProduct';
 import {

@@ -123,7 +123,7 @@ const SaveProductButton = styled(ButtonPrimary)`
 `
 
 const ProductName = styled(H1)`
-  margin-bottom: ${props => props.theme.spacing.base};
+  margin-bottom: ${props => props.theme.spacing.tiny};
 `
 
 const Calories = styled(H1)`
