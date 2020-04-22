@@ -13,7 +13,7 @@ export class FoodFactsApi {
     userAgent: `UserAgent: ${appName} - ${Platform.OS} - Version ${appVersion} -`
   });
   
-  async findByBarcode(
+  async findOneByBarcode(
     barcode: BarcodeId,
     controller?: AbortController
   ): Promise<NormalizedProduct | null> {

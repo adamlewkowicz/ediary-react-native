@@ -18,7 +18,7 @@ describe('FoodFactsApi', () => {
         json: async () => openFoodFactsResponseMock
       }));
     
-      const normalizedProduct = await foodFactsApi.findByBarcode(barcode);
+      const normalizedProduct = await foodFactsApi.findOneByBarcode(barcode);
     
       expect(fetchMock).toHaveBeenCalledTimes(1);
       expect(normalizedProduct).toMatchSnapshot();

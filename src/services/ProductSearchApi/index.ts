@@ -20,6 +20,6 @@ export class ProductSearchApi {
     return this.ilewazyApi.findByName(name, controller);
   }
 
-  findOneByBarcode = this.foodFactsApi.findByBarcode.bind(this.foodFactsApi);
+  findOneByBarcode = this.foodFactsApi.findOneByBarcode.bind(this.foodFactsApi);
   
 }
