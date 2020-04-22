@@ -289,11 +289,12 @@ export class Product extends GenericEntity {
   static async findFavorites(userId: UserId): Promise<Product[]> {
     const productFavorites = await ProductFavorite.find({
       where: { userId },
-      relations: ['product']
+      relations: ['product'],
+      order: { id: 'DESC' }
     });
 
     const products = productFavorites.flatMap(productFavorite =>
-      productFavorite.product ? [productFavorite.product] : []
+      productFavorite.product ?? []
     );
 
     return products;
