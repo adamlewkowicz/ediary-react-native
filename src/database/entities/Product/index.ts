@@ -7,7 +7,6 @@ import {
   JoinColumn,
   Unique,
   Like,
-  Index,
 } from 'typeorm';
 import { MealProduct, IMealProduct } from '../MealProduct';
 import {
@@ -309,7 +308,7 @@ export class Product extends GenericEntity {
 
 }
 
-export type IProduct = EntityType<Product>;
+export type IProduct = EntityType<Product, 'portion'>;
 export type IProductRequired = EntityRequired<IProduct,
   | 'name'
   | 'macro'
