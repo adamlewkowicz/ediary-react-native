@@ -8,10 +8,12 @@ export const useProductHistory = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isAfterFirstFetch) {
+    const isNotAfterFirstFetch = !isAfterFirstFetch;
+
+    if (isNotAfterFirstFetch) {
       dispatch(Actions.productHistoryLoad());
     }
-  }, [isAfterFirstFetch]);
+  }, [dispatch, isAfterFirstFetch]);
 
   const addProduct = (product: Product): void => {
     dispatch(

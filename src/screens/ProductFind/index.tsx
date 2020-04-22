@@ -18,21 +18,21 @@ import {
 } from '../../components';
 import * as Utils from '../../utils';
 import { TabContainer } from '../../components/atoms/Tab';
-import { ValueOf, BarcodeId } from '../../types';
+import { BarcodeId } from '../../types';
 import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
 
 interface ProductFindScreenState {
-  activeRoute: TabRoute
   productName: string
   barcode: BarcodeId | null
   createdProduct: Product | null
+  activeTabIndex: number
 }
 
 export const ProductFindScreen = () => {
   const { params, navigate, navigation } = useNavigationData<ProductFindScreenNavigationProps>();
   const [state, setState] = useNativeState<ProductFindScreenState>({
-    activeRoute: TAB_ROUTE.recent,
+    activeTabIndex: TAB_INDEX.recent,
     productName: '',
     barcode: null,
     createdProduct: null,
@@ -59,7 +59,7 @@ export const ProductFindScreen = () => {
         navigate('ProductFind');
 
         setState({
-          activeRoute: TAB_ROUTE.created,
+          activeTabIndex: TAB_INDEX.created,
           createdProduct,
         });
 
@@ -101,8 +101,8 @@ export const ProductFindScreen = () => {
   });
 
   const handleInputFocus = (): void => {
-    if (state.activeRoute !== TAB_ROUTE.search) {
-      setState({ activeRoute: TAB_ROUTE.search });
+    if (state.activeTabIndex !== TAB_INDEX.search) {
+      setState({ activeTabIndex: TAB_INDEX.search });
     }
   }
 
@@ -123,42 +123,44 @@ export const ProductFindScreen = () => {
         />
       </SearchContainer>
       <TabContainer
-        activeRoute={state.activeRoute}
-        onRouteChange={activeRoute => setState({ activeRoute })}
-        routes={{
-          [TAB_ROUTE.recent]: (
-            <ProductRecentListMemo onProductSelect={handleProductSelect} />
-          ),
-          [TAB_ROUTE.favorite]: (
-            <ProductFavoritesListMemo onProductSelect={handleProductSelect} />
-          ),
-          [TAB_ROUTE.created]: (
-            <ProductCreatedListMemo
-              onProductSelect={handleProductSelect}
-              createdProduct={state.createdProduct}
-            />
-          ),
-          [TAB_ROUTE.search]: (
-            <ProductSearchListMemo
-              onProductSelect={handleProductSelect}
-              productName={productNameDebounced}
-              barcode={state.barcode}
-            />
-          )
+        activeIndex={state.activeTabIndex}
+        onIndexChange={activeTabIndex => setState({ activeTabIndex })}
+        titles={['Ostatnio używane', 'Ulubione', 'Utworzone', 'Znalezione']}
+        renderScene={props => {
+          switch(props.route.index) {
+            case TAB_INDEX.recent: return (
+              <ProductRecentListMemo onProductSelect={handleProductSelect} />
+            )
+            case TAB_INDEX.favorite: return (
+              <ProductFavoritesListMemo onProductSelect={handleProductSelect} />
+            )
+            case TAB_INDEX.created: return (
+              <ProductCreatedListMemo
+                onProductSelect={handleProductSelect}
+                createdProduct={state.createdProduct}
+              />
+            )
+            case TAB_INDEX.search: return (
+              <ProductSearchListMemo
+                onProductSelect={handleProductSelect}
+                productName={productNameDebounced}
+                barcode={state.barcode}
+              />
+            )
+            default: return null;
+          }
         }}
       />
     </Container>
   );
 }
 
-const TAB_ROUTE = {
-  recent: 'Ostatnio używane',
-  favorite: 'Ulubione',
-  created: 'Utworzone',
-  search: 'Znalezione',
+const TAB_INDEX = {
+  recent: 0,
+  favorite: 1,
+  created: 2,
+  search: 3,
 } as const;
-
-type TabRoute = ValueOf<typeof TAB_ROUTE>;
 
 const SearchContainer = styled.View`
   flex-direction: row;
