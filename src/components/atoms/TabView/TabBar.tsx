@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { SceneRendererProps, Route } from 'react-native-tab-view';
 import { ScrollView } from 'react-native';
-import { TabButton } from './TabButton';
+import { TabBarButton } from './TabBarButton';
 
 interface TabBarProps extends SceneRendererProps {
   routes: Route[]
@@ -31,7 +31,7 @@ export const TabBar = (props: TabBarProps) => {
         horizontal
       >
         {props.routes.map((route, index) => (
-          <TabButton
+          <TabBarButton
             key={route.key}
             title={route.key}
             onPress={() => props.jumpTo(route.key)}

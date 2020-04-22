@@ -8,7 +8,7 @@ interface TabButtonProps extends TouchableOpacityProps {
   isActive: boolean
 }
 
-export const TabButton = (props: TabButtonProps) => {
+export const TabBarButton = (props: TabButtonProps) => {
   return (
     <Container {...props}>
       <TextPrimary>{props.title}</TextPrimary>

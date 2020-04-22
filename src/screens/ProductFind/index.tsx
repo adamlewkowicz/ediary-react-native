@@ -15,9 +15,9 @@ import {
   ProductFavoritesListMemo,
   ProductCreatedListMemo,
   ProductSearchListMemo,
+  TabView,
 } from '../../components';
 import * as Utils from '../../utils';
-import { TabContainer } from '../../components/atoms/Tab';
 import { BarcodeId } from '../../types';
 import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
@@ -122,7 +122,7 @@ export const ProductFindScreen = () => {
           onPress={handleBarcodeScan}
         />
       </SearchContainer>
-      <TabContainer
+      <TabView
         activeIndex={state.activeTabIndex}
         onIndexChange={activeTabIndex => setState({ activeTabIndex })}
         titles={['Ostatnio używane', 'Ulubione', 'Utworzone', 'Znalezione']}

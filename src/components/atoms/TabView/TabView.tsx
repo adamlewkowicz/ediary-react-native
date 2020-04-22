@@ -1,16 +1,16 @@
 import React, { ReactNode, useMemo } from 'react';
 import { Dimensions } from 'react-native';
-import { TabView, Route } from 'react-native-tab-view';
+import { TabView as NativeTabView, Route } from 'react-native-tab-view';
 import { TabBar } from './TabBar';
 
-interface TabContainerProps {
+interface TabViewProps {
   activeIndex: number
   onIndexChange: (index: number) => void
   titles: string[]
   renderScene: (props: { route: Route & { index: number } }) => ReactNode
 }
 
-export const TabContainer = (props: TabContainerProps) => {
+export const TabView = (props: TabViewProps) => {
   const routes = useMemo(() => {
     return props.titles.map((title, index) => ({
       key: title,
@@ -20,7 +20,7 @@ export const TabContainer = (props: TabContainerProps) => {
   }, []);
 
   return (
-    <TabView
+    <NativeTabView
       navigationState={{ index: props.activeIndex, routes }}
       renderScene={props.renderScene}
       onIndexChange={props.onIndexChange}
