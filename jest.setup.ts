@@ -17,7 +17,13 @@ const globalObject: any = global;
 globalObject.__DEV__ = false;
 globalObject.requestIdleCallback = jest.fn((callback: any) => callback());
 globalObject.cancelIdleCallback = jest.fn();
-globalObject.AbortController = jest.fn(() => ({ signal: {}, abort() {} }));
+globalObject.AbortController = jest.fn(() => ({
+  abort() {},
+  signal: {
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn()
+  },
+}));
 globalObject.fetch = jest.genMockFromModule('node-fetch');
 
 beforeEach(async () => {
