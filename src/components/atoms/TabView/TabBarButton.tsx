@@ -10,7 +10,11 @@ interface TabButtonProps extends TouchableOpacityProps {
 
 export const TabBarButton = (props: TabButtonProps) => {
   return (
-    <Container {...props}>
+    <Container
+      accessibilityState={{ selected: props.isActive }}
+      accessibilityRole="button"
+      {...props}
+    >
       <TextPrimary>{props.title}</TextPrimary>
     </Container>
   );

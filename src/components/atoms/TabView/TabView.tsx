@@ -40,7 +40,7 @@ export const TabView = (props: TabViewProps) => {
 
 const initialLayout = { width: Dimensions.get('window').width };
 
-interface Route extends NativeRoute {
+export interface Route extends NativeRoute {
   index: number
   title: string
-} 
+}

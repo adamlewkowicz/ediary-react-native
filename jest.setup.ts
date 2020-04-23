@@ -9,6 +9,7 @@ import { config } from './src/database/config/config';
 jest.mock('react-native/Libraries/Components/ScrollResponder');
 jest.mock('react-native/Libraries/LayoutAnimation/LayoutAnimation');
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
+jest.mock('react-native/Libraries/Components/ToastAndroid/NativeToastAndroid');
 jest.mock('react-native-gesture-handler/RNGestureHandlerModule');
 
 const globalObject: any = global; 

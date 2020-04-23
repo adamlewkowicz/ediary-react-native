@@ -1,14 +1,29 @@
 import React from 'react';
 import { fireEvent } from '@testing-library/react-native';
 import { renderSetup } from '../../../test-utils';
-import { Product, Meal } from '../../database/entities';
+import { Product, ProductFavorite } from '../../database/entities';
 import { ProductFindScreen } from '.';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import { APP_ROUTE } from '../../navigation/consts';
+import { USER_ID_UNSYNCED } from '../../common/consts';
 
 describe('<ProductFindScreen />', () => {
 
   describe('when searches for product 🔎', () => {
+
+    describe('when focuses on input', () => {
+
+      it('should change active tab to products search tab 🔖', async () => {
+        const ctx = renderSetup(<ProductFindScreen />);
+  
+        const productFindInput = ctx.getByLabelText('Nazwa szukanego produktu');
+        fireEvent.focus(productFindInput);
+  
+        const productSearchTabButton = ctx.getByLabelText('Znalezione');
+        expect(productSearchTabButton).toBeSelected();
+      });
+
+    });
 
     it('should display found products', async () => {
       const productMock = await Product.save({ name: 'tomatoe' });
@@ -50,13 +65,35 @@ describe('<ProductFindScreen />', () => {
 
   });
 
-  it('should display recently used products', async () => {
-    const productMock = await Product.save({ name: 'Fish' });
-    await Meal.createWithProductId({ name: 'Fish soup' }, productMock.id);
-  
-    const ctx = renderSetup(<ProductFindScreen />);
-  
-    await ctx.findByText(productMock.name);
+  describe('when is on favorite products tab 🔖', () => {
+
+    it('should display favorite products 💖', async () => {
+      const productMock = await Product.save({ name: 'Fish' });
+      await ProductFavorite.save({ productId: productMock.id, userId: USER_ID_UNSYNCED });
+
+      const ctx = renderSetup(<ProductFindScreen />);
+
+      const productFavoritesTabButton = ctx.getByLabelText('Ulubione');
+      fireEvent.press(productFavoritesTabButton);
+
+      expect(productFavoritesTabButton).toBeSelected();
+      await ctx.findByText(productMock.name);
+    });
+
+  });
+
+  describe('when is on recently used products tab 🔖', () => {
+    
+    it('should display recently used products', async () => {
+      const productMock = await Product.save({ name: 'Fish' });
+    
+      const ctx = renderSetup(<ProductFindScreen />);
+      const recentProductsTabButton = ctx.getByLabelText('Ostatnio używane');
+
+      expect(recentProductsTabButton).toBeSelected();
+      await ctx.findByText(productMock.name);
+    });
+
   });
 
   describe('when presses on barcode button', () => {

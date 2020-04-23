@@ -1,8 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components/native';
-import { SceneRendererProps, Route } from 'react-native-tab-view';
+import { SceneRendererProps } from 'react-native-tab-view';
 import { ScrollView } from 'react-native';
 import { TabBarButton } from './TabBarButton';
+import { Route } from './TabView';
 
 interface TabBarProps extends SceneRendererProps {
   routes: Route[]
@@ -36,6 +37,7 @@ export const TabBar = (props: TabBarProps) => {
             title={route.key}
             onPress={() => props.jumpTo(route.key)}
             isActive={index === props.activeIndex}
+            accessibilityLabel={route.title}
           />
         ))}
       </ScrollView>
