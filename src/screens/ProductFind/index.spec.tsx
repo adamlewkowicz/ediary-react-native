@@ -1,11 +1,10 @@
 import React from 'react';
 import { fireEvent } from '@testing-library/react-native';
 import { renderSetup } from '../../../test-utils';
-import { Product, ProductFavorite } from '../../database/entities';
+import { Product } from '../../database/entities';
 import { ProductFindScreen } from '.';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import { APP_ROUTE } from '../../navigation/consts';
-import { USER_ID_UNSYNCED } from '../../common/consts';
 
 describe('<ProductFindScreen />', () => {
 
@@ -68,16 +67,12 @@ describe('<ProductFindScreen />', () => {
   describe('when is on favorite products tab 🔖', () => {
 
     it('should display favorite products 💖', async () => {
-      const productMock = await Product.save({ name: 'Fish' });
-      await ProductFavorite.save({ productId: productMock.id, userId: USER_ID_UNSYNCED });
-
       const ctx = renderSetup(<ProductFindScreen />);
 
       const productFavoritesTabButton = ctx.getByLabelText('Ulubione');
       fireEvent.press(productFavoritesTabButton);
 
       expect(productFavoritesTabButton).toBeSelected();
-      // TODO await ctx.findByText(productMock.name);
     });
 
   });
@@ -85,13 +80,11 @@ describe('<ProductFindScreen />', () => {
   describe('when is on recently used products tab 🔖', () => {
     
     it('should display recently used products', async () => {
-      // const productMock = await Product.save({ name: 'Fish' });
     
       const ctx = renderSetup(<ProductFindScreen />);
       const recentProductsTabButton = ctx.getByLabelText('Ostatnio używane');
 
       expect(recentProductsTabButton).toBeSelected();
-      // TODO await ctx.findByText(productMock.name);
     });
 
   });
