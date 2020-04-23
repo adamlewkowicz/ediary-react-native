@@ -15,13 +15,12 @@ export class FoodFactsApi {
   
   async findOneByBarcode(
     barcode: BarcodeId,
-    controller?: AbortController
+    controller: AbortController
   ): Promise<NormalizedProduct | null> {
 
-    const product = await this.openFoodFactsApi.findProductByBarcode(
-      barcode as string,
-      controller
-    );
+    const product = await this.openFoodFactsApi
+      .setController(controller)
+      .findProductByBarcode(barcode as string);
 
     if (product === null) {
       return null;
@@ -32,15 +31,12 @@ export class FoodFactsApi {
 
   async findByName(
     name: string,
-    page = 1,
-    controller?: AbortController
+    controller: AbortController
   ): Promise<NormalizedProduct[]> {
 
-    const { products } = await this.openFoodFactsApi.findProductsBySearchTerm(
-      name,
-      page,
-      controller
-    );
+    const { products } = await this.openFoodFactsApi
+      .setController(controller)
+      .findProductsBySearchTerm(name);
 
     return this.normalizeProducts(products);
   }

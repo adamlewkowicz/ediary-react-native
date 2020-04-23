@@ -9,15 +9,15 @@ export class ProductSearchApi {
 
   async findByName(
     name: string,
-    controller?: AbortController
+    controller: AbortController
   ): Promise<NormalizedProduct[]> {
-    const foodFactsProducts = await this.foodFactsApi.findByName(name, 1, controller);
+    const ilewazyProducts = await this.ilewazyApi.findByName(name, controller);
 
-    if (foodFactsProducts.length) {
-      return foodFactsProducts;
+    if (!ilewazyProducts.length) {
+      return this.foodFactsApi.findByName(name, controller);
     }
-    
-    return this.ilewazyApi.findByName(name, controller);
+
+    return ilewazyProducts;
   }
 
   findOneByBarcode = this.foodFactsApi.findOneByBarcode.bind(this.foodFactsApi);
