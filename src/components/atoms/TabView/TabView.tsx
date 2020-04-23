@@ -1,18 +1,18 @@
 import React, { ReactNode, useMemo } from 'react';
 import { Dimensions } from 'react-native';
-import { TabView as NativeTabView, Route } from 'react-native-tab-view';
+import { TabView as NativeTabView, Route as NativeRoute } from 'react-native-tab-view';
 import { TabBar } from './TabBar';
 
 interface TabViewProps {
   activeIndex: number
   onIndexChange: (index: number) => void
   titles: string[]
-  renderScene: (props: { route: Route & { index: number } }) => ReactNode
+  renderScene: (props: { route: Route }) => ReactNode
 }
 
 export const TabView = (props: TabViewProps) => {
-  const routes = useMemo(() => {
-    return props.titles.map((title, index) => ({
+  const routes = useMemo<Route[]>(() => {
+    return props.titles.map((title, index): Route => ({
       key: title,
       title,
       index
@@ -39,3 +39,8 @@ export const TabView = (props: TabViewProps) => {
 }
 
 const initialLayout = { width: Dimensions.get('window').width };
+
+interface Route extends NativeRoute {
+  index: number
+  title: string
+} 
