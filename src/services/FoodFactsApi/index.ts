@@ -15,7 +15,7 @@ export class FoodFactsApi {
   
   async findOneByBarcode(
     barcode: BarcodeId,
-    controller: AbortController
+    controller?: AbortController
   ): Promise<NormalizedProduct | null> {
 
     const product = await this.openFoodFactsApi
@@ -31,7 +31,7 @@ export class FoodFactsApi {
 
   async findByName(
     name: string,
-    controller: AbortController
+    controller?: AbortController
   ): Promise<NormalizedProduct[]> {
 
     const { products } = await this.openFoodFactsApi
