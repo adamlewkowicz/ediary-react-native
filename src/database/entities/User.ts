@@ -19,6 +19,7 @@ import { Profile } from './Profile';
 import { GenericEntity } from '../generics/GenericEntity';
 import { DeepPartial } from 'redux';
 import { EntityType } from '../types';
+import { ProductFavorite } from './ProductFavorite';
 
 @Entity('user')
 export class User extends GenericEntity {
@@ -62,6 +63,13 @@ export class User extends GenericEntity {
     profile => profile.user
   )
   profile?: Profile; 
+
+  @OneToMany(
+    type => ProductFavorite,
+    productFavorite => productFavorite.user,
+    { onDelete: 'CASCADE' }
+  )
+  productFavorites?: ProductFavorite[];
   
   async getProfile(): Promise<Profile> {
     const profile = await getRepository(Profile).findOneOrFail(this.id);
@@ -95,6 +103,7 @@ export class User extends GenericEntity {
       userId
     });
   }
+
 }
 
 export type IUser = EntityType<User>;

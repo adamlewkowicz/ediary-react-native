@@ -4,14 +4,15 @@ import { Product } from '../database/entities';
 import { useEffect } from 'react';
 
 export const useProductHistory = () => {
+  const { products: data, isAfterFirstFetch: isLoading } = useSelector(Selectors.getProductHistory);
   const dispatch = useDispatch();
-  const { products: data, isAfterFirstFetch } = useSelector(Selectors.getProductHistory);
+  const isNotAfterFirstFetch = !isLoading;
 
   useEffect(() => {
-    if (!isAfterFirstFetch) {
+    if (isNotAfterFirstFetch) {
       dispatch(Actions.productHistoryLoad());
     }
-  }, [isAfterFirstFetch]);
+  }, [dispatch, isNotAfterFirstFetch]);
 
   const addProduct = (product: Product): void => {
     dispatch(
@@ -19,5 +20,5 @@ export const useProductHistory = () => {
     );
   }
 
-  return { data, addProduct };
+  return { data, addProduct, isLoading: isNotAfterFirstFetch };
 }

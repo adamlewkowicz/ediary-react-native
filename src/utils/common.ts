@@ -2,6 +2,7 @@ import { ToastAndroid, Alert, LayoutAnimation } from 'react-native';
 import { Client as BugsnagClient } from 'bugsnag-react-native';
 import { BUGSNAG_API_KEY } from 'react-native-dotenv';
 import { IS_DEV } from '../common/consts';
+import { AbortError } from '../common/error';
 
 export const createDebouncedFunc = <T extends (...args: any) => any>(
   callback: T,
@@ -72,4 +73,27 @@ export const handleError = (error: Error): void => {
   } else {
     getBugsnag()?.notify(error);
   }
+}
+
+export const cancelablePromise = <T, P extends Promise<T> = Promise<T>>(
+  promise: P,
+  { signal }: AbortController,
+): Promise<T> => {
+  return new Promise<T>(async (resolve, reject) => {
+    const abortHandler = () => reject(new AbortError());
+
+    try {
+      signal.addEventListener('abort', abortHandler);
+    
+      const result = await promise;
+
+      resolve(result);
+
+    } catch(error) {
+      reject(error);
+
+    } finally {
+      signal.removeEventListener('abort', abortHandler);
+    }
+  });
 }

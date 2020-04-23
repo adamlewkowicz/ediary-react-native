@@ -12,6 +12,7 @@ const SPACING_HELPERS = {
   microXSmall: '4px 16px',
 
   tinyVertical: '8px 0px',
+  tinyHorizontal: '0px 8px',
 
   smallVertical: '16px 0px',
   smallHorizontal: '0px 16px',

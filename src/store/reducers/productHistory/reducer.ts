@@ -22,7 +22,7 @@ export function productHistoryReducer(
 
   if (extractedProducts.length) {
     const maxNumberOfProducts = 8;
-    const isAfterFirstFetch = !state.isAfterFirstFetch && action.type === PRODUCT_HISTORY_ADDED;
+    const isAfterFirstFetch = action.type === PRODUCT_HISTORY_ADDED;
     
     const products = [...extractedProducts, ...state.products]
       .filter(Utils.filterByUniqueId)

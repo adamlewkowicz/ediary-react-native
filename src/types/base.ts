@@ -82,3 +82,5 @@ export interface NormalizedProduct {
   description?: string
   ingredients?: string[]
 }
+
+export type ValueOf<T> = T[keyof T];

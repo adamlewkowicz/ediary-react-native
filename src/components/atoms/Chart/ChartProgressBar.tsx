@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { SvgGradientDef } from '../Svg';
 import Svg, { Rect } from 'react-native-svg';
 import { Animated } from 'react-native';
-import { useAnimatedSpring } from '../../../hooks';
+import { useAnimatedTiming } from '../../../hooks';
 import { getA11yProgressBarProps } from '../../../utils';
 
 export interface ChartProgressBarProps {
@@ -14,7 +14,7 @@ export interface ChartProgressBarProps {
 
 export const ChartProgressBar = ({ height = 5, ...props }: ChartProgressBarProps) => {
   const percentage = props.percentage > 100 ? 100 : props.percentage;
-  const animatedValue = useAnimatedSpring(percentage);
+  const animatedValue = useAnimatedTiming(percentage);
 
   const animatedWidth = animatedValue.interpolate({
     inputRange: [0, 100],
