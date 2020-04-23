@@ -15,6 +15,7 @@ describe('<ProductFindScreen />', () => {
       const ctx = renderSetup(<ProductFindScreen />);
   
       const productFindInput = ctx.getByLabelText('Nazwa szukanego produktu');
+      fireEvent.focus(productFindInput);
       fireEvent.changeText(productFindInput, productMock.name);
 
       await ctx.findByText(productMock.name);
@@ -22,7 +23,7 @@ describe('<ProductFindScreen />', () => {
 
     describe('when selects product', () => {
 
-      it('should return choosen product as product resolver', async () => {
+      it('should return choosen product as a product resolver', async () => {
         const paramsMock = {
           onProductSelected: jest.fn()
         }
@@ -32,9 +33,10 @@ describe('<ProductFindScreen />', () => {
         );
     
         const productFindInput = ctx.getByLabelText('Nazwa szukanego produktu');
+        fireEvent.focus(productFindInput);
         fireEvent.changeText(productFindInput, productMock.name);
 
-        const addProductToMealButton = await ctx.findByLabelText('Dodaj produkt do posiłku');
+        const addProductToMealButton = await ctx.findByText(productMock.name);
         fireEvent.press(addProductToMealButton);
   
         expect(paramsMock.onProductSelected).toHaveBeenCalledTimes(1);

@@ -12,7 +12,7 @@ interface ProductSearchListProps extends Omit<ProductListProps, 'data'> {
 
 export const ProductSearchList = (props: ProductSearchListProps) => {
   const { isConnected, isLoading, products } = useProductSearch(props.productName, props.barcode);
-
+  
   function RenderInfo() {
     const isProductsNotEmpty = products.length > 0;
     const isProductNameNotTouched = props.productName.length === 0;
@@ -48,6 +48,7 @@ export const ProductSearchList = (props: ProductSearchListProps) => {
         data={products}
         isLoading={isLoading}
         onProductSelect={props.onProductSelect}
+        a11yLabel="Lista znalezionych produktów"
       />
     </>
   );

@@ -33,7 +33,7 @@ export const useProductSearch = (productName: string, barcode: null | BarcodeId)
         setState({ isLoading: true });
 
         const products = await Product[methodName](trimmedName, controller);
-    
+
         // TODO: Prevent adding products if connection is lost and payload is empty
         setState({ products, isLoading: false });
 

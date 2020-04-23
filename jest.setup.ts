@@ -10,7 +10,6 @@ jest.mock('react-native/Libraries/Components/ScrollResponder');
 jest.mock('react-native/Libraries/LayoutAnimation/LayoutAnimation');
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
 jest.mock('react-native-gesture-handler/RNGestureHandlerModule');
-jest.mock('react-native-reanimated', () => jest.requireActual('react-native-reanimated/mock'));
 
 const globalObject: any = global; 
 

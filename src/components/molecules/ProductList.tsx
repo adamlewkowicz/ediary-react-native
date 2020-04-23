@@ -11,6 +11,7 @@ export interface ProductListProps<T = ProductOrNormalizedProduct> {
   onProductSelect: (product: T) => void
   isLoading?: boolean
   onRefresh?: () => void
+  a11yLabel?: string
 }
 
 export const ProductList = (props: ProductListProps) => (
