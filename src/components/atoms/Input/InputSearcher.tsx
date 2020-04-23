@@ -6,7 +6,7 @@ import { THEME } from '../../../common/theme';
 
 interface InputSearcherProps extends TextInputProps {
   showLabel?: boolean
-  isLoading: boolean
+  isLoading?: boolean
 }
 
 export const InputSearcher = ({ isLoading, ...props }: InputSearcherProps) => (

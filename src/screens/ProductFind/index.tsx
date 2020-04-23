@@ -1,42 +1,52 @@
 import React, { useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Product, ProductOrNormalizedProduct } from '../../database/entities';
-import { useProductsSearch, useNavigationData, useProductHistory } from '../../hooks';
-import { FlatList } from 'react-native';
+import {
+  useNavigationData,
+  useDebouncedValue,
+  useNativeState,
+} from '../../hooks';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import {
-  H3,
   ButtonSecondaryArrow,
-  ProductSearchItemMemo,
-  ItemSeparator,
   InputSearcher,
   BarcodeButton,
-  TextPrimary,
+  ProductRecentListMemo,
+  ProductFavoritesListMemo,
+  ProductCreatedListMemo,
+  ProductSearchListMemo,
+  TabView,
 } from '../../components';
 import * as Utils from '../../utils';
+import { BarcodeId } from '../../types';
+import { useDispatch } from 'react-redux';
+import { Actions } from '../../store';
+
+interface ProductFindScreenState {
+  productName: string
+  barcode: BarcodeId | null
+  createdProduct: Product | null
+  activeTabIndex: number
+}
 
 export const ProductFindScreen = () => {
   const { params, navigate, navigation } = useNavigationData<ProductFindScreenNavigationProps>();
-  const productHistory = useProductHistory();
-  const hasBeenPressed = useRef(false);
-  const {
-    state,
-    isConnected,
-    debouncedProductName,
-    ...productSearch
-  } = useProductsSearch();
-
-  const showProductHistory = !state.isDirty;
-
-  const productSource: ProductOrNormalizedProduct[] = showProductHistory
-    ? productHistory.data
-    : state.products;
+  const [state, setState] = useNativeState<ProductFindScreenState>({
+    activeTabIndex: TAB_INDEX.recent,
+    productName: '',
+    barcode: null,
+    createdProduct: null,
+  });
+  const hasProductBeenSelected = useRef(false);
+  const productNameDebounced = useDebouncedValue(state.productName);
+  const dispatch = useDispatch();
 
   function handleBarcodeScan() {
     navigate('BarcodeScan', {
       onBarcodeDetected(barcode) {
         navigate('ProductFind');
-        productSearch.updateBarcode(barcode);
+
+        setState({ barcode });
       }
     });
   }
@@ -44,67 +54,38 @@ export const ProductFindScreen = () => {
   function handleProductCreate() {
     navigate('ProductCreate', {
       barcode: state.barcode ?? undefined,
-      name: debouncedProductName.trim(),
+      name: state.productName.trim(),
       onProductCreated(createdProduct) {
-        productSearch.addProduct(createdProduct);
-
         navigate('ProductFind');
 
+        setState({
+          activeTabIndex: TAB_INDEX.created,
+          createdProduct,
+        });
+
         Utils.toastCenter(`Utworzono produkt "${createdProduct.name}"`);
-        productHistory.addProduct(createdProduct);
+
+        dispatch(Actions.productHistoryAdded([createdProduct]));
       }
     });
   }
 
-  const handleProductSelect = useCallback((product: ProductOrNormalizedProduct) => {
-    if (params.onProductSelected && !hasBeenPressed.current) {
-      hasBeenPressed.current = true;
+  const handleProductSelect = useCallback((product: ProductOrNormalizedProduct): void => {
+    if (!params.onProductSelected || hasProductBeenSelected.current) {
+      return;
+    }
 
-      const productResolver: ProductResolver = async () => {
-        if (product instanceof Product) {
-          return product;
-        }
-        return Product.saveNormalizedProduct(product);
+    hasProductBeenSelected.current = true;
+
+    const productResolver: ProductResolver = async () => {
+      if (product instanceof Product) {
+        return product;
       }
-
-      params.onProductSelected(productResolver, product.portion);
-    }
-  }, [params]);
-
-  function RenderInfo() {
-    const {
-      isSearching,
-      products,
-      barcode,
-      isTyping,
-    } = state;
-    const isBusy = isSearching || isTyping;
-    const isProductsNotEmpty = products.length > 0;
-    const isProductNameNotTouched = debouncedProductName.length === 0;
-    const hasNotBeenSearching = isProductNameNotTouched && barcode === null;
-
-    if (isBusy || isProductsNotEmpty || hasNotBeenSearching) {
-      return null;
+      return Product.saveNormalizedProduct(product);
     }
 
-    const notFoundMessage = barcode !== null
-      ? `z podanym kodem kreskowym: ${barcode}`
-      : `o podanej nazwie: ${debouncedProductName}`;
-
-    return (
-      <>
-        <NotFoundInfo>
-          Nie znaleziono produktów {'\n'}
-          {notFoundMessage}
-        </NotFoundInfo>
-        {!isConnected && (
-          <NotFoundInfo>
-            Aby wyszukiwać więcej produktów, przejdź do trybu online.
-          </NotFoundInfo>
-        )}
-      </>
-    );
-  }
+    params.onProductSelected(productResolver, product.portion);
+  }, [params.onProductSelected]);
 
   navigation.setOptions({
     headerRight: () => (
@@ -119,41 +100,67 @@ export const ProductFindScreen = () => {
     )
   });
 
+  const handleInputFocus = (): void => {
+    if (state.activeTabIndex !== TAB_INDEX.search) {
+      setState({ activeTabIndex: TAB_INDEX.search });
+    }
+  }
+
   return (
     <Container>
       <SearchContainer>
         <InputSearcher
           value={state.productName}
+          onChangeText={productName => setState({ productName })}
           placeholder="Nazwa produktu"
           accessibilityLabel="Nazwa szukanego produktu"
           accessibilityRole="search"
-          onChangeText={productSearch.updateProductName}
-          isLoading={state.isSearching}
+          onFocus={handleInputFocus}
         />
         <BarcodeButton
           accessibilityLabel="Zeskanuj kod kreskowy"
           onPress={handleBarcodeScan}
         />
       </SearchContainer>
-      <ProductsTitle>
-        {showProductHistory ? 'Ostatnio używane produkty:' : 'Znalezione produkty:'}
-      </ProductsTitle>
-      <RenderInfo />
-      <FlatList
-        data={productSource}
-        keyExtractor={productKeyExtractor}
-        keyboardShouldPersistTaps="handled"
-        ItemSeparatorComponent={ItemSeparator}
-        renderItem={({ item: product }) => (
-          <ProductSearchItemMemo
-            product={product}
-            onSelect={handleProductSelect}
-          />
-        )}
+      <TabView
+        activeIndex={state.activeTabIndex}
+        onIndexChange={activeTabIndex => setState({ activeTabIndex })}
+        titles={['Ostatnio używane', 'Ulubione', 'Utworzone', 'Znalezione']}
+        renderScene={props => {
+          switch(props.route.index) {
+            case TAB_INDEX.recent: return (
+              <ProductRecentListMemo onProductSelect={handleProductSelect} />
+            )
+            case TAB_INDEX.favorite: return (
+              <ProductFavoritesListMemo onProductSelect={handleProductSelect} />
+            )
+            case TAB_INDEX.created: return (
+              <ProductCreatedListMemo
+                onProductSelect={handleProductSelect}
+                createdProduct={state.createdProduct}
+              />
+            )
+            case TAB_INDEX.search: return (
+              <ProductSearchListMemo
+                onProductSelect={handleProductSelect}
+                productName={productNameDebounced}
+                barcode={state.barcode}
+              />
+            )
+            default: return null;
+          }
+        }}
       />
     </Container>
   );
 }
+
+const TAB_INDEX = {
+  recent: 0,
+  favorite: 1,
+  created: 2,
+  search: 3,
+} as const;
 
 const SearchContainer = styled.View`
   flex-direction: row;
@@ -167,24 +174,8 @@ const Container = styled.View`
   padding-top: ${props => props.theme.spacing.small};
 `
 
-const NotFoundInfo = styled(TextPrimary)`
-  text-align: center;
-  margin-top: ${props => props.theme.spacing.base};
-  padding: ${props => props.theme.spacing.largeHorizontal};
-`
-
-const ProductsTitle = styled(H3)`
-  margin: ${props => props.theme.spacing.smallXMicroVertical};
-  padding: ${props => props.theme.spacing.smallHorizontal};
-`
-
 const AddOwnProductButton = styled(ButtonSecondaryArrow)`
   margin-right: ${props => props.theme.spacing.micro};
 `
-
-const productKeyExtractor = (product: ProductOrNormalizedProduct): string => {
-  const productId = '_id' in product ? product._id : product.id;
-  return String(productId);
-}
 
 export type ProductResolver = () => Promise<Product>;

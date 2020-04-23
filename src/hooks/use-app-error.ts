@@ -1,9 +1,10 @@
 import { ToastAndroid } from 'react-native';
 import * as Utils from '../utils';
+import { useCallback } from 'react';
 
 export const useAppError = () => {
 
-  const setAppError = (
+  const setAppError = useCallback((
     error: Error,
     userFriendlyMessage = 'Wystąpił nieoczekiwany błąd'
   ): void => {
@@ -14,7 +15,7 @@ export const useAppError = () => {
       ToastAndroid.LONG,
       ToastAndroid.CENTER
     );
-  }
+  }, []);
 
   return { setAppError };
 }

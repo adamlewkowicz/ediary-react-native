@@ -9,8 +9,13 @@ import {
   RadioInputsRow,
   InputMetaText,
   ButtonPrimary,
+  ButtonFavorite,
 } from '../../components';
-import { useNavigationData, useCalculatedMacro } from '../../hooks';
+import {
+  useNavigationData,
+  useCalculatedMacro,
+  useProductFavorite,
+} from '../../hooks';
 import { ProductPreviewScreenNavigationProps } from '../../navigation';
 import { Product } from '../../database/entities';
 import * as Utils from '../../utils';
@@ -25,6 +30,7 @@ export const ProductPreviewScreen = () => {
     macroPercentages,
     macroNeeds,
   } = useCalculatedMacro(params.product.macro, quantity);
+  const productFavorite = useProductFavorite(params.product.id);
 
   const isEditMode = params.onProductQuantityUpdated != null;
 
@@ -59,6 +65,12 @@ export const ProductPreviewScreen = () => {
   return (
     <Container>
       <ProductName>{params.product.name}</ProductName>
+      {productFavorite.isFavorite !== null && (
+        <ButtonFavorite
+          isFavorite={productFavorite.isFavorite}
+          onToggle={productFavorite.toggle}
+        />
+      )}
       <Section title="Ilość produktu">
         <RadioInputsRow
           title="Porcje"
@@ -111,7 +123,7 @@ const SaveProductButton = styled(ButtonPrimary)`
 `
 
 const ProductName = styled(H1)`
-  margin-bottom: ${props => props.theme.spacing.base};
+  margin-bottom: ${props => props.theme.spacing.tiny};
 `
 
 const Calories = styled(H1)`

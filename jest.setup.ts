@@ -6,16 +6,24 @@ import './test-utils/extend-expect';
 import { createConnection, getConnection } from 'typeorm';
 import { config } from './src/database/config/config';
 
-// Automatically mocks each module property, by provided import path.
 jest.mock('react-native/Libraries/Components/ScrollResponder');
 jest.mock('react-native/Libraries/LayoutAnimation/LayoutAnimation');
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
+jest.mock('react-native/Libraries/Components/ToastAndroid/NativeToastAndroid');
+jest.mock('react-native-gesture-handler/RNGestureHandlerModule');
 
 const globalObject: any = global; 
 
 globalObject.__DEV__ = false;
 globalObject.requestIdleCallback = jest.fn((callback: any) => callback());
 globalObject.cancelIdleCallback = jest.fn();
-globalObject.AbortController = jest.fn(() => ({ signal: {}, abort() {} }));
+globalObject.AbortController = jest.fn(() => ({
+  abort() {},
+  signal: {
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn()
+  },
+}));
 globalObject.fetch = jest.genMockFromModule('node-fetch');
 
 beforeEach(async () => {

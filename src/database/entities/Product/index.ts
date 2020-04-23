@@ -29,6 +29,7 @@ import { Macro } from '../../embeds/Macro';
 import { FindMostUsedResult, FindMostProductIdsResult } from './types';
 import * as Utils from '../../../utils';
 import { ProductSearchApi } from '../../../services/ProductSearchApi';
+import { ProductFavorite } from '../ProductFavorite';
 
 @Entity('product')
 @Unique<Product>(['name', 'isVerified'])
@@ -94,6 +95,13 @@ export class Product extends GenericEntity {
     { cascade: true }
   )
   images?: ProductImage[];
+
+  @OneToMany(
+    type => ProductFavorite,
+    productFavorite => productFavorite.product,
+    { onDelete: 'CASCADE' }
+  )
+  favorites?: ProductFavorite[];
 
   static defaultPortion = 100;
 
@@ -196,7 +204,7 @@ export class Product extends GenericEntity {
   
   static async findAndFetchByNameLike(
     name: string,
-    controller?: AbortController,
+    controller: AbortController,
   ): Promise<ProductOrNormalizedProduct[]> {
 
     const savedProducts = await Product.findByNameLike(name);
@@ -262,18 +270,41 @@ export class Product extends GenericEntity {
     controller: AbortController
   ): Promise<Product[]> {
     const savedProducts = await this.findByBarcode(barcode);
-    const hasVerifiedProduct = savedProducts.some(product => product.isVerified);
+    const hasNoSavedProducts = !savedProducts.length;
+    const hasNoVerifiedProduct = !savedProducts.some(product => product.isVerified);
     
-    if (!savedProducts.length || !hasVerifiedProduct) {
-      const fetchedProducts = await Product.searchApi.findByBarcode(barcode, controller);
-      const createdProducts = await Utils.mapAsyncSequence(
-        fetchedProducts, Product.saveNormalizedProduct
-      );
+    if (hasNoSavedProducts || hasNoVerifiedProduct) {
+      const fetchedProduct = await Product.searchApi.findOneByBarcode(barcode, controller);
 
-      return [ ...createdProducts, ...savedProducts];
+      if (fetchedProduct) {
+        const createdProduct = await Product.saveNormalizedProduct(fetchedProduct);
+
+        return [createdProduct, ...savedProducts];
+      }
     }
 
     return savedProducts;
+  }
+
+  static async findFavorites(userId: UserId): Promise<Product[]> {
+    const productFavorites = await ProductFavorite.find({
+      where: { userId },
+      relations: ['product'],
+      order: { id: 'DESC' }
+    });
+
+    const products = productFavorites.flatMap(productFavorite =>
+      productFavorite.product ?? []
+    );
+
+    return products;
+  }
+
+  static findOwn(userId: UserId): Promise<Product[]> {
+    return Product.find({
+      where: { userId },
+      order: { id: 'DESC' }
+    });
   }
 
 }
