@@ -85,7 +85,7 @@ describe('<ProductFindScreen />', () => {
   describe('when is on recently used products tab 🔖', () => {
     
     it('should display recently used products', async () => {
-      const productMock = await Product.save({ name: 'Fish' });
+      // const productMock = await Product.save({ name: 'Fish' });
     
       const ctx = renderSetup(<ProductFindScreen />);
       const recentProductsTabButton = ctx.getByLabelText('Ostatnio używane');
