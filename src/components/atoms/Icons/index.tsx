@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, { G, Path, SvgProps, Rect } from 'react-native-svg';
+import Svg, { G, Path, SvgProps } from 'react-native-svg';
 import { THEME } from '../../../common/theme';
 const StyledPath = Path as any;
 
