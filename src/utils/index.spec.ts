@@ -1,6 +1,6 @@
 import * as Utils from './index';
 
-describe('Utils', () => {
+describe('Utils 🛠️', () => {
 
   describe('createDebouncedFunc', () => {
 
