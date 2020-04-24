@@ -8,6 +8,8 @@ export class ProductAndMacro1587715938752 implements MigrationInterface {
         
         await queryRunner.query(`ALTER TABLE "product" ADD COLUMN "macroFattyacids" decimal(6, 2) NOT NULL DEFAULT (0);`);
         await queryRunner.query(`ALTER TABLE "product" ADD COLUMN "macroSugars" decimal(6, 2) NOT NULL DEFAULT (0);`);
+        await queryRunner.query(`ALTER TABLE "product" ADD COLUMN "brand" text;`);
+        await queryRunner.query(`ALTER TABLE "product" ADD COLUMN "producer" text;`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

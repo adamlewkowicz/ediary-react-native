@@ -60,6 +60,12 @@ export class Product extends GenericEntity {
   @SqliteENUM(PRODUCT_UNIT_TYPE)
   unit!: ProductUnitType;
 
+  @Column('text', { nullable: true })
+  brand!: string | null;
+
+  @Column('text', { nullable: true })
+  producer!: string | null;
+
   @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;
 
