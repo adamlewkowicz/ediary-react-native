@@ -1,17 +1,17 @@
 import { Product } from '../../../database/entities';
 import { ProductHistoryAction } from '../../actions';
 import { getProductsFromAction } from './helpers';
-import { PRODUCT_HISTORY_ADDED } from '../../consts';
+import { PRODUCT_HISTORY_LOADED } from '../../consts';
 import * as Utils from '../../../utils';
 
 interface ProductHistoryState {
   products: Product[]
-  isAfterFirstFetch: boolean
+  isLoaded: boolean
 }
 
 const initialState: ProductHistoryState = {
   products: [],
-  isAfterFirstFetch: false,
+  isLoaded: false,
 }
 
 export function productHistoryReducer(
@@ -19,17 +19,17 @@ export function productHistoryReducer(
   action: ProductHistoryAction
 ): ProductHistoryState {
   const extractedProducts = getProductsFromAction(action);
+  const isLoaded = state.isLoaded ? true : action.type === PRODUCT_HISTORY_LOADED;
 
   if (extractedProducts.length) {
     const maxNumberOfProducts = 8;
-    const isAfterFirstFetch = action.type === PRODUCT_HISTORY_ADDED;
     
     const products = [...extractedProducts, ...state.products]
       .filter(Utils.filterByUniqueId)
       .splice(0, maxNumberOfProducts);
 
-    return { products, isAfterFirstFetch };
+    return { products, isLoaded };
   }
 
-  return state;
+  return { ...state, isLoaded };
 }
