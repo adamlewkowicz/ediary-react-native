@@ -4,7 +4,7 @@ import { TextInputProps, ActivityIndicator } from 'react-native';
 import { LoupeIcon } from '../Icons';
 import { THEME } from '../../../common/theme';
 
-interface InputSearcherProps extends TextInputProps {
+export interface InputSearcherProps extends TextInputProps {
   showLabel?: boolean
   isLoading?: boolean
 }
@@ -23,7 +23,7 @@ export const InputSearcher = ({ isLoading, ...props }: InputSearcherProps) => (
 const LOUPE_SIZE = 16;
 
 const LOUPE_ICON_STYLE = {
-  fill: THEME.color.primary,
+  fill: THEME.color.tertiary,
   width: LOUPE_SIZE,
   height: LOUPE_SIZE,
   style: { transform: [{ translateY: -LOUPE_SIZE / 2 }] }

@@ -1,24 +1,24 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { Selectors, Actions } from '../store';
 import { Product } from '../database/entities';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 
 export const useProductHistory = () => {
-  const { products: data, isAfterFirstFetch: isLoading } = useSelector(Selectors.getProductHistory);
+  const { products: data, isLoaded } = useSelector(Selectors.getProductHistory);
   const dispatch = useDispatch();
-  const isNotAfterFirstFetch = !isLoading;
+  const isLoading = !isLoaded;
 
   useEffect(() => {
-    if (isNotAfterFirstFetch) {
+    if (!isLoaded) {
       dispatch(Actions.productHistoryLoad());
     }
-  }, [dispatch, isNotAfterFirstFetch]);
+  }, [dispatch, isLoaded]);
 
-  const addProduct = (product: Product): void => {
+  const addProduct = useCallback((product: Product): void => {
     dispatch(
       Actions.productHistoryAdded([product])
     );
-  }
+  }, [dispatch]);
 
-  return { data, addProduct, isLoading: isNotAfterFirstFetch };
+  return { data, addProduct, isLoading };
 }

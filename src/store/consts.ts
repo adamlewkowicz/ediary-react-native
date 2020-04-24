@@ -20,3 +20,4 @@ export const USER_INITIALIZED = 'USER_INITIALIZED' as const;
 
 // Product history
 export const PRODUCT_HISTORY_ADDED = 'PRODUCT_HISTORY_ADDED' as const;
+export const PRODUCT_HISTORY_LOADED = 'PRODUCT_HISTORY_LOADED' as const;

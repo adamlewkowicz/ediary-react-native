@@ -9,13 +9,12 @@ import {
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import {
   ButtonSecondaryArrow,
-  InputSearcher,
-  BarcodeButton,
   ProductRecentListMemo,
   ProductFavoritesListMemo,
   ProductCreatedListMemo,
   ProductSearchListMemo,
   TabView,
+  ProductSearcher,
 } from '../../components';
 import * as Utils from '../../utils';
 import { BarcodeId } from '../../types';
@@ -108,20 +107,12 @@ export const ProductFindScreen = () => {
 
   return (
     <Container>
-      <SearchContainer>
-        <InputSearcher
-          value={state.productName}
-          onChangeText={productName => setState({ productName })}
-          placeholder="Nazwa produktu"
-          accessibilityLabel="Nazwa szukanego produktu"
-          accessibilityRole="search"
-          onFocus={handleInputFocus}
-        />
-        <BarcodeButton
-          accessibilityLabel="Zeskanuj kod kreskowy"
-          onPress={handleBarcodeScan}
-        />
-      </SearchContainer>
+      <ProductSearcher
+        value={state.productName}
+        onChangeText={productName => setState({ productName })}
+        onFocus={handleInputFocus}
+        onBarcodeScan={handleBarcodeScan}
+      />
       <TabView
         activeIndex={state.activeTabIndex}
         onIndexChange={activeTabIndex => setState({ activeTabIndex })}
@@ -161,13 +152,6 @@ const TAB_INDEX = {
   created: 2,
   search: 3,
 } as const;
-
-const SearchContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: ${props => props.theme.spacing.smallHorizontal};
-`
 
 const Container = styled.View`
   flex: 1;
