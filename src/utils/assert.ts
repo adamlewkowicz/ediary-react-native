@@ -9,8 +9,14 @@ export const isLastCharEqual = (value: string, character: string): boolean => {
   return false;
 }
 
-export const isANumber = (value: number): boolean => {
-  return !Number.isNaN(value);
+export const isANumber = (value: unknown): value is number => {
+  if (typeof value !== 'number') {
+    return false;
+  }
+  if (Number.isNaN(value)) {
+    return false;
+  }
+  return true;
 }
 
 const eachValueEquals = <V>(

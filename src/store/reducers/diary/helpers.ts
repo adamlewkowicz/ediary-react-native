@@ -26,12 +26,14 @@ export const normalizeProductEntity = (
   mealId: MealId,
   quantity: number,
 ): DiaryProduct => {
+  
+  const calcedMacro = Utils.calculateMacroPerQuantity(productEntity.macro, quantity);
 
   const normalizedProduct: DiaryProduct = {
     mealId,
     quantity,
+    calcedMacro,
     data: productEntity,
-    calcedMacro: Utils.calculateMacroPerQuantity(productEntity.macro, quantity)
   }
   
   return normalizedProduct;

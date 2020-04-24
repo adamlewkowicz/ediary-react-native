@@ -6,6 +6,7 @@ import {
   DayjsTimeBase,
 } from '../../../types';
 import { IProduct, IMeal } from '../../../database/entities';
+import { MacroDetailed } from '../../../database/embeds/MacroDetailed';
 
 export interface DiaryState {
   meals: DiaryMealOrTemplate[]
@@ -38,12 +39,7 @@ export interface DiaryProduct {
   data: IProduct
   quantity: number
   mealId: MealId | null
-  calcedMacro: {
-    carbs: number
-    prots: number
-    fats: number
-    kcal: number
-  }
+  calcedMacro: MacroDetailed
 }
 
 export type DiaryMealOrTemplateId = MealId | TemplateId;

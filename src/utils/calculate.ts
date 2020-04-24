@@ -7,6 +7,7 @@ import {
 } from '../types';
 import { KCAL_PER_MACRO_GRAM, MACRO, FORMULA_RATIO_BY_WEIGHT_GOAL } from '../common/consts';
 import { objectMap, round } from './generic';
+import { isANumber } from './assert';
 
 const objectEntries: ObjectEntries = Object.entries;
 
@@ -25,14 +26,27 @@ export const calculatePercentage = (portion: number, total: number): number => {
   return Math.floor(portion / total * 100);
 }
 
-export const calculateMacroPerQuantity = (
-  macroValuesPerHundredQuantity: MacroElements,
+export const calculateMacroPerQuantity = <T extends object>(
+  macroValuesPerHundredQuantity: T,
   quantity: number
-): MacroElements => objectMap(
-  macroValuesPerHundredQuantity,
-  (_, macroValue: number) => round(macroValue * quantity / 100, 100)
-  // TODO: Remove duck typing
-) as MacroElements;
+): T => Object.fromEntries(
+  Object
+    .entries(macroValuesPerHundredQuantity)
+    .map(([property, value]) => {
+
+      if (isANumber(value)) {
+        const calcedValue = calculateValuePerQuantity(value, quantity);
+        return [property, calcedValue];
+      }
+
+      return [property, value];
+    })
+) as T;
+
+const calculateValuePerQuantity = (
+  valuePerHundredQuantity: number,
+  quantity: number
+): number => round(valuePerHundredQuantity * quantity / 100, 100);
 
 export const calculateMacroPercentages = <T extends BaseMacroElements>(
   macroValues: T
