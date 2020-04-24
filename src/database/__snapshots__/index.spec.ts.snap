@@ -10,6 +10,8 @@ exports[`Database automatically generated schema should match snapshot: meal 1`]
   \\"macroProts\\" decimal(6, 2) NOT NULL DEFAULT (0),
   \\"macroFats\\" decimal(6, 2) NOT NULL DEFAULT (0),
   \\"macroKcal\\" decimal(6, 2) NOT NULL DEFAULT (0),
+  \\"macroFattyacids\\" decimal(6, 2) NOT NULL DEFAULT (0),
+  \\"macroSugars\\" decimal(6, 2) NOT NULL DEFAULT (0),
   CONSTRAINT \\"FK_419ad998c5e3b37a7cce0f872f5\\" FOREIGN KEY (\\"userId\\") REFERENCES \\"user\\" (\\"id\\") ON DELETE NO ACTION ON UPDATE NO ACTION
 )"
 `;
@@ -39,6 +41,8 @@ exports[`Database automatically generated schema should match snapshot: product 
   \\"macroProts\\" decimal(6, 2) NOT NULL DEFAULT (0),
   \\"macroFats\\" decimal(6, 2) NOT NULL DEFAULT (0),
   \\"macroKcal\\" decimal(6, 2) NOT NULL DEFAULT (0),
+  \\"macroFattyacids\\" decimal(6, 2) NOT NULL DEFAULT (0),
+  \\"macroSugars\\" decimal(6, 2) NOT NULL DEFAULT (0),
   CONSTRAINT \\"UQ_3e46cda47a776b779fa6faaed10\\" UNIQUE (\\"barcode\\", \\"isVerified\\"),
   CONSTRAINT \\"UQ_c1dd1975fe160d2190161668c52\\" UNIQUE (\\"barcode\\", \\"userId\\"),
   CONSTRAINT \\"UQ_905c0fed2f9ceb88491e43331ec\\" UNIQUE (\\"name\\", \\"isVerified\\"),
@@ -121,6 +125,8 @@ exports[`Database migrated schema should match snapshot: meal 1`] = `
   \\"macroProts\\" decimal(6, 2) NOT NULL DEFAULT (0),
   \\"macroFats\\" decimal(6, 2) NOT NULL DEFAULT (0),
   \\"macroKcal\\" decimal(6, 2) NOT NULL DEFAULT (0),
+  \\"macroFattyacids\\" decimal(6, 2) NOT NULL DEFAULT (0),
+  \\"macroSugars\\" decimal(6, 2) NOT NULL DEFAULT (0),
   CONSTRAINT \\"FK_419ad998c5e3b37a7cce0f872f5\\" FOREIGN KEY (\\"userId\\") REFERENCES \\"user\\" (\\"id\\") ON DELETE NO ACTION ON UPDATE NO ACTION
 )"
 `;
@@ -150,6 +156,8 @@ exports[`Database migrated schema should match snapshot: product 1`] = `
   \\"macroProts\\" decimal(6, 2) NOT NULL DEFAULT (0),
   \\"macroFats\\" decimal(6, 2) NOT NULL DEFAULT (0),
   \\"macroKcal\\" decimal(6, 2) NOT NULL DEFAULT (0),
+  \\"macroFattyacids\\" decimal(6, 2) NOT NULL DEFAULT (0),
+  \\"macroSugars\\" decimal(6, 2) NOT NULL DEFAULT (0),
   CONSTRAINT \\"UQ_3e46cda47a776b779fa6faaed10\\" UNIQUE (\\"barcode\\", \\"isVerified\\"),
   CONSTRAINT \\"UQ_c1dd1975fe160d2190161668c52\\" UNIQUE (\\"barcode\\", \\"userId\\"),
   CONSTRAINT \\"UQ_905c0fed2f9ceb88491e43331ec\\" UNIQUE (\\"name\\", \\"isVerified\\"),

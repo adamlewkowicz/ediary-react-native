@@ -25,11 +25,11 @@ import { PRODUCT_UNIT_TYPE } from '../../../common/consts';
 import { MinLength } from 'class-validator';
 import { GenericEntity } from '../../generics/GenericEntity';
 import { ProductImage } from '../ProductImage';
-import { Macro } from '../../embeds/Macro';
 import { FindMostUsedResult, FindMostProductIdsResult } from './types';
 import * as Utils from '../../../utils';
 import { ProductSearchApi } from '../../../services/ProductSearchApi';
 import { ProductFavorite } from '../ProductFavorite';
+import { MacroDetailed } from '../../embeds/MacroDetailed';
 
 @Entity('product')
 @Unique<Product>(['name', 'isVerified'])
@@ -49,8 +49,8 @@ export class Product extends GenericEntity {
   @Column('text', { nullable: true })
   barcode!: BarcodeId | null;
 
-  @Column(type => Macro)
-  macro!: Macro;
+  @Column(type => MacroDetailed)
+  macro!: MacroDetailed;
 
   /**
    * Type of unit that describes macro values.

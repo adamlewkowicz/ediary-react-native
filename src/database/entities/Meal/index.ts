@@ -16,10 +16,10 @@ import { EntityType } from '../../types';
 import { GenericEntity } from '../../generics/GenericEntity';
 import dayjs from 'dayjs';
 import { DAYJS_DATE_TIME, DAYJS_DATE, MACRO } from '../../../common/consts';
-import { Macro } from '../../embeds/Macro';
 import { MealTemplate } from '../../../store/reducers/diary';
 import { GetMacroSummaryResult, GetMacroHistoryResult } from './types';
 import * as Utils from '../../../utils';
+import { MacroDetailed } from '../../embeds/MacroDetailed';
 
 @Entity('meal')
 export class Meal extends GenericEntity {
@@ -30,8 +30,8 @@ export class Meal extends GenericEntity {
   @Column()
   name!: string;
 
-  @Column(type => Macro)
-  macro!: Macro;
+  @Column(type => MacroDetailed)
+  macro!: MacroDetailed;
 
   @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   date!: string;
