@@ -51,19 +51,19 @@ describe('<ProductCreateScreen />', () => {
     fireEvent.changeText(kcalInput, productMock.macro.kcal.toString());
     fireEvent.changeText(barcodeInput, productMock.barcode);
     fireEvent.press(saveProductButton);
-
-    await wait(() => {
-      expect(productSaveSpy).toHaveBeenCalledTimes(1);
-    });
+    
+    await wait(() => expect(productSaveSpy).toHaveBeenCalledTimes(1));
+    expect(saveProductButton).not.toBeDisabled();
   });
 
   describe('when presses calories calculate button', () => {
 
-    it('should calculate calories based on provided macro nutriements 🧮', () => {
+    it('should calculate calories based on provided macro nutriements 🧮', async () => {
+      const kcalMock = '0';
       const ctx = renderSetup(<ProductCreateScreen />);
 
       const kcalInput = ctx.getByLabelText('Kalorie');
-      fireEvent.changeText(kcalInput, '0');
+      fireEvent.changeText(kcalInput, kcalMock);
 
       const carbsInput = ctx.getByLabelText('Węglowodany');
       fireEvent.changeText(carbsInput, '100');
@@ -71,7 +71,9 @@ describe('<ProductCreateScreen />', () => {
       const calculateCaloriesButton = ctx.getByLabelText('Oblicz kalorie');
       fireEvent.press(calculateCaloriesButton);
 
-      expect(kcalInput.getProp('value')).not.toEqual('0');
+      await wait(() => 
+        expect(kcalInput.getProp('value')).not.toEqual(kcalMock)
+      );
     });
     
   });

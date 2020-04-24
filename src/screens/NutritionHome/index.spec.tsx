@@ -53,11 +53,11 @@ describe('<NutritionHomeScreen />', () => {
     it('should add selected product to meal', async () => {
       const productMock = await Product.save({ name: 'Tomatoes' });
       const productResolverMock = async () => productMock;
-      const navigationProductSelectedMock = (_: any, params: any) => params.onProductSelected(productResolverMock);
+      const onProductSelectedParamMock = async (_: any, params: any) => params.onProductSelected(productResolverMock);
       const ctx = renderSetup(<NutritionHomeScreen />);
 
       ctx.mocks.navigationContext.navigate
-        .mockImplementationOnce(navigationProductSelectedMock)
+        .mockImplementationOnce(onProductSelectedParamMock)
         .mockImplementationOnce(() => {});
 
       const [firstMealTemplateOpenButton] = await ctx.findAllByLabelText('Pokaż szczegóły lub usuń posiłek');
@@ -72,7 +72,7 @@ describe('<NutritionHomeScreen />', () => {
       expect(ctx.mocks.navigationContext.navigate).toHaveBeenCalledTimes(2);
       expect(ctx.mocks.navigationContext.navigate).toHaveBeenNthCalledWith(1, 'ProductFind', expect.any(Object));
       expect(ctx.mocks.navigationContext.navigate).toHaveBeenNthCalledWith(2, 'NutritionHome');
-      expect(await MealProduct.findOneOrFail({ productId: productMock.id })).toBeInstanceOf(MealProduct);
+      expect(await MealProduct.findOne({ productId: productMock.id })).toBeInstanceOf(MealProduct);
     });
 
   });
