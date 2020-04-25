@@ -20,6 +20,7 @@ export const ProductList = (props: ProductListProps) => (
     keyExtractor={productKeyExtractor}
     keyboardShouldPersistTaps="handled"
     ItemSeparatorComponent={ItemSeparator}
+    accessibilityLabel={props.a11yLabel}
     renderItem={({ item: product }) => (
       <ProductSearchItemMemo
         product={product}
@@ -30,6 +31,7 @@ export const ProductList = (props: ProductListProps) => (
       <RefreshControl
         refreshing={props.isLoading ?? false}
         onRefresh={() => props.onRefresh?.()}
+        accessibilityLabel="Trwa ładowanie produktów"
       />
     )}
   />

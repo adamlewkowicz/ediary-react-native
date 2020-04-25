@@ -17,8 +17,10 @@ describe('<ProductFindScreen />', () => {
   
         const productFindInput = ctx.getByLabelText('Nazwa szukanego produktu');
         fireEvent.focus(productFindInput);
-  
+
+        await ctx.findByLabelText('Lista znalezionych produktów');
         const productSearchTabButton = ctx.getByLabelText('Znalezione');
+
         expect(productSearchTabButton).toBeSelected();
       });
 
@@ -38,10 +40,9 @@ describe('<ProductFindScreen />', () => {
     describe('when selects product', () => {
 
       it('should return choosen product as a product resolver', async () => {
-        const paramsMock = {
-          onProductSelected: jest.fn()
-        }
+        const paramsMock = { onProductSelected: jest.fn() };
         const productMock = await Product.save({ name: 'tomatoe' });
+
         const ctx = renderSetup<ProductFindScreenNavigationProps>(
           <ProductFindScreen />, { params: paramsMock }
         );
@@ -72,6 +73,8 @@ describe('<ProductFindScreen />', () => {
       const productFavoritesTabButton = ctx.getByLabelText('Ulubione');
       fireEvent.press(productFavoritesTabButton);
 
+      await ctx.findByLabelText('Lista ulubionych produktów');
+
       expect(productFavoritesTabButton).toBeSelected();
     });
 
@@ -83,6 +86,8 @@ describe('<ProductFindScreen />', () => {
     
       const ctx = renderSetup(<ProductFindScreen />);
       const recentProductsTabButton = ctx.getByLabelText('Ostatnio używane');
+
+      await ctx.findByLabelText('Lista ostatnio używanych produktów');
 
       expect(recentProductsTabButton).toBeSelected();
     });
