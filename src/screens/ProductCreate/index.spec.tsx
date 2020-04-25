@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, wait } from '@testing-library/react-native';
+import { fireEvent, wait, waitForElementToBeRemoved } from '@testing-library/react-native';
 import { Product } from '../../database/entities';
 import { ProductCreateScreen } from '.';
 import { renderSetup } from '../../../test-utils';
@@ -51,8 +51,11 @@ describe('<ProductCreateScreen />', () => {
     fireEvent.changeText(kcalInput, productMock.macro.kcal.toString());
     fireEvent.changeText(barcodeInput, productMock.barcode);
     fireEvent.press(saveProductButton);
-    
-    await wait(() => expect(productSaveSpy).toHaveBeenCalledTimes(1));
+
+    await ctx.findByLabelText('Trwa ładowanie');
+    await waitForElementToBeRemoved(() => ctx.getByLabelText('Trwa ładowanie'));
+
+    expect(productSaveSpy).toHaveBeenCalledTimes(1);
     expect(saveProductButton).not.toBeDisabled();
   });
 

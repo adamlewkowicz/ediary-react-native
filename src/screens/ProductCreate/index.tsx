@@ -233,7 +233,6 @@ export const ProductCreateScreen = () => {
         />
       </Section>
       <SaveProductButton
-        accessibilityLabel="Zapisz produkt"
         onPress={handleSubmit}
         isLoading={isLoading}
       >
