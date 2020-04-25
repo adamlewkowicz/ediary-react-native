@@ -2,20 +2,17 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { ChartMacroCircles } from '../ChartMacroCircles';
 import { MealProductItemMemo } from '../MealProductItem';
-import { Selectors } from '../../../store';
 import { MealId } from '../../../types';
 import { ActivityIndicator } from 'react-native';
-import { ButtonSecondary, H2 } from '../../atoms';
-import { Theme } from '../../../common/theme';
+import { ButtonSecondary } from '../../atoms';
+import { DiaryProduct } from '../../../store/reducers/diary';
+import { Selectors } from '../../../store';
 
-export interface MealItemDetailsProps<
-  Meal extends Selectors.MealCalced = Selectors.MealCalced,
-  Product extends Meal['products'][number] = Meal['products'][number]
-> {
-  meal: Meal
-  onProductQuantityUpdate: (mealId: MealId, product: Product) => void
-  onProductDelete: (mealId: MealId, product: Product) => void
-  onProductAdd: (meal: Meal) => void
+export interface MealItemDetailsProps {
+  meal: Selectors.MealCalced
+  onProductQuantityUpdate: (mealId: MealId, product: DiaryProduct) => void
+  onProductDelete: (mealId: MealId, product: DiaryProduct) => void
+  onProductAdd: (meal: Selectors.MealCalced) => void
 }
 
 export const MealItemDetails = (props: MealItemDetailsProps) => {
@@ -76,13 +73,3 @@ const Spinner = styled(ActivityIndicator)`
 const AddProductButton = styled(ButtonSecondary)`
   margin: ${props => props.theme.spacing.smallVertical};
 `
-
-// @ts-ignore
-const MealName = styled<IsOpenedProp>(H2)`
-  color: ${(props: IsOpenedProp) => props.theme.color[props.isOpened ? 'primaryLight' : 'primary']};
-`
-
-interface IsOpenedProp {
-  isOpened?: boolean
-  theme: Theme
-}
