@@ -27,16 +27,18 @@ export const Button = (props: ButtonProps) => {
       variant={variant}
       accessibilityRole={role}
       accessibilityState={{ disabled: isLoading }}
+      accessibilityLabel={props.accessibilityLabel ?? children}
       onPress={isLoading ? undefined : onPress}
       {...props}
     >
       {isLoading ? (
-        <ActivityIndicator color={THEME.color.primaryLight} />
+        <ActivityIndicator
+          color={THEME.color.primaryLight}
+          accessibilityLabel="Trwa ładowanie"
+        />
       ) : (
         <>
-          <Title variant={variant}>
-            {children}
-          </Title>
+          <Title variant={variant}>{children}</Title>
           {Icon && <Icon {...ICON_PROPS}  />}
         </>
       )}
