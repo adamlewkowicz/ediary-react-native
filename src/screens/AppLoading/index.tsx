@@ -9,9 +9,7 @@ import styled from 'styled-components/native';
 import { useDispatch } from 'react-redux';
 import { useAppError } from '../../hooks';
 
-interface AppLoadingScreenProps {}
-
-export const AppLoadingScreen = (props: AppLoadingScreenProps) => {
+export const AppLoadingScreen = () => {
   const dispatch = useDispatch();
   const { setAppError } = useAppError();
 

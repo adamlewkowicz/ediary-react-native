@@ -17,9 +17,7 @@ import * as Yup from 'yup';
 import * as Utils from '../../utils';
 import { ProductUnitType } from '../../types';
 
-interface ProductCreateScreenProps {}
-
-export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
+export const ProductCreateScreen = () => {
   const { params, navigation, navigate } = useNavigationData<ProductCreateScreenNavigationProps>();
   const [portionUnitType] = useState<ProductUnitType>('g');
   const [isLoading, setIsLoading] = useState(false);
@@ -70,7 +68,7 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
       fats: Number(formik.values.fats)
     });
 
-    if (!Number.isNaN(calcedKcal)) {
+    if (Utils.isANumber(calcedKcal)) {
       formik.setFieldValue('kcal', String(calcedKcal));
     }
   }
@@ -214,7 +212,6 @@ export const ProductCreateScreen = (props: ProductCreateScreenProps) => {
         />
       </Section>
       <SaveProductButton
-        accessibilityLabel="Zapisz produkt"
         onPress={handleSubmit}
         isLoading={isLoading}
       >

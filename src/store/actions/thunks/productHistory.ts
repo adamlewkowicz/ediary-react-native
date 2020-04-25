@@ -1,10 +1,9 @@
 import { Thunk } from '../..';
 import { Product } from '../../../database/entities';
-import { productHistoryAdded } from '../creators/productHistory';
+import { produtHistoryLoaded } from '../creators/productHistory';
 
 export const productHistoryLoad = (): Thunk => async (dispatch) => {
   const recentProducts = await Product.findRecentlyUsed();
-  if (recentProducts.length) {
-    dispatch(productHistoryAdded(recentProducts));
-  }
+
+  dispatch(produtHistoryLoaded(recentProducts));
 }

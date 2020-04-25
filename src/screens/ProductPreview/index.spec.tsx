@@ -1,6 +1,6 @@
 import React from 'react';
 import { Product } from '../../database/entities';
-import { renderSetup } from '../../../__tests__/utils';
+import { renderSetup } from '../../../test-utils';
 import { ProductPreviewScreen } from '.';
 
 describe('<ProductPreviewScreen />', () => {
@@ -12,6 +12,7 @@ describe('<ProductPreviewScreen />', () => {
     const ctx = renderSetup(<ProductPreviewScreen />, { params });
 
     ctx.getByText(productMock.name);
+    await ctx.findByLabelText('Dodaj lub usuń produkt z ulubionych');
   });
 
 });

@@ -42,7 +42,6 @@ export const ChartsMacroNeeds = (props: ChartsMacroNeedsProps) => {
           gradientColors={THEME.gradient.fats}
         />
       </CirclesContainer>
-
     </>
   );
 }

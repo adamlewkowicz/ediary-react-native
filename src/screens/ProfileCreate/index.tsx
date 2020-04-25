@@ -19,9 +19,7 @@ import { Actions } from '../../store';
 import { SelectionOptions } from '../../components/molecules/SelectionOptions';
 import * as Utils from '../../utils';
 
-interface ProfileCreateScreenProps {}
-
-export const ProfileCreateScreen = (props: ProfileCreateScreenProps) => {
+export const ProfileCreateScreen = () => {
   const [male, setMale] = useState(true);
   const [height, setHeight] = useState(175);
   const [weight, setWeight] = useState(65);

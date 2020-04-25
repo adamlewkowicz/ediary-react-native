@@ -1,5 +1,5 @@
 import React from 'react';
-import { renderSetup } from '../../../__tests__/utils';
+import { renderSetup } from '../../../test-utils';
 import { DiarySummaryScreen } from '.';
 
 describe('<DiarySummaryScreen />', () => {

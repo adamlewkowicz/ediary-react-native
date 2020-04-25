@@ -4,9 +4,9 @@ import { TextInputProps, ActivityIndicator } from 'react-native';
 import { LoupeIcon } from '../Icons';
 import { THEME } from '../../../common/theme';
 
-interface InputSearcherProps extends TextInputProps {
+export interface InputSearcherProps extends TextInputProps {
   showLabel?: boolean
-  isLoading: boolean
+  isLoading?: boolean
 }
 
 export const InputSearcher = ({ isLoading, ...props }: InputSearcherProps) => (

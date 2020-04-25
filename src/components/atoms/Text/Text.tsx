@@ -10,7 +10,6 @@ export const H2 = styled.Text`
   font-family: ${props => props.theme.fontWeight.light};
   font-size: 18px;
   color: ${props => props.theme.color.primary};
-  /* margin-bottom: 10px; */
 `
 
 export const H3 = styled.Text`

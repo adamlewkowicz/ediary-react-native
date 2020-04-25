@@ -25,6 +25,6 @@ export const InputMetaText = React.forwardRef((
 
 const MetaText = styled(TextSecondary)`
   position: absolute;
-  right: 0;
+  right: 0px;
   color: ${props => props.theme.color.secondary};
 `

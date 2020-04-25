@@ -5,9 +5,7 @@ import { BarcodeId } from '../../types';
 import { BarcodeScanScreenNavigationProps } from '../../navigation';
 import { useNavigationData } from '../../hooks';
 
-interface BarcodeScanScreenProps {}
-
-export const BarcodeScanScreen = (props: BarcodeScanScreenProps) => {
+export const BarcodeScanScreen = () => {
   const { params } = useNavigationData<BarcodeScanScreenNavigationProps>();
   const cameraRef = useRef<RNCamera>(null);
   const prevBarcodeId = useRef<BarcodeId | null>(null);
