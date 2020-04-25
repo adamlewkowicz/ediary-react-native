@@ -1,47 +1,61 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useAppError } from './use-app-error';
 import * as Utils from '../utils';
+import { useNativeState } from './use-native-state';
+
+interface State<T> {
+  isLoading: boolean
+  isRefreshRequested: boolean
+  data: T
+}
 
 export const useAsyncData = <T>(options: {
   initialValue: T
   asyncTask: () => Promise<T>
 }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isRefreshRequested, setIsRefreshRequested] = useState(true);
-  const [data, setData] = useState<T>(options.initialValue);
+  const [state, setState] = useNativeState<State<T>>({
+    isLoading: false,
+    isRefreshRequested: false,
+    data: options.initialValue,
+  });
   const { setAppError } = useAppError();
 
-  const refresh = useCallback(() => setIsRefreshRequested(true), []);
+  const refresh = useCallback(() => setState({ isRefreshRequested: true }), []);
 
   useEffect(() => {
     const abortController = new AbortController();
     
     const handleAsyncTask = async () => {
       try {
-        setIsLoading(true);
+        setState({ isLoading: true });
 
-        const result = await Utils.cancelablePromise<T>(
+        const data = await Utils.cancelablePromise<T>(
           options.asyncTask(),
           abortController
         );
 
-        setData(result);
+        setState({
+          data,
+          isLoading: false,
+          isRefreshRequested: false,
+        });
 
       } catch(error) {
         setAppError(error);
 
-      } finally {
-        setIsLoading(false);
-        setIsRefreshRequested(false);
+        setState({
+          isLoading: false,
+          isRefreshRequested: false,
+        });
       }
     }
 
-    if (isRefreshRequested) {
+    if (state.isRefreshRequested) {
       handleAsyncTask();
     }
 
     return () => abortController.abort();
-  }, [isRefreshRequested]);
+  }, [state.isRefreshRequested]);
   
-  return { data, isLoading, refresh };
+  return { ...state, refresh };
 }

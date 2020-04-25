@@ -25,12 +25,14 @@ const createA11yStateMatcher = (a11yStatePropName: keyof A11YState) => function(
 
 expect.extend({
   toBeExpanded: createA11yStateMatcher('expanded'),
-  toBeSelected: createA11yStateMatcher('selected')
+  toBeSelected: createA11yStateMatcher('selected'),
+  toBeBusy: createA11yStateMatcher('busy'),
 });
 
 type A11YState = {
   expanded?: boolean
   selected?: boolean
+  busy?: boolean
 };
 
 declare global {
@@ -48,6 +50,12 @@ declare global {
        * ```
        */
       toBeSelected(): R
+      /**
+       * ```tsx
+       * accessibilityState={{ busy: true }}
+       * ```
+       */
+      toBeBusy(): R
     }
   }
 }
