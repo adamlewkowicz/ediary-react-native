@@ -17,6 +17,7 @@ export interface ProductListProps<T = ProductOrNormalizedProduct> {
 export const ProductList = (props: ProductListProps) => (
   <FlatList
     data={props.data}
+    accessibilityState={{ busy: props.isLoading }}
     keyExtractor={productKeyExtractor}
     keyboardShouldPersistTaps="handled"
     ItemSeparatorComponent={ItemSeparator}
