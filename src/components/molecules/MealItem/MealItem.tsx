@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Theme } from '../../common/theme';
+import { Theme } from '../../../common/theme';
 import { MealItemDetails, MealItemDetailsProps } from './MealItemDetails';
 import { MealItemInfo, MealItemContentProps } from './MealItemInfo';
 

@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { ChartMacroCircles } from './ChartMacroCircles';
-import { MealProductItemMemo } from './MealProductItem';
-import { Selectors } from '../../store';
-import { MealId } from '../../types';
+import { ChartMacroCircles } from '../ChartMacroCircles';
+import { MealProductItemMemo } from '../MealProductItem';
+import { Selectors } from '../../../store';
+import { MealId } from '../../../types';
 import { ActivityIndicator } from 'react-native';
-import { ButtonSecondary, H2 } from '../atoms';
-import { Theme } from '../../common/theme';
+import { ButtonSecondary, H2 } from '../../atoms';
+import { Theme } from '../../../common/theme';
 
 export interface MealItemDetailsProps<
   Meal extends Selectors.MealCalced = Selectors.MealCalced,
