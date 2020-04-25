@@ -14,9 +14,16 @@ export const ButtonFavorite = (props: ButtonFavoriteProps) => {
     duration: 2500,
     easing: Easing.linear,
   });
+  const a11yHint = props.isFavorite
+    ? 'Usuń produkt z ulubionych'
+    : 'Dodaj produkt do ulubionych';
 
   return (
-    <Container onPress={props.onToggle}>
+    <Container
+      accessibilityLabel="Dodaj lub usuń produkt z ulubionych"
+      accessibilityHint={a11yHint}
+      onPress={props.onToggle}
+    >
       <LottieStyled
         source={require('../../../../assets/lottie/heart.json')}
         progress={progress}

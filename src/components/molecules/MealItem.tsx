@@ -86,7 +86,12 @@ export const MealItem = <T extends Selectors.MealCalced>(props: MealItemProps<T>
                 onDelete={props.onProductDelete}
               />
             ))}
-            {meal.isAddingProduct && <Spinner size={25} />}
+            {meal.isAddingProduct && (
+              <Spinner
+                accessibilityLabel="Trwa dodawanie produktu"
+                size={25}
+              />
+            )}
             <AddProductButton
               accessibilityLabel="Dodaj produkt do posiłku"
               accessibilityHint="Przechodzi do wyszukiwarki produktów"

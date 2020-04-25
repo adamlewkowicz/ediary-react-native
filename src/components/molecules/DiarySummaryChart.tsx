@@ -87,7 +87,7 @@ const Container = styled.View`
 `
 
 const YAxis = styled(SvgCharts.YAxis)`
-  margin-bottom: ${X_AXIS_HEIGHT};
+  margin-bottom: ${X_AXIS_HEIGHT}px;
   min-width: 30px;
 `
 

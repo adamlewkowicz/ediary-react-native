@@ -68,7 +68,7 @@ export const ProductCreateScreen = () => {
       fats: Number(formik.values.fats)
     });
 
-    if (!Number.isNaN(calcedKcal)) {
+    if (Utils.isANumber(calcedKcal)) {
       formik.setFieldValue('kcal', String(calcedKcal));
     }
   }
@@ -233,7 +233,6 @@ export const ProductCreateScreen = () => {
         />
       </Section>
       <SaveProductButton
-        accessibilityLabel="Zapisz produkt"
         onPress={handleSubmit}
         isLoading={isLoading}
       >
