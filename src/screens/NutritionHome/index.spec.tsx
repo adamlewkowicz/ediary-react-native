@@ -3,6 +3,7 @@ import {
   fireEvent,
   wait,
   within,
+  waitForElementToBeRemoved,
 } from '@testing-library/react-native';
 import { renderSetup } from '../../../test-utils';
 import { Meal, Product, MealProduct } from '../../database/entities';
@@ -65,6 +66,8 @@ describe('<NutritionHomeScreen />', () => {
 
       const addProductToMealButton = await ctx.findByLabelText('Dodaj produkt do posiłku');
       fireEvent.press(addProductToMealButton);
+
+      await waitForElementToBeRemoved(() => ctx.getByLabelText('Trwa dodawanie produktu'));
 
       const addedProduct = await ctx.findByText(productMock.name);
 
