@@ -87,8 +87,8 @@ const IconContainer = styled.View`
 
 const CheckedStyled = styled(CheckedIcon)`
   position: absolute;
-  right: ${-CHECKED_ICON_SIZE / 2};
-  top: ${-CHECKED_ICON_SIZE / 2};
+  right: ${-CHECKED_ICON_SIZE / 2}px;
+  top: ${-CHECKED_ICON_SIZE / 2}px;
 `
 
 const Description = styled(TextSecondary)`
