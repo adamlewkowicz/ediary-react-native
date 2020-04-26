@@ -8,6 +8,4 @@ describe('<DiarySummaryScreen />', () => {
     renderSetup(<DiarySummaryScreen />);
   });
 
-  it.todo('should display average macro from last week');
-
 });

@@ -99,6 +99,7 @@ const ChartContainer = styled.View`
 const XAxis = styled(SvgCharts.XAxis)`
   margin-horizontal: -15px;
   height: 20px;
+  color: ${props => props.theme.color.primary};
 `
 
 const AreaChart = styled(SvgCharts.AreaChart)`

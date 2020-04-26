@@ -15,3 +15,5 @@ export * from './ProductSearchList';
 export * from './ProductList';
 export * from './BottomTabBar';
 export * from './ProductSearcher';
+export * from './MacroConsumptionInfo';
+export * from './RatioInfo';
