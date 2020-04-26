@@ -1,9 +1,9 @@
 import React from 'react';
-import { Table, H4, TextHighlight, TextPrimary } from '..';
+import { Table, H4, TextHighlight, TextPrimary } from '../..';
 import { TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
-import { MealId } from '../../types';
-import { DiaryProduct } from '../../store/reducers/diary';
+import { MealId } from '../../../types';
+import { DiaryProduct } from '../../../store/reducers/diary';
 
 interface MealProductItemProps<T> {
   mealId: MealId

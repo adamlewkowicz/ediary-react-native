@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { ChartMacroCircles } from '../ChartMacroCircles';
-import { MealProductItemMemo } from '../MealProductItem';
+import { MealProductItemMemo } from './MealProductItem';
 import { MealId } from '../../../types';
 import { ActivityIndicator } from 'react-native';
 import { ButtonSecondary } from '../../atoms';
