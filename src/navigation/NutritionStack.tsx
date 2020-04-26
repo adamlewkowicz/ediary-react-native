@@ -30,6 +30,9 @@ export type NutritionStackParamList = {
     barcode?: BarcodeId
     name?: string
     onProductCreated?: (product: Product) => void
+    // Params for product editing
+    product?: Product
+    onProductEdited?: (product: Product) => void
   };
   [APP_ROUTE.BarcodeScan]: {
     onBarcodeDetected?: (barcode: BarcodeId) => void

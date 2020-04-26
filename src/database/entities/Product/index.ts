@@ -138,6 +138,17 @@ export class Product extends GenericEntity {
     return Product.save(productData);
   }
 
+  private normalizePortionQuantity() {
+
+  }
+
+  static updateWithPortion(
+    productData: IProductRequired,
+    portionQuantity: number,
+  ) {
+
+  }
+
   static findByNameLike(name: string): Promise<Product[]> {
     const limit = 10;
     

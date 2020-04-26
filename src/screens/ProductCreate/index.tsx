@@ -35,27 +35,51 @@ export const ProductCreateScreen = () => {
   const kcalInputRef = useRef<TextInput>(null);
   const barcodeInputRef = useRef<TextInput>(null);
 
+  const handleProductSave = async (values: FormData) => {
+    try {
+      if (isLoading) return;
+
+      setIsLoading(true);
+
+      const { portionQuantity, ...productData } = normalizeProductData(values);
+      const productWithUserId = { ...productData, userId };
+  
+      const createdProduct = await Product.saveWithPortion(productWithUserId, portionQuantity);
+  
+      params.onProductCreated?.(createdProduct);
+
+    } catch(error) {
+      setAppError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const handleProductUpdate = async (values: FormData) => {
+    try {
+      if (isLoading) return;
+
+      setIsLoading(true);
+
+      const { portionQuantity, ...productData } = normalizeProductData(values);
+      const productWithUserId = { ...productData, userId };
+  
+      const updatedProduct = await Product.saveWithPortion(productWithUserId, portionQuantity);
+  
+      params.onProductCreated?.(createdProduct);
+
+    } catch(error) {
+      setAppError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   const formik = useFormik({
-    initialValues: INITIAL_VALUES,
+    initialValues: getInitialValues(params.product),
     validationSchema: getValidationSchema(portionUnitType),
-    async onSubmit(values) {
-      try {
-        if (isLoading) return;
-
-        setIsLoading(true);
-
-        const { portionQuantity, ...productData } = normalizeProductData(values);
-        const productWithUserId = { ...productData, userId };
-    
-        const createdProduct = await Product.saveWithPortion(productWithUserId, portionQuantity);
-    
-        params.onProductCreated?.(createdProduct);
-
-      } catch(error) {
-        setAppError(error);
-      } finally {
-        setIsLoading(false);
-      }
+    onSubmit(values) {
+      handleProductSave(values);
     }
   });
 
@@ -250,19 +274,59 @@ const SaveProductButton = styled(ButtonPrimary)`
   margin-bottom: 20px;
 `
 
-const INITIAL_VALUES = {
-  name: '',
-  brand: '',
-  producer: '',
-  portionQuantity: '',
-  carbs: '',
-  sugars: '',
-  prots: '',
-  fats: '',
-  fattyAcids: '',
-  kcal: '',
-  barcode: '',
-};
+const getInitialValues = (product?: Product): FormData => {
+  const defaultValues = {
+    name: '',
+    brand: '',
+    producer: '',
+    portionQuantity: '',
+    carbs: '',
+    sugars: '',
+    prots: '',
+    fats: '',
+    fattyAcids: '',
+    kcal: '',
+    barcode: '',
+  };
+
+  if (product) {
+    const { macro, barcode, portion, name } = product;
+
+    const parsedMacro = Object.fromEntries(
+      Object.entries(macro).map(
+        ([prop, value]) => [prop, String(value)]
+      )
+    );
+
+    const parsedBarcode = Utils.isNil(barcode) ? '' : String(barcode)
+
+    const formData: FormData = {
+      ...defaultValues,
+      ...parsedMacro,
+      name,
+      barcode: parsedBarcode,
+      portionQuantity: String(portion),
+    };
+
+    return formData;
+  }
+
+  return defaultValues;
+}
+
+type FormData = {
+  name: string
+  brand: string
+  producer: string
+  portionQuantity: string
+  carbs: string
+  sugars: string
+  prots: string
+  fats: string
+  fattyAcids: string
+  kcal: string
+  barcode: string
+}
 
 const MAX_PORTION_QUANTITY = 2000;
 
@@ -288,8 +352,6 @@ const getValidationSchema = (portionUnitType: ProductUnitType) => Yup.object({
   kcal: Yup.number(),
   barcode: Yup.string(),
 });
-
-type FormData = typeof INITIAL_VALUES;
 
 const normalizeProductData = (productData: FormData) => {
   const { fattyAcids, sugars, ...restData } = productData;
