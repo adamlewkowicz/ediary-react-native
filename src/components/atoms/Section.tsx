@@ -8,22 +8,28 @@ interface SectionProps {
   children: ReactNode
 }
 
-export const Section = (props: SectionProps) => {
-  return (
-    <Container>
-      <Title accessibilityRole="text">
-        {props.title}
-      </Title>
-      {props.description && <H3>{props.description}</H3>}
-      {props.children}
-    </Container>
-  );
-}
-
-const Title = styled(H2)`
-  margin-bottom: ${props => props.theme.spacing.small};
-`
+export const Section = (props: SectionProps) => (
+  <Container>
+    <Title isDescription={props.description != null}>
+      {props.title}
+    </Title>
+    {props.description && (
+      <Description>{props.description}</Description>
+    )}
+    {props.children}
+  </Container>
+);
 
 const Container = styled.View`
   margin: ${props => props.theme.spacing.baseVertical};
+`
+
+const Title = styled(H2)<{
+  isDescription: boolean
+}>`
+  margin-bottom: ${props => props.isDescription ? 0 : props.theme.spacing.small};
+`
+
+const Description = styled(H3)`
+  margin-bottom: ${props => props.theme.spacing.small};
 `
