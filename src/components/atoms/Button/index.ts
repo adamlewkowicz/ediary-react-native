@@ -1,4 +1,4 @@
 export * from './ButtonPrimary';
 export * from './ButtonSecondary';
-export * from './BarcodeButton';
+export * from './ButtonBarcode';
 export * from './ButtonFavorite';

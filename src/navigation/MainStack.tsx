@@ -5,7 +5,7 @@ import {
   BottomTabBarOptions,
 } from '@react-navigation/bottom-tabs';
 import { APP_ROUTE } from './consts';
-import { DiarySummaryScreen } from '../screens';
+import { NutritionSummaryScreen } from '../screens';
 import { THEME } from '../common/theme';
 import { BottomTabBar } from '../components';
 import { NutritionStack } from './NutritionStack';
@@ -15,7 +15,7 @@ const Tab = createBottomTabNavigator<TabStackParamList>();
 
 export type TabStackParamList = {
   [APP_ROUTE.NutritionStack]: undefined;
-  [APP_ROUTE.DiarySummary]: undefined;
+  [APP_ROUTE.NutritionSummary]: undefined;
 }
 
 export const MainStack = () => (
@@ -30,8 +30,8 @@ export const MainStack = () => (
       options={{ tabBarLabel: 'Dziennik' }}
     />
     <Tab.Screen
-      name={APP_ROUTE.DiarySummary}
-      component={DiarySummaryScreen}
+      name={APP_ROUTE.NutritionSummary}
+      component={NutritionSummaryScreen}
       options={{ tabBarLabel: 'Podsumowanie' }}
     />
   </Tab.Navigator>
@@ -49,7 +49,7 @@ const TAB_BAR_OPTIONS: BottomTabBarOptions = {
 
 export type NutritionStackNavigationProp = ScreenProps<'NutritionStack'>;
 
-export type DiarySummaryScreenNavigationProps = ScreenProps<'DiarySummary'>;
+export type NutritionSummaryScreenNavigationProps = ScreenProps<'NutritionSummary'>;
 
 type ScreenProps<
   K extends keyof TabStackParamList

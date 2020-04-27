@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { InputSearcher, InputSearcherProps, BarcodeButton } from '../atoms';
+import { InputSearcher, InputSearcherProps, ButtonBarcode } from '../atoms';
 
 interface SearcherProps extends InputSearcherProps {
   onBarcodeScan?: () => void
@@ -14,7 +14,7 @@ export const ProductSearcher = ({ onBarcodeScan, ...props }: SearcherProps) => (
       placeholder="Nazwa produktu"
       {...props}
     />
-    <BarcodeButton
+    <ButtonBarcode
       accessibilityLabel="Zeskanuj kod kreskowy"
       onPress={onBarcodeScan}
     />

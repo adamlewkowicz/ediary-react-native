@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { ChartProgressBar } from '../';
-import { THEME } from '../../common/theme';
-import { BaseMacroElements } from '../../types';
+import { ChartProgressBar } from '../..';
+import { THEME } from '../../../common/theme';
+import { BaseMacroElements } from '../../../types';
 
 interface ChartMacroBarsBaseProps {
   percentages: BaseMacroElements

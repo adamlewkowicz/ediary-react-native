@@ -36,7 +36,7 @@ export const DateChanger = (props: DateChangerProps) => {
         accessibilityLabel="Poprzedni dzień"
         onPress={() => handleDayChange('prev')}
       >
-        <ArrowIconLeft {...ARROW_ICON_STYLE} />
+        <ArrowIconLeft />
       </DayChangeButton>
       <CalendarButton
         onPress={handleOpen}
@@ -50,7 +50,7 @@ export const DateChanger = (props: DateChangerProps) => {
         accessibilityLabel="Następny dzień"
         onPress={() => handleDayChange('next')}
       >
-        <ArrowIconRight {...ARROW_ICON_STYLE} />
+        <ArrowIconRight />
       </DayChangeButton>
       {isOpened && (
         <DateTimePicker
@@ -75,7 +75,11 @@ const DayChangeButton = styled.TouchableOpacity`
   padding: ${props => props.theme.spacing.base};
 `
 
-const ArrowIconRight = styled(RightArrowIcon)``
+const ArrowIconRight = styled(RightArrowIcon).attrs(theme => ({
+  fill: THEME.color.highlight,
+  width: 26,
+  height: 26,
+}))``
 
 const ArrowIconLeft = styled(ArrowIconRight)`
   transform: rotate(180deg);
@@ -95,14 +99,8 @@ const DateInfo = styled(TextPrimary)`
   font-family: ${props => props.theme.fontWeight.light};
 `
 
-export const DateChangerMemo = React.memo(DateChanger);
-
-const ARROW_ICON_STYLE = {
-  fill: THEME.color.highlight,
-  width: 26,
-  height: 26,
-}
-
 const DAYJS_DAY = 'dddd';
 
 const DAYJS_MAIN_DATE = 'DD MMMM YYYY';
+
+export const DateChangerMemo = React.memo(DateChanger);

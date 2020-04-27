@@ -1,15 +1,15 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Selectors } from '../../store';
+import { Selectors } from '../../../store';
 import { ChartCalories } from './ChartCalories';
-import { ChartMacroCircleLeft } from '../';
-import { THEME } from '../../common/theme';
+import { ChartMacroCircleLeft } from '../..';
+import { THEME } from '../../../common/theme';
 
-interface ChartsMacroNeedsProps {
+interface ChartMacroNeedsProps {
   macroNeeds: Selectors.MacroNeeds
 }
 
-export const ChartsMacroNeeds = (props: ChartsMacroNeedsProps) => {
+export const ChartMacroNeeds = (props: ChartMacroNeedsProps) => {
   const { carbs, prots, fats, kcal } = props.macroNeeds;
 
   return (  

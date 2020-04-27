@@ -1,6 +1,6 @@
 import React from 'react';
-import { ProductList, ProductListProps } from './ProductList';
-import { useProductFavorites } from '../../hooks';
+import { ProductList, ProductListProps } from '.';
+import { useProductFavorites } from '../../../hooks';
 
 interface ProductFavoritesListProps extends Omit<ProductListProps, 'data'> {}
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { useProductsCreated } from '../../hooks';
-import { ProductList, ProductListProps } from './ProductList';
-import { Product } from '../../database/entities';
+import { useProductsCreated } from '../../../hooks';
+import { ProductList, ProductListProps } from '.';
+import { Product } from '../../../database/entities';
 
 interface ProductCreatedListProps extends Omit<ProductListProps, 'data'> {
   createdProduct: Product | null
