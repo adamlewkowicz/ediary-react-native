@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { H2, TextSecondary, MacroDetails } from '../';
-import { THEME } from '../../common/theme';
-import { ProductOrNormalizedProduct } from '../../database/entities';
+import { H2, TextSecondary, MacroDetails } from '../..';
+import { THEME } from '../../../common/theme';
+import { ProductOrNormalizedProduct } from '../../../database/entities';
 
 interface ProductSearchItemProps<T = ProductOrNormalizedProduct> {
   product: T

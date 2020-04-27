@@ -72,14 +72,7 @@ export const calculateMacroNeeds = <T extends ObjectNumeric>(
     return macroValueNeed;
   }
   // TODO: Remove duck typing
-) as MacroElements<MacroNeed>;
-
-type MacroNeed = {
-  eaten: number
-  needed: number
-  left: number,
-  percentage: number
-}
+) as MacroNeeds;
 
 const calculateObjectsValueSum = <T extends ObjectNumeric>(objects: T[]): T => {
   const [initialObj, ...restObjects] = objects;
@@ -137,3 +130,12 @@ export const calculateCircleStrokeDasharray = (
   const FORMULA_CONSTANT = 2;
   return Math.floor(FORMULA_CONSTANT * Math.PI * radius) + strokeWidth;
 }
+
+export type MacroNeed = {
+  eaten: number
+  needed: number
+  left: number,
+  percentage: number
+}
+
+type MacroNeeds = MacroElements<MacroNeed>;

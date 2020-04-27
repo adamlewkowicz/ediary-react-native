@@ -1,6 +1,6 @@
 import React from 'react';
-import { ProductList, ProductListProps } from './ProductList';
-import { useProductHistory } from '../../hooks';
+import { ProductList, ProductListProps } from '.';
+import { useProductHistory } from '../../../hooks';
 
 interface ProductRecentListProps extends Omit<ProductListProps, 'data'> {}
 

@@ -1,4 +1,4 @@
-import React, { ReactNode, RefObject } from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components/native'
 import { TextInputProps, TextInput as NativeTextInput } from 'react-native';
 import { THEME } from '../../../common/theme';
@@ -7,17 +7,18 @@ import { InputLabel, TextPrimary } from '../index';
 export interface InputProps extends TextInputProps  {
   label: string
   rightContent?: ReactNode
-  forwardedRef?: RefObject<NativeTextInput>
   error?: string
   isDirty?: boolean
 }
 
-export const Input = (props: InputProps) => {
+export const Input = React.forwardRef((
+  props: InputProps,
+  ref: React.Ref<NativeTextInput>
+) => {
   const {
     rightContent,
     label,
     accessibilityLabel = label,
-    forwardedRef,
     ...inputProps
   } = props;
 
@@ -36,8 +37,7 @@ export const Input = (props: InputProps) => {
         <TextInput
           status={validationStatus}
           accessibilityLabel={accessibilityLabel}
-          placeholderTextColor={THEME.color.tertiary}
-          ref={forwardedRef}
+          ref={ref}
           {...inputProps}
         />
         {rightContent}
@@ -49,18 +49,16 @@ export const Input = (props: InputProps) => {
       )}
     </Container>
   );
-};
-
-export const InputRef = React.forwardRef<NativeTextInput, InputProps>(
-  (props, ref) => <Input {...props} forwardedRef={ref as RefObject<NativeTextInput>} />
-);
+});
 
 const Container = styled.View`
   margin-bottom: ${props => props.theme.spacing.small};
   flex: 1;
 `
 
-const TextInput = styled.TextInput<{
+const TextInput = styled.TextInput.attrs(props => ({
+  placeholderTextColor: THEME.color.tertiary as string
+}))<{
   status: ValidationStatus
 }>`
   border-bottom-color: ${props => {

@@ -5,7 +5,7 @@ import NativeBarcodeIcon from '../../../../assets/img/barcode.svg';
 
 interface BarcodeButtonProps extends TouchableOpacityProps {}
 
-export const BarcodeButton = (props: BarcodeButtonProps) => (
+export const ButtonBarcode = (props: BarcodeButtonProps) => (
   <Container {...props}>
     <BarcodeIcon />
   </Container>

@@ -97,3 +97,33 @@ export const cancelablePromise = <T, P extends Promise<T> = Promise<T>>(
     }
   });
 }
+
+export const bindFormikProps = <
+  F extends object,
+  K extends keyof F,
+>(
+  formik: Formik<F>,
+  formikProperty: K
+) => {
+  const isNotExistingProperty = !(formikProperty in formik.values);
+
+  if (isNotExistingProperty) {
+    throw new Error(`Unknown formik property "${formikProperty}"`);
+  }
+
+  return {
+    value: formik.values[formikProperty],
+    onChangeText: formik.handleChange(formikProperty as string),
+    onBlur: formik.handleBlur(formikProperty as string),
+    error: formik.errors[formikProperty],
+    isDirty: (formik.touched as any)[formikProperty],
+  };
+}
+
+interface Formik<F extends object> {
+  values: F
+  errors: F
+  touched: object
+  handleChange: (key: string) => any
+  handleBlur: (key: string) => any
+}
