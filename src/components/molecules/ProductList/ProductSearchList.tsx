@@ -1,9 +1,9 @@
 import React from 'react';
-import { ProductList, ProductListProps } from './ProductList';
-import { useProductSearch } from '../../hooks';
+import { ProductList, ProductListProps } from '.';
+import { useProductSearch } from '../../../hooks';
 import styled from 'styled-components/native';
-import { TextPrimary } from '../atoms';
-import { BarcodeId } from '../../types';
+import { TextPrimary } from '../../atoms';
+import { BarcodeId } from '../../../types';
 
 interface ProductSearchListProps extends Omit<ProductListProps, 'data'> {
   productName: string

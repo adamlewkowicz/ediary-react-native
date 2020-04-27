@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { FlatList, RefreshControl as NativeRefreshControl } from 'react-native';
-import { ProductOrNormalizedProduct } from '../../database/entities';
-import { ItemSeparator } from '../atoms';
+import { ProductOrNormalizedProduct } from '../../../database/entities';
+import { ItemSeparator } from '../../atoms';
 import { ProductSearchItemMemo } from './ProductSearchItem';
 import styled from 'styled-components/native';
 
