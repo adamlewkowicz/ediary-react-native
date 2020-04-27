@@ -14,7 +14,7 @@ import {
   ChartNutritionSummaryMemo,
 } from '../../components';
 
-export const DiarySummaryScreen = () => {
+export const NutritionSummaryScreen = () => {
   const [macroSummary, setMacroSummary] = useState<MacroElements>(() => ({ ...MACRO }));
   const [historyRecords, setHistoryRecords] = useState<HistoryRecord[]>([]);
   const userMacroNeeds = useSelector(Selectors.getUserMacroNeeds);

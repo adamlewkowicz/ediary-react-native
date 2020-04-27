@@ -1,11 +1,11 @@
 import React from 'react';
 import { renderSetup } from '../../../test-utils';
-import { DiarySummaryScreen } from '.';
+import { NutritionSummaryScreen } from '.';
 
-describe('<DiarySummaryScreen />', () => {
+describe('<NutritionSummaryScreen />', () => {
 
   it('should render without crashing 💥', () => {
-    renderSetup(<DiarySummaryScreen />);
+    renderSetup(<NutritionSummaryScreen />);
   });
 
 });
