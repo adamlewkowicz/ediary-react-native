@@ -11,7 +11,7 @@ import {
   H1,
   H3,
   MacroConsumptionInfo,
-  DiarySummaryChart,
+  ChartNutritionSummaryMemo,
 } from '../../components';
 
 export const DiarySummaryScreen = () => {
@@ -44,7 +44,7 @@ export const DiarySummaryScreen = () => {
     <Container>
       <Header>Podsumowanie</Header>
       <Description>Dzienne spożycie kalorii</Description>
-      <DiarySummaryChart
+      <ChartNutritionSummaryMemo
         data={historyRecords}
       />
       <Header>Makroskładniki</Header>
@@ -90,8 +90,6 @@ const Container = styled.ScrollView`
   padding-horizontal: ${props => props.theme.spacing.small};
   background: ${props => props.theme.color.primaryLight};
 `
-
-const CHART_DATE_FORMAT = 'ddd D/M';
 
 type HistoryRecord = {
   value: number

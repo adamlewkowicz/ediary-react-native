@@ -8,7 +8,7 @@ import { THEME } from '../../common/theme';
 import styled, {  } from 'styled-components/native';
 import { SvgGradientDef } from '../atoms';
 
-interface DiarySummaryChartProps {
+interface ChartNutritionSummaryProps {
   dateFormat?: string
   data: {
     value: number
@@ -16,7 +16,7 @@ interface DiarySummaryChartProps {
   }[]
 }
 
-export const DiarySummaryChart = (props: DiarySummaryChartProps) => {
+export const ChartNutritionSummary = (props: ChartNutritionSummaryProps) => {
   const { dateFormat = 'ddd D' } = props;
 
   const handleFormatLabel = (value: string): string => {
@@ -125,3 +125,5 @@ const DateXAxisContentInset = {
   left: 10,
   right: 30,
 };
+
+export const ChartNutritionSummaryMemo = React.memo(ChartNutritionSummary);
