@@ -1,4 +1,4 @@
-import { Product } from '../../database/entities';
+import { Product, IProductRequired } from '../../database/entities';
 import * as Utils from '../../utils';
 
 export const serializeProduct = (product?: Product): FormData => {
@@ -41,27 +41,28 @@ export const serializeProduct = (product?: Product): FormData => {
   return defaultValues;
 }
 
-export const deserializeProduct = (productData: FormData) => {
-  const { fattyAcids, sugars, ...restData } = productData;
+export const deserializeProduct = (productData: FormData): {
+  product: IProductRequired
+  portionQuantity: number
+} => {
 
   const macro = {
     carbs: Number(productData.carbs),
     prots: Number(productData.prots),
     fats: Number(productData.fats),
-    kcal: Number(productData.kcal)
+    kcal: Number(productData.kcal),
   }
 
   const barcode = productData.barcode.length ? productData.barcode : null;
   const portionQuantity = Number(productData.portionQuantity);
 
-  const product = {
-    ...restData,
+  const product: IProductRequired = {
+    name: productData.name,
     macro,
     barcode,
-    portionQuantity,
   }
 
-  return product;
+  return { product, portionQuantity };
 }
 
 export type FormData = {

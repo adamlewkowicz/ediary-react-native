@@ -28,6 +28,7 @@ interface ProductFindScreenState {
   createdProduct: Product | null
   activeTabIndex: number
   productAction: ProductOrNormalizedProduct | null
+  refreshTabIndex: number | null
 }
 
 export const ProductFindScreen = () => {
@@ -38,6 +39,7 @@ export const ProductFindScreen = () => {
     barcode: null,
     createdProduct: null,
     productAction: null,
+    refreshTabIndex: null,
   });
   const hasProductBeenSelected = useRef(false);
   const productNameDebounced = useDebouncedValue(state.productName);
@@ -62,6 +64,7 @@ export const ProductFindScreen = () => {
 
         setState({
           activeTabIndex: TAB_INDEX.created,
+          refreshTabIndex: TAB_INDEX.created,
           createdProduct,
         });
 
@@ -94,31 +97,34 @@ export const ProductFindScreen = () => {
   }, []);
 
   const handleProductAction = (actionOption: ActionOption): void => {
-    const isNotInstanceOfProduct = !(state.productAction instanceof Product);
-    const tabIndexProductReturnedFrom = state.activeTabIndex;
-
-    if (isNotInstanceOfProduct) {
+    if (!(state.productAction instanceof Product)) {
       return;
     }
 
     switch(actionOption) {
-      case PRODUCT_ACTION_OPTION.edit: {
+      case PRODUCT_ACTION_OPTION.edit: 
         navigate('ProductCreate', {
-          onProductEdited() {
+          product: state.productAction,
+          onProductEdited(editedProduct) {
             navigate('ProductFind');
+
             // @TODO Request refresh on this tab index
-            setState({ activeTabIndex: tabIndexProductReturnedFrom });
+            setState({
+              activeTabIndex: TAB_INDEX.created,
+              refreshTabIndex: TAB_INDEX.created,
+            });
           }
         });
         break;
-      }
-      case PRODUCT_ACTION_OPTION.showDetails: {
+      
+      case PRODUCT_ACTION_OPTION.showDetails: 
         navigate('ProductPreview', {
-          product: state.productAction as Product,
+          product: state.productAction,
         });
         break;
-      }
     }
+
+    setState({ productAction: null });
   }
 
   navigation.setOptions({
@@ -224,3 +230,7 @@ const AddOwnProductButton = styled(ButtonSecondaryArrow)`
 export type ProductResolver = () => Promise<Product>;
 
 type ActionOption = ValueOf<typeof PRODUCT_ACTION_OPTION>;
+
+const isInstanceOfProduct = (
+  product: ProductOrNormalizedProduct | null
+): product is Product => product instanceof Product;

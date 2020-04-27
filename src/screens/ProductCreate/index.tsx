@@ -43,17 +43,17 @@ export const ProductCreateScreen = () => {
 
       setIsLoading(true);
 
-      const { portionQuantity, ...newProductData } = deserializeProduct(values);
-      const productWithUserId = { ...newProductData, userId };
+      const { portionQuantity, product: productData } = deserializeProduct(values);
+      const productWithUserId = { ...productData, userId };
 
       if (params.onProductEdited && params.product) {
 
-        const updatedOrCreatedProduct = await Product.updateOrCreate(
-          params.product,
-          newProductData,
-          userId,
+        const updatedOrCreatedProduct = await Product.updateOrCreate({
+          originalProduct: params.product,
+          updateProductData: productData,
           portionQuantity,
-        );
+          userId,
+        });
 
         params.onProductEdited(updatedOrCreatedProduct);
         
@@ -73,7 +73,7 @@ export const ProductCreateScreen = () => {
   const formik = useFormik({
     initialValues: serializeProduct(params.product),
     validationSchema: getValidationSchema(portionUnitType),
-    onSubmit: handleFormSubmit
+    onSubmit: handleFormSubmit,
   });
 
   const handleCaloriesEvaluation = (): void => {
@@ -204,7 +204,7 @@ export const ProductCreateScreen = () => {
         />
       </Section>
       <SaveProductButton
-        onPress={() => formik.handleSubmit}
+        onPress={() => formik.handleSubmit()}
         isLoading={isLoading}
       >
         Zapisz produkt

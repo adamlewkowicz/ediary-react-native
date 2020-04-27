@@ -307,22 +307,29 @@ export class Product extends GenericEntity {
     });
   }
 
-  static async updateOrCreate(
+  static async updateOrCreate(options: {
     originalProduct: Product,
-    payload: IProductRequired,
+    updateProductData: IProductRequired,
     portionQuantity: number,
-    userId: UserId,
-  ): Promise<Product> {
+    userId: UserId
+  }): Promise<Product> {
+    const {
+      originalProduct,
+      userId,
+      updateProductData,
+      portionQuantity,
+    } = options;
+
     const isOwnProduct = originalProduct.userId === userId;
 
     if (isOwnProduct) {
-      await Product.update(originalProduct.id, payload);
+      await Product.update(originalProduct.id, updateProductData);
       const updatedProduct = await Product.findOneOrFail(originalProduct.id); 
 
       return updatedProduct;
     }
 
-    const createdProduct = await Product.saveWithPortion({ ...payload, userId }, portionQuantity);
+    const createdProduct = await Product.saveWithPortion({ ...updateProductData, userId }, portionQuantity);
 
     return createdProduct;
   }
