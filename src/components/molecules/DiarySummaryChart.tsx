@@ -1,38 +1,15 @@
 import React from 'react';
-import { Defs, Stop, LinearGradient } from 'react-native-svg'
 import { Grid } from 'react-native-svg-charts';
 import * as SvgCharts from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 import * as scale from 'd3-scale';
 import dayjs from 'dayjs';
 import { THEME } from '../../common/theme';
-import styled from 'styled-components/native';
-
-const GRADIENT_ID = 'diary-summary-chart';
-const X_AXIS_HEIGHT = 30;
-
-const YAxisContentInset = { top: 10, bottom: 10 };
-const YAxisSvg = {
-  fontSize: 10,
-  fill: THEME.color.tertiary,
-  fontFamily: THEME.fontWeight.regular,
-};
-const XAxisSvg = {
-  fill: 'black',
-  fontFamily: THEME.fontWeight.regular,
-  fontSize: 8,
-  fontWeight: 'bold',
-  rotation: 20,
-  originY: X_AXIS_HEIGHT,
-  y: 5,
-};
-const AreaChartSvg = { fill: `url(#${GRADIENT_ID})` };
-const AreaChartContentInset = { top: 15, bottom: 15 };
-const GridSvg = { stroke: THEME.color.quaternary };
-const XAxisContentInset = { left: 10, right: 30 };
+import styled, {  } from 'styled-components/native';
+import { SvgGradientDef } from '../atoms';
 
 interface DiarySummaryChartProps {
-  dateFormat: string
+  dateFormat?: string
   data: {
     value: number
     date: Date
@@ -40,45 +17,50 @@ interface DiarySummaryChartProps {
 }
 
 export const DiarySummaryChart = (props: DiarySummaryChartProps) => {
+  const { dateFormat = 'ddd D' } = props;
+
+  const handleFormatLabel = (value: string): string => {
+    return dayjs(value).format(dateFormat);
+  }
+
   return (
     <Container>
-      <YAxis
+      <RangeYAxis
         data={props.data.map(record => record.value)}
-        contentInset={YAxisContentInset}
-        svg={YAxisSvg}
-        numberOfTicks={5}
+        contentInset={RangeYAxisContentInset}
+        svg={RangeYAxisStyle}
+        numberOfTicks={6}
       />
       <ChartContainer>
         <AreaChart
           data={props.data.map(record => record.value)}
           contentInset={AreaChartContentInset}
-          svg={AreaChartSvg}
-          curve={shape.curveNatural}
+          svg={AreaChartStyle}
+          curve={shape.curveBasis}
         >
-          <Grid svg={GridSvg} />
-          <Gradient />
+          <Grid svg={GridSvgStyle} />
+          <SvgGradientDef
+            id={GRADIENT_ID}
+            colors={THEME.gradient.kcal}
+            stopOpacity={[0.8, 0.2]}
+          />
         </AreaChart>
-        <XAxis
+        <DateXAxis
           data={props.data}
-          svg={XAxisSvg as any}
+          svg={DateXAxisStyle as any}
           xAccessor={({ item }: any) => item.date}
           scale={scale.scaleTime}
-          contentInset={XAxisContentInset}
-          formatLabel={value => dayjs(value).format(props.dateFormat)}
+          contentInset={DateXAxisContentInset}
+          formatLabel={handleFormatLabel}
         />
       </ChartContainer>
     </Container>
   );
 }
 
-const Gradient = ({ index }: { index?: number }) => (
-  <Defs key={index}>
-    <LinearGradient id={GRADIENT_ID} x1="0%" y1="0%" x2="0%" y2="100%">
-      <Stop offset="0%" stopColor={THEME.gradient.kcal[0]} stopOpacity={0.8}/>
-      <Stop offset="100%" stopColor={THEME.gradient.kcal[1]} stopOpacity={0.2}/>
-    </LinearGradient>
-  </Defs>
-);
+const GRADIENT_ID = 'diary-summary-chart';
+
+const X_AXIS_HEIGHT = 30;
 
 const Container = styled.View`
   height: 200px;
@@ -86,7 +68,7 @@ const Container = styled.View`
   margin-bottom: 20px;
 `
 
-const YAxis = styled(SvgCharts.YAxis)`
+const RangeYAxis = styled(SvgCharts.YAxis)`
   margin-bottom: ${X_AXIS_HEIGHT}px;
   min-width: 30px;
 `
@@ -96,12 +78,50 @@ const ChartContainer = styled.View`
   margin-left: 10px;
 `
 
-const XAxis = styled(SvgCharts.XAxis)`
+const DateXAxis = styled(SvgCharts.XAxis)`
   margin-horizontal: -15px;
   height: 20px;
-  color: ${props => props.theme.color.primary};
 `
 
 const AreaChart = styled(SvgCharts.AreaChart)`
   flex: 1;
 `
+
+const RangeYAxisContentInset = {
+  top: 10,
+  bottom: 10,
+};
+
+const RangeYAxisStyle = {
+  fontSize: 10,
+  fill: THEME.color.tertiary,
+  fontFamily: THEME.fontWeight.regular,
+};
+
+const DateXAxisStyle = {
+  fill: THEME.color.primary,
+  fontFamily: THEME.fontWeight.regular,
+  fontSize: 8,
+  fontWeight: 'bold',
+  rotation: 20,
+  originY: X_AXIS_HEIGHT,
+  y: 5,
+};
+
+const AreaChartStyle = {
+  fill: `url(#${GRADIENT_ID})`
+};
+
+const AreaChartContentInset = {
+  top: 15,
+  bottom: 15,
+};
+
+const GridSvgStyle = {
+  stroke: THEME.color.quaternary
+};
+
+const DateXAxisContentInset = {
+  left: 10,
+  right: 30,
+};

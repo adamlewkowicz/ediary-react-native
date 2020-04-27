@@ -45,7 +45,6 @@ export const DiarySummaryScreen = () => {
       <Header>Podsumowanie</Header>
       <Description>Dzienne spożycie kalorii</Description>
       <DiarySummaryChart
-        dateFormat={CHART_DATE_FORMAT}
         data={historyRecords}
       />
       <Header>Makroskładniki</Header>
