@@ -4,11 +4,14 @@ import { store } from './store';
 import { ThemeProvider } from 'styled-components/native';
 import { THEME } from './common/theme';
 import { RootStack } from './navigation/RootStack';
+import { IntlProvider } from './context/IntlContext';
 
 export const App = () => (
-  <ReduxProvider store={store}>
-    <ThemeProvider theme={THEME}>
-      <RootStack />
-    </ThemeProvider>
-  </ReduxProvider>
+  <IntlProvider>
+    <ReduxProvider store={store}>
+      <ThemeProvider theme={THEME}>
+        <RootStack />
+      </ThemeProvider>
+    </ReduxProvider>
+  </IntlProvider>
 );
