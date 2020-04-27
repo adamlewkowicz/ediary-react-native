@@ -43,16 +43,20 @@ export const ProductCreateScreen = () => {
 
       setIsLoading(true);
 
-      const { portionQuantity, ...productData } = deserializeProduct(values);
-      const productWithUserId = { ...productData, userId };
+      const { portionQuantity, ...newProductData } = deserializeProduct(values);
+      const productWithUserId = { ...newProductData, userId };
 
       if (params.onProductEdited && params.product) {
-        await Product.update(params.product.id, productData);
 
-        const updatedProduct = await Product.findOneOrFail(params.product.id); 
+        const updatedOrCreatedProduct = await Product.updateOrCreate(
+          params.product,
+          newProductData,
+          userId,
+          portionQuantity,
+        );
 
-        params.onProductEdited(updatedProduct);
-      
+        params.onProductEdited(updatedOrCreatedProduct);
+        
       } else if (params.onProductCreated) {
         const createdProduct = await Product.saveWithPortion(productWithUserId, portionQuantity);
 

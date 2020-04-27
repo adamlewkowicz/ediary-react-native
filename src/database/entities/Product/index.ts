@@ -138,17 +138,6 @@ export class Product extends GenericEntity {
     return Product.save(productData);
   }
 
-  private normalizePortionQuantity() {
-
-  }
-
-  static updateWithPortion(
-    productData: IProductRequired,
-    portionQuantity: number,
-  ) {
-
-  }
-
   static findByNameLike(name: string): Promise<Product[]> {
     const limit = 10;
     
@@ -316,6 +305,26 @@ export class Product extends GenericEntity {
       where: { userId },
       order: { id: 'DESC' }
     });
+  }
+
+  static async updateOrCreate(
+    originalProduct: Product,
+    payload: IProductRequired,
+    portionQuantity: number,
+    userId: UserId,
+  ): Promise<Product> {
+    const isOwnProduct = originalProduct.userId === userId;
+
+    if (isOwnProduct) {
+      await Product.update(originalProduct.id, payload);
+      const updatedProduct = await Product.findOneOrFail(originalProduct.id); 
+
+      return updatedProduct;
+    }
+
+    const createdProduct = await Product.saveWithPortion({ ...payload, userId }, portionQuantity);
+
+    return createdProduct;
   }
 
 }
