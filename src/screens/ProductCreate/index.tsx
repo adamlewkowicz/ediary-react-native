@@ -17,6 +17,7 @@ import * as Yup from 'yup';
 import * as Utils from '../../utils';
 import { bindFormikProps } from '../../utils';
 import { ProductUnitType } from '../../types';
+import { deserializeProduct, serializeProduct, FormData } from './utils';
 
 export const ProductCreateScreen = () => {
   const { params, navigation, navigate } = useNavigationData<ProductCreateScreenNavigationProps>();
@@ -36,38 +37,27 @@ export const ProductCreateScreen = () => {
   const kcalInputRef = useRef<TextInput>(null);
   const barcodeInputRef = useRef<TextInput>(null);
 
-  const handleProductSave = async (values: FormData) => {
+  const handleFormSubmit = async (values: FormData): Promise<void> => {
     try {
       if (isLoading) return;
 
       setIsLoading(true);
 
-      const { portionQuantity, ...productData } = normalizeProductData(values);
+      const { portionQuantity, ...productData } = deserializeProduct(values);
       const productWithUserId = { ...productData, userId };
-  
-      const createdProduct = await Product.saveWithPortion(productWithUserId, portionQuantity);
-  
-      params.onProductCreated?.(createdProduct);
 
-    } catch(error) {
-      setAppError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+      if (params.onProductEdited && params.product) {
+        await Product.update(params.product.id, productData);
 
-  const handleProductUpdate = async (values: FormData) => {
-    try {
-      if (isLoading) return;
+        const updatedProduct = await Product.findOneOrFail(params.product.id); 
 
-      setIsLoading(true);
+        params.onProductEdited(updatedProduct);
+      
+      } else if (params.onProductCreated) {
+        const createdProduct = await Product.saveWithPortion(productWithUserId, portionQuantity);
 
-      const { portionQuantity, ...productData } = normalizeProductData(values);
-      const productWithUserId = { ...productData, userId };
-  
-      const updatedProduct = await Product.saveWithPortion(productWithUserId, portionQuantity);
-  
-      params.onProductCreated?.(createdProduct);
+        params.onProductCreated(createdProduct);
+      }
 
     } catch(error) {
       setAppError(error);
@@ -77,30 +67,10 @@ export const ProductCreateScreen = () => {
   }
 
   const formik = useFormik({
-    initialValues: getInitialValues(params.product),
+    initialValues: serializeProduct(params.product),
     validationSchema: getValidationSchema(portionUnitType),
-    async onSubmit(values) {
-      try {
-        if (isLoading) return;
-
-        setIsLoading(true);
-
-        const { portionQuantity, ...productData } = normalizeProductData(values);
-        const productWithUserId = { ...productData, userId };
-
-        const createdProduct = await Product.saveWithPortion(productWithUserId, portionQuantity);
-
-        params.onProductCreated?.(createdProduct);
-
-      } catch(error) {
-        setAppError(error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
+    onSubmit: handleFormSubmit
   });
-
-  const handleSubmit = (): void => formik.handleSubmit();
 
   const handleCaloriesEvaluation = (): void => {
     const calcedKcal = Utils.calculateCaloriesByMacro({
@@ -230,7 +200,7 @@ export const ProductCreateScreen = () => {
         />
       </Section>
       <SaveProductButton
-        onPress={handleSubmit}
+        onPress={() => formik.handleSubmit}
         isLoading={isLoading}
       >
         Zapisz produkt
@@ -246,60 +216,6 @@ const Container = styled(ScrollView)`
 const SaveProductButton = styled(ButtonPrimary)`
   margin-bottom: 20px;
 `
-
-const getInitialValues = (product?: Product): FormData => {
-  const defaultValues = {
-    name: '',
-    brand: '',
-    producer: '',
-    portionQuantity: '',
-    carbs: '',
-    sugars: '',
-    prots: '',
-    fats: '',
-    fattyAcids: '',
-    kcal: '',
-    barcode: '',
-  };
-
-  if (product) {
-    const { macro, barcode, portion, name } = product;
-
-    const parsedMacro = Object.fromEntries(
-      Object.entries(macro).map(
-        ([prop, value]) => [prop, String(value)]
-      )
-    );
-
-    const parsedBarcode = Utils.isNil(barcode) ? '' : String(barcode)
-
-    const formData: FormData = {
-      ...defaultValues,
-      ...parsedMacro,
-      name,
-      barcode: parsedBarcode,
-      portionQuantity: String(portion),
-    };
-
-    return formData;
-  }
-
-  return defaultValues;
-}
-
-type FormData = {
-  name: string
-  brand: string
-  producer: string
-  portionQuantity: string
-  carbs: string
-  sugars: string
-  prots: string
-  fats: string
-  fattyAcids: string
-  kcal: string
-  barcode: string
-}
 
 const MAX_PORTION_QUANTITY = 2000;
 
@@ -325,26 +241,3 @@ const getValidationSchema = (portionUnitType: ProductUnitType) => Yup.object({
   kcal: Yup.number(),
   barcode: Yup.string(),
 });
-
-const normalizeProductData = (productData: FormData) => {
-  const { fattyAcids, sugars, ...restData } = productData;
-
-  const macro = {
-    carbs: Number(productData.carbs),
-    prots: Number(productData.prots),
-    fats: Number(productData.fats),
-    kcal: Number(productData.kcal)
-  }
-
-  const barcode = productData.barcode.length ? productData.barcode : null;
-  const portionQuantity = Number(productData.portionQuantity);
-
-  const product = {
-    ...restData,
-    macro,
-    barcode,
-    portionQuantity,
-  }
-
-  return product;
-}
