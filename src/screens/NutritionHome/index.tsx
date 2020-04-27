@@ -27,6 +27,8 @@ export const NutritionHomeScreen = () => {
       async onProductSelected(productResolver, productQuantity) {
         navigate('NutritionHome');
 
+        Utils.layoutAnimateEase();
+
         await dispatch(
           Actions.mealOrTemplateProductAdd(
             meal,
@@ -43,7 +45,10 @@ export const NutritionHomeScreen = () => {
     Utils.alertDelete(
       'Usuń posiłek',
       `Czy jesteś pewnien że chcesz usunąć "${meal.data.name}"?`,
-      () => dispatch(Actions.mealDelete(meal.data.id))
+      () => {
+        Utils.layoutAnimateEase();
+        dispatch(Actions.mealDelete(meal.data.id));
+      }
     );
   }, [dispatch]);
 
@@ -51,7 +56,10 @@ export const NutritionHomeScreen = () => {
     Utils.alertDelete(
       'Usuń produkt',
       `Czy jesteś pewnien że chcesz usunąć "${product.data.name}"?`,
-      () => dispatch(Actions.mealProductDelete(mealId, product.data.id))
+      () => {
+        Utils.layoutAnimateEase();
+        dispatch(Actions.mealProductDelete(mealId, product.data.id));
+      }
     );
   }, [dispatch]);
 
@@ -78,6 +86,7 @@ export const NutritionHomeScreen = () => {
         navigate('NutritionHome');
 
         await InteractionManager.runAfterInteractions();
+        Utils.layoutAnimateEase();
 
         dispatch(Actions.mealProductQuantityUpdate(mealId, product.data.id, quantity));
       }
