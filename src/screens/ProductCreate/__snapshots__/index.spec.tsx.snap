@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ProductCreateScreen /> creating new product should work 🥝 1`] = `
+Object {
+  "barcode": "391287145",
+  "brand": "Bart",
+  "carbs": "249",
+  "fats": "12",
+  "kcal": "319",
+  "macro": Object {
+    "carbs": 249,
+    "fats": 12,
+    "kcal": 319,
+    "prots": 25,
+  },
+  "name": "Orange Juice",
+  "portions": Array [
+    Object {
+      "type": "portion",
+      "value": 140,
+    },
+  ],
+  "producer": "Gardens",
+  "prots": "25",
+  "userId": 0,
+}
+`;

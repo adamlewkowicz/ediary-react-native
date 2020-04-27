@@ -42,20 +42,23 @@ describe('<ProductCreateScreen />', () => {
     fireEvent.changeText(nameInput, productMock.name);
     fireEvent.changeText(brandInput, productMock.brand);
     fireEvent.changeText(producerInput, productMock.producer);
-    fireEvent.changeText(portionQuantityInput, productMock.quantity.toString());
-    fireEvent.changeText(carbsInput, productMock.macro.carbs.toString());
-    fireEvent.changeText(sugarsInput, productMock.macro.sugars.toString());
-    fireEvent.changeText(protsInput, productMock.macro.prots.toString());
-    fireEvent.changeText(fatsInput, productMock.macro.fats.toString());
-    fireEvent.changeText(fattyAcidsInput, productMock.macro.fattyAcids.toString());
-    fireEvent.changeText(kcalInput, productMock.macro.kcal.toString());
-    fireEvent.changeText(barcodeInput, productMock.barcode);
+    fireEvent.changeText(portionQuantityInput, String(productMock.quantity));
+    fireEvent.changeText(carbsInput, String(productMock.macro.carbs));
+    fireEvent.changeText(sugarsInput, String(productMock.macro.sugars));
+    fireEvent.changeText(protsInput, String(productMock.macro.prots));
+    fireEvent.changeText(fatsInput, String(productMock.macro.fats));
+    fireEvent.changeText(fattyAcidsInput, String(productMock.macro.fattyAcids));
+    fireEvent.changeText(kcalInput, String(productMock.macro.kcal));
+    fireEvent.changeText(barcodeInput, String(productMock.barcode));
     fireEvent.press(saveProductButton);
 
     await ctx.findByLabelText('Trwa ładowanie');
     await waitForElementToBeRemoved(() => ctx.getByLabelText('Trwa ładowanie'));
 
+    const productPayload = productSaveSpy.mock.calls[0][0];
+
     expect(productSaveSpy).toHaveBeenCalledTimes(1);
+    expect(productPayload).toMatchSnapshot();
     expect(saveProductButton).not.toBeDisabled();
   });
 
