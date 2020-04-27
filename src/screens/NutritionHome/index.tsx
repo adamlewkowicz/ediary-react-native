@@ -7,7 +7,7 @@ import { MealId } from '../../types';
 import { DiaryMeal, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
 import { useNavigationData, useAppDate } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
-import { ChartsMacroNeeds, MealItemMemo, ItemSeparator } from '../../components';
+import { ChartMacroNeeds, MealItemMemo, ItemSeparator } from '../../components';
 import * as Utils from '../../utils';
 
 export const NutritionHomeScreen = () => {
@@ -92,7 +92,7 @@ export const NutritionHomeScreen = () => {
         value={appDate}
         onChange={appDateContext.update}
       />
-      <ChartsMacroNeeds macroNeeds={macroNeeds} />
+      <ChartMacroNeeds macroNeeds={macroNeeds} />
     </>
   );
 
