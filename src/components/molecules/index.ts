@@ -12,3 +12,4 @@ export * from './ProductSearcher';
 export * from './MacroConsumptionInfo';
 export * from './RatioInfo';
 export * from './Charts';
+export * from './MacroDetails';
