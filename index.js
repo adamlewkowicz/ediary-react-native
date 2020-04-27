@@ -10,7 +10,9 @@ import 'intl';
 import 'intl/locale-data/jsonp/pl-PL';
 import * as Utils from './src/utils';
 
-ErrorUtils.setGlobalHandler(Utils.handleError);
+if (!__DEV__) {
+  ErrorUtils.setGlobalHandler(Utils.handleError);
+}
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);

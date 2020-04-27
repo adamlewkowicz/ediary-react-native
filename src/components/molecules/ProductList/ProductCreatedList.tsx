@@ -22,6 +22,7 @@ const ProductCreatedList = (props: ProductCreatedListProps) => {
       onProductSelect={props.onProductSelect}
       isLoading={productsCreated.isLoading}
       onRefresh={productsCreated.refresh}
+      onProductAction={props.onProductAction}
     />
   );
 }

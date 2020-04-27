@@ -11,6 +11,7 @@ export const ProductRecentList = (props: ProductRecentListProps) => {
     <ProductList
       data={productHistory.data}
       onProductSelect={props.onProductSelect}
+      onProductAction={props.onProductAction}
       isLoading={productHistory.isLoading}
       a11yLabel="Lista ostatnio używanych produktów"
     />
