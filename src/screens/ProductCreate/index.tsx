@@ -9,12 +9,13 @@ import {
   Group,
   InputButton,
   InputMetaText,
-  InputForm,
   ButtonPrimary,
+  Input,
 } from '../../components';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import * as Utils from '../../utils';
+import { bindFormikProps } from '../../utils';
 import { ProductUnitType } from '../../types';
 
 export const ProductCreateScreen = () => {
@@ -85,41 +86,34 @@ export const ProductCreateScreen = () => {
   return (
     <Container keyboardShouldPersistTaps="handled">
       <Section title="Podstawowe dane">
-        <InputForm
+        <Input
+          {...bindFormikProps(formik, 'name')}
           label="Nazwa"
           placeholder="Mleko UHT 3.2 %"
-          formik={formik}
-          formikProperty="name"
           onSubmitEditing={brandInputRef.current?.focus}
         />
-        <InputForm
+        <Input
+          {...bindFormikProps(formik, 'brand')}
           label="Marka"
           placeholder="Łaciate"
           ref={brandInputRef}
-          formik={formik}
-          formikProperty="brand"
           onSubmitEditing={producerInputRef.current?.focus}
         />
-        <InputForm
+        <Input
+          {...bindFormikProps(formik, 'producer')}
           label="Producent"
           placeholder="Mlekovita"
           ref={producerInputRef}
-          formik={formik}
-          formikProperty="producer"
           onSubmitEditing={portionQuantityInputRef.current?.focus}
         />
         <InputMetaText
+          {...bindFormikProps(formik, 'portionQuantity')}
           label={`Ilość ${portionUnitType} w jednej porcji`}
           placeholder="100"
-          value={formik.values.portionQuantity}
-          onChangeText={formik.handleChange('portionQuantity') as any}
-          onBlur={formik.handleBlur('portionQuantity') as any}
           metaText={portionUnitType}
           keyboardType="numeric"
           ref={portionQuantityInputRef}
           onSubmitEditing={carbsInputRef.current?.focus}
-          error={formik.errors.portionQuantity}
-          isDirty={formik.touched.portionQuantity}
         />
       </Section>
       <Section
@@ -127,19 +121,17 @@ export const ProductCreateScreen = () => {
         description={`Na 100${portionUnitType} produtku`}
       >
         <Group.Container>
-          <InputForm
+          <Input
+            {...bindFormikProps(formik, 'carbs')}
             label="Węglowodany"
             placeholder="0"
-            formik={formik}
-            formikProperty="carbs"
             keyboardType="numeric"
             ref={carbsInputRef}
             onSubmitEditing={sugarsInputRef.current?.focus}
           />
           <Group.Separator />
-          <InputForm
-            formik={formik}
-            formikProperty="sugars"
+          <Input
+            {...bindFormikProps(formik, 'sugars')}
             label="w tym cukry"
             placeholder="0"
             keyboardType="numeric"
@@ -148,43 +140,35 @@ export const ProductCreateScreen = () => {
           />
         </Group.Container>
         <InputMetaText
-          value={formik.values.prots}
-          onChangeText={formik.handleChange('prots') as any}
-          onBlur={formik.handleBlur('prots') as any}
+          {...bindFormikProps(formik, 'prots')}
           label="Białko"
           placeholder="0"
           metaText="g"
           keyboardType="numeric"
           ref={protsInputRef}
           onSubmitEditing={fatsInputRef.current?.focus}
-          error={formik.errors.prots}
-          isDirty={formik.touched.prots}
         />
         <Group.Container>
-          <InputForm
+          <Input
+            {...bindFormikProps(formik, 'fats')}
             label="Tłuszcze"
             placeholder="0"
             keyboardType="numeric"
-            formik={formik}
-            formikProperty="fats"
             ref={fatsInputRef}
             onSubmitEditing={fattyAcidsInputRef.current?.focus}
           />
           <Group.Separator />
-          <InputForm
+          <Input
+            {...bindFormikProps(formik, 'fattyAcids')}
             label="w tym kwasy tłuszczowe"
             placeholder="0"
             keyboardType="numeric"
-            formik={formik}
-            formikProperty="fattyAcids"
             ref={fattyAcidsInputRef}
             onSubmitEditing={kcalInputRef.current?.focus}
           />
         </Group.Container>
         <InputButton
-          value={formik.values.kcal}
-          onChangeText={formik.handleChange('kcal') as any}
-          onBlur={formik.handleBlur('kcal') as any}
+          {...bindFormikProps(formik, 'kcal')}
           label="Kalorie"
           placeholder="0"
           buttonText="Oblicz"
@@ -193,22 +177,16 @@ export const ProductCreateScreen = () => {
           onButtonPress={handleCaloriesEvaluation}
           ref={kcalInputRef}
           onSubmitEditing={barcodeInputRef.current?.focus}
-          error={formik.errors.kcal}
-          isDirty={formik.touched.kcal}
         />
       </Section>
       <Section title="Inne">
         <InputButton
-          value={formik.values.barcode}
-          onChangeText={formik.handleChange('barcode') as any}
-          onBlur={formik.handleBlur('barcode') as any}
+          {...bindFormikProps(formik, 'barcode')}
           label="Kod kreskowy"
           placeholder="5900512300108"
           buttonText="Zeskanuj"
           onButtonPress={handleBarcodeScanNavigation}
           ref={barcodeInputRef}
-          error={formik.errors.barcode}
-          isDirty={formik.touched.barcode}
         />
       </Section>
       <SaveProductButton
