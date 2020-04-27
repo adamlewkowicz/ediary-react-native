@@ -5,6 +5,7 @@ import { ProductOrNormalizedProduct } from '../../../database/entities';
 import { ItemSeparator } from '../../atoms';
 import { ProductSearchItemMemo } from './ProductSearchItem';
 import styled from 'styled-components/native';
+import { useIntl } from '../../../hooks';
 
 export interface ProductListProps<T = ProductOrNormalizedProduct> {
   data: T[]
@@ -14,29 +15,33 @@ export interface ProductListProps<T = ProductOrNormalizedProduct> {
   a11yLabel?: string
 }
 
-export const ProductList = (props: ProductListProps) => (
-  <FlatList
-    data={props.data}
-    accessibilityState={{ busy: props.isLoading }}
-    keyExtractor={productKeyExtractor}
-    keyboardShouldPersistTaps="handled"
-    ItemSeparatorComponent={ItemSeparator}
-    accessibilityLabel={props.a11yLabel}
-    renderItem={({ item: product }) => (
-      <ProductSearchItemMemo
-        product={product}
-        onSelect={props.onProductSelect}
-      />
-    )}
-    refreshControl={(
-      <RefreshControl
-        refreshing={props.isLoading ?? false}
-        onRefresh={() => props.onRefresh?.()}
-        accessibilityLabel="Trwa ładowanie produktów"
-      />
-    )}
-  />
-);
+export const ProductList = (props: ProductListProps) => {
+  const t = useIntl();
+
+  return (
+    <FlatList
+      data={props.data}
+      accessibilityState={{ busy: props.isLoading }}
+      keyExtractor={productKeyExtractor}
+      keyboardShouldPersistTaps="handled"
+      ItemSeparatorComponent={ItemSeparator}
+      accessibilityLabel={props.a11yLabel}
+      renderItem={({ item: product }) => (
+        <ProductSearchItemMemo
+          product={product}
+          onSelect={props.onProductSelect}
+        />
+      )}
+      refreshControl={(
+        <RefreshControl
+          refreshing={props.isLoading ?? false}
+          onRefresh={() => props.onRefresh?.()}
+          accessibilityLabel={t.loadingProducts}
+        />
+      )}
+    />
+  );
+}
 
 const RefreshControl = styled(NativeRefreshControl).attrs(props => ({
   colors: [props.theme.color.highlight],

@@ -6,6 +6,7 @@ import { ChartMacroBarsBase } from '../Chart';
 import { isDiaryMeal } from '../../../store/reducers/diary/helpers';
 import { Theme } from '../../../common/theme';
 import { Selectors } from '../../../store';
+import { useIntl } from '../../../hooks';
 
 export interface MealItemContentProps {
   index: number
@@ -15,6 +16,7 @@ export interface MealItemContentProps {
 }
 
 export const MealItemInfo = (props: MealItemContentProps) => {
+  const t = useIntl();
 
   const handleMealDelete = (): void => {
     if (isDiaryMeal(props.meal)) {
@@ -27,8 +29,8 @@ export const MealItemInfo = (props: MealItemContentProps) => {
       onPress={() => props.onMealOpen(props.meal, props.index)}
       onLongPress={__DEV__ ? undefined : handleMealDelete}
       isOpened={props.meal.isOpened}
-      accessibilityLabel="Pokaż szczegóły lub usuń posiłek"
-      accessibilityHint="Dotknij aby wyświetlić szczegóły posiłku, lub przytrzymaj aby go usunąć"
+      accessibilityLabel={t.removeProductOrShowDetailsLabel}
+      accessibilityHint={t.removeProductOrShowDetailsHint}
     >
       <MealTime>{props.meal.timeBase}</MealTime>
       <BaseInfo>

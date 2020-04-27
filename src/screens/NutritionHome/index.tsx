@@ -5,7 +5,7 @@ import { FlatList, InteractionManager } from 'react-native';
 import { DateChangerMemo } from '../../components/molecules/DateChanger';
 import { MealId } from '../../types';
 import { DiaryMeal, DiaryProduct, DiaryMealOrTemplate } from '../../store/reducers/diary';
-import { useNavigationData, useAppDate } from '../../hooks';
+import { useNavigationData, useAppDate, useIntl } from '../../hooks';
 import { NutritionHomeScreenNavigationProps } from '../../navigation';
 import { ChartMacroNeeds, MealItemMemo, ItemSeparator } from '../../components';
 import * as Utils from '../../utils';
@@ -17,6 +17,7 @@ export const NutritionHomeScreen = () => {
   const macroNeeds = useSelector(Selectors.getCalcedMacroNeeds);
   const meals = useSelector(Selectors.getMealsCalced);
   const mealListRef = useRef<FlatList<Selectors.MealCalced>>(null);
+  const t = useIntl();
 
   useEffect(() => {
     dispatch(Actions.mealsFindByDay(appDateDay));
@@ -43,8 +44,8 @@ export const NutritionHomeScreen = () => {
   
   const handleMealDelete = useCallback((meal: DiaryMeal): void => {
     Utils.alertDelete(
-      'Usuń posiłek',
-      `Czy jesteś pewnien że chcesz usunąć "${meal.data.name}"?`,
+      t.deleteMeal,
+      t.confirmMealDelete(meal.data.name),
       () => {
         Utils.layoutAnimateEase();
         dispatch(Actions.mealDelete(meal.data.id));
@@ -54,8 +55,8 @@ export const NutritionHomeScreen = () => {
 
   const handleProductDelete = useCallback((mealId: MealId, product: DiaryProduct): void => {
     Utils.alertDelete(
-      'Usuń produkt',
-      `Czy jesteś pewnien że chcesz usunąć "${product.data.name}"?`,
+      t.deleteProduct,
+      t.confirmProductDelete(product.data.name),
       () => {
         Utils.layoutAnimateEase();
         dispatch(Actions.mealProductDelete(mealId, product.data.id));

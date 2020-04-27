@@ -3,12 +3,13 @@ import { RNCamera, RNCameraProps } from 'react-native-camera';
 import styled from 'styled-components/native';
 import { BarcodeId } from '../../types';
 import { BarcodeScanScreenNavigationProps } from '../../navigation';
-import { useNavigationData } from '../../hooks';
+import { useNavigationData, useIntl } from '../../hooks';
 
 export const BarcodeScanScreen = () => {
   const { params } = useNavigationData<BarcodeScanScreenNavigationProps>();
   const cameraRef = useRef<RNCamera>(null);
   const prevBarcodeId = useRef<BarcodeId | null>(null);
+  const t = useIntl();
   
   const takePicture = async () => {
     if (cameraRef.current && params.onPhotoTaken) {
@@ -40,7 +41,7 @@ export const BarcodeScanScreen = () => {
         ref={cameraRef}
         type="back"
         flashMode="auto"
-        androidCameraPermissionOptions={ANDROID_CAMERA_PERMISSIONS}
+        androidCameraPermissionOptions={t.androidCameraPermissions}
         onBarCodeRead={handleBarcodeDetection}
         onGoogleVisionBarcodesDetected={handleGoogleBarcodeDetection}
         onTextRecognized={null as any}
@@ -49,7 +50,7 @@ export const BarcodeScanScreen = () => {
       />
       {params.onPhotoTaken && (
         <PhotoButton onPress={takePicture}>
-          <PhotoTitle>Zrób zdjęcie</PhotoTitle>
+          <PhotoTitle>{t.takePhoto}</PhotoTitle>
         </PhotoButton>
       )}
     </Container>
@@ -76,10 +77,3 @@ const PhotoTitle = styled.Text`
   border-radius: 5px;
   text-align: center;
 `
-
-const ANDROID_CAMERA_PERMISSIONS = {
-  title: 'Uprawnienia kamery',
-  message: 'Potrzebuję uprawnień kamery do zeskanowania kodu kreskowego',
-  buttonPositive: 'Ok',
-  buttonNegative: 'Anuluj',
-}

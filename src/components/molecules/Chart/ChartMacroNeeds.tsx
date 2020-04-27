@@ -4,12 +4,14 @@ import { Selectors } from '../../../store';
 import { ChartCalories } from './ChartCalories';
 import { ChartMacroCircleLeft } from '../..';
 import { THEME } from '../../../common/theme';
+import { useIntl } from '../../../hooks';
 
 interface ChartMacroNeedsProps {
   macroNeeds: Selectors.MacroNeeds
 }
 
 export const ChartMacroNeeds = (props: ChartMacroNeedsProps) => {
+  const t = useIntl();
   const { carbs, prots, fats, kcal } = props.macroNeeds;
 
   return (  
@@ -21,21 +23,21 @@ export const ChartMacroNeeds = (props: ChartMacroNeedsProps) => {
       />
       <CirclesContainer>
         <ChartMacroCircleLeft
-          title="Węglowodany (g)"
+          title={`${t.carbs} (g)`}
           value={carbs.eaten}
           valueLeft={carbs.needed}
           percentage={carbs.percentage}
           gradientColors={THEME.gradient.carbs}
         />
         <ChartMacroCircleLeft
-          title="Białko (g)"
+          title={`${t.prots} (g)`}
           value={prots.eaten}
           valueLeft={prots.needed}
           percentage={prots.percentage}
           gradientColors={THEME.gradient.prots}
         />
         <ChartMacroCircleLeft
-          title="Tłuszcze (g)"
+          title={`${t.fats} (g)`}
           value={fats.eaten}
           valueLeft={fats.needed}
           percentage={fats.percentage}

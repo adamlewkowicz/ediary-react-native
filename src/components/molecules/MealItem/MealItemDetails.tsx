@@ -7,6 +7,7 @@ import { ActivityIndicator } from 'react-native';
 import { ButtonSecondary } from '../../atoms';
 import { DiaryProduct } from '../../../store/reducers/diary';
 import { Selectors } from '../../../store';
+import { useIntl } from '../../../hooks';
 
 export interface MealItemDetailsProps {
   meal: Selectors.MealCalced
@@ -16,6 +17,8 @@ export interface MealItemDetailsProps {
 }
 
 export const MealItemDetails = (props: MealItemDetailsProps) => {
+  const t = useIntl();
+
   return (
     <>
       <ChartsContainer>
@@ -36,13 +39,13 @@ export const MealItemDetails = (props: MealItemDetailsProps) => {
         ))}
         {props.meal.isAddingProduct && (
           <Spinner
-            accessibilityLabel="Trwa dodawanie produktu"
+            accessibilityLabel={t.addingProductPendingLabel}
             size={25}
           />
         )}
         <AddProductButton
-          accessibilityLabel="Dodaj produkt do posiłku"
-          accessibilityHint="Przechodzi do wyszukiwarki produktów"
+          accessibilityLabel={t.addProductToMealLabel}
+          accessibilityHint={t.addProductToMealHint}
           role="link"
           onPress={() => props.onProductAdd(props.meal)}
         >

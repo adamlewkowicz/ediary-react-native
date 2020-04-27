@@ -5,6 +5,7 @@ import {
   useNavigationData,
   useDebouncedValue,
   useNativeState,
+  useIntl,
 } from '../../hooks';
 import { ProductFindScreenNavigationProps } from '../../navigation';
 import {
@@ -39,6 +40,7 @@ export const ProductFindScreen = () => {
   const hasProductBeenSelected = useRef(false);
   const productNameDebounced = useDebouncedValue(state.productName);
   const dispatch = useDispatch();
+  const t = useIntl();
 
   function handleBarcodeScan() {
     navigate('BarcodeScan', {
@@ -62,7 +64,7 @@ export const ProductFindScreen = () => {
           createdProduct,
         });
 
-        Utils.toastCenter(`Utworzono produkt "${createdProduct.name}"`);
+        Utils.toastCenter(t.createdProduct(createdProduct.name));
 
         dispatch(Actions.productHistoryAdded([createdProduct]));
       }
@@ -90,8 +92,8 @@ export const ProductFindScreen = () => {
     headerRight: () => (
       <AddOwnProductButton
         onPress={handleProductCreate}
-        accessibilityLabel="Stwórz własny produkt"
-        accessibilityHint="Przechodzi do tworzenia własnego produktu"
+        accessibilityLabel={t.createOwnProductLabel}
+        accessibilityHint={t.createOwnProductHint}
         role="link"
       >
         Stwórz
@@ -116,7 +118,12 @@ export const ProductFindScreen = () => {
       <TabView
         activeIndex={state.activeTabIndex}
         onIndexChange={activeTabIndex => setState({ activeTabIndex })}
-        titles={['Ostatnio używane', 'Ulubione', 'Utworzone', 'Znalezione']}
+        titles={[
+          t.productsRecent,
+          t.productsFavorite,
+          t.productsCreated,
+          t.productsFound,
+        ]}
         renderScene={props => {
           switch(props.route.index) {
             case TAB_INDEX.recent: return (

@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { RightArrowIcon, TextPrimary, H1 } from '../';
 import { THEME } from '../../common/theme';
 import DateTimePicker, { BaseProps as DatePickerBaseProps } from '@react-native-community/datetimepicker';
+import { useIntl } from '../../hooks';
 
 interface DateChangerProps {
   value: Date
@@ -11,6 +12,7 @@ interface DateChangerProps {
 }
 
 export const DateChanger = (props: DateChangerProps) => {
+  const t = useIntl();
   const dayjsDate = dayjs(props.value);
   const [isOpened, setIsOpened] = useState(false);
 
@@ -33,7 +35,7 @@ export const DateChanger = (props: DateChangerProps) => {
   return (
     <Container>
       <DayChangeButton
-        accessibilityLabel="Poprzedni dzień"
+        accessibilityLabel={t.prevDayLabel}
         onPress={() => handleDayChange('prev')}
       >
         <ArrowIconLeft />
@@ -41,13 +43,13 @@ export const DateChanger = (props: DateChangerProps) => {
       <CalendarButton
         onPress={handleOpen}
         accessibilityRole="button"
-        accessibilityLabel="Zmień datę"
+        accessibilityLabel={t.changeDateLabel}
       >
         <Title>{dayjsDate.format(DAYJS_DAY)}</Title>
         <DateInfo>{dayjsDate.format(DAYJS_MAIN_DATE)}</DateInfo>
       </CalendarButton>
       <DayChangeButton
-        accessibilityLabel="Następny dzień"
+        accessibilityLabel={t.nextDayLabel}
         onPress={() => handleDayChange('next')}
       >
         <ArrowIconRight />
