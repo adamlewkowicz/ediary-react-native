@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Selectors } from '../../store';
+import { Selectors } from '../../../store';
 import { ChartCalories } from './ChartCalories';
-import { ChartMacroCircleLeft } from '../';
-import { THEME } from '../../common/theme';
+import { ChartMacroCircleLeft } from '../..';
+import { THEME } from '../../../common/theme';
 
 interface ChartsMacroNeedsProps {
   macroNeeds: Selectors.MacroNeeds

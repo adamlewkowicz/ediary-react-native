@@ -4,9 +4,9 @@ import * as SvgCharts from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 import * as scale from 'd3-scale';
 import dayjs from 'dayjs';
-import { THEME } from '../../common/theme';
+import { THEME } from '../../../common/theme';
 import styled, {  } from 'styled-components/native';
-import { SvgGradientDef } from '../atoms';
+import { SvgGradientDef } from '../../atoms';
 
 interface ChartNutritionSummaryProps {
   dateFormat?: string

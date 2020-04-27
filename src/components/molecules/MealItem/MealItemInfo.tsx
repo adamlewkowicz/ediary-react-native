@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { DiaryMeal, DiaryMealOrTemplate } from '../../../store/reducers/diary';
 import { H4, TextHighlight, H2 } from '../../atoms';
-import { ChartMacroBarsBase } from '../ChartMacroBarsBase';
+import { ChartMacroBarsBase } from '../Charts';
 import { isDiaryMeal } from '../../../store/reducers/diary/helpers';
 import { Theme } from '../../../common/theme';
 import { Selectors } from '../../../store';
