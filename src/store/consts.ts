@@ -12,7 +12,6 @@ export const PRODUCT_QUANTITY_UPDATED = 'PRODUCT_QUANTITY_UPDATED' as const;
 // Application
 export const APP_DATE_UPDATED = 'APP_DATE_UPDATED' as const;
 export const APP_CONNECTION_STATUS_UPDATED = 'APP_CONNECTION_STATUS_UPDATED' as const;
-export const APP_STATUS_UPDATED = 'APP_STATUS_UPDATED' as const;
 
 // User
 export const USER_PROFILE_CREATED = 'USER_PROFILE_CREATED' as const;
