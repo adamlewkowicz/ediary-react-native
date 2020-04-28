@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Database automatically generated schema should match snapshot: meal 1`] = `
+exports[`Database 🗄️ automatically generated schema should match snapshot: meal 1`] = `
 "CREATE TABLE \\"meal\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"name\\" varchar NOT NULL,
@@ -14,7 +14,7 @@ exports[`Database automatically generated schema should match snapshot: meal 1`]
 )"
 `;
 
-exports[`Database automatically generated schema should match snapshot: meal_product 1`] = `
+exports[`Database 🗄️ automatically generated schema should match snapshot: meal_product 1`] = `
 "CREATE TABLE \\"meal_product\\" (
   \\"mealId\\" integer NOT NULL,
   \\"productId\\" integer NOT NULL,
@@ -25,7 +25,7 @@ exports[`Database automatically generated schema should match snapshot: meal_pro
 )"
 `;
 
-exports[`Database automatically generated schema should match snapshot: product 1`] = `
+exports[`Database 🗄️ automatically generated schema should match snapshot: product 1`] = `
 "CREATE TABLE \\"product\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"name\\" varchar NOT NULL,
@@ -47,7 +47,7 @@ exports[`Database automatically generated schema should match snapshot: product 
 )"
 `;
 
-exports[`Database automatically generated schema should match snapshot: product_favorites 1`] = `
+exports[`Database 🗄️ automatically generated schema should match snapshot: product_favorites 1`] = `
 "CREATE TABLE \\"product_favorites\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"productId\\" integer NOT NULL,
@@ -58,7 +58,7 @@ exports[`Database automatically generated schema should match snapshot: product_
 )"
 `;
 
-exports[`Database automatically generated schema should match snapshot: product_images 1`] = `
+exports[`Database 🗄️ automatically generated schema should match snapshot: product_images 1`] = `
 "CREATE TABLE \\"product_images\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"url\\" varchar NOT NULL,
@@ -68,7 +68,7 @@ exports[`Database automatically generated schema should match snapshot: product_
 )"
 `;
 
-exports[`Database automatically generated schema should match snapshot: product_portions 1`] = `
+exports[`Database 🗄️ automatically generated schema should match snapshot: product_portions 1`] = `
 "CREATE TABLE \\"product_portions\\" (
   \\"productId\\" integer NOT NULL,
   \\"type\\" varchar NOT NULL,
@@ -79,7 +79,7 @@ exports[`Database automatically generated schema should match snapshot: product_
 )"
 `;
 
-exports[`Database automatically generated schema should match snapshot: profile 1`] = `
+exports[`Database 🗄️ automatically generated schema should match snapshot: profile 1`] = `
 "CREATE TABLE \\"profile\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"weight\\" tinyint NOT NULL,
@@ -100,7 +100,7 @@ exports[`Database automatically generated schema should match snapshot: profile 
 )"
 `;
 
-exports[`Database automatically generated schema should match snapshot: user 1`] = `
+exports[`Database 🗄️ automatically generated schema should match snapshot: user 1`] = `
 "CREATE TABLE \\"user\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"email\\" text,
@@ -111,7 +111,7 @@ exports[`Database automatically generated schema should match snapshot: user 1`]
 )"
 `;
 
-exports[`Database migrated schema should match snapshot: meal 1`] = `
+exports[`Database 🗄️ migrated schema should match snapshot: meal 1`] = `
 "CREATE TABLE \\"meal\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"name\\" varchar NOT NULL,
@@ -125,7 +125,7 @@ exports[`Database migrated schema should match snapshot: meal 1`] = `
 )"
 `;
 
-exports[`Database migrated schema should match snapshot: meal_product 1`] = `
+exports[`Database 🗄️ migrated schema should match snapshot: meal_product 1`] = `
 "CREATE TABLE \\"meal_product\\" (
   \\"mealId\\" integer NOT NULL,
   \\"productId\\" integer NOT NULL,
@@ -136,7 +136,7 @@ exports[`Database migrated schema should match snapshot: meal_product 1`] = `
 )"
 `;
 
-exports[`Database migrated schema should match snapshot: product 1`] = `
+exports[`Database 🗄️ migrated schema should match snapshot: product 1`] = `
 "CREATE TABLE \\"product\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"name\\" varchar NOT NULL,
@@ -158,7 +158,7 @@ exports[`Database migrated schema should match snapshot: product 1`] = `
 )"
 `;
 
-exports[`Database migrated schema should match snapshot: product_favorites 1`] = `
+exports[`Database 🗄️ migrated schema should match snapshot: product_favorites 1`] = `
 "CREATE TABLE \\"product_favorites\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"productId\\" integer NOT NULL,
@@ -169,7 +169,7 @@ exports[`Database migrated schema should match snapshot: product_favorites 1`] =
 )"
 `;
 
-exports[`Database migrated schema should match snapshot: product_images 1`] = `
+exports[`Database 🗄️ migrated schema should match snapshot: product_images 1`] = `
 "CREATE TABLE \\"product_images\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"url\\" varchar NOT NULL,
@@ -179,7 +179,7 @@ exports[`Database migrated schema should match snapshot: product_images 1`] = `
 )"
 `;
 
-exports[`Database migrated schema should match snapshot: product_portions 1`] = `
+exports[`Database 🗄️ migrated schema should match snapshot: product_portions 1`] = `
 "CREATE TABLE \\"product_portions\\" (
   \\"productId\\" integer NOT NULL,
   \\"type\\" varchar NOT NULL,
@@ -190,7 +190,7 @@ exports[`Database migrated schema should match snapshot: product_portions 1`] = 
 )"
 `;
 
-exports[`Database migrated schema should match snapshot: profile 1`] = `
+exports[`Database 🗄️ migrated schema should match snapshot: profile 1`] = `
 "CREATE TABLE \\"profile\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"weight\\" tinyint NOT NULL,
@@ -211,7 +211,7 @@ exports[`Database migrated schema should match snapshot: profile 1`] = `
 )"
 `;
 
-exports[`Database migrated schema should match snapshot: user 1`] = `
+exports[`Database 🗄️ migrated schema should match snapshot: user 1`] = `
 "CREATE TABLE \\"user\\" (
   \\"id\\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   \\"email\\" text,
