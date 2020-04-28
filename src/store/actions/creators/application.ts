@@ -16,7 +16,3 @@ export const appConnectionStatusUpdated = (
   type: APP_CONNECTION_STATUS_UPDATED,
   payload: status
 });
-
-export type ApplicationAction =
-  | ReturnType<typeof appDateUpdated>
-  | ReturnType<typeof appConnectionStatusUpdated>

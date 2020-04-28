@@ -76,14 +76,3 @@ export const mealOpenToggled = (
 
 export type MealAdded = ReturnType<typeof mealAdded>;
 export type MealProductAdded = ReturnType<typeof mealProductAdded>;
-
-export type DiaryAction =
-  | MealAdded
-  | MealProductAdded
-  | ReturnType<typeof mealsLoaded>
-  | ReturnType<typeof mealDeleted>
-  | ReturnType<typeof mealProductDeleted>
-  | ReturnType<typeof productQuantityUpdated>
-  | ReturnType<typeof mealOpenToggled>
-  | ReturnType<typeof mealProductAddStarted>
-  | ReturnType<typeof mealProductAddFinished>
