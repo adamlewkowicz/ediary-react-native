@@ -25,7 +25,6 @@ import { Actions } from '../../store';
 interface ProductFindScreenState {
   productName: string
   barcode: BarcodeId | null
-  createdProduct: Product | null
   activeTabIndex: number
   productAction: ProductOrNormalizedProduct | null
   refreshTabIndex: number | null
@@ -37,7 +36,6 @@ export const ProductFindScreen = () => {
     activeTabIndex: TAB_INDEX.recent,
     productName: '',
     barcode: null,
-    createdProduct: null,
     productAction: null,
     refreshTabIndex: null,
   });
@@ -56,6 +54,8 @@ export const ProductFindScreen = () => {
   }
 
   function handleProductCreate() {
+    setState({ refreshTabIndex: null });
+
     navigate('ProductCreate', {
       barcode: state.barcode ?? undefined,
       name: state.productName.trim(),
@@ -65,7 +65,6 @@ export const ProductFindScreen = () => {
         setState({
           activeTabIndex: TAB_INDEX.created,
           refreshTabIndex: TAB_INDEX.created,
-          createdProduct,
         });
 
         Utils.toastCenter(`Utworzono produkt "${createdProduct.name}"`);
@@ -101,6 +100,8 @@ export const ProductFindScreen = () => {
       return;
     }
 
+    setState({ refreshTabIndex: null });
+
     switch(actionOption) {
       case PRODUCT_ACTION_OPTION.edit: 
         navigate('ProductCreate', {
@@ -108,7 +109,6 @@ export const ProductFindScreen = () => {
           onProductEdited(editedProduct) {
             navigate('ProductFind');
 
-            // @TODO Request refresh on this tab index
             setState({
               activeTabIndex: TAB_INDEX.created,
               refreshTabIndex: TAB_INDEX.created,
@@ -176,7 +176,7 @@ export const ProductFindScreen = () => {
               <ProductCreatedListMemo
                 onProductSelect={handleProductSelect}
                 onProductAction={handleProductActionRequest}
-                createdProduct={state.createdProduct}
+                isRefreshRequested={state.refreshTabIndex === TAB_INDEX.created}
               />
             )
             case TAB_INDEX.search: return (
@@ -230,7 +230,3 @@ const AddOwnProductButton = styled(ButtonSecondaryArrow)`
 export type ProductResolver = () => Promise<Product>;
 
 type ActionOption = ValueOf<typeof PRODUCT_ACTION_OPTION>;
-
-const isInstanceOfProduct = (
-  product: ProductOrNormalizedProduct | null
-): product is Product => product instanceof Product;
