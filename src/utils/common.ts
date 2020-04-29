@@ -3,6 +3,7 @@ import { Client as BugsnagClient } from 'bugsnag-react-native';
 import { BUGSNAG_API_KEY } from 'react-native-dotenv';
 import { IS_DEV } from '../common/consts';
 import { AbortError } from '../common/error';
+import { sortByClosestValue } from './sort';
 
 export const createDebouncedFunc = <T extends (...args: any) => any>(
   callback: T,
@@ -126,4 +127,10 @@ interface Formik<F extends object> {
   touched: object
   handleChange: (key: string) => any
   handleBlur: (key: string) => any
+}
+
+export const findClosestValue = <T extends number>(targetValue: T, values: T[]): T => {
+  const [closestValue] = values.sort(sortByClosestValue(targetValue));
+  console.log(values.sort(sortByClosestValue(targetValue)))
+  return closestValue;
 }

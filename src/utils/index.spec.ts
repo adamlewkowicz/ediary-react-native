@@ -4,7 +4,7 @@ import {
   findOrFail,
   sortByMostAccurateName,
 } from '.';
-import { createDebouncedFunc } from './common';
+import { createDebouncedFunc, findClosestValue } from './common';
 
 test('createDebouncedFunc - debounced function gets called only once', () => {
   jest.useFakeTimers();
@@ -56,4 +56,17 @@ test('sortByMostAccurateName - sorts items by most matching name', () => {
   const result = dataMock.sort(sortByMostAccurateName(name));
 
   expect(result).toMatchSnapshot();
+});
+
+describe.only('findClosestValue', () => {
+
+  it('should return nearest value to the given value', () => {
+    expect(findClosestValue(1, [1, 2])).toEqual(1);
+    expect(findClosestValue(2, [1, 2])).toEqual(2);
+  });
+
+  it('should favor smaller values', () => {
+    // expect(findClosestValue(2, [1, 3, 5])).toEqual(1);
+  });
+
 });

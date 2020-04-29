@@ -40,3 +40,25 @@ export function sortByMostAccurateName(phrase: string): SortHOF<{ name: string }
     return orderByShorter;
   }
 }
+
+export const sortByClosestValue = (targetValue: number): SortHOF<number> => (a, b) => {
+  const aDiff = targetValue - a;
+  const bDiff = targetValue - b;
+
+  console.log({ aDiff, bDiff })
+
+  if (a === targetValue || b === targetValue) {
+    return 1;
+  }
+
+  if (b === targetValue) {
+    return -1;
+  }
+
+  if (aDiff === bDiff) return 0;
+
+  if (aDiff < bDiff) {
+    return 1;
+  }
+  return -1;
+}
