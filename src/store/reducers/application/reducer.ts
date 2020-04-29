@@ -1,7 +1,6 @@
 import {
   APP_DATE_UPDATED,
   APP_CONNECTION_STATUS_UPDATED,
-  APP_STATUS_UPDATED
 } from '../../consts';
 import { DayjsDate } from '../../../types';
 import dayjs from 'dayjs';
@@ -18,7 +17,6 @@ const initialState: ApplicationState = {
   todayDate: date,
   todayDay: todayDateDay,
   isConnected: false,
-  status: 'INITIALIZING'
 }
 
 export function applicationReducer(
@@ -26,10 +24,6 @@ export function applicationReducer(
   action: ApplicationAction
 ): ApplicationState {
   switch(action.type) {
-    case APP_STATUS_UPDATED: return {
-      ...state,
-      status: action.payload,
-    }
     case APP_DATE_UPDATED: return {
       ...state,
       date: action.payload,

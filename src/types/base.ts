@@ -6,7 +6,6 @@ import {
   PRODUCT_UNIT_TYPE,
 } from '../common/consts';
 import { NavigationProp, ParamListBase, RouteProp } from '@react-navigation/native';
-import { FriscoProductId } from '../services/FriscoApi/FriscoProductIdApi/types';
 import { BarcodeId } from './nominal';
 
 export type UnitType = typeof UNIT_TYPES[number];
@@ -34,7 +33,6 @@ export type WeightGoal = 'decrease' | 'maintain' | 'increase';
 
 export type Environment = 'development' | 'test' | 'production';
 
-export type ApplicationStatus = 'INITIALIZING' | 'CREATING PROFILE' | 'INITIALIZED';
 
 /** Higher order function type for `Array.prototype.filter` method callback. */
 export type FilterHOF<T> = (value: T, index: number, values: T[]) => boolean;
@@ -65,7 +63,7 @@ export type NormalizedPortion = {
 export type NormalizedPortions = NormalizedPortion[]
 
 export interface NormalizedProduct {
-  _id: string | number | FriscoProductId
+  _id: string | number
   name: string
   portion: number
   brand?: string
@@ -83,3 +81,5 @@ export interface NormalizedProduct {
   description?: string
   ingredients?: string[]
 }
+
+export type ValueOf<T> = T[keyof T];

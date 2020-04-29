@@ -9,5 +9,5 @@ export const APP_ROUTE = {
       ProductFind: 'ProductFind',
       BarcodeScan: 'BarcodeScan',
       ProductPreview: 'ProductPreview',
-    DiarySummary: 'DiarySummary',
+    NutritionSummary: 'NutritionSummary',
 } as const;

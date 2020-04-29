@@ -22,18 +22,18 @@ export type RootStackParamList = {
 }
 
 export const RootStack = () => {
+  const user = useSelector(Selectors.getUser);
   useNetworkSubscription();
-  const appStatus = useSelector(Selectors.getAppStatus);
   
   return (
     <NavigationContainer theme={NAVIGATION_THEME}>
       <Stack.Navigator headerMode="none">
-        {appStatus === 'INITIALIZING' ? (
+        {user.data === null ? (
           <Stack.Screen
             name={APP_ROUTE.AppLoading}
             component={AppLoadingScreen}
           />
-        ) : appStatus === 'CREATING PROFILE' ? (
+        ) : user.profile === null ? (
           <Stack.Screen
             name={APP_ROUTE.ProfileCreate}
             component={ProfileCreateScreen}

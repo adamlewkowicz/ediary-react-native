@@ -5,9 +5,9 @@ import {
   BottomTabBarOptions,
 } from '@react-navigation/bottom-tabs';
 import { APP_ROUTE } from './consts';
-import { DiarySummaryScreen } from '../screens';
+import { NutritionSummaryScreen } from '../screens';
 import { THEME } from '../common/theme';
-import { ReportIcon, DishIcon } from '../components';
+import { BottomTabBar } from '../components';
 import { NutritionStack } from './NutritionStack';
 import { RouteProp } from '@react-navigation/native';
 
@@ -15,19 +15,14 @@ const Tab = createBottomTabNavigator<TabStackParamList>();
 
 export type TabStackParamList = {
   [APP_ROUTE.NutritionStack]: undefined;
-  [APP_ROUTE.DiarySummary]: undefined;
+  [APP_ROUTE.NutritionSummary]: undefined;
 }
 
 export const MainStack = () => (
   <Tab.Navigator
     initialRouteName={APP_ROUTE.NutritionStack}
     tabBarOptions={TAB_BAR_OPTIONS}
-    screenOptions={({ route }) => ({
-      tabBarIcon: ({ color }) => {
-        const Icon = TAB_BAR_ICON[route.name];
-        return <Icon fill={color} {...TAB_ICON_SIZE} />;
-      },
-    })}
+    tabBar={BottomTabBar}
   >
     <Tab.Screen
       name={APP_ROUTE.NutritionStack}
@@ -35,8 +30,8 @@ export const MainStack = () => (
       options={{ tabBarLabel: 'Dziennik' }}
     />
     <Tab.Screen
-      name={APP_ROUTE.DiarySummary}
-      component={DiarySummaryScreen}
+      name={APP_ROUTE.NutritionSummary}
+      component={NutritionSummaryScreen}
       options={{ tabBarLabel: 'Podsumowanie' }}
     />
   </Tab.Navigator>
@@ -45,25 +40,16 @@ export const MainStack = () => (
 const TAB_BAR_OPTIONS: BottomTabBarOptions = {
   showIcon: true,
   activeTintColor: THEME.color.highlight,
+  inactiveTintColor: THEME.color.tertiary,
   labelStyle: {
     fontSize: THEME.fontSizeRaw.small,
     fontFamily: THEME.fontWeight.regular,
   },
 };
 
-const TAB_ICON_SIZE = {
-  width: 22,
-  height: 22,
-};
-
-const TAB_BAR_ICON = {
-  [APP_ROUTE.NutritionStack]: DishIcon,
-  [APP_ROUTE.DiarySummary]: ReportIcon,
-};
-
 export type NutritionStackNavigationProp = ScreenProps<'NutritionStack'>;
 
-export type DiarySummaryScreenNavigationProps = ScreenProps<'DiarySummary'>;
+export type NutritionSummaryScreenNavigationProps = ScreenProps<'NutritionSummary'>;
 
 type ScreenProps<
   K extends keyof TabStackParamList

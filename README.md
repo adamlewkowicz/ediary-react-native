@@ -49,9 +49,15 @@ Play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://p
 ![Własne produkty](https://i.imgur.com/IvvL3zM.png)
 
 ## Roadmap
-- Śledzenie i pomiary wagi ciała
-- Śledzenie dziennego spożycia wody
-- Kreator przepisów i ulubione produkty
-- Treningi siłowe oraz areobowe (podział na ćwiczenia, serie, obciążenie i powtórzenia)
-- Treningi wytrzymałowściowe z możliwością śledzenia przebytej trasy na mapie (bieganie, jazda na rowerze)
-- Szczegółowe wartości makroskładników i indeks pro/przeciwzapalny produktów
+- [ ] Śledzenie i pomiary wagi ciała.
+- [ ] Śledzenie dziennego spożycia wody.
+- [ ] Kreator przepisów.
+- [x] Ulubione, utworzone i ostatnio używane produkty.
+- [ ] Treningi siłowe oraz areobowe (podział na ćwiczenia, serie, obciążenie i powtórzenia).
+- [ ] Treningi wytrzymałowściowe z możliwością śledzenia przebytej trasy na mapie (bieganie, jazda na rowerze).
+- [ ] Szczegółowe wartości makroskładników i indeks pro/przeciwzapalny produktów.
+
+## Licencja
+Szczegóły licencji - [Commons Clause](LICENSE.md)
+
+Zasady użytkowania - https://faircode.io/
