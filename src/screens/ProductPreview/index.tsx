@@ -23,15 +23,14 @@ import { ScrollView } from 'react-native';
 
 export const ProductPreviewScreen = () => {
   const { params, navigation } = useNavigationData<ProductPreviewScreenNavigationProps>();
-  const [quantity, setQuantity] = useState<number>(params.quantity ?? 0);
+  const productPortionQuantity = 'portion' in params.product ? params.product.portion : Product.defaultPortion;
+  const [quantity, setQuantity] = useState<number>(params.quantity ?? productPortionQuantity);
   const {
     macro,
     macroPercentages,
     macroNeeds,
   } = useCalculatedMacro(params.product.macro, quantity);
   const productFavorite = useProductFavorite(params.product.id);
-  const productPortion = params.product.portions?.[0];
-  const productPortionQuantity = productPortion?.value ?? Product.defaultPortion;
 
   const isEditMode = params.onProductQuantityUpdated != null;
 

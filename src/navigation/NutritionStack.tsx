@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator, StackNavigationProp, StackNavigationOptions } from '@react-navigation/stack';
 import { APP_ROUTE } from './consts';
 import { BarcodeId } from '../types';
-import { Product } from '../database/entities';
+import { Product, IProduct } from '../database/entities';
 import { TakePictureResponse } from 'react-native-camera/types';
 import {
   ProductFindScreen,
@@ -14,7 +14,6 @@ import {
 import { RouteProp } from '@react-navigation/native';
 import { THEME } from '../common/theme';
 import { ProductPreviewScreen } from '../screens/ProductPreview';
-import { DiaryProduct } from '../store/reducers/diary';
 
 const Stack = createStackNavigator<NutritionStackParamList>();
 
@@ -39,7 +38,7 @@ export type NutritionStackParamList = {
     onPhotoTaken?: (data: TakePictureResponse) => void
   };
   [APP_ROUTE.ProductPreview]: {
-    product: DiaryProduct['data']
+    product: IProduct | Product
     quantity?: number
     onProductQuantityUpdated?: (quantity: number) => void
   };
