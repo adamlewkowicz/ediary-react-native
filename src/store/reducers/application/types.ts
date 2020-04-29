@@ -1,4 +1,4 @@
-import { DayjsDate, ApplicationStatus } from '../../../types';
+import { DayjsDate } from '../../../types';
 
 export interface ApplicationState {
   date: Date
@@ -6,5 +6,4 @@ export interface ApplicationState {
   todayDate: Date
   todayDay: DayjsDate
   isConnected: boolean
-  status: ApplicationStatus
 }

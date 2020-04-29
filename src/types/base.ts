@@ -33,7 +33,6 @@ export type WeightGoal = 'decrease' | 'maintain' | 'increase';
 
 export type Environment = 'development' | 'test' | 'production';
 
-export type ApplicationStatus = 'INITIALIZING' | 'CREATING PROFILE' | 'INITIALIZED';
 
 /** Higher order function type for `Array.prototype.filter` method callback. */
 export type FilterHOF<T> = (value: T, index: number, values: T[]) => boolean;
