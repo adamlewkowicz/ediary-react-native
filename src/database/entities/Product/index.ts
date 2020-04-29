@@ -303,7 +303,7 @@ export class Product extends GenericEntity {
   static findOwn(userId: UserId): Promise<Product[]> {
     return Product.find({
       where: { userId },
-      order: { id: 'DESC' }
+      order: { updatedAt: 'DESC' }
     });
   }
 
