@@ -26,7 +26,7 @@ interface ProductFindScreenState {
   productName: string
   barcode: BarcodeId | null
   activeTabIndex: number
-  productAction: ProductOrNormalizedProduct | null
+  actionProduct: ProductOrNormalizedProduct | null
   refreshTabIndex: number | null
 }
 
@@ -36,7 +36,7 @@ export const ProductFindScreen = () => {
     activeTabIndex: TAB_INDEX.recent,
     productName: '',
     barcode: null,
-    productAction: null,
+    actionProduct: null,
     refreshTabIndex: null,
   });
   const hasProductBeenSelected = useRef(false);
@@ -92,20 +92,18 @@ export const ProductFindScreen = () => {
   }, [params.onProductSelected]);
 
   const handleProductActionRequest = useCallback((product: ProductOrNormalizedProduct): void => {
-    setState({ productAction: product });
+    setState({ actionProduct: product });
   }, []);
 
   const handleProductAction = (actionOption: ActionOption): void => {
-    if (!(state.productAction instanceof Product)) {
+    if (!(state.actionProduct instanceof Product)) {
       return;
     }
-
-    setState({ refreshTabIndex: null });
 
     switch(actionOption) {
       case PRODUCT_ACTION_OPTION.edit: 
         navigate('ProductCreate', {
-          product: state.productAction,
+          product: state.actionProduct,
           onProductEdited(editedProduct) {
             navigate('ProductFind');
 
@@ -118,13 +116,14 @@ export const ProductFindScreen = () => {
         break;
       
       case PRODUCT_ACTION_OPTION.showDetails: 
-        navigate('ProductPreview', {
-          product: state.productAction,
-        });
+        navigate('ProductPreview', { product: state.actionProduct });
         break;
     }
 
-    setState({ productAction: null });
+    setState({
+      actionProduct: null,
+      refreshTabIndex: null,
+    });
   }
 
   navigation.setOptions({
@@ -191,15 +190,15 @@ export const ProductFindScreen = () => {
           }
         }}
       />
-      {state.productAction && (
+      {state.actionProduct && (
         <ActionSheet
-          title={state.productAction.name}
+          title={state.actionProduct.name}
           options={[
             PRODUCT_ACTION_OPTION.showDetails,
             PRODUCT_ACTION_OPTION.edit,
           ]}
           onAction={handleProductAction}
-          onDismiss={() => setState({ productAction: null })}
+          onDismiss={() => setState({ actionProduct: null })}
         />
       )}
     </Container>
