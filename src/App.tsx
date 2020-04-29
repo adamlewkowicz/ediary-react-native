@@ -7,7 +7,7 @@ import { RootStack } from './navigation/RootStack';
 import { IntlProvider } from './context/IntlContext';
 
 export const App = () => (
-  <IntlProvider>
+  <IntlProvider initialLanguage="pl">
     <StoreProvider store={store}>
       <ThemeProvider theme={THEME}>
         <RootStack />

@@ -9,6 +9,8 @@ import { USER_ID_UNSYNCED } from '../src/common/consts';
 import { render } from '@testing-library/react-native';
 import { NavigationContainer, NavigationContext, NavigationRouteContext } from '@react-navigation/native';
 import { BaseScreenProps } from '../src/types';
+import { IntlProvider } from '../src/context/IntlContext';
+import { TEST_APP_LANGUAGE } from './intl';
 
 let userMock: User;
 
@@ -34,17 +36,19 @@ export function renderSetup<
   
   return {
     ...render(
-      <Provider store={storeMock}>
-        <ThemeProvider theme={THEME}>
-          <NavigationContainer>
-            <NavigationContext.Provider value={navigationCtxMock as any}>
-              <NavigationRouteContext.Provider value={{ params } as any}>
-                {ui}
-              </NavigationRouteContext.Provider>
-            </NavigationContext.Provider>
-          </NavigationContainer>
-        </ThemeProvider>
-      </Provider>
+      <IntlProvider initialLanguage={TEST_APP_LANGUAGE}>
+        <Provider store={storeMock}>
+          <ThemeProvider theme={THEME}>
+            <NavigationContainer>
+              <NavigationContext.Provider value={navigationCtxMock as any}>
+                <NavigationRouteContext.Provider value={{ params } as any}>
+                  {ui}
+                </NavigationRouteContext.Provider>
+              </NavigationContext.Provider>
+            </NavigationContainer>
+          </ThemeProvider>
+        </Provider>
+      </IntlProvider>
     ),
     mocks: {
       navigationContext: navigationCtxMock,
