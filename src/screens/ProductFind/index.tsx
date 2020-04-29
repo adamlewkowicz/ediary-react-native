@@ -21,6 +21,7 @@ import * as Utils from '../../utils';
 import { BarcodeId, ValueOf } from '../../types';
 import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface ProductFindScreenState {
   productName: string
@@ -43,6 +44,13 @@ export const ProductFindScreen = () => {
   const productNameDebounced = useDebouncedValue(state.productName);
   const dispatch = useDispatch();
 
+  const cleanupState = useCallback(() => setState({
+    actionProduct: null,
+    refreshTabIndex: null,
+  }), []);
+
+  useFocusEffect(cleanupState);
+
   function handleBarcodeScan() {
     navigate('BarcodeScan', {
       onBarcodeDetected(barcode) {
@@ -54,8 +62,6 @@ export const ProductFindScreen = () => {
   }
 
   function handleProductCreate() {
-    setState({ refreshTabIndex: null });
-
     navigate('ProductCreate', {
       barcode: state.barcode ?? undefined,
       name: state.productName.trim(),
@@ -119,11 +125,6 @@ export const ProductFindScreen = () => {
         navigate('ProductPreview', { product: state.actionProduct });
         break;
     }
-
-    setState({
-      actionProduct: null,
-      refreshTabIndex: null,
-    });
   }
 
   navigation.setOptions({

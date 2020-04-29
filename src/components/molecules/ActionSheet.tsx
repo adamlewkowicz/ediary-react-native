@@ -17,6 +17,7 @@ export const ActionSheet = <T extends string>(props: ActionSheetProps<T>) => {
 
   useEffect(() => {
     actionSheet.current?.show();
+    return () => (actionSheet.current as any)?.hide();
   }, []);
 
   const handleOnPress = (index: number): void => {
