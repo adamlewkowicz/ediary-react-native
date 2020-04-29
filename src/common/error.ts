@@ -11,3 +11,5 @@ export class AbortError extends Error {
     super(message);
   }
 }
+
+export class ContextProviderError extends Error {}
