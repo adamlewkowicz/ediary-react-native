@@ -20,7 +20,10 @@ export const useAsyncData = <T>(options: {
   });
   const { setAppError } = useAppError();
 
-  const refresh = useCallback(() => setState({ isRefreshRequested: true }), []);
+  const refresh = useCallback(() => setState({
+    isRefreshRequested: true,
+    isLoading: true,
+  }), []);
 
   useEffect(() => {
     const abortController = new AbortController();
