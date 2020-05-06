@@ -13,6 +13,7 @@ export const ProductRecentList = (props: ProductRecentListProps) => {
       onProductSelect={props.onProductSelect}
       onProductAction={props.onProductAction}
       isLoading={productHistory.isLoading}
+      onRefresh={productHistory.refresh}
       a11yLabel="Lista ostatnio używanych produktów"
     />
   );
