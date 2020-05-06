@@ -17,20 +17,15 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* EdiaryMobileAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* EdiaryMobileAppTests.m */; };
 		3306289D655AA24767BE5066 /* libPods-EdiaryMobileApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F8CB78AFBFB2F45056B71BA9 /* libPods-EdiaryMobileApp.a */; };
-		435A3D4EFCA88A2FC3CF8324 /* libPods-EdiaryMobileAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 061536890CA20802CBA3FEA8 /* libPods-EdiaryMobileAppTests.a */; };
-		503178ACCA20B7CF710781C9 /* libPods-EdiaryMobileApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0548FCB7F02BF72F47CD142E /* libPods-EdiaryMobileApp-tvOS.a */; };
-		8CB52CC93A47B38E8387E307 /* libPods-EdiaryMobileApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F6739655C5581ED096C5A85 /* libPods-EdiaryMobileApp-tvOSTests.a */; };
-		B006C67EFC294952816955E4 /* DMSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FBAADE754973499182EEB75F /* DMSans-Bold.ttf */; };
-		AFDEE4A2999A4746AEA41C63 /* DMSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C932406101994C3E98F3A280 /* DMSans-BoldItalic.ttf */; };
-		98F9202EB24549F89341A559 /* DMSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C05B1B22EE384B70909D5B32 /* DMSans-Medium.ttf */; };
-		3B642546ECAD4FFF857B4473 /* DMSans-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E5731F0C84704740AD3D9DFB /* DMSans-MediumItalic.ttf */; };
-		F41A6E5CD1FD4E0288FF60A6 /* DMSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 44850916D3F54C51B89179A2 /* DMSans-Regular.ttf */; };
-		CF569BB6ADFC4648B3440DB7 /* DMSans-RegularItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F2077F1CA694B63987568A5 /* DMSans-RegularItalic.ttf */; };
-		493C7F7C4714472BAD0EAEAB /* Hind-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8CECCB8DC8EA42C19B2B7E6D /* Hind-Bold.ttf */; };
-		6FF0C2828E014B26BCD9C589 /* Hind-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6C6D8A38CD1840ABA2E677F2 /* Hind-Light.ttf */; };
-		CA808096A1E74D17AEF4FE63 /* Hind-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F8D4CC51E6F247CBB4E57DE2 /* Hind-Medium.ttf */; };
-		6CF1B787BD834E2F885A4ADD /* Hind-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D36A31630BDD440C9A18E0BE /* Hind-Regular.ttf */; };
 		433C0B1F232B44D9B02A6F07 /* Hind-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC0B5F168FA741EFAF182585 /* Hind-SemiBold.ttf */; };
+		435A3D4EFCA88A2FC3CF8324 /* libPods-EdiaryMobileAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 061536890CA20802CBA3FEA8 /* libPods-EdiaryMobileAppTests.a */; };
+		493C7F7C4714472BAD0EAEAB /* Hind-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8CECCB8DC8EA42C19B2B7E6D /* Hind-Bold.ttf */; };
+		503178ACCA20B7CF710781C9 /* libPods-EdiaryMobileApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0548FCB7F02BF72F47CD142E /* libPods-EdiaryMobileApp-tvOS.a */; };
+		66EC01952462EA6F004A9DB1 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EC01942462EA6F004A9DB1 /* File.swift */; };
+		6CF1B787BD834E2F885A4ADD /* Hind-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D36A31630BDD440C9A18E0BE /* Hind-Regular.ttf */; };
+		6FF0C2828E014B26BCD9C589 /* Hind-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6C6D8A38CD1840ABA2E677F2 /* Hind-Light.ttf */; };
+		8CB52CC93A47B38E8387E307 /* libPods-EdiaryMobileApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F6739655C5581ED096C5A85 /* libPods-EdiaryMobileApp-tvOSTests.a */; };
+		CA808096A1E74D17AEF4FE63 /* Hind-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F8D4CC51E6F247CBB4E57DE2 /* Hind-Medium.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,28 +62,30 @@
 		2D02E47B1E0B4A5D006451C7 /* EdiaryMobileApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EdiaryMobileApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* EdiaryMobileApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "EdiaryMobileApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4255748BA9F196AF7073182A /* Pods-EdiaryMobileAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EdiaryMobileAppTests.debug.xcconfig"; path = "Target Support Files/Pods-EdiaryMobileAppTests/Pods-EdiaryMobileAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		44850916D3F54C51B89179A2 /* DMSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DMSans-Regular.ttf"; path = "../assets/fonts/DMSans-Regular.ttf"; sourceTree = "<group>"; };
 		4B05263AC039F262C49ADBA3 /* Pods-EdiaryMobileApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EdiaryMobileApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-EdiaryMobileApp-tvOS/Pods-EdiaryMobileApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		500370725D945F89A2790688 /* Pods-EdiaryMobileApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EdiaryMobileApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-EdiaryMobileApp-tvOSTests/Pods-EdiaryMobileApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		66EC01932462EA6F004A9DB1 /* EdiaryMobileApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EdiaryMobileApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		66EC01942462EA6F004A9DB1 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		6A930594881C9E94954D5655 /* Pods-EdiaryMobileAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EdiaryMobileAppTests.release.xcconfig"; path = "Target Support Files/Pods-EdiaryMobileAppTests/Pods-EdiaryMobileAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		6C6D8A38CD1840ABA2E677F2 /* Hind-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Hind-Light.ttf"; path = "../assets/fonts/Hind-Light.ttf"; sourceTree = "<group>"; };
 		6DAF8B71E081516C53588844 /* Pods-EdiaryMobileApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EdiaryMobileApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-EdiaryMobileApp-tvOS/Pods-EdiaryMobileApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		6F2077F1CA694B63987568A5 /* DMSans-RegularItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DMSans-RegularItalic.ttf"; path = "../assets/fonts/DMSans-RegularItalic.ttf"; sourceTree = "<group>"; };
 		754CFBE21A7353311DA052B5 /* Pods-EdiaryMobileApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EdiaryMobileApp.debug.xcconfig"; path = "Target Support Files/Pods-EdiaryMobileApp/Pods-EdiaryMobileApp.debug.xcconfig"; sourceTree = "<group>"; };
+		8CECCB8DC8EA42C19B2B7E6D /* Hind-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Hind-Bold.ttf"; path = "../assets/fonts/Hind-Bold.ttf"; sourceTree = "<group>"; };
 		8F6739655C5581ED096C5A85 /* libPods-EdiaryMobileApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EdiaryMobileApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC0B5F168FA741EFAF182585 /* Hind-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Hind-SemiBold.ttf"; path = "../assets/fonts/Hind-SemiBold.ttf"; sourceTree = "<group>"; };
 		BC0E4299751AB30A257F02EB /* Pods-EdiaryMobileApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EdiaryMobileApp.release.xcconfig"; path = "Target Support Files/Pods-EdiaryMobileApp/Pods-EdiaryMobileApp.release.xcconfig"; sourceTree = "<group>"; };
+		C05B1B22EE384B70909D5B32 /* DMSans-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DMSans-Medium.ttf"; path = "../assets/fonts/DMSans-Medium.ttf"; sourceTree = "<group>"; };
+		C932406101994C3E98F3A280 /* DMSans-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DMSans-BoldItalic.ttf"; path = "../assets/fonts/DMSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		CA5AFBB12255C85EA1E098B7 /* Pods-EdiaryMobileApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EdiaryMobileApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-EdiaryMobileApp-tvOSTests/Pods-EdiaryMobileApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D36A31630BDD440C9A18E0BE /* Hind-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Hind-Regular.ttf"; path = "../assets/fonts/Hind-Regular.ttf"; sourceTree = "<group>"; };
+		E5731F0C84704740AD3D9DFB /* DMSans-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DMSans-MediumItalic.ttf"; path = "../assets/fonts/DMSans-MediumItalic.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F8CB78AFBFB2F45056B71BA9 /* libPods-EdiaryMobileApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EdiaryMobileApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		FBAADE754973499182EEB75F /* DMSans-Bold.ttf */ = {isa = PBXFileReference; name = "DMSans-Bold.ttf"; path = "../assets/fonts/DMSans-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		C932406101994C3E98F3A280 /* DMSans-BoldItalic.ttf */ = {isa = PBXFileReference; name = "DMSans-BoldItalic.ttf"; path = "../assets/fonts/DMSans-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		C05B1B22EE384B70909D5B32 /* DMSans-Medium.ttf */ = {isa = PBXFileReference; name = "DMSans-Medium.ttf"; path = "../assets/fonts/DMSans-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		E5731F0C84704740AD3D9DFB /* DMSans-MediumItalic.ttf */ = {isa = PBXFileReference; name = "DMSans-MediumItalic.ttf"; path = "../assets/fonts/DMSans-MediumItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		44850916D3F54C51B89179A2 /* DMSans-Regular.ttf */ = {isa = PBXFileReference; name = "DMSans-Regular.ttf"; path = "../assets/fonts/DMSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		6F2077F1CA694B63987568A5 /* DMSans-RegularItalic.ttf */ = {isa = PBXFileReference; name = "DMSans-RegularItalic.ttf"; path = "../assets/fonts/DMSans-RegularItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		8CECCB8DC8EA42C19B2B7E6D /* Hind-Bold.ttf */ = {isa = PBXFileReference; name = "Hind-Bold.ttf"; path = "../assets/fonts/Hind-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		6C6D8A38CD1840ABA2E677F2 /* Hind-Light.ttf */ = {isa = PBXFileReference; name = "Hind-Light.ttf"; path = "../assets/fonts/Hind-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		F8D4CC51E6F247CBB4E57DE2 /* Hind-Medium.ttf */ = {isa = PBXFileReference; name = "Hind-Medium.ttf"; path = "../assets/fonts/Hind-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		D36A31630BDD440C9A18E0BE /* Hind-Regular.ttf */ = {isa = PBXFileReference; name = "Hind-Regular.ttf"; path = "../assets/fonts/Hind-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		AC0B5F168FA741EFAF182585 /* Hind-SemiBold.ttf */ = {isa = PBXFileReference; name = "Hind-SemiBold.ttf"; path = "../assets/fonts/Hind-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F8D4CC51E6F247CBB4E57DE2 /* Hind-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Hind-Medium.ttf"; path = "../assets/fonts/Hind-Medium.ttf"; sourceTree = "<group>"; };
+		FBAADE754973499182EEB75F /* DMSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DMSans-Bold.ttf"; path = "../assets/fonts/DMSans-Bold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +168,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		34A7DD77536146ABAABD17A3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FBAADE754973499182EEB75F /* DMSans-Bold.ttf */,
+				C932406101994C3E98F3A280 /* DMSans-BoldItalic.ttf */,
+				C05B1B22EE384B70909D5B32 /* DMSans-Medium.ttf */,
+				E5731F0C84704740AD3D9DFB /* DMSans-MediumItalic.ttf */,
+				44850916D3F54C51B89179A2 /* DMSans-Regular.ttf */,
+				6F2077F1CA694B63987568A5 /* DMSans-RegularItalic.ttf */,
+				8CECCB8DC8EA42C19B2B7E6D /* Hind-Bold.ttf */,
+				6C6D8A38CD1840ABA2E677F2 /* Hind-Light.ttf */,
+				F8D4CC51E6F247CBB4E57DE2 /* Hind-Medium.ttf */,
+				D36A31630BDD440C9A18E0BE /* Hind-Regular.ttf */,
+				AC0B5F168FA741EFAF182585 /* Hind-SemiBold.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -181,6 +196,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				66EC01942462EA6F004A9DB1 /* File.swift */,
 				13B07FAE1A68108700A75B9A /* EdiaryMobileApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* EdiaryMobileAppTests */,
@@ -188,6 +204,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				E5282174B0FF4B084BC623C8 /* Pods */,
 				34A7DD77536146ABAABD17A3 /* Resources */,
+				66EC01932462EA6F004A9DB1 /* EdiaryMobileApp-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -217,28 +234,8 @@
 				4255748BA9F196AF7073182A /* Pods-EdiaryMobileAppTests.debug.xcconfig */,
 				6A930594881C9E94954D5655 /* Pods-EdiaryMobileAppTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
-		};
-		34A7DD77536146ABAABD17A3 /* Resources */ = {
-			isa = "PBXGroup";
-			children = (
-				FBAADE754973499182EEB75F /* DMSans-Bold.ttf */,
-				C932406101994C3E98F3A280 /* DMSans-BoldItalic.ttf */,
-				C05B1B22EE384B70909D5B32 /* DMSans-Medium.ttf */,
-				E5731F0C84704740AD3D9DFB /* DMSans-MediumItalic.ttf */,
-				44850916D3F54C51B89179A2 /* DMSans-Regular.ttf */,
-				6F2077F1CA694B63987568A5 /* DMSans-RegularItalic.ttf */,
-				8CECCB8DC8EA42C19B2B7E6D /* Hind-Bold.ttf */,
-				6C6D8A38CD1840ABA2E677F2 /* Hind-Light.ttf */,
-				F8D4CC51E6F247CBB4E57DE2 /* Hind-Medium.ttf */,
-				D36A31630BDD440C9A18E0BE /* Hind-Regular.ttf */,
-				AC0B5F168FA741EFAF182585 /* Hind-SemiBold.ttf */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
@@ -334,6 +331,9 @@
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
+					13B07F861A680F5B00A75B9A = {
+						LastSwiftMigration = 1140;
+					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
 						ProvisioningStyle = Automatic;
@@ -350,6 +350,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -380,12 +381,6 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				B006C67EFC294952816955E4 /* DMSans-Bold.ttf in Resources */,
-				AFDEE4A2999A4746AEA41C63 /* DMSans-BoldItalic.ttf in Resources */,
-				98F9202EB24549F89341A559 /* DMSans-Medium.ttf in Resources */,
-				3B642546ECAD4FFF857B4473 /* DMSans-MediumItalic.ttf in Resources */,
-				F41A6E5CD1FD4E0288FF60A6 /* DMSans-Regular.ttf in Resources */,
-				CF569BB6ADFC4648B3440DB7 /* DMSans-RegularItalic.ttf in Resources */,
 				493C7F7C4714472BAD0EAEAB /* Hind-Bold.ttf in Resources */,
 				6FF0C2828E014B26BCD9C589 /* Hind-Light.ttf in Resources */,
 				CA808096A1E74D17AEF4FE63 /* Hind-Medium.ttf in Resources */,
@@ -582,6 +577,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				66EC01952462EA6F004A9DB1 /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -635,6 +631,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4255748BA9F196AF7073182A /* Pods-EdiaryMobileAppTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -658,6 +655,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6A930594881C9E94954D5655 /* Pods-EdiaryMobileAppTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = EdiaryMobileAppTests/Info.plist;
@@ -679,6 +677,7 @@
 			baseConfigurationReference = 754CFBE21A7353311DA052B5 /* Pods-EdiaryMobileApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = NO;
 				INFOPLIST_FILE = EdiaryMobileApp/Info.plist;
@@ -690,6 +689,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = EdiaryMobileApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "EdiaryMobileApp-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -699,6 +701,7 @@
 			baseConfigurationReference = BC0E4299751AB30A257F02EB /* Pods-EdiaryMobileApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 4;
 				INFOPLIST_FILE = EdiaryMobileApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -709,6 +712,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = EdiaryMobileApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "EdiaryMobileApp-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
