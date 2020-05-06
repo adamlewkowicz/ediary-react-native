@@ -30,8 +30,6 @@ export const useAsyncData = <T>(options: {
     
     const handleAsyncTask = async () => {
       try {
-        setState({ isLoading: true });
-
         const data = await Utils.cancelablePromise<T>(
           options.asyncTask(),
           abortController
