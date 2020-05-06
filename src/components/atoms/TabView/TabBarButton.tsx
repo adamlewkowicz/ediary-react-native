@@ -8,17 +8,18 @@ interface TabButtonProps extends TouchableOpacityProps {
   isActive: boolean
 }
 
-export const TabBarButton = (props: TabButtonProps) => {
+export const TabBarButton = React.forwardRef((props: TabButtonProps, ref) => {
   return (
     <Container
       accessibilityState={{ selected: props.isActive }}
       accessibilityRole="button"
+      ref={ref}
       {...props}
     >
       <TextPrimary>{props.title}</TextPrimary>
     </Container>
   );
-}
+});
 
 const Container = styled.TouchableOpacity<{
   isActive: boolean

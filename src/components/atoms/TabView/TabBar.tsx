@@ -1,9 +1,10 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { SceneRendererProps } from 'react-native-tab-view';
-import { ScrollView } from 'react-native';
+import { ScrollView, View, findNodeHandle } from 'react-native';
 import { TabBarButton } from './TabBarButton';
 import { Route } from './TabView';
+import { useRefs } from '../../../hooks/use-refs';
 
 interface TabBarProps extends SceneRendererProps {
   routes: Route[]
@@ -12,16 +13,23 @@ interface TabBarProps extends SceneRendererProps {
 
 export const TabBar = (props: TabBarProps) => {
   const scrollViewRef = useRef<ScrollView>(null);
+  const buttonRefs = useRefs<View>(props.routes.length);
+
+  const scrollToIndex = (index: number) => {
+    const node = buttonRefs[index].current;
+    const position = findNodeHandle(node);
+
+    if (position) {
+      scrollViewRef.current?.scrollTo({
+        x: 0,
+        y: position,
+        animated: true,
+      });
+    }
+  }
 
   useEffect(() => {
-    const isFirstIndex = props.activeIndex === 0;
-    const isLastIndex = props.activeIndex === props.routes.length - 1;
-
-    if (isFirstIndex) {
-      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
-    } else if (isLastIndex) {
-      scrollViewRef.current?.scrollToEnd();
-    }
+    scrollToIndex(props.activeIndex);
   }, [props.activeIndex]);
 
   return (
@@ -33,6 +41,7 @@ export const TabBar = (props: TabBarProps) => {
       >
         {props.routes.map((route, index) => (
           <TabBarButton
+            ref={buttonRefs[index]}
             key={route.key}
             title={route.key}
             onPress={() => props.jumpTo(route.key)}
