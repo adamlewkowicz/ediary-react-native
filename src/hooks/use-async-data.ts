@@ -14,8 +14,8 @@ export const useAsyncData = <T>(options: {
   asyncTask: () => Promise<T>
 }) => {
   const [state, setState] = useNativeState<State<T>>({
-    isLoading: false,
-    isRefreshRequested: false,
+    isLoading: true,
+    isRefreshRequested: true,
     data: options.initialValue,
   });
   const { setAppError } = useAppError();
