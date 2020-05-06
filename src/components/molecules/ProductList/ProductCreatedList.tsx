@@ -1,19 +1,23 @@
 import React, { useEffect } from 'react';
 import { useProductsCreated } from '../../../hooks';
 import { ProductList, ProductListProps } from '.';
+import { useImperativeHandle } from 'react';
 
-interface ProductCreatedListProps extends Omit<ProductListProps, 'data'> {
-  isRefreshRequested: boolean
+export interface ProductCreatedListRef {
+  refresh: () => void
 }
 
-const ProductCreatedList = (props: ProductCreatedListProps) => {
+interface ProductCreatedListProps extends Omit<ProductListProps, 'data'> {}
+
+const ProductCreatedList = React.forwardRef<ProductCreatedListRef, ProductCreatedListProps>((
+  props: ProductCreatedListProps,
+  ref
+) => {
   const productsCreated = useProductsCreated();
 
-  useEffect(() => {
-    if (props.isRefreshRequested) {
-      productsCreated.refresh();
-    }
-  }, [props.isRefreshRequested]);
+  useImperativeHandle(ref, () => ({
+    refresh: productsCreated.refresh
+  }));
 
   return (
     <ProductList
@@ -24,6 +28,6 @@ const ProductCreatedList = (props: ProductCreatedListProps) => {
       onProductAction={props.onProductAction}
     />
   );
-}
+});
 
 export const ProductCreatedListMemo = React.memo(ProductCreatedList);

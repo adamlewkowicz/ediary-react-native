@@ -16,6 +16,7 @@ import {
   TabView,
   ProductSearcher,
   ActionSheet,
+  ProductCreatedListRef,
 } from '../../components';
 import * as Utils from '../../utils';
 import { BarcodeId, ValueOf } from '../../types';
@@ -28,7 +29,6 @@ interface ProductFindScreenState {
   barcode: BarcodeId | null
   activeTabIndex: number
   actionProduct: ProductOrNormalizedProduct | null
-  refreshTabIndex: number | null
 }
 
 export const ProductFindScreen = () => {
@@ -38,16 +38,13 @@ export const ProductFindScreen = () => {
     productName: '',
     barcode: null,
     actionProduct: null,
-    refreshTabIndex: null,
   });
   const hasProductBeenSelected = useRef(false);
   const productNameDebounced = useDebouncedValue(state.productName);
   const dispatch = useDispatch();
+  const productCreatedListRef = useRef<ProductCreatedListRef>(null);
 
-  const cleanupState = useCallback(() => setState({
-    actionProduct: null,
-    refreshTabIndex: null,
-  }), []);
+  const cleanupState = useCallback(() => setState({ actionProduct: null }), []);
 
   useFocusEffect(cleanupState);
 
@@ -68,10 +65,7 @@ export const ProductFindScreen = () => {
       onProductCreated(createdProduct) {
         navigate('ProductFind');
 
-        setState({
-          activeTabIndex: TAB_INDEX.created,
-          refreshTabIndex: TAB_INDEX.created,
-        });
+        setState({ activeTabIndex: TAB_INDEX.created });
 
         Utils.toastCenter(`Utworzono produkt "${createdProduct.name}"`);
 
@@ -113,10 +107,9 @@ export const ProductFindScreen = () => {
           onProductEdited(editedProduct) {
             navigate('ProductFind');
 
-            setState({
-              activeTabIndex: TAB_INDEX.created,
-              refreshTabIndex: TAB_INDEX.created,
-            });
+            setState({ activeTabIndex: TAB_INDEX.created });
+
+            productCreatedListRef.current?.refresh();
           }
         });
         break;
@@ -176,7 +169,6 @@ export const ProductFindScreen = () => {
               <ProductCreatedListMemo
                 onProductSelect={handleProductSelect}
                 onProductAction={handleProductActionRequest}
-                isRefreshRequested={state.refreshTabIndex === TAB_INDEX.created}
               />
             )
             case TAB_INDEX.search: return (
