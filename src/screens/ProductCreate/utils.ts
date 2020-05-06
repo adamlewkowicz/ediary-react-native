@@ -1,5 +1,7 @@
 import { Product, IProductRequired } from '../../database/entities';
 import * as Utils from '../../utils';
+import * as Yup from 'yup';
+import { ProductUnitType } from '../../types';
 
 export const serializeProduct = (product?: Product): FormData => {
   const defaultValues = {
@@ -64,6 +66,31 @@ export const deserializeProduct = (productData: FormData): {
 
   return { product, portionQuantity };
 }
+
+const MAX_PORTION_QUANTITY = 2000;
+
+const MIN_PRODUCT_NAME = 3;
+
+export const getValidationSchema = (portionUnitType: ProductUnitType) => Yup.object({
+  name: Yup.string()
+    .min(MIN_PRODUCT_NAME, `Nazwa powinna zawierać min. ${MIN_PRODUCT_NAME} znaki`)
+    .required('Nazwa jest wymagana'),
+  brand: Yup.string(),
+  producer: Yup.string(),
+  portionQuantity: Yup
+    .number()
+    .max(
+      MAX_PORTION_QUANTITY,
+      `Maksymalna ilość w jednej porcji to ${MAX_PORTION_QUANTITY} ${portionUnitType}`
+    ),
+  carbs: Yup.number(),
+  sugars: Yup.number(),
+  prots: Yup.number(),
+  fats: Yup.number(),
+  fattyAcids: Yup.number(),
+  kcal: Yup.number(),
+  barcode: Yup.string(),
+});
 
 export type FormData = {
   name: string

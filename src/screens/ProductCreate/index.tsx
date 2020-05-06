@@ -13,11 +13,15 @@ import {
   Input,
 } from '../../components';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import * as Utils from '../../utils';
 import { bindFormikProps } from '../../utils';
 import { ProductUnitType } from '../../types';
-import { deserializeProduct, serializeProduct, FormData } from './utils';
+import {
+  deserializeProduct,
+  serializeProduct,
+  FormData,
+  getValidationSchema,
+} from './utils';
 
 export const ProductCreateScreen = () => {
   const { params, navigation, navigate } = useNavigationData<ProductCreateScreenNavigationProps>();
@@ -220,28 +224,3 @@ const Container = styled(ScrollView)`
 const SaveProductButton = styled(ButtonPrimary)`
   margin-bottom: 20px;
 `
-
-const MAX_PORTION_QUANTITY = 2000;
-
-const MIN_PRODUCT_NAME = 3;
-
-const getValidationSchema = (portionUnitType: ProductUnitType) => Yup.object({
-  name: Yup.string()
-    .min(MIN_PRODUCT_NAME, `Nazwa powinna zawierać min. ${MIN_PRODUCT_NAME} znaki`)
-    .required('Nazwa jest wymagana'),
-  brand: Yup.string(),
-  producer: Yup.string(),
-  portionQuantity: Yup
-    .number()
-    .max(
-      MAX_PORTION_QUANTITY,
-      `Maksymalna ilość w jednej porcji to ${MAX_PORTION_QUANTITY} ${portionUnitType}`
-    ),
-  carbs: Yup.number(),
-  sugars: Yup.number(),
-  prots: Yup.number(),
-  fats: Yup.number(),
-  fattyAcids: Yup.number(),
-  kcal: Yup.number(),
-  barcode: Yup.string(),
-});
