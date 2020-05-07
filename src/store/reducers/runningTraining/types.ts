@@ -7,6 +7,7 @@ export interface RunningTrainingState {
   velocity: number
   routeCoordinates: Coordinate[]
   prevLatLng: Coordinate
+  coordinate: Coordinate
   error: GeolocationError | null
   isActive: boolean
   isPaused: boolean

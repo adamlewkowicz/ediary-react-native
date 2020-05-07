@@ -1,5 +1,5 @@
 import { RunningTrainingState } from './types';
-import { _RunningTrainingAction } from '../../actions/types/runningTraining';
+import { RunningTrainingAction } from '../../actions/types/runningTraining';
 import {
   RUNNING_TRAINING_STARTED,
   RUNNING_TRAINING_PAUSED,
@@ -31,6 +31,7 @@ const initialState: RunningTrainingState = {
   velocity: 0,
   routeCoordinates: [],
   prevLatLng: { latitude: 0, longitude: 0 },
+  coordinate: { latitude: 0, longitude: 0 },
   error: null,
   isActive: false,
   isPaused: false,
@@ -38,7 +39,7 @@ const initialState: RunningTrainingState = {
 
 export function runningTrainingReducer(
   state = initialState,
-  action: _RunningTrainingAction
+  action: RunningTrainingAction
 ): RunningTrainingState {
   switch(action.type) {
     case RUNNING_TRAINING_STARTED: return {
@@ -80,6 +81,7 @@ export function runningTrainingReducer(
         distance,
         routeCoordinates: [...state.routeCoordinates, nextCoordinate],
         prevLatLng: nextCoordinate,
+        coordinate: nextCoordinate,
         velocity: calcVelocity(state.duration, distance),
       }
     case RUNNING_TRAINING_POSITION_FAILED: return {

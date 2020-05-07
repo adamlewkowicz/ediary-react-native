@@ -1,5 +1,5 @@
 import * as React from 'react';
-import MapView, { AnimatedRegion, Region, Polyline, Marker,  } from 'react-native-maps';
+import MapView, { AnimatedRegion, Region, Polyline, Marker } from 'react-native-maps';
 import { Platform, View } from 'react-native';
 import styled from 'styled-components/native';
 import { Coordinate } from '../../types';
@@ -9,7 +9,8 @@ import Geolocation, { GeolocationResponse } from '@react-native-community/geoloc
 import { HoldableButton } from '../../components/HoldableButton';
 import { useNativeState } from '../../hooks';
 import { requestLocationPermission } from '../../utils';
-import { TextPrimary } from '../../components';
+import { TextPrimary, ButtonPrimary } from '../../components';
+import { GeoLocation as CustomGeoLocation } from '../../services/GeoLocation';
 
 interface RunningScreenState {
   latitude: number
@@ -34,17 +35,22 @@ export const RunningScreen = () => {
      longitudeDelta: 0,
     }),
   });
-  const watchId = React.useRef<number | null>(null);
+  const animatedRegion = React.useRef(new AnimatedRegion({
+    latitude: 0,
+    longitude: 0,
+    latitudeDelta: 0,
+    longitudeDelta: 0,
+  }));
   const markerRef = React.useRef<Marker>(null);
   const dispatch = useDispatch();
   const runningTraining = useSelector(Selectors.getRunningTraining);
 
-  const getMapRegion = (): Region => ({
-    latitude: state.latitude,
-    longitude: state.longitude,
+  const mapRegion: Region = {
+    latitude: runningTraining.coordinate.latitude,
+    longitude: runningTraining.coordinate.longitude,
     latitudeDelta: 0,
     longitudeDelta: 0,
-  });
+  };
 
   const handleCoordinateAnimation = (
     newCoordinate: Coordinate,
@@ -60,15 +66,6 @@ export const RunningScreen = () => {
     }
   }
 
-  const getCurrentPosition = (): Promise<GeolocationResponse> => {
-    return new Promise((resolve, reject) => {
-      Geolocation.getCurrentPosition(
-        resolve,
-        reject
-      );
-    });
-  }
-
   React.useEffect(() => {
     const bootstrap = async () => {
       const permissionGranted = await requestLocationPermission();
@@ -76,25 +73,13 @@ export const RunningScreen = () => {
       if (!permissionGranted) {
         return;
       }
-  
-      const currentPosition = await getCurrentPosition();
-      const { latitude, longitude } = currentPosition.coords;
-  
-      const newCoordinate = { latitude, longitude };
-  
-      setState({
-        latitude,
-        longitude,
-        routeCoordinates: [newCoordinate, newCoordinate]
-      });
-  
+
       dispatch(Actions.runningTrainingStart());
     }
 
     bootstrap();
 
     return () => {
-      Geolocation.clearWatch(watchId.current as number);
       dispatch(Actions.runningTrainingFinish());
     }
   }, [dispatch]);
@@ -112,16 +97,28 @@ export const RunningScreen = () => {
         </View>
         <TextPrimary>
           {runningTraining.velocity.toFixed(2)} km/h
-        </TextPrimary> 
+        </TextPrimary>
         <HoldableButton
           onHoldEnd={() => {}}
         />
+        <ButtonPrimary
+          onPress={() => dispatch(Actions.runningTrainingPauseToggle(!runningTraining.isPaused))}
+        >
+          {runningTraining.isPaused ? 'Kontynuuj' : 'Pauza'}
+        </ButtonPrimary>
+        <ButtonPrimary
+          onPress={() => dispatch(Actions.runningTrainingFinish())}
+        >
+          Zakończ
+        </ButtonPrimary>
+        <TextPrimary>Szer: {runningTraining.coordinate.latitude}</TextPrimary>
+        <TextPrimary>Wys: {runningTraining.coordinate.longitude}</TextPrimary>
       </DataContainer>
       <StyledMapView
         showsUserLocation
         followsUserLocation
         loadingEnabled
-        region={getMapRegion()}
+        region={mapRegion}
       >
         <Polyline
           coordinates={runningTraining.routeCoordinates}

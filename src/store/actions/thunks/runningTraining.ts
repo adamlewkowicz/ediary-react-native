@@ -31,6 +31,10 @@ const runningTrainingEffectsStart = (): Thunk => async (dispatch) => {
 }
 
 export const runningTrainingStart = (): Thunk => async (dispatch) => {
+  Geolocation.getCurrentPosition(position => {
+    dispatch(runningTrainingPositionUpdated(position));
+  });
+
   dispatch(runningTrainingStarted());
   dispatch(runningTrainingEffectsStart());
 }
