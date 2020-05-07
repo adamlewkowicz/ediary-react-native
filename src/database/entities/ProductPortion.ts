@@ -30,7 +30,7 @@ export class ProductPortion extends GenericEntity {
     { onDelete: 'CASCADE' }
   )
   @JoinColumn({ name: 'productId' })
-  product!: Product;
+  product?: Product;
 
 }
 

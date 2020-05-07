@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.3.0</string>
+	<string>1.1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>8</string>
+	<string>21</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true />
 	<key>NSAppTransportSecurity</key>
@@ -61,6 +61,11 @@
 		<string>DMSans-MediumItalic.ttf</string>
 		<string>DMSans-Regular.ttf</string>
 		<string>DMSans-RegularItalic.ttf</string>
+		<string>Hind-Bold.ttf</string>
+		<string>Hind-Light.ttf</string>
+		<string>Hind-Medium.ttf</string>
+		<string>Hind-Regular.ttf</string>
+		<string>Hind-SemiBold.ttf</string>
 	</array>
 </dict>
 </plist>

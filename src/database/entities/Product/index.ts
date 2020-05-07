@@ -9,20 +9,27 @@ import {
   Like,
 } from 'typeorm';
 import { MealProduct, IMealProduct } from '../MealProduct';
-import { BarcodeId, ProductId, UserId, ProductUnit } from '../../../types';
+import {
+  BarcodeId,
+  ProductId,
+  UserId,
+  ProductUnitType,
+  FilterHOF,
+  NormalizedProduct,
+} from '../../../types';
 import { User } from '../User';
 import { ProductPortion } from '../ProductPortion';
-import { friscoApi } from '../../../services/FriscoApi';
 import { SqliteENUM } from '../../decorators';
 import { EntityType, EntityRequired } from '../../types';
-import { PRODUCT_UNITS } from '../../../common/consts';
-import { ilewazyApi } from '../../../services/IlewazyApi';
-import { mapAsyncSequence, filterByUniqueId } from '../../../common/utils';
+import { PRODUCT_UNIT_TYPE } from '../../../common/consts';
 import { MinLength } from 'class-validator';
 import { GenericEntity } from '../../generics/GenericEntity';
 import { ProductImage } from '../ProductImage';
 import { Macro } from '../../embeds/Macro';
 import { FindMostUsedResult, FindMostProductIdsResult } from './types';
+import * as Utils from '../../../utils';
+import { ProductSearchApi } from '../../../services/ProductSearchApi';
+import { ProductFavorite } from '../ProductFavorite';
 
 @Entity('product')
 @Unique<Product>(['name', 'isVerified'])
@@ -50,8 +57,8 @@ export class Product extends GenericEntity {
    * Each macro value describes it's value in 100 units of this type.  
   */
   @Column('text', { default: 'g' })
-  @SqliteENUM(PRODUCT_UNITS)
-  unit!: ProductUnit;
+  @SqliteENUM(PRODUCT_UNIT_TYPE)
+  unit!: ProductUnitType;
 
   @Column('text', { default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;
@@ -89,18 +96,51 @@ export class Product extends GenericEntity {
   )
   images?: ProductImage[];
 
-  get portion(): number {
-    const defaultPortion = 100;
+  @OneToMany(
+    type => ProductFavorite,
+    productFavorite => productFavorite.product,
+    { onDelete: 'CASCADE' }
+  )
+  favorites?: ProductFavorite[];
 
-    if (this.portions && this.portions.length) {
+  static defaultPortion = 100;
+
+  get portion(): number {
+    if (this.portions?.length) {
       const [firstPortion] = this.portions;
       return firstPortion.value;
     }
-
-    return defaultPortion;
+    return Product.defaultPortion;
   }
 
-  static findByNameLike(name: string, limit = 10): Promise<Product[]> {
+  private static searchApi = new ProductSearchApi();
+  
+  static saveWithPortion(
+    productData: IProductRequired,
+    portionQuantity: number,
+    portionType = 'portion'
+  ): Promise<Product> {
+    if (
+      portionQuantity > 0 &&
+      portionQuantity !== Product.defaultPortion
+    ) {
+      return Product.save({
+        ...productData,
+        portions: [
+          {
+            type: portionType,
+            value: portionQuantity,
+          }
+        ],
+      });
+    }
+
+    return Product.save(productData);
+  }
+
+  static findByNameLike(name: string): Promise<Product[]> {
+    const limit = 10;
+    
     return this.find({
       where: { name: Like(`%${name}%`) },
       take: limit
@@ -141,86 +181,130 @@ export class Product extends GenericEntity {
     return Product.findByIds(productIds);
   }
 
-  static async findAndFetchByNameLike(name: string): Promise<Product[]> {
+  private static filterProductsByNameAndInstance: FilterHOF<ProductOrNormalizedProduct> = (
+    currentProduct, currentIndex, products
+  ) => {
+    const REMOVE = false;
+    const PRESERVE = true;
+
+    const hasProductWithExactName = products.some((anyProduct, index) => {
+      const isNotCurrentProductIndex = index !== currentIndex;
+      const hasExactName = anyProduct.name === currentProduct.name;
+      return isNotCurrentProductIndex && hasExactName;
+    });
+
+    const isNotInstanceOfProduct = !(currentProduct instanceof Product);
+
+    if (hasProductWithExactName && isNotInstanceOfProduct) {
+      return REMOVE;
+    }
+
+    return PRESERVE;
+  }
+  
+  static async findAndFetchByNameLike(
+    name: string,
+    controller: AbortController,
+  ): Promise<ProductOrNormalizedProduct[]> {
+
     const savedProducts = await Product.findByNameLike(name);
+    const minProductsFoundLimit = 3;
+    const sortByMostAccurateProductName = Utils.sortByMostAccurateName(name);
 
-    if (savedProducts.length <= 3) {
-      const fetchedProducts = await ilewazyApi.findByName(name);
-      console.log('fetchedProducts', { fetchedProducts })
+    if (savedProducts.length <= minProductsFoundLimit) {
+      try {
+        const fetchedProducts = await Product.searchApi.findByName(name, controller);
 
-      if (fetchedProducts.length) {
-        const foundOrCreatedProducts = await mapAsyncSequence(fetchedProducts, async (product) => {
-          const {
-            images = [],
-            carbs,
-            prots,
-            fats,
-            kcal,
-            unit,
-            portion,
-            ...data
-          } = product;
-          const parsedProduct = {
-            ...data,
-            images: images.map(url => ({ url })),
-            isVerified: true,
-            macro: { carbs, prots, fats, kcal },
-          }
-          const query = {
-            where: {
-              name: product.name,
-              isVerified: true
-            }
-          }
-          return this.findOneOrSave(query, parsedProduct);
-        });
-
-        const mergedProducts = [...savedProducts, ...foundOrCreatedProducts]
-          .filter(filterByUniqueId);
-        
+        const mergedProducts = [...savedProducts, ...fetchedProducts]
+          .filter(Product.filterProductsByNameAndInstance)
+          .sort(sortByMostAccurateProductName);
+  
         return mergedProducts;
+      } catch(error) {
+        Utils.handleError(error);
+
+        return savedProducts.sort(sortByMostAccurateProductName);
       }
     }
 
-    return savedProducts;
+    return savedProducts.sort(sortByMostAccurateProductName);
   }
 
   static findByBarcode(barcode: BarcodeId): Promise<Product[]> {
     return this.find({ barcode });
   }
 
-  static async findAndFetchByBarcode(barcode: BarcodeId): Promise<Product[]> {
-    const savedProducts = await this.findByBarcode(barcode);
-    const hasVerifiedProduct = savedProducts.some(product => product.isVerified);
-    
-    if (!savedProducts.length || !hasVerifiedProduct) {
-      const fetchedProducts = await friscoApi.findByQuery(barcode);
-      const createdProducts = await mapAsyncSequence(fetchedProducts, product => {
-        const {
-          unit,
-          portion,
-          portions,
-          images = [],
-          carbs,
-          prots,
-          fats,
-          kcal,
-          ...data
-        } = product;
-        const macro = { carbs, prots, fats, kcal };
-        const parsedProduct = {
-          ...data,
-          images: images.map(url => ({ url })),
-          isVerified: true,
-          macro
-        }
-        return this.save(parsedProduct);
-      });
+  private static parseNormalizedProduct(payload: NormalizedProduct) {
+    const {
+      images = [],
+      unit,
+      portion,
+      _id,
+      ...data
+    } = payload;
 
-      return [...savedProducts, ...createdProducts];
+    const parsedProduct = {
+      ...data,
+      images: images.map(url => ({ url })),
+      isVerified: true,
+    }
+    
+    return parsedProduct;
+  }
+
+  static saveNormalizedProduct(payload: NormalizedProduct): Promise<Product> {
+    const parsedProduct = Product.parseNormalizedProduct(payload);
+    
+    const query = {
+      where: {
+        name: parsedProduct.name,
+        isVerified: true,
+      }
+    }
+
+    return Product.findOneOrSave(query, parsedProduct);
+  }
+
+  static async findAndFetchByBarcode(
+    barcode: BarcodeId,
+    controller: AbortController
+  ): Promise<Product[]> {
+    const savedProducts = await this.findByBarcode(barcode);
+    const hasNoSavedProducts = !savedProducts.length;
+    const hasNoVerifiedProduct = !savedProducts.some(product => product.isVerified);
+    
+    if (hasNoSavedProducts || hasNoVerifiedProduct) {
+      const fetchedProduct = await Product.searchApi.findOneByBarcode(barcode, controller);
+
+      if (fetchedProduct) {
+        const createdProduct = await Product.saveNormalizedProduct(fetchedProduct);
+
+        return [createdProduct, ...savedProducts];
+      }
     }
 
     return savedProducts;
+  }
+
+  static async findFavorites(userId: UserId): Promise<Product[]> {
+    const productFavorites = await ProductFavorite.find({
+      where: { userId },
+      relations: ['product'],
+      order: { id: 'DESC' }
+    });
+
+    const products = productFavorites.flatMap(productFavorite =>
+      productFavorite.product ?? []
+    );
+
+    return products;
+  }
+
+  static findOwn(userId: UserId): Promise<Product[]> {
+    return Product.find({
+      where: { userId },
+      order: { id: 'DESC' }
+    });
   }
 
 }
@@ -231,3 +315,4 @@ export type IProductRequired = EntityRequired<IProduct,
   | 'macro'
 >;
 export type IProductMerged = IProduct & IMealProduct;
+export type ProductOrNormalizedProduct = Product | NormalizedProduct;

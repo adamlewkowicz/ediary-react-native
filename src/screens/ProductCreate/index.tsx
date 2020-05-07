@@ -1,208 +1,272 @@
-import React, { useReducer, useRef, createRef, useEffect } from 'react';
-import styled, { css } from 'styled-components/native';
-import { BasicInput, BasicInputRef } from '../../components/BasicInput';
-import {
-  productCreateReducer,
-  ProductCreateState,
-  PortionOption,
-  initProductCreateReducer,
-} from './reducer';
-import { TextInput, ScrollView, TouchableOpacity } from 'react-native';
-import { InputRow } from '../../components/InputRow';
-import { Options } from '../../components/Options';
-import { NavigationScreenProps } from 'react-navigation';
-import { useUserId } from '../../hooks';
+import React, { useRef, useState } from 'react';
+import styled from 'styled-components/native';
+import { TextInput, ScrollView } from 'react-native';
+import { useUserId, useNavigationData, useAppError } from '../../hooks';
 import { Product } from '../../database/entities';
-import { parseNumber } from '../../common/utils';
-import { useDispatch } from 'react-redux';
-import { Actions } from '../../store';
-import { ProductCreateParams } from './params';
-import { useNavigationParams } from '../../hooks/useNavigationParams';
-import { PORTION_TITLE, NUTRITION_INPUTS } from './consts';
+import { ProductCreateScreenNavigationProps } from '../../navigation';
+import {
+  Section,
+  Group,
+  InputButton,
+  InputMetaText,
+  ButtonPrimary,
+  Input,
+} from '../../components';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import * as Utils from '../../utils';
+import { bindFormikProps } from '../../utils';
+import { ProductUnitType } from '../../types';
 
-interface ProductCreateProps extends
-  NavigationScreenProps<ProductCreateParams, ProductCreateOptions> {}
-
-export const ProductCreate = (props: ProductCreateProps) => {
-  const params = useNavigationParams<ProductCreateParams>([
-    'onProductCreated',
-    'barcode',
-    'name',
-  ]);
-  const [state, dispatch] = useReducer(
-    productCreateReducer,
-    params,
-    initProductCreateReducer
-  );
-  const storeDispatch = useDispatch();
+export const ProductCreateScreen = () => {
+  const { params, navigation, navigate } = useNavigationData<ProductCreateScreenNavigationProps>();
+  const [portionUnitType] = useState<ProductUnitType>('g');
+  const [isLoading, setIsLoading] = useState(false);
+  const { setAppError } = useAppError();
   const userId = useUserId();
-  const { current: refsList } = useRef({
-    producer: createRef<TextInput>(),
-    portion: createRef<TextInput>(),
-    carbs: createRef<TextInput>(),
-    prots: createRef<TextInput>(),
-    fats: createRef<TextInput>(),
-    kcal: createRef<TextInput>(),
-    barcode: createRef<TextInput>(),
+
+  const brandInputRef = useRef<TextInput>(null);
+  const producerInputRef = useRef<TextInput>(null);
+  const portionQuantityInputRef = useRef<TextInput>(null);
+  const carbsInputRef = useRef<TextInput>(null);
+  const sugarsInputRef = useRef<TextInput>(null);
+  const protsInputRef = useRef<TextInput>(null);
+  const fatsInputRef = useRef<TextInput>(null);
+  const fattyAcidsInputRef = useRef<TextInput>(null);
+  const kcalInputRef = useRef<TextInput>(null);
+  const barcodeInputRef = useRef<TextInput>(null);
+
+  const formik = useFormik({
+    initialValues: INITIAL_VALUES,
+    validationSchema: getValidationSchema(portionUnitType),
+    async onSubmit(values) {
+      try {
+        if (isLoading) return;
+
+        setIsLoading(true);
+
+        const { portionQuantity, ...productData } = normalizeProductData(values);
+        const productWithUserId = { ...productData, userId };
+
+        const createdProduct = await Product.saveWithPortion(productWithUserId, portionQuantity);
+
+        params.onProductCreated?.(createdProduct);
+
+      } catch(error) {
+        setAppError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
   });
 
-  function handleUpdate(payload: Partial<ProductCreateState>) {
-    dispatch({
-      type: 'UPDATE',
-      payload
+  const handleSubmit = (): void => formik.handleSubmit();
+
+  const handleCaloriesEvaluation = (): void => {
+    const calcedKcal = Utils.calculateCaloriesByMacro({
+      carbs: Number(formik.values.carbs),
+      prots: Number(formik.values.prots),
+      fats: Number(formik.values.fats)
     });
-  }
 
-  async function handleProductCreate() {
-    const {
-      portionOption,
-      portionOptions,
-      portion,
-      barcode,
-      carbs,
-      prots,
-      fats,
-      kcal,
-      ...data
-    } = state;
-
-    if (!data.name.length) {
-      return;
+    if (Utils.isANumber(calcedKcal)) {
+      formik.setFieldValue('kcal', String(calcedKcal));
     }
-
-    const createdProduct = await Product.save({
-      ...data,
-      name: data.name.trim(),
-      barcode: barcode.length ? barcode : null,
-      userId,
-      macro: {
-        carbs: Number(carbs),
-        prots: Number(prots),
-        fats: Number(fats),
-        kcal: Number(kcal),
-      }
-    });
-
-    storeDispatch(
-      Actions.productHistoryRecentAdded([createdProduct])
-    );
-
-    params.onProductCreated?.(createdProduct);
   }
-  
-  useEffect(() => {
-    props.navigation.setParams({ _handleProductCreate: handleProductCreate });
-  }, [state]);
 
-  function handlePortionOptionChange(option: PortionOption) {
-    dispatch({
-      type: 'SELECT_PORTION_OPTION',
-      payload: option
+  const handleBarcodeScanNavigation = (): void => {
+    navigate('BarcodeScan', {
+      onBarcodeDetected(barcode) {
+        navigation.goBack();
+        formik.setFieldValue('barcode', barcode);
+      }
     });
   }
 
   return (
-    <ScrollView>
-      <Container behavior="padding">
-        <BasicInput
+    <Container keyboardShouldPersistTaps="handled">
+      <Section title="Podstawowe dane">
+        <Input
+          {...bindFormikProps(formik, 'name')}
           label="Nazwa"
-          accessibilityLabel="Nazwa produktu"
-          value={state.name}
-          onChangeText={name => handleUpdate({ name })}
-          onSubmitEditing={refsList.producer.current?.focus}
+          placeholder="Mleko UHT 3.2 %"
+          onSubmitEditing={brandInputRef.current?.focus}
         />
-        <BasicInputRef
+        <Input
+          {...bindFormikProps(formik, 'brand')}
+          label="Marka"
+          placeholder="Łaciate"
+          ref={brandInputRef}
+          onSubmitEditing={producerInputRef.current?.focus}
+        />
+        <Input
+          {...bindFormikProps(formik, 'producer')}
           label="Producent"
-          accessibilityLabel="Producent"
-          value={state.producer}
-          onChangeText={producer => handleUpdate({ producer })}
-          onSubmitEditing={refsList.portion.current?.focus}
-          ref={refsList.producer}
+          placeholder="Mlekovita"
+          ref={producerInputRef}
+          onSubmitEditing={portionQuantityInputRef.current?.focus}
         />
-        <OptionsContainer>
-          <InfoTitle>Wartości odżywcze na:</InfoTitle>
-          <Options
-            value={state.portionOptions}
-            onChange={handlePortionOptionChange}
+        <InputMetaText
+          {...bindFormikProps(formik, 'portionQuantity')}
+          label={`Ilość ${portionUnitType} w jednej porcji`}
+          placeholder="100"
+          metaText={portionUnitType}
+          keyboardType="numeric"
+          ref={portionQuantityInputRef}
+          onSubmitEditing={carbsInputRef.current?.focus}
+        />
+      </Section>
+      <Section
+        title="Makroskładniki"
+        description={`Na 100${portionUnitType} produtku`}
+      >
+        <Group.Container>
+          <Input
+            {...bindFormikProps(formik, 'carbs')}
+            label="Węglowodany"
+            placeholder="0"
+            keyboardType="numeric"
+            ref={carbsInputRef}
+            onSubmitEditing={sugarsInputRef.current?.focus}
           />
-        </OptionsContainer>
-        <InputRow
-          title={PORTION_TITLE[state.portionOption]}
-          value={state.portion}
-          onChangeText={portion => handleUpdate({ portion: parseNumber(portion, 10000, 6) })}
-          onSubmitEditing={refsList.carbs.current?.focus}
-          ref={refsList.portion}
-          accessibilityLabel="Ilość produktu"
-          styles={InputCss}
-        />
-        {NUTRITION_INPUTS.map(data => (
-          <InputRow
-            key={data.title}
-            title={data.title}
-            value={state[data.property]}
-            onChangeText={value => handleUpdate({ [data.property]: parseNumber(value, 10000, 6) })}
-            onSubmitEditing={refsList[data.nextRef].current?.focus}
-            ref={refsList[data.property]}
-            accessibilityLabel={data.title}
-            styles={InputCss}
+          <Group.Separator />
+          <Input
+            {...bindFormikProps(formik, 'sugars')}
+            label="w tym cukry"
+            placeholder="0"
+            keyboardType="numeric"
+            ref={sugarsInputRef}
+            onSubmitEditing={protsInputRef.current?.focus}
           />
-        ))}
-        <InputRow
-          title="Kod kreskowy"
-          keyboardType="default"
-          ref={refsList.barcode}
-          value={state.barcode as string}
-          onChangeText={barcode => handleUpdate({ barcode })}
-          onSubmitEditing={handleProductCreate}
-          accessibilityLabel="Kod kreskowy"
-          styles={InputCss}
+        </Group.Container>
+        <InputMetaText
+          {...bindFormikProps(formik, 'prots')}
+          label="Białko"
+          placeholder="0"
+          metaText="g"
+          keyboardType="numeric"
+          ref={protsInputRef}
+          onSubmitEditing={fatsInputRef.current?.focus}
         />
-      </Container>
-    </ScrollView>
+        <Group.Container>
+          <Input
+            {...bindFormikProps(formik, 'fats')}
+            label="Tłuszcze"
+            placeholder="0"
+            keyboardType="numeric"
+            ref={fatsInputRef}
+            onSubmitEditing={fattyAcidsInputRef.current?.focus}
+          />
+          <Group.Separator />
+          <Input
+            {...bindFormikProps(formik, 'fattyAcids')}
+            label="w tym kwasy tłuszczowe"
+            placeholder="0"
+            keyboardType="numeric"
+            ref={fattyAcidsInputRef}
+            onSubmitEditing={kcalInputRef.current?.focus}
+          />
+        </Group.Container>
+        <InputButton
+          {...bindFormikProps(formik, 'kcal')}
+          label="Kalorie"
+          placeholder="0"
+          buttonText="Oblicz"
+          buttonLabel="Oblicz kalorie"
+          keyboardType="numeric"
+          onButtonPress={handleCaloriesEvaluation}
+          ref={kcalInputRef}
+          onSubmitEditing={barcodeInputRef.current?.focus}
+        />
+      </Section>
+      <Section title="Inne">
+        <InputButton
+          {...bindFormikProps(formik, 'barcode')}
+          label="Kod kreskowy"
+          placeholder="5900512300108"
+          buttonText="Zeskanuj"
+          onButtonPress={handleBarcodeScanNavigation}
+          ref={barcodeInputRef}
+        />
+      </Section>
+      <SaveProductButton
+        onPress={handleSubmit}
+        isLoading={isLoading}
+      >
+        Zapisz produkt
+      </SaveProductButton>
+    </Container>
   );
 }
 
-const Container = styled.KeyboardAvoidingView`
-  padding: 20px;
+const Container = styled(ScrollView)`
+  padding: 0 20px;
 `
 
-const InfoTitle = styled.Text`
-  text-align: center;
-  font-size: ${props => props.theme.fontSize.regular};
-  font-family: ${props => props.theme.fontWeight.regular};
+const SaveProductButton = styled(ButtonPrimary)`
+  margin-bottom: 20px;
 `
 
-const SaveButton = styled(TouchableOpacity)`
-  margin-right: 10px;
-`
+const INITIAL_VALUES = {
+  name: '',
+  brand: '',
+  producer: '',
+  portionQuantity: '',
+  carbs: '',
+  sugars: '',
+  prots: '',
+  fats: '',
+  fattyAcids: '',
+  kcal: '',
+  barcode: '',
+};
 
-const SaveText = styled.Text`
-  font-family: ${props => props.theme.fontWeight.regular};
-  color: ${props => props.theme.color.focus};
-`
+const MAX_PORTION_QUANTITY = 2000;
 
-const OptionsContainer = styled.View`
-  margin: 10px 0;
-`
+const MIN_PRODUCT_NAME = 3;
 
-const InputCss = css`
-  margin-bottom: 10px;
-`
-
-const navigationOptions: ProductCreateProps['navigationOptions'] = ({ navigation }) => ({
-  headerTitle: 'Stwórz produkt',
-  headerRight: (
-    <SaveButton
-      onPress={navigation.getParam('_handleProductCreate')}
-      accessibilityLabel="Zapisz produkt"  
-    >
-      <SaveText>Zapisz</SaveText>
-    </SaveButton>
-  )
+const getValidationSchema = (portionUnitType: ProductUnitType) => Yup.object({
+  name: Yup.string()
+    .min(MIN_PRODUCT_NAME, `Nazwa powinna zawierać min. ${MIN_PRODUCT_NAME} znaki`)
+    .required('Nazwa jest wymagana'),
+  brand: Yup.string(),
+  producer: Yup.string(),
+  portionQuantity: Yup
+    .number()
+    .max(
+      MAX_PORTION_QUANTITY,
+      `Maksymalna ilość w jednej porcji to ${MAX_PORTION_QUANTITY} ${portionUnitType}`
+    ),
+  carbs: Yup.number(),
+  sugars: Yup.number(),
+  prots: Yup.number(),
+  fats: Yup.number(),
+  fattyAcids: Yup.number(),
+  kcal: Yup.number(),
+  barcode: Yup.string(),
 });
 
-ProductCreate.navigationOptions = navigationOptions;
-interface ProductCreateOptions {
-  headerTitle: string
-  headerRight: JSX.Element
+type FormData = typeof INITIAL_VALUES;
+
+const normalizeProductData = (productData: FormData) => {
+  const { fattyAcids, sugars, ...restData } = productData;
+
+  const macro = {
+    carbs: Number(productData.carbs),
+    prots: Number(productData.prots),
+    fats: Number(productData.fats),
+    kcal: Number(productData.kcal)
+  }
+
+  const barcode = productData.barcode.length ? productData.barcode : null;
+  const portionQuantity = Number(productData.portionQuantity);
+
+  const product = {
+    ...restData,
+    macro,
+    barcode,
+    portionQuantity,
+  }
+
+  return product;
 }

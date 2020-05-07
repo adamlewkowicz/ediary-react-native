@@ -1,16 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`findByName - products are normalized correctly 1`] = `
+exports[`IlewazyApi findByName() should normalize products correctly 📝 1`] = `
 Object {
   "_id": "16390",
-  "carbs": 104,
-  "fats": 7.8,
   "images": Array [
     "http://static.ilewazy.pl/dziennik/470/bagatelka-ciastka-jablko-z-cynamonem-1.jpg",
     "http://static.ilewazy.pl/dziennik/470/bagatelka-ciastka-jablko-z-cynamonem-2.jpg",
   ],
-  "kcal": 365,
+  "macro": Object {
+    "carbs": 104,
+    "fats": 7.8,
+    "kcal": 365,
+    "prots": 7,
+  },
   "name": "Bagatelka owocowa, kruche ciasteczka z nadzieniem jabłkowym z cynamonem",
+  "portion": 16,
   "portions": Array [
     Object {
       "type": "piece",
@@ -23,20 +27,23 @@ Object {
       "value": 48,
     },
   ],
-  "prots": 7,
 }
 `;
 
-exports[`findByName - products are normalized correctly 2`] = `
+exports[`IlewazyApi findByName() should normalize products correctly 📝 2`] = `
 Object {
   "_id": "17551",
-  "carbs": 135,
-  "fats": 3.6,
   "images": Array [
     "http://static.ilewazy.pl/dziennik/470/baton-marchew-jablko-pomarancza-freeyu-1.jpg",
   ],
-  "kcal": 333,
+  "macro": Object {
+    "carbs": 135,
+    "fats": 3.6,
+    "kcal": 333,
+    "prots": 1.4,
+  },
   "name": "Baton jabłkowo-pomarańczowy z marchwią",
+  "portion": 40,
   "portions": Array [
     Object {
       "type": "piece",
@@ -44,6 +51,5 @@ Object {
       "value": 40,
     },
   ],
-  "prots": 1.4,
 }
 `;

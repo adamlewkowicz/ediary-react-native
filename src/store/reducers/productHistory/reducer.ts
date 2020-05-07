@@ -1,22 +1,35 @@
-import { filterByUniqueId } from '../../../common/utils';
 import { Product } from '../../../database/entities';
 import { ProductHistoryAction } from '../../actions';
 import { getProductsFromAction } from './helpers';
+import { PRODUCT_HISTORY_LOADED } from '../../consts';
+import * as Utils from '../../../utils';
 
-export function productHistoryReducer(
-  state: Product[] = [],
-  action: ProductHistoryAction
-): ProductHistoryState {
-  const products = getProductsFromAction(action);
-  if (products.length) {
-    const maxNumberOfProducts = 8;
-    const mergedProducts = [...products, ...state]
-      .filter(filterByUniqueId)
-      .splice(0, maxNumberOfProducts);
-  
-    return mergedProducts;
-  }
-  return state;
+interface ProductHistoryState {
+  products: Product[]
+  isLoaded: boolean
 }
 
-type ProductHistoryState = Product[];
+const initialState: ProductHistoryState = {
+  products: [],
+  isLoaded: false,
+}
+
+export function productHistoryReducer(
+  state = initialState,
+  action: ProductHistoryAction
+): ProductHistoryState {
+  const extractedProducts = getProductsFromAction(action);
+  const isLoaded = state.isLoaded ? true : action.type === PRODUCT_HISTORY_LOADED;
+
+  if (extractedProducts.length) {
+    const maxNumberOfProducts = 8;
+    
+    const products = [...extractedProducts, ...state.products]
+      .filter(Utils.filterByUniqueId)
+      .splice(0, maxNumberOfProducts);
+
+    return { products, isLoaded };
+  }
+
+  return { ...state, isLoaded };
+}

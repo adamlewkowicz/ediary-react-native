@@ -1,76 +1,61 @@
-import { TemplateId, TemplateIdReverted } from '../../../types';
-import { MACRO_ELEMENTS } from '../../../common/consts';
-import { Meal } from '../../../database/entities';
-import { getDayFromDate, getTimeFromDate } from '../../../common/utils';
+import { Meal, IProductMerged, Product } from '../../../database/entities';
 import {
   DiaryMealTemplate,
-  DiaryTemplate,
-  NormalizeMealsResult,
+  MealTemplate,
   DiaryMeal,
   DiaryProduct,
-  CalcMacroByQuantityData,
+  DiaryMealOrTemplate,
+  DiaryMealOrTemplateId,
 } from './types';
+import { MealId, TemplateId } from '../../../types';
+import * as Utils from '../../../utils';
 
-export const calcMacroByQuantity = <T extends CalcMacroByQuantityData>(
-  macroData: T,
-  quantity: number
-) => MACRO_ELEMENTS.map(element => ({
-  value: Math.round(macroData[element] * quantity / 100),
-  element
-}));
+export const getDiaryMealTemplate = (
+  template: MealTemplate
+): DiaryMealTemplate => ({
+  type: 'template',
+  data: template,
+  productIds: [],
+  isOpened: false,
+  isAddingProduct: false,
+  timeBase: template.timeBase,
+});
 
-export const getRevertedTemplateId = (
-  templateId: TemplateId
-): TemplateIdReverted => {
-  return ((templateId as any) * -1) as any;
-}
+export const normalizeProductEntity = (
+  productEntity: Product | IProductMerged,
+  mealId: MealId,
+  quantity: number,
+): DiaryProduct => {
 
-export const getMealFromTemplate = (
-  template: DiaryTemplate
-): DiaryMealTemplate => {
-  return {
-    id: getRevertedTemplateId(template.id),
-    name: template.name,
-    type: 'template',
-    macro: {
-      carbs: 0,
-      prots: 0,
-      fats: 0,
-      kcal: 0,
-    },
-    day: null,
-    date: null,
-    time: template.time,
-    isToggled: false,
-    templateId: template.id,
-    productIds: [],
+  const normalizedProduct: DiaryProduct = {
+    mealId,
+    quantity,
+    data: productEntity,
+    calcedMacro: Utils.calculateMacroPerQuantity(productEntity.macro, quantity)
   }
+  
+  return normalizedProduct;
 }
 
-export const normalizeMeal = (
-  mealEntity: Meal
+export const normalizeMealEntity = (
+  mealEntity: Meal,
+  openMealByDefault = false
 ) => {
   const { mealProducts = [], ...meal } = mealEntity;
 
   const normalizedMeal: DiaryMeal = {
-    ...meal,
+    data: meal,
     type: 'meal',
-    isToggled: false,
-    day: getDayFromDate(meal.date),
-    time: getTimeFromDate(meal.date),
+    isOpened: openMealByDefault,
+    isAddingProduct: false,
+    timeBase: Utils.getTimeBaseFromDateTime(meal.date),
     productIds: mealProducts.map(mealProduct => mealProduct.productId),
   }
 
-  const normalizedProducts = mealProducts.map<DiaryProduct>(mealProductEntity => {
-    const { meal, product, ...data } = mealProductEntity;
-    const normalizedProduct: DiaryProduct = {
-      ...data,
-      ...product,
-      isToggled: false,
-      calcedMacro: calcMacroByQuantity(product.macro, data.quantity)
-    }
-    return normalizedProduct;
-  });
+  const normalizedProducts = mealProducts
+    .map<DiaryProduct>(({ product, mealId, quantity }) =>
+      normalizeProductEntity(product, mealId, quantity)
+    );
 
   return {
     meal: normalizedMeal,
@@ -78,14 +63,35 @@ export const normalizeMeal = (
   }
 }
 
-export const normalizeMeals = (
-  payload: Meal[]
+export const normalizeMealEntities = (
+  payload: Meal[],
+  openMealsByDefault = false
 ): NormalizeMealsResult => {
   return payload.reduce<NormalizeMealsResult>((normalized, mealEntity) => {
-    const { meal, products } = normalizeMeal(mealEntity);
+    const { meal, products } = normalizeMealEntity(mealEntity, openMealsByDefault);
+    
     return {
       meals: [...normalized.meals, meal],
       products: [...normalized.products, ...products]
     }
   }, { meals: [], products: [] });
+}
+
+export const isDiaryMeal = (meal: DiaryMealOrTemplate): meal is DiaryMeal => meal.type === 'meal';
+
+export const isEqualMealId = <ID extends DiaryMealOrTemplateId>(
+  diaryMealOrTemplate: DiaryMealOrTemplate,
+  targetId: ID
+): diaryMealOrTemplate is PredictDiaryMealType<ID> => {
+  return diaryMealOrTemplate.data.id === targetId;
+}
+
+type PredictDiaryMealType<ID extends DiaryMealOrTemplateId> =
+  ID extends MealId ? DiaryMeal :
+  ID extends TemplateId ? DiaryMealTemplate :
+  DiaryMealOrTemplate;
+
+type NormalizeMealsResult = {
+  meals: DiaryMeal[]
+  products: DiaryProduct[]
 }

@@ -1,10 +1,22 @@
 import { User, IProfileRequired } from '../../../database/entities';
 import { Thunk } from '../..';
-import { userProfileCreated } from '../creators';
+import { userProfileCreated, userInitialized } from '../creators';
+import { USER_ID_UNSYNCED } from '../../../common/consts';
 
-export const userProfileCreate: Thunk = (
+export const userInitialize = (): Thunk<Promise<void>> => async (dispatch) => {
+  const user = await User.getOrCreate({
+    id: USER_ID_UNSYNCED,
+    email: null,
+    login: 'login',
+    password: 'password',
+  });
+
+  dispatch(userInitialized(user));
+}
+
+export const userProfileCreate = (
   profile: IProfileRequired
-) => async (dispatch) => {
+): Thunk<Promise<void>> => async (dispatch) => {
   const { userId, ...data } = profile;
   const createdProfile = await User.createProfile(userId, data);
 

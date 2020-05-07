@@ -1,183 +1,165 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 import styled from 'styled-components/native';
-import { sortByMostAccurateName, debounce } from '../../common/utils';
-import { Product } from '../../database/entities';
-import { ProductListItem, Separator } from '../../components/ProductListItem';
-import { InputSearcher } from '../../components/InputSearcher';
-import { NavigationScreenProps, SectionList } from 'react-navigation';
-import { Block, Title } from '../../components/Elements';
-import { BarcodeButton } from '../../components/BarcodeButton';
+import { Product, ProductOrNormalizedProduct } from '../../database/entities';
+import {
+  useNavigationData,
+  useDebouncedValue,
+  useNativeState,
+} from '../../hooks';
+import { ProductFindScreenNavigationProps } from '../../navigation';
+import {
+  ButtonSecondaryArrow,
+  ProductRecentListMemo,
+  ProductFavoritesListMemo,
+  ProductCreatedListMemo,
+  ProductSearchListMemo,
+  TabView,
+  ProductSearcher,
+} from '../../components';
+import * as Utils from '../../utils';
 import { BarcodeId } from '../../types';
-import { Button } from 'react-native-ui-kitten';
-import { useConnected, useIdleStatus, useNavigate } from '../../hooks';
-import { useSelector } from 'react-redux';
-import { StoreState } from '../../store';
-import { ActivityIndicator } from 'react-native';
-import { ProductFindParams } from './params';
-import { useNavigationParams } from '../../hooks/useNavigationParams';
+import { useDispatch } from 'react-redux';
+import { Actions } from '../../store';
 
-const debounceA = debounce();
-const SECTION_TITLE = {
-  foundProducts: 'Znalezione produkty:',
-  recentProducts: 'Ostatnie produkty:',
+interface ProductFindScreenState {
+  productName: string
+  barcode: BarcodeId | null
+  createdProduct: Product | null
+  activeTabIndex: number
 }
 
-interface ProductFindProps extends NavigationScreenProps<ProductFindParams> {}
+export const ProductFindScreen = () => {
+  const { params, navigate, navigation } = useNavigationData<ProductFindScreenNavigationProps>();
+  const [state, setState] = useNativeState<ProductFindScreenState>({
+    activeTabIndex: TAB_INDEX.recent,
+    productName: '',
+    barcode: null,
+    createdProduct: null,
+  });
+  const hasProductBeenSelected = useRef(false);
+  const productNameDebounced = useDebouncedValue(state.productName);
+  const dispatch = useDispatch();
 
-export const ProductFind = (props: ProductFindProps) => {
-  const params = useNavigationParams<ProductFindParams>(['onItemPress']);
-  const [name, setName] = useState('');
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setLoading] = useState(false);
-  const [barcode, setBarcode] = useState<BarcodeId | null>(null);
-  const isConnected = useConnected();
-  const productsAreEmpty = !products.length;
-  const recentProducts = useSelector((state: StoreState) => state.productHistory);
-  const hasBeenPressed = useRef(false);
-  const isIdle = useIdleStatus();
-  const navigate = useNavigate();
-
-  function handleProductSearch(name: string) {
-    setName(name);
-    if (!isLoading) setLoading(true);
-    const trimmedName = name.trim();
-    const methodName = isConnected ? 'findAndFetchByNameLike' : 'findByNameLike';
-
-    debounceA(async () => {
-      const foundProducts = await Product[methodName](trimmedName);
-      const sortedProducts = foundProducts
-        .sort(sortByMostAccurateName(name));
-
-      setProducts(sortedProducts);
-      setLoading(false);
-    }, 600);
-  }
-
-  function handleBarcodeScanNavigation() {
+  function handleBarcodeScan() {
     navigate('BarcodeScan', {
-      async onBarcodeDetected(barcode) {
+      onBarcodeDetected(barcode) {
         navigate('ProductFind');
-        setName('');
-        setProducts([]);
-        setLoading(true);
 
-        const methodName = isConnected ? 'findAndFetchByBarcode' : 'findByBarcode';
-        const foundProducts = await Product[methodName](barcode);
-
-        if (foundProducts.length) {
-          setProducts(foundProducts);
-        } else {
-          setBarcode(barcode);
-        }
-        setLoading(false);
+        setState({ barcode });
       }
     });
   }
 
-  function handleProductCreateNavigation() {
+  function handleProductCreate() {
     navigate('ProductCreate', {
-      barcode: barcode !== null ? barcode : undefined,
-      name: name.trim(),
+      barcode: state.barcode ?? undefined,
+      name: state.productName.trim(),
       onProductCreated(createdProduct) {
-        setBarcode(null);
-        setProducts([createdProduct]);
-        setLoading(false);
         navigate('ProductFind');
+
+        setState({
+          activeTabIndex: TAB_INDEX.created,
+          createdProduct,
+        });
+
+        Utils.toastCenter(`Utworzono produkt "${createdProduct.name}"`);
+
+        dispatch(Actions.productHistoryAdded([createdProduct]));
       }
     });
   }
 
-  function renderInfo() {
-    if (
-      isLoading ||
-      !productsAreEmpty ||
-      (!name.length && barcode === null)
-    ) return null;
+  const handleProductSelect = useCallback((product: ProductOrNormalizedProduct): void => {
+    if (!params.onProductSelected || hasProductBeenSelected.current) {
+      return;
+    }
 
-    return (
-      <>
-        <NotFoundInfo>
-          Nie znaleziono produktów.
-        </NotFoundInfo>
-        {!isConnected && (
-          <NotFoundInfo>
-            Aby wyszukiwać więcej produktów, przejdź do trybu online.
-          </NotFoundInfo>
-        )}
-        <Button
-          style={{ marginTop: 15 }}
-          onPress={handleProductCreateNavigation}
-        >
-          Dodaj własny
-        </Button>
-      </>
-    );
-  }
+    hasProductBeenSelected.current = true;
 
-  function handleItemPress(item: Product) {
-    if (params.onItemPress && !hasBeenPressed.current) {
-      hasBeenPressed.current = true;
-      params.onItemPress(item);
+    const productResolver: ProductResolver = async () => {
+      if (product instanceof Product) {
+        return product;
+      }
+      return Product.saveNormalizedProduct(product);
+    }
+
+    params.onProductSelected(productResolver, product.portion);
+  }, [params.onProductSelected]);
+
+  navigation.setOptions({
+    headerRight: () => (
+      <AddOwnProductButton
+        onPress={handleProductCreate}
+        accessibilityLabel="Stwórz własny produkt"
+        accessibilityHint="Przechodzi do tworzenia własnego produktu"
+        role="link"
+      >
+        Stwórz
+      </AddOwnProductButton>
+    )
+  });
+
+  const handleInputFocus = (): void => {
+    if (state.activeTabIndex !== TAB_INDEX.search) {
+      setState({ activeTabIndex: TAB_INDEX.search });
     }
   }
 
   return (
     <Container>
-      <Block space="space-between" align="center">
-        <InputSearcher
-          value={name}
-          placeholder="Nazwa produktu"
-          onChangeText={handleProductSearch}
-          isLoading={isLoading}
-        />
-        <BarcodeButton
-          onPress={handleBarcodeScanNavigation}
-        />
-      </Block>
-      <SectionList
-        data={products}
-        keyExtractor={(product, index) => `${product.id}${index}`}
-        keyboardShouldPersistTaps="handled"
-        ItemSeparatorComponent={Separator}
-        renderSectionHeader={({ section: { title }}) => (
-          <SectionTitleContainer isFirst={title === SECTION_TITLE.foundProducts}>
-            <Title>{title}</Title>
-            {title === SECTION_TITLE.foundProducts && renderInfo()}
-            {title === SECTION_TITLE.recentProducts && !isIdle && <ActivityIndicator />}
-          </SectionTitleContainer>
-        )}
-        sections={[
-          { title: SECTION_TITLE.foundProducts, data: products },
-          { title: SECTION_TITLE.recentProducts, data: isIdle ? recentProducts : [] },
-        ]}
-        renderItem={({ item }) => (
-          <ProductListItem
-            product={item}
-            onPress={() => handleItemPress(item)}
-          />
-        )}
+      <ProductSearcher
+        value={state.productName}
+        onChangeText={productName => setState({ productName })}
+        onFocus={handleInputFocus}
+        onBarcodeScan={handleBarcodeScan}
+      />
+      <TabView
+        activeIndex={state.activeTabIndex}
+        onIndexChange={activeTabIndex => setState({ activeTabIndex })}
+        titles={['Ostatnio używane', 'Ulubione', 'Utworzone', 'Znalezione']}
+        renderScene={props => {
+          switch(props.route.index) {
+            case TAB_INDEX.recent: return (
+              <ProductRecentListMemo onProductSelect={handleProductSelect} />
+            )
+            case TAB_INDEX.favorite: return (
+              <ProductFavoritesListMemo onProductSelect={handleProductSelect} />
+            )
+            case TAB_INDEX.created: return (
+              <ProductCreatedListMemo
+                onProductSelect={handleProductSelect}
+                createdProduct={state.createdProduct}
+              />
+            )
+            case TAB_INDEX.search: return (
+              <ProductSearchListMemo
+                onProductSelect={handleProductSelect}
+                productName={productNameDebounced}
+                barcode={state.barcode}
+              />
+            )
+            default: return null;
+          }
+        }}
       />
     </Container>
   );
 }
 
+const TAB_INDEX = {
+  recent: 0,
+  favorite: 1,
+  created: 2,
+  search: 3,
+} as const;
+
 const Container = styled.View`
-  padding: 20px 20px 60px 20px;
+  flex: 1;
+  padding-top: ${props => props.theme.spacing.small};
 `
 
-const NotFoundInfo = styled.Text`
-  margin-top: 25px;
-  text-align: center;
-  font-family: ${props => props.theme.fontWeight.regular};
-  padding: 0 50px;
+const AddOwnProductButton = styled(ButtonSecondaryArrow)`
+  margin-right: ${props => props.theme.spacing.micro};
 `
 
-const SectionTitleContainer = styled.View<{
-  isFirst: boolean
-}>`
-  padding: ${props => props.isFirst ? '10px 0 5px 0' : '30px 0 5px 0'}
-`
-
-ProductFind.navigationOptions = {
-  headerTitle: 'Znajdź produkt'
-}
+export type ProductResolver = () => Promise<Product>;

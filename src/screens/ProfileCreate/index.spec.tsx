@@ -1,21 +1,35 @@
 import React from 'react';
-import { ProfileCreate } from '.';
-import { render } from '@testing-library/react-native';
-import { App } from '../../../__tests__/utils';
-import { NavigationContext } from 'react-navigation';
+import { ProfileCreateScreen } from '.';
+import { renderSetup } from '../../../test-utils';
+import { fireEvent } from '@testing-library/react-native';
+import { Profile } from '../../database/entities';
 
-test('renders without crashing', () => {
-  const navigationMock: any = {
-    navigate: jest.fn()
-  }
+describe('<ProfileCreateScreen />', () => {
+  
+  it('should render without crashing 💥', () => {
+    renderSetup(<ProfileCreateScreen />);
+  });
 
-  const { container } = render(
-    <App>
-      <NavigationContext.Provider value={navigationMock}>
-        <ProfileCreate />
-      </NavigationContext.Provider>
-    </App>
-  );
+  it('creating new profile should work 🧑', async () => {
+    const profileSaveSpy = jest.spyOn(Profile, 'save');
 
-  expect(container).toMatchSnapshot();
+    const ctx = renderSetup(<ProfileCreateScreen />);
+
+    const nextStepButton = ctx.getByLabelText('Przejdź dalej');
+    fireEvent.press(nextStepButton);
+    
+    // Setting a11y label prop on picker doesnt work.
+    fireEvent.press(nextStepButton);
+
+    const increaseWeightGoalButton = ctx.getByText('Zwiększenie');
+    fireEvent.press(increaseWeightGoalButton);
+
+    fireEvent.press(nextStepButton);
+
+    const [firstCallArguments] = profileSaveSpy.mock.calls;
+
+    expect(profileSaveSpy).toHaveBeenCalledTimes(1);
+    expect(firstCallArguments).toMatchSnapshot();
+  });
+
 });
