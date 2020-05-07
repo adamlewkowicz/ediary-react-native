@@ -1,16 +1,15 @@
 import * as React from 'react';
-import MapView, { AnimatedRegion, Region, Polyline, Marker } from 'react-native-maps';
-import { Platform, PermissionsAndroid } from 'react-native';
+import MapView, { AnimatedRegion, Region, Polyline, Marker,  } from 'react-native-maps';
+import { Platform, View } from 'react-native';
 import styled from 'styled-components/native';
 import { Coordinate } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Actions, Selectors } from '../../store';
 import Geolocation, { GeolocationResponse } from '@react-native-community/geolocation';
-import { LabeledValue } from '../../components/LabeledValue';
-import { Block } from '../../components/Elements';
-import { formatDuration } from '../../common/utils';
 import { HoldableButton } from '../../components/HoldableButton';
 import { useNativeState } from '../../hooks';
+import { requestLocationPermission } from '../../utils';
+import { TextPrimary } from '../../components';
 
 interface RunningScreenState {
   latitude: number
@@ -61,22 +60,6 @@ export const RunningScreen = () => {
     }
   }
 
-  const requestPermissionStatus = async (): Promise<boolean> => {
-    const permissionStatus = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, 
-      {
-        title: 'Uprawnienia lokalizacji',
-        message: 'Potrzebuję uprawnień lokalizacji aby mierzyć dystans.',
-        buttonPositive: 'OK',
-        buttonNegative: 'Anuluj',
-      }
-    );
-    if (permissionStatus === 'granted') {
-      return true;
-    }
-    return false;
-  }
-
   const getCurrentPosition = (): Promise<GeolocationResponse> => {
     return new Promise((resolve, reject) => {
       Geolocation.getCurrentPosition(
@@ -88,9 +71,9 @@ export const RunningScreen = () => {
 
   React.useEffect(() => {
     const bootstrap = async () => {
-      const permissionStatus = await requestPermissionStatus();
+      const permissionGranted = await requestLocationPermission();
 
-      if (!permissionStatus) {
+      if (!permissionGranted) {
         return;
       }
   
@@ -100,7 +83,8 @@ export const RunningScreen = () => {
       const newCoordinate = { latitude, longitude };
   
       setState({
-        latitude, longitude,
+        latitude,
+        longitude,
         routeCoordinates: [newCoordinate, newCoordinate]
       });
   
@@ -118,21 +102,17 @@ export const RunningScreen = () => {
   return (
     <Container>
       <DataContainer>
-        <LabeledValue
-          value={runningTraining.distance.toFixed(1)}
-          label="km"
-        />
-        <Block marginVertical={10} space="space-between">
-          <LabeledValue
-            accessibilityLabel="Czas trwania treningu"
-            value={formatDuration(runningTraining.duration)}
-            label="Czas"
-          />
-        </Block>
-        <LabeledValue
-          value={runningTraining.velocity.toFixed(2)}
-          label="km/h"
-        />
+        <TextPrimary>
+          {runningTraining.distance.toFixed(1)} km
+        </TextPrimary>
+        <View>
+          <TextPrimary>
+            {String(Math.floor(runningTraining.duration))} czas
+          </TextPrimary>
+        </View>
+        <TextPrimary>
+          {runningTraining.velocity.toFixed(2)} km/h
+        </TextPrimary> 
         <HoldableButton
           onHoldEnd={() => {}}
         />

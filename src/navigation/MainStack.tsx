@@ -5,7 +5,7 @@ import {
   BottomTabBarOptions,
 } from '@react-navigation/bottom-tabs';
 import { APP_ROUTE } from './consts';
-import { NutritionSummaryScreen } from '../screens';
+import { NutritionSummaryScreen, RunningScreen } from '../screens';
 import { THEME } from '../common/theme';
 import { BottomTabBar } from '../components';
 import { NutritionStack } from './NutritionStack';
@@ -16,6 +16,7 @@ const Tab = createBottomTabNavigator<TabStackParamList>();
 export type TabStackParamList = {
   [APP_ROUTE.NutritionStack]: undefined;
   [APP_ROUTE.NutritionSummary]: undefined;
+  [APP_ROUTE.RunningTraining]: undefined;
 }
 
 export const MainStack = () => (
@@ -33,6 +34,11 @@ export const MainStack = () => (
       name={APP_ROUTE.NutritionSummary}
       component={NutritionSummaryScreen}
       options={{ tabBarLabel: 'Podsumowanie' }}
+    />
+    <Tab.Screen
+      name={APP_ROUTE.RunningTraining}
+      component={RunningScreen}
+      options={{ tabBarLabel: 'Trening' }}
     />
   </Tab.Navigator>
 );
