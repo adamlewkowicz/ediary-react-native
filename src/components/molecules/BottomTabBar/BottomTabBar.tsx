@@ -4,6 +4,7 @@ import { BottomTabBarProps as NativeBottomTabBarProps } from '@react-navigation/
 import { BottomTabBarButton } from './BottomTabBarButton';
 import CutleryIcon from '../../../../assets/img/cutlery.svg';
 import NoteIcon from '../../../../assets/img/note.svg';
+import RunnerIcon from '../../../../assets/img/runner.svg';
 import { APP_ROUTE } from '../../../navigation/consts';
 
 interface BottomTabBarProps extends NativeBottomTabBarProps {}
@@ -72,5 +73,5 @@ const Container = styled.View`
 const TAB_BAR_ICON = {
   [APP_ROUTE.NutritionStack]: CutleryIcon,
   [APP_ROUTE.NutritionSummary]: NoteIcon,
-  [APP_ROUTE.RunningTraining]: NoteIcon,
+  [APP_ROUTE.RunningTraining]: RunnerIcon,
 };

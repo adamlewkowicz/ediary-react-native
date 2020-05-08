@@ -5,15 +5,18 @@ import { TouchableOpacityProps } from 'react-native';
 import { TextSecondary } from '../Text';
 
 interface ButtonRoundedProps extends TouchableOpacityProps {
-  children: ReactNode
+  children?: ReactNode
+  icon?: any
 }
 
 export const ButtonRounded = (props: ButtonRoundedProps) => {
   return (
     <Container {...props}>
-      <TextSecondary>
-        {props.children}
-      </TextSecondary>
+      {props.icon ?? (
+        <TextSecondary>
+          {props.children}
+        </TextSecondary>
+      )}
     </Container>
   );
 }

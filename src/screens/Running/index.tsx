@@ -51,7 +51,6 @@ export const RunningScreen = () => {
         {
           text: 'Anuluj',
           style: 'cancel',
-          onPress: training.unpause
         },
         {
           text: 'Zakończ',

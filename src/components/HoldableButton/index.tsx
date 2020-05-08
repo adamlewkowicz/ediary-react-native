@@ -8,6 +8,7 @@ interface HoldableButtonProps {
   holdDuration?: number
   onPressExceeded: () => void
   children?: ReactNode
+  icon?: JSX.Element
 }
 
 export const HoldableButton: React.FC<HoldableButtonProps> = (props) => {
@@ -48,6 +49,7 @@ export const HoldableButton: React.FC<HoldableButtonProps> = (props) => {
       <ButtonRounded
         onPressIn={handleHoldDuration}
         onPressOut={handleHoldDurationClear}
+        icon={props.icon}
       >
         {props.children}
       </ButtonRounded>
