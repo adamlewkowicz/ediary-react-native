@@ -46,7 +46,7 @@ export const TrainingStack = (props: TrainingStackProps) => {
       <Stack.Screen
         name={APP_ROUTE.TrainingSummary}
         component={TrainingSummaryScreen}
-        options={{ title: 'Podsumowanie treningu' }}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
@@ -62,6 +62,8 @@ const SCREEN_OPTIONS: StackNavigationOptions = {
 export type RunningTrainingScreenNavigationProps = ScreenProps<'RunningTraining'>;
 
 export type CountdownScreenNavigationProps = ScreenProps<'Countdown'>;
+
+export type TrainingSummaryScreenNavigationProps = ScreenProps<'TrainingSummary'>;
 
 type ScreenProps<
   K extends keyof TrainingStackParamList

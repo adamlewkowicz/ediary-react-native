@@ -26,7 +26,7 @@ const runningTrainingEffectsStart = (): Thunk => async (dispatch) => {
   }, error => {
     dispatch(runningTrainingPositionFailed(error));
   }, {
-    enableHighAccuracy: true, timeout: 20000, maximumAge: 1000
+    enableHighAccuracy: true, timeout: 1000, maximumAge: 1000
   });
 }
 
@@ -39,17 +39,17 @@ export const runningTrainingStart = (): Thunk => async (dispatch) => {
   dispatch(runningTrainingEffectsStart());
 }
 
-export const runningTrainingPauseToggle = (enablePause: boolean): Thunk<void> => (dispatch) => {
-  if (enablePause) {
-    _runningTrainingEffectsStop();
-    dispatch(runningTrainingPaused());
-  } else {
-    dispatch(runningTrainingUnpaused());
-    dispatch(runningTrainingEffectsStart());
-  }
-}
-
 export const runningTrainingFinish = (): Thunk<void> => (dispatch) => {
   _runningTrainingEffectsStop();
   dispatch(runningTrainingFinished());
+}
+
+export const runningTrainingPause = (): Thunk<void> => (dispatch) => {
+  _runningTrainingEffectsStop();
+  dispatch(runningTrainingPaused());
+}
+
+export const runningTrainingUnpause = (): Thunk<void> => (dispatch) => {
+  dispatch(runningTrainingUnpaused());
+  dispatch(runningTrainingEffectsStart());
 }

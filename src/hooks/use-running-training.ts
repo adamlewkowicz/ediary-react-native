@@ -5,10 +5,6 @@ export const useRunningTraining = () => {
   const dispatch = useDispatch();
   const data = useSelector(Selectors.getRunningTraining);
 
-  const pauseToggle = (status: boolean = !data.isPaused) => {
-    dispatch(Actions.runningTrainingPauseToggle(status));
-  }
-
   const start = () => {
     dispatch(Actions.runningTrainingStart());
   }
@@ -17,9 +13,13 @@ export const useRunningTraining = () => {
     dispatch(Actions.runningTrainingFinish());
   }
 
-  const pause = () => pauseToggle();
+  const pause = () => {
+    dispatch(Actions.runningTrainingPause());
+  }
 
-  const unpause = () => pauseToggle();
+  const unpause = () => {
+    dispatch(Actions.runningTrainingUnpause());
+  }
 
-  return { data, start, finish, pauseToggle, pause, unpause };
+  return { data, start, finish, pause, unpause };
 }
