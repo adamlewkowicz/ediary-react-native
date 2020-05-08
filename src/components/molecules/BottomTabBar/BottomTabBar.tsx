@@ -73,5 +73,5 @@ const Container = styled.View`
 const TAB_BAR_ICON = {
   [APP_ROUTE.NutritionStack]: CutleryIcon,
   [APP_ROUTE.NutritionSummary]: NoteIcon,
-  [APP_ROUTE.RunningTraining]: RunnerIcon,
+  [APP_ROUTE.TrainingStack]: RunnerIcon,
 };

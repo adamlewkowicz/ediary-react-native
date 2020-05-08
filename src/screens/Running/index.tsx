@@ -5,22 +5,29 @@ import { TextPrimary, MapView, TrainingData } from '../../components';
 import { useRunningTraining } from '../../hooks/use-running-training';
 import { useLocationPermission } from '../../hooks/use-location-permission';
 import { TrainingButtons } from '../../components/molecules/TrainingButtons';
+import { useNavigationData } from '../../hooks';
+import { APP_ROUTE } from '../../navigation/consts';
+import { RunningTrainingScreenNavigationProps } from '../../navigation/TrainingStack';
 
 export const RunningScreen = () => {
   const training = useRunningTraining();
-  const permission = useLocationPermission();
+  const locationPermission = useLocationPermission();
+  const { navigate } = useNavigationData<RunningTrainingScreenNavigationProps>();
 
   React.useEffect(() => {
-    if (permission.isGranted) {
+    if (locationPermission.isGranted) {
       training.start();
     }
 
+    // navigate(APP_ROUTE.Countdown, {
+    //   countdown: 3,
+    //   onCountdownEnd: () => navigate('RunningTraining')
+    // });
+
     return () => training.finish();
-  }, [permission.isGranted]);
+  }, [locationPermission.isGranted]);
 
   const handleTrainingFinish = () => {
-    training.pause();
-
     Alert.alert(
       'Zakończyć sesję?',
       '',
@@ -46,9 +53,9 @@ export const RunningScreen = () => {
           startTime={training.data.startTime}
           isPaused={training.data.isPaused}
         />
-        {!permission.isGranted && (
+        {!locationPermission.isGranted && (
           <TextPrimary>
-            Potwierdź uprawnienia do lokalizacji
+            Potwierdź uprawnienia lokalizacji
           </TextPrimary>
         )}
         <TrainingButtons
