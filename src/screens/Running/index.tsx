@@ -1,14 +1,14 @@
 import * as React from 'react';
-import MapView, { AnimatedRegion, Region, Polyline, Marker } from 'react-native-maps';
+import { AnimatedRegion, Region, Polyline, Marker } from 'react-native-maps';
 import { Platform, View } from 'react-native';
 import styled from 'styled-components/native';
 import { Coordinate } from '../../types';
 import Geolocation, { GeolocationResponse } from '@react-native-community/geolocation';
 import { HoldableButton } from '../../components/HoldableButton';
-import { requestLocationPermission } from '../../utils';
-import { TextPrimary, ButtonPrimary } from '../../components';
+import { TextPrimary, ButtonPrimary, MapView } from '../../components';
 import { GeoLocation as CustomGeoLocation } from '../../services/GeoLocation';
 import { useRunningTraining } from '../../hooks/use-running-training';
+import { useLocationPermission } from '../../hooks/use-location-permission';
 
 export const RunningScreen = () => {
   const animatedRegion = React.useRef(new AnimatedRegion({
@@ -19,6 +19,8 @@ export const RunningScreen = () => {
   }));
   const markerRef = React.useRef<Marker>(null);
   const training = useRunningTraining();
+  const [isLocked, setIsLocked] = React.useState(true);
+  const permission = useLocationPermission();
 
   const mapRegion: Region = {
     latitude: training.data.coordinate.latitude,
@@ -42,20 +44,12 @@ export const RunningScreen = () => {
   }
 
   React.useEffect(() => {
-    const bootstrap = async () => {
-      const permissionGranted = await requestLocationPermission();
-
-      if (!permissionGranted) {
-        return;
-      }
-
+    if (permission.isGranted) {
       training.start();
     }
 
-    bootstrap();
-
     return () => training.finish();
-  }, []);
+  }, [permission.isGranted]);
 
   return (
     <Container>
@@ -74,33 +68,39 @@ export const RunningScreen = () => {
         <TextPrimary>
           {training.data.velocity.toFixed(2)} km/h
         </TextPrimary>
-        <HoldableButton
-          onPressExceeded={() => training.pauseToggle()}
-        />
-        <ButtonPrimary
-          onPress={() => training.pauseToggle()}
-        >
-          {training.data.isPaused ? 'Kontynuuj' : 'Pauza'}
-        </ButtonPrimary>
-        <ButtonPrimary
-          onPress={() => training.finish()}
-        >
-          Zakończ
-        </ButtonPrimary>
+
+        {!permission.isGranted && (
+          <TextPrimary>
+            Potwierdź uprawnienia do lokalizacji
+          </TextPrimary>
+        )}
+        {isLocked ? (
+          <HoldableButton
+            onPressExceeded={() => setIsLocked(false)}
+          />
+        ): (
+          <>
+            <ButtonPrimary
+              onPress={() => training.pauseToggle()}
+            >
+              {training.data.isPaused ? 'Kontynuuj' : 'Pauza'}
+            </ButtonPrimary>
+            <ButtonPrimary
+              onPress={() => training.finish()}
+            >
+              Zakończ
+            </ButtonPrimary>
+            <ButtonPrimary
+              onPress={() => setIsLocked(true)}
+            >
+              Zablokuj
+            </ButtonPrimary>
+          </>
+        )}
         <TextPrimary>Szer: {training.data.coordinate.latitude}</TextPrimary>
         <TextPrimary>Wys: {training.data.coordinate.longitude}</TextPrimary>
       </DataContainer>
-      <StyledMapView
-        showsUserLocation
-        followsUserLocation
-        loadingEnabled
-        region={mapRegion}
-      >
-        <Polyline
-          coordinates={training.data.routeCoordinates}
-          strokeWidth={5}
-        />
-      </StyledMapView>
+      <MapView coordinates={training.data.routeCoordinates} />
     </Container>
   );
 }
@@ -113,8 +113,4 @@ const DataContainer = styled.View`
   padding: 10px 0;
   align-items: center;
   justify-content: space-around;
-`
-
-const StyledMapView = styled(MapView)`
-  flex: 1;
 `

@@ -43,7 +43,7 @@ export const HoldableButton: React.FC<HoldableButtonProps> = (props) => {
   }, []);
 
   return (
-    <Container style={{ opacity: animatedValue }}>
+    <Container style={{ opacity }}>
       <Button
         onPressIn={handleHoldDuration}
         onPressOut={handleHoldDurationClear}
