@@ -16,7 +16,7 @@ export const HoldableButton: React.FC<HoldableButtonProps> = (props) => {
   const animatedValue = useAnimatedValue(1);
   const opacity = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ['red', THEME.color.primaryDark]
+    outputRange: [THEME.color.error, THEME.color.primaryDark]
   });
   const scale = animatedValue.interpolate({
     inputRange: [0, 1],
@@ -70,5 +70,4 @@ HoldableButton.defaultProps = {
 
 const Container = styled(Animated.View)`
   border-radius: 50;
-  background-color: #e67e22;
 `

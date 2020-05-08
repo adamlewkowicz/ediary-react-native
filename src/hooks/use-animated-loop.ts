@@ -7,7 +7,9 @@ interface Options {
   duration?: number
 }
 
-/** Animates value from 0 to 1 during a loop.  */
+/**
+ * Animates value from 0 to 1 during a loop.
+ */
 export const useAnimatedLoop = (options: Options) => {
   const animatedValue = useAnimatedValue(0);
   const { isRunning, duration = 700 } = options;
@@ -20,8 +22,8 @@ export const useAnimatedLoop = (options: Options) => {
           toValue: 1,
           duration,
         }
-      ).start(() => {
-        if (options.isRunning) {
+      ).start((result) => {
+        if (result.finished &&options.isRunning) {
           decrement();
         }
       });
@@ -34,8 +36,8 @@ export const useAnimatedLoop = (options: Options) => {
           toValue: 0,
           duration,
         }
-      ).start(() => {
-        if (options.isRunning) {
+      ).start((result) => {
+        if (result.finished && options.isRunning) {
           increment();
         }
       });
