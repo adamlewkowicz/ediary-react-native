@@ -8,45 +8,50 @@ interface Options {
 }
 
 /**
- * Animates value from 0 to 1 during a loop.
+ * Animates infinitely value from 0 to 1 in a loop.
  */
 export const useAnimatedLoop = (options: Options) => {
   const animatedValue = useAnimatedValue(0);
   const { isRunning, duration = 700 } = options;
 
+  const runTransitionLoop = () => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(
+          animatedValue,
+          {
+            toValue: 1,
+            duration,
+            useNativeDriver: true,
+          }
+        ),
+        Animated.timing(
+          animatedValue,
+          {
+            toValue: 0,
+            duration,
+            useNativeDriver: true,
+          }
+        )
+      ]),
+    ).start();
+  }
+
+  const stopTransitionLoop = () => {
+    Animated.timing(animatedValue, {
+      toValue: 0,
+      duration,
+      useNativeDriver: true,
+    }).start();
+  }
+
   useEffect(() => {
-    const increment = () => {
-      Animated.timing(
-        animatedValue,
-        {
-          toValue: 1,
-          duration,
-        }
-      ).start((result) => {
-        if (result.finished &&options.isRunning) {
-          decrement();
-        }
-      });
-    }
-
-    const decrement = () => {
-      Animated.timing(
-        animatedValue,
-        {
-          toValue: 0,
-          duration,
-        }
-      ).start((result) => {
-        if (result.finished && options.isRunning) {
-          increment();
-        }
-      });
-    }
-
     if (isRunning) {
-      increment();
+      runTransitionLoop();
+    } else {
+      stopTransitionLoop();
     }
-  }, [isRunning, options.isRunning]);
+  }, [isRunning]);
 
   return animatedValue;
 }
