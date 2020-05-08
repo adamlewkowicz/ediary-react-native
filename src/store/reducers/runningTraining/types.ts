@@ -5,11 +5,11 @@ export interface RunningTrainingState {
   duration: number
   distance: number
   velocity: number
-  routeCoordinates: Coordinate[]
-  prevLatLng: Coordinate
-  coordinate: Coordinate
+  coordinates: Coordinate[]
+  prevCoordinate: Coordinate
   error: GeolocationError | null
   isActive: boolean
   isPaused: boolean
+  /** ISOString of start time */
   startTime: string | null
 }

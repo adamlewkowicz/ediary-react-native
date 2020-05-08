@@ -72,14 +72,14 @@ export const RunningScreen = () => {
           onPause={training.pause}
           onUnpause={training.unpause}
         />
-        <TextPrimary>Szer: {training.data.coordinate.latitude}</TextPrimary>
-        <TextPrimary>Wys: {training.data.coordinate.longitude}</TextPrimary>
+        <TextPrimary>Szer: {training.data.prevCoordinate.latitude}</TextPrimary>
+        <TextPrimary>Wys: {training.data.prevCoordinate.longitude}</TextPrimary>
       </DataContainer>
       <ButtonPrimary onPress={handleMapShownToggle}>
         {`${isMapShown ? 'Schowaj' : 'Pokaż'} mapę` }
       </ButtonPrimary>
       {isMapShown && (
-        <MapView coordinates={training.data.routeCoordinates} />
+        <MapView coordinates={training.data.coordinates} />
       )}
     </Container>
   );

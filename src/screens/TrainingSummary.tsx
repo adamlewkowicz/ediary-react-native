@@ -15,7 +15,7 @@ export const TrainingSummaryScreen = () => {
 
   return (
     <Container>
-      <MapView coordinates={training.routeCoordinates} />
+      <MapView coordinates={training.coordinates} />
       <Details>
         <Detail title="Czas" value={training.duration} />
         <Detail title="Średnia prędkość" value="14.5 km/h" />
