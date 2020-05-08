@@ -1,17 +1,48 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components/native';
 import { H1, TextPrimary } from '../../atoms';
 import { Detail } from './Detail';
+import { Animated } from 'react-native';
+import { useAnimatedValue } from '../../../hooks/use-animated-value';
 
 interface TrainingDataProps {
   distance: number
   duration: number
+  isPaused: boolean
   startTime: string | null
 }
 
 export const TrainingData = (props: TrainingDataProps) => {
+  const animatedValue = useAnimatedValue(0);
+  const opacity = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 0.5],
+  });
+
+  useEffect(() => {
+    if (props.isPaused) {
+      spring();
+    }
+  }, [props.isPaused]);
+
+  const spring = () => {
+    animatedValue.setValue(0);
+
+    Animated.timing(
+      animatedValue,
+      {
+        toValue: 1,
+        duration: 1000,
+      }
+    ).start(() => {
+      if (props.isPaused) {
+        spring();
+      }
+    });
+  }
+
   return (
-    <Container>
+    <Animated.View style={{ opacity }}>
       <Distance>
         {props.distance.toFixed(2)} 
         <TextPrimary>km</TextPrimary>
@@ -27,7 +58,7 @@ export const TrainingData = (props: TrainingDataProps) => {
           value={`${0} km/h`}
         />
       </Details>
-    </Container>
+    </Animated.View>
   );
 }
 

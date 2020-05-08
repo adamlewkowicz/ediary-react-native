@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import NativeMapView, { Region, Polyline, Marker } from 'react-native-maps';
+import NativeMapView, { Region, Polyline, Marker, AnimatedRegion } from 'react-native-maps';
+import { Platform } from 'react-native';
+import { Coordinate } from '../../../types';
 
 interface MapViewProps {
   coordinates: any[]
@@ -8,6 +10,27 @@ interface MapViewProps {
 
 export const MapView = (props: MapViewProps) => {
   const [coordinate] = props.coordinates;
+  const animatedRegion = React.useRef(new AnimatedRegion({
+    latitude: 0,
+    longitude: 0,
+    latitudeDelta: 0,
+    longitudeDelta: 0,
+  }));
+  const markerRef = React.useRef<Marker>(null);
+
+  const handleCoordinateAnimation = (
+    newCoordinate: Coordinate,
+    coordinate: AnimatedRegion
+  ): void => {
+    if (Platform.OS === 'android') {
+      markerRef.current?.animateMarkerToCoordinate(
+        newCoordinate,
+        500
+      );
+    } else {
+      coordinate.timing(newCoordinate).start();
+    }
+  }
 
   const mapRegion: Region = {
     latitude: coordinate?.latitude ?? 0,

@@ -1,37 +1,14 @@
 import * as React from 'react';
-import { AnimatedRegion, Marker } from 'react-native-maps';
-import { Platform, Alert } from 'react-native';
+import { Alert } from 'react-native';
 import styled from 'styled-components/native';
-import { Coordinate } from '../../types';
 import { TextPrimary, MapView, TrainingData } from '../../components';
 import { useRunningTraining } from '../../hooks/use-running-training';
 import { useLocationPermission } from '../../hooks/use-location-permission';
 import { TrainingButtons } from '../../components/molecules/TrainingButtons';
 
 export const RunningScreen = () => {
-  const animatedRegion = React.useRef(new AnimatedRegion({
-    latitude: 0,
-    longitude: 0,
-    latitudeDelta: 0,
-    longitudeDelta: 0,
-  }));
-  const markerRef = React.useRef<Marker>(null);
   const training = useRunningTraining();
   const permission = useLocationPermission();
-
-  const handleCoordinateAnimation = (
-    newCoordinate: Coordinate,
-    coordinate: AnimatedRegion
-  ): void => {
-    if (Platform.OS === 'android') {
-      markerRef.current?.animateMarkerToCoordinate(
-        newCoordinate,
-        500
-      );
-    } else {
-      coordinate.timing(newCoordinate).start();
-    }
-  }
 
   React.useEffect(() => {
     if (permission.isGranted) {
@@ -67,6 +44,7 @@ export const RunningScreen = () => {
           distance={training.data.distance}
           duration={training.data.duration}
           startTime={training.data.startTime}
+          isPaused={training.data.isPaused}
         />
         {!permission.isGranted && (
           <TextPrimary>
