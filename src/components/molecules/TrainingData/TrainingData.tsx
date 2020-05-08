@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 import { H1, TextPrimary } from '../../atoms';
 import { Detail } from './Detail';
 import { Animated } from 'react-native';
-import { useAnimatedValue } from '../../../hooks/use-animated-value';
+import { useAnimatedLoop } from '../../../hooks/use-animated-loop';
 
 interface TrainingDataProps {
   distance: number
@@ -13,36 +13,14 @@ interface TrainingDataProps {
 }
 
 export const TrainingData = (props: TrainingDataProps) => {
-  const animatedValue = useAnimatedValue(0);
-  const opacity = animatedValue.interpolate({
+  const animtedValueLoop = useAnimatedLoop({ isRunning: props.isPaused });
+  const opacity = animtedValueLoop.interpolate({
     inputRange: [0, 1],
-    outputRange: [1, 0.5],
+    outputRange: [1, 0.2],
   });
 
-  useEffect(() => {
-    if (props.isPaused) {
-      spring();
-    }
-  }, [props.isPaused]);
-
-  const spring = () => {
-    animatedValue.setValue(0);
-
-    Animated.timing(
-      animatedValue,
-      {
-        toValue: 1,
-        duration: 1000,
-      }
-    ).start(() => {
-      if (props.isPaused) {
-        spring();
-      }
-    });
-  }
-
   return (
-    <Animated.View style={{ opacity }}>
+    <Container style={{ opacity }}>
       <Distance>
         {props.distance.toFixed(2)} 
         <TextPrimary>km</TextPrimary>
@@ -58,16 +36,20 @@ export const TrainingData = (props: TrainingDataProps) => {
           value={`${0} km/h`}
         />
       </Details>
-    </Animated.View>
+    </Container>
   );
 }
 
-const Container = styled.View`
+const Container = styled(Animated.View)`
+  align-items: center;
+  margin-bottom: ${props => props.theme.spacing.base};
 `
 
 const Details = styled.View`
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
+  flex-direction: row;
+  width: 100%;
 `
 
 const Distance = styled(H1)`
