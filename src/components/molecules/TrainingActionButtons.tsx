@@ -8,25 +8,30 @@ import PlayIcon from '../../../assets/img/play.svg';
 import FinishIcon from '../../../assets/img/racing.svg';
 import { THEME } from '../../common/theme';
 
-interface TrainingButtonsProps {
-  isTrainingPaused: boolean
-  onTrainingPause: (status?: boolean) => void
-  onTrainingFinish: () => void
+interface TrainingActionButtonsProps {
+  isPaused: boolean
+  onPause: () => void
+  onUnpause: () => void
+  onFinish: () => void
 }
 
-export const TrainingButtons = (props: TrainingButtonsProps) => {
+export const TrainingActionButtons = (props: TrainingActionButtonsProps) => {
   const [isLocked, setIsLocked] = useState(false);
 
-  if (props.isTrainingPaused) {
+  const handleLock = () => setIsLocked(true);
+
+  const handleUnlock = () => setIsLocked(true);
+
+  if (props.isPaused) {
     return (
       <Container>
         <ButtonRounded
-          onPress={() => props.onTrainingPause(false)}
+          onPress={props.onUnpause}
           icon={<PlayIcon {...style} />}
           accessibilityLabel="Kontynuuj"
         />
         <HoldableButton
-          onPressExceeded={props.onTrainingFinish}
+          onPressExceeded={props.onFinish}
           icon={<FinishIcon {...style} />}
         >
           Zakończ trening
@@ -38,7 +43,7 @@ export const TrainingButtons = (props: TrainingButtonsProps) => {
   if (isLocked) {
     return (
       <HoldableButton
-        onPressExceeded={() => setIsLocked(false)}
+        onPressExceeded={handleUnlock}
         icon={<PadlockIcon {...style} />}
         // accessibilityLabel="Odblokuj"
       />  
@@ -48,12 +53,12 @@ export const TrainingButtons = (props: TrainingButtonsProps) => {
   return (
     <Container>
       <ButtonRounded
-        onPress={() => props.onTrainingPause(true)}
+        onPress={props.onPause}
         icon={<PauseIcon {...style} />}
         accessibilityLabel="Pauza"
       />
       <ButtonRounded
-        onPress={() => setIsLocked(true)}
+        onPress={handleLock}
         icon={<PadlockIcon {...style} />}
         accessibilityLabel="Zablokuj"
       />

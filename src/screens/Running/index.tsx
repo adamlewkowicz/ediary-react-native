@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Alert } from 'react-native';
 import styled from 'styled-components/native';
-import { TextPrimary, MapView, TrainingData } from '../../components';
+import { TextPrimary, MapView, TrainingData, ButtonPrimary } from '../../components';
 import { useRunningTraining } from '../../hooks/use-running-training';
 import { useLocationPermission } from '../../hooks/use-location-permission';
-import { TrainingButtons } from '../../components/molecules/TrainingButtons';
+import { TrainingActionButtons } from '../../components/molecules/TrainingActionButtons';
 import { useNavigationData } from '../../hooks';
 import { APP_ROUTE } from '../../navigation/consts';
 import { RunningTrainingScreenNavigationProps } from '../../navigation/TrainingStack';
@@ -13,6 +13,9 @@ export const RunningScreen = () => {
   const training = useRunningTraining();
   const locationPermission = useLocationPermission();
   const { navigate } = useNavigationData<RunningTrainingScreenNavigationProps>();
+  const [isMapShown, setIsMapShown] = React.useState(false);
+
+  const handleMapShownToggle = () => setIsMapShown(status => !status);
 
   React.useEffect(() => {
     if (locationPermission.isGranted) {
@@ -58,15 +61,21 @@ export const RunningScreen = () => {
             Potwierdź uprawnienia lokalizacji
           </TextPrimary>
         )}
-        <TrainingButtons
-          isTrainingPaused={training.data.isPaused}
-          onTrainingFinish={handleTrainingFinish}
-          onTrainingPause={training.pauseToggle}
+        <TrainingActionButtons
+          isPaused={training.data.isPaused}
+          onFinish={handleTrainingFinish}
+          onPause={training.pause}
+          onUnpause={training.unpause}
         />
         <TextPrimary>Szer: {training.data.coordinate.latitude}</TextPrimary>
         <TextPrimary>Wys: {training.data.coordinate.longitude}</TextPrimary>
       </DataContainer>
-      <MapView coordinates={training.data.routeCoordinates} />
+      <ButtonPrimary onPress={handleMapShownToggle}>
+        {`${isMapShown ? 'Schowaj' : 'Pokaż'} mapę` }
+      </ButtonPrimary>
+      {isMapShown && (
+        <MapView coordinates={training.data.routeCoordinates} />
+      )}
     </Container>
   );
 }
