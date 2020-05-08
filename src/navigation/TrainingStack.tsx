@@ -7,6 +7,7 @@ import {
 import { RouteProp } from '@react-navigation/native';
 import { THEME } from '../common/theme';
 import { CountdownScreen } from '../screens/Countdown';
+import { TrainingSummaryScreen } from '../screens/TrainingSummary';
 
 const Stack = createStackNavigator<TrainingStackParamList>();
 
@@ -16,6 +17,7 @@ export type TrainingStackParamList = {
     countdown: number
     onCountdownEnd: () => void
   };
+  [APP_ROUTE.TrainingSummary]: {}
 }
 
 interface TrainingStackProps {
@@ -40,6 +42,11 @@ export const TrainingStack = (props: TrainingStackProps) => {
         name={APP_ROUTE.Countdown}
         component={CountdownScreen}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={APP_ROUTE.TrainingSummary}
+        component={TrainingSummaryScreen}
+        options={{ title: 'Podsumowanie treningu' }}
       />
     </Stack.Navigator>
   );

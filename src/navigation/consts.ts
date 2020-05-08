@@ -13,4 +13,5 @@ export const APP_ROUTE = {
     TrainingStack: 'TrainingStack',
       RunningTraining: 'RunningTraining',
       Countdown: 'Countdown',
+      TrainingSummary: 'TrainingSummary',
 } as const;

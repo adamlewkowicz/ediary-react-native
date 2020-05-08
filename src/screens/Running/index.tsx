@@ -30,6 +30,11 @@ export const RunningScreen = () => {
     return () => training.finish();
   }, [locationPermission.isGranted]);
 
+  const handleFinish = () => {
+    training.finish();
+    navigate('TrainingSummary');
+  }
+
   const handleTrainingFinish = () => {
     Alert.alert(
       'Zakończyć sesję?',
@@ -41,7 +46,7 @@ export const RunningScreen = () => {
         },
         {
           text: 'Zakończ',
-          onPress: training.finish
+          onPress: handleFinish
         }
       ]
     );
