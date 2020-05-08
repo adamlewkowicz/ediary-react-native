@@ -37,8 +37,8 @@ export const RunningScreen = () => {
 
   const handleTrainingFinish = () => {
     Alert.alert(
-      'Zakończyć sesję?',
-      '',
+      'Zakończ trening',
+      'Czy chcesz zakończyć trening?',
       [
         {
           text: 'Anuluj',

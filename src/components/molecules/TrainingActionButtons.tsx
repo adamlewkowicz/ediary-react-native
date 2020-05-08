@@ -20,7 +20,7 @@ export const TrainingActionButtons = (props: TrainingActionButtonsProps) => {
 
   const handleLock = () => setIsLocked(true);
 
-  const handleUnlock = () => setIsLocked(true);
+  const handleUnlock = () => setIsLocked(false);
 
   if (props.isPaused) {
     return (
