@@ -1,58 +1,72 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, ReactNode } from 'react';
 import styled from 'styled-components/native';
 import { Animated } from 'react-native';
-
-let timeout: number;
+import { useAnimatedValue } from '../../hooks/use-animated-value';
 
 interface HoldableButtonProps {
   holdDuration?: number
-  onHoldEnd: () => void
+  onPressExceeded: () => void
+  children?: ReactNode
 }
 
 export const HoldableButton: React.FC<HoldableButtonProps> = (props) => {
-  const animatedValue = useRef(new Animated.Value(0));
+  const animatedValue = useAnimatedValue(1);
+  const opacity = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.5, 1]
+  });
 
   const handleHoldDuration = () => {
-    timeout = setTimeout(props.onHoldEnd, props.holdDuration);
     Animated.timing(
-      animatedValue.current,
+      animatedValue,
       {
-        toValue: 1,
+        toValue: 0,
         duration: props.holdDuration,
       }
-    ).start();
+    ).start(() => {
+      props.onPressExceeded();
+    });
   }
 
   const handleHoldDurationClear = () => {
-    clearTimeout(timeout);
     Animated.timing(
-      animatedValue.current,
+      animatedValue,
       {
-        toValue: 0,
+        toValue: 1,
         duration: props.holdDuration
       }
     ).stop();
   }
 
-  useEffect(() => handleHoldDurationClear, []);
+  useEffect(() => {
+    return () => handleHoldDurationClear();
+  }, []);
 
   return (
-    <Container
-      onPressIn={handleHoldDuration}
-      onPressOut={handleHoldDurationClear}
-    >
-
+    <Container style={{ opacity: animatedValue }}>
+      <Button
+        onPressIn={handleHoldDuration}
+        onPressOut={handleHoldDurationClear}
+      >
+        {props.children}
+      </Button>
     </Container>
   );
 }
 
 HoldableButton.defaultProps = {
-  holdDuration: 500
+  holdDuration: 2000
 }
 
-const Container = styled.TouchableOpacity`
+const Container = styled(Animated.View)`
   border-radius: 50;
   background-color: #e67e22;
+  width: 80px;
+  height: 80px;
+`
+
+const Button = styled.TouchableOpacity`
+  border-radius: 50;
   width: 80px;
   height: 80px;
 `

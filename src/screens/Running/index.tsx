@@ -3,38 +3,14 @@ import MapView, { AnimatedRegion, Region, Polyline, Marker } from 'react-native-
 import { Platform, View } from 'react-native';
 import styled from 'styled-components/native';
 import { Coordinate } from '../../types';
-import { useDispatch, useSelector } from 'react-redux';
-import { Actions, Selectors } from '../../store';
 import Geolocation, { GeolocationResponse } from '@react-native-community/geolocation';
 import { HoldableButton } from '../../components/HoldableButton';
-import { useNativeState } from '../../hooks';
 import { requestLocationPermission } from '../../utils';
 import { TextPrimary, ButtonPrimary } from '../../components';
 import { GeoLocation as CustomGeoLocation } from '../../services/GeoLocation';
-
-interface RunningScreenState {
-  latitude: number
-  longitude: number
-  routeCoordinates: Coordinate[]
-  distanceTravelled: number
-  prevLatLng: Coordinate
-  coordinate: AnimatedRegion
-}
+import { useRunningTraining } from '../../hooks/use-running-training';
 
 export const RunningScreen = () => {
-  const [state, setState] = useNativeState<RunningScreenState>({
-    latitude: 0,
-    longitude: 0,
-    routeCoordinates: [],
-    distanceTravelled: 0,
-    prevLatLng: { latitude: 0, longitude: 0 },
-    coordinate: new AnimatedRegion({
-     latitude: 0,
-     longitude: 0,
-     latitudeDelta: 0,
-     longitudeDelta: 0,
-    }),
-  });
   const animatedRegion = React.useRef(new AnimatedRegion({
     latitude: 0,
     longitude: 0,
@@ -42,12 +18,11 @@ export const RunningScreen = () => {
     longitudeDelta: 0,
   }));
   const markerRef = React.useRef<Marker>(null);
-  const dispatch = useDispatch();
-  const runningTraining = useSelector(Selectors.getRunningTraining);
+  const training = useRunningTraining();
 
   const mapRegion: Region = {
-    latitude: runningTraining.coordinate.latitude,
-    longitude: runningTraining.coordinate.longitude,
+    latitude: training.data.coordinate.latitude,
+    longitude: training.data.coordinate.longitude,
     latitudeDelta: 0,
     longitudeDelta: 0,
   };
@@ -74,45 +49,46 @@ export const RunningScreen = () => {
         return;
       }
 
-      dispatch(Actions.runningTrainingStart());
+      training.start();
     }
 
     bootstrap();
 
-    return () => {
-      dispatch(Actions.runningTrainingFinish());
-    }
-  }, [dispatch]);
+    return () => training.finish();
+  }, []);
 
   return (
     <Container>
       <DataContainer>
+        <ButtonPrimary>
+          Zacznij trening
+        </ButtonPrimary>
         <TextPrimary>
-          {runningTraining.distance.toFixed(1)} km
+          {training.data.distance} km
         </TextPrimary>
         <View>
           <TextPrimary>
-            {String(Math.floor(runningTraining.duration))} czas
+            {String(Math.floor(training.data.duration))} czas
           </TextPrimary>
         </View>
         <TextPrimary>
-          {runningTraining.velocity.toFixed(2)} km/h
+          {training.data.velocity.toFixed(2)} km/h
         </TextPrimary>
         <HoldableButton
-          onHoldEnd={() => {}}
+          onPressExceeded={() => training.pauseToggle()}
         />
         <ButtonPrimary
-          onPress={() => dispatch(Actions.runningTrainingPauseToggle(!runningTraining.isPaused))}
+          onPress={() => training.pauseToggle()}
         >
-          {runningTraining.isPaused ? 'Kontynuuj' : 'Pauza'}
+          {training.data.isPaused ? 'Kontynuuj' : 'Pauza'}
         </ButtonPrimary>
         <ButtonPrimary
-          onPress={() => dispatch(Actions.runningTrainingFinish())}
+          onPress={() => training.finish()}
         >
           Zakończ
         </ButtonPrimary>
-        <TextPrimary>Szer: {runningTraining.coordinate.latitude}</TextPrimary>
-        <TextPrimary>Wys: {runningTraining.coordinate.longitude}</TextPrimary>
+        <TextPrimary>Szer: {training.data.coordinate.latitude}</TextPrimary>
+        <TextPrimary>Wys: {training.data.coordinate.longitude}</TextPrimary>
       </DataContainer>
       <StyledMapView
         showsUserLocation
@@ -121,7 +97,7 @@ export const RunningScreen = () => {
         region={mapRegion}
       >
         <Polyline
-          coordinates={runningTraining.routeCoordinates}
+          coordinates={training.data.routeCoordinates}
           strokeWidth={5}
         />
       </StyledMapView>
