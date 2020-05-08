@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { AnimatedRegion, Marker } from 'react-native-maps';
-import { Platform } from 'react-native';
+import { Platform, Alert } from 'react-native';
 import styled from 'styled-components/native';
 import { Coordinate } from '../../types';
-import Geolocation, { GeolocationResponse } from '@react-native-community/geolocation';
 import { TextPrimary, MapView, TrainingData } from '../../components';
 import { useRunningTraining } from '../../hooks/use-running-training';
 import { useLocationPermission } from '../../hooks/use-location-permission';
@@ -18,7 +17,6 @@ export const RunningScreen = () => {
   }));
   const markerRef = React.useRef<Marker>(null);
   const training = useRunningTraining();
-  const [isLocked, setIsLocked] = React.useState(true);
   const permission = useLocationPermission();
 
   const handleCoordinateAnimation = (
@@ -43,6 +41,26 @@ export const RunningScreen = () => {
     return () => training.finish();
   }, [permission.isGranted]);
 
+  const handleTrainingFinish = () => {
+    training.pause();
+
+    Alert.alert(
+      'Zakończyć sesję?',
+      '',
+      [
+        {
+          text: 'Anuluj',
+          style: 'cancel',
+          onPress: training.unpause
+        },
+        {
+          text: 'Zakończ',
+          onPress: training.finish
+        }
+      ]
+    );
+  }
+
   return (
     <Container>
       <DataContainer>
@@ -57,10 +75,8 @@ export const RunningScreen = () => {
           </TextPrimary>
         )}
         <TrainingButtons
-          isLocked={isLocked}
-          onLockToggle={setIsLocked}
           isTrainingPaused={training.data.isPaused}
-          onTrainingFinish={training.finish}
+          onTrainingFinish={handleTrainingFinish}
           onTrainingPause={training.pauseToggle}
         />
         <TextPrimary>Szer: {training.data.coordinate.latitude}</TextPrimary>

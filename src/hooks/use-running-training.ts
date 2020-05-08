@@ -17,5 +17,9 @@ export const useRunningTraining = () => {
     dispatch(Actions.runningTrainingFinish());
   }
 
-  return { data, start, finish, pauseToggle };
+  const pause = () => pauseToggle(true);
+
+  const unpause = () => pauseToggle(false);
+
+  return { data, start, finish, pauseToggle, pause, unpause };
 }

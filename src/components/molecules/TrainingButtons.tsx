@@ -1,45 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { HoldableButton } from '../HoldableButton';
-import { ButtonPrimary } from '../atoms';
+import { ButtonRounded } from '../atoms';
+import { layoutAnimateEase } from '../../utils';
 
 interface TrainingButtonsProps {
-  isLocked: boolean
-  onLockToggle: (status: boolean) => void
   isTrainingPaused: boolean
-  onTrainingPause: () => void
+  onTrainingPause: (status?: boolean) => void
   onTrainingFinish: () => void
 }
 
 export const TrainingButtons = (props: TrainingButtonsProps) => {
+  const [isLocked, setIsLocked] = useState(false);
 
-  if (props.isLocked) {
+  
+
+  if (props.isTrainingPaused) {
+    return (
+      <Container>
+        <ButtonRounded onPress={() => layoutAnimateEase() || props.onTrainingPause(false)}>
+          Kontynuuj
+        </ButtonRounded>
+        <HoldableButton
+          onPressExceeded={props.onTrainingFinish}
+        >
+          Zakończ trening
+        </HoldableButton>
+      </Container>
+    );
+  }
+
+  if (isLocked) {
     return (
       <HoldableButton
-        onPressExceeded={() => props.onLockToggle(false)}
+        onPressExceeded={() => layoutAnimateEase() || setIsLocked(false)}
       />  
     );
   }
 
   return (
-    <>
-      <ButtonPrimary
-        onPress={props.onTrainingPause}
-      >
-        {props.isTrainingPaused ? 'Kontynuuj' : 'Pauza'}
-      </ButtonPrimary>
-      <ButtonPrimary onPress={props.onTrainingFinish}>
-        Zakończ
-      </ButtonPrimary>
-      <ButtonPrimary
-        onPress={() => props.onLockToggle(true)}
-      >
+    <Container>
+      <ButtonRounded onPress={() => layoutAnimateEase() || props.onTrainingPause(true)}>
+        Pauza
+      </ButtonRounded>
+      <ButtonRounded onPress={() => layoutAnimateEase() || setIsLocked(true)}>
         Zablokuj
-      </ButtonPrimary>
-    </>
+      </ButtonRounded>
+    </Container>
   );
 }
 
 const Container = styled.View`
-
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
 `

@@ -2,6 +2,7 @@ import React, { useEffect, ReactNode } from 'react';
 import styled from 'styled-components/native';
 import { Animated } from 'react-native';
 import { useAnimatedValue } from '../../hooks/use-animated-value';
+import { TextPrimary, ButtonRounded } from '../atoms';
 
 interface HoldableButtonProps {
   holdDuration?: number
@@ -13,7 +14,7 @@ export const HoldableButton: React.FC<HoldableButtonProps> = (props) => {
   const animatedValue = useAnimatedValue(1);
   const opacity = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [0.5, 1]
+    outputRange: ['red', 'blue']
   });
 
   const handleHoldDuration = () => {
@@ -43,13 +44,13 @@ export const HoldableButton: React.FC<HoldableButtonProps> = (props) => {
   }, []);
 
   return (
-    <Container style={{ opacity }}>
-      <Button
+    <Container style={{ backgroundColor: opacity }}>
+      <ButtonRounded
         onPressIn={handleHoldDuration}
         onPressOut={handleHoldDurationClear}
       >
         {props.children}
-      </Button>
+      </ButtonRounded>
     </Container>
   );
 }
@@ -61,8 +62,6 @@ HoldableButton.defaultProps = {
 const Container = styled(Animated.View)`
   border-radius: 50;
   background-color: #e67e22;
-  width: 80px;
-  height: 80px;
 `
 
 const Button = styled.TouchableOpacity`
