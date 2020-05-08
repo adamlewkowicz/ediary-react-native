@@ -13,6 +13,7 @@ import {
 } from '../../consts';
 import { Coordinate } from '../../../types';
 import haversine from 'haversine';
+import dayjs from 'dayjs';
 
 const calcDistance = (prevLatLng: Coordinate, nextLatLng: Coordinate): number => {
   return haversine(prevLatLng, nextLatLng) || 0;
@@ -35,6 +36,7 @@ const initialState: RunningTrainingState = {
   error: null,
   isActive: false,
   isPaused: false,
+  startTime: null
 }
 
 export function runningTrainingReducer(
@@ -45,6 +47,7 @@ export function runningTrainingReducer(
     case RUNNING_TRAINING_STARTED: return {
       ...initialState,
       isActive: true,
+      startTime: dayjs().toISOString()
     }
     case RUNNING_TRAINING_TICK: {
       const duration = state.duration + 1;

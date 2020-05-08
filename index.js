@@ -6,6 +6,7 @@ import { App } from './src/App';
 import { name as appName } from './app.json';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pl';
+import duration from 'dayjs/plugin/duration';
 import 'intl';
 import 'intl/locale-data/jsonp/pl-PL';
 import * as Utils from './src/utils';
@@ -17,5 +18,6 @@ if (Platform.OS === 'android') {
 }
 
 dayjs.locale('pl');
+dayjs.extend(duration);
 
 AppRegistry.registerComponent(appName, () => App);

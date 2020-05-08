@@ -11,4 +11,5 @@ export interface RunningTrainingState {
   error: GeolocationError | null
   isActive: boolean
   isPaused: boolean
+  startTime: string | null
 }
