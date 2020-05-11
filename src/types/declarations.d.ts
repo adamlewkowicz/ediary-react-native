@@ -1,6 +1,7 @@
 /// <reference lib="dom" />
 import { SvgProps } from 'react-native-svg';
 import { Theme } from '../common/theme';
+import { Coordinate } from 'react-native-maps';
 
 declare global {
 
@@ -12,6 +13,11 @@ declare global {
   declare module "*.svg" {
     const content: React.ComponentClass<SvgProps, any>
     export default content
+  }
+  
+  declare module "haversine" {
+    const haversine: (a: Coordinate, b: Coordinate) => number;
+    export default haversine;
   }
 
   declare module NodeJS  {

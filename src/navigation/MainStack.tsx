@@ -10,12 +10,14 @@ import { THEME } from '../common/theme';
 import { BottomTabBar } from '../components';
 import { NutritionStack } from './NutritionStack';
 import { RouteProp } from '@react-navigation/native';
+import { TrainingStack } from './TrainingStack';
 
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
 export type TabStackParamList = {
   [APP_ROUTE.NutritionStack]: undefined;
   [APP_ROUTE.NutritionSummary]: undefined;
+  [APP_ROUTE.TrainingStack]: undefined;
 }
 
 export const MainStack = () => (
@@ -33,6 +35,11 @@ export const MainStack = () => (
       name={APP_ROUTE.NutritionSummary}
       component={NutritionSummaryScreen}
       options={{ tabBarLabel: 'Podsumowanie' }}
+    />
+    <Tab.Screen
+      name={APP_ROUTE.TrainingStack}
+      component={TrainingStack}
+      options={{ tabBarLabel: 'Trening' }}
     />
   </Tab.Navigator>
 );

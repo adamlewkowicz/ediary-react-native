@@ -8,3 +8,5 @@ export * from './RatioInfo';
 export * from './Chart';
 export * from './MacroDetails';
 export * from './ProductList';
+export * from './MapView';
+export * from './TrainingDetails';

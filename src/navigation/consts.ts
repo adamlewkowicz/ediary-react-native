@@ -10,4 +10,8 @@ export const APP_ROUTE = {
       BarcodeScan: 'BarcodeScan',
       ProductPreview: 'ProductPreview',
     NutritionSummary: 'NutritionSummary',
+    TrainingStack: 'TrainingStack',
+      RunningTraining: 'RunningTraining',
+      Countdown: 'Countdown',
+      TrainingSummary: 'TrainingSummary',
 } as const;

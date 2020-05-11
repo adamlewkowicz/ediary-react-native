@@ -5,4 +5,6 @@ export * from './User';
 export * from './ProductPortion';
 export * from './Profile';
 export * from './ProductImage';
+export * from './RunningTraining';
+export * from './RunningCoords';
 export * from './ProductFavorite';
