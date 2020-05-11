@@ -19,7 +19,9 @@ const calcDistance = (prevLatLng: Coordinate, nextLatLng: Coordinate): number =>
 }
 
 const calcVelocity = (durationInSeconds: number, distanceInKm: number): number => {
-  if (durationInSeconds === 0 || distanceInKm === 0) return 0;
+  if (durationInSeconds === 0 || distanceInKm === 0) {
+    return 0;
+  }
   const durationInHours = durationInSeconds / 60 / 60;
   const velocity = distanceInKm / durationInHours;
   return velocity;
@@ -30,7 +32,6 @@ const initialState: RunningTrainingState = {
   distance: 0,
   velocity: 0,
   coordinates: [],
-  prevCoordinate: { latitude: 0, longitude: 0 },
   error: null,
   isActive: false,
   isPaused: false,
@@ -82,7 +83,6 @@ export function runningTrainingReducer(
         ...state,
         distance,
         coordinates: [...state.coordinates, nextCoordinate],
-        prevCoordinate: nextCoordinate,
         velocity: calcVelocity(state.duration, distance),
       }
     case RUNNING_TRAINING_POSITION_FAILED: return {
