@@ -8,6 +8,7 @@ import { useAnimatedLoop } from '../../../hooks/use-animated-loop';
 interface TrainingDataProps {
   distance: number
   duration: number
+  velocity: number
   isPaused: boolean
   startTime: string | null
 }
@@ -16,7 +17,7 @@ export const TrainingData = (props: TrainingDataProps) => {
   const animtedValueLoop = useAnimatedLoop({ isRunning: props.isPaused });
   const opacity = animtedValueLoop.interpolate({
     inputRange: [0, 1],
-    outputRange: [1, 0.2],
+    outputRange: [1, 0.1],
   });
 
   return (
@@ -33,7 +34,7 @@ export const TrainingData = (props: TrainingDataProps) => {
         />
         <Detail
           title="Prędkość"
-          value={`${0} km/h`}
+          value={`${props.velocity.toFixed(0)} km/h`}
         />
       </Details>
     </Container>

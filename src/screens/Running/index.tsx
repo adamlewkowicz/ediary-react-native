@@ -55,12 +55,7 @@ export const RunningScreen = () => {
   return (
     <Container>
       <DataContainer>
-        <TrainingData
-          distance={training.data.distance}
-          duration={training.data.duration}
-          startTime={training.data.startTime}
-          isPaused={training.data.isPaused}
-        />
+        <TrainingData {...training.data} />
         {!locationPermission.isGranted && (
           <TextPrimary>
             Potwierdź uprawnienia lokalizacji
@@ -72,8 +67,6 @@ export const RunningScreen = () => {
           onPause={training.pause}
           onUnpause={training.unpause}
         />
-        <TextPrimary>Szer: {training.data.prevCoordinate.latitude}</TextPrimary>
-        <TextPrimary>Wys: {training.data.prevCoordinate.longitude}</TextPrimary>
       </DataContainer>
       <ButtonPrimary onPress={handleMapShownToggle}>
         {`${isMapShown ? 'Schowaj' : 'Pokaż'} mapę` }
