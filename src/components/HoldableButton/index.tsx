@@ -1,4 +1,4 @@
-import React, { useEffect, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components/native';
 import { Animated } from 'react-native';
 import { useAnimatedValue } from '../../hooks/use-animated-value';
@@ -14,7 +14,7 @@ interface HoldableButtonProps {
 
 export const HoldableButton: React.FC<HoldableButtonProps> = (props) => {
   const animatedValue = useAnimatedValue(1);
-  const opacity = animatedValue.interpolate({
+  const backgroundColor = animatedValue.interpolate({
     inputRange: [0, 1],
     outputRange: [THEME.color.error, THEME.color.primaryDark]
   });
@@ -47,12 +47,8 @@ export const HoldableButton: React.FC<HoldableButtonProps> = (props) => {
     ).start();
   }
 
-  useEffect(() => {
-    return () => handleHoldDurationClear();
-  }, []);
-
   return (
-    <Container style={{ backgroundColor: opacity, transform: [{ scale }] }}>
+    <Container style={{ backgroundColor, transform: [{ scale }] }}>
       <ButtonRounded
         onPressIn={handleHoldDuration}
         onPressOut={handleHoldDurationClear}
