@@ -32,9 +32,8 @@ export const TrainingActionButtons = (props: TrainingActionButtonsProps) => {
         <ButtonHoldable
           onPressExceeded={props.onFinish}
           icon={<FinishIcon {...style} />}
-        >
-          Zakończ trening
-        </ButtonHoldable>
+          accessibilityLabel="Zakończ trening"
+        />
       </Container>
     );
   }
@@ -44,7 +43,7 @@ export const TrainingActionButtons = (props: TrainingActionButtonsProps) => {
       <ButtonHoldable
         onPressExceeded={handleUnlock}
         icon={<PadlockIcon {...style} />}
-        // accessibilityLabel="Odblokuj"
+        accessibilityLabel="Odblokuj"
       />  
     );
   }

@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components/native';
-import { Animated } from 'react-native';
+import { Animated, TouchableOpacityProps } from 'react-native';
 import { useAnimatedValue } from '../../../hooks/use-animated-value';
 import { ButtonRounded } from '..';
 import { THEME } from '../../../common/theme';
@@ -10,6 +10,7 @@ interface ButtonHoldableProps {
   onPressExceeded: () => void
   children?: ReactNode
   icon?: JSX.Element
+  accessibilityLabel?: TouchableOpacityProps['accessibilityLabel']
 }
 
 export const ButtonHoldable: React.FC<ButtonHoldableProps> = (props) => {
@@ -23,7 +24,7 @@ export const ButtonHoldable: React.FC<ButtonHoldableProps> = (props) => {
     outputRange: [0.9, 1]
   });
 
-  const handleHoldDuration = () => {
+  const handlePressHold = () => {
     Animated.timing(
       animatedValue,
       {
@@ -37,7 +38,7 @@ export const ButtonHoldable: React.FC<ButtonHoldableProps> = (props) => {
     });
   }
 
-  const handleHoldDurationClear = () => {
+  const handlePressOut = () => {
     Animated.timing(
       animatedValue,
       {
@@ -50,8 +51,9 @@ export const ButtonHoldable: React.FC<ButtonHoldableProps> = (props) => {
   return (
     <Container style={{ backgroundColor, transform: [{ scale }] }}>
       <ButtonRounded
-        onPressIn={handleHoldDuration}
-        onPressOut={handleHoldDurationClear}
+        accessibilityLabel={props.accessibilityLabel}
+        onPressIn={handlePressHold}
+        onPressOut={handlePressOut}
         icon={props.icon}
       >
         {props.children}
