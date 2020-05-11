@@ -9,6 +9,7 @@ import {
   runningTrainingPaused,
   runningTrainingUnpaused,
 } from '../creators';
+import { RunningTraining } from '../../../database/entities';
 
 let interval: NodeJS.Timeout;
 let navigatorId: number;
@@ -52,4 +53,14 @@ export const runningTrainingPause = (): Thunk<void> => (dispatch) => {
 export const runningTrainingUnpause = (): Thunk<void> => (dispatch) => {
   dispatch(runningTrainingUnpaused());
   dispatch(runningTrainingEffectsStart());
+}
+
+export const runningTrainingSave = (): Thunk<Promise<void>> => async (dispatch, getState) => {
+  const trainingData = getState().runningTraining;
+
+  await RunningTraining.save({
+    duration: trainingData.duration,
+    distance: trainingData.distance,
+    coords: trainingData.coordinates
+  });
 }

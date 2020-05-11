@@ -21,5 +21,7 @@ export const useRunningTraining = () => {
     dispatch(Actions.runningTrainingUnpause());
   }
 
-  return { data, start, finish, pause, unpause };
+  const save = () => dispatch(Actions.runningTrainingSave());
+
+  return { data, start, finish, pause, unpause, save };
 }

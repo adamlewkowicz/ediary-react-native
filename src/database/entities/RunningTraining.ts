@@ -20,11 +20,21 @@ export class RunningTraining extends GenericEntity {
   duration!: number;
 
   @Column()
+  distance!: number;
+
+  /**
+   * km/h
+   */
+  @Column()
+  avgVelocity!: number;
+
+  @Column()
   userId!: UserId;
 
   @OneToMany(
     type => RunningCoord,
     runningCoord => runningCoord,
+    { cascade: true }
   )
   coords?: RunningCoord[];
 

@@ -1,23 +1,25 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { MapView, ButtonPrimary } from '../components';
-import { useSelector } from 'react-redux';
-import { Selectors } from '../store';
 import { Detail } from '../components/molecules/TrainingData/Detail';
 import { useNavigationData } from '../hooks';
 import { TrainingSummaryScreenNavigationProps } from '../navigation/TrainingStack';
+import { useRunningTraining } from '../hooks/use-running-training';
 
 export const TrainingSummaryScreen = () => {
   const { navigate } = useNavigationData<TrainingSummaryScreenNavigationProps>();
-  const training = useSelector(Selectors.getRunningTraining);
+  const training = useRunningTraining();
 
-  const handleExit = () => navigate('RunningTraining');
+  const handleExit = async () => {
+    await training.save();
+    navigate('RunningTraining');
+  }
 
   return (
     <Container>
-      <MapView coordinates={training.coordinates} />
+      <MapView coordinates={training.data.coordinates} />
       <Details>
-        <Detail title="Czas" value={training.duration} />
+        <Detail title="Czas" value={training.data.duration} />
         <Detail title="Średnia prędkość" value="14.5 km/h" />
         <Detail title="Spalone kalorie" value={489} />
       </Details>
