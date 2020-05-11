@@ -15,17 +15,20 @@ import {
   ProductSearchListMemo,
   TabView,
   ProductSearcher,
+  ActionSheet,
+  ProductCreatedListRef,
 } from '../../components';
 import * as Utils from '../../utils';
-import { BarcodeId } from '../../types';
+import { BarcodeId, ValueOf } from '../../types';
 import { useDispatch } from 'react-redux';
 import { Actions } from '../../store';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface ProductFindScreenState {
   productName: string
   barcode: BarcodeId | null
-  createdProduct: Product | null
   activeTabIndex: number
+  actionProduct: ProductOrNormalizedProduct | null
 }
 
 export const ProductFindScreen = () => {
@@ -34,11 +37,16 @@ export const ProductFindScreen = () => {
     activeTabIndex: TAB_INDEX.recent,
     productName: '',
     barcode: null,
-    createdProduct: null,
+    actionProduct: null,
   });
   const hasProductBeenSelected = useRef(false);
   const productNameDebounced = useDebouncedValue(state.productName);
   const dispatch = useDispatch();
+  const productCreatedListRef = useRef<ProductCreatedListRef>(null);
+
+  const cleanupState = useCallback(() => setState({ actionProduct: null }), []);
+
+  useFocusEffect(cleanupState);
 
   function handleBarcodeScan() {
     navigate('BarcodeScan', {
@@ -57,10 +65,7 @@ export const ProductFindScreen = () => {
       onProductCreated(createdProduct) {
         navigate('ProductFind');
 
-        setState({
-          activeTabIndex: TAB_INDEX.created,
-          createdProduct,
-        });
+        setState({ activeTabIndex: TAB_INDEX.created });
 
         Utils.toastCenter(`Utworzono produkt "${createdProduct.name}"`);
 
@@ -85,6 +90,35 @@ export const ProductFindScreen = () => {
 
     params.onProductSelected(productResolver, product.portion);
   }, [params.onProductSelected]);
+
+  const handleProductActionRequest = useCallback((product: ProductOrNormalizedProduct): void => {
+    setState({ actionProduct: product });
+  }, []);
+
+  const handleProductAction = (actionOption: ActionOption): void => {
+    if (!(state.actionProduct instanceof Product)) {
+      return;
+    }
+
+    switch(actionOption) {
+      case PRODUCT_ACTION_OPTION.edit: 
+        navigate('ProductCreate', {
+          product: state.actionProduct,
+          onProductEdited(editedProduct) {
+            navigate('ProductFind');
+
+            setState({ activeTabIndex: TAB_INDEX.created });
+
+            productCreatedListRef.current?.refresh();
+          }
+        });
+        break;
+      
+      case PRODUCT_ACTION_OPTION.showDetails: 
+        navigate('ProductPreview', { product: state.actionProduct });
+        break;
+    }
+  }
 
   navigation.setOptions({
     headerRight: () => (
@@ -120,20 +154,27 @@ export const ProductFindScreen = () => {
         renderScene={props => {
           switch(props.route.index) {
             case TAB_INDEX.recent: return (
-              <ProductRecentListMemo onProductSelect={handleProductSelect} />
+              <ProductRecentListMemo
+                onProductSelect={handleProductSelect}
+                onProductAction={handleProductActionRequest}
+              />
             )
             case TAB_INDEX.favorite: return (
-              <ProductFavoritesListMemo onProductSelect={handleProductSelect} />
+              <ProductFavoritesListMemo
+                onProductSelect={handleProductSelect}
+                onProductAction={handleProductActionRequest}  
+              />
             )
             case TAB_INDEX.created: return (
               <ProductCreatedListMemo
                 onProductSelect={handleProductSelect}
-                createdProduct={state.createdProduct}
+                onProductAction={handleProductActionRequest}
               />
             )
             case TAB_INDEX.search: return (
               <ProductSearchListMemo
                 onProductSelect={handleProductSelect}
+                onProductAction={handleProductActionRequest}
                 productName={productNameDebounced}
                 barcode={state.barcode}
               />
@@ -142,6 +183,17 @@ export const ProductFindScreen = () => {
           }
         }}
       />
+      {state.actionProduct && (
+        <ActionSheet
+          title={state.actionProduct.name}
+          options={[
+            PRODUCT_ACTION_OPTION.showDetails,
+            PRODUCT_ACTION_OPTION.edit,
+          ]}
+          onAction={handleProductAction}
+          onDismiss={() => setState({ actionProduct: null })}
+        />
+      )}
     </Container>
   );
 }
@@ -151,6 +203,11 @@ const TAB_INDEX = {
   favorite: 1,
   created: 2,
   search: 3,
+} as const;
+
+const PRODUCT_ACTION_OPTION = {
+  showDetails: 'Pokaż szczegóły',
+  edit: 'Edytuj',
 } as const;
 
 const Container = styled.View`
@@ -163,3 +220,5 @@ const AddOwnProductButton = styled(ButtonSecondaryArrow)`
 `
 
 export type ProductResolver = () => Promise<Product>;
+
+type ActionOption = ValueOf<typeof PRODUCT_ACTION_OPTION>;

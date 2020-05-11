@@ -23,8 +23,8 @@ import { ScrollView } from 'react-native';
 
 export const ProductPreviewScreen = () => {
   const { params, navigation } = useNavigationData<ProductPreviewScreenNavigationProps>();
-  const [{ value: productPortion = Product.defaultPortion } = {}] = params.product.portions ?? [];
-  const [quantity, setQuantity] = useState<number>(params.quantity ?? 0);
+  const productPortionQuantity = 'portion' in params.product ? params.product.portion : Product.defaultPortion;
+  const [quantity, setQuantity] = useState<number>(params.quantity ?? productPortionQuantity);
   const {
     macro,
     macroPercentages,
@@ -39,12 +39,12 @@ export const ProductPreviewScreen = () => {
   }
 
   const handlePortionUpdate = (portion: number): void => {
-    setQuantity(productPortion * portion);
+    setQuantity(productPortionQuantity * portion);
   }
 
   const dynamicPortionValue = useMemo(
-    () => Math.round(quantity / productPortion),
-    [quantity, productPortion]
+    () => Math.round(quantity / productPortionQuantity),
+    [quantity, productPortionQuantity]
   );
 
   if (isEditMode) {

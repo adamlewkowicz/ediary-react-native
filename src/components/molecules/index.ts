@@ -8,3 +8,4 @@ export * from './RatioInfo';
 export * from './Chart';
 export * from './MacroDetails';
 export * from './ProductList';
+export * from './ActionSheet';

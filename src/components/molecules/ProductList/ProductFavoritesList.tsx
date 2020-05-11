@@ -13,6 +13,7 @@ export const ProductFavoritesList = (props: ProductFavoritesListProps) => {
       isLoading={productFavorites.isLoading}
       onRefresh={productFavorites.refresh}
       onProductSelect={props.onProductSelect}
+      onProductAction={props.onProductAction}
       a11yLabel="Lista ulubionych produktów"
     />
   );

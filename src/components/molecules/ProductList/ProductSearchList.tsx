@@ -48,6 +48,7 @@ export const ProductSearchList = (props: ProductSearchListProps) => {
         data={products}
         isLoading={isLoading}
         onProductSelect={props.onProductSelect}
+        onProductAction={props.onProductAction}
         a11yLabel="Lista znalezionych produktów"
       />
     </>

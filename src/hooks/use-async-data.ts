@@ -14,21 +14,22 @@ export const useAsyncData = <T>(options: {
   asyncTask: () => Promise<T>
 }) => {
   const [state, setState] = useNativeState<State<T>>({
-    isLoading: false,
-    isRefreshRequested: false,
+    isLoading: true,
+    isRefreshRequested: true,
     data: options.initialValue,
   });
   const { setAppError } = useAppError();
 
-  const refresh = useCallback(() => setState({ isRefreshRequested: true }), []);
+  const refresh = useCallback(() => setState({
+    isRefreshRequested: true,
+    isLoading: true,
+  }), []);
 
   useEffect(() => {
     const abortController = new AbortController();
     
     const handleAsyncTask = async () => {
       try {
-        setState({ isLoading: true });
-
         const data = await Utils.cancelablePromise<T>(
           options.asyncTask(),
           abortController
