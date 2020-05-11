@@ -20,8 +20,8 @@ export const ChartMacroCircleLeft = (props: ChartMacroCircleLeftProps) => {
         <H4>{props.percentage}%</H4>
       </ChartCircle>
       <TextSplit
-        primary={props.value.toFixed(0)}
-        secondary={props.valueLeft.toFixed(0)}
+        current={props.value.toFixed(0)}
+        total={props.valueLeft.toFixed(0)}
       />
       <H4>{props.title}</H4>
     </Container>

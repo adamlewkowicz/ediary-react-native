@@ -12,6 +12,7 @@ describe('<ProductPreviewScreen />', () => {
     const ctx = renderSetup(<ProductPreviewScreen />, { params });
 
     ctx.getByText(productMock.name);
+    await ctx.findByLabelText('Dodaj lub usuń produkt z ulubionych');
   });
 
 });

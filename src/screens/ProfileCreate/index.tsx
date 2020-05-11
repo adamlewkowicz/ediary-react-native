@@ -38,15 +38,12 @@ export const ProfileCreateScreen = () => {
 
       const profile: IProfileRequired = {
         male, height, weightGoal, weight, age, userId
-      }
+      };
   
       await dispatch(
         Actions.userProfileCreate(profile)
       );
   
-      dispatch(
-        Actions.appStatusUpdated('INITIALIZED')
-      );
     } catch(error) {
       setAppError(error, 'Nie udało się stworzyć profilu');
       setIsLoading(false);

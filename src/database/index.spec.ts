@@ -1,7 +1,7 @@
 import { getDatabaseSchema } from './utils/getSchema';
 import { getConnection } from 'typeorm';
 
-describe('Database', () => {
+describe('Database 🗄️', () => {
 
   describe('migrations', () => {
 

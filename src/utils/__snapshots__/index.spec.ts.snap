@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`sortByMostAccurateName - sorts items by most matching name 1`] = `
+exports[`Utils 🛠️ sortByMostAccurateName should sort items by most matching name 1`] = `
 Array [
   Object {
     "name": "Orange",

@@ -1,51 +1,11 @@
 import React from 'react';
-import styled from 'styled-components/native';
-import { TextPrimary, RightArrowIcon } from '../index';
-import { TouchableOpacityProps } from 'react-native';
-import { THEME } from '../../../common/theme';
-import { SvgProps } from 'react-native-svg';
+import { Button, ButtonProps } from './Button';
+import { RightArrowIcon } from '../Icons';
 
-export interface ButtonSecondaryProps extends TouchableOpacityProps {
-  children: string
-  role?: 'button' | 'link'
-  Icon?: (props: SvgProps) => JSX.Element
-}
-
-export const ButtonSecondary = (props: ButtonSecondaryProps) => {
-  const { children, Icon, role = 'button' } = props;
-  
-  return (
-    <Container
-      accessibilityRole={role}
-      {...props}
-    >
-      <ButtonText>{children}</ButtonText>
-      {Icon && <Icon {...ICON_STYLE} />}
-    </Container>
-  );
-}
-
-export const ButtonSecondaryArrow = (props: ButtonSecondaryProps) => (
-  <ButtonSecondary Icon={RightArrowIcon} {...props} />
+export const ButtonSecondary = (props: ButtonProps) => (
+  <Button {...props} variant="secondary" />
 );
 
-const Container = styled.TouchableOpacity`
-  background-color: ${props => props.theme.color.primaryLight};
-  border: ${props => `1px solid ${props.theme.color.highlight}`};
-  padding: 10px;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-`
-
-const ButtonText = styled(TextPrimary)`
-  text-align: center;
-  color: ${props => props.theme.color.primary};
-`
-
-const ICON_STYLE = {
-  width: 16,
-  height: 16,
-  fill: THEME.color.primary,
-  style: { marginLeft: 5 }
-} as const;
+export const ButtonSecondaryArrow = (props: ButtonProps) => (
+  <Button {...props} variant="secondary" Icon={RightArrowIcon} />
+);
