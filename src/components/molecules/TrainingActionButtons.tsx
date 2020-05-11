@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { HoldableButton } from '../HoldableButton';
-import { ButtonRounded } from '../atoms';
+import { ButtonRounded, ButtonHoldable } from '../atoms';
 import PauseIcon from '../../../assets/img/pause.svg';
 import PadlockIcon from '../../../assets/img/padlock.svg';
 import PlayIcon from '../../../assets/img/play.svg';
@@ -30,19 +29,19 @@ export const TrainingActionButtons = (props: TrainingActionButtonsProps) => {
           icon={<PlayIcon {...style} />}
           accessibilityLabel="Kontynuuj"
         />
-        <HoldableButton
+        <ButtonHoldable
           onPressExceeded={props.onFinish}
           icon={<FinishIcon {...style} />}
         >
           Zakończ trening
-        </HoldableButton>
+        </ButtonHoldable>
       </Container>
     );
   }
 
   if (isLocked) {
     return (
-      <HoldableButton
+      <ButtonHoldable
         onPressExceeded={handleUnlock}
         icon={<PadlockIcon {...style} />}
         // accessibilityLabel="Odblokuj"

@@ -1,18 +1,18 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components/native';
 import { Animated } from 'react-native';
-import { useAnimatedValue } from '../../hooks/use-animated-value';
-import { ButtonRounded } from '../atoms';
-import { THEME } from '../../common/theme';
+import { useAnimatedValue } from '../../../hooks/use-animated-value';
+import { ButtonRounded } from '..';
+import { THEME } from '../../../common/theme';
 
-interface HoldableButtonProps {
+interface ButtonHoldableProps {
   holdDuration?: number
   onPressExceeded: () => void
   children?: ReactNode
   icon?: JSX.Element
 }
 
-export const HoldableButton: React.FC<HoldableButtonProps> = (props) => {
+export const ButtonHoldable: React.FC<ButtonHoldableProps> = (props) => {
   const animatedValue = useAnimatedValue(1);
   const backgroundColor = animatedValue.interpolate({
     inputRange: [0, 1],
@@ -60,7 +60,7 @@ export const HoldableButton: React.FC<HoldableButtonProps> = (props) => {
   );
 }
 
-HoldableButton.defaultProps = {
+ButtonHoldable.defaultProps = {
   holdDuration: 1500
 }
 
