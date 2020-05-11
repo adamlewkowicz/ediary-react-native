@@ -5,7 +5,7 @@
   align="left"
 />
 
-# E-diary
+# [E-diary](https://typescript-blog.netlify.app/blog/e-diary-studium-przypadku/)
 
 Kontroluj z łatwością dzienne spożycie kalorii.
 
