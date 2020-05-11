@@ -7,10 +7,16 @@ export const useProductHistory = () => {
   const { products: data, isLoaded } = useSelector(Selectors.getProductHistory);
   const dispatch = useDispatch();
   const isLoading = !isLoaded;
-
+  
+  const productHistoryLoad = useCallback(() => {
+    dispatch(
+      Actions.productHistoryLoad()
+    );
+  }, [dispatch]);
+  
   useEffect(() => {
     if (!isLoaded) {
-      dispatch(Actions.productHistoryLoad());
+      productHistoryLoad();
     }
   }, [dispatch, isLoaded]);
 
@@ -20,5 +26,7 @@ export const useProductHistory = () => {
     );
   }, [dispatch]);
 
-  return { data, addProduct, isLoading };
+  const refresh = productHistoryLoad;
+
+  return { data, addProduct, isLoading, refresh };
 }

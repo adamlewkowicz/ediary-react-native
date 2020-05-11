@@ -7,12 +7,14 @@ import { ProductOrNormalizedProduct } from '../../../database/entities';
 interface ProductSearchItemProps<T = ProductOrNormalizedProduct> {
   product: T
   onSelect: (product: T) => void
+  onAction?: (product: T) => void
 }
 
 export const ProductSearchItem = (props: ProductSearchItemProps) => {
   return (
     <Container
       onPress={() => props.onSelect(props.product)}
+      onLongPress={() => props.onAction?.(props.product)}
       accessibilityLabel="Dodaj produkt do posiłku"
       accessibilityHint="Wraca na główną stronę i dodaje produkt do posiłku"
     >

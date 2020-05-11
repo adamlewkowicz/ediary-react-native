@@ -303,8 +303,35 @@ export class Product extends GenericEntity {
   static findOwn(userId: UserId): Promise<Product[]> {
     return Product.find({
       where: { userId },
-      order: { id: 'DESC' }
+      order: { updatedAt: 'DESC' }
     });
+  }
+
+  static async updateOrCreate(options: {
+    originalProduct: Product,
+    updateProductData: IProductRequired,
+    portionQuantity: number,
+    userId: UserId
+  }): Promise<Product> {
+    const {
+      originalProduct,
+      userId,
+      updateProductData,
+      portionQuantity,
+    } = options;
+
+    const isOwnProduct = originalProduct.userId === userId;
+
+    if (isOwnProduct) {
+      await Product.update(originalProduct.id, updateProductData);
+      const updatedProduct = await Product.findOneOrFail(originalProduct.id); 
+
+      return updatedProduct;
+    }
+
+    const createdProduct = await Product.saveWithPortion({ ...updateProductData, userId }, portionQuantity);
+
+    return createdProduct;
   }
 
 }

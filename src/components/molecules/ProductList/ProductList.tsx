@@ -9,6 +9,7 @@ import styled from 'styled-components/native';
 export interface ProductListProps<T = ProductOrNormalizedProduct> {
   data: T[]
   onProductSelect: (product: T) => void
+  onProductAction?: (product: T) => void
   isLoading?: boolean
   onRefresh?: () => void
   a11yLabel?: string
@@ -26,6 +27,7 @@ export const ProductList = (props: ProductListProps) => (
       <ProductSearchItemMemo
         product={product}
         onSelect={props.onProductSelect}
+        onAction={props.onProductAction}
       />
     )}
     refreshControl={(

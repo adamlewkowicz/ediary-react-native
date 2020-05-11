@@ -1,4 +1,10 @@
 import { Environment, MacroElements } from '../types';
+import { name as appName } from '../../app.json';
+import { Platform } from 'react-native';
+
+const DEPRECATED_APP_NAME = 'EdiaryMobileApp';
+
+export const APP_NAME = Platform.OS === 'ios' ? DEPRECATED_APP_NAME : appName;
 
 export const DEFAULT_CONNECTION = 'default';
 
