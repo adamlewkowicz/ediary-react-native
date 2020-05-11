@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { RadioInput } from '.';
 import { H3 } from '../Text';
+import { ScrollView } from 'react-native';
 
 interface RadioInputsRowProps<T> {
   activeValue: T
@@ -13,17 +14,19 @@ interface RadioInputsRowProps<T> {
 export const RadioInputsRow = <T extends number>(props: RadioInputsRowProps<T>) => {
   return (
     <Container>
-      <Title>{props.title}</Title>
-      <RadioInputsContainer>
-        {props.values.map((value, index) => (
-          <StyledRadioInput
-            key={index}
-            value={value === props.activeValue}
-            onChange={() => props.onChange(value)}
-            text={value.toString()}
-          />
-        ))}
-      </RadioInputsContainer>
+      <ScrollView showsHorizontalScrollIndicator={true}>
+        <Title>{props.title}</Title>
+        <RadioInputsContainer>
+          {props.values.map((value, index) => (
+            <StyledRadioInput
+              key={index}
+              value={value === props.activeValue}
+              onChange={() => props.onChange(value)}
+              text={value.toString()}
+            />
+          ))}
+        </RadioInputsContainer>
+      </ScrollView>
     </Container>
   );
 }

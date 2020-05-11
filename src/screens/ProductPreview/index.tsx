@@ -20,6 +20,7 @@ import { ProductPreviewScreenNavigationProps } from '../../navigation';
 import { Product } from '../../database/entities';
 import * as Utils from '../../utils';
 import { ScrollView } from 'react-native';
+import { findClosestValue } from '../../utils';
 
 export const ProductPreviewScreen = () => {
   const { params, navigation } = useNavigationData<ProductPreviewScreenNavigationProps>();
@@ -43,7 +44,11 @@ export const ProductPreviewScreen = () => {
   }
 
   const dynamicPortionValue = useMemo(
-    () => Math.round(quantity / productPortionQuantity),
+    () => {
+      const portion = quantity / productPortionQuantity;
+      console.log({ portion })
+      return findClosestValue(portion, PORTIONS);
+    },
     [quantity, productPortionQuantity]
   );
 
@@ -73,7 +78,7 @@ export const ProductPreviewScreen = () => {
       )}
       <Section title="Ilość produktu">
         <RadioInputsRow
-          title="Porcje"
+          title="Porcja"
           values={PORTIONS}
           activeValue={dynamicPortionValue}
           onChange={handlePortionUpdate}
@@ -131,4 +136,18 @@ const Calories = styled(H1)`
   margin-bottom: ${props => props.theme.spacing.tiny};
 `
 
-const PORTIONS = Utils.fillArrayWithinRange({ from: 1, to: 6 });
+const PORTIONS = [
+  0.25,
+  0.5,
+  0.75,
+  1,
+  1.25,
+  1.5,
+  1.75,
+  2,
+  2.5,
+  3,
+  4,
+  5,
+  6
+];
