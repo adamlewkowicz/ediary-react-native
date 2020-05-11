@@ -4,7 +4,7 @@ import { H1, TextPrimary } from '../../atoms';
 import { Detail } from './Detail';
 import { BlinkingView } from '../BlinkingView';
 
-interface TrainingDataProps {
+interface TrainingDetailsProps {
   distance: number
   duration: number
   velocity: number
@@ -12,7 +12,7 @@ interface TrainingDataProps {
   startTime: string | null
 }
 
-export const TrainingData = (props: TrainingDataProps) => (
+export const TrainingDetails = (props: TrainingDetailsProps) => (
   <Container isBlinking={props.isPaused}>
     <Distance>
       {props.distance.toFixed(2)} 

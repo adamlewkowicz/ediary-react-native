@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Alert } from 'react-native';
 import styled from 'styled-components/native';
-import { TextPrimary, MapView, TrainingData, ButtonPrimary } from '../../components';
+import { TextPrimary, MapView, TrainingDetails, ButtonPrimary } from '../../components';
 import { useRunningTraining } from '../../hooks/use-running-training';
 import { useLocationPermission } from '../../hooks/use-location-permission';
 import { TrainingActionButtons } from '../../components/molecules/TrainingActionButtons';
@@ -55,7 +55,7 @@ export const RunningScreen = () => {
   return (
     <Container>
       <DataContainer>
-        <TrainingData {...training.data} />
+        <TrainingDetails {...training.data} />
         {!locationPermission.isGranted && (
           <TextPrimary>
             Potwierdź uprawnienia lokalizacji

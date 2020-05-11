@@ -9,4 +9,4 @@ export * from './Chart';
 export * from './MacroDetails';
 export * from './ProductList';
 export * from './MapView';
-export * from './TrainingData';
+export * from './TrainingDetails';

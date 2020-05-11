@@ -8,8 +8,8 @@ interface BlinkingViewProps extends ViewProps {
 }
 
 export const BlinkingView = ({ isBlinking, ...props }: BlinkingViewProps) => {
-  const animtedValueLoop = useAnimatedLoop({ isRunning: isBlinking });
-  const opacity = animtedValueLoop.interpolate({
+  const animatedValueLoop = useAnimatedLoop({ isRunning: isBlinking });
+  const opacity = animatedValueLoop.interpolate({
     inputRange: [0, 1],
     outputRange: [1, 0.1],
   });

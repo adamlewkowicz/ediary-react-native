@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { MapView, ButtonPrimary } from '../components';
-import { Detail } from '../components/molecules/TrainingData/Detail';
+import { Detail } from '../components/molecules/TrainingDetails/Detail';
 import { useNavigationData } from '../hooks';
 import { TrainingSummaryScreenNavigationProps } from '../navigation/TrainingStack';
 import { useRunningTraining } from '../hooks/use-running-training';
