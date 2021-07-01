@@ -84,6 +84,7 @@
     "babel-jest": "^25.4.0",
     "babel-plugin-transform-typescript-metadata": "^0.2.2",
     "core-js": "^3.2.1",
+    "detox": "^16.0.1",
     "eslint": "^6.3.0",
     "eslint-plugin-react": "^7.14.3",
     "husky": "^3.0.5",
@@ -105,5 +106,26 @@
     "ts-node-dev": "^1.0.0-pre.40",
     "typescript": "^3.8.3",
     "utility-types": "^3.7.0"
+  },
+  "detox": {
+    "configurations": {
+      "android.emu.debug": {
+        "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+        "build": "cd android && gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+        "type": "android.attached",
+        "device": {
+          "adbName": "a563b628"
+        }
+      },
+      "android.emu.release": {
+        "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
+        "build": "cd android && gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
+        "type": "android.attached",
+        "device": {
+          "adbName": "a563b628"
+        }
+      }
+    },
+    "test-runner": "jest"
   }
 }
