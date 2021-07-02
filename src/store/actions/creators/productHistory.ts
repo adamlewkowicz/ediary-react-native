@@ -12,8 +12,8 @@ export const produtHistoryLoaded = (products: Product[]) => ({
   payload: products
 });
 
-export type ProductHistoryAction = 
-  | ReturnType<typeof productHistoryAdded>
-  | ReturnType<typeof produtHistoryLoaded>
-  | MealProductAdded
-  | MealAdded
+// export type ProductHistoryAction = 
+//   | ReturnType<typeof productHistoryAdded>
+//   | ReturnType<typeof produtHistoryLoaded>
+//   | MealProductAdded
+//   | MealAdded

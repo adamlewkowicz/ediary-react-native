@@ -10,8 +10,3 @@ export const userInitialized = (user: User) => ({
   type: USER_INITIALIZED,
   payload: user
 });
-
-
-export type UserAction = 
-  | ReturnType<typeof userProfileCreated>
-  | ReturnType<typeof userInitialized>
