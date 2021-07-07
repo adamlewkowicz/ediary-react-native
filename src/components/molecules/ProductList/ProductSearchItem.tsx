@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import { H2, TextSecondary, MacroDetails } from '../..';
 import { THEME } from '../../../common/theme';
 import { ProductOrNormalizedProduct } from '../../../database/entities';
+import { useIntl } from '../../../hooks';
 
 interface ProductSearchItemProps<T = ProductOrNormalizedProduct> {
   product: T
@@ -10,27 +11,28 @@ interface ProductSearchItemProps<T = ProductOrNormalizedProduct> {
 }
 
 export const ProductSearchItem = (props: ProductSearchItemProps) => {
+  const t = useIntl();
+
   return (
     <Container
       onPress={() => props.onSelect(props.product)}
-      accessibilityLabel="Dodaj produkt do posiłku"
-      accessibilityHint="Wraca na główną stronę i dodaje produkt do posiłku"
+      accessibilityLabel={t.addProductToMealLabel}
     >
       <ProductName>{props.product.name}</ProductName>
       <Content>
         <MacroContainer>
           <MacroDetails
-            title="W"
+            title={t.carbs[0]}
             color={THEME.color.carbs}
             value={props.product.macro.carbs}
           />
           <MacroDetails
-            title="B"
+            title={t.prots[0]}
             color={THEME.color.prots}
             value={props.product.macro.prots}
           />
           <MacroDetails
-            title="T"
+            title={t.fats[0]}
             color={THEME.color.fats}
             value={props.product.macro.fats}
           />

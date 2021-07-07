@@ -83,3 +83,5 @@ export interface NormalizedProduct {
 }
 
 export type ValueOf<T> = T[keyof T];
+
+export type Language = 'pl';

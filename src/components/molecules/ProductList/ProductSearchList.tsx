@@ -1,6 +1,6 @@
 import React from 'react';
 import { ProductList, ProductListProps } from '.';
-import { useProductSearch } from '../../../hooks';
+import { useProductSearch, useIntl } from '../../../hooks';
 import styled from 'styled-components/native';
 import { TextPrimary } from '../../atoms';
 import { BarcodeId } from '../../../types';
@@ -12,7 +12,8 @@ interface ProductSearchListProps extends Omit<ProductListProps, 'data'> {
 
 export const ProductSearchList = (props: ProductSearchListProps) => {
   const { isConnected, isLoading, products } = useProductSearch(props.productName, props.barcode);
-  
+  const t = useIntl();
+
   function RenderInfo() {
     const isProductsNotEmpty = products.length > 0;
     const isProductNameNotTouched = props.productName.length === 0;
@@ -23,8 +24,8 @@ export const ProductSearchList = (props: ProductSearchListProps) => {
     }
 
     const notFoundMessage = props.barcode !== null
-      ? `z podanym kodem kreskowym: ${props.barcode}`
-      : `o podanej nazwie: ${props.productName}`;
+      ? t.withBarcode(props.barcode as string)
+      : t.withName(props.productName);
 
     return (
       <>
@@ -48,7 +49,7 @@ export const ProductSearchList = (props: ProductSearchListProps) => {
         data={products}
         isLoading={isLoading}
         onProductSelect={props.onProductSelect}
-        a11yLabel="Lista znalezionych produktów"
+        a11yLabel={t.productListFound}
       />
     </>
   );

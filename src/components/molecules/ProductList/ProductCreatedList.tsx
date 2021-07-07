@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useProductsCreated } from '../../../hooks';
+import { useProductsCreated, useIntl } from '../../../hooks';
 import { ProductList, ProductListProps } from '.';
 import { Product } from '../../../database/entities';
 
@@ -9,6 +9,7 @@ interface ProductCreatedListProps extends Omit<ProductListProps, 'data'> {
 
 const ProductCreatedList = (props: ProductCreatedListProps) => {
   const productsCreated = useProductsCreated();
+  const t = useIntl();
 
   useEffect(() => {
     if (props.createdProduct !== null) {
@@ -22,6 +23,7 @@ const ProductCreatedList = (props: ProductCreatedListProps) => {
       onProductSelect={props.onProductSelect}
       isLoading={productsCreated.isLoading}
       onRefresh={productsCreated.refresh}
+      a11yLabel={t.productListCreated}
     />
   );
 }
