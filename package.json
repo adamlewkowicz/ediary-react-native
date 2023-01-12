@@ -32,7 +32,7 @@
     "@react-navigation/native": "^5.0.7",
     "@react-navigation/stack": "^5.0.8",
     "bugsnag-react-native": "^2.23.6",
-    "class-validator": "^0.9.1",
+    "class-validator": "^0.14.0",
     "dayjs": "^1.8.15",
     "formik": "^2.1.4",
     "intl": "^1.2.5",
